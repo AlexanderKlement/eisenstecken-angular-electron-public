@@ -1,0 +1,12 @@
+<app-toolbar [title]="title"></app-toolbar>
+<div class="window-container">
+    <form (ngSubmit)="onSubmit()" [formGroup]="stockGroup">
+        <div fxLayout="column" fxLayoutAlign="space-around center">
+            <mat-form-field appearance="fill">
+                <mat-label>Name</mat-label>
+                <input class="form-control" formControlName="name" matInput>
+            </mat-form-field>
+            <button [disabled]="submitted" mat-raised-button type="submit">Speichern</button>
+        </div>
+    </form>
+</div>

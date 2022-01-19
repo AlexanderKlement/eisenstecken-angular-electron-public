@@ -1,0 +1,54 @@
+<h3 class="heading">{{name}}</h3>
+<mat-form-field appearance="fill">
+  <mat-label>Suchen</mat-label>
+  <input matInput [formControl]="search">
+</mat-form-field>
+<div *ngIf="available" fxLayout="row" fxLayoutAlign="center center">
+  <button type="button" (click)="addButtonClicked()" mat-raised-button class="add-button">
+    Artikel hinzufügen
+  </button>
+</div>
+<mat-list *ngIf="available">
+  <mat-list-item *ngFor="let article of searchAvailableArticles$| async">
+    <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill class="article">
+      <button mat-button mat-icon-button *ngIf="article.favorite" (click)="toggleFavorite(article)" title="Favorit">
+        <mat-icon>star</mat-icon>
+      </button>
+      <button mat-button mat-icon-button *ngIf="!article.favorite" (click)="toggleFavorite(article)" title="Favorit">
+        <mat-icon>star_border</mat-icon>
+      </button>
+      <input matInput value="{{article.name.translation}}" matTooltip="{{article.description.translation}}" readonly
+             class="article-name">
+      <button mat-button mat-icon-button (click)="copyButtonClicked(article)" title="Kopieren und hinzufügen">
+        <mat-icon>content_copy</mat-icon>
+      </button>
+      <button mat-button mat-icon-button (click)="orderButtonClicked(article)" title="Hinzufügen">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </mat-list-item>
+</mat-list>
+<mat-list *ngIf="!available">
+  <mat-list-item *ngFor="let orderedArticle of searchOrderedArticles$| async" fxFlexFill  class="article">
+    <div fxLayout="column" fxLayoutAlign="start stretch" fxFlexFill>
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <input matInput value="{{orderedArticle.article.name.translation}}" class="title" readonly>
+        <button mat-button mat-icon-button (click)="editButtonClicked(orderedArticle)" title="Bearbeiten">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+      <div class="description">
+          <small>{{orderedArticle.custom_description}}</small>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <mat-form-field>
+          <mat-label>Menge</mat-label>
+          <input type=number matInput value="{{orderedArticle.amount}}" readonly>
+        </mat-form-field>
+        <button mat-button mat-icon-button (click)="removeButtonClicked(orderedArticle)" title="Entfernen">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mat-list-item>
+</mat-list>

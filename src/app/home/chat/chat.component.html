@@ -1,0 +1,28 @@
+<div fxLayout="column" fxLayoutAlign="space-between stretch" class="chat" fxFlexFill>
+  <div fxFlex="0" class="chat-message-box" #chatMsgBox [class.ivan]="ivan">
+    <app-chat-message *ngFor="let message of messages; let last = last" [message]="message" [ivan]="ivan">
+      {{last ? scrollToBottom() : ''}}
+    </app-chat-message>
+  </div>
+  <div fxFlex="20" fxFlexFill class="input-box">
+    <form [formGroup]="chatGroup" (ngSubmit)="send()" fxLayout="column" *ngIf="recipients$ | async as recipients"
+          fxLayoutAlign="flex-start stretch" fxFlexFill>
+      <mat-form-field fxFlex="70">
+        <mat-label>Nachricht</mat-label>
+        <textarea id="message-input" rows=3 class="form-control" formControlName="messageInput" matInput></textarea>
+      </mat-form-field>
+      <div fxFlex="40" fxLayout="row" fxLayoutAlign="space-evenly flex-start">
+        <mat-form-field fxFlex="30">
+          <mat-label>Empfänger</mat-label>
+          <mat-select formControlName="recipientSelect"  >
+            <mat-option *ngFor="let recipient of recipients" [value]="recipient.id">
+              {{recipient.firstname}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button [disabled]="buttonLocked" type="submit" fxFlex="30" mat-raised-button>Senden</button>
+      </div>
+    </form>
+  </div>
+</div>
+

@@ -1,0 +1,10 @@
+<h3 class="heading">{{name}}</h3>
+<mat-form-field appearance="fill">
+  <mat-label>Suchen</mat-label>
+  <input matInput [formControl]="search">
+</mat-form-field>
+<mat-selection-list #elements [multiple]="false" (selectionChange)="selectionChange(elements.selectedOptions.selected[0])" >
+  <mat-list-option *ngFor="let listElement of search$ | async" [value]="listElement">
+    {{listElement.name}}
+  </mat-list-option>
+</mat-selection-list>

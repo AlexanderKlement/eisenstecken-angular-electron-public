@@ -1,0 +1,24 @@
+<form [formGroup]="address" fxFlexFill>
+  <div fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill>
+    <mat-form-field appearance="fill">
+      <mat-label>Adresse</mat-label>
+      <input class="form-control" formControlName="street_number" matInput>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Stadt/Gemeinde</mat-label>
+      <input class="form-control" formControlName="city" matInput>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>PLZ</mat-label>
+      <input class="form-control" formControlName="cap" matInput>
+    </mat-form-field>
+    <mat-form-field *ngIf="countryOptions$ | async as countryOptions" appearance="fill">
+      <mat-label>Land</mat-label>
+      <mat-select formControlName="country">
+        <mat-option *ngFor="let country of countryOptions" [value]="country.code">
+          {{country.name.translation_de}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</form>

@@ -1,0 +1,10 @@
+{
+  "name": "eisenstecken",
+  "version": "1.1.3",
+  "main": "main.js",
+  "private": true,
+  "dependencies": {
+    "@sentry/electron": "^2.5.4",
+    "electron-updater": "^4.6.1"
+  }
+}

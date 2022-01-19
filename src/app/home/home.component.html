@@ -1,0 +1,18 @@
+<div fxLayout="column" fxLayoutAlign="space-between stretch" class="root">
+  <div fxFlex="15" fxLayout="row" fxLayoutAlign="space-between start">
+    <button mat-raised-button mat-icon-button (click)="showInfoClicked()" title="Info">
+      <mat-icon>info</mat-icon>
+    </button>
+    <img (dblclick)="onLogoDoubleClick()" class="logo" src="assets/logos/ESS-Logo-RGB-Pos-Small.jpg" alt="Eisenstecken-logo">
+    <button mat-raised-button mat-icon-button (click)="logoutClicked()" title="Logout">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="space-between center" fxFlex="85" class="window-container">
+    <app-calendars-frame fxFlex="35" fxFlexFill></app-calendars-frame>
+    <app-note fxFlex="30" fxFlexFill></app-note>
+    <app-menu-tiles fxFlex="25" fxFlexFill></app-menu-tiles>
+  </div>
+</div>
+
+<!--- bitte amol do lossn :) 2560x1440 -->

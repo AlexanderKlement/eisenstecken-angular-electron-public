@@ -1,0 +1,97 @@
+<app-toolbar [title]="title" [buttonList]="buttons"></app-toolbar>
+<div class="window-container">
+  <mat-tab-group>
+    <mat-tab label="Allgemein">
+      <form (ngSubmit)="onSubmitGeneral()" [formGroup]="userGroup">
+        <div fxLayout="column" fxLayoutAlign="space-around center">
+          <mat-form-field appearance="fill">
+            <mat-label>Vorname</mat-label>
+            <input class="form-control" formControlName="firstname" matInput>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Nachname</mat-label>
+            <input class="form-control" formControlName="secondname" matInput>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Mail</mat-label>
+            <input class="form-control" formControlName="email" matInput>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Telefon</mat-label>
+            <input class="form-control" formControlName="tel" matInput>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Handy</mat-label>
+            <input class="form-control" formControlName="handy" matInput>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Kurzwahl</mat-label>
+            <input class="form-control" formControlName="dial" matInput>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Position</mat-label>
+            <input class="form-control" formControlName="position" matInput>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Stundensatz</mat-label>
+            <input class="form-control" formControlName="cost" matInput>
+          </mat-form-field>
+          <mat-checkbox formControlName="employee"
+                        title="Ist dieser Account auch ein Angestellter?">Angestellter
+          </mat-checkbox>
+          <mat-checkbox formControlName="office"
+                        title="Arbeitet der Angestellte im Büro?">Büro
+          </mat-checkbox>
+          <mat-checkbox formControlName="chat"
+                        title="Mitarbeiter über Chat erreichbar?">Chat empfangen
+          </mat-checkbox>
+          <mat-checkbox formControlName="hours"
+                        title="Mitarbeiter Stunden aufschreiben?">Stunden aufschreiben
+          </mat-checkbox>
+          <mat-form-field *ngIf="createMode">
+            <mat-label>Password</mat-label>
+            <input class="form-control" formControlName="password" matInput>
+          </mat-form-field>
+          <button [disabled]="submitted" mat-raised-button type="submit" class="save-btn">Speichern</button>
+        </div>
+      </form>
+    </mat-tab>
+    <mat-tab label="Rechte" *ngIf="!createMode && grantRightsAvailable">
+      <div fxLayout="column" fxLayoutAlign="space-around center">
+        <div *ngIf="!rightsLoaded">
+          <mat-spinner></mat-spinner>
+        </div>
+        <mat-selection-list #rights *ngIf="rightsLoaded" class="right-selection">
+          <div *ngFor="let cat of availableRightCats;" class="category {{cat.open ? 'open' : ''}}">
+            <div class="category-option">
+              <div class="clickable" (click)="onCategoryClick(cat.key)"></div>
+              <mat-pseudo-checkbox [state]="userHasRightCategory(cat.key)"
+                                   class="category-checkbox"
+                                   (click)="onCategoryCheck(cat.key,userHasRightCategory(cat.key))"></mat-pseudo-checkbox>
+              <div class="category-title">{{cat.title}}</div>
+            </div>
+            <mat-list-option *ngFor="let right of availableRights | RightFilter: cat.key;"
+                             [selected]="userHasRight(right.key)"
+                             value="{{right.key}}" (click)="onRightCheck(right)">
+              {{right.key}} : {{right.description}}
+            </mat-list-option>
+          </div>
+        </mat-selection-list>
+        <button [disabled]="submitted" mat-raised-button type="button" (click)="onSubmitRights()" class="save-btn">
+          Speichern
+        </button>
+      </div>
+    </mat-tab>
+    <mat-tab label="Password" *ngIf="!createMode">
+      <form (ngSubmit)="onSubmitPassword()" [formGroup]="passwordGroup">
+        <div fxLayout="column" fxLayoutAlign="space-around center">
+          <mat-form-field appearance="fill">
+            <mat-label>Neues Password</mat-label>
+            <input class="form-control" formControlName="password" matInput>
+          </mat-form-field>
+          <button [disabled]="submitted" mat-raised-button type="submit" class="save-btn">Speichern</button>
+        </div>
+      </form>
+    </mat-tab>
+  </mat-tab-group>
+</div>

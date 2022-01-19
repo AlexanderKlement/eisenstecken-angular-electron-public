@@ -1,0 +1,10 @@
+<!--<button mat-button (click)="editButtonClicked()">Bearbeiten</button> -->
+<h4>Information</h4>
+<div *ngIf="dataSource.data$ | async as data" fxLayout="row wrap">
+  <div *ngFor="let info of dataSource.mapping; let i=index" fxFlex="25">
+    <mat-form-field>
+      <mat-label> {{ info.name}}</mat-label>
+      <input matInput value="{{ getPropertyOfObject(data, info.property)}}" readonly>
+    </mat-form-field>
+  </div>
+</div>

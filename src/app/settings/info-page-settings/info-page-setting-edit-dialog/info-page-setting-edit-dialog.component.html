@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<div mat-dialog-content>
+    <form [formGroup]="infoPageGroup">
+        <div fxLayout="column" fxLayoutAlign="space-around center">
+            <mat-form-field appearance="fill">
+                <mat-label>Name</mat-label>
+                <input class="form-control" matInput formControlName="name">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Inhalt</mat-label>
+                <textarea rows=30 class="form-control" matInput formControlName="body"></textarea>
+            </mat-form-field>
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-button *ngIf="showDeleteButton" (click)="onDeleteClick()">Löschen</button>
+    <span class="spacer"></span>
+    <button mat-button (click)="onCancelClick()">Abbrechen</button>
+    <button mat-button (click)="onSaveClick()">Speichern</button>
+</div>

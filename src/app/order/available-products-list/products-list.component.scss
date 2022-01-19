@@ -1,0 +1,46 @@
+.heading {
+  text-align: center;
+}
+
+mat-form-field {
+  min-width: 180px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.article {
+  box-shadow: 0 1px 0.5px 0px rgb(0 0 0 / 30%);
+
+
+
+  &:hover {
+    background: rgba(44, 44, 44, 0.04)
+  }
+
+  .title{font-weight: 600;}
+
+  mat-form-field {
+    cursor: pointer;
+    min-width: 80px;
+  }
+
+  input {
+    cursor: pointer;
+  }
+  .description{
+    margin-bottom: 1em;
+  }
+}
+
+.add-button{
+  margin-bottom: 20px;
+}
+
+.description {
+
+  textarea {
+    font-size: 12px;
+    resize: none;
+  }
+
+}

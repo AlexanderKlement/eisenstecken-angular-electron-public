@@ -1,0 +1,59 @@
+import {Component, HostListener, Input, OnInit} from '@angular/core';
+import {NavigationService} from '../../services/navigation.service';
+
+export interface CustomButton {
+    name: string;
+    navigate: VoidFunction;
+}
+
+@Component({
+    selector: 'app-toolbar',
+    templateUrl: './toolbar.component.html',
+    styleUrls: ['./toolbar.component.scss']
+})
+export class ToolbarComponent implements OnInit {
+
+    @Input() buttonList?: CustomButton[];
+    @Input() beforeBackFunction?: (afterBackFunction: VoidFunction) => void;
+    @Input() title = '';
+
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    constructor(private navigation: NavigationService) {
+    }
+
+    // @ts-ignore
+    @HostListener('window:popstate', ['$event'])
+
+    //@HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+    //    this.backClicked();
+    //}
+
+    onBrowserBackBtnClose(event: Event): void {
+        event.preventDefault();
+        this.navigation.backEvent();
+        this.backClicked();
+    }
+
+    ngOnInit(): void {
+    }
+
+    backClicked(): void {
+        if (this.beforeBackFunction != null) {
+            this.beforeBackFunction(() => {
+                this.navigation.back();
+            });
+        } else {
+            this.navigation.back();
+        }
+    }
+
+    homeClicked(): void {
+        this.navigation.home();
+    }
+
+    buttonClicked(button: CustomButton): void {
+        console.log('Toolbar: ' + button.name + ' clicked');
+        button.navigate();
+    }
+
+}

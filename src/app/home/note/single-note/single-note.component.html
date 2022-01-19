@@ -1,0 +1,8 @@
+<div class="single-note" *ngIf="noteVisible">
+  <div class="pin"></div>
+  <span (click)="deleteNoteClicked()" class="material-icons close">delete</span>
+  <div class="text">
+    <textarea [formControl]="singleNoteTextArea"
+              class="note-text">{{note.text}}</textarea>
+  </div>
+</div>

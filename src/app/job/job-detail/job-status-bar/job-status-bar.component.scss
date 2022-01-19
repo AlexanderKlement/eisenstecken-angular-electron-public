@@ -1,0 +1,30 @@
+@use 'sass:map';
+@use "../../../shared/components/base-edit/base-edit.component";
+@import "../../../../theme";
+
+.mat-toolbar {
+  margin: 10px 0;
+  &.created {
+    background: #EAEAEA;
+    color: map.get($mat-accent, main);
+  }
+
+  &.accepted {
+    background: #90EE90;
+    color: map.get($mat-accent, main);
+  }
+
+  &.completed {
+    background: map.get($mat-primary, 200);
+    color: map.get($mat-accent, main);
+  }
+
+  &.declined {
+    background: #F08080;
+    color: map.get($mat-accent, main);
+  }
+}
+
+.statusbar-spacer {
+  flex: 1 1 auto;
+}

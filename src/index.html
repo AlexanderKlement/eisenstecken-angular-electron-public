@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Eisenstecken - Eibel</title>
+    <base href="">
+    <script>
+        global = globalThis;
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
+    <style>
+        #notification {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 200px;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: white;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<app-root>Zuaschneiden ... <br>Zommleim ...<br>Schleifen ...<br>Lackieren ...</app-root>
+<div id="notification" class="hidden">
+    <p id="message"></p>
+    <button id="close-button" onClick="closeNotification()">
+        Close
+    </button>
+    <button id="restart-button" onClick="restartApp()" class="hidden">
+        Restart
+    </button>
+</div>
+<script>
+    const {ipcRenderer} = require('electron');
+    const version = document.getElementById('version');
+
+    ipcRenderer.send('app_version');
+    ipcRenderer.on('app_version', (event, arg) => {
+        ipcRenderer.removeAllListeners('app_version');
+        document.title = document.title + ' - ' + arg.version
+        console.log("VERSION: " + arg.version);
+    });
+
+    const notification = document.getElementById('notification');
+    const message = document.getElementById('message');
+    const restartButton = document.getElementById('restart-button');
+    ipcRenderer.on('update_available', () => {
+        ipcRenderer.removeAllListeners('update_available');
+        message.innerText = 'Ein neues Update ist verfügbar. Download wurde gestartet!';
+        notification.classList.remove('hidden');
+    });
+    ipcRenderer.on('update_downloaded', () => {
+        ipcRenderer.removeAllListeners('update_downloaded');
+        message.innerText = 'Update heruntergeladen. Dies wird beim Neustart installiert. Neustarten?';
+        restartButton.classList.remove('hidden');
+        notification.classList.remove('hidden');
+    });
+
+    function closeNotification() {
+        notification.classList.add('hidden');
+    }
+
+    function restartApp() {
+        ipcRenderer.send('restart_app');
+    }
+</script>
+</body>
+</html>

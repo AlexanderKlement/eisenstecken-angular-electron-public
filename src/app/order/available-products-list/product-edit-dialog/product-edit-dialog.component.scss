@@ -1,0 +1,23 @@
+@use 'sass:map';
+@use "../../../shared/components/base-edit/base-edit.component";
+@import "../../../../theme";
+
+.dialog-content {
+  margin: 0;
+  padding: 0;
+
+  .add-button {
+    background-color: map.get($mat-primary, main);
+  }
+
+}
+
+.mat-dialog-content{
+  max-height: 85vh;
+}
+
+form{
+  mat-form-field{
+    max-width: 700px;
+  }
+}
