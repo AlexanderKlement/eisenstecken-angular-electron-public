@@ -20,11 +20,11 @@ export const defaultValues = {
     filter: '',
     sortDirection: 'ASC',
     pageIndex: 1,
-    pageSize: 25,
+    pageSize: 100,
     pageSizeOptions: [
-        25,
-        50,
-        100
+        100,
+        200,
+        500
     ]
 };
 

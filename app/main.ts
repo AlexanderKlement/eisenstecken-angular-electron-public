@@ -17,6 +17,8 @@ var appPath = app.getAppPath();
 var mailExecutablePath = appPath + '\\mail\\mail.exe';
 const {autoUpdater} = require('electron-updater');
 
+var forceClose = false;
+
 initIPC();
 
 try {
@@ -121,6 +123,9 @@ function createWindow(): BrowserWindow {
     });
 
     win.on('close', async e => {
+        if (forceClose) {
+            return;
+        }
         e.preventDefault();
 
         const {response} = await dialog.showMessageBox(win, {
@@ -187,6 +192,7 @@ function initIPC() {
     });
 
     ipcMain.on('restart_app', () => {
+        forceClose = true;
         autoUpdater.quitAndInstall();
     });
 }
