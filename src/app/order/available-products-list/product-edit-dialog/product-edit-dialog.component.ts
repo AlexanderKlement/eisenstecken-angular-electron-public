@@ -4,7 +4,7 @@ import {Observable, Subscription} from 'rxjs';
 import {DefaultService, Unit, Vat} from 'eisenstecken-openapi-angular-library';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 
-export interface DialogData {
+export interface OrderDialogData {
     title: string;
     name: string;
     description: string;
@@ -20,6 +20,9 @@ export interface DialogData {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     vat_id: number;
     request: boolean;
+    comment: string;
+    position: string;
+    delete: boolean;
 }
 
 @Component({
@@ -33,13 +36,16 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
     unitOptions$: Observable<Unit[]>;
     productEditGroup: FormGroup;
     subscription: Subscription;
+    priceSubscription: Subscription;
+    singlePrice = true;
 
     constructor(public dialogRef: MatDialogRef<ProductEditDialogComponent>,
-                @Inject(MAT_DIALOG_DATA) public data: DialogData, private api: DefaultService) {
+                @Inject(MAT_DIALOG_DATA) public data: OrderDialogData, private api: DefaultService) {
     }
 
     ngOnInit(): void {
         this.subscription = new Subscription();
+        this.priceSubscription = new Subscription();
         this.vatOptions$ = this.api.readVatsVatGet();
         this.unitOptions$ = this.api.readUnitsUnitGet();
         this.initProductEditGroup();
@@ -47,6 +53,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+        this.priceSubscription.unsubscribe();
     }
 
     onNoClick(): void {
@@ -54,10 +61,14 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
     }
 
     onAddClick(): void {
-        this.dialogRef.close(this.getReturnData());
+        this.dialogRef.close(this.getReturnData(false));
     }
 
-    private getReturnData(): DialogData {
+    onDeleteClick(): void {
+        this.dialogRef.close(this.getReturnData(true));
+    }
+
+    private getReturnData(deleteOrder: boolean): OrderDialogData {
         return {
             title: this.productEditGroup.get('title').value,
             name: this.productEditGroup.get('name').value,
@@ -74,6 +85,9 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             vat_id: this.productEditGroup.get('vat_id').value,
             request: this.productEditGroup.get('request').value,
+            comment: this.productEditGroup.get('comment').value,
+            position: this.productEditGroup.get('position').value,
+            delete: deleteOrder,
         };
     }
 
@@ -95,7 +109,11 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
             vat_id: new FormControl(this.data.vat_id),
             request: new FormControl(this.data.request),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            total_price: new FormControl(0)
+            total_price: new FormControl(0),
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            single_price_insert: new FormControl(true),
+            comment: new FormControl(this.data.comment),
+            position: new FormControl(this.data.position)
         });
         this.subscription.add(this.productEditGroup.get('amount').valueChanges.subscribe(() => {
             this.recalculateTotalPrice();
@@ -103,16 +121,41 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
         this.subscription.add(this.productEditGroup.get('discount').valueChanges.subscribe(() => {
             this.recalculateTotalPrice();
         }));
-        this.subscription.add(this.productEditGroup.get('price').valueChanges.subscribe(() => {
+        this.priceSubscription.add(this.productEditGroup.get('price').valueChanges.subscribe(() => {
             this.recalculateTotalPrice();
+        }));
+        this.subscription.add(this.productEditGroup.get('single_price_insert').valueChanges.subscribe(() => {
+            this.singlePriceInsertChanged();
         }));
         this.recalculateTotalPrice();
     }
 
 
     private recalculateTotalPrice(): void {
-        let price = this.productEditGroup.get('price').value * this.productEditGroup.get('amount').value;
-        price = price * (1 - (this.productEditGroup.get('discount').value / 100));
-        this.productEditGroup.get('total_price').setValue(price.toFixed(2));
+        if (this.singlePrice) {
+            let price = this.productEditGroup.get('price').value * this.productEditGroup.get('amount').value;
+            price = price * (1 - (this.productEditGroup.get('discount').value / 100));
+            this.productEditGroup.get('total_price').setValue(price.toFixed(2));
+        } else {
+            let price = this.productEditGroup.get('total_price').value / (1 - (this.productEditGroup.get('discount').value / 100));
+            price = price / this.productEditGroup.get('amount').value;
+            this.productEditGroup.get('price').setValue(price.toFixed(2));
+        }
+    }
+
+
+    private singlePriceInsertChanged(): void {
+        this.priceSubscription.unsubscribe();
+        if (this.productEditGroup.get('single_price_insert').value) {
+            this.singlePrice = true;
+            this.priceSubscription.add(this.productEditGroup.get('price').valueChanges.subscribe(() => {
+                this.recalculateTotalPrice();
+            }));
+        } else {
+            this.singlePrice = false;
+            this.priceSubscription.add(this.productEditGroup.get('total_price').valueChanges.subscribe(() => {
+                this.recalculateTotalPrice();
+            }));
+        }
     }
 }

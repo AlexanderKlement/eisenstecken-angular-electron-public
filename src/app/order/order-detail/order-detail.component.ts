@@ -7,6 +7,7 @@ import {first} from 'rxjs/operators';
 import {ProductsListComponent} from '../available-products-list/products-list.component';
 import {ProductEditDialogComponent} from '../available-products-list/product-edit-dialog/product-edit-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-order-detail',
@@ -19,7 +20,7 @@ export class OrderDetailComponent implements OnInit {
 
     orderId: number;
 
-    constructor(private api: DefaultService, private route: ActivatedRoute, private router: Router, private dialog: MatDialog) {
+    constructor(private api: DefaultService, private route: ActivatedRoute, private router: Router, private dialog: MatDialog, private snackBar: MatSnackBar) {
     }
 
     ngOnInit(): void {
@@ -110,6 +111,18 @@ export class OrderDetailComponent implements OnInit {
             const dialogData$ = ProductsListComponent.createEditDialogData(orderedArticle, 'Produkt bearbeiten', this.api);
             const closeFunction = (result: any) => {
                 if (result === undefined) {
+                    return;
+                }
+                if (result.delete) {
+                    ProductsListComponent.deleteOrderedArticle(orderedArticle.id, this.api).pipe(first()).subscribe((success) => {
+                        if (success) {
+                            this.articleDataSource.loadData();
+                        } else {
+                            this.snackBar.open('Es ist ein Fehler aufgetreten.', 'Ok', {
+                                duration: 10000
+                            });
+                        }
+                    });
                     return;
                 }
                 const orderedArticleCreate = ProductsListComponent
