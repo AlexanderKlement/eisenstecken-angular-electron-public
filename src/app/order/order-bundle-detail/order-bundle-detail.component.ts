@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {TableBuilderComponent} from '../../shared/components/table-builder/table-builder.component';
-import {DefaultService, Order, OrderBundle, Supplier} from 'eisenstecken-openapi-angular-library';
+import {DefaultService, Order, OrderBundle} from 'eisenstecken-openapi-angular-library';
 import {InfoDataSource} from '../../shared/components/info-builder/info-builder.datasource';
 import {TableDataSource} from '../../shared/components/table-builder/table-builder.datasource';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -23,17 +22,6 @@ export class OrderBundleDetailComponent implements OnInit {
     orderBundleId: number;
 
     buttons: CustomButton[] = [
-        {
-            name: 'Preise eintragen',
-            navigate: (): void => {
-                this.locker.getLockAndTryNavigate(
-                    this.api.islockedOrderBundleOrderBundleIslockedOrderBundleIdGet(this.orderBundleId),
-                    this.api.lockOrderBundleOrderBundleLockOrderBundleIdPost(this.orderBundleId),
-                    this.api.unlockOrderBundleOrderBundleUnlockOrderBundleIdPost(this.orderBundleId),
-                    'order_bundle/edit/' + this.orderBundleId.toString()
-                );
-            }
-        },
         {
             name: 'Löschen',
             navigate: (): void => {
@@ -65,9 +53,8 @@ export class OrderBundleDetailComponent implements OnInit {
         const dialogRef = this.dialog.open(ConfirmDialogComponent, {
             width: '400px',
             data: {
-                title: 'Versendete Bestellung löschen?',
-                text: 'Versendete Besellung wirklich löschen? Die einzelnen Artikel können' +
-                    ' danach wieder im Bestellung-Fenster bearbeitet werden.'
+                title: 'Bestellung löschen?',
+                text: 'Bestellung wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden!',
             }
         });
         dialogRef.afterClosed().subscribe(result => {
@@ -76,8 +63,8 @@ export class OrderBundleDetailComponent implements OnInit {
                     if (success) {
                         this.orderDataSource.loadData();
                     } else {
-                        this.snackBar.open('Bestellung konnte nicht aufgelöst werden', 'Ok',{
-                          duration: 10000
+                        this.snackBar.open('Bestellung konnte nicht gelöscht werden', 'Ok', {
+                            duration: 10000
                         });
                         console.error('Could not delete order bundle');
                     }

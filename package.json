@@ -1,6 +1,6 @@
 {
   "name": "eisenstecken-eibel",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "description": "Angular 13 with Electron 16 (Typescript + SASS + Hot Reload)",
   "homepage": "https://kivi.bz.it",
   "author": {

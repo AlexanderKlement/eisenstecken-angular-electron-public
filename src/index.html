@@ -58,7 +58,7 @@
     });
     ipcRenderer.on('update_downloaded', () => {
         ipcRenderer.removeAllListeners('update_downloaded');
-        message.innerText = 'Update heruntergeladen. Dies wird beim Neustart installiert. Neustarten?';
+        message.innerText = 'Update heruntergeladen. Dieses wird beim Neustart installiert. Neustarten?';
         restartButton.classList.remove('hidden');
         notification.classList.remove('hidden');
     });

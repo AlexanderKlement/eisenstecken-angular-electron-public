@@ -113,9 +113,9 @@ export class JobDetailComponent implements OnInit {
                 dataSourceClasses.forEach((dataSource) => {
                     rows.push(
                         {
-                            values: {
-                                id: dataSource.id,
-                                date: moment(dataSource.date).format('L'),
+                             values: {
+                                    id: dataSource.id,
+                                    date: moment(dataSource.date).format('L'),
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
                                 full_price_with_vat: formatCurrency(dataSource.full_price_with_vat, 'de-DE', 'EUR')
                             },

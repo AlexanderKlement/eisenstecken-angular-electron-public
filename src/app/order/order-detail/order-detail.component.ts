@@ -8,6 +8,8 @@ import {ProductsListComponent} from '../available-products-list/products-list.co
 import {ProductEditDialogComponent} from '../available-products-list/product-edit-dialog/product-edit-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {CustomButton} from '../../shared/components/toolbar/toolbar.component';
+import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
     selector: 'app-order-detail',
@@ -19,6 +21,16 @@ export class OrderDetailComponent implements OnInit {
     infoDataSource: InfoDataSource<Order>;
 
     orderId: number;
+
+    buttons: CustomButton[] = [
+        {
+            name: 'Löschen',
+            navigate: (): void => {
+                this.orderDeleteClicked();
+            }
+        },
+    ];
+
 
     constructor(private api: DefaultService, private route: ActivatedRoute, private router: Router, private dialog: MatDialog, private snackBar: MatSnackBar) {
     }
@@ -82,9 +94,9 @@ export class OrderDetailComponent implements OnInit {
                                 custom_description: dataSource.custom_description,
                                 amount: dataSource.amount,
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                                'article.unit.name.translation_de': dataSource.article.unit.name.translation_de,
-                                price: dataSource.price,
-                                discount: dataSource.price * dataSource.amount - dataSource.discount,
+                                'ordered_unit.name.translation_de': dataSource.ordered_unit.name.translation_de,
+                                price: dataSource.price.toFixed(2) + ' €',
+                                discount: (dataSource.price * dataSource.amount - dataSource.discount).toFixed(2) + ' €',
                             },
                             route: () => {
                                 this.orderedArticleClicked(dataSource.id);
@@ -97,9 +109,9 @@ export class OrderDetailComponent implements OnInit {
                 {name: 'article.name.translation_de', headerName: 'Name'},
                 {name: 'custom_description', headerName: 'Beschreibung'},
                 {name: 'amount', headerName: 'Menge'},
-                {name: 'article.unit.name.translation_de', headerName: 'Einheit'},
-                {name: 'price', headerName: 'Einzelpreis [€]'},
-                {name: 'discount', headerName: 'Gesamtpreis [€]'}
+                {name: 'ordered_unit.name.translation_de', headerName: 'Einheit'},
+                {name: 'price', headerName: 'Einzelpreis'},
+                {name: 'discount', headerName: 'Gesamtpreis'}
             ],
             (api) => api.readOrderedArticleCountByOrderOrderedArticleOrderOrderIdCountGet(this.orderId)
         );
@@ -147,4 +159,28 @@ export class OrderDetailComponent implements OnInit {
         });
     }
 
+    private orderDeleteClicked() {
+        const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+            width: '400px',
+            data: {
+                title: 'Bestellung löschen?',
+                text: 'Bestellung wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden!',
+            }
+        });
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.api.deleteOrderOrderOrderIdDelete(this.orderId).pipe(first()).subscribe(success => {
+                    if (success) {
+                        this.articleDataSource.loadData();
+                    } else {
+                        this.snackBar.open('Bestellung konnte nicht gelöscht werden', 'Ok', {
+                            duration: 10000
+                        });
+                        console.error('Could not delete order');
+                    }
+                });
+
+            }
+        });
+    }
 }
