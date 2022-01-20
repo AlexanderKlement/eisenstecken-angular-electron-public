@@ -4,6 +4,7 @@ import {DefaultService, OutgoingInvoice} from 'eisenstecken-openapi-angular-libr
 import {LockService} from '../../shared/services/lock.service';
 import {first} from 'rxjs/operators';
 import {AuthService} from '../../shared/services/auth.service';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-outgoing',
@@ -32,10 +33,10 @@ export class OutgoingComponent implements OnInit {
                     rows.push(
                         {
                             values: {
-                                id: dataSource.id,
-                                date: dataSource.number,
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                                full_price_with_vat: dataSource.date
+                                client_name: dataSource.client_name,
+                                date: moment(dataSource.date, 'YYYY-MM-DD').format('L'),
+                                id: dataSource.number
                             },
                             route: () => {
                                 this.authService.currentUserHasRight('outgoing_invoices:modify').pipe(first()).subscribe(allowed => {
@@ -54,8 +55,8 @@ export class OutgoingComponent implements OnInit {
                 return rows;
             },
             [
-                {name: 'id', headerName: 'ID'},
-                {name: 'number', headerName: 'Nummer'},
+                {name: 'client_name', headerName: 'Kunde'},
+                {name: 'id', headerName: 'Nummer'},
                 {name: 'date', headerName: 'Datum'}
             ],
             (api) => api.countOutgoingInvoicesOutgoingInvoiceCountGet()

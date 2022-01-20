@@ -113,3 +113,5 @@ the time not accessible by others, which makes regular uploads a real struggle.
 
 First we have to change the version numbers in `package.json` in the root and root/app folder
 
+The build the update exe and publish the release on GitHub
+

@@ -1,5 +1,7 @@
 {
   "asar": false,
+  "productName": "Eisenstecken - Eibel",
+  "artifactName": "eisenstecken-eibel-${version}.${ext}",
   "directories": {
     "output": "release/"
   },
