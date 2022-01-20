@@ -1,9 +1,23 @@
-.heading{
+.heading {
   text-align: center;
 }
 
-mat-form-field{
+mat-form-field {
   min-width: 180px;
   max-width: 500px;
   width: 100%;
+}
+
+.mat-list-option,
+.mat-nav-list .mat-list-item,
+.mat-action-list .mat-list-item {
+  &:hover, &:focus {
+    background: rgba(#fdc400, 0.4);
+  }
+}
+
+.mat-list-single-selected-option {
+  &, &:hover, &:focus {
+    background: rgba(#fdc400, 0.6);
+  }
 }
