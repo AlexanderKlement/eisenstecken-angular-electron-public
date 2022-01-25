@@ -14,6 +14,11 @@ import {AuthService} from '../../shared/services/auth.service';
 import {first} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 
+interface Update {
+    versionName: string;
+    changes: string[];
+}
+
 @Component({
     selector: 'app-info-dialog',
     templateUrl: './info-dialog.component.html',
@@ -27,6 +32,19 @@ export class InfoDialogComponent implements OnInit {
     credentialDataSource: TableDataSource<Credential>;
     userCanViewPrice = false;
     infoPages$: Observable<InfoPage[]>;
+
+    updateList: Update[] = [
+        {
+            versionName: '0.8.10',
+            changes: [
+                'Bei den Einstellungen (Spalte Angebote) wurden die Zeilen die nicht mehr benötigt werden entfernt. ' +
+                'Dazu zählen Position und Name, welche jetzt direkt vom jeweiligen Benutzer verwendet werden.',
+                'Das Beschreibungsfeld bei Angebot erstellen oder bearbeiten ist nun breiter.',
+                'Das Beschreibungsfeld bei Angebot erstellen oder bearbeiten passt sich nun in der Höhe laufend an.'
+            ]
+        },
+    ];
+
 
     constructor(private api: DefaultService, public dialogRef: MatDialogRef<InfoDialogComponent>, private authService: AuthService) {
     }

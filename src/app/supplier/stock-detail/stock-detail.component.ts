@@ -1,6 +1,13 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {InfoBuilderComponent} from '../../shared/components/info-builder/info-builder.component';
-import {DefaultService, Order, OrderBundle, Stock, Supplier} from 'eisenstecken-openapi-angular-library';
+import {
+    DefaultService,
+    Order,
+    OrderBundle,
+    OrderBundleCreate,
+    Stock,
+    Supplier
+} from 'eisenstecken-openapi-angular-library';
 import {InfoDataSource} from '../../shared/components/info-builder/info-builder.datasource';
 import {TableDataSource} from '../../shared/components/table-builder/table-builder.datasource';
 import {CustomButton} from '../../shared/components/toolbar/toolbar.component';
@@ -8,9 +15,11 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import * as moment from 'moment';
 import {AuthService} from '../../shared/services/auth.service';
-import {first} from 'rxjs/operators';
+import {first, map} from 'rxjs/operators';
 import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {OrderDateReturnData, OrderDialogComponent} from '../supplier-detail/order-dialog/order-dialog.component';
+import {FileService} from '../../shared/services/file.service';
 
 @Component({
     selector: 'app-stock-detail',
@@ -28,7 +37,7 @@ export class StockDetailComponent implements OnInit {
 
     constructor(private api: DefaultService, private authService: AuthService,
                 private router: Router, private snackBar: MatSnackBar,
-                private route: ActivatedRoute,
+                private route: ActivatedRoute, private file: FileService,
                 public dialog: MatDialog) {
     }
 
@@ -61,6 +70,17 @@ export class StockDetailComponent implements OnInit {
                     name: 'Lager ausblenden',
                     navigate: () => {
                         this.stockDeleteClicked();
+                    }
+                });
+            }
+        });
+
+        this.authService.currentUserHasRight('orders:modify').pipe(first()).subscribe(allowed => {
+            if (allowed) {
+                this.buttons.push({
+                    name: 'Bestellung(en) senden',
+                    navigate: () => {
+                        this.sendOrderButtonClicked();
                     }
                 });
             }
@@ -173,8 +193,8 @@ export class StockDetailComponent implements OnInit {
                     if (success) {
                         this.router.navigateByUrl('supplier');
                     } else {
-                        this.snackBar.open('Beim Ausblenden ist ein Fehler aufgetreten', 'Ok',{
-                          duration: 10000
+                        this.snackBar.open('Beim Ausblenden ist ein Fehler aufgetreten', 'Ok', {
+                            duration: 10000
                         });
                         console.error('Could not delete order bundle');
                     }
@@ -184,5 +204,41 @@ export class StockDetailComponent implements OnInit {
         });
 
 
+    }
+
+    private sendOrderButtonClicked(): void {
+        const dialogRef = this.dialog.open(OrderDialogComponent, {
+            width: '400px',
+            data: {
+                name: this.api.readStockStockStockIdGet(this.id).pipe(
+                    map((supplier) => supplier.displayable_name)),
+                orders: this.api.readOrdersFromOrderFromOrderableFromIdGet(this.id, 0, 1000, '', 'CREATED')
+            }
+        });
+
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+            this.ordersToOrderSelected(result);
+        });
+    }
+
+    private ordersToOrderSelected(orderDateReturnData: OrderDateReturnData): void {
+        this.api.readSupplierSupplierSupplierIdGet(this.id).pipe(first()).subscribe((stock) => {
+            const orderBundle: OrderBundleCreate = {
+                description: '',
+                orders: orderDateReturnData.orders,
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                delivery_date: orderDateReturnData.date,
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                order_from_id: stock.id
+            };
+            this.api.createOrderBundleOrderBundlePost(orderBundle).pipe(first()).subscribe((newOrderBundle) => {
+                //this.deliveredOrderDataSource.loadData();
+                //this.orderedOrderDataSource.loadData();
+                //this.createdOrderDataSource.loadData();
+                this.file.open(newOrderBundle.pdf);
+            });
+        });
     }
 }

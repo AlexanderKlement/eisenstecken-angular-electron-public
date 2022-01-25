@@ -14,8 +14,15 @@ const gotTheLock = app.requestSingleInstanceLock();
 
 var child = require('child_process').execFile;
 var appPath = app.getAppPath();
-var mailExecutablePath = appPath + '\\mail\\mail.exe';
+
+var mail64ExecutablePath = appPath + '\\mail64\\mail.exe';
+var mail32ExecutablePath = appPath + '\\mail32\\mail.exe';
 const {autoUpdater} = require('electron-updater');
+
+if (app.getVersion().includes('beta')) {
+    console.warn("ATTENTION: This is a BETA Version");
+    autoUpdater.channel = "beta"
+}
 
 var forceClose = false;
 
@@ -160,7 +167,13 @@ function initIPC() {
         });
     });
     ipcMain.on('send-mail-request', (event, arg) => {
-        child(mailExecutablePath, arg, function (err, data) {
+        //I'll just do both of them, one of them should open correctly.
+        //If it opens twice we should add a check here
+        child(mail64ExecutablePath, arg, function (err, data) {
+            console.log(err);
+            console.log(data);
+        });
+        child(mail32ExecutablePath, arg, function (err, data) {
             console.log(err);
             console.log(data);
         });

@@ -1,6 +1,6 @@
 {
   "name": "eisenstecken-eibel",
-  "version": "0.8.6",
+  "version": "0.8.10-beta",
   "description": "Angular 13 with Electron 16 (Typescript + SASS + Hot Reload)",
   "homepage": "https://kivi.bz.it",
   "author": {
@@ -37,6 +37,7 @@
     "electron:local": "npm run build:prod && npx electron .",
     "electron:build": "npm run build:prod && electron-builder build --publish=never",
     "electron:deploy": "npm run build:prod && electron-builder build --publish=always",
+    "electron:dev": "npm run build:dev && electron-builder build --publish=never",
     "test": "ng test --watch=false",
     "test:watch": "ng test",
     "e2e": "npm run build:prod && playwright test -c e2e/playwright.config.ts e2e/",

@@ -304,11 +304,11 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
     protected initDescriptiveArticles(descriptiveArticle?: DescriptiveArticle): FormGroup {
         const descriptiveArticleFormGroup = new FormGroup({
             description: new FormControl(''),
-            amount: new FormControl(''),
+            amount: new FormControl('0'),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            single_price: new FormControl(''),
+            single_price: new FormControl('0'),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            total_price: new FormControl('')
+            total_price: new FormControl('0')
         });
 
         this.subscription.add(descriptiveArticleFormGroup.get('single_price').valueChanges.subscribe(

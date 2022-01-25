@@ -17,6 +17,18 @@
         <mat-tab *ngFor="let infoPage of infoPages$|async" [label]="infoPage.name">
             <textarea rows="40" readonly class="form-control" matInput>{{infoPage.body}}</textarea>
         </mat-tab>
+        <mat-tab label="Änderungsprotokoll">
+            <div *ngFor="let singleUpdate of updateList">
+                <h4>
+                    {{singleUpdate.versionName}}
+                </h4>
+                <ul>
+                    <li *ngFor="let change of singleUpdate.changes">
+                        {{change}}
+                    </li>
+                </ul>
+            </div>
+        </mat-tab>
     </mat-tab-group>
 </div>
 <div mat-dialog-actions>

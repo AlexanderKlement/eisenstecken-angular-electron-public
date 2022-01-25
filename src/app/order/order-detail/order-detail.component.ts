@@ -96,7 +96,7 @@ export class OrderDetailComponent implements OnInit {
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
                                 'ordered_unit.name.translation_de': dataSource.ordered_unit.name.translation_de,
                                 price: dataSource.price.toFixed(2) + ' €',
-                                discount: (dataSource.price * dataSource.amount - dataSource.discount).toFixed(2) + ' €',
+                                discount: (dataSource.price * dataSource.amount * (1 - dataSource.discount / 100)).toFixed(2) + ' €',
                             },
                             route: () => {
                                 this.orderedArticleClicked(dataSource.id);

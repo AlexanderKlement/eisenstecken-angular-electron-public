@@ -156,10 +156,10 @@ export class JobDetailComponent implements OnInit {
                     rows.push(
                         {
                             values: {
-                                id: dataSource.id,
-                                date: moment(dataSource.date).format('L'),
-                                // eslint-disable-next-line id-blacklist
-                                number: dataSource.number
+                                // eslint-disable-next-line @typescript-eslint/naming-convention
+                                client_name: dataSource.client_name,
+                                date: moment(dataSource.date, 'YYYY-MM-DD').format('L'),
+                                id: dataSource.number
                             },
                             route: () => {
                                 this.authService.currentUserHasRight('outgoing_invoices:modify').pipe(first()).subscribe(allowed => {
@@ -179,8 +179,8 @@ export class JobDetailComponent implements OnInit {
                 return rows;
             },
             [
-                {name: 'id', headerName: 'ID'},
-                {name: 'number', headerName: 'Nummer'},
+                {name: 'client_name', headerName: 'Kunde'},
+                {name: 'id', headerName: 'Nummer'},
                 {name: 'date', headerName: 'Datum'}
             ],
             (api) => api.countOutgoingInvoicesByJobOutgoingInvoiceJobCountJobIdGet(this.jobId)

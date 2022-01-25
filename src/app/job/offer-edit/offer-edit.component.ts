@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AbstractControl, FormArray, FormControl, FormGroup} from '@angular/forms';
 import {BaseEditComponent} from '../../shared/components/base-edit/base-edit.component';
 import {
@@ -11,13 +11,14 @@ import {
 } from 'eisenstecken-openapi-angular-library';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-import {Observable, Subscription} from 'rxjs';
+import {Observable, Subscription, take} from 'rxjs';
 import {first, tap} from 'rxjs/operators';
 import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import {FileService} from '../../shared/services/file.service';
 import {formatDateTransport} from '../../shared/date.util';
 import {CustomButton} from '../../shared/components/toolbar/toolbar.component';
 import {CurrencyPipe, getLocaleCurrencyCode} from '@angular/common';
+import {CdkTextareaAutosize} from '@angular/cdk/text-field';
 
 @Component({
     selector: 'app-offer-edit',

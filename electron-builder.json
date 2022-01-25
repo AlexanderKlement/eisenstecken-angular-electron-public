@@ -2,6 +2,7 @@
   "asar": false,
   "productName": "Eisenstecken - Eibel",
   "artifactName": "eisenstecken-eibel-${version}.${ext}",
+  "generateUpdatesFilesForAllChannels": true,
   "directories": {
     "output": "release/"
   },

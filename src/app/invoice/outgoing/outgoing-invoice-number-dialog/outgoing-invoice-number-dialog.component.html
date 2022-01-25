@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>Zählerstand Rechnungen</h1>
+<div mat-dialog-content>
+    <div class="window-container">
+        <form [formGroup]="outgoingInvoiceNumberFormGroup">
+            <mat-form-field appearance="fill">
+                <mat-label>Nächste Rechnungsnummer:</mat-label>
+                <input class="form-control" type="text" formControlName="invoice_number" matInput>
+            </mat-form-field>
+            <br>
+        </form>
+    </div>
+</div>
+<mat-dialog-actions>
+    <button mat-button (click)="onCancelClick()">Abbrechen</button>
+    <button mat-button (click)="onSubmitClick()">Ok</button>
+</mat-dialog-actions>

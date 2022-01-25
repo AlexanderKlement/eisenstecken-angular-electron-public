@@ -1,4 +1,4 @@
-<app-toolbar title="Rechnung"></app-toolbar>
+<app-toolbar [buttonList]="buttons" title="Rechnung"></app-toolbar>
 <div class="window-container">
 <mat-tab-group>
     <mat-tab *ngIf="outgoingInvoicesAvailable" label="Ausgangsrechnungen">

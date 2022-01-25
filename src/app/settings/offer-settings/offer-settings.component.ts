@@ -20,11 +20,7 @@ export class OfferSettingsComponent extends BaseSettingsComponent  implements On
     'offer_delivery_de',
     'offer_delivery_it',
     'offer_payment_de',
-    'offer_payment_it',
-    'offer_name_de',
-    'offer_name_it',
-    'offer_position_de',
-    'offer_position_it',
+    'offer_payment_it'
   ];
 
 

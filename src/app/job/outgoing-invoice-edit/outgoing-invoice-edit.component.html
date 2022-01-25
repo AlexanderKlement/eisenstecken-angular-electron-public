@@ -20,19 +20,19 @@
             <mat-icon>arrow_downward</mat-icon>
           </button>
           <div fxLayout="row" fxLayoutAlign="space-between center" [formGroupName]="i">
-            <mat-form-field appearance="fill" fxFlex="22">
+            <mat-form-field appearance="fill" fxFlex="70">
               <mat-label>Position</mat-label>
               <input class="form-control" formControlName="description" maxlength="10000" matInput>
             </mat-form-field>
-            <mat-form-field appearance="fill" fxFlex="22">
+            <mat-form-field appearance="fill" fxFlex="6">
               <mat-label>Menge</mat-label>
               <input class="form-control" type=number formControlName="amount" matInput>
             </mat-form-field>
-            <mat-form-field appearance="fill" fxFlex="22">
+            <mat-form-field appearance="fill" fxFlex="6">
               <mat-label>Einzelpreis</mat-label>
               <input class="form-control" type=number formControlName="single_price" matInput>
             </mat-form-field>
-            <mat-form-field appearance="fill" fxFlex="22">
+            <mat-form-field appearance="fill" fxFlex="6">
               <mat-label>Gesamtpreis</mat-label>
               <input readonly class="form-control" formControlName="total_price" matInput>
             </mat-form-field>

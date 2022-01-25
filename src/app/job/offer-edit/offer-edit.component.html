@@ -45,13 +45,16 @@
                         <div fxLayout="row" fxLayoutAlign="space-between stretch" [formGroupName]="j"
                              *ngFor="let sub_descriptive_article of getSubDescriptiveArticles(descriptiveArticle).controls; let j = index"
                              class="descriptive-sub-article">
-                            <mat-form-field appearance="fill" fxFlex="40">
+                            <mat-form-field appearance="fill" fxFlex="70">
                                 <mat-label>Beschreibung</mat-label>
-                                <textarea class="form-control description" formControlName="description"
+                                <textarea cdkTextareaAutosize
+                                          cdkAutosizeMinRows="1"
+                                          cdkAutosizeMaxRows="10" class="form-control description"
+                                          formControlName="description"
                                           maxlength="10000"
                                           matInput></textarea>
                             </mat-form-field>
-                            <div class="amount-price" fxLayout="column" fxLayoutAlign="start stretch" fxFlex="40">
+                            <div class="amount-price" fxLayout="column" fxLayoutAlign="start stretch" fxFlex="10">
                                 <mat-form-field appearance="fill">
                                     <mat-label>Menge</mat-label>
                                     <input class="form-control" type=number formControlName="amount" matInput>
