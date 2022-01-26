@@ -35,14 +35,35 @@ export class InfoDialogComponent implements OnInit {
 
     updateList: Update[] = [
         {
+            versionName: '0.8.11',
+            changes: [
+                'Falls eine Bestellung erstellt wird werden nun 2 PDF geliefert: intern und extern. Das externe PDF ist dasselbe was' +
+                'derzeit schon generiert wird. Das interne enthält die Bemerkung welche beim Eintragen der Bestellung notiert werden kann.'
+            ]
+        },
+        {
             versionName: '0.8.10',
             changes: [
+                'Dieses Info-Feld hinzugefügt um alle Benutzer über die laufenden Änderungen zu informieren',
                 'Bei den Einstellungen (Spalte Angebote) wurden die Zeilen die nicht mehr benötigt werden entfernt. ' +
                 'Dazu zählen Position und Name, welche jetzt direkt vom jeweiligen Benutzer verwendet werden.',
                 'Das Beschreibungsfeld bei Angebot erstellen oder bearbeiten ist nun breiter.',
-                'Das Beschreibungsfeld bei Angebot erstellen oder bearbeiten passt sich nun in der Höhe laufend an.'
+                'Das Beschreibungsfeld bei Angebot erstellen oder bearbeiten passt sich nun in der Höhe laufend an.',
+                'Wenn man im Fenster "Bestellungen: Details" die Einheit ändert, sollte diese nun korrekt übernommen werden.',
+                'Lieferanten können nun als Favorit markiert werden (Im Fenster Bestellungen). Markierte erscheinen in der' +
+                'List ganz oben',
+                'Sollten auf einen Lierferanten mehrere Bestellungen an einem Tag gemacht werden, wird jetzt nicht mehr ' +
+                'das alte PDF ausgeliefert.',
+                'Bei externer Bestellpdf wird nun angegeben wer die Bestellung aufgegeben hat.',
+                'Das PDF "Artikelliste" sollte nun angemessen neue Zeile nehmen und den Text nicht mehr übereinander schreiben',
+                'Update Benachrichtigung verschwindet nun nicht mehr hinter Chat/Calendar Frame',
+                'Preis von Angebot wird ab jetzt in der Liste ohne MwSt. angezeigt',
+                'Angbot wird jetzt nach folgendem Schema benannt "AUFTRAG_KODEX"_"ANGEBOT_NUMMER".pdf',
+                'Artikelliste PDF wird nun nach Lieferant - Position geordnet',
+                'Die Ansicht Bestellung: Details, ordnet nun Artikel auch nach Position',
+                'Das PDF "Bestellung extern" zeigt nun wieder die richtige Überschrift bei Liefertermin an'
             ]
-        },
+        }
     ];
 
 

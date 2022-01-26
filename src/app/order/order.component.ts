@@ -159,7 +159,7 @@ export class OrderComponent implements OnInit {
 
     private loadFromList(withStocks: boolean) {
         const stocks$ = this.api.readStocksStockGet().pipe(first());
-        const suppliers$ = this.api.readSuppliersSupplierGet(0, 500).pipe(first());
+        const suppliers$ = this.api.readSuppliersSupplierGet(0, 500, '', true).pipe(first());
 
         if (withStocks) {
             combineLatest([stocks$, suppliers$]).subscribe(([stocks, jobs]) => {

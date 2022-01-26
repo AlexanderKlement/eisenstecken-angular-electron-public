@@ -32,7 +32,8 @@ export class OrderDetailComponent implements OnInit {
     ];
 
 
-    constructor(private api: DefaultService, private route: ActivatedRoute, private router: Router, private dialog: MatDialog, private snackBar: MatSnackBar) {
+    constructor(private api: DefaultService, private route: ActivatedRoute, private router: Router,
+                private dialog: MatDialog, private snackBar: MatSnackBar) {
     }
 
     ngOnInit(): void {
@@ -81,7 +82,7 @@ export class OrderDetailComponent implements OnInit {
         this.articleDataSource = new TableDataSource(
             this.api,
             (api, filter, sortDirection, skip, limit) =>
-                api.readOrderedArticlesByOrderOrderedArticleOrderOrderIdGet(this.orderId, skip, limit, filter),
+                api.readOrderedArticlesByOrderOrderedArticleOrderOrderIdGet(this.orderId, skip, limit, filter, true),
             (dataSourceClasses) => {
                 const rows = [];
                 dataSourceClasses.forEach((dataSource) => {
@@ -92,6 +93,7 @@ export class OrderDetailComponent implements OnInit {
                                 'article.name.translation_de': dataSource.article.name.translation_de,
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
                                 custom_description: dataSource.custom_description,
+                                position: dataSource.position,
                                 amount: dataSource.amount,
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
                                 'ordered_unit.name.translation_de': dataSource.ordered_unit.name.translation_de,
@@ -108,6 +110,7 @@ export class OrderDetailComponent implements OnInit {
             [
                 {name: 'article.name.translation_de', headerName: 'Name'},
                 {name: 'custom_description', headerName: 'Beschreibung'},
+                {name: 'position', headerName: 'Position'},
                 {name: 'amount', headerName: 'Menge'},
                 {name: 'ordered_unit.name.translation_de', headerName: 'Einheit'},
                 {name: 'price', headerName: 'Einzelpreis'},

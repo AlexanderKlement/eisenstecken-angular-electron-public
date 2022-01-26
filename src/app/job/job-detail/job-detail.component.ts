@@ -117,7 +117,7 @@ export class JobDetailComponent implements OnInit {
                                     id: dataSource.id,
                                     date: moment(dataSource.date).format('L'),
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                                full_price_with_vat: formatCurrency(dataSource.full_price_with_vat, 'de-DE', 'EUR')
+                                full_price_without_vat: formatCurrency(dataSource.full_price_without_vat, 'de-DE', 'EUR')
                             },
                             route: () => {
                                 this.authService.currentUserHasRight('offers:modify').pipe(first()).subscribe(allowed => {
@@ -138,7 +138,7 @@ export class JobDetailComponent implements OnInit {
             [
                 {name: 'id', headerName: 'ID'},
                 {name: 'date', headerName: 'Datum'},
-                {name: 'full_price_with_vat', headerName: 'Preis'}
+                {name: 'full_price_without_vat', headerName: 'Preis'}
             ],
             (api) => api.countOffersByJobOfferJobCountJobIdGet(this.jobId)
         );

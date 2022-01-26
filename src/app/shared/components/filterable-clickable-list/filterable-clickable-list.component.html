@@ -1,10 +1,18 @@
 <h3 class="heading">{{name}}</h3>
 <mat-form-field appearance="fill">
-  <mat-label>Suchen</mat-label>
-  <input matInput [formControl]="search">
+    <mat-label>Suchen</mat-label>
+    <input matInput [formControl]="search">
 </mat-form-field>
-<mat-selection-list #elements [multiple]="false" (selectionChange)="selectionChange(elements.selectedOptions.selected[0])" >
-  <mat-list-option *ngFor="let listElement of search$ | async" [value]="listElement">
-    {{listElement.name}}
-  </mat-list-option>
+<mat-selection-list #elements [multiple]="false"
+                    (selectionChange)="selectionChange(elements.selectedOptions.selected[0])">
+    <div fxLayout="row" fxLayoutAlign="space-around center" *ngFor="let listElement of search$ | async">
+        <button *ngIf="listElement.type==='supplier'" mat-button mat-icon-button
+                (click)="toggleFavoriteSupplier(listElement)" title="Favorit">
+            <mat-icon *ngIf="isListItemFavorite(listElement.item)">star</mat-icon>
+            <mat-icon *ngIf="!isListItemFavorite(listElement.item)">star_border</mat-icon>
+        </button>
+        <mat-list-option [value]="listElement">
+            {{listElement.name}}
+        </mat-list-option>
+    </div>
 </mat-selection-list>

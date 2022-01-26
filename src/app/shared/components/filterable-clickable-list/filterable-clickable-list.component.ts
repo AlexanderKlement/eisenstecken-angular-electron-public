@@ -1,8 +1,9 @@
 import {Component, Input, OnInit, Output, EventEmitter, OnDestroy} from '@angular/core';
 import {Observable, of, Subscription} from 'rxjs';
-import {ListItem} from './filterable-clickable-list.types';
+import {ListItem, SupportedListElements} from './filterable-clickable-list.types';
 import {FormControl} from '@angular/forms';
-import {debounceTime, startWith, switchMap} from 'rxjs/operators';
+import {debounceTime, first, startWith, switchMap} from 'rxjs/operators';
+import {DefaultService} from 'eisenstecken-openapi-angular-library';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class FilterableClickableListComponent implements OnInit, OnDestroy {
     search$: Observable<ListItem[]>;
     subscription: Subscription;
 
-    constructor() {
+    constructor(private api: DefaultService) {
     }
 
     ngOnInit(): void {
@@ -56,4 +57,18 @@ export class FilterableClickableListComponent implements OnInit, OnDestroy {
         this.clickEventEmitter.emit($event.value);
     }
 
+    toggleFavoriteSupplier(listElement: ListItem) {
+        this.api.toggleSupplierFavoriteSupplierFavoriteSupplierIdPost(listElement.item.id).pipe(first()).subscribe((supplier) => {
+            if ('favorite' in listElement.item) {
+                listElement.item.favorite = supplier.favorite;
+            }
+        });
+    }
+
+    isListItemFavorite(listItem: SupportedListElements): boolean {
+        if ('favorite' in listItem) {
+            return listItem.favorite;
+        }
+        return false;
+    }
 }
