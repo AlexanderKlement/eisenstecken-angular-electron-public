@@ -54,7 +54,7 @@
                                           maxlength="10000"
                                           matInput></textarea>
                             </mat-form-field>
-                            <div class="amount-price" fxLayout="column" fxLayoutAlign="start stretch" fxFlex="10">
+                            <div class="amount-price" fxLayout="column" fxLayoutAlign="start stretch" fxFlex="17">
                                 <mat-form-field appearance="fill">
                                     <mat-label>Menge</mat-label>
                                     <input class="form-control" type=number formControlName="amount" matInput>
@@ -65,11 +65,11 @@
                                            [value]="sub_descriptive_article.get('single_price').value" matInput>
                                 </mat-form-field>
                             </div>
-                            <div fxLayout="column" fxLayoutAlign="start stretch" fxFlex="15">
-                                <mat-checkbox formControlName="alternative" fxFlex="50" class="alternative"
+                            <div fxLayout="column" fxLayoutAlign="start start" fxFlex="10">
+                                <mat-checkbox formControlName="alternative" class="alternative"
                                               title="Soll dies ein Alternativartikel sein">Alternative
                                 </mat-checkbox>
-                                <div fxLayout="row" fxLayoutAlign="space-between center" fxFlex="50">
+                                <div fxLayout="row" fxLayoutAlign="space-between center">
                                     <button type="button" mat-button
                                             (click)="addDescriptiveSubArticle(descriptiveArticle, j)"
                                             title="Neuer Unterartikel">
