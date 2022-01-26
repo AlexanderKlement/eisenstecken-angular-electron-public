@@ -224,7 +224,7 @@ export class StockDetailComponent implements OnInit {
     }
 
     private ordersToOrderSelected(orderDateReturnData: OrderDateReturnData): void {
-        this.api.readSupplierSupplierSupplierIdGet(this.id).pipe(first()).subscribe((stock) => {
+        this.api.readStockStockStockIdGet(this.id).pipe(first()).subscribe((stock) => {
             const orderBundle: OrderBundleCreate = {
                 description: '',
                 orders: orderDateReturnData.orders,
@@ -237,7 +237,7 @@ export class StockDetailComponent implements OnInit {
                 //this.deliveredOrderDataSource.loadData();
                 //this.orderedOrderDataSource.loadData();
                 //this.createdOrderDataSource.loadData();
-                this.file.open(newOrderBundle.pdf);
+                this.file.open(newOrderBundle.pdf_internal);
             });
         });
     }

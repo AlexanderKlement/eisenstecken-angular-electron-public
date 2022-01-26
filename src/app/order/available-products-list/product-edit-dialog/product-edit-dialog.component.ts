@@ -135,11 +135,11 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
         if (this.singlePrice) {
             let price = this.productEditGroup.get('price').value * this.productEditGroup.get('amount').value;
             price = price * (1 - (this.productEditGroup.get('discount').value / 100));
-            this.productEditGroup.get('total_price').setValue(price.toFixed(2));
+            this.productEditGroup.get('total_price').setValue(price);
         } else {
             let price = this.productEditGroup.get('total_price').value / (1 - (this.productEditGroup.get('discount').value / 100));
             price = price / this.productEditGroup.get('amount').value;
-            this.productEditGroup.get('price').setValue(price.toFixed(2));
+            this.productEditGroup.get('price').setValue(price);
         }
     }
 

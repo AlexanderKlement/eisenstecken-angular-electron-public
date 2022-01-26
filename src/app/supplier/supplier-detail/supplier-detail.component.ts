@@ -259,10 +259,10 @@ export class SupplierDetailComponent implements OnInit {
                         body = body.replace('[POSITION]', user.position);
                         body = body.replace('[MOBILE]', user.handy);
                         body = body.replace('[TEL]', user.tel);
-                        this.email.sendMail(supplier.mail1, subject, body, newOrderBundle.pdf);
+                        this.email.sendMail(supplier.mail1, subject, body, newOrderBundle.pdf_external);
                     });
                 });
-                this.file.open(newOrderBundle.pdf);
+                this.file.open(newOrderBundle.pdf_internal);
             });
         });
     }

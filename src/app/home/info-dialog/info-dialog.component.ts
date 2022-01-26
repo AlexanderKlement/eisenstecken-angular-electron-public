@@ -38,7 +38,14 @@ export class InfoDialogComponent implements OnInit {
             versionName: '0.8.11',
             changes: [
                 'Falls eine Bestellung erstellt wird werden nun 2 PDF geliefert: intern und extern. Das externe PDF ist dasselbe was' +
-                'derzeit schon generiert wird. Das interne enthält die Bemerkung welche beim Eintragen der Bestellung notiert werden kann.'
+                'derzeit schon generiert wird. Das interne enthält die Bemerkung welche beim Eintragen der Bestellung notiert werden kann.',
+                'Bestellungen können nun bestellt werden wie Lieferanten. Sollte von einem Projekt/Auftrag bereits eine ' +
+                'erstellte/bestellte oder erhaltenen' +
+                'Bestellung vorhanden sein, wird jeder neue Artikel zu dieser hinzugefügt. Über den Status kann keine' +
+                ' Einflussnahme mehr getätigt werden.',
+                'In der Ansicht "Bestellung: Details, kann nun direkt zu den entsprechenden Lagern oder Lieferant navigiert werden.',
+                'Bei Angeboten erstellen oder bearbeiten ist das "+" nun fixiert und weiter rechts',
+                'Im Homebildschirm wurden die Menükacheln überarbeitet um der neuen Bildschirmgröße gerecht zu werden.'
             ]
         },
         {

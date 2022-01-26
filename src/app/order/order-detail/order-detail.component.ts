@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {DefaultService, Order, OrderBundle, OrderedArticle} from 'eisenstecken-openapi-angular-library';
+import {DefaultService, Order, OrderableType, OrderBundle, OrderedArticle} from 'eisenstecken-openapi-angular-library';
 import {ActivatedRoute, Router} from '@angular/router';
 import {InfoDataSource} from '../../shared/components/info-builder/info-builder.datasource';
 import {TableDataSource} from '../../shared/components/table-builder/table-builder.datasource';
@@ -21,6 +21,7 @@ export class OrderDetailComponent implements OnInit {
     infoDataSource: InfoDataSource<Order>;
 
     orderId: number;
+    gotoNavigationTarget = '';
 
     buttons: CustomButton[] = [
         {
@@ -28,7 +29,7 @@ export class OrderDetailComponent implements OnInit {
             navigate: (): void => {
                 this.orderDeleteClicked();
             }
-        },
+        }
     ];
 
 
@@ -46,6 +47,7 @@ export class OrderDetailComponent implements OnInit {
             }
             this.initArticleDataSource();
             this.initInfoDataSource();
+            this.initGoToButton();
         });
     }
 
@@ -183,6 +185,32 @@ export class OrderDetailComponent implements OnInit {
                     }
                 });
 
+            }
+        });
+    }
+
+    private gotoButtonClicked() {
+        this.router.navigateByUrl(this.gotoNavigationTarget);
+    }
+
+    private initGoToButton(): void {
+        this.api.readOrdersOrderOrderIdGet(this.orderId).pipe(first()).subscribe((order) => {
+            if (order.order_from.type === OrderableType.Supplier) {
+                this.buttons.push({
+                    name: 'Gehe zu Lieferant',
+                    navigate: (): void => {
+                        this.gotoButtonClicked();
+                    }
+                });
+                this.gotoNavigationTarget = 'supplier/' + order.order_from.id.toString();
+            } else {
+                this.buttons.push({
+                    name: 'Gehe zu Lager',
+                    navigate: (): void => {
+                        this.gotoButtonClicked();
+                    }
+                });
+                this.gotoNavigationTarget = 'stock/' + order.order_from.id.toString();
             }
         });
     }
