@@ -35,6 +35,18 @@ export class InfoDialogComponent implements OnInit {
 
     updateList: Update[] = [
         {
+            versionName: '0.8.12',
+            changes: [
+                'Stück ist nun Standardeinheit bei Bestellungen.',
+                'Einzelne oder mehrere Artikel können nun auf andere Aufträge oder Lager verschoben werden.',
+                'In der Ansicht "Lieferanten/Lager" werden Lieferanten nun im gleichen Stil geordnet wie bei den Bestellungen:' +
+                'Favoriten: Alphabetisch(Auftsteigend) -> Nicht Favoriten: Alphabetisch(Aufsteigend)',
+                'Bei Versendete Bestellungen (das sind im Grunde all jene zu denen die Bestllung PDFs generiert wurden, gibt' +
+                'es jetzt eine Schaltfläche die das erneute generieren der PDFs erlaubt. Diese überschreiben NICHT das vorhergende PDF',
+                'Beim Bestellen auf Lager wird jetzt anstatt eine PDF anzuzeigen, einfach eine kleine Bestätigung angezeigt.'
+            ]
+        },
+        {
             versionName: '0.8.11',
             changes: [
                 'Falls eine Bestellung erstellt wird werden nun 2 PDF geliefert: intern und extern. Das externe PDF ist dasselbe was' +

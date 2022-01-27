@@ -11,6 +11,8 @@ export class FileService {
 
     open(path: string): Promise<string> {
         if (!this.electronService.isElectron) {
+            console.warn('Not electron! No file opening therefore');
+            console.log(path);
             return new Promise((resolve, reject) => {
                 reject();
             });

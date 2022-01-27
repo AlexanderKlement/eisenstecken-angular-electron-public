@@ -101,7 +101,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
             amount: new FormControl(this.data.amount, Validators.min(0.0000001)),
             discount: new FormControl(this.data.discount, Validators.min(0)),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            unit_id: new FormControl(this.data.unit_id !== null ? this.data.unit_id : 1),
+            unit_id: new FormControl(this.data.unit_id !== null ? this.data.unit_id : 3),
             price: new FormControl(this.data.price, Validators.min(0)),
             // eslint-disable-next-line @typescript-eslint/naming-convention
             mod_number: new FormControl(this.data.mod_number),

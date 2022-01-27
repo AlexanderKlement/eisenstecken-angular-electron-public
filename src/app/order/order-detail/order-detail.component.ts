@@ -3,13 +3,15 @@ import {DefaultService, Order, OrderableType, OrderBundle, OrderedArticle} from 
 import {ActivatedRoute, Router} from '@angular/router';
 import {InfoDataSource} from '../../shared/components/info-builder/info-builder.datasource';
 import {TableDataSource} from '../../shared/components/table-builder/table-builder.datasource';
-import {first} from 'rxjs/operators';
+import {first, map} from 'rxjs/operators';
 import {ProductsListComponent} from '../available-products-list/products-list.component';
 import {ProductEditDialogComponent} from '../available-products-list/product-edit-dialog/product-edit-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {CustomButton} from '../../shared/components/toolbar/toolbar.component';
 import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/confirm-dialog.component';
+import {OrderDialogComponent} from '../../supplier/supplier-detail/order-dialog/order-dialog.component';
+import {OrderedArticleMoveDialogComponent} from './ordered-article-move-dialog/ordered-article-move-dialog.component';
 
 @Component({
     selector: 'app-order-detail',
@@ -28,6 +30,12 @@ export class OrderDetailComponent implements OnInit {
             name: 'Löschen',
             navigate: (): void => {
                 this.orderDeleteClicked();
+            }
+        },
+        {
+            name: 'Artikel verschieben',
+            navigate: (): void => {
+                this.moveOrderedArticlesClicked();
             }
         }
     ];
@@ -211,6 +219,21 @@ export class OrderDetailComponent implements OnInit {
                     }
                 });
                 this.gotoNavigationTarget = 'stock/' + order.order_from.id.toString();
+            }
+        });
+    }
+
+    private moveOrderedArticlesClicked() {
+        const dialogRef = this.dialog.open(OrderedArticleMoveDialogComponent, {
+            width: '800px',
+            data: {
+                orderId: this.orderId
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result.success) {
+                this.articleDataSource.loadData();
             }
         });
     }

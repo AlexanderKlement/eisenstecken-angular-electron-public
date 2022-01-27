@@ -32,7 +32,7 @@ export class SupplierComponent implements OnInit {
         this.supplierTableDataSource = new TableDataSource(
             this.api,
             (api, filter, sortDirection, skip, limit) =>
-                api.readSuppliersSupplierGet(skip, limit, filter),
+                api.readSuppliersSupplierGet(skip, limit, filter, true),
             (dataSourceClasses) => {
                 const rows = [];
                 dataSourceClasses.forEach((dataSource) => {

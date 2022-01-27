@@ -1,6 +1,6 @@
 {
   "name": "eisenstecken",
-  "version": "0.8.11",
+  "version": "0.8.12-beta",
   "main": "main.js",
   "private": true,
   "dependencies": {

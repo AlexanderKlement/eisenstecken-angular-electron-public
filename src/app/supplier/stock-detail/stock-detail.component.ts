@@ -234,10 +234,11 @@ export class StockDetailComponent implements OnInit {
                 order_from_id: stock.id
             };
             this.api.createOrderBundleOrderBundlePost(orderBundle).pipe(first()).subscribe((newOrderBundle) => {
-                //this.deliveredOrderDataSource.loadData();
-                //this.orderedOrderDataSource.loadData();
-                //this.createdOrderDataSource.loadData();
-                this.file.open(newOrderBundle.pdf_internal);
+                this.ingoingDataSource.loadData();
+                this.outgoingDataSource.loadData();
+                this.snackBar.open('Erfolgreich bestellt!', 'Ok', {
+                    duration: 1000
+                });
             });
         });
     }

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {DefaultService, Order, OrderBundle} from 'eisenstecken-openapi-angular-library';
+import {DefaultService, Order, OrderableType, OrderBundle, Supplier} from 'eisenstecken-openapi-angular-library';
 import {InfoDataSource} from '../../shared/components/info-builder/info-builder.datasource';
 import {TableDataSource} from '../../shared/components/table-builder/table-builder.datasource';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -9,6 +9,9 @@ import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/con
 import {first} from 'rxjs/operators';
 import {LockService} from '../../shared/services/lock.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {FileService} from '../../shared/services/file.service';
+import {EmailService} from '../../shared/services/email.service';
+import {SupplierDetailComponent} from '../../supplier/supplier-detail/supplier-detail.component';
 
 @Component({
     selector: 'app-order-bundle-detail',
@@ -28,12 +31,23 @@ export class OrderBundleDetailComponent implements OnInit {
                 this.orderDeleteClicked();
             }
         },
+        {
+            name: 'PDF neu generieren',
+            navigate: (): void => {
+                this.regeneratePdfClicked();
+            }
+        }
     ];
 
 
-    constructor(private api: DefaultService, private route: ActivatedRoute, private router: Router,
+    constructor(private api: DefaultService, private route: ActivatedRoute, private router: Router, private authService,
+                private file: FileService, private email: EmailService,
                 public dialog: MatDialog, private locker: LockService, private snackBar: MatSnackBar) {
 
+    }
+
+    private static instanceOfSupplier(object: any): object is Supplier {
+        return object.type === OrderableType.Supplier;
     }
 
     ngOnInit(): void {
@@ -130,5 +144,14 @@ export class OrderBundleDetailComponent implements OnInit {
             (api) => api.readOrdersByOrderBundleOrderBundleOrdersOrderBundleIdCountGet(this.orderBundleId)
         );
         this.orderDataSource.loadData();
+    }
+
+    private regeneratePdfClicked() {
+        this.api.regenerateOrderBundlePdfOrderBundlePdfOrderBundleIdPut(this.orderBundleId).pipe(first()).subscribe((orderBundle) => {
+            if (OrderBundleDetailComponent.instanceOfSupplier(orderBundle.order_from)) {
+                SupplierDetailComponent.sendAndDisplayOrderBundlePdf(this.api, this.authService, this.email,
+                    this.file, orderBundle, orderBundle.order_from);
+            }
+        });
     }
 }

@@ -38,6 +38,22 @@ export class SupplierDetailComponent implements OnInit {
                 public dialog: MatDialog) {
     }
 
+    static sendAndDisplayOrderBundlePdf(api: DefaultService, authService: AuthService, email: EmailService, file: FileService, orderBundle: OrderBundle, supplier: Supplier) {
+        const subject$ = api.getParameterParameterKeyGet('order_subject');
+        const body$ = api.getParameterParameterKeyGet('order_mail');
+        combineLatest([subject$, body$]).pipe(first()).subscribe(([subject, body]) => {
+            authService.getCurrentUser().pipe(first()).subscribe(user => {
+                console.log(supplier.mail1);
+                body = body.replace('[NAME]', user.fullname);
+                body = body.replace('[POSITION]', user.position);
+                body = body.replace('[MOBILE]', user.handy);
+                body = body.replace('[TEL]', user.tel);
+                email.sendMail(supplier.mail1, subject, body, orderBundle.pdf_external);
+            });
+        });
+        file.open(orderBundle.pdf_internal);
+    }
+
     ngOnInit(): void {
         this.route.params.subscribe((params) => {
             try {
@@ -250,19 +266,7 @@ export class SupplierDetailComponent implements OnInit {
                 this.deliveredOrderDataSource.loadData();
                 this.orderedOrderDataSource.loadData();
                 this.createdOrderDataSource.loadData();
-                const subject$ = this.api.getParameterParameterKeyGet('order_subject');
-                const body$ = this.api.getParameterParameterKeyGet('order_mail');
-                combineLatest([subject$, body$]).pipe(first()).subscribe(([subject, body]) => {
-                    this.authService.getCurrentUser().pipe(first()).subscribe(user => {
-                        console.log(supplier.mail1);
-                        body = body.replace('[NAME]', user.fullname);
-                        body = body.replace('[POSITION]', user.position);
-                        body = body.replace('[MOBILE]', user.handy);
-                        body = body.replace('[TEL]', user.tel);
-                        this.email.sendMail(supplier.mail1, subject, body, newOrderBundle.pdf_external);
-                    });
-                });
-                this.file.open(newOrderBundle.pdf_internal);
+                SupplierDetailComponent.sendAndDisplayOrderBundlePdf(this.api, this.authService, this.email, this.file, newOrderBundle, supplier);
             });
         });
     }

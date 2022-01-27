@@ -20,6 +20,8 @@ import {MatIconModule} from '@angular/material/icon';
 import { OrderBundleDetailComponent } from './order-bundle-detail/order-bundle-detail.component';
 import { OrderBundleEditComponent } from './order-bundle-edit/order-bundle-edit.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { OrderedArticleMoveDialogComponent } from './order-detail/ordered-article-move-dialog/ordered-article-move-dialog.component';
+import {MatStepperModule} from '@angular/material/stepper';
 
 
 @NgModule({
@@ -29,7 +31,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     ProductEditDialogComponent,
     OrderDetailComponent,
     OrderBundleDetailComponent,
-    OrderBundleEditComponent
+    OrderBundleEditComponent,
+    OrderedArticleMoveDialogComponent
   ],
     imports: [
         CommonModule,
@@ -46,7 +49,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
         MatDialogModule,
         MatSelectModule,
         MatIconModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        MatStepperModule
     ]
 })
 export class OrderModule { }

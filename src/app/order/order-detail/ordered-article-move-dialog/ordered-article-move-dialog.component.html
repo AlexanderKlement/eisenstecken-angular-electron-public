@@ -1,0 +1,59 @@
+<h1 mat-dialog-title>Bestellte Artikel verschieben</h1>
+<div mat-dialog-content>
+    <div fxLayout="column" fxLayoutAlign="space-around center">
+        <mat-stepper [linear]="true" #stepper>
+            <mat-step>
+                <ng-template matStepLabel>Artikel auswählen</ng-template>
+                <div fxLayout="column" fxLayoutAlign="space-around center">
+                    <p>Welche Artikel sollen verschoben werden?</p>
+                    <mat-selection-list #articles multiple="multiple" (click)="orderedArticleClicked()">
+                        <mat-list-option *ngFor="let orderedArticle of orderedArticles$ | async"
+                                         value="{{orderedArticle.id}}">
+                            {{orderedArticle.article.name.translation}}
+                        </mat-list-option>
+                    </mat-selection-list>
+                    <div fxLayout="row" fxLayoutAlign="space-around center" *ngIf="atLeastOneArticleSelected">
+                        <button mat-raised-button matStepperNext>Weiter</button>
+                    </div>
+                </div>
+            </mat-step>
+            <mat-step>
+                <ng-template matStepLabel>Ziel auswählen</ng-template>
+                <div fxLayout="column" fxLayoutAlign="space-around center">
+                </div>
+                <p>Wohin sollen die Artikel verschoben werden?</p>
+                <mat-selection-list #orderable multiple="false" (click)="orderableClicked()">
+                    <mat-list-option *ngFor="let orderable of orderableTargets$ | async" value="{{orderable.id}}">
+                        {{orderable.name}}
+                    </mat-list-option>
+                </mat-selection-list>
+                <div fxLayout="row" fxLayoutAlign="space-around center" >
+                    <button mat-raised-button matStepperPrevious>Zurück</button>
+                    <button mat-raised-button matStepperNext *ngIf="oneOrderableSelected">Weiter</button>
+                </div>
+            </mat-step>
+            <mat-step>
+                <ng-template matStepLabel>Bestätigen</ng-template>
+                <div fxLayout="column" fxLayoutAlign="space-around center">
+                    <p>Ausgewählte Artikel: </p>
+                    <mat-list>
+                        <mat-list-item *ngFor="let selectedArticle of articles.selectedOptions.selected">
+                            {{selectedArticle._text.nativeElement.innerHTML}}
+                        </mat-list-item>
+                    </mat-list>
+                    <p *ngIf="orderable.selectedOptions.selected && orderable.selectedOptions.selected.length > 0">
+                        Ziel: {{orderable.selectedOptions.selected[0]._text.nativeElement.innerHTML}}
+                    </p>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-around center">
+                    <button mat-raised-button matStepperPrevious>Zurück</button>
+                    <button mat-raised-button (click)="onSubmitClick()">Verschieben</button>
+                </div>
+            </mat-step>
+        </mat-stepper>
+
+    </div>
+</div>
+<mat-dialog-actions>
+    <button mat-button (click)="onCancelClick()">Abbrechen</button>
+</mat-dialog-actions>

@@ -141,7 +141,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 vat_id: 3,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                unit_id: 1,
+                unit_id: 3,
                 request: false,
                 comment: '',
                 position: '',
@@ -162,7 +162,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             vat_id: article.vat.id,
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            unit_id: article.unit.id,
+            unit_id: 3,
             request: false,
             comment: '',
             position: '',

@@ -11,6 +11,11 @@ export class EmailService {
 
     sendMail(mail: string, subject: string, body: string, attachment?: string): Promise<void> {
         if (!this.electronService.isElectron) {
+            console.warn("Not electron: got the following though:");
+            console.log(mail);
+            console.log(subject);
+            console.log(body);
+            console.log(attachment);
             return new Promise((resolve, reject) => {
                 reject();
             });
