@@ -27,8 +27,9 @@
                     </button>
                     <div fxLayout="row" fxLayoutAlign="space-between center" class="descriptive-article-header">
                         <mat-form-field appearance="fill">
+                            <span class="header" matPrefix>{{(i + 1).toString()}}: </span>
                             <mat-label>Name Position</mat-label>
-                            <input class="form-control" formControlName="description" maxlength="10000" matInput>
+                            <input class="form-control header" formControlName="description" maxlength="10000" matInput>
                         </mat-form-field>
                         <button type="button" mat-icon-button mat-raised-button (click)="removeDescriptiveArticle(i)"
                                 [disabled]="i === 0" class="position-delete">

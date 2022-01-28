@@ -35,6 +35,15 @@ export class InfoDialogComponent implements OnInit {
 
     updateList: Update[] = [
         {
+            versionName: '0.8.13',
+            changes: [
+                'Angebot zeigt nun die Nummerierungen der einzelnen Positionen während des Erstellens oder Bearbeiten an.',
+                'Checkbox "Alternative" ist nun viel kleiner',
+                'Nachkalkulationen sind nun für Aufträge mit Status "Fertig" UND "Angenommen" verfügbar',
+                'Nachkalkulation enthält nun zusätzliche optionale Felder für Lacke',
+            ]
+        },
+        {
             versionName: '0.8.12',
             changes: [
                 'Stück ist nun Standardeinheit bei Bestellungen.',
@@ -43,7 +52,7 @@ export class InfoDialogComponent implements OnInit {
                 'Favoriten: Alphabetisch(Auftsteigend) -> Nicht Favoriten: Alphabetisch(Aufsteigend)',
                 'Bei Versendete Bestellungen (das sind im Grunde all jene zu denen die Bestllung PDFs generiert wurden, gibt' +
                 'es jetzt eine Schaltfläche die das erneute generieren der PDFs erlaubt. Diese überschreiben NICHT das vorhergende PDF',
-                'Beim Bestellen auf Lager wird jetzt anstatt eine PDF anzuzeigen, einfach eine kleine Bestätigung angezeigt.'
+                'Beim Bestellen von Lager auf Auftrag wird jetzt anstatt eine PDF anzuzeigen, einfach eine kleine Bestätigung angezeigt.'
             ]
         },
         {

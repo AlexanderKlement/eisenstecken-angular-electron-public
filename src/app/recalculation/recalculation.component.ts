@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {TableDataSource} from '../shared/components/table-builder/table-builder.datasource';
 import {DefaultService, Job} from 'eisenstecken-openapi-angular-library';
 import {Router} from '@angular/router';
+import {concat, merge} from 'rxjs';
 
 @Component({
     selector: 'app-recalculation',
@@ -24,7 +25,9 @@ export class RecalculationComponent implements OnInit {
         this.jobDataSource = new TableDataSource(
             this.api,
             (api, filter, sortDirection, skip, limit) =>
-                api.readJobsJobGet(skip, limit, filter, undefined, 'JOBSTATUS_COMPLETED', true)
+                concat(
+                    api.readJobsJobGet(skip, limit, filter, undefined, 'JOBSTATUS_ACCEPTED', true),
+                    api.readJobsJobGet(skip, limit, filter, undefined, 'JOBSTATUS_COMPLETED', true))
             ,
             (dataSourceClasses) => {
                 const rows = [];

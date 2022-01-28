@@ -76,7 +76,7 @@
       .alternative {
         padding: 20px 0;
         text-align: center;
-        font-size: 16pt;
+        font-size: 10pt;
       }
     }
   }
@@ -84,4 +84,8 @@
 
 .position-fold-all {
   margin: 10px 0 10px calc(70% - 95px);
+}
+
+.header {
+  font-family: "Roboto Black", serif;
 }
