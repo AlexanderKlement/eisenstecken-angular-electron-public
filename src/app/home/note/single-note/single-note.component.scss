@@ -51,7 +51,8 @@
       resize: none;
       font-family: 'Roboto', sans-serif !important;
       width: 100%;
-      height: 100%;
+      height: 90%;
+      padding-top: 5%;
       outline: none;
       background: transparent;
       font-size: 13pt;
@@ -146,13 +147,11 @@
     position: absolute;
     top: -1%;
     left: 25%;
-    -webkit-transform: rotate(
-        -2deg);
+    -webkit-transform: rotate(-2deg);
     -moz-transform: rotate(-2deg);
     -o-transform: rotate(-2deg);
     -ms-transform: rotate(-2deg);
-    transform: rotate(
-        -2deg);
+    transform: rotate(-2deg);
   }
 
   &:after {

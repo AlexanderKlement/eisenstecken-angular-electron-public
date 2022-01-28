@@ -41,6 +41,8 @@ export class InfoDialogComponent implements OnInit {
                 'Checkbox "Alternative" ist nun viel kleiner',
                 'Nachkalkulationen sind nun für Aufträge mit Status "Fertig" UND "Angenommen" verfügbar',
                 'Nachkalkulation enthält nun zusätzliche optionale Felder für Lacke',
+                'Man schreibt nicht mehr unter den Klebestreifen bei den Notizen auf der Startseite.',
+                'Bei Angeboten erstellen oder bearbeiten sind Positionen nun nummeriert.'
             ]
         },
         {

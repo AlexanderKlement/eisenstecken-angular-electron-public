@@ -26,9 +26,8 @@
                         <mat-icon>arrow_downward</mat-icon>
                     </button>
                     <div fxLayout="row" fxLayoutAlign="space-between center" class="descriptive-article-header">
-                        <mat-form-field appearance="fill">
-                            <span class="header" matPrefix>{{(i + 1).toString()}}: </span>
-                            <mat-label>Name Position</mat-label>
+                        <mat-form-field appearance="fill" fxFlex="70">
+                            <mat-label>Name Position <strong>{{(i + 1).toString()}}</strong></mat-label>
                             <input class="form-control header" formControlName="description" maxlength="10000" matInput>
                         </mat-form-field>
                         <button type="button" mat-icon-button mat-raised-button (click)="removeDescriptiveArticle(i)"
@@ -47,7 +46,7 @@
                              *ngFor="let sub_descriptive_article of getSubDescriptiveArticles(descriptiveArticle).controls; let j = index"
                              class="descriptive-sub-article">
                             <mat-form-field appearance="fill" fxFlex="70">
-                                <mat-label>Beschreibung</mat-label>
+                                <mat-label>Beschreibung <strong>{{(i + 1).toString()}}.{{(j + 1).toString()}}</strong></mat-label>
                                 <textarea cdkTextareaAutosize
                                           cdkAutosizeMinRows="1"
                                           cdkAutosizeMaxRows="10" class="form-control description"
@@ -57,11 +56,11 @@
                             </mat-form-field>
                             <div class="amount-price" fxLayout="column" fxLayoutAlign="start stretch" fxFlex="17">
                                 <mat-form-field appearance="fill">
-                                    <mat-label>Menge</mat-label>
+                                    <mat-label>Menge <strong>{{(i + 1).toString()}}.{{(j + 1).toString()}}</strong></mat-label>
                                     <input class="form-control" type=number formControlName="amount" matInput>
                                 </mat-form-field>
                                 <mat-form-field appearance="fill">
-                                    <mat-label>Einzelpreis</mat-label>
+                                    <mat-label>Einzelpreis <strong>{{(i + 1).toString()}}.{{(j + 1).toString()}}</strong></mat-label>
                                     <input class="form-control" type=number formControlName="single_price"
                                            [value]="sub_descriptive_article.get('single_price').value" matInput>
                                 </mat-form-field>
