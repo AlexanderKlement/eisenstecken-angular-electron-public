@@ -38,7 +38,8 @@ export class SupplierDetailComponent implements OnInit {
                 public dialog: MatDialog) {
     }
 
-    static sendAndDisplayOrderBundlePdf(api: DefaultService, authService: AuthService, email: EmailService, file: FileService, orderBundle: OrderBundle, supplier: Supplier) {
+    static sendAndDisplayOrderBundlePdf(api: DefaultService, authService: AuthService, email: EmailService,
+                                        file: FileService, orderBundle: OrderBundle, supplier: Supplier) {
         const subject$ = api.getParameterParameterKeyGet('order_subject');
         const body$ = api.getParameterParameterKeyGet('order_mail');
         combineLatest([subject$, body$]).pipe(first()).subscribe(([subject, body]) => {

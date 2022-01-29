@@ -25,10 +25,7 @@ export class RecalculationComponent implements OnInit {
         this.jobDataSource = new TableDataSource(
             this.api,
             (api, filter, sortDirection, skip, limit) =>
-                concat(
-                    api.readJobsJobGet(skip, limit, filter, undefined, 'JOBSTATUS_ACCEPTED', true),
-                    api.readJobsJobGet(skip, limit, filter, undefined, 'JOBSTATUS_COMPLETED', true))
-            ,
+                api.readJobsJobGet(skip, limit, filter, undefined, 'JOBSTATUS_ACCEPTED, JOBSTATUS_COMPLETED', true),
             (dataSourceClasses) => {
                 const rows = [];
                 dataSourceClasses.forEach((dataSource) => {

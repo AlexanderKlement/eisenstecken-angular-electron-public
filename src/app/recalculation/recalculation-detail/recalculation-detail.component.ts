@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {DefaultService, Expense, Order, Recalculation, Workload} from 'eisenstecken-openapi-angular-library';
+import {DefaultService, Expense, Order, Paint, Recalculation, Workload} from 'eisenstecken-openapi-angular-library';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TableDataSource} from '../../shared/components/table-builder/table-builder.datasource';
 import * as moment from 'moment';
@@ -26,6 +26,7 @@ export class RecalculationDetailComponent implements OnInit {
     orderDataSource: TableDataSource<Order>;
     workloadDataSource: TableDataSource<Workload>;
     expenseDataSource: TableDataSource<Expense>;
+    paintDataSource: TableDataSource<Paint>;
     jobName$: Observable<string>;
 
     buttons: CustomButton[] = [];
@@ -79,6 +80,7 @@ export class RecalculationDetailComponent implements OnInit {
         this.initOrderTable();
         this.initWorkloadTable();
         this.initExpenseTable();
+        this.initPaintTable();
         this.jobName$ = this.api.readJobJobJobIdGet(this.jobId).pipe(
             first(),
             map(job => 'Nachkalkulation: ' + job.displayable_name)
@@ -180,11 +182,45 @@ export class RecalculationDetailComponent implements OnInit {
             },
             [
                 {name: 'name', headerName: 'Beschreibung'},
-                {name: 'amount', headerName: 'Menge [€]'},
+                {name: 'amount', headerName: 'Kosten [€]'},
             ],
             (api) => api.readExpenseCountExpenseCountGet(this.recalculation.id)
         );
         this.expenseDataSource.loadData();
+    }
+
+    private initPaintTable() {
+        this.paintDataSource = new TableDataSource(
+            this.api,
+            (api, filter, sortDirection, skip, limit) =>
+                api.readPaintsPaintGet(skip, limit, filter, this.recalculation.id),
+            (dataSourceClasses) => {
+                const rows = [];
+                dataSourceClasses.forEach((dataSource) => {
+                    rows.push(
+                        {
+                            values: {
+                                name: dataSource.name,
+                                price: dataSource.price,
+                                amount: dataSource.amount,
+                                id: dataSource.price * dataSource.amount
+                            },
+                            route: () => {
+                                //this.router.navigateByUrl('/order/' + dataSource.id.toString());
+                            }
+                        });
+                });
+                return rows;
+            },
+            [
+                {name: 'name', headerName: 'Beschreibung'},
+                {name: 'amount', headerName: 'Menge [l]'},
+                {name: 'price', headerName: 'Einzelpreis [€]'},
+                {name: 'id', headerName: 'Gesamtpreis [€]'},
+            ],
+            (api) => api.readPaintCountPaintCountGet(this.recalculation.id)
+        );
+        this.paintDataSource.loadData();
     }
 
     private editButtonClicked(): void {

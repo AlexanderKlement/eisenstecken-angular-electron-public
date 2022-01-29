@@ -4,7 +4,7 @@ import {BaseEditComponent} from '../../shared/components/base-edit/base-edit.com
 import {
     DefaultService,
     Expense, ExpenseCreate,
-    Lock, Order,
+    Lock, Order, Paint, PaintCreate,
     Recalculation,
     RecalculationCreate, RecalculationUpdate, Workload
 } from 'eisenstecken-openapi-angular-library';
@@ -33,7 +33,7 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
     workloadDataSource: TableDataSource<Workload>;
     title = 'Nachkalkulation: Bearbeiten';
 
-    constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog,  private file: FileService) {
+    constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private file: FileService) {
         super(api, router, route, dialog);
     }
 
@@ -77,6 +77,7 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
             // eslint-disable-next-line @typescript-eslint/naming-convention
             wood_amount: new FormControl(''),
             expenses: new FormArray([]),
+            paints: new FormArray([]),
             // eslint-disable-next-line @typescript-eslint/naming-convention
             material_charge_percent: new FormControl(30, Validators.compose([Validators.min(0), Validators.max(100)]))
         });
@@ -89,6 +90,9 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
         this.recalculationGroup.get('wood_amount').setValue(recalculation.wood_amount);
         for (const expense of recalculation.expenses) {
             this.addExpense(expense);
+        }
+        for (const paint of recalculation.paints) {
+            this.addPaint(paint);
         }
     }
 
@@ -120,6 +124,36 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
         }
     }
 
+    getPaints(): FormArray {
+        return this.recalculationGroup.get('paints') as FormArray;
+    }
+
+    removePaintAt(index: number): void {
+        this.getPaints().removeAt(index);
+    }
+
+    addPaint(paint?: Paint): void {
+        this.getPaints().push(this.createPaint(paint));
+    }
+
+    createPaint(paint?: Paint): FormGroup {
+        if (paint !== undefined) {
+            return new FormGroup({
+                id: new FormControl(paint.id),
+                amount: new FormControl(paint.amount),
+                name: new FormControl(paint.name),
+                price: new FormControl(paint.price)
+            });
+        } else {
+            return new FormGroup({
+                id: new FormControl(0),
+                amount: new FormControl(0),
+                name: new FormControl(''),
+                price: new FormControl(0)
+            });
+        }
+    }
+
 
     onSubmit() {
         const expenses: ExpenseCreate[] = [];
@@ -129,11 +163,20 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
                 amount: expenseGroup.get('amount').value,
             });
         }
+        const paints: PaintCreate[] = [];
+        for (const paintGroup of this.getPaints().controls) {
+            paints.push({
+                name: paintGroup.get('name').value,
+                price: paintGroup.get('price').value,
+                amount: paintGroup.get('amount').value,
+            });
+        }
         if (this.createMode) {
             const recalculationCreate: RecalculationCreate = {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 wood_amount: this.recalculationGroup.get('wood_amount').value,
                 expenses,
+                paints,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 material_charge_percent: this.recalculationGroup.get('material_charge_percent').value,
             };
@@ -146,6 +189,7 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 wood_amount: this.recalculationGroup.get('wood_amount').value,
                 expenses,
+                paints,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 material_charge_percent: this.recalculationGroup.get('material_charge_percent').value,
             };
@@ -178,7 +222,7 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
                                 status: dataSource.status_translation,
                             },
                             route: () => {
-                                if(this.recalculationGroup.pristine) {
+                                if (this.recalculationGroup.pristine) {
                                     this.router.navigateByUrl('/order/' + dataSource.id.toString());
                                 } else {
                                     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
