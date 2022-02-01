@@ -186,7 +186,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
         if (this.available) {
             this.articles = [];
             this.subscription.add(this.availableProducts$.subscribe((products) => {
-                this.articles = products.sort((a,b)=>a.name.translation.localeCompare(b.name.translation));
+                this.articles = products;
                 this.search.setValue('');
             }));
             this.searchAvailableArticles$ = this.search.valueChanges.pipe(

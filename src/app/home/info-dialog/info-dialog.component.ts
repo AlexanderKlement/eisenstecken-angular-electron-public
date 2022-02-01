@@ -62,7 +62,7 @@ export class InfoDialogComponent implements OnInit {
                 'Angebot zeigt nun die Nummerierungen der einzelnen Positionen während des Erstellens oder Bearbeiten an.',
                 'Checkbox "Alternative" (bei Angebot) ist nun viel kleiner.',
                 'Nachkalkulationen sind nun für Aufträge mit Status "Fertig" UND "Angenommen" verfügbar',
-                'Nachkalkulation enthält nun zusätzliche optionale Felder für Lacke.',
+                'Nachkalkulation enthält nun zusätzliche optionale Felder für Oberflächen.',
                 'Man schreibt nicht mehr unter den Klebestreifen bei den Notizen auf der Startseite.',
                 'Bei Angeboten erstellen oder bearbeiten sind Positionen nun nummeriert.',
                 'In den Ansichten "Versendete Bestellungen" und "Bestellungen: Details" werden die Felder die ein Datum enthalten ' +
@@ -73,7 +73,9 @@ export class InfoDialogComponent implements OnInit {
                 'Anfragen sind nun verfügbar: Bestellte Artikel, die als Anfrage markiert wurden, können nun beim Lieferanten ' +
                 'unter dem separaten Menüpunkte "Anfrage verschicken" als PDF generiert und versandt werden. Das PDF wurde ' +
                 'nach Gefühl gestaltet. Einfach melden falls ich hier noch was ändern soll.',
-                'Die Ansicht "Bestellung" wurde verbreitert und das Feld mit dem Artikelname ist nun mehrzeilig falls notwendig'
+                'Die Ansicht "Bestellung" wurde verbreitert und das Feld mit dem Artikelname ist nun mehrzeilig falls notwendig',
+                'Bei der Ansicht "Bestellung" werden Suchergebnisse nun fatt markiert.',
+                'Lieferant: Details hat neuen Tab mit allen Anfragen'
             ]
         },
         {

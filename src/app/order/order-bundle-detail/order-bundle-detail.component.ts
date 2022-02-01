@@ -13,7 +13,6 @@ import {FileService} from '../../shared/services/file.service';
 import {EmailService} from '../../shared/services/email.service';
 import {SupplierDetailComponent} from '../../supplier/supplier-detail/supplier-detail.component';
 import {AuthService} from '../../shared/services/auth.service';
-import * as moment from 'moment';
 
 @Component({
     selector: 'app-order-bundle-detail',

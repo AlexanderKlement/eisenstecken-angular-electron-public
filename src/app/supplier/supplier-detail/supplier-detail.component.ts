@@ -29,6 +29,7 @@ export class SupplierDetailComponent implements OnInit {
     createdOrderDataSource: TableDataSource<Order>;
     orderedOrderDataSource: TableDataSource<OrderBundle>;
     deliveredOrderDataSource: TableDataSource<OrderBundle>;
+    requestOrderDataSource: TableDataSource<OrderBundle>;
     buttons: CustomButton[] = [];
 
 
@@ -195,9 +196,10 @@ export class SupplierDetailComponent implements OnInit {
                         {
                             values: {
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                                create_date: moment(dataSource.create_date).format('LLLL'),
+                                create_date: moment(dataSource.create_date).format('L'),
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                                delivery_date: moment(dataSource.delivery_date).format('L')
+                                delivery_date: moment(dataSource.delivery_date).format('L'),
+                                'user.fullname': dataSource.user.fullname,
                             },
                             route: () => {
                                 this.router.navigateByUrl('/order_bundle/' + dataSource.id.toString());
@@ -209,6 +211,7 @@ export class SupplierDetailComponent implements OnInit {
             [
                 {name: 'create_date', headerName: 'Bestelldatum'},
                 {name: 'delivery_date', headerName: 'Lieferdatum'},
+                {name: 'user.fullname', headerName: 'Bestellt von'}
             ],
             (api) => api.readCountOfOrderBundleBySupplierAndStatusOrderBundleSupplierSupplierIdCountGet(supplierId, 'ORDERED')
         );
@@ -223,7 +226,37 @@ export class SupplierDetailComponent implements OnInit {
                         {
                             values: {
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                                create_date: moment(dataSource.create_date).format('LLLL'),
+                                create_date: moment(dataSource.create_date).format('L'),
+                                // eslint-disable-next-line @typescript-eslint/naming-convention
+                                delivery_date: moment(dataSource.delivery_date).format('L'),
+                                'user.fullname': dataSource.user.fullname,
+                            },
+                            route: () => {
+                                this.router.navigateByUrl('/order_bundle/' + dataSource.id.toString());
+                            }
+                        });
+                });
+                return rows;
+            },
+            [
+                {name: 'create_date', headerName: 'Bestelldatum'},
+                {name: 'delivery_date', headerName: 'Lieferdatum'},
+                {name: 'user.fullname', headerName: 'Bestellt von'}
+            ],
+            (api) => api.readCountOfOrderBundleBySupplierAndStatusOrderBundleSupplierSupplierIdCountGet(supplierId, 'DELIVERED')
+        );
+        this.requestOrderDataSource = new TableDataSource(
+            this.api,
+            (api, filter, sortDirection, skip, limit) =>
+                api.readOrderBundleBySupplierOrderBundleSupplierSupplierIdGet(this.id, skip, limit, filter, undefined, true),
+            (dataSourceClasses) => {
+                const rows = [];
+                dataSourceClasses.forEach((dataSource) => {
+                    rows.push(
+                        {
+                            values: {
+                                // eslint-disable-next-line @typescript-eslint/naming-convention
+                                create_date: moment(dataSource.create_date).format('L'),
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
                                 delivery_date: moment(dataSource.delivery_date).format('L'),
                                 'user.fullname': dataSource.user.fullname,
@@ -245,6 +278,7 @@ export class SupplierDetailComponent implements OnInit {
         this.createdOrderDataSource.loadData();
         this.orderedOrderDataSource.loadData();
         this.deliveredOrderDataSource.loadData();
+        this.requestOrderDataSource.loadData();
     }
 
     private sendOrderButtonClicked(request: boolean): void {

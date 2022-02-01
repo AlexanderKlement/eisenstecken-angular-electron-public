@@ -16,7 +16,7 @@
             </mat-form-field>
         </div>
         <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="paints">
-            <h3>Lacke</h3>
+            <h3>Oberflächen</h3>
             <div *ngFor="let paint of getPaints().controls; let i = index" [formGroupName]="i" fxLayout="row"
                  fxLayoutAlign="space-around center">
                 <mat-form-field appearance="fill">
