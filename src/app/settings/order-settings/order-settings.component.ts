@@ -13,7 +13,10 @@ export class OrderSettingsComponent extends BaseSettingsComponent implements OnI
     keyList = [
         'order_text',
         'order_mail',
-        'order_subject'
+        'order_subject',
+        'order_text_request',
+        'order_mail_request',
+        'order_subject_request'
     ];
 
     constructor(protected api: DefaultService, protected snackBar: MatSnackBar) {

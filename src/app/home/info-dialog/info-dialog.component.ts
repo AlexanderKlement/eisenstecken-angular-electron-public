@@ -54,9 +54,6 @@ export class InfoDialogComponent implements OnInit {
                 ' um Ansichten nicht bei jeder ' +
                 'Änderung zu verschieben. Sollte diese lieber nach Index geordnet werden ist dies auch möglich.',
                 'Bei Bestellungen die Möglichkeit hinzufügen, einzelne Artikel auch hier zu löschen (mit Bestätigungsdialog)',
-                'Bestellungen Fenster breiter machen um die Namen der Artikel voll einzublenden. Auf kleineren ' +
-                'Bildschirmen (z.B. Hubert Büro), ' +
-                'wird sich nichts ändern.'
             ]
         },
         {
@@ -76,6 +73,7 @@ export class InfoDialogComponent implements OnInit {
                 'Anfragen sind nun verfügbar: Bestellte Artikel, die als Anfrage markiert wurden, können nun beim Lieferanten ' +
                 'unter dem separaten Menüpunkte "Anfrage verschicken" als PDF generiert und versandt werden. Das PDF wurde ' +
                 'nach Gefühl gestaltet. Einfach melden falls ich hier noch was ändern soll.',
+                'Die Ansicht "Bestellung" wurde verbreitert und das Feld mit dem Artikelname ist nun mehrzeilig falls notwendig'
             ]
         },
         {
