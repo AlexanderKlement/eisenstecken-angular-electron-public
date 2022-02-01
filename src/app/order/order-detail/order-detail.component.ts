@@ -61,7 +61,7 @@ export class OrderDetailComponent implements OnInit {
 
     private initInfoDataSource(): void {
         this.infoDataSource = new InfoDataSource<Order>(
-            this.api.readOrdersOrderOrderIdGet(this.orderId),
+            this.api.readOrderOrderOrderIdGet(this.orderId),
             [
                 {
                     property: 'order_from.name',
@@ -76,7 +76,7 @@ export class OrderDetailComponent implements OnInit {
                     name: 'Bestellung versendet:'
                 },
                 {
-                    property: 'create_date',
+                    property: 'create_date_formatted',
                     name: 'Erstelldatum'
                 },
             ],
@@ -202,7 +202,7 @@ export class OrderDetailComponent implements OnInit {
     }
 
     private initGoToButton(): void {
-        this.api.readOrdersOrderOrderIdGet(this.orderId).pipe(first()).subscribe((order) => {
+        this.api.readOrderOrderOrderIdGet(this.orderId).pipe(first()).subscribe((order) => {
             if (order.order_from.type === OrderableType.Supplier) {
                 this.buttons.push({
                     name: 'Gehe zu Lieferant',

@@ -13,6 +13,7 @@ import {FileService} from '../../shared/services/file.service';
 import {EmailService} from '../../shared/services/email.service';
 import {SupplierDetailComponent} from '../../supplier/supplier-detail/supplier-detail.component';
 import {AuthService} from '../../shared/services/auth.service';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-order-bundle-detail',
@@ -98,11 +99,11 @@ export class OrderBundleDetailComponent implements OnInit {
                     name: 'Name'
                 },
                 {
-                    property: 'create_date',
+                    property: 'create_date_formatted',
                     name: 'Erstelldatum'
                 },
                 {
-                    property: 'delivery_date',
+                    property: 'delivery_date_formatted',
                     name: 'Bestelldatum'
                 },
                 {

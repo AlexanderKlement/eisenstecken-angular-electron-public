@@ -333,7 +333,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
             if (result === undefined) {
                 return;
             }
-            this.api.readOrdersOrderOrderIdGet(this.orderId).pipe(first()).subscribe((order) => {
+            this.api.readOrderOrderOrderIdGet(this.orderId).pipe(first()).subscribe((order) => {
                 const newArticle = ProductsListComponent.mapDialogData2ArticleCreate(result,
                     order.order_from.type === OrderableType.Supplier ? order.order_from.id : undefined);
                 this.api.createArticleArticlePost(newArticle).pipe(first()).subscribe(article => {

@@ -231,7 +231,8 @@ export class StockDetailComponent implements OnInit {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 delivery_date: orderDateReturnData.date,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                order_from_id: stock.id
+                order_from_id: stock.id,
+                request: false
             };
             this.api.createOrderBundleOrderBundlePost(orderBundle).pipe(first()).subscribe((newOrderBundle) => {
                 this.ingoingDataSource.loadData();

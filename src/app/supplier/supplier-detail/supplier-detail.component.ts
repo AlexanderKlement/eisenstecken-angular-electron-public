@@ -82,7 +82,17 @@ export class SupplierDetailComponent implements OnInit {
                 this.buttons.push({
                     name: 'Bestellung(en) senden',
                     navigate: () => {
-                        this.sendOrderButtonClicked();
+                        this.sendOrderButtonClicked(false);
+                    }
+                });
+            }
+        });
+        this.authService.currentUserHasRight('orders:modify').pipe(first()).subscribe(allowed => {
+            if (allowed) {
+                this.buttons.push({
+                    name: 'Anfrage(n) senden',
+                    navigate: () => {
+                        this.sendOrderButtonClicked(true);
                     }
                 });
             }
@@ -147,7 +157,7 @@ export class SupplierDetailComponent implements OnInit {
         this.createdOrderDataSource = new TableDataSource(
             this.api,
             (api, filter, sortDirection, skip, limit) =>
-                api.readOrdersOrderSupplierSupplierIdGet(this.id, skip, limit, filter, 'CREATED'),
+                api.readOrdersSupplierOrderSupplierSupplierIdGet(this.id, skip, limit, filter, 'CREATED'),
             (dataSourceClasses) => {
                 const rows = [];
                 dataSourceClasses.forEach((dataSource) => {
@@ -237,23 +247,23 @@ export class SupplierDetailComponent implements OnInit {
         this.deliveredOrderDataSource.loadData();
     }
 
-    private sendOrderButtonClicked(): void {
+    private sendOrderButtonClicked(request: boolean): void {
         const dialogRef = this.dialog.open(OrderDialogComponent, {
             width: '400px',
             data: {
                 name: this.api.readSupplierSupplierSupplierIdGet(this.id).pipe(
                     map((supplier) => supplier.displayable_name)),
-                orders: this.api.readOrdersOrderSupplierSupplierIdGet(this.id, 0, 1000, '', 'CREATED')
+                orders: this.api.readOrdersSupplierOrderSupplierSupplierIdGet(this.id, 0, 1000, '', 'CREATED', request)
             }
         });
 
         dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
-            this.ordersToOrderSelected(result);
+            this.ordersToOrderSelected(result, request);
         });
     }
 
-    private ordersToOrderSelected(orderDateReturnData: OrderDateReturnData): void {
+    private ordersToOrderSelected(orderDateReturnData: OrderDateReturnData, request: boolean): void {
         this.api.readSupplierSupplierSupplierIdGet(this.id).pipe(first()).subscribe((supplier) => {
             const orderBundle: OrderBundleCreate = {
                 description: '',
@@ -261,13 +271,15 @@ export class SupplierDetailComponent implements OnInit {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 delivery_date: orderDateReturnData.date,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                order_from_id: supplier.id
+                order_from_id: supplier.id,
+                request
             };
             this.api.createOrderBundleOrderBundlePost(orderBundle).pipe(first()).subscribe((newOrderBundle) => {
                 this.deliveredOrderDataSource.loadData();
                 this.orderedOrderDataSource.loadData();
                 this.createdOrderDataSource.loadData();
-                SupplierDetailComponent.sendAndDisplayOrderBundlePdf(this.api, this.authService, this.email, this.file, newOrderBundle, supplier);
+                SupplierDetailComponent.sendAndDisplayOrderBundlePdf(this.api, this.authService, this.email,
+                    this.file, newOrderBundle, supplier);
             });
         });
     }

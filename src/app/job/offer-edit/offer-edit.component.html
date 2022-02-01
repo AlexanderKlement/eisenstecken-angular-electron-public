@@ -56,11 +56,11 @@
                             </mat-form-field>
                             <div class="amount-price" fxLayout="column" fxLayoutAlign="start stretch" fxFlex="17">
                                 <mat-form-field appearance="fill">
-                                    <mat-label>Menge <strong>{{(i + 1).toString()}}.{{(j + 1).toString()}}</strong></mat-label>
+                                    <mat-label>Menge</mat-label>
                                     <input class="form-control" type=number formControlName="amount" matInput>
                                 </mat-form-field>
                                 <mat-form-field appearance="fill">
-                                    <mat-label>Einzelpreis <strong>{{(i + 1).toString()}}.{{(j + 1).toString()}}</strong></mat-label>
+                                    <mat-label>Einzelpreis</mat-label>
                                     <input class="form-control" type=number formControlName="single_price"
                                            [value]="sub_descriptive_article.get('single_price').value" matInput>
                                 </mat-form-field>

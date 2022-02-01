@@ -60,10 +60,10 @@ export class OrderedArticleMoveDialogComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.orderedArticles$ = this.api.readOrdersOrderOrderIdGet(this.data.orderId).pipe(map(order => order.articles));
+        this.orderedArticles$ = this.api.readOrderOrderOrderIdGet(this.data.orderId).pipe(map(order => order.articles));
         const jobs$ = this.api.readJobsJobGet(0, 1000, '', undefined, 'JOBSTATUS_ACCEPTED');
         const stocks$ = this.api.readStocksStockGet();
-        const order$ = this.api.readOrdersOrderOrderIdGet(this.data.orderId);
+        const order$ = this.api.readOrderOrderOrderIdGet(this.data.orderId);
         combineLatest([stocks$, jobs$, order$]).pipe(first()).subscribe(([stocks, jobs, order]) => {
             const stockOrderables = stocks.map(this.jobStock2SimpleOrderable);
             const jobOrderables = jobs.map(this.jobStock2SimpleOrderable);
