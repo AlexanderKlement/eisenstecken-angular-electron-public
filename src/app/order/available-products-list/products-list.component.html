@@ -17,8 +17,8 @@
       <button mat-button mat-icon-button *ngIf="!article.favorite" (click)="toggleFavorite(article)" title="Favorit">
         <mat-icon>star_border</mat-icon>
       </button>
-      <input matInput value="{{article.name.translation}}" matTooltip="{{article.description.translation}}" readonly
-             class="article-name">
+      <p matTooltip="{{article.description.translation}}"
+         class="article-name">{{article.name.translation}}</p>
       <button mat-button mat-icon-button (click)="copyButtonClicked(article)" title="Kopieren und hinzufügen">
         <mat-icon>content_copy</mat-icon>
       </button>

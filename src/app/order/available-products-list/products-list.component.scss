@@ -9,15 +9,25 @@ mat-form-field {
 }
 
 .article {
-  box-shadow: 0 1px 0.5px 0px rgb(0 0 0 / 30%);
+  //border-bottom: solid thin rgb(0 0 0 / 30%);
 
-
-
-  &:hover {
-    background: rgba(44, 44, 44, 0.04)
+  &:first-child {
+    box-shadow: 0 -1px 0 0 rgb(0 0 0 / 30%);
   }
 
-  .title{font-weight: 600;}
+  p.article-name {
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  &:hover {
+    background: rgba(#fdc400, 0.2);
+  }
+
+  .title {
+    font-weight: 600;
+  }
 
   mat-form-field {
     cursor: pointer;
@@ -27,12 +37,13 @@ mat-form-field {
   input {
     cursor: pointer;
   }
-  .description{
+
+  .description {
     margin-bottom: 1em;
   }
 }
 
-.add-button{
+.add-button {
   margin-bottom: 20px;
 }
 
