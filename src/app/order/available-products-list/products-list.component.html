@@ -18,7 +18,8 @@
         <mat-icon>star_border</mat-icon>
       </button>
       <p matTooltip="{{article.description.translation}}"
-         class="article-name">{{article.name.translation}}</p>
+         class="article-name"
+         [innerHTML]="search.value.length ? (article.name.translation|boldSpan:search.value) : article.name.translation"></p>
       <button mat-button mat-icon-button (click)="copyButtonClicked(article)" title="Kopieren und hinzufügen">
         <mat-icon>content_copy</mat-icon>
       </button>
@@ -29,7 +30,7 @@
   </mat-list-item>
 </mat-list>
 <mat-list *ngIf="!available">
-  <mat-list-item *ngFor="let orderedArticle of searchOrderedArticles$| async" fxFlexFill  class="article">
+  <mat-list-item *ngFor="let orderedArticle of searchOrderedArticles$| async" fxFlexFill class="article">
     <div fxLayout="column" fxLayoutAlign="start stretch" fxFlexFill>
       <div fxLayout="row" fxLayoutAlign="space-between center">
         <input matInput value="{{orderedArticle.article.name.translation}}" class="title" readonly>
@@ -38,7 +39,7 @@
         </button>
       </div>
       <div class="description">
-          <small>{{orderedArticle.custom_description}}</small>
+        <small>{{orderedArticle.custom_description}}</small>
       </div>
       <div fxLayout="row" fxLayoutAlign="space-between center">
         <mat-form-field>
