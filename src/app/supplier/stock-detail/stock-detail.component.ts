@@ -63,7 +63,6 @@ export class StockDetailComponent implements OnInit {
                 });
             }
         });
-
         this.authService.currentUserHasRight('stocks:delete').pipe(first()).subscribe(allowed => {
             if (allowed) {
                 this.buttons.push({
@@ -74,13 +73,22 @@ export class StockDetailComponent implements OnInit {
                 });
             }
         });
-
         this.authService.currentUserHasRight('orders:modify').pipe(first()).subscribe(allowed => {
             if (allowed) {
                 this.buttons.push({
                     name: 'Bestellung(en) senden',
                     navigate: () => {
                         this.sendOrderButtonClicked();
+                    }
+                });
+            }
+        });
+        this.authService.currentUserHasRight('articles:all').pipe(first()).subscribe(allowed => {
+            if (allowed) {
+                this.buttons.push({
+                    name: 'Artikel',
+                    navigate: () => {
+                        this.router.navigateByUrl('stock/articles/' + this.id.toString());
                     }
                 });
             }

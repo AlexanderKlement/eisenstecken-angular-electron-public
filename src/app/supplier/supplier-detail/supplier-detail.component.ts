@@ -86,10 +86,6 @@ export class SupplierDetailComponent implements OnInit {
                         this.sendOrderButtonClicked(false);
                     }
                 });
-            }
-        });
-        this.authService.currentUserHasRight('orders:modify').pipe(first()).subscribe(allowed => {
-            if (allowed) {
                 this.buttons.push({
                     name: 'Anfrage(n) senden',
                     navigate: () => {
@@ -104,6 +100,16 @@ export class SupplierDetailComponent implements OnInit {
                     name: 'Lieferant ausblenden',
                     navigate: () => {
                         this.supplierDeleteClicked();
+                    }
+                });
+            }
+        });
+        this.authService.currentUserHasRight('articles:all').pipe(first()).subscribe(allowed => {
+            if (allowed) {
+                this.buttons.push({
+                    name: 'Artikel',
+                    navigate: () => {
+                        this.router.navigateByUrl('supplier/articles/' + this.id.toString());
                     }
                 });
             }

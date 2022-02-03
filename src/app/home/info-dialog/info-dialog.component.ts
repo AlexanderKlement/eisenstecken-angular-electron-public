@@ -48,12 +48,16 @@ export class InfoDialogComponent implements OnInit {
                 'kombiniert werden, sollte dies gewünscht sein.',
                 'Sollte eine Artikelliste von einem Hauptauftrag erstellt werden, führt dies zu fehlerhafen Ergebnissen: der erste ' +
                 'Unterauftrag wird als Name verwendet und danache werden die einzelnen Listen nicht in separate Unteraufträge aufgeteilt.',
-                'Eigene Ansicht erstellen, in der alle verfügbaren Artikel pro Lieferant angezeigt und bearbeitet werden können.',
-                'Artikel werden in Zukunft bei jeder Änderung ausgeblendet und eine neue Version erzeugt, um älter Bestellungen nicht ' +
-                'unbeabsichtig zu verändern. Bei allen Ansichten müssen Artikel alphabetisch geordnet werden' +
-                ' um Ansichten nicht bei jeder ' +
-                'Änderung zu verschieben. Sollte diese lieber nach Index geordnet werden ist dies auch möglich.',
                 'Bei Bestellungen die Möglichkeit hinzufügen, einzelne Artikel auch hier zu löschen (mit Bestätigungsdialog)',
+                'Kommazahlen werden manchmal fälschlicherweise mit einem "." statt mit dem üblichen "," abgebildet.'
+            ]
+        },
+        {
+            versionName: '0.8.14',
+            changes: [
+                'Eigene Ansicht erstellt mit der es möglich ist alle Artikel eines Lieferanten/ Lager einzusehen und zu bearbeiten. ' +
+                'Diese Ansicht ist erreichbar, wenn man auf den jeweiligen Lieferanten geht und oben rechts auf Artikel klickt.',
+                'Artikel werden nun bei einer Änderung dupliziert um ältere Bestellungen nicht zu alternieren.'
             ]
         },
         {

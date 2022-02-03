@@ -22,6 +22,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {SupplierComponent} from './supplier.component';
 import { StockDetailComponent } from './stock-detail/stock-detail.component';
 import { StockEditComponent } from './stock-edit/stock-edit.component';
+import { ArticleSupplierComponent } from './article-supplier/article-supplier.component';
+import { ArticleEditDialogComponent } from './article-supplier/article-edit-dialog/article-edit-dialog.component';
 
 
 @NgModule({
@@ -31,7 +33,9 @@ import { StockEditComponent } from './stock-edit/stock-edit.component';
         SupplierEditComponent,
         OrderDialogComponent,
         StockDetailComponent,
-        StockEditComponent
+        StockEditComponent,
+        ArticleSupplierComponent,
+        ArticleEditDialogComponent
     ],
     imports: [
         CommonModule,
