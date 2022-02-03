@@ -12,6 +12,7 @@ import {CustomButton} from '../../shared/components/toolbar/toolbar.component';
 import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import {OrderDialogComponent} from '../../supplier/supplier-detail/order-dialog/order-dialog.component';
 import {OrderedArticleMoveDialogComponent} from './ordered-article-move-dialog/ordered-article-move-dialog.component';
+import {formatCurrency} from '@angular/common';
 
 @Component({
     selector: 'app-order-detail',
@@ -107,8 +108,8 @@ export class OrderDetailComponent implements OnInit {
                                 amount: dataSource.amount,
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
                                 'ordered_unit.name.translation_de': dataSource.ordered_unit.name.translation_de,
-                                price: dataSource.price.toFixed(2) + ' €',
-                                discount: (dataSource.price * dataSource.amount * (1 - dataSource.discount / 100)).toFixed(2) + ' €',
+                                price: formatCurrency(dataSource.price, 'de-DE', 'EUR'),
+                                discount: formatCurrency(dataSource.price * dataSource.amount * (1 - dataSource.discount / 100), 'de-DE', 'EUR'),
                             },
                             route: () => {
                                 this.orderedArticleClicked(dataSource.id);

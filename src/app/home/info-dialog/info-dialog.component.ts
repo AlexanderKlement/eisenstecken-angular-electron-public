@@ -40,15 +40,15 @@ export class InfoDialogComponent implements OnInit {
                 'Aufträge löschen ist immer noch nur eingeschränkt möglich.',
                 'Die Anzahl der ungelesenen Chat Nachrichten stimmt nicht. Außerdem wird der Wert bei jedem ' +
                 'Neustart zurückgesetzt.',
-                'Kommazahlen werden nicht konsistent abgespeichert. Vor allem bei Preisen werden oft zu viele Stellen angezeigt ' +
-                'oder zu stark gerundet. Lösung: Intern-> 4 Byte (2^8) ; Programm -> 2 Nachkommastellen anzeigen.',
                 'Um Chat Mitteilungen nicht zu verpassen, solle Programm statt mit "x" zu schließen in Taskleiste minimiert werden. ' +
                 'Eingehende Nachrichten werden dann als Benachrichtigung angezeigt. Diese Funktion kann später vielleicht mit Terminen ' +
                 'kombiniert werden, sollte dies gewünscht sein.',
                 'Sollte eine Artikelliste von einem Hauptauftrag erstellt werden, führt dies zu fehlerhafen Ergebnissen: der erste ' +
                 'Unterauftrag wird als Name verwendet und danache werden die einzelnen Listen nicht in separate Unteraufträge aufgeteilt.',
-                'Bei Bestellungen die Möglichkeit hinzufügen, einzelne Artikel auch hier zu löschen (mit Bestätigungsdialog)',
-                'Kommazahlen werden manchmal fälschlicherweise mit einem "." statt mit dem üblichen "," abgebildet.'
+                'Bei Bestellungen sollte es möglich sein die Unteraufträge/projekte einzuklappen, um die ganze Ansicht übersichtlicher' +
+                ' zu gestalten.',
+                'Eingangsrechnungen import machen',
+                'Aus- und Eingangsrechnungen sollten Möglichkeit haben als bezahlt zu markieren.'
             ]
         },
         {
@@ -57,10 +57,15 @@ export class InfoDialogComponent implements OnInit {
                 'Eigene Ansicht erstellt mit der es möglich ist alle Artikel eines Lieferanten/ Lager einzusehen und zu bearbeiten. ' +
                 'Diese Ansicht ist erreichbar, wenn man auf den jeweiligen Lieferanten geht und oben rechts auf Artikel klickt.',
                 'Artikel werden nun bei einer Änderung dupliziert um ältere Bestellungen nicht zu alternieren.',
-                'Email Text bei Bestellungen kann nun sehr viel besser formatiert werden.',
+                'Email Text bei Bestellungen kann nun sehr viel besser formatiert werden. (Müssen wir noch abändern sobald ' +
+                'alle diese Version haben)',
                 'Text bei Nachkalkulation sollte nun früher aufhöhren.',
                 'Bei Nachkalkulatio wurde spalte Name in Kommission umbenannt.',
-                'Nachkalkulationen können nun auch nach Kunden durchsucht werden.'
+                'Nachkalkulationen können nun auch nach Kunden durchsucht werden.',
+                'In der Ansicht "Bestellungen: Zusammenstellen" können nun auch Artikel gelöscht werden.',
+                'Lierschein Beschreibung Feld ist nun breiter',
+                'Kommazahlen wurden überarbeitet und sollten nun korrekt mit 2 Nachkommastellen (Mengenangaben ausgenommen) ' +
+                'angezeigt. Als Kommazeichen wird "," verwendet. Sollte ich was übersehen haben bitte melden.'
             ]
         },
         {

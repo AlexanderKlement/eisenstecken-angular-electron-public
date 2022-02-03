@@ -3,6 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Observable, Subscription} from 'rxjs';
 import {DefaultService, Unit, Vat} from 'eisenstecken-openapi-angular-library';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {formatNumber} from '@angular/common';
 
 export interface OrderDialogData {
     title: string;
@@ -23,6 +24,7 @@ export interface OrderDialogData {
     comment: string;
     position: string;
     delete: boolean;
+    create: boolean;
 }
 
 @Component({
@@ -38,9 +40,14 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
     subscription: Subscription;
     priceSubscription: Subscription;
     singlePrice = true;
+    createMode: boolean;
 
     constructor(public dialogRef: MatDialogRef<ProductEditDialogComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: OrderDialogData, private api: DefaultService) {
+    }
+
+    public static roundTo2Decimals(input: number): number { //TODO: move bitch get out the way
+        return Math.round(input * 100) / 100;
     }
 
     ngOnInit(): void {
@@ -49,6 +56,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
         this.vatOptions$ = this.api.readVatsVatGet();
         this.unitOptions$ = this.api.readUnitsUnitGet();
         this.initProductEditGroup();
+        this.createMode = this.data.create;
     }
 
     ngOnDestroy() {
@@ -79,7 +87,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
             discount: this.productEditGroup.get('discount').value,
             // eslint-disable-next-line @typescript-eslint/naming-convention
             unit_id: this.productEditGroup.get('unit_id').value,
-            price: this.productEditGroup.get('price').value,
+            price: this.singlePrice ? this.productEditGroup.get('price').value : this.calcSinglePrice(),
             // eslint-disable-next-line @typescript-eslint/naming-convention
             mod_number: this.productEditGroup.get('mod_number').value,
             // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -88,6 +96,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
             comment: this.productEditGroup.get('comment').value,
             position: this.productEditGroup.get('position').value,
             delete: deleteOrder,
+            create: this.data.create,
         };
     }
 
@@ -130,19 +139,25 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
         this.recalculateTotalPrice();
     }
 
+    private calcSinglePrice(): number {
+        const price = this.productEditGroup.get('total_price').value / (1 - (this.productEditGroup.get('discount').value / 100));
+        return price / this.productEditGroup.get('amount').value;
+    }
+
+    private calcTotalPrice(): number {
+        const price = this.productEditGroup.get('price').value * this.productEditGroup.get('amount').value;
+        return price * (1 - (this.productEditGroup.get('discount').value / 100));
+    }
 
     private recalculateTotalPrice(): void {
         if (this.singlePrice) {
-            let price = this.productEditGroup.get('price').value * this.productEditGroup.get('amount').value;
-            price = price * (1 - (this.productEditGroup.get('discount').value / 100));
-            this.productEditGroup.get('total_price').setValue(price);
+            console.log(this.calcTotalPrice());
+            this.productEditGroup.get('total_price').setValue(ProductEditDialogComponent.roundTo2Decimals(this.calcTotalPrice()));
         } else {
-            let price = this.productEditGroup.get('total_price').value / (1 - (this.productEditGroup.get('discount').value / 100));
-            price = price / this.productEditGroup.get('amount').value;
-            this.productEditGroup.get('price').setValue(price);
+            console.log(this.calcSinglePrice());
+            this.productEditGroup.get('price').setValue(ProductEditDialogComponent.roundTo2Decimals(this.calcSinglePrice()));
         }
     }
-
 
     private singlePriceInsertChanged(): void {
         this.priceSubscription.unsubscribe();

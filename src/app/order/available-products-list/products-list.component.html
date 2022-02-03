@@ -26,6 +26,9 @@
       <button mat-button mat-icon-button (click)="orderButtonClicked(article)" title="Hinzufügen">
         <mat-icon>add</mat-icon>
       </button>
+      <button mat-button mat-icon-button (click)="removeArticleButtonClicked(article)" title="Entfernen">
+        <mat-icon>delete</mat-icon>
+      </button>
     </div>
   </mat-list-item>
 </mat-list>
@@ -46,7 +49,7 @@
           <mat-label>Menge</mat-label>
           <input type=number matInput value="{{orderedArticle.amount}}" readonly>
         </mat-form-field>
-        <button mat-button mat-icon-button (click)="removeButtonClicked(orderedArticle)" title="Entfernen">
+        <button mat-button mat-icon-button (click)="removeOrderedArticleButtonClicked(orderedArticle)" title="Entfernen">
           <mat-icon>delete</mat-icon>
         </button>
       </div>

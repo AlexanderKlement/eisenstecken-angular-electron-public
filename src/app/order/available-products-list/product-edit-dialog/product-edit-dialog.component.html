@@ -88,7 +88,7 @@
 
         </div>
         <div fxLayout="row" fxLayoutAlign="space-around start">
-            <button type="button" mat-button (click)="onDeleteClick()">Löschen</button>
+            <button *ngIf="!createMode" type="button" mat-button (click)="onDeleteClick()">Löschen</button>
             <span class="spacer"></span>
             <button type="button" mat-button (click)="onNoClick()">Abbrechen</button>
             <button type="submit" [disabled]="!productEditGroup.valid" mat-button class="add-button">Hinzufügen

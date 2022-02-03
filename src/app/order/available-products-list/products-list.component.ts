@@ -12,6 +12,7 @@ import {debounceTime, first, startWith, switchMap} from 'rxjs/operators';
 import {MatDialog} from '@angular/material/dialog';
 import {OrderDialogData, ProductEditDialogComponent} from './product-edit-dialog/product-edit-dialog.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 
 @Component({
@@ -53,6 +54,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
                 dialogData.request = orderedArticle.request;
                 dialogData.comment = orderedArticle.comment;
                 dialogData.position = orderedArticle.position;
+                dialogData.create = false;
                 dialogDataSubscriber.next(dialogData);
             });
         });
@@ -147,7 +149,8 @@ export class ProductsListComponent implements OnInit, OnDestroy {
                 request: false,
                 comment: '',
                 position: '',
-                delete: false
+                delete: false,
+                create: true,
             };
         }
         return {
@@ -168,7 +171,8 @@ export class ProductsListComponent implements OnInit, OnDestroy {
             request: false,
             comment: '',
             position: '',
-            delete: false
+            delete: false,
+            create: true
         };
     }
 
@@ -316,7 +320,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
         });
     }
 
-    removeButtonClicked(orderedArticle: OrderedArticle): void {
+    removeOrderedArticleButtonClicked(orderedArticle: OrderedArticle): void {
         this.api.deleteOrderedArticleOrderedArticleOrderedArticleIdDelete(orderedArticle.id)
             .pipe(first()).subscribe((success) => {
             if (success) {
@@ -328,6 +332,31 @@ export class ProductsListComponent implements OnInit, OnDestroy {
             }
         });
     }
+
+    removeArticleButtonClicked(article: Article): void {
+        const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+            width: '400px',
+            data: {
+                title: 'Artikel löschen?',
+                text: 'Diese Operation kann rückgängig gemacht werden.'
+            }
+        });
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.api.deleteArticleArticleArticleIdDelete(article.id)
+                    .pipe(first()).subscribe((success) => {
+                    if (success) {
+                        this.refreshAvailableOrderList();
+                    } else {
+                        this.snackBar.open('Artikel konnte nicht gelöscht werden. Bitte probieren sie es später erneut', 'Ok', {
+                            duration: 10000
+                        });
+                    }
+                });
+            }
+        });
+    }
+
 
     addButtonClicked(): void {
         const dialogData = ProductsListComponent.createEmptyDialogData('Neuen Artikel hinzufügen');
