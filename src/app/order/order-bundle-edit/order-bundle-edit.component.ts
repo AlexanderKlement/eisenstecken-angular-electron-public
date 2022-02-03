@@ -106,7 +106,7 @@ export class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> imp
                     price: parseFloat(article.get('price').value),
                 });
             }
-        }
+        } //This does not work anymore
         this.api.updateOrderedArticlePriceOrderedArticlePricePut(priceUpdate).pipe(first()).subscribe(result => {
             if (result) {
                 this.router.navigateByUrl('order_bundle/' + this.orderBundleId.toString());

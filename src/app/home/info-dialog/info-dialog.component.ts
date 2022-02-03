@@ -38,7 +38,6 @@ export class InfoDialogComponent implements OnInit {
             versionName: 'In Bearbeitung:',
             changes: [
                 'Aufträge löschen ist immer noch nur eingeschränkt möglich.',
-                'Email Text bei Bestellung wird nicht schön formatiert.',
                 'Die Anzahl der ungelesenen Chat Nachrichten stimmt nicht. Außerdem wird der Wert bei jedem ' +
                 'Neustart zurückgesetzt.',
                 'Kommazahlen werden nicht konsistent abgespeichert. Vor allem bei Preisen werden oft zu viele Stellen angezeigt ' +
@@ -57,7 +56,11 @@ export class InfoDialogComponent implements OnInit {
             changes: [
                 'Eigene Ansicht erstellt mit der es möglich ist alle Artikel eines Lieferanten/ Lager einzusehen und zu bearbeiten. ' +
                 'Diese Ansicht ist erreichbar, wenn man auf den jeweiligen Lieferanten geht und oben rechts auf Artikel klickt.',
-                'Artikel werden nun bei einer Änderung dupliziert um ältere Bestellungen nicht zu alternieren.'
+                'Artikel werden nun bei einer Änderung dupliziert um ältere Bestellungen nicht zu alternieren.',
+                'Email Text bei Bestellungen kann nun sehr viel besser formatiert werden.',
+                'Text bei Nachkalkulation sollte nun früher aufhöhren.',
+                'Bei Nachkalkulatio wurde spalte Name in Kommission umbenannt.',
+                'Nachkalkulationen können nun auch nach Kunden durchsucht werden.'
             ]
         },
         {

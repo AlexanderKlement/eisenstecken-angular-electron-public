@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angula
 import {Observable, of, Subscription} from 'rxjs';
 import {
     Article, ArticleCreate,
-    ArticleUpdate,
+    ArticleUpdate, ArticleUpdateFull,
     DefaultService, OrderableType,
     OrderedArticle,
     OrderedArticleCreate
@@ -62,7 +62,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
         return api.deleteOrderedArticleOrderedArticleOrderedArticleIdDelete(orderedArticleId);
     }
 
-    public static mapDialogData2ArticleUpdate(dialogData: OrderDialogData): ArticleUpdate {
+    public static mapDialogData2ArticleUpdate(dialogData: OrderDialogData): ArticleUpdateFull {
         return {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             mod_number: dialogData.mod_number,
@@ -79,6 +79,8 @@ export class ProductsListComponent implements OnInit, OnDestroy {
             description_it: dialogData.custom_description,
             // eslint-disable-next-line @typescript-eslint/naming-convention
             vat_id: dialogData.vat_id,
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            category_ids: []
         };
     }
 
@@ -255,7 +257,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
             }
             const orderedArticleCreate = ProductsListComponent.mapDialogData2OrderedArticleCreate(result, article.id);
             const articleUpdate = ProductsListComponent.mapDialogData2ArticleUpdate(result);
-            this.api.patchArticleArticleArticleIdPatch(article.id, articleUpdate).pipe(first()).subscribe((patchArticle) => {
+            this.api.updateArticleArticleArticleIdPut(article.id, articleUpdate).pipe(first()).subscribe((patchArticle) => {
                 orderedArticleCreate.article_id = patchArticle.id;
                 this.api.addOrderedArticleToOrderOrderOrderedArticleOrderIdPut(this.orderId, orderedArticleCreate)
                     .pipe(first()).subscribe(() => {
@@ -299,7 +301,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
             const orderedArticleCreate = ProductsListComponent
                 .mapDialogData2OrderedArticleCreate(result, orderedArticle.article.id);
             const articleUpdate = ProductsListComponent.mapDialogData2ArticleUpdate(result);
-            this.api.patchArticleArticleArticleIdPatch(orderedArticle.article.id, articleUpdate)
+            this.api.updateArticleArticleArticleIdPut(orderedArticle.article.id, articleUpdate)
                 .pipe(first()).subscribe((article) => {
                 orderedArticleCreate.article_id = article.id;
                 this.api.updateOrderedArticleOrderedArticleOrderedArticleIdPut(orderedArticle.id, orderedArticleCreate)

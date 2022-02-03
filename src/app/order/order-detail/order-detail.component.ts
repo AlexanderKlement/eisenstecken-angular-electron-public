@@ -153,7 +153,7 @@ export class OrderDetailComponent implements OnInit {
                 const orderedArticleCreate = ProductsListComponent
                     .mapDialogData2OrderedArticleCreate(result, orderedArticle.article.id);
                 const articleUpdate = ProductsListComponent.mapDialogData2ArticleUpdate(result);
-                this.api.patchArticleArticleArticleIdPatch(orderedArticle.article.id, articleUpdate)
+                this.api.updateArticleArticleArticleIdPut(orderedArticle.article.id, articleUpdate)
                     .pipe(first()).subscribe((article) => {
                     orderedArticleCreate.article_id = article.id;
                     this.api.updateOrderedArticleOrderedArticleOrderedArticleIdPut(orderedArticle.id, orderedArticleCreate)

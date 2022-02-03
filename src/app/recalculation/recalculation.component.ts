@@ -44,7 +44,7 @@ export class RecalculationComponent implements OnInit {
                 return rows;
             },
             [
-                {name: 'name', headerName: 'Name'},
+                {name: 'name', headerName: 'Kommission'},
                 {name: 'client.name', headerName: 'Kunde'},
                 {name: 'description', headerName: 'Beschreibung'}
             ],

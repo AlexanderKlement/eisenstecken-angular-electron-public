@@ -6,12 +6,13 @@ import {ElectronService} from '../../core/services';
 })
 export class EmailService {
 
+
     constructor(private electronService: ElectronService) {
     }
 
     sendMail(mail: string, subject: string, body: string, attachment?: string): Promise<void> {
         if (!this.electronService.isElectron) {
-            console.warn("Not electron: got the following though:");
+            console.warn('Not electron: got the following though:');
             console.log(mail);
             console.log(subject);
             console.log(body);
@@ -21,12 +22,15 @@ export class EmailService {
             });
         }
 
+        console.log(body);
+
+
         // TODO: implement some checks here
 
         const mailArray = [];
         mailArray.push(mail);
         mailArray.push(subject);
-        mailArray.push(body);
+        mailArray.push(this.decodeHtml(body));
 
         if (attachment) {
             mailArray.push(attachment);
@@ -49,4 +53,13 @@ export class EmailService {
             }
         });
     }
+
+    decodeHtml(html) {
+        const txt = document.createElement('textarea');
+        txt.innerHTML = html;
+        return txt.value;
+    }
+
 }
+
+

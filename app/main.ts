@@ -169,11 +169,12 @@ function initIPC() {
     ipcMain.on('send-mail-request', (event, arg) => {
         //I'll just do both of them, one of them should open correctly.
         //If it opens twice we should add a check here
-        child(mail64ExecutablePath, arg, function (err, data) {
+        console.log("Preparing mail: ");
+        child(mail32ExecutablePath, arg, function (err, data) {
             console.log(err);
             console.log(data);
         });
-        child(mail32ExecutablePath, arg, function (err, data) {
+        child(mail64ExecutablePath, arg, function (err, data) {
             console.log(err);
             console.log(data);
         });
