@@ -33,8 +33,9 @@ export class RecalculationComponent implements OnInit {
                         {
                             values: {
                                 name: dataSource.name,
+                                code: dataSource.code,
                                 'client.name': dataSource.client.fullname,
-                                description: dataSource.description,
+                                'responsible.fullname': dataSource.responsible.fullname,
                             },
                             route: () => {
                                 this.router.navigateByUrl('/recalculation/' + dataSource.id.toString());
@@ -44,9 +45,10 @@ export class RecalculationComponent implements OnInit {
                 return rows;
             },
             [
+                {name: 'code', headerName: 'Kommissionsnummer'},
                 {name: 'name', headerName: 'Kommission'},
                 {name: 'client.name', headerName: 'Kunde'},
-                {name: 'description', headerName: 'Beschreibung'}
+                {name: 'responsible.fullname', headerName: 'Zuständig'}
             ],
             (api) => api.readJobCountJobCountGet('JOBSTATUS_COMPLETED', true)
         );

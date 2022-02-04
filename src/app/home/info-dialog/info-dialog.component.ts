@@ -37,7 +37,6 @@ export class InfoDialogComponent implements OnInit {
         {
             versionName: 'In Bearbeitung:',
             changes: [
-                'Aufträge löschen ist immer noch nur eingeschränkt möglich.',
                 'Die Anzahl der ungelesenen Chat Nachrichten stimmt nicht. Außerdem wird der Wert bei jedem ' +
                 'Neustart zurückgesetzt.',
                 'Um Chat Mitteilungen nicht zu verpassen, solle Programm statt mit "x" zu schließen in Taskleiste minimiert werden. ' +
@@ -50,6 +49,15 @@ export class InfoDialogComponent implements OnInit {
                 'Eingangsrechnungen import machen',
                 'Aus- und Eingangsrechnungen sollten Möglichkeit haben als bezahlt zu markieren.'
             ]
+        },
+        {
+            versionName: '0.8.15',
+            changes: [
+                'Aufträge und Unteraufträge können nun gelöscht werden.',
+                'Aufträge können jetzt auch nach Kommissionsnummer durchsucht werden.',
+                'Ausgangsrechnungen enthalten nun nicht mehr den Auftragsnamen im Dateinamen.',
+                'Artikel werden bei Bestellungen nun anders geordnet: Favoriten -> Alphabetisch; Andere -> Neueste zuerst.'
+            ],
         },
         {
             versionName: '0.8.14',

@@ -113,9 +113,9 @@ export class JobDetailComponent implements OnInit {
                 dataSourceClasses.forEach((dataSource) => {
                     rows.push(
                         {
-                             values: {
-                                    id: dataSource.id,
-                                    date: moment(dataSource.date).format('L'),
+                            values: {
+                                id: dataSource.id,
+                                date: moment(dataSource.date).format('L'),
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
                                 full_price_without_vat: formatCurrency(dataSource.full_price_without_vat, 'de-DE', 'EUR')
                             },
@@ -377,13 +377,6 @@ export class JobDetailComponent implements OnInit {
     }
 
     private jobDeleteClicked(): void {
-        if (!this.isMainJob) {
-            this.snackBar.open('Unterauftrag derzeit deaktiviert. Bitte Hannes sagen.'
-                , 'Ok', {
-                    duration: 10000
-                });
-            return;
-        }
         const dialogRef = this.dialog.open(ConfirmDialogComponent, {
             width: '400px',
             data: {
@@ -393,25 +386,14 @@ export class JobDetailComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                const secondDialogRef = this.dialog.open(ConfirmDialogComponent, {
-                    width: '400px',
-                    data: {
-                        title: 'Auftrag löschen?',
-                        text: 'Sind Sie sich sicher?'
-                    }
-                });
-                secondDialogRef.afterClosed().subscribe(secondResult => {
-                    if (secondResult) {
-                        this.api.deleteJobJobJobIdDelete(this.jobId).pipe(first()).subscribe(success => {
-                            if (success) {
-                                this.router.navigateByUrl('job');
-                            } else {
-                                this.snackBar.open('Der Auftrag konnte leider nicht gelöscht werden.'
-                                    , 'Ok', {
-                                        duration: 10000
-                                    });
-                            }
-                        });
+                this.api.deleteJobJobJobIdDelete(this.jobId).pipe(first()).subscribe(success => {
+                    if (success) {
+                        this.router.navigateByUrl('job');
+                    } else {
+                        this.snackBar.open('Der Auftrag konnte leider nicht gelöscht werden.'
+                            , 'Ok', {
+                                duration: 10000
+                            });
                     }
                 });
             }
