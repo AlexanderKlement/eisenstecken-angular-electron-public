@@ -6,7 +6,7 @@ import {
     Expense, ExpenseCreate,
     Lock, Order, Paint, PaintCreate,
     Recalculation,
-    RecalculationCreate, RecalculationUpdate, Workload
+    RecalculationCreate, RecalculationUpdate, Unit, WoodList, WoodListCreate, Workload
 } from 'eisenstecken-openapi-angular-library';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
@@ -17,6 +17,7 @@ import * as moment from 'moment';
 import {minutesToDisplayableString} from '../../shared/date.util';
 import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import {FileService} from '../../shared/services/file.service';
+import {templateJitUrl} from '@angular/compiler';
 
 @Component({
     selector: 'app-recalculation-edit',
@@ -28,6 +29,7 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
     navigationTarget = 'recalculation';
     jobId: number;
     jobName$: Observable<string>;
+    units$: Observable<Unit[]>;
 
     orderDataSource: TableDataSource<Order>;
     workloadDataSource: TableDataSource<Workload>;
@@ -46,6 +48,7 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
 
     ngOnInit(): void {
         super.ngOnInit();
+        this.units$ = this.api.readUnitsUnitGet();
         this.initRecalculationsGroup();
         this.routeParams.subscribe((params) => {
             this.jobId = parseInt(params.job_id, 10);
@@ -61,6 +64,8 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
             );
             if (this.createMode) {
                 this.addExpense();
+                this.addTemplatePaints();
+                this.addWoodList();
             } else {
                 this.api.readRecalculationRecalculationRecalculationIdGet(this.id).pipe(first()).subscribe(recalculation => {
                     this.fillFormGroup(recalculation);
@@ -75,9 +80,10 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
     initRecalculationsGroup(): void {
         this.recalculationGroup = new FormGroup({
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            wood_amount: new FormControl(''),
             expenses: new FormArray([]),
             paints: new FormArray([]),
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            wood_lists: new FormArray([]),
             // eslint-disable-next-line @typescript-eslint/naming-convention
             material_charge_percent: new FormControl(30, Validators.compose([Validators.min(0), Validators.max(100)]))
         });
@@ -87,12 +93,14 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
     }
 
     fillFormGroup(recalculation: Recalculation): void {
-        this.recalculationGroup.get('wood_amount').setValue(recalculation.wood_amount);
         for (const expense of recalculation.expenses) {
             this.addExpense(expense);
         }
         for (const paint of recalculation.paints) {
             this.addPaint(paint);
+        }
+        for (const woodList of recalculation.wood_lists) {
+            this.addWoodList(woodList);
         }
     }
 
@@ -124,6 +132,36 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
         }
     }
 
+    getWoodLists(): FormArray {
+        return this.recalculationGroup.get('wood_lists') as FormArray;
+    }
+
+    removeWoodListAt(index: number): void {
+        this.getWoodLists().removeAt(index);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    addWoodList(wood_list?: WoodList): void {
+        this.getWoodLists().push(this.createWoodList(wood_list));
+    }
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    createWoodList(wood_list?: WoodList): FormGroup {
+        if (wood_list !== undefined) {
+            return new FormGroup({
+                id: new FormControl(wood_list.id),
+                price: new FormControl(wood_list.price),
+                name: new FormControl(wood_list.name)
+            });
+        } else {
+            return new FormGroup({
+                id: new FormControl(0),
+                price: new FormControl(0),
+                name: new FormControl('')
+            });
+        }
+    }
+
     getPaints(): FormArray {
         return this.recalculationGroup.get('paints') as FormArray;
     }
@@ -136,20 +174,37 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
         this.getPaints().push(this.createPaint(paint));
     }
 
+    addPaintManual(name: string, price: number, unitId: number): void {
+        this.getPaints().push(this.createPaintManual(name, price, unitId));
+    }
+
+    createPaintManual(name: string, price: number, unitId: number): FormGroup {
+        return new FormGroup({
+            name: new FormControl(name),
+            price: new FormControl(price),
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            unit_id: new FormControl(unitId)
+        });
+    }
+
     createPaint(paint?: Paint): FormGroup {
         if (paint !== undefined) {
             return new FormGroup({
                 id: new FormControl(paint.id),
                 amount: new FormControl(paint.amount),
                 name: new FormControl(paint.name),
-                price: new FormControl(paint.price)
+                price: new FormControl(paint.price),
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                unit_id: new FormControl(paint.unit.id)
             });
         } else {
             return new FormGroup({
                 id: new FormControl(0),
                 amount: new FormControl(0),
                 name: new FormControl(''),
-                price: new FormControl(0)
+                price: new FormControl(0),
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                unit_id: new FormControl(4),
             });
         }
     }
@@ -169,14 +224,23 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
                 name: paintGroup.get('name').value,
                 price: paintGroup.get('price').value,
                 amount: paintGroup.get('amount').value,
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                unit_id: paintGroup.get('unit_id').value,
+            });
+        }
+        const woodLists: WoodListCreate[] = [];
+        for (const woodListGroup of this.getWoodLists().controls) {
+            woodLists.push({
+                name: woodListGroup.get('name').value,
+                price: woodListGroup.get('price').value,
             });
         }
         if (this.createMode) {
             const recalculationCreate: RecalculationCreate = {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                wood_amount: this.recalculationGroup.get('wood_amount').value,
                 expenses,
                 paints,
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                wood_lists: woodLists,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 material_charge_percent: this.recalculationGroup.get('material_charge_percent').value,
             };
@@ -186,10 +250,10 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
             });
         } else {
             const recalculationUpdate: RecalculationUpdate = {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                wood_amount: this.recalculationGroup.get('wood_amount').value,
                 expenses,
                 paints,
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                wood_lists: woodLists,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 material_charge_percent: this.recalculationGroup.get('material_charge_percent').value,
             };
@@ -285,5 +349,13 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
             (api) => api.readWorkloadCountWorkloadCountGet(undefined, this.jobId)
         );
         this.workloadDataSource.loadData();
+    }
+
+    private addTemplatePaints() {
+        this.api.readTemplatePaintsTemplatePaintGet().pipe(first()).subscribe((paintTemplates) => {
+            for (const templatePaint of paintTemplates) {
+                this.addPaintManual(templatePaint.name, templatePaint.price, templatePaint.unit.id);
+            }
+        });
     }
 }

@@ -8,12 +8,8 @@
                 <input type=number class="form-control" readonly [value]="recalculation.total_sum.toString()"
                        matInput>
             </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>Preis Holzliste [€]</mat-label>
-                <input type=number class="form-control" readonly [value]="recalculation.wood_amount.toString()"
-                       matInput>
-            </mat-form-field>
         </div>
+        <app-table-builder [dataSource]="woodListDataSource" title="Preise Holzlisten"></app-table-builder>
         <app-table-builder [dataSource]="paintDataSource" title="Oberflächen"></app-table-builder>
         <app-table-builder [dataSource]="expenseDataSource" title="Ausgaben"></app-table-builder>
         <app-table-builder [dataSource]="orderDataSource" title="Bestellungen"></app-table-builder>

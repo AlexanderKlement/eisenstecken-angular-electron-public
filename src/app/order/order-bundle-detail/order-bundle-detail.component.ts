@@ -99,11 +99,11 @@ export class OrderBundleDetailComponent implements OnInit {
                 },
                 {
                     property: 'create_date_formatted',
-                    name: 'Erstelldatum'
+                    name: 'Bestelldatum'
                 },
                 {
                     property: 'delivery_date_formatted',
-                    name: 'Bestelldatum'
+                    name: 'Lieferdatumdatum'
                 },
                 {
                     property: 'user.fullname',
@@ -115,7 +115,6 @@ export class OrderBundleDetailComponent implements OnInit {
             undefined,
             undefined
         );
-
     }
 
     private initOrderDataSource(): void {

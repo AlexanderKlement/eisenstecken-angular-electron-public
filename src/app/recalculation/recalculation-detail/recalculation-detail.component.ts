@@ -1,5 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {DefaultService, Expense, Order, Paint, Recalculation, Workload} from 'eisenstecken-openapi-angular-library';
+import {
+    DefaultService,
+    Expense,
+    Order,
+    Paint,
+    Recalculation,
+    WoodList,
+    Workload
+} from 'eisenstecken-openapi-angular-library';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TableDataSource} from '../../shared/components/table-builder/table-builder.datasource';
 import * as moment from 'moment';
@@ -10,6 +18,7 @@ import {LockService} from '../../shared/services/lock.service';
 import {AuthService} from '../../shared/services/auth.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {minutesToDisplayableString} from '../../shared/date.util';
+import {formatCurrency} from '@angular/common';
 
 
 @Component({
@@ -27,6 +36,7 @@ export class RecalculationDetailComponent implements OnInit {
     workloadDataSource: TableDataSource<Workload>;
     expenseDataSource: TableDataSource<Expense>;
     paintDataSource: TableDataSource<Paint>;
+    woodListDataSource: TableDataSource<WoodList>;
     jobName$: Observable<string>;
 
     buttons: CustomButton[] = [];
@@ -81,6 +91,7 @@ export class RecalculationDetailComponent implements OnInit {
         this.initWorkloadTable();
         this.initExpenseTable();
         this.initPaintTable();
+        this.initWoodListTable();
         this.jobName$ = this.api.readJobJobJobIdGet(this.jobId).pipe(
             first(),
             map(job => 'Nachkalkulation: ' + job.displayable_name)
@@ -202,8 +213,9 @@ export class RecalculationDetailComponent implements OnInit {
                             values: {
                                 name: dataSource.name,
                                 price: dataSource.price,
-                                amount: dataSource.amount,
-                                id: dataSource.price * dataSource.amount
+                                unit: dataSource.unit.name.translation,
+                                amount: formatCurrency(dataSource.amount, 'de-DE', 'EUR'),
+                                id:  formatCurrency(dataSource.price * dataSource.amount, 'de-DE', 'EUR'),
                             },
                             route: () => {
                                 //this.router.navigateByUrl('/order/' + dataSource.id.toString());
@@ -214,13 +226,44 @@ export class RecalculationDetailComponent implements OnInit {
             },
             [
                 {name: 'name', headerName: 'Beschreibung'},
-                {name: 'amount', headerName: 'Menge [l]'},
-                {name: 'price', headerName: 'Einzelpreis [€]'},
-                {name: 'id', headerName: 'Gesamtpreis [€]'},
+                {name: 'amount', headerName: 'Menge'},
+                {name: 'unit', headerName: 'Einheit'},
+                {name: 'price', headerName: 'Einzelpreis'},
+                {name: 'id', headerName: 'Gesamtpreis'},
             ],
             (api) => api.readPaintCountPaintCountGet(this.recalculation.id)
         );
         this.paintDataSource.loadData();
+    }
+
+    private initWoodListTable() {
+        this.woodListDataSource = new TableDataSource(
+            this.api,
+            (api, filter, sortDirection, skip, limit) =>
+                api.readWoodListsWoodListGet(skip, limit, filter, this.recalculation.id),
+            (dataSourceClasses) => {
+                const rows = [];
+                dataSourceClasses.forEach((dataSource) => {
+                    rows.push(
+                        {
+                            values: {
+                                name: dataSource.name,
+                                price: formatCurrency(dataSource.price, 'de-DE', 'EUR'),
+                            },
+                            route: () => {
+                                //this.router.navigateByUrl('/order/' + dataSource.id.toString());
+                            }
+                        });
+                });
+                return rows;
+            },
+            [
+                {name: 'name', headerName: 'Beschreibung'},
+                {name: 'price', headerName: 'Preis'},
+            ],
+            (api) => api.readWoodListCountWoodListCountGet(this.recalculation.id)
+        );
+        this.woodListDataSource.loadData();
     }
 
     private editButtonClicked(): void {

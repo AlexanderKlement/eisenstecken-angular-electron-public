@@ -72,14 +72,6 @@ export class OrderDetailComponent implements OnInit {
                     property: 'order_to.name',
                     name: 'Empfänger'
                 },
-                {
-                    property: 'user.fullname',
-                    name: 'Bestellung versendet:'
-                },
-                {
-                    property: 'create_date_formatted',
-                    name: 'Erstelldatum'
-                },
             ],
             '/order/' + this.orderId.toString(),
             undefined,

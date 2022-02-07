@@ -1,12 +1,12 @@
 import {
     Article,
-    Calendar,
+    Calendar, TemplatePaint,
     Client, Contact, Credential, Fee,
     IngoingInvoice, Expense,
     Job, Journey, Meal, MealSum,
     Offer, Order, OrderBundle, OrderedArticle,
     OutgoingInvoice, Price, Recalculation, Stock, Supplier, TechnicalData,
-    User, Workload, Service, Maintenance, ServiceSum, InfoPage
+    User, Workload, Service, Maintenance, ServiceSum, InfoPage, WoodList
 } from 'eisenstecken-openapi-angular-library';
 
 
@@ -38,6 +38,8 @@ export type DataSourceClass =
     | ServiceSum
     | Maintenance
     | InfoPage
+    | WoodList
+    | TemplatePaint
     | Journey;
 
 export type RecursiveKeyOf<T, Prefix extends string = never> =

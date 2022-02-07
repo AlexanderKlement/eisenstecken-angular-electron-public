@@ -7,13 +7,31 @@
     <form [formGroup]="recalculationGroup" (submit)="onSubmit()">
         <div fxLayout="column" fxLayoutAlign="space-around center">
             <mat-form-field appearance="fill">
-                <mat-label>Preis Holzliste [€]</mat-label>
-                <input type=number class="form-control" formControlName="wood_amount" matInput>
-            </mat-form-field>
-            <mat-form-field appearance="fill">
                 <mat-label>Materialkostenaufschlag [%]</mat-label>
                 <input type=number class="form-control" formControlName="material_charge_percent" matInput>
             </mat-form-field>
+        </div>
+        <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="wood_lists">
+            <h3>Preise Holzlisten</h3>
+            <div *ngFor="let wood_list of getWoodLists().controls; let i = index" [formGroupName]="i" fxLayout="row"
+                 fxLayoutAlign="space-around center">
+                <mat-form-field appearance="fill">
+                    <mat-label>Bezeichnung</mat-label>
+                    <input class="form-control" formControlName="name" matInput>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Preis [€]</mat-label>
+                    <input type=number class="form-control" formControlName="price" matInput>
+                </mat-form-field>
+                <button type="button" mat-icon-button mat-raised-button (click)="removeWoodListAt(i)"
+                        [disabled]="i === 0" class="position-delete">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+            <button type="button" mat-button
+                    (click)="addWoodList()">
+                <mat-icon>add</mat-icon>
+            </button>
         </div>
         <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="paints">
             <h3>Oberflächen</h3>
@@ -24,8 +42,16 @@
                     <input class="form-control" formControlName="name" matInput>
                 </mat-form-field>
                 <mat-form-field appearance="fill">
-                    <mat-label>Menge [l]</mat-label>
+                    <mat-label>Menge</mat-label>
                     <input type=number class="form-control" formControlName="amount" matInput>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Einheit</mat-label>
+                    <mat-select formControlName="unit_id">
+                        <mat-option *ngFor="let unit of units$ | async" [value]="unit.id">
+                            {{unit.name.translation}}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
                 <mat-form-field appearance="fill">
                     <mat-label>Preis [€]</mat-label>

@@ -3,6 +3,7 @@ import {TableDataSource} from '../shared/components/table-builder/table-builder.
 import {DefaultService, Job} from 'eisenstecken-openapi-angular-library';
 import {Router} from '@angular/router';
 import {concat, merge} from 'rxjs';
+import {CustomButton} from '../shared/components/toolbar/toolbar.component';
 
 @Component({
     selector: 'app-recalculation',
@@ -12,6 +13,14 @@ import {concat, merge} from 'rxjs';
 export class RecalculationComponent implements OnInit {
 
     jobDataSource: TableDataSource<Job>;
+    buttons: CustomButton[] = [
+        {
+            name: 'Oberflächen-Vorlage',
+            navigate: () => {
+                this.router.navigateByUrl('paint-template');
+            }
+        },
+    ];
 
 
     constructor(private api: DefaultService, private router: Router) {

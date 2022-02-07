@@ -5,7 +5,7 @@ import {BaseEditComponent} from '../../shared/components/base-edit/base-edit.com
 import {FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-import {first, tap} from 'rxjs/operators';
+import {tap} from 'rxjs/operators';
 
 @Component({
     selector: 'app-client-edit',
@@ -26,7 +26,6 @@ export class ClientEditComponent extends BaseEditComponent<Client> implements On
     }
 
     lockFunction = (api: DefaultService, id: number): Observable<Lock> => api.islockedClientClientIslockedClientIdGet(id);
-
     dataFunction = (api: DefaultService, id: number): Observable<Client> => api.readClientClientClientIdGet(id);
     unlockFunction = (api: DefaultService, id: number): Observable<boolean> => api.unlockClientClientUnlockClientIdPost(id);
 
@@ -40,6 +39,8 @@ export class ClientEditComponent extends BaseEditComponent<Client> implements On
             mail2: new FormControl(''),
             tel1: new FormControl(''),
             tel2: new FormControl(''),
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            contact_person: new FormControl(''),
             // eslint-disable-next-line @typescript-eslint/naming-convention
             vat_number: new FormControl(''),
             // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -98,6 +99,8 @@ export class ClientEditComponent extends BaseEditComponent<Client> implements On
             publica_amministrazione: false, //this.clientGroup.get("publica_amministrazione").value,
             cup: '', //this.clientGroup.get("cup").value,
             cig: '', //this.clientGroup.get("cig").value,
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            contact_person: this.clientGroup.get('contact_person').value,
             address: {
                 name: fullName,
                 // eslint-disable-next-line @typescript-eslint/naming-convention

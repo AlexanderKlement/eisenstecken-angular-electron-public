@@ -103,6 +103,10 @@ export class ClientDetailComponent implements OnInit {
                     name: 'Telefon'
                 },
                 {
+                    property: 'contact_person',
+                    name: 'Ansprechpartner'
+                },
+                {
                     property: 'fiscal_code',
                     name: 'Steuernummer'
                 },

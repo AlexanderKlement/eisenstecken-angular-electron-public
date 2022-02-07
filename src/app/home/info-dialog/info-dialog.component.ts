@@ -44,10 +44,21 @@ export class InfoDialogComponent implements OnInit {
                 'kombiniert werden, sollte dies gewünscht sein.',
                 'Sollte eine Artikelliste von einem Hauptauftrag erstellt werden, führt dies zu fehlerhafen Ergebnissen: der erste ' +
                 'Unterauftrag wird als Name verwendet und danache werden die einzelnen Listen nicht in separate Unteraufträge aufgeteilt.',
-                'Bei Bestellungen sollte es möglich sein die Unteraufträge/projekte einzuklappen, um die ganze Ansicht übersichtlicher' +
+                'Bei Bestellungen sollte es möglich sein die Unteraufträge/Projekte einzuklappen, um die ganze Ansicht übersichtlicher' +
                 ' zu gestalten.',
                 'Eingangsrechnungen import machen',
                 'Aus- und Eingangsrechnungen sollten Möglichkeit haben als bezahlt zu markieren.'
+            ]
+        },
+        {
+            versionName: '0.8.16',
+            changes: [
+                'Bei Kunden kann jetzt ein Ansprechpartner mit angegeben werden.',
+                'Nachkalkulation enthält nun einen neue Lists: "Preise Holzliste". Hier können verschiedene Preise angegeben werden.' +
+                ' Dies ersetzt das Feld "Preis Holzliste"',
+                'Oberflächen bei Nachkalkulation wird nun mit einer Einheit versehen. Als Standart wird Liter verwendet.',
+                'Grafische Ausbesserungen bei Nachkalkulations-pdf',
+                'Es können nun Vorlagen für Oberflächen in Nachkalkulation erstellt werden.'
             ]
         },
         {
@@ -56,7 +67,9 @@ export class InfoDialogComponent implements OnInit {
                 'Aufträge und Unteraufträge können nun gelöscht werden.',
                 'Aufträge können jetzt auch nach Kommissionsnummer durchsucht werden.',
                 'Ausgangsrechnungen enthalten nun nicht mehr den Auftragsnamen im Dateinamen.',
-                'Artikel werden bei Bestellungen nun anders geordnet: Favoriten -> Alphabetisch; Andere -> Neueste zuerst.'
+                'Artikel werden bei Bestellungen nun anders geordnet: Favoriten -> Alphabetisch; Andere -> Neueste zuerst.',
+                'Aufträge werden jetzt anders geordnet: Nimm x der neuesten Aufträge -> ordne Hauptaufträge vor Kleinstaufträge -> ' +
+                'ordner nach Kodex alphabetisch absteigend',
             ],
         },
         {
