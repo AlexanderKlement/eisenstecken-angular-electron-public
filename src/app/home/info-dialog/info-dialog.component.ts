@@ -58,7 +58,9 @@ export class InfoDialogComponent implements OnInit {
                 ' Dies ersetzt das Feld "Preis Holzliste"',
                 'Oberflächen bei Nachkalkulation wird nun mit einer Einheit versehen. Als Standart wird Liter verwendet.',
                 'Grafische Ausbesserungen bei Nachkalkulations-pdf',
-                'Es können nun Vorlagen für Oberflächen in Nachkalkulation erstellt werden.'
+                'Es können nun Vorlagen für Oberflächen in Nachkalkulation erstellt werden.',
+                'Suchfunktion bei "Bestellungen: Details" sollte nun wie gewünscht funktionieren.',
+                'Die Schriftart Roboto-Bold ist nun im Programm enthalten und muss nicht separat installiert werden'
             ]
         },
         {

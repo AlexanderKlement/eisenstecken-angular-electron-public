@@ -4,8 +4,8 @@
         <div fxLayout="column" fxLayoutAlign="space-around center">
             <h3>{{jobName$ | async}}</h3>
             <mat-form-field appearance="fill">
-                <mat-label>Gesamtpreis [€]</mat-label>
-                <input type=number class="form-control" readonly [value]="recalculation.total_sum.toString()"
+                <mat-label>Gesamtpreis</mat-label>
+                <input class="form-control" readonly [value]="recalculation.total_sum | currency:'EUR'"
                        matInput>
             </mat-form-field>
         </div>

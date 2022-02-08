@@ -151,7 +151,7 @@ export class RecalculationDetailComponent implements OnInit {
                             values: {
                                 'user.fullname': dataSource.user.fullname,
                                 minutes: minutesToDisplayableString(dataSource.minutes),
-                                cost: dataSource.cost,
+                                cost: formatCurrency(dataSource.cost, 'de-DE', 'EUR'),
                             },
                             route: () => {
                                 //this.router.navigateByUrl('/order/' + dataSource.id.toString());
@@ -163,7 +163,7 @@ export class RecalculationDetailComponent implements OnInit {
             [
                 {name: 'user.fullname', headerName: 'Name'},
                 {name: 'minutes', headerName: 'Zeit'},
-                {name: 'cost', headerName: 'Kosten [€]'},
+                {name: 'cost', headerName: 'Kosten'},
             ],
             (api) => api.readWorkloadCountWorkloadCountGet(undefined, this.jobId)
         );
@@ -182,7 +182,7 @@ export class RecalculationDetailComponent implements OnInit {
                         {
                             values: {
                                 name: dataSource.name,
-                                amount: dataSource.amount,
+                                amount: formatCurrency(dataSource.amount, 'de-DE', 'EUR'),
                             },
                             route: () => {
                                 //this.router.navigateByUrl('/order/' + dataSource.id.toString());
@@ -193,7 +193,7 @@ export class RecalculationDetailComponent implements OnInit {
             },
             [
                 {name: 'name', headerName: 'Beschreibung'},
-                {name: 'amount', headerName: 'Kosten [€]'},
+                {name: 'amount', headerName: 'Kosten'},
             ],
             (api) => api.readExpenseCountExpenseCountGet(this.recalculation.id)
         );
@@ -212,10 +212,10 @@ export class RecalculationDetailComponent implements OnInit {
                         {
                             values: {
                                 name: dataSource.name,
-                                price: dataSource.price,
+                                price: formatCurrency(dataSource.price, 'de-DE', 'EUR'),
                                 unit: dataSource.unit.name.translation,
-                                amount: formatCurrency(dataSource.amount, 'de-DE', 'EUR'),
-                                id:  formatCurrency(dataSource.price * dataSource.amount, 'de-DE', 'EUR'),
+                                amount: dataSource.amount,
+                                id: formatCurrency(dataSource.price * dataSource.amount, 'de-DE', 'EUR'),
                             },
                             route: () => {
                                 //this.router.navigateByUrl('/order/' + dataSource.id.toString());
