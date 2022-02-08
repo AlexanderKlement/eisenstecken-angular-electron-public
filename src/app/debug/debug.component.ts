@@ -12,6 +12,7 @@ export class DebugComponent implements OnInit {
     emailFormGroup: FormGroup;
     openFileFormGroup: FormGroup;
     showFileFormGroup: FormGroup;
+    selectFolderFormGroup: FormGroup;
 
     constructor(private email: EmailService, private file: FileService) {
     }
@@ -20,6 +21,7 @@ export class DebugComponent implements OnInit {
         this.initEmailGroup();
         this.initOpenFileGroup();
         this.initShowFileGroup();
+        this.initSelectFolderGroup();
     }
 
     onEmailSubmit(): void {
@@ -49,6 +51,14 @@ export class DebugComponent implements OnInit {
         this.file.show(this.showFileFormGroup.get('path').value);
     }
 
+    selectFolderClicked() {
+        console.log('Select Folder Started');
+        this.file.selectFolder().then((result) => {
+            console.log(result);
+            this.selectFolderFormGroup.get('path').setValue(result);
+        });
+    }
+
     private initEmailGroup() {
         this.emailFormGroup = new FormGroup({
             email: new FormControl(''),
@@ -68,6 +78,12 @@ export class DebugComponent implements OnInit {
     private initShowFileGroup() {
         this.showFileFormGroup = new FormGroup({
             path: new FormControl('')
+        });
+    }
+
+    private initSelectFolderGroup() {
+        this.selectFolderFormGroup = new FormGroup({
+            path: new FormControl(''),
         });
     }
 }

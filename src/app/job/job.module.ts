@@ -24,6 +24,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatTabsModule} from '@angular/material/tabs';
 import {OrderPrintDialogComponent} from './job-detail/order-print-dialog/order-print-dialog.component';
 import {MatListModule} from '@angular/material/list';
+import { ChangePathDialogComponent } from './job-detail/change-path-dialog/change-path-dialog.component';
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import {MatListModule} from '@angular/material/list';
         WorkHoursComponent,
         WorkHourEditDialogComponent,
         OrderPrintDialogComponent,
+        ChangePathDialogComponent,
     ],
     exports: [
         JobStatusBarComponent

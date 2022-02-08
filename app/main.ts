@@ -80,7 +80,6 @@ try {
 }
 
 function createWindow(): BrowserWindow {
-
     const electronScreen = screen;
     const size = electronScreen.getPrimaryDisplay().workAreaSize;
     // Create the browser window.
@@ -198,8 +197,28 @@ function initIPC() {
             console.error(e);
             event.reply('shell-file-reply', false);
         }
-
     });
+
+    ipcMain.on('select-folder-request', (event, arg) => {
+        try {
+            const {dialog} = require('electron')
+            const pathPromise = dialog.showOpenDialog({
+                properties: ['openDirectory']
+            });
+            pathPromise.then((path) => {
+                if (path.canceled)
+                    event.reply('select-folder-reply', '');
+                else
+                    event.reply('select-folder-reply', path.filePaths[0]);
+            })
+        } catch (e) {
+            console.error("Main: Select Folder FAIL");
+            console.error(e);
+            event.reply('select-folder-reply', '');
+        }
+    });
+
+
 //IPC  for autoupdate:
     ipcMain.on('app_version', (event) => {
         event.sender.send('app_version', {version: app.getVersion()});

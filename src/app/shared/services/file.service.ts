@@ -11,8 +11,8 @@ export class FileService {
 
     open(path: string): Promise<string> {
         if (!this.electronService.isElectron) {
-            console.warn('Not electron! No file opening therefore');
-            console.log(path);
+            console.error('Opening Files is only possible in electron!');
+            console.error(path);
             return new Promise((resolve, reject) => {
                 reject();
             });
@@ -28,8 +28,8 @@ export class FileService {
                 });
                 this.electronService.ipcRenderer.send('shell-item-request', path);
             } catch (e) {
-                console.warn(e);
-                console.warn('Cannot send request to api');
+                console.error(e);
+                console.error('Cannot send request to api');
                 reject();
             }
         });
@@ -37,6 +37,8 @@ export class FileService {
 
     show(path: string): Promise<void> {
         if (!this.electronService.isElectron) {
+            console.error('Showing files is only possible in electron!');
+            console.error(path);
             return new Promise((resolve, reject) => {
                 reject();
             });
@@ -52,8 +54,34 @@ export class FileService {
                 });
                 this.electronService.ipcRenderer.send('shell-file-request', path);
             } catch (e) {
-                console.warn(e);
-                console.warn('Cannot send request to api');
+                console.error(e);
+                console.error('Cannot send request to api');
+                reject();
+            }
+        });
+    }
+
+
+    selectFolder(): Promise<string> {
+        if (!this.electronService.isElectron) {
+            console.error('Selecting Folders is only possible in electron!');
+            return new Promise((resolve, reject) => {
+                reject();
+            });
+        }
+        return new Promise<string>((resolve, reject) => {
+            try {
+                this.electronService.ipcRenderer.on('select-folder-reply', (_, data) => {
+                    if (data) {
+                        resolve(data);
+                    } else {
+                        reject();
+                    }
+                });
+                this.electronService.ipcRenderer.send('select-folder-request');
+            } catch (e) {
+                console.error(e);
+                console.error('Cannot send request to api');
                 reject();
             }
         });

@@ -17,6 +17,7 @@ import {
 } from './order-print-dialog/order-print-dialog.component';
 import {OrderPrintDialogComponent} from './order-print-dialog/order-print-dialog.component';
 import {FileService} from '../../shared/services/file.service';
+import {ChangePathDialogComponent} from './change-path-dialog/change-path-dialog.component';
 
 @Component({
     selector: 'app-job-detail',
@@ -275,6 +276,12 @@ export class JobDetailComponent implements OnInit {
                         this.child.editButtonClicked();
                     }
                 });
+                this.buttonsMain.push({
+                    name: 'Pfad anpassen',
+                    navigate: (): void => {
+                        this.changePathClicked();
+                    }
+                });
                 this.buttonsSub.push({
                     name: 'Bearbeiten',
                     navigate: (): void => {
@@ -446,6 +453,23 @@ export class JobDetailComponent implements OnInit {
     private makePdfFromOrderList(orderDateReturnData: OrderReturnData) {
         this.api.generateOrderPdfOrderPdfPost(orderDateReturnData.orders).pipe(first()).subscribe(pdf => {
             this.file.open(pdf);
+        });
+    }
+
+    private changePathClicked() {
+        const dialogRef = this.dialog.open(ChangePathDialogComponent, {
+            width: '600px',
+            data: {
+                id: this.jobId,
+            }
+        });
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.snackBar.open('Pfad erfolgreich geändert!'
+                    , 'Ok', {
+                        duration: 5000
+                    });
+            }
         });
     }
 }
