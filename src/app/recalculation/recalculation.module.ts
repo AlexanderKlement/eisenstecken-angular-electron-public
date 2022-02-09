@@ -16,6 +16,7 @@ import {MatSelectModule} from '@angular/material/select';
 import { PaintTemplateComponent } from './paint-template/paint-template.component';
 import { PaintTemplateEditDialogComponent } from './paint-template/paint-template-edit-dialog/paint-template-edit-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatListModule} from '@angular/material/list';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import {MatDialogModule} from '@angular/material/dialog';
         MatButtonModule,
         MatIconModule,
         MatSelectModule,
-        MatDialogModule
+        MatDialogModule,
+        MatListModule
     ]
 })
 export class RecalculationModule { }

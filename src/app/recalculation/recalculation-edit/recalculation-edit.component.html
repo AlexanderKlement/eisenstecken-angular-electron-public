@@ -24,7 +24,7 @@
                     <input type=number class="form-control" formControlName="price" matInput>
                 </mat-form-field>
                 <button type="button" mat-icon-button mat-raised-button (click)="removeWoodListAt(i)"
-                        [disabled]="i === 0" class="position-delete">
+                        class="position-delete">
                     <mat-icon>delete</mat-icon>
                 </button>
             </div>
@@ -35,37 +35,51 @@
         </div>
         <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="paints">
             <h3>Oberflächen</h3>
-            <div *ngFor="let paint of getPaints().controls; let i = index" [formGroupName]="i" fxLayout="row"
-                 fxLayoutAlign="space-around center">
-                <mat-form-field appearance="fill">
-                    <mat-label>Bezeichnung</mat-label>
-                    <input class="form-control" formControlName="name" matInput>
-                </mat-form-field>
-                <mat-form-field appearance="fill">
-                    <mat-label>Menge</mat-label>
-                    <input type=number class="form-control" formControlName="amount" matInput>
-                </mat-form-field>
-                <mat-form-field appearance="fill">
-                    <mat-label>Einheit</mat-label>
-                    <mat-select formControlName="unit_id">
-                        <mat-option *ngFor="let unit of units$ | async" [value]="unit.id">
-                            {{unit.name.translation}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <mat-form-field appearance="fill">
-                    <mat-label>Preis [€]</mat-label>
-                    <input type=number class="form-control" formControlName="price" matInput>
-                </mat-form-field>
-                <button type="button" mat-icon-button mat-raised-button (click)="removePaintAt(i)"
-                        [disabled]="i === 0" class="position-delete">
-                    <mat-icon>delete</mat-icon>
-                </button>
+            <div fxLayout="row" fxLayoutAlign="space-between start">
+                <div fxLayout="column" fxLayoutAlign="space-around center">
+                    <h4>Benutzt</h4>
+                    <div *ngFor="let paint of getPaints().controls; let i = index" [formGroupName]="i" fxLayout="row"
+                         fxLayoutAlign="space-around center">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Bezeichnung</mat-label>
+                            <input class="form-control" formControlName="name" matInput>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Menge</mat-label>
+                            <input type=number class="form-control" formControlName="amount" matInput>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Einheit</mat-label>
+                            <mat-select formControlName="unit_id">
+                                <mat-option *ngFor="let unit of units$ | async" [value]="unit.id">
+                                    {{unit.name.translation}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Preis [€]</mat-label>
+                            <input type=number class="form-control" formControlName="price" matInput>
+                        </mat-form-field>
+                        <button type="button" mat-icon-button mat-raised-button (click)="removePaintAt(i)"
+                                class="position-delete">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                    <button type="button" mat-button
+                            (click)="addPaint()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+                <div fxLayout="column" fxLayoutAlign="space-around center">
+                    <h4>Vorlagen</h4>
+                    <mat-action-list>
+                        <button *ngFor="let templatePaint of (templatePaints$ | async)" mat-list-item
+                                (click)="templatePaintClicked(templatePaint)">
+                            {{templatePaint.name}}
+                        </button>
+                    </mat-action-list>
+                </div>
             </div>
-            <button type="button" mat-button
-                    (click)="addPaint()">
-                <mat-icon>add</mat-icon>
-            </button>
         </div>
         <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="expenses">
             <h3>Zusatzkosten</h3>
@@ -80,7 +94,7 @@
                     <input type=number class="form-control" formControlName="amount" matInput>
                 </mat-form-field>
                 <button type="button" mat-icon-button mat-raised-button (click)="removeExpenseAt(i)"
-                        [disabled]="i === 0" class="position-delete">
+                        class="position-delete">
                     <mat-icon>delete</mat-icon>
                 </button>
             </div>

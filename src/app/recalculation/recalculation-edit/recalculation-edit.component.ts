@@ -6,7 +6,7 @@ import {
     Expense, ExpenseCreate,
     Lock, Order, Paint, PaintCreate,
     Recalculation,
-    RecalculationCreate, RecalculationUpdate, Unit, WoodList, WoodListCreate, Workload
+    RecalculationCreate, RecalculationUpdate, TemplatePaint, Unit, WoodList, WoodListCreate, Workload
 } from 'eisenstecken-openapi-angular-library';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
@@ -17,7 +17,6 @@ import * as moment from 'moment';
 import {minutesToDisplayableString} from '../../shared/date.util';
 import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import {FileService} from '../../shared/services/file.service';
-import {templateJitUrl} from '@angular/compiler';
 
 @Component({
     selector: 'app-recalculation-edit',
@@ -30,6 +29,7 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
     jobId: number;
     jobName$: Observable<string>;
     units$: Observable<Unit[]>;
+    templatePaints$: Observable<TemplatePaint[]>;
 
     orderDataSource: TableDataSource<Order>;
     workloadDataSource: TableDataSource<Workload>;
@@ -49,6 +49,7 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
     ngOnInit(): void {
         super.ngOnInit();
         this.units$ = this.api.readUnitsUnitGet();
+        this.templatePaints$ = this.api.readTemplatePaintsTemplatePaintGet();
         this.initRecalculationsGroup();
         this.routeParams.subscribe((params) => {
             this.jobId = parseInt(params.job_id, 10);
@@ -62,18 +63,29 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
                 first(),
                 map(job => job.displayable_name)
             );
-            if (this.createMode) {
-                this.addExpense();
-                this.addTemplatePaints();
-                this.addWoodList();
-            } else {
+            if (!this.createMode) {
                 this.api.readRecalculationRecalculationRecalculationIdGet(this.id).pipe(first()).subscribe(recalculation => {
                     this.fillFormGroup(recalculation);
+                    this.addAtLeastOne();
                 });
+            } else {
+                this.addAtLeastOne();
             }
         });
         if (this.createMode) {
             this.title = 'Nachkalkulation: Erstellen';
+        }
+    }
+
+    addAtLeastOne(): void {
+        if (this.getExpenses().length === 0){
+            this.addExpense();
+        }
+        if (this.getPaints().length === 0) {
+            this.addPaint();
+        }
+        if(this.getWoodLists().length === 0) {
+            this.addWoodList();
         }
     }
 
@@ -174,19 +186,6 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
         this.getPaints().push(this.createPaint(paint));
     }
 
-    addPaintManual(name: string, price: number, unitId: number): void {
-        this.getPaints().push(this.createPaintManual(name, price, unitId));
-    }
-
-    createPaintManual(name: string, price: number, unitId: number): FormGroup {
-        return new FormGroup({
-            name: new FormControl(name),
-            price: new FormControl(price),
-            // eslint-disable-next-line @typescript-eslint/naming-convention
-            unit_id: new FormControl(unitId)
-        });
-    }
-
     createPaint(paint?: Paint): FormGroup {
         if (paint !== undefined) {
             return new FormGroup({
@@ -262,6 +261,17 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
                 this.router.navigateByUrl('recalculation/' + this.jobId, {replaceUrl: true});
             });
         }
+    }
+
+    templatePaintClicked(templatePaint: TemplatePaint) {
+        const paint: Paint = {
+            name: templatePaint.name,
+            amount: 0,
+            price: templatePaint.price,
+            id: -1,
+            unit: templatePaint.unit,
+        };
+        this.addPaint(paint);
     }
 
     private initOrderTable() {
@@ -349,13 +359,5 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
             (api) => api.readWorkloadCountWorkloadCountGet(undefined, this.jobId)
         );
         this.workloadDataSource.loadData();
-    }
-
-    private addTemplatePaints() {
-        this.api.readTemplatePaintsTemplatePaintGet().pipe(first()).subscribe((paintTemplates) => {
-            for (const templatePaint of paintTemplates) {
-                this.addPaintManual(templatePaint.name, templatePaint.price, templatePaint.unit.id);
-            }
-        });
     }
 }

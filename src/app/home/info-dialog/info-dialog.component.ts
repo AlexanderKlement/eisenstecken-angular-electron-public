@@ -46,7 +46,6 @@ export class InfoDialogComponent implements OnInit {
                 ' zu gestalten.',
                 'Eingangsrechnungen import machen',
                 'Aus- und Eingangsrechnungen sollten Möglichkeit haben als bezahlt zu markieren.',
-                'Ordner sollten verschoben oder umbenannt werden können.',
                 'Abgelehnte Aufträge in eigenen Ordner verschieben um Ordner nicht zu voll zu machen.',
                 'Rechnungen sollten pro Rechnung einen Ordner machen und alle benötigten Dateien dort hineinspeichern.',
                 'Wenn Aufträge angenommen werden, wird der Ordner von Angebote in Projekte verschoben. Sollte eine Datei geöffnet sein ' +
@@ -61,8 +60,10 @@ export class InfoDialogComponent implements OnInit {
             versionName: '0.8.17',
             changes: [
                 'Pfade für Projekte können jetzt vom Benutzer selbst angepasst werden',
-                'Artikellisten haben nun ein neues Format: Der Auftrag oben rechts ist immer der Hauptauftrag.' +
-                ' Einzelne Bestellungen werden bei den einzelnen Überschriften mit dem jeweiligen Auftrag bezeichnet.'
+                'Artikellisten haben nun ein neues Format: Der Auftrag oben rechts ist immer der Hauptauftrag. ' +
+                'Einzelne Bestellungen werden bei den einzelnen Überschriften mit dem jeweiligen Auftrag bezeichnet.',
+                'Bei Nachkalkulation wird nun eine extra Liste mit Oberflächenvorlagen angezeigt. Bei Klick wird die ' +
+                'Vorlage in die aktuelle Liste übertragen.',
             ]
         },
         {
