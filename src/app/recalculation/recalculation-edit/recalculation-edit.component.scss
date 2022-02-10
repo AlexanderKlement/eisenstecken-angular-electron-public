@@ -1,1 +1,7 @@
 @use "../../shared/components/base-edit/base-edit.component";
+
+.separator-left {
+  border-left: rgba(0 0 0 / 30%) 1px solid;
+  padding-left: 40px;
+  margin-left: 50px;
+}
