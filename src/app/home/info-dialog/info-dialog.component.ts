@@ -64,6 +64,8 @@ export class InfoDialogComponent implements OnInit {
                 'Einzelne Bestellungen werden bei den einzelnen Überschriften mit dem jeweiligen Auftrag bezeichnet.',
                 'Bei Nachkalkulation wird nun eine extra Liste mit Oberflächenvorlagen angezeigt. Bei Klick wird die ' +
                 'Vorlage in die aktuelle Liste übertragen.',
+                'Info Dialog Einstellungen können nun nach oben oder unten verschoben werden.',
+                'Rechnungen werden nun in einem separatem Ordner abgespeichert',
             ]
         },
         {

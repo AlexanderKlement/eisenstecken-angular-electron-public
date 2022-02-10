@@ -9,6 +9,7 @@ import {
     TechnicalData, TechnicalDataUpdate
 } from 'eisenstecken-openapi-angular-library';
 import {first} from 'rxjs/operators';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-info-settings',
@@ -25,7 +26,7 @@ export class InfoSettingsComponent implements OnInit {
     submitted = false;
 
 
-    constructor(private api: DefaultService) {
+    constructor(private api: DefaultService, private snackBar: MatSnackBar) {
     }
 
     ngOnInit(): void {
@@ -80,7 +81,7 @@ export class InfoSettingsComponent implements OnInit {
 
     updateContactsSuccess(contacts: Contact[]): void {
         this.submitted = false;
-        console.log('InfoSettingsComponent: Update success');
+        this.showSuccess();
     }
 
     removeContactAt(index: number): void {
@@ -104,9 +105,9 @@ export class InfoSettingsComponent implements OnInit {
             });
         });
         this.api.bulkUpdateContactsContactBulkPut(contactUpdates).pipe(first()).subscribe({
-                next: this.updateContactsSuccess.bind(this),
-                error: this.updateError.bind(this),
-                complete: this.updateComplete.bind(this)
+            next: this.updateContactsSuccess.bind(this),
+            error: this.updateError.bind(this),
+            complete: this.updateComplete.bind(this)
         });
     }
 
@@ -151,7 +152,7 @@ export class InfoSettingsComponent implements OnInit {
         this.clearFormArray(this.getCredentialFormArray());
         this.addCredentialArrayToFormGroup(credentials);
         this.submitted = false;
-        console.log('InfoSettingsComponent: Update success');
+        this.showSuccess();
     }
 
     removeCredentialAt(index: number): void {
@@ -217,11 +218,10 @@ export class InfoSettingsComponent implements OnInit {
     }
 
     updatePricesSuccess(prices: Price[]): void {
-        console.log(this.getPriceFormArray());
         this.clearFormArray(this.getPriceFormArray());
         this.addPriceArrayToFormGroup(prices);
         this.submitted = false;
-        console.log('InfoSettingsComponent: Update success');
+        this.showSuccess();
     }
 
     removePriceAt(index: number): void {
@@ -288,11 +288,10 @@ export class InfoSettingsComponent implements OnInit {
     }
 
     updateTechnicalDataSuccess(technicalData: TechnicalData[]): void {
-        console.log(this.getTechnicalDataFormArray());
         this.clearFormArray(this.getTechnicalDataFormArray());
         this.addTechnicalDataArrayToFormGroup(technicalData);
         this.submitted = false;
-        console.log('InfoSettingsComponent: Update success');
+        this.showSuccess();
     }
 
     removeTechnicalDataAt(index: number): void {
@@ -322,6 +321,50 @@ export class InfoSettingsComponent implements OnInit {
         });
     }
 
+    moveContactUpClicked(i: number) {
+        this.moveDescriptiveArticleUp(this.getContactFormArray(), i);
+    }
+
+    moveContactDownClicked(i: number) {
+        this.moveDescriptiveArticleDown(this.getContactFormArray(), i);
+    }
+
+    moveDescriptiveArticleUp(formArray: FormArray, index: number) {
+        const descriptiveArticle = formArray.at(index);
+        formArray.removeAt(index);
+        formArray.insert(index - 1, descriptiveArticle);
+    }
+
+    moveDescriptiveArticleDown(formArray: FormArray, index: number) {
+        const descriptiveArticle = formArray.at(index);
+        formArray.removeAt(index);
+        formArray.insert(index + 1, descriptiveArticle);
+    }
+
+    movePriceUpClicked(i: number) {
+        this.moveDescriptiveArticleUp(this.getPriceFormArray(), i);
+    }
+
+    movePriceDownClicked(i: number) {
+        this.moveDescriptiveArticleDown(this.getPriceFormArray(), i);
+    }
+
+    moveCredentialDownClicked(i: number) {
+        this.moveDescriptiveArticleDown(this.getCredentialFormArray(), i);
+    }
+
+    moveCredentialUpClicked(i: number) {
+        this.moveDescriptiveArticleUp(this.getCredentialFormArray(), i);
+    }
+
+    moveTechnicalDataUpClicked(i: number) {
+        this.moveDescriptiveArticleUp(this.getTechnicalDataFormArray(), i);
+    }
+
+    moveTechnicalDataDownClicked(i: number) {
+        this.moveDescriptiveArticleDown(this.getTechnicalDataFormArray(), i);
+    }
+
     private updateError(error: any): void {
         console.error('InfoSettingsComponent: Could not update');
         console.error(error);
@@ -331,4 +374,11 @@ export class InfoSettingsComponent implements OnInit {
     private updateComplete(): void {
         this.submitted = false;
     }
+
+    private showSuccess(): void {
+        this.snackBar.open('Speichern erfolgreich!', 'OK', {
+            duration: 5000
+        });
+    }
+
 }
