@@ -10,6 +10,7 @@ import {
 } from 'eisenstecken-openapi-angular-library';
 import {first} from 'rxjs/operators';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {ThemePalette} from '@angular/material/core';
 
 @Component({
     selector: 'app-info-settings',
@@ -22,7 +23,6 @@ export class InfoSettingsComponent implements OnInit {
     credentialGroup: FormGroup;
     priceGroup: FormGroup;
     technicalDataGroup: FormGroup;
-
     submitted = false;
 
 
@@ -34,6 +34,7 @@ export class InfoSettingsComponent implements OnInit {
         this.initCredentials();
         this.initPrices();
         this.initTechnicalData();
+
     }
 
     initContacts(): void {

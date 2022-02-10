@@ -6,16 +6,6 @@
                     <div fxLayout="row" fxLayoutAlign="space-around start"
                          *ngFor="let contact of getContactFormArray().controls; let i = index"
                          [formGroupName]="i">
-                        <button type="button" mat-icon-button mat-raised-button (click)="moveContactUpClicked(i)"
-                                [disabled]="i === 0"
-                                class="position-control position-up" title="Nach oben schieben">
-                            <mat-icon>arrow_upward</mat-icon>
-                        </button>
-                        <button type="button" mat-icon-button mat-raised-button (click)="moveContactDownClicked(i)"
-                                [disabled]="i === getContactFormArray().controls.length - 1"
-                                class="position-control position-down" title="Nach unten schieben">
-                            <mat-icon>arrow_downward</mat-icon>
-                        </button>
                         <mat-form-field appearance="fill">
                             <mat-label>Name</mat-label>
                             <input class="form-control" formControlName="name" matInput>
@@ -32,6 +22,16 @@
                             <mat-label>Bemerkung</mat-label>
                             <input class="form-control" formControlName="note" matInput>
                         </mat-form-field>
+                        <button type="button" mat-fab color="primary" (click)="moveContactUpClicked(i)"
+                                [disabled]="i === 0"
+                                class="position-control position-up up-down-arrow" title="Nach oben schieben">
+                            <mat-icon>arrow_upward</mat-icon>
+                        </button>
+                        <button type="button" mat-fab color="primary" (click)="moveContactDownClicked(i)"
+                                [disabled]="i === getContactFormArray().controls.length - 1"
+                                class="position-control position-down up-down-arrow" title="Nach unten schieben">
+                            <mat-icon>arrow_downward</mat-icon>
+                        </button>
                         <button type="button" mat-fab (click)="removeContactAt(i)">
                             <mat-icon>
                                 delete
@@ -53,16 +53,6 @@
                     <div fxLayout="row" fxLayoutAlign="space-around start"
                          *ngFor="let price of getPriceFormArray().controls; let i = index"
                          [formGroupName]="i">
-                        <button type="button" mat-icon-button mat-raised-button (click)="movePriceUpClicked(i)"
-                                [disabled]="i === 0"
-                                class="position-control position-up" title="Nach oben schieben">
-                            <mat-icon>arrow_upward</mat-icon>
-                        </button>
-                        <button type="button" mat-icon-button mat-raised-button (click)="movePriceDownClicked(i)"
-                                [disabled]="i === getPriceFormArray().controls.length - 1"
-                                class="position-control position-down" title="Nach unten schieben">
-                            <mat-icon>arrow_downward</mat-icon>
-                        </button>
                         <mat-form-field appearance="fill">
                             <mat-label>Name</mat-label>
                             <input class="form-control" formControlName="name" matInput>
@@ -75,6 +65,16 @@
                             <mat-label>Kommentar</mat-label>
                             <input class="form-control" formControlName="comment" matInput>
                         </mat-form-field>
+                        <button type="button" mat-fab color="primary" (click)="movePriceUpClicked(i)"
+                                [disabled]="i === 0"
+                                class="position-control position-up up-down-arrow" title="Nach oben schieben">
+                            <mat-icon>arrow_upward</mat-icon>
+                        </button>
+                        <button type="button" mat-fab color="primary" (click)="movePriceDownClicked(i)"
+                                [disabled]="i === getPriceFormArray().controls.length - 1"
+                                class="position-control position-down up-down-arrow" title="Nach unten schieben">
+                            <mat-icon>arrow_downward</mat-icon>
+                        </button>
                         <button type="button" mat-fab (click)="removePriceAt(i)">
                             <mat-icon>
                                 delete
@@ -96,16 +96,6 @@
                     <div fxLayout="row" fxLayoutAlign="space-around start"
                          *ngFor="let credential of getCredentialFormArray().controls; let i = index"
                          [formGroupName]="i">
-                        <button type="button" mat-icon-button mat-raised-button (click)="moveCredentialUpClicked(i)"
-                                [disabled]="i === 0"
-                                class="position-control position-up" title="Nach oben schieben">
-                            <mat-icon>arrow_upward</mat-icon>
-                        </button>
-                        <button type="button" mat-icon-button mat-raised-button (click)="moveCredentialDownClicked(i)"
-                                [disabled]="i === getCredentialFormArray().controls.length - 1"
-                                class="position-control position-down" title="Nach unten schieben">
-                            <mat-icon>arrow_downward</mat-icon>
-                        </button>
                         <mat-form-field appearance="fill">
                             <mat-label>Name</mat-label>
                             <input class="form-control" formControlName="name" matInput>
@@ -122,6 +112,16 @@
                             <mat-label>Link/Kommentar</mat-label>
                             <input class="form-control" formControlName="url" matInput>
                         </mat-form-field>
+                        <button type="button" mat-fab color="primary" (click)="moveCredentialUpClicked(i)"
+                                [disabled]="i === 0"
+                                class="position-control position-up up-down-arrow" title="Nach oben schieben">
+                            <mat-icon>arrow_upward</mat-icon>
+                        </button>
+                        <button type="button" mat-fab color="primary" (click)="moveCredentialDownClicked(i)"
+                                [disabled]="i === getCredentialFormArray().controls.length - 1"
+                                class="position-control position-down up-down-arrow" title="Nach unten schieben">
+                            <mat-icon>arrow_downward</mat-icon>
+                        </button>
                         <button type="button" mat-fab (click)="removeCredentialAt(i)">
                             <mat-icon>
                                 delete
@@ -143,17 +143,6 @@
                     <div fxLayout="row" fxLayoutAlign="space-around start"
                          *ngFor="let technicalData of getTechnicalDataFormArray().controls; let i = index"
                          [formGroupName]="i">
-                        <button type="button" mat-icon-button mat-raised-button (click)="moveTechnicalDataUpClicked(i)"
-                                [disabled]="i === 0"
-                                class="position-control position-up" title="Nach oben schieben">
-                            <mat-icon>arrow_upward</mat-icon>
-                        </button>
-                        <button type="button" mat-icon-button mat-raised-button
-                                (click)="moveTechnicalDataDownClicked(i)"
-                                [disabled]="i === getCredentialFormArray().controls.length - 1"
-                                class="position-control position-down" title="Nach unten schieben">
-                            <mat-icon>arrow_downward</mat-icon>
-                        </button>
                         <mat-form-field appearance="fill">
                             <mat-label>Name</mat-label>
                             <input class="form-control" formControlName="name" matInput>
@@ -170,6 +159,17 @@
                             <mat-label>Länge</mat-label>
                             <input class="form-control" formControlName="length" matInput>
                         </mat-form-field>
+                        <button type="button" mat-fab color="primary" (click)="moveTechnicalDataUpClicked(i)"
+                                [disabled]="i === 0"
+                                class="position-control position-up up-down-arrow" title="Nach oben schieben">
+                            <mat-icon>arrow_upward</mat-icon>
+                        </button>
+                        <button type="button" mat-fab color="primary"
+                                (click)="moveTechnicalDataDownClicked(i)"
+                                [disabled]="i === getCredentialFormArray().controls.length - 1"
+                                class="position-control position-down up-down-arrow" title="Nach unten schieben">
+                            <mat-icon>arrow_downward</mat-icon>
+                        </button>
                         <button type="button" mat-fab (click)="removeTechnicalDataAt(i)">
                             <mat-icon>
                                 delete

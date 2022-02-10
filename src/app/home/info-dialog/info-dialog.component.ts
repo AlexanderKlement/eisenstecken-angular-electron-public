@@ -66,6 +66,7 @@ export class InfoDialogComponent implements OnInit {
                 'Vorlage in die aktuelle Liste übertragen.',
                 'Info Dialog Einstellungen können nun nach oben oder unten verschoben werden.',
                 'Rechnungen werden nun in einem separatem Ordner abgespeichert',
+                'Bestellungen Fenster sollte nun zentriert sein.'
             ]
         },
         {

@@ -1,6 +1,6 @@
 {
   "name": "eisenstecken-eibel",
-  "version": "0.8.17-beta",
+  "version": "0.8.17",
   "description": "Angular 13 with Electron 16 (Typescript + SASS + Hot Reload)",
   "homepage": "https://kivi.bz.it",
   "author": {
@@ -73,8 +73,8 @@
     "zone.js": "~0.11.4"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/AlexanderKlement/eisenstecken-angular-electron-public.git"
+    "type": "git",
+    "url": "https://github.com/AlexanderKlement/eisenstecken-angular-electron-public.git"
   },
   "devDependencies": {
     "@angular-builders/custom-webpack": "13.0.0",
