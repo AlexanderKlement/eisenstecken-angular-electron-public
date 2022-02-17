@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {TableDataSource} from '../../shared/components/table-builder/table-builder.datasource';
 import {DefaultService, IngoingInvoice} from 'eisenstecken-openapi-angular-library';
 import {LockService} from '../../shared/services/lock.service';
@@ -7,6 +7,9 @@ import {TableButton} from '../../shared/components/table-builder/table-builder.c
 import {first} from 'rxjs/operators';
 import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
+import {Observable, Subscription} from 'rxjs';
+import {Router} from '@angular/router';
+import {formatCurrency} from '@angular/common';
 
 @Component({
     selector: 'app-ingoing',
@@ -15,6 +18,7 @@ import {MatDialog} from '@angular/material/dialog';
 })
 export class IngoingComponent implements OnInit {
 
+    @Input() updateTables$: Observable<void>;
     allIngoingInvoiceDataSource: TableDataSource<IngoingInvoice>;
     paidIngoingInvoiceDataSource: TableDataSource<IngoingInvoice>;
     unPaidIngoingInvoiceDataSource: TableDataSource<IngoingInvoice>;
@@ -28,15 +32,23 @@ export class IngoingComponent implements OnInit {
             selectedField: 'id',
         },
     ];
+    private subscription: Subscription;
 
-
-    constructor(private api: DefaultService, private locker: LockService, private dialog: MatDialog) {
+    constructor(private api: DefaultService, private locker: LockService, private dialog: MatDialog, private router: Router) {
     }
 
     ngOnInit(): void {
         this.initAllIngoingInvoiceDataSource();
         this.initPaidIngoingInvoiceDataSource();
         this.initUnPaidIngoingInvoiceDataSource();
+        if (!this.updateTables$) {
+            console.warn('OutgoingComponent: Cannot update tables');
+            return;
+        }
+        this.subscription = new Subscription();
+        this.subscription.add(this.updateTables$.subscribe(() => {
+            this.loadTables();
+        }));
     }
 
     loadTables() {
@@ -110,13 +122,8 @@ export class IngoingComponent implements OnInit {
                                 paid: dataSource.paid ? 'Ja' : 'Nein',
                             },
                             route: () => {
-                                this.locker.getLockAndTryNavigate(
-                                    this.api.islockedIngoingInvoiceIngoingInvoiceIslockedIngoingInvoiceIdGet(dataSource.id),
-                                    this.api.lockIngoingInvoiceIngoingInvoiceLockIngoingInvoiceIdPost(dataSource.id),
-                                    this.api.unlockIngoingInvoiceIngoingInvoiceUnlockIngoingInvoiceIdPost(dataSource.id),
-                                    'ingoing_invoice/edit/' + dataSource.id.toString()
-                                );
-                            }
+                                this.router.navigateByUrl('/invoice/ingoing/' + dataSource.id.toString());
+                            },
                         });
                 });
                 return rows;
@@ -149,13 +156,8 @@ export class IngoingComponent implements OnInit {
                                 id: dataSource.id,
                             },
                             route: () => {
-                                this.locker.getLockAndTryNavigate(
-                                    this.api.islockedIngoingInvoiceIngoingInvoiceIslockedIngoingInvoiceIdGet(dataSource.id),
-                                    this.api.lockIngoingInvoiceIngoingInvoiceLockIngoingInvoiceIdPost(dataSource.id),
-                                    this.api.unlockIngoingInvoiceIngoingInvoiceUnlockIngoingInvoiceIdPost(dataSource.id),
-                                    'ingoing_invoice/edit/' + dataSource.id.toString()
-                                );
-                            }
+                                this.router.navigateByUrl('/invoice/ingoing/' + dataSource.id.toString());
+                            },
                         });
                 });
                 return rows;
@@ -184,16 +186,12 @@ export class IngoingComponent implements OnInit {
                                 rgNum: dataSource.number,
                                 name: dataSource.name,
                                 date: moment(dataSource.date).format('L'),
+                                total: formatCurrency(dataSource.total, 'de-DE', 'EUR'),
                                 id: dataSource.id,
                             },
                             route: () => {
-                                this.locker.getLockAndTryNavigate(
-                                    this.api.islockedIngoingInvoiceIngoingInvoiceIslockedIngoingInvoiceIdGet(dataSource.id),
-                                    this.api.lockIngoingInvoiceIngoingInvoiceLockIngoingInvoiceIdPost(dataSource.id),
-                                    this.api.unlockIngoingInvoiceIngoingInvoiceUnlockIngoingInvoiceIdPost(dataSource.id),
-                                    'ingoing_invoice/edit/' + dataSource.id.toString()
-                                );
-                            }
+                                this.router.navigateByUrl('/invoice/ingoing/' + dataSource.id.toString());
+                            },
                         });
                 });
                 return rows;
@@ -202,6 +200,7 @@ export class IngoingComponent implements OnInit {
                 {name: 'name', headerName: 'Firma'},
                 {name: 'rgNum', headerName: 'Nummer'},
                 {name: 'date', headerName: 'Datum'},
+                {name: 'total', headerName: 'Gesamtpreis [mit MwSt.]'},
             ],
             (api) => api.countIngoingInvoicesIngoingInvoiceCountGet(false)
         );

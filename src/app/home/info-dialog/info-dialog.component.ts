@@ -50,7 +50,8 @@ export class InfoDialogComponent implements OnInit {
                 ' werden die restlichen Dateien ' +
                 'trotzdem verschoben. Nach Abschluss dieser Operation sind zwei Ordner vorhanden (Angebote und' +
                 ' Projekte). mit jeweils mindestens' +
-                ' einer Datei. Hier entwerder die Operation nicht durchführen, oder bei Fehlern wieder rückgängig machen.'
+                ' einer Datei. Hier entwerder die Operation nicht durchführen, oder bei Fehlern wieder rückgängig machen.',
+                'Mail die sich bei Bestellung öffnet ist nicht korrekt formatiert.'
             ]
         },
         {
@@ -62,11 +63,13 @@ export class InfoDialogComponent implements OnInit {
                 'Die Genauigkeit der Menge beim Artikellisten-PDF von 2 auf 3 Nachkommastellen erhöht.',
                 'Eingangsrechnung können nun importiert werden. Unterstützte Formate: xml und p7m',
                 'Eingangsrechnungen können nun als bezahlt markiert werden.',
-                'Rechnungen können nun asl bezahlt markiert werden. ',
+                'Rechnungen können nun als bezahlt markiert werden. ',
                 'Fehler behoben, bei dem Aritkel, die von Lager auf Aufträgen bestellt wurden, nicht korrekt registriert wurden.',
                 'Bei Angebot die Postitionsüberschrift (hoffentlich) wieder auf Roboto geändert und Fett gemacht.',
                 'Bindestrich bei Auftragscode in Artikellistenpdf eingefügt.',
-
+                'Ein- und Ausgangsrechnungen werden nun in "Alle", "Bezahlt" und "Unbezahlt" unterteilt.',
+                'Aufträge können nun korrekt nach dem Nachnamen des Kunden durchsucht werden.',
+                'Rechnungen bearbeiten Fenster sollte nun nach dem speichern auf das korrekte Feld zurückverweisen.'
             ]
         },
         {

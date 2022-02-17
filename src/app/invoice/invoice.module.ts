@@ -17,6 +17,7 @@ import {MatInputModule} from '@angular/material/input';
 import { ImportXmlDialogComponent } from './ingoing/import-xml-dialog/import-xml-dialog.component';
 import {MatListModule} from '@angular/material/list';
 import {MatIconModule} from '@angular/material/icon';
+import { IngoingDetailComponent } from './ingoing/ingoing-detail/ingoing-detail.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import {MatIconModule} from '@angular/material/icon';
     IngoingComponent,
     OutgoingComponent,
     OutgoingInvoiceNumberDialogComponent,
-    ImportXmlDialogComponent
+    ImportXmlDialogComponent,
+    IngoingDetailComponent
   ],
     imports: [
         CommonModule,

@@ -23,7 +23,7 @@ export class ImportXmlDialogComponent implements OnInit {
         this.selectXmlFormGroup = new FormGroup({
             paths: new FormArray([]),
         });
-        this.addPath('C:\\Users\\alexa\\Desktop\\temp\\IT02713280218_0WFw4.xml');
+        //this.addPath('C:\\Users\\alexa\\Desktop\\temp\\IT02713280218_0WFw4.xml');
     }
 
     getPaths(): FormArray {
@@ -80,8 +80,8 @@ export class ImportXmlDialogComponent implements OnInit {
         }
         console.log(xmlFiles);
         this.api.uploadIngoingInvoiceXmlAsStringIngoingInvoiceUploadXmlAsStringPost(xmlFiles).pipe(first())
-            .subscribe((ingoingInvoiceList) => {
-                console.log(ingoingInvoiceList);
+            .subscribe(() => {
+                this.dialogRef.close(true);
             });
     }
 }

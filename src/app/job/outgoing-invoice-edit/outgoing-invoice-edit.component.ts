@@ -23,6 +23,7 @@ import * as moment from 'moment';
 import {formatDateTransport} from '../../shared/date.util';
 import {FileService} from '../../shared/services/file.service';
 import {CurrencyPipe, getLocaleCurrencyCode} from '@angular/common';
+import {NavigationService} from '../../shared/services/navigation.service';
 
 @Component({
     selector: 'app-outgoing-invoice-edit',
@@ -41,7 +42,7 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
     title = 'Ausgangsrechnung: Bearbeiten';
 
     constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private currency: CurrencyPipe,
-                private authService: AuthService, private snackBar: MatSnackBar, private file: FileService) {
+                private authService: AuthService, private snackBar: MatSnackBar, private file: FileService, private navigation: NavigationService) {
         super(api, router, route, dialog);
     }
 
@@ -102,7 +103,8 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
                                     this.api.deleteOutgoingInvoiceOutgoingInvoiceOutgoingInvoiceIdDelete(this.id)
                                         .pipe(first()).subscribe((success) => {
                                             if (success) {
-                                                this.router.navigateByUrl(this.navigationTarget);
+                                                this.navigation.back();
+                                                //this.router.navigateByUrl(this.navigationTarget);
                                             } else {
                                                 this.invoiceDeleteFailed();
                                             }
@@ -130,7 +132,7 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
             , 'Ok', {
                 duration: 10000
             });
-        this.router.navigateByUrl(this.navigationTarget);
+        this.navigation.back();
     }
 
     getDescriptiveArticles(): FormArray {
@@ -276,7 +278,8 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
                 value: invoiceNumber.toString()
             }).pipe(first()).subscribe(() => {
                 this.file.open(invoice.pdf);
-                this.router.navigateByUrl('job/' + this.jobId.toString(), {replaceUrl: true});
+                this.navigation.back();
+                //this.router.navigateByUrl('job/' + this.jobId.toString(), {replaceUrl: true});
             });
         });
     }

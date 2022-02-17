@@ -19,7 +19,6 @@ export class OutgoingComponent implements OnInit {
     allOutgoingInvoiceDataSource: TableDataSource<OutgoingInvoice>;
     unPaidOutgoingInvoiceDataSource: TableDataSource<OutgoingInvoice>;
     paidOutgoingInvoiceDataSource: TableDataSource<OutgoingInvoice>;
-
     buttons: TableButton[] = [
         {
             name: 'Zahlung',
@@ -131,7 +130,6 @@ export class OutgoingComponent implements OnInit {
                 {name: 'rgNum', headerName: 'Nummer'},
                 {name: 'date', headerName: 'Datum'},
                 {name: 'paid', headerName: 'Bezahlt'}
-
             ],
             (api) => api.countOutgoingInvoicesOutgoingInvoiceCountGet()
         );

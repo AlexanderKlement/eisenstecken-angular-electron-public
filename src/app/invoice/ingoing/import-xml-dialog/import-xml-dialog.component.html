@@ -2,7 +2,7 @@
 <div mat-dialog-content>
     <form [formGroup]="selectXmlFormGroup">
         <div fxLayout="column" fxLayoutAlign="space-around center">
-            <button type="button" mat-button (click)="selectXmlClicked()">Auswählen</button>
+            <button type="button" mat-raised-button (click)="selectXmlClicked()">Auswählen</button>
             <mat-list>
                 <mat-list-item *ngFor="let path of getPaths().controls; let i = index">
                     <div fxLayout="row" fxLayoutAlign="space-around center">

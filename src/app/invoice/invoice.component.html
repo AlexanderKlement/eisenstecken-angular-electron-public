@@ -1,11 +1,11 @@
 <app-toolbar [buttonList]="buttons" title="Rechnung"></app-toolbar>
 <div class="window-container">
-<mat-tab-group>
-    <mat-tab *ngIf="outgoingInvoicesAvailable" label="Ausgangsrechnungen">
-        <app-outgoing></app-outgoing>
-    </mat-tab>
-    <mat-tab *ngIf="ingoingInvoicesAvailable" label="Eingangsrechnungen">
-        <app-ingoing></app-ingoing>
-    </mat-tab>
-</mat-tab-group>
+    <mat-tab-group (selectedIndexChange)="selectedTabChanged($event)">
+        <mat-tab *ngIf="outgoingInvoicesAvailable" label="Ausgangsrechnungen">
+            <app-outgoing></app-outgoing>
+        </mat-tab>
+        <mat-tab *ngIf="ingoingInvoicesAvailable" label="Eingangsrechnungen">
+            <app-ingoing [updateTables$]="updateChildTables$"></app-ingoing>
+        </mat-tab>
+    </mat-tab-group>
 </div>

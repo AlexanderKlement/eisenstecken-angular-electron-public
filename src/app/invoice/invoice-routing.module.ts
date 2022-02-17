@@ -1,17 +1,26 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 import {InvoiceComponent} from './invoice.component';
+import {AccessGuard} from '../shared/services/access-guard.service';
+import {IngoingDetailComponent} from './ingoing/ingoing-detail/ingoing-detail.component';
 
 const routes: Routes = [
-  {
-    path: 'invoice',
-    component: InvoiceComponent,
-    data:{requiresLogin: true}
-  },
+    {
+        path: 'invoice',
+        component: InvoiceComponent,
+        data: {requiresLogin: true}
+    },
+    {
+        path: 'invoice/ingoing/:id',
+        component: IngoingDetailComponent,
+        data: {requiresLogin: true},
+        canActivate: [AccessGuard]
+    },
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
-export class InvoiceRoutingModule { }
+export class InvoiceRoutingModule {
+}
