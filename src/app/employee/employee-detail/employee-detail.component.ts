@@ -61,7 +61,8 @@ export class EmployeeDetailComponent implements OnInit {
     title = '';
 
 
-    constructor(private api: DefaultService, private route: ActivatedRoute, private router: Router, private dialog: MatDialog, private snackBar: MatSnackBar) {
+    constructor(private api: DefaultService, private route: ActivatedRoute, private router: Router,
+                private dialog: MatDialog, private snackBar: MatSnackBar) {
     }
 
     ngOnInit(): void {

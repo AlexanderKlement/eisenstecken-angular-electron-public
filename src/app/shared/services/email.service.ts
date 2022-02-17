@@ -22,8 +22,6 @@ export class EmailService {
             });
         }
 
-        console.log(body);
-
 
         // TODO: implement some checks here
 

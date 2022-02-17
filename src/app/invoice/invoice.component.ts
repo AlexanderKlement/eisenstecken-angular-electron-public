@@ -6,6 +6,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {
     OutgoingInvoiceNumberDialogComponent
 } from './outgoing/outgoing-invoice-number-dialog/outgoing-invoice-number-dialog.component';
+import {ImportXmlDialogComponent} from './ingoing/import-xml-dialog/import-xml-dialog.component';
 
 @Component({
     selector: 'app-invoice',
@@ -20,6 +21,12 @@ export class InvoiceComponent implements OnInit {
             name: 'Nächste Rechnungsnummer setzen',
             navigate: (): void => {
                 this.outgoingInvoiceNumberClicked();
+            }
+        },
+        {
+            name: 'Eingangsrechnungen importieren',
+            navigate: (): void => {
+                this.importIngoingInvoiceClicked();
             }
         }
     ];
@@ -42,4 +49,9 @@ export class InvoiceComponent implements OnInit {
         });
     }
 
+    private importIngoingInvoiceClicked() {
+        this.dialog.open(ImportXmlDialogComponent, {
+            width: '600px'
+        });
+    }
 }

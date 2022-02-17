@@ -86,4 +86,33 @@ export class FileService {
             }
         });
     }
+
+    selectFiles(multi: boolean, filterName: string, filters: string[]): Promise<string[]> {
+        if (!this.electronService.isElectron) {
+            console.error('Selecting Files is only possible in electron!');
+            return new Promise((resolve, reject) => {
+                reject();
+            });
+        }
+        const settings = [];
+        settings.push(multi);
+        settings.push(filterName);
+        settings.push(filters.join(';'));
+        return new Promise<string[]>((resolve, reject) => {
+            try {
+                this.electronService.ipcRenderer.on('select-files-reply', (_, data) => {
+                    if (data) {
+                        resolve(data);
+                    } else {
+                        reject();
+                    }
+                });
+                this.electronService.ipcRenderer.send('select-files-request', settings);
+            } catch (e) {
+                console.error(e);
+                console.error('Cannot send request to api');
+                reject();
+            }
+        });
+    }
 }

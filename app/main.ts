@@ -5,6 +5,7 @@ import * as url from 'url';
 import * as Sentry from "@sentry/electron";
 
 
+
 Sentry.init({dsn: "https://60ac4754e4be476a82b10b0e597dfaa6@sentry.kivi.bz.it/25"});
 
 let win: BrowserWindow = null;
@@ -210,13 +211,55 @@ function initIPC() {
                     event.reply('select-folder-reply', '');
                 else
                     event.reply('select-folder-reply', path.filePaths[0]);
-            })
+            });
         } catch (e) {
             console.error("Main: Select Folder FAIL");
             console.error(e);
             event.reply('select-folder-reply', '');
         }
     });
+
+
+    /*
+    Arg0: multi: [true, false]
+    Arg1: filtername: str,
+    Arg2: filters separated by ";"
+     */
+    ipcMain.on('select-files-request', (event, arg) => {
+
+        try {
+            const properties: Array<'openFile' | 'openDirectory' | 'multiSelections' | 'showHiddenFiles' |
+                'createDirectory' | 'promptToCreate' | 'noResolveAliases' | 'treatPackageAsDirectory' |
+                'dontAddToRecent'> = [
+                'openFile'
+            ];
+            if (arg[0]) {
+                properties.push('multiSelections')
+            }
+            const {dialog} = require('electron')
+            const pathPromise = dialog.showOpenDialog({
+                properties: properties,
+                filters: [
+                    {
+                        name: arg[1],
+                        extensions: arg[2].split(';')
+                    }
+                ]
+            });
+            pathPromise.then((path) => {
+                if (path.canceled)
+                    event.reply('select-files-reply', []);
+                else {
+                    event.reply('select-files-reply', path.filePaths);
+                }
+
+            });
+        } catch (e) {
+            console.error("Main: Select Files FAIL");
+            console.error(e);
+            event.reply('select-files-reply', []);
+        }
+    })
 
 
 //IPC  for autoupdate:

@@ -4,7 +4,13 @@ import {MatPaginator} from '@angular/material/paginator';
 import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 import {fromEvent, Subscription} from 'rxjs';
 import {DataSourceClass} from '../../types';
-import {CustomButton} from '../toolbar/toolbar.component';
+
+export interface TableButton {
+    name: string;
+    navigate: ($event: any, id: number) => void;
+    selectedField: string;
+}
+
 
 @Component({
     selector: 'app-table-builder',
@@ -15,7 +21,7 @@ export class TableBuilderComponent<T extends DataSourceClass> implements OnInit,
 
     @Input() dataSource: TableDataSource<T>;
     @Input() title?: string;
-    @Input() buttons?: CustomButton[] = [];
+    @Input() buttons?: TableButton[] = [];
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild('input') input: ElementRef;
 
@@ -27,6 +33,13 @@ export class TableBuilderComponent<T extends DataSourceClass> implements OnInit,
 
     ngOnInit(): void {
         this.subscription = new Subscription();
+        if (this.buttons.length > 0) {
+            this.dataSource.columnIdentifiers.push('actions');
+            this.dataSource.columns.push({
+                name: 'actions',
+                headerName: 'Aktionen',
+            });
+        }
     }
 
     ngAfterViewInit(): void {

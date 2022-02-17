@@ -1,0 +1,24 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<div mat-dialog-content>
+    <form [formGroup]="selectXmlFormGroup">
+        <div fxLayout="column" fxLayoutAlign="space-around center">
+            <button type="button" mat-button (click)="selectXmlClicked()">Auswählen</button>
+            <mat-list>
+                <mat-list-item *ngFor="let path of getPaths().controls; let i = index">
+                    <div fxLayout="row" fxLayoutAlign="space-around center">
+                        <p>
+                            {{getFileNameAt(i)}}
+                        </p>
+                        <button mat-button mat-icon-button (click)="deletePath(i)" title="Entfernen">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </mat-list-item>
+            </mat-list>
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-button type="button" (click)="onCancelClick()">Abbrechen</button>
+    <button mat-button type="button" (click)="onSubmitClick()">Importieren</button>
+</div>

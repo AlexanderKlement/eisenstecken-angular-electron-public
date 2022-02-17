@@ -126,7 +126,7 @@ export class StockDetailComponent implements OnInit {
                                 'order_from.displayable_name': dataSource.order_from.displayable_name,
                                 articles: dataSource.articles[0].article.name.translation,
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                                create_date: moment(dataSource.create_date).format('LLLL'),
+                                create_date: moment(dataSource.create_date).format('L'),
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
                                 delivery_date: dataSource.delivery_date !== null ? moment(dataSource.delivery_date).format('L') : '',
                                 'user.fullname': dataSource.user.fullname,
@@ -207,11 +207,8 @@ export class StockDetailComponent implements OnInit {
                         console.error('Could not delete order bundle');
                     }
                 });
-
             }
         });
-
-
     }
 
     private sendOrderButtonClicked(): void {

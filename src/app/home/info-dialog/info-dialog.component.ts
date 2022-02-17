@@ -44,16 +44,29 @@ export class InfoDialogComponent implements OnInit {
                 'kombiniert werden, sollte dies gewünscht sein.',
                 'Bei Bestellungen sollte es möglich sein die Unteraufträge/Projekte einzuklappen, um die ganze Ansicht übersichtlicher' +
                 ' zu gestalten.',
-                'Eingangsrechnungen import machen',
-                'Aus- und Eingangsrechnungen sollten Möglichkeit haben als bezahlt zu markieren.',
                 'Abgelehnte Aufträge in eigenen Ordner verschieben um Ordner nicht zu voll zu machen.',
-                'Rechnungen sollten pro Rechnung einen Ordner machen und alle benötigten Dateien dort hineinspeichern.',
                 'Wenn Aufträge angenommen werden, wird der Ordner von Angebote in Projekte verschoben. Sollte eine Datei geöffnet sein ' +
                 '(oder der Server anderweitig keine Schreibberechtigung auf eine oder mehrere Dateien erhält),' +
                 ' werden die restlichen Dateien ' +
                 'trotzdem verschoben. Nach Abschluss dieser Operation sind zwei Ordner vorhanden (Angebote und' +
                 ' Projekte). mit jeweils mindestens' +
                 ' einer Datei. Hier entwerder die Operation nicht durchführen, oder bei Fehlern wieder rückgängig machen.'
+            ]
+        },
+        {
+            versionName: '0.8.18',
+            changes: [
+                'Ausgangsrechnungen können nun als bezahlt markiert werden.',
+                'Bei Bestellungen auf Lager, wird nun falls die Bestellung versandt wurde das Datum und der Bestellende ' +
+                'korrekt übernommen',
+                'Die Genauigkeit der Menge beim Artikellisten-PDF von 2 auf 3 Nachkommastellen erhöht.',
+                'Eingangsrechnung können nun importiert werden. Unterstützte Formate: xml und p7m',
+                'Eingangsrechnungen können nun als bezahlt markiert werden.',
+                'Rechnungen können nun asl bezahlt markiert werden. ',
+                'Fehler behoben, bei dem Aritkel, die von Lager auf Aufträgen bestellt wurden, nicht korrekt registriert wurden.',
+                'Bei Angebot die Postitionsüberschrift (hoffentlich) wieder auf Roboto geändert und Fett gemacht.',
+                'Bindestrich bei Auftragscode in Artikellistenpdf eingefügt.',
+
             ]
         },
         {

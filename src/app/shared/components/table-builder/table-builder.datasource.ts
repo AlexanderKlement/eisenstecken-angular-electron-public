@@ -6,7 +6,7 @@ import {DataSourceClass, RecursiveKeyOf} from '../../types';
 import {MatPaginatorIntl} from '@angular/material/paginator';
 
 export interface Column<T> {
-    name: RecursiveKeyOf<T>;
+    name: string; // RecursiveKeyOf<T>; Maybe this is better this way
     sortable?: boolean;
     headerName: string;
 }
@@ -67,7 +67,7 @@ export type AmountFunction = (api: DefaultService) => Observable<number>;
 
 export class TableDataSource<T extends DataSourceClass> extends DataSource<Row<T>> {
 
-    public readonly columns: Column<T>[];
+    public columns: Column<T>[];
     public readonly columnIdentifiers: string[];
     public amount$: Observable<number>;
     public pageSize = defaultValues.pageSize;

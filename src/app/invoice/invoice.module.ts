@@ -14,6 +14,9 @@ import {FlexModule} from '@angular/flex-layout';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
+import { ImportXmlDialogComponent } from './ingoing/import-xml-dialog/import-xml-dialog.component';
+import {MatListModule} from '@angular/material/list';
+import {MatIconModule} from '@angular/material/icon';
 
 
 @NgModule({
@@ -21,7 +24,8 @@ import {MatInputModule} from '@angular/material/input';
     InvoiceComponent,
     IngoingComponent,
     OutgoingComponent,
-    OutgoingInvoiceNumberDialogComponent
+    OutgoingInvoiceNumberDialogComponent,
+    ImportXmlDialogComponent
   ],
     imports: [
         CommonModule,
@@ -33,7 +37,9 @@ import {MatInputModule} from '@angular/material/input';
         FlexModule,
         MatFormFieldModule,
         ReactiveFormsModule,
-        MatInputModule
+        MatInputModule,
+        MatListModule,
+        MatIconModule
     ]
 })
 export class InvoiceModule { }
