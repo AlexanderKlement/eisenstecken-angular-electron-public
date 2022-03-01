@@ -59,7 +59,12 @@ export class InfoDialogComponent implements OnInit {
                 'Anfragen haben nun einen anderen Text wie Bestellungen in Email.',
                 'Digital unterschriebene Rechnungen (.p7m) werden nun korrekt übertragen und sollten nun problemlos ' +
                 'importiert werden können.',
-                'Eisenstecken-Logo oben links, wird nun nicht mehr so groß wenn man mit der Maus darüberfährt.'
+                'Eisenstecken-Logo oben links, wird nun nicht mehr so groß wenn man mit der Maus darüberfährt.',
+                'Eingangsrechnungen mit dem Dokumententype "TD04" (=Gutschrift) zeigen nun einen negativen Gesamtbetrag an.',
+                'Kalender started nun immer an einem Montag',
+                'Kalendertage Samstag und Sonntag sind nun leicht transparent um diese einfacher zu erkennen.',
+                'Notizen haben nun ein schlichteres Design',
+                'Pdf für unbezahlt Ein- und Ausgangsrechnungen enthält nun die jeweiligen Gesamtsummen'
             ]
         },
         {

@@ -27,7 +27,7 @@ export class CalendarComponent implements OnInit {
 
 
     constructor(public dialog: MatDialog, private calendar: CalendarService, private authService: AuthService) {
-        this.dayManager = new DayManager(0, 7);
+        this.dayManager = new DayManager(0, 7, true);
         this.amountOfDays = this.dayManager.amountOfDaysString;
     }
 

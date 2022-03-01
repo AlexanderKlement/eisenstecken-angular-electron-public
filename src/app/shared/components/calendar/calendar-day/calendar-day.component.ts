@@ -24,12 +24,16 @@ export class CalendarDayComponent implements OnInit, OnDestroy {
     titleDay: string;
 
     loading = true;
+    weekend = false;
 
     constructor(private api: DefaultService, private router: Router, private calendar: CalendarService, private dialog: MatDialog) {
     }
 
     ngOnInit(): void {
-        //The html does unsubscribe automatically onDestroy
+        const currentDayId = moment().add(this.day, 'days').day();
+        if (currentDayId === 6 || currentDayId === 0) {
+            this.weekend = true;
+        }
         this.calendarEntries$ = this.calendar.getCalendarEntries(this.calendarId, this.day).pipe(
             tap(() => this.loading = false)
         );
