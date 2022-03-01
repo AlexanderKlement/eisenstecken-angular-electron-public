@@ -129,7 +129,7 @@ export class OutgoingComponent implements OnInit {
                 {name: 'client_name', headerName: 'Kunde'},
                 {name: 'rgNum', headerName: 'Nummer'},
                 {name: 'date', headerName: 'Datum'},
-                {name: 'paid', headerName: 'Bezahlt'}
+                {name: 'paid', headerName: 'Bezahlen'}
             ],
             (api) => api.countOutgoingInvoicesOutgoingInvoiceCountGet()
         );

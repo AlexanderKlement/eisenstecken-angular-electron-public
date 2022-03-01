@@ -19,6 +19,6 @@
     </form>
 </div>
 <div mat-dialog-actions>
-    <button mat-button type="button" (click)="onCancelClick()">Abbrechen</button>
-    <button mat-button type="button" (click)="onSubmitClick()">Importieren</button>
+    <button mat-button [disabled]="loading" type="button" (click)="onCancelClick()">Abbrechen</button>
+    <button mat-button [disabled]="loading" type="button" (click)="onSubmitClick()">Importieren</button>
 </div>

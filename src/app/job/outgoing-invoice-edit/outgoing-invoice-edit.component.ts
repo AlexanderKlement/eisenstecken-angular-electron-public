@@ -42,7 +42,8 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
     title = 'Ausgangsrechnung: Bearbeiten';
 
     constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private currency: CurrencyPipe,
-                private authService: AuthService, private snackBar: MatSnackBar, private file: FileService, private navigation: NavigationService) {
+                private authService: AuthService, private snackBar: MatSnackBar, private file: FileService,
+                private navigation: NavigationService) {
         super(api, router, route, dialog);
     }
 

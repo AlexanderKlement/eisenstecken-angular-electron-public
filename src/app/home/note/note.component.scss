@@ -2,13 +2,6 @@
 @import "../../../theme";
 
 .note {
-  // border-width: 1px;
-  // border-style: outset;
-  // border-color: map.get($mat-primary, main);
-  // box-shadow: 0 0 5px map.get($mat-primary, main);
-  // padding: 10px;
-  // background-image: url("http://res.cloudinary.com/cspaveljb/image/upload/v1499110969/cork_w2tt25.jpg");
-  // background-size: cover;
   background: white;
   isolation: isolate;
 
@@ -18,22 +11,18 @@
     .single-note-container {
       overflow: visible;
       aspect-ratio: 1.5;
-      // max-width: clamp(10px, calc(100%), 300px);
-      // max-height: clamp(10px, calc(100%), 300px);
-      //  padding-top: min(300px, calc((100% - 0px) * 1 + 0px)) !important;
-      //  top: 2vw !important;
 
       &:first-child,
       &:nth-child(4n) {
-        transform: rotate(-2.5deg);
-        -webkit-transform: rotate(-2.5deg);
-        -moz-transform: rotate(-2.5deg);
+        transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
       }
 
       &:nth-child(2n) {
-        transform: rotate(1.5deg);
-        -webkit-transform: rotate(1.5deg);
-        -moz-transform: rotate(1.5deg);
+        transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
       }
 
       &:nth-child(3n) {

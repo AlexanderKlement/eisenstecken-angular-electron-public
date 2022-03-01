@@ -24,9 +24,7 @@ export class TableBuilderComponent<T extends DataSourceClass> implements OnInit,
     @Input() buttons?: TableButton[] = [];
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild('input') input: ElementRef;
-
     subscription: Subscription;
-
 
     constructor() {
     }

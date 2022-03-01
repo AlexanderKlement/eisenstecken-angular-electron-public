@@ -4,6 +4,7 @@ import {DefaultService} from 'eisenstecken-openapi-angular-library';
 import {catchError, finalize, map} from 'rxjs/operators';
 import {DataSourceClass, RecursiveKeyOf} from '../../types';
 import {MatPaginatorIntl} from '@angular/material/paginator';
+import {Input} from '@angular/core';
 
 export interface Column<T> {
     name: string; // RecursiveKeyOf<T>; Maybe this is better this way
@@ -14,6 +15,7 @@ export interface Column<T> {
 export interface Row<T> {
     values: T;
     route: VoidFunction;
+    toolTip?: string;
 }
 
 export const defaultValues = {
@@ -34,7 +36,9 @@ export interface TableButton<T> {
 }
 
 const germanRangeLabel = (page: number, pageSize: number, length: number) => {
-    if (length === 0 || pageSize === 0) { return `0 von ${length}`; }
+    if (length === 0 || pageSize === 0) {
+        return `0 von ${length}`;
+    }
 
     length = Math.max(length, 0);
 

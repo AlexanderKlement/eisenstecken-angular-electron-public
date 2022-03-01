@@ -40,12 +40,17 @@ export class SupplierDetailComponent implements OnInit {
     }
 
     static sendAndDisplayOrderBundlePdf(api: DefaultService, authService: AuthService, email: EmailService,
-                                        file: FileService, orderBundle: OrderBundle, supplier: Supplier) {
-        const subject$ = api.getParameterParameterKeyGet('order_subject');
-        const body$ = api.getParameterParameterKeyGet('order_mail');
+                                        file: FileService, orderBundle: OrderBundle, supplier: Supplier, request: boolean = false) {
+
+        let subject$ = api.getParameterParameterKeyGet('order_subject');
+        let body$ = api.getParameterParameterKeyGet('order_mail');
+        if (request) {
+            subject$ = api.getParameterParameterKeyGet('order_subject_request');
+            body$ = api.getParameterParameterKeyGet('order_mail_request');
+        }
+
         combineLatest([subject$, body$]).pipe(first()).subscribe(([subject, body]) => {
             authService.getCurrentUser().pipe(first()).subscribe(user => {
-                console.log(supplier.mail1);
                 body = body.replace('[NAME]', user.fullname);
                 body = body.replace('[POSITION]', user.position);
                 body = body.replace('[MOBILE]', user.handy);
@@ -319,7 +324,7 @@ export class SupplierDetailComponent implements OnInit {
                 this.orderedOrderDataSource.loadData();
                 this.createdOrderDataSource.loadData();
                 SupplierDetailComponent.sendAndDisplayOrderBundlePdf(this.api, this.authService, this.email,
-                    this.file, newOrderBundle, supplier);
+                    this.file, newOrderBundle, supplier, request);
             });
         });
     }

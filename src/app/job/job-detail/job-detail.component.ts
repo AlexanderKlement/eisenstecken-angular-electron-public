@@ -18,6 +18,7 @@ import {
 import {OrderPrintDialogComponent} from './order-print-dialog/order-print-dialog.component';
 import {FileService} from '../../shared/services/file.service';
 import {ChangePathDialogComponent} from './change-path-dialog/change-path-dialog.component';
+import {OrderDetailComponent} from '../../order/order-detail/order-detail.component';
 
 @Component({
     selector: 'app-job-detail',
@@ -217,6 +218,7 @@ export class JobDetailComponent implements OnInit {
         );
     }
 
+
     private initOrderTable(): void {
         this.orderDataSource = new TableDataSource(
             this.api,
@@ -240,7 +242,8 @@ export class JobDetailComponent implements OnInit {
                             },
                             route: () => {
                                 this.router.navigateByUrl('/order/' + dataSource.id.toString());
-                            }
+                            },
+                            toolTip: OrderDetailComponent.extractOrderToolTips(dataSource)
                         });
                 });
                 return rows;
@@ -252,10 +255,12 @@ export class JobDetailComponent implements OnInit {
                 {name: 'delivery_date', headerName: 'Lieferdatum'},
                 {name: 'status', headerName: 'Status'},
             ],
-            (api) => api.readOrdersToCountOrderToOrderableToIdCountGet(this.jobId)
+            (api) => api.readOrdersToCountOrderToOrderableToIdCountGet(this.jobId),
+            []
         );
         this.orderDataSource.loadData();
     }
+
 
     private initAccessRights() {
         this.authService.currentUserHasRight('orders:all').pipe(first()).subscribe(allowed => {

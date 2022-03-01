@@ -46,6 +46,14 @@ export class OrderDetailComponent implements OnInit {
                 private dialog: MatDialog, private snackBar: MatSnackBar) {
     }
 
+    public static extractOrderToolTips(dataSource: Order): string {
+        let toolTipString = '';
+        for (const article of dataSource.articles) {
+            toolTipString += article.article.name.translation + ' - ';
+        }
+        return toolTipString.substring(0, toolTipString.length - 3);
+    }
+
     ngOnInit(): void {
         this.route.params.subscribe((params) => {
             this.orderId = parseInt(params.id, 10);

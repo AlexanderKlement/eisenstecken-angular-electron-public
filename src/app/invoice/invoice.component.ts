@@ -9,6 +9,8 @@ import {
 import {ImportXmlDialogComponent} from './ingoing/import-xml-dialog/import-xml-dialog.component';
 import {Observable, Subscriber} from 'rxjs';
 import {ConfirmDialogComponent} from '../shared/components/confirm-dialog/confirm-dialog.component';
+import {DefaultService} from 'eisenstecken-openapi-angular-library';
+import {FileService} from '../shared/services/file.service';
 
 @Component({
     selector: 'app-invoice',
@@ -55,7 +57,7 @@ export class InvoiceComponent implements OnInit {
 
     buttons: CustomButton[] = [];
 
-    constructor(private authService: AuthService, private dialog: MatDialog) {
+    constructor(private authService: AuthService, private dialog: MatDialog, private api: DefaultService, private file: FileService) {
     }
 
     ngOnInit(): void {
@@ -104,20 +106,14 @@ export class InvoiceComponent implements OnInit {
     }
 
     private printUnpaidIngoingInvoicesClicked() {
-        this.showNotAvailableDialog();
+        this.api.generateUnpaidIngoingInvoicesPdfIngoingInvoicePdfUnpaidGet().pipe(first()).subscribe((pdf) => {
+            this.file.open(pdf);
+        });
     }
 
     private printUnpaidOutgoingInvoicesClicked() {
-        this.showNotAvailableDialog();
-    }
-
-    private showNotAvailableDialog(): void {
-        this.dialog.open(ConfirmDialogComponent, {
-            width: '400px',
-            data: {
-                title: 'Nicht verfügbar',
-                text: 'Diese Funktion ist in Kürze verfügbar.'
-            }
+        this.api.generateUnpaidOutgoingInvoicesPdfOutgoingInvoicePdfUnpaidGet().pipe(first()).subscribe((pdf) => {
+            this.file.open(pdf);
         });
     }
 

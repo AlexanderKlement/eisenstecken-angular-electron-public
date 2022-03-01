@@ -37,12 +37,12 @@ export class ClientEditComponent extends BaseEditComponent<Client> implements On
             isCompany: new FormControl(''),
             mail1: new FormControl(''),
             mail2: new FormControl(''),
-            tel1: new FormControl(''),
-            tel2: new FormControl(''),
+            tel1: new FormControl('+39'),
+            tel2: new FormControl('+39'),
             // eslint-disable-next-line @typescript-eslint/naming-convention
             contact_person: new FormControl(''),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            vat_number: new FormControl(''),
+            vat_number: new FormControl('IT'),
             // eslint-disable-next-line @typescript-eslint/naming-convention
             fiscal_code: new FormControl(''),
             // eslint-disable-next-line @typescript-eslint/naming-convention

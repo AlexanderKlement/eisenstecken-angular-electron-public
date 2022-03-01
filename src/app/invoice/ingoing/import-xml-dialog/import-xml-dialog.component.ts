@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup} from '@angular/forms';
-import {DefaultService, XmlFile} from 'eisenstecken-openapi-angular-library';
+import {DefaultService, XmlFileStr} from 'eisenstecken-openapi-angular-library';
 import {FileService} from '../../../shared/services/file.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ElectronService} from '../../../core/services';
 import {first} from 'rxjs/operators';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-import-xml-dialog',
@@ -14,9 +15,10 @@ import {first} from 'rxjs/operators';
 export class ImportXmlDialogComponent implements OnInit {
     selectXmlFormGroup: FormGroup;
     title: 'Digitale Rechnungen auswählen';
+    loading = false;
 
     constructor(private api: DefaultService, private file: FileService, private electron: ElectronService,
-                public dialogRef: MatDialogRef<ImportXmlDialogComponent>) {
+                public dialogRef: MatDialogRef<ImportXmlDialogComponent>, private snackBar: MatSnackBar) {
     }
 
     ngOnInit(): void {
@@ -70,9 +72,10 @@ export class ImportXmlDialogComponent implements OnInit {
     }
 
     onSubmitClick() {
-        const xmlFiles: XmlFile[] = [];
+        this.loading = true;
+        const xmlFiles: XmlFileStr[] = [];
         for (const filePath of this.getPathsAsString()) {
-            const buffer = this.electron.fs.readFileSync(filePath, {encoding: 'utf8', flag: 'r'});
+            const buffer = this.electron.fs.readFileSync(filePath, {encoding: 'base64', flag: 'r'});
             xmlFiles.push({
                 filename: filePath.split('\\').pop(),
                 content: buffer
@@ -82,6 +85,11 @@ export class ImportXmlDialogComponent implements OnInit {
         this.api.uploadIngoingInvoiceXmlAsStringIngoingInvoiceUploadXmlAsStringPost(xmlFiles).pipe(first())
             .subscribe(() => {
                 this.dialogRef.close(true);
+            }, () => {
+                this.snackBar.open('Importieren fehlgeschlagen. Bitte Kalle kontaktieren.', 'OK', {
+                    duration: 10000
+                });
+                this.loading = false;
             });
     }
 }

@@ -31,6 +31,13 @@ export class IngoingComponent implements OnInit {
             },
             selectedField: 'id',
         },
+        {
+            name: 'Löschen',
+            navigate: ($event: any, id: number) => {
+                this.deleteClicked($event, id);
+            },
+            selectedField: 'id',
+        },
     ];
     private subscription: Subscription;
 
@@ -208,4 +215,33 @@ export class IngoingComponent implements OnInit {
     }
 
 
+    private deleteClicked($event: any, id: number) {
+        $event.stopPropagation();
+        this.api.readIngoingInvoiceIngoingInvoiceIngoingInvoiceIdGet(id).pipe(first()).subscribe(ingoingInvoice => {
+            const text = `Die Rechnung ${ingoingInvoice.number} vom ${moment(ingoingInvoice.date, 'YYYY-MM-DD')
+                .format('L')} von ${ingoingInvoice.name} löschen?`;
+            const title = 'Rechnung löschen';
+
+            const returnFunction = (result) => {
+                if (result) {
+                    this.api.deleteIngoingInvoiceIngoingInvoiceIngoingInvoiceIdDelete(id).pipe(first()).subscribe(() => {
+                        this.loadTables();
+                    });
+                }
+            };
+
+
+            const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+                width: '400px',
+                data: {
+                    title,
+                    text
+                }
+            });
+
+            dialogRef.afterClosed().subscribe(result => {
+                returnFunction(result);
+            });
+        });
+    }
 }

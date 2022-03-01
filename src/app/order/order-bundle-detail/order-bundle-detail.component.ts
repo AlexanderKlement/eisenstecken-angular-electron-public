@@ -13,6 +13,7 @@ import {FileService} from '../../shared/services/file.service';
 import {EmailService} from '../../shared/services/email.service';
 import {SupplierDetailComponent} from '../../supplier/supplier-detail/supplier-detail.component';
 import {AuthService} from '../../shared/services/auth.service';
+import {OrderDetailComponent} from '../order-detail/order-detail.component';
 
 @Component({
     selector: 'app-order-bundle-detail',
@@ -133,7 +134,8 @@ export class OrderBundleDetailComponent implements OnInit {
                             },
                             route: () => {
                                 this.router.navigateByUrl('/order/' + dataSource.id.toString());
-                            }
+                            },
+                            toolTip: OrderDetailComponent.extractOrderToolTips(dataSource)
                         });
                 });
                 return rows;
@@ -150,7 +152,7 @@ export class OrderBundleDetailComponent implements OnInit {
         this.api.regenerateOrderBundlePdfOrderBundlePdfOrderBundleIdPut(this.orderBundleId).pipe(first()).subscribe((orderBundle) => {
             if (OrderBundleDetailComponent.instanceOfSupplier(orderBundle.order_from)) {
                 SupplierDetailComponent.sendAndDisplayOrderBundlePdf(this.api, this.authService, this.email,
-                    this.file, orderBundle, orderBundle.order_from);
+                    this.file, orderBundle, orderBundle.order_from, orderBundle.request);
             }
         });
     }

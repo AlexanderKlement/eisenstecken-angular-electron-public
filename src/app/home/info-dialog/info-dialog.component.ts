@@ -44,14 +44,30 @@ export class InfoDialogComponent implements OnInit {
                 'kombiniert werden, sollte dies gewünscht sein.',
                 'Bei Bestellungen sollte es möglich sein die Unteraufträge/Projekte einzuklappen, um die ganze Ansicht übersichtlicher' +
                 ' zu gestalten.',
-                'Abgelehnte Aufträge in eigenen Ordner verschieben um Ordner nicht zu voll zu machen.',
                 'Wenn Aufträge angenommen werden, wird der Ordner von Angebote in Projekte verschoben. Sollte eine Datei geöffnet sein ' +
                 '(oder der Server anderweitig keine Schreibberechtigung auf eine oder mehrere Dateien erhält),' +
                 ' werden die restlichen Dateien ' +
                 'trotzdem verschoben. Nach Abschluss dieser Operation sind zwei Ordner vorhanden (Angebote und' +
                 ' Projekte). mit jeweils mindestens' +
                 ' einer Datei. Hier entwerder die Operation nicht durchführen, oder bei Fehlern wieder rückgängig machen.',
-                'Mail die sich bei Bestellung öffnet ist nicht korrekt formatiert.'
+                'Mail die sich bei Bestellung öffnet ist nicht optimal formatiert.'
+            ]
+        },
+        {
+            versionName: '0.8.20',
+            changes: [
+                'Anfragen haben nun einen anderen Text wie Bestellungen in Email.',
+                'Digital unterschriebene Rechnungen (.p7m) werden nun korrekt übertragen und sollten nun problemlos ' +
+                'importiert werden können.',
+                'Eisenstecken-Logo oben links, wird nun nicht mehr so groß wenn man mit der Maus darüberfährt.'
+            ]
+        },
+        {
+            versionName: '0.8.19',
+            changes: [
+                'Eingangsrechnungen können nun gelöscht werden.',
+                'Unbezahlte Ein- und Ausgangsrechnungen können nun gedruckt werden (oder PDF erzeugt).',
+                'Bestellungen zeigen nun eine Vorschau der bestellten Artikel an'
             ]
         },
         {
