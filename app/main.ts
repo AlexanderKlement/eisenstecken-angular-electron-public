@@ -5,7 +5,6 @@ import * as url from 'url';
 import * as Sentry from "@sentry/electron";
 
 
-
 Sentry.init({dsn: "https://60ac4754e4be476a82b10b0e597dfaa6@sentry.kivi.bz.it/25"});
 
 let win: BrowserWindow = null;
@@ -270,5 +269,13 @@ function initIPC() {
     ipcMain.on('restart_app', () => {
         forceClose = true;
         autoUpdater.quitAndInstall();
+    });
+
+    //IPC for get information
+    ipcMain.on('app_path', (event) => {
+        event.sender.send('app_path', {path: app.getPath('appData')});
+    });
+    ipcMain.on('app_path_sync', (event) => {
+        event.returnValue = {path: app.getPath('appData')};
     });
 }

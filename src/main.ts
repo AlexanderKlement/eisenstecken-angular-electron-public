@@ -5,6 +5,8 @@ import {Integrations} from '@sentry/tracing';
 import * as moment from 'moment';
 import {AppModule} from './app/app.module';
 import {APP_CONFIG} from './environments/environment';
+import {LocalConfig} from './app/LocalConfig';
+
 
 Sentry.init({
     dsn: 'https://739b39d0b92749a485e48a80da87816e@sentry.kivi.bz.it/26',
@@ -17,6 +19,8 @@ Sentry.init({
     // We recommend adjusting this value in production
     tracesSampleRate: 0.5,
 });
+
+LocalConfig.getInstance().init();
 
 
 moment.locale('de');
