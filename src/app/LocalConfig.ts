@@ -1,4 +1,3 @@
-import * as fs from 'fs';
 import * as yaml from 'yaml';
 import {APP_CONFIG} from '../environments/environment';
 import {ElectronService} from './core/services';
@@ -42,9 +41,9 @@ export class LocalConfig {
             const path = require('path');
             const configFileFolderPath = path.join(appdataPath, this.configFileFolder);
             this.configFilePath = path.join(configFileFolderPath, this.configFileName);
-            fs.mkdirSync(configFileFolderPath, {recursive: true});
+            electronService.fs.mkdirSync(configFileFolderPath, {recursive: true});
             console.log(this.configFilePath);
-            if (fs.existsSync(this.configFilePath)) {
+            if (electronService.fs.existsSync(this.configFilePath)) {
                 this.readConfig();
             } else {
                 this.writeConfig();
@@ -58,11 +57,13 @@ export class LocalConfig {
 
     private writeConfig(): void {
         const yamlString = yaml.stringify(this.loadedConfig);
-        fs.writeFileSync(this.configFilePath, yamlString, {encoding: this.defaultEncoding});
+        const electronService = new ElectronService();
+        electronService.fs.writeFileSync(this.configFilePath, yamlString, {encoding: this.defaultEncoding});
     }
 
     private readConfig(): void {
-        const configData = fs.readFileSync(this.configFilePath, {encoding: this.defaultEncoding});
+        const electronService = new ElectronService();
+        const configData = electronService.fs.readFileSync(this.configFilePath, {encoding: this.defaultEncoding});
         this.loadedConfig = yaml.parse(configData);
     }
 
