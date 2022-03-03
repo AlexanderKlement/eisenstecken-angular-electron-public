@@ -67,5 +67,4 @@ export class LocalConfig {
         this.loadedConfig = yaml.parse(configData);
     }
 
-
 }

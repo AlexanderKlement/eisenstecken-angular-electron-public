@@ -54,6 +54,15 @@ export class InfoDialogComponent implements OnInit {
             ]
         },
         {
+            versionName: '0.9.0',
+            changes: [
+                'Das Programm wird nun bei einem Klick auf "Minimieren" oder "Schließen" immer rechts unten als in die Taskleiste ' +
+                'geschoben. Wieder geöffnet kann das Programm wie gewohnt über die Verknüpfung oder mit Rechtsklick auf die Taskleiste und ' +
+                '"Offnen". Wichtig: Ein vollständiges Schließen ist nur über die Option "Schließen" in der Taskleiste möglich.',
+
+            ]
+        },
+        {
             versionName: '0.8.20',
             changes: [
                 'Anfragen haben nun einen anderen Text wie Bestellungen in Email.',

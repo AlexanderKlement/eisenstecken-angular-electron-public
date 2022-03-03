@@ -1,4 +1,4 @@
-import {app, BrowserWindow, dialog, ipcMain, screen, shell} from 'electron';
+import {app, BrowserWindow, dialog, ipcMain, Menu, screen, shell, Tray} from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as url from 'url';
@@ -15,17 +15,23 @@ const gotTheLock = app.requestSingleInstanceLock();
 var child = require('child_process').execFile;
 var appPath = app.getAppPath();
 
-var mail64ExecutablePath = appPath + '\\mail64\\mail.exe';
-var mail32ExecutablePath = appPath + '\\mail32\\mail.exe';
-const {autoUpdater} = require('electron-updater');
+const mail64ExecutablePath = appPath + '\\mail64\\mail.exe';
+const mail32ExecutablePath = appPath + '\\mail32\\mail.exe';
+var {autoUpdater} = require('electron-updater');
 
 if (app.getVersion().includes('beta')) {
     console.warn("ATTENTION: This is a BETA Version");
     autoUpdater.channel = "beta"
 }
 
-var forceClose = false;
 
+const eisensteckenIconIco = appPath + '\\assets\\icons\\favicon.ico';
+const eisensteckenIconPng = appPath + '\\assets\\icons\\favicon.png';
+let isQuiting;
+let forceClose = false;
+let tray = null;
+
+initTray();
 initIPC();
 
 try {
@@ -36,6 +42,7 @@ try {
         app.on('second-instance', (event, commandLine, workingDirectory) => {
             console.log("Second instance detected");
             // Someone tried to run a second instance, we should focus our window.
+            win.show();
             if (win) {
                 if (win.isMinimized()) win.restore()
                 win.focus()
@@ -128,7 +135,25 @@ function createWindow(): BrowserWindow {
         win = null;
     });
 
+
+    win.on('minimize', function (event) {
+        event.preventDefault();
+        win.hide();
+    });
+
+    app.on('before-quit', function () {
+        isQuiting = true;
+    });
+
+
     win.on('close', async e => {
+
+        if (!isQuiting) {
+            e.preventDefault();
+            win.hide();
+            e.returnValue = false;
+        }
+        /* I am leaving this for the moment, in case we want to go back
         if (forceClose) {
             return;
         }
@@ -142,6 +167,7 @@ function createWindow(): BrowserWindow {
         })
 
         response || win.destroy()
+        */
     });
 
 
@@ -150,6 +176,27 @@ function createWindow(): BrowserWindow {
     });
 
     return win;
+}
+
+function initTray() {
+    app.whenReady().then(() => {
+        tray = new Tray(eisensteckenIconIco);
+        tray.setToolTip('Eisenstecken-Eibel');
+        tray.setContextMenu(Menu.buildFromTemplate([
+            {
+                label: 'Öffnen', click: function () {
+                    win.show();
+                }
+            },
+            {
+                label: 'Schließen', click: function () {
+                    isQuiting = true;
+                    app.quit();
+                }
+            }
+        ]));
+    })
+
 }
 
 function initIPC() {
@@ -277,5 +324,25 @@ function initIPC() {
     });
     ipcMain.on('app_path_sync', (event) => {
         event.returnValue = {path: app.getPath('appData')};
+    });
+
+
+    //IPC for tray
+    ipcMain.on('show-tray-balloon-request', (event, arg) => {
+        //I'll just do both of them, one of them should open correctly.
+        //If it opens twice we should add a check here
+        console.log("Showing tray balloon: ");
+        console.log(arg[0]);
+        console.log(arg[1]);
+        const image = require('electron').nativeImage.createFromPath(eisensteckenIconPng);
+        tray.displayBalloon({
+            icon: image,
+            iconType: 'custom',
+            title: arg[0],
+            content: arg[1],
+            noSound: false,
+            respectQuietTime: false
+        });
+        event.reply('show-tray-balloon-replay', true);
     });
 }

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {EmailService} from '../shared/services/email.service';
 import {FileService} from '../shared/services/file.service';
+import {TrayService} from '../shared/services/tray.service';
 
 @Component({
     selector: 'app-debug',
@@ -13,8 +14,9 @@ export class DebugComponent implements OnInit {
     openFileFormGroup: FormGroup;
     showFileFormGroup: FormGroup;
     selectFolderFormGroup: FormGroup;
+    trayBalloonFormGroup: FormGroup;
 
-    constructor(private email: EmailService, private file: FileService) {
+    constructor(private email: EmailService, private file: FileService, private tray: TrayService) {
     }
 
     ngOnInit(): void {
@@ -22,6 +24,7 @@ export class DebugComponent implements OnInit {
         this.initOpenFileGroup();
         this.initShowFileGroup();
         this.initSelectFolderGroup();
+        this.initTrayBalloonFromGroup();
     }
 
     onEmailSubmit(): void {
@@ -49,6 +52,11 @@ export class DebugComponent implements OnInit {
 
     showFileSubmit() {
         this.file.show(this.showFileFormGroup.get('path').value);
+    }
+
+    trayBalloonSubmit() {
+        this.tray.showBalloon(this.trayBalloonFormGroup.get('title').value,
+            this.trayBalloonFormGroup.get('content').value);
     }
 
     selectFolderClicked() {
@@ -84,6 +92,13 @@ export class DebugComponent implements OnInit {
     private initSelectFolderGroup() {
         this.selectFolderFormGroup = new FormGroup({
             path: new FormControl(''),
+        });
+    }
+
+    private initTrayBalloonFromGroup() {
+        this.trayBalloonFormGroup = new FormGroup({
+            title: new FormControl(''),
+            content: new FormControl(''),
         });
     }
 }

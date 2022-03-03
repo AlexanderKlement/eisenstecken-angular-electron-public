@@ -46,7 +46,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     onLogoDoubleClick() {
         this.keyBoardEntries = '';
-        this.debugTimer = setInterval(
+        this.debugTimer = setTimeout(
             () => {
                 this.checkCode();
             }, HomeComponent.debugTimeoutLengthSeconds * 1000
