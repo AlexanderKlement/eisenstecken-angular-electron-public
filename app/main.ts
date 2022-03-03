@@ -135,6 +135,13 @@ function createWindow(): BrowserWindow {
         win = null;
     });
 
+    win.on('hide', () => {
+        appHidden();
+    });
+
+    win.on('show', () => {
+        appShown();
+    });
 
     win.on('minimize', function (event) {
         event.preventDefault();
@@ -340,9 +347,19 @@ function initIPC() {
             iconType: 'custom',
             title: arg[0],
             content: arg[1],
-            noSound: false,
+            noSound: true,
             respectQuietTime: false
         });
         event.reply('show-tray-balloon-replay', true);
     });
+}
+
+
+function appShown(): void {
+    win.webContents.send('app-shown');
+}
+
+
+function appHidden(): void {
+    win.webContents.send('app-hidden');
 }

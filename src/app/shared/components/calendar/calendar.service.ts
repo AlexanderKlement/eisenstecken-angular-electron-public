@@ -1,7 +1,8 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 import {CalendarEntry, DefaultService} from 'eisenstecken-openapi-angular-library';
 import {Observable, Subscriber} from 'rxjs';
 import {first} from 'rxjs/operators';
+import {TrayService} from '../../services/tray.service';
 
 export interface CalendarDayListElement {
     day: number;
@@ -18,15 +19,37 @@ export interface CalendarListElement {
 @Injectable({
     providedIn: 'root'
 })
-export class CalendarService {
+export class CalendarService implements OnDestroy {
 
     minutesBetweenUpdate = 10;
     randomMaxSeconds = 100;
 
     private calendarList: CalendarListElement[] = [];
 
-    constructor(private api: DefaultService) {
+    private notificationInterval: NodeJS.Timeout;
+    private notificationIntervalMinutes = 1;
+    private notificationIntervalDistanceMinutes = 15;
+    private calendarEntriesAlreadyNotified: number[] = [];
 
+    constructor(private api: DefaultService, private tray: TrayService) {
+        this.notificationInterval = setInterval(() => {
+            this.api.readNextCalendarEntriesInCalendarNextTimeMinutesGet(this.notificationIntervalDistanceMinutes)
+                .pipe(first()).subscribe((calendarEntries) => {
+                for (const calendarEntry of calendarEntries) {
+                    if (this.calendarEntriesAlreadyNotified.includes(calendarEntry.id)) {
+                        continue;
+                    }
+                    this.tray.showBalloon('Termin in Kürze:', calendarEntry.title);
+                    this.calendarEntriesAlreadyNotified.push(calendarEntry.id);
+                }
+            });
+        }, this.notificationIntervalMinutes * 1000 * 60);
+    }
+
+    ngOnDestroy(): void {
+        //This should not really be necessary, because CalendarService only gets destroyed if main application is getting destroyed
+        console.log('Destroying CalendarService');
+        clearInterval(this.notificationInterval);
     }
 
     public getCalendarEntries(calendarId: number, day: number): Observable<CalendarEntry[]> {
