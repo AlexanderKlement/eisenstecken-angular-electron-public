@@ -1,5 +1,5 @@
 <app-loading [loading]="loading">
-    <mat-card class="small-card" [ngClass]="{'weekend': weekend}">
+    <mat-card class="small-card" [ngClass]="{'weekend': weekend, 'today': today}">
         <mat-card-content>
             <div fxLayout="row" fxLayoutAlign="start center">
                 <div fxFlex="20" class="day-title">
@@ -9,7 +9,8 @@
                 <table class="mat-table entries" fxFlex="80">
                     <tr class="mat-row" *ngFor="let calendarEntry of calendarEntries$ | async"
                         (click)="onCalendarEntryClicked(calendarEntry.id)">
-                        <td class="mat-cell" title="Wann">{{getCalendarStartEndTime(calendarEntry)}}<br>
+                        <td class="mat-cell"
+                            title="Wann">{{getCalendarStartEndTime(calendarEntry)}}<br>
                             <sub *ngIf="public">{{calendarEntry.user.firstname}}</sub>
                         </td>
                         <td class="mat-cell" title="Beschreibung">

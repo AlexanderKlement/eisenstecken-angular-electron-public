@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {Observable, Subscriber} from 'rxjs';
+import {Observable} from 'rxjs';
 import {CalendarEntry, DefaultService} from 'eisenstecken-openapi-angular-library';
 import {first, tap} from 'rxjs/operators';
 import {Router} from '@angular/router';
@@ -25,6 +25,7 @@ export class CalendarDayComponent implements OnInit, OnDestroy {
 
     loading = true;
     weekend = false;
+    today = false;
 
     constructor(private api: DefaultService, private router: Router, private calendar: CalendarService, private dialog: MatDialog) {
     }
@@ -33,6 +34,9 @@ export class CalendarDayComponent implements OnInit, OnDestroy {
         const currentDayId = moment().add(this.day, 'days').day();
         if (currentDayId === 6 || currentDayId === 0) {
             this.weekend = true;
+        }
+        if (this.day === 0) {
+            this.today = true;
         }
         this.calendarEntries$ = this.calendar.getCalendarEntries(this.calendarId, this.day).pipe(
             tap(() => this.loading = false)
@@ -69,6 +73,4 @@ export class CalendarDayComponent implements OnInit, OnDestroy {
         this.titleDayOfTheWeek = todaysDate.format('dddd');
         this.titleDay = todaysDate.format('Do MMMM');
     }
-
-
 }

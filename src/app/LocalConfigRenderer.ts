@@ -2,7 +2,6 @@ import * as yaml from 'yaml';
 import {APP_CONFIG} from '../environments/environment';
 import {ElectronService} from './core/services';
 
-
 export class LocalConfigRenderer {
 
     private static instance: LocalConfigRenderer;
@@ -16,7 +15,6 @@ export class LocalConfigRenderer {
     private defaultConfig = {
         api: APP_CONFIG.apiBasePath
     };
-
 
     private loadedConfig;
 
@@ -66,5 +64,4 @@ export class LocalConfigRenderer {
         const configData = electronService.fs.readFileSync(this.configFilePath, {encoding: this.defaultEncoding});
         this.loadedConfig = yaml.parse(configData);
     }
-
 }
