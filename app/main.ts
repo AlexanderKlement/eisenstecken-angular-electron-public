@@ -3,6 +3,8 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as url from 'url';
 import * as Sentry from "@sentry/electron";
+import {autoUpdater} from 'electron-updater';
+import {LocalConfigMain} from './LocalConfigMain';
 
 
 Sentry.init({dsn: "https://60ac4754e4be476a82b10b0e597dfaa6@sentry.kivi.bz.it/25"});
@@ -13,17 +15,25 @@ const args = process.argv.slice(1),
 const gotTheLock = app.requestSingleInstanceLock();
 
 var child = require('child_process').execFile;
-var appPath = app.getAppPath();
+const appPath = app.getAppPath();
 
 const mail64ExecutablePath = appPath + '\\mail64\\mail.exe';
 const mail32ExecutablePath = appPath + '\\mail32\\mail.exe';
-var {autoUpdater} = require('electron-updater');
+
+const localConfig = LocalConfigMain.getInstance();
 
 if (app.getVersion().includes('beta')) {
-    console.warn("ATTENTION: This is a BETA Version");
-    autoUpdater.channel = "beta"
+    autoUpdater.channel = "beta";
+    localConfig.setChannel("beta");
+} else {
+    autoUpdater.channel = localConfig.getChannel();
 }
 
+if (autoUpdater.channel == "beta") {
+    console.warn("ATTENTION: This is a BETA Version");
+}
+
+autoUpdater.allowDowngrade = false;
 
 const eisensteckenIconIco = appPath + '\\assets\\icons\\favicon.ico';
 const eisensteckenIconPng = appPath + '\\assets\\icons\\favicon.png';
@@ -87,8 +97,7 @@ try {
 }
 
 function createWindow(): BrowserWindow {
-    const electronScreen = screen;
-    const size = electronScreen.getPrimaryDisplay().workAreaSize;
+    const size = screen.getPrimaryDisplay().workAreaSize;
     // Create the browser window.
     win = new BrowserWindow({
         x: 0,

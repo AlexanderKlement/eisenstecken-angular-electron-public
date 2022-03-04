@@ -3,18 +3,18 @@ import {APP_CONFIG} from '../environments/environment';
 import {ElectronService} from './core/services';
 
 
-export class LocalConfig {
+export class LocalConfigRenderer {
 
-    private static instance: LocalConfig;
+    private static instance: LocalConfigRenderer;
 
     private configFileFolder = 'Kivi/Eisenstecken-Eibel';
-    private configFileName = 'config.yml';
+    private configFileName = 'config_renderer.yml';
 
     private configFilePath: string;
 
     private defaultEncoding: BufferEncoding = 'utf8';
     private defaultConfig = {
-        api: APP_CONFIG.apiBasePath,
+        api: APP_CONFIG.apiBasePath
     };
 
 
@@ -24,12 +24,12 @@ export class LocalConfig {
         this.init();
     }
 
-    public static getInstance(): LocalConfig {
-        if (!LocalConfig.instance) {
-            LocalConfig.instance = new LocalConfig();
+    public static getInstance(): LocalConfigRenderer {
+        if (!LocalConfigRenderer.instance) {
+            LocalConfigRenderer.instance = new LocalConfigRenderer();
         }
 
-        return LocalConfig.instance;
+        return LocalConfigRenderer.instance;
     }
 
     public init(): void {
@@ -42,7 +42,7 @@ export class LocalConfig {
             const configFileFolderPath = path.join(appdataPath, this.configFileFolder);
             this.configFilePath = path.join(configFileFolderPath, this.configFileName);
             electronService.fs.mkdirSync(configFileFolderPath, {recursive: true});
-            console.log(this.configFilePath);
+            console.log('Renderer Config: ' + this.configFilePath);
             if (electronService.fs.existsSync(this.configFilePath)) {
                 this.readConfig();
             } else {

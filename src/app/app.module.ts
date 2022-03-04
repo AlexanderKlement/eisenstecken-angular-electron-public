@@ -53,7 +53,7 @@ import {ServiceWorkerModule} from '@angular/service-worker';
 import {MatIconModule} from '@angular/material/icon';
 import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
 import {DebugModule} from './debug/debug.module';
-import {LocalConfig} from './LocalConfig';
+import {LocalConfigRenderer} from './LocalConfigRenderer';
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader => new TranslateHttpLoader(http, './assets/i18n/', '.json');
 
@@ -61,7 +61,7 @@ registerLocaleData(localeDe, 'de-DE', localeDeExtra);
 
 export function apiConfigFactory(): Configuration {
     const params: ConfigurationParameters = {
-        basePath: LocalConfig.getInstance().getApi(),
+        basePath: LocalConfigRenderer.getInstance().getApi(),
     };
     return new Configuration(params);
 }
@@ -143,7 +143,7 @@ export function apiConfigFactory(): Configuration {
             useFactory: (authService: AuthService) => new Configuration(
                 {
                     accessToken: authService.getToken.bind(authService),
-                    basePath: LocalConfig.getInstance().getApi(),
+                    basePath: LocalConfigRenderer.getInstance().getApi(),
                 }
             ),
             deps: [AuthService],

@@ -5,7 +5,7 @@ import {Integrations} from '@sentry/tracing';
 import * as moment from 'moment';
 import {AppModule} from './app/app.module';
 import {APP_CONFIG} from './environments/environment';
-import {LocalConfig} from './app/LocalConfig';
+import {LocalConfigRenderer} from './app/LocalConfigRenderer';
 
 
 Sentry.init({
@@ -20,7 +20,7 @@ Sentry.init({
     tracesSampleRate: 0.5,
 });
 
-LocalConfig.getInstance().init();
+LocalConfigRenderer.getInstance().init();
 
 
 moment.locale('de');
