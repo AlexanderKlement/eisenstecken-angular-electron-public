@@ -1,1 +1,10 @@
 @use "../shared/components/base-edit/base-edit.component";
+
+::ng-deep button.unpaid {
+  background-color: #ee9090 !important;
+}
+
+
+::ng-deep button.paid {
+  background-color: #99ff99 !important;
+}

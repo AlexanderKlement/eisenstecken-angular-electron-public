@@ -21,10 +21,12 @@ export class OutgoingComponent implements OnInit {
     paidOutgoingInvoiceDataSource: TableDataSource<OutgoingInvoice>;
     buttons: TableButton[] = [
         {
-            name: 'Zahlung',
+            name: (condition: any) => (condition) ? 'Zahlung entfernen' : ' Zahlung hinzufügen',
+            class: (condition: any) => (condition) ? 'paid' : ' unpaid',
             navigate: ($event: any, id: number) => {
                 this.paidClicked($event, id);
             },
+            color: (_) => 'primary',
             selectedField: 'id',
         },
     ];
@@ -108,6 +110,7 @@ export class OutgoingComponent implements OnInit {
                                 rgNum: dataSource.number,
                                 id: dataSource.id,
                                 paid: dataSource.paid ? 'Ja' : 'Nein',
+                                condition: dataSource.paid
                             },
                             route: () => {
                                 this.authService.currentUserHasRight('outgoing_invoices:modify').pipe(first()).subscribe(allowed => {
@@ -129,7 +132,6 @@ export class OutgoingComponent implements OnInit {
                 {name: 'client_name', headerName: 'Kunde'},
                 {name: 'rgNum', headerName: 'Nummer'},
                 {name: 'date', headerName: 'Datum'},
-                {name: 'paid', headerName: 'Bezahlen'}
             ],
             (api) => api.countOutgoingInvoicesOutgoingInvoiceCountGet()
         );
@@ -152,6 +154,7 @@ export class OutgoingComponent implements OnInit {
                                 date: moment(dataSource.date, 'YYYY-MM-DD').format('L'),
                                 rgNum: dataSource.number,
                                 id: dataSource.id,
+                                condition: dataSource.paid
                             },
                             route: () => {
                                 this.authService.currentUserHasRight('outgoing_invoices:modify').pipe(first()).subscribe(allowed => {
@@ -195,6 +198,7 @@ export class OutgoingComponent implements OnInit {
                                 date: moment(dataSource.date, 'YYYY-MM-DD').format('L'),
                                 rgNum: dataSource.number,
                                 id: dataSource.id,
+                                condition: dataSource.paid
                             },
                             route: () => {
                                 this.authService.currentUserHasRight('outgoing_invoices:modify').pipe(first()).subscribe(allowed => {

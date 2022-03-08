@@ -37,11 +37,6 @@ export class InfoDialogComponent implements OnInit {
         {
             versionName: 'In Bearbeitung:',
             changes: [
-                'Die Anzahl der ungelesenen Chat Nachrichten stimmt nicht. Außerdem wird der Wert bei jedem ' +
-                'Neustart zurückgesetzt.',
-                'Um Chat Mitteilungen nicht zu verpassen, solle Programm statt mit "x" zu schließen in Taskleiste minimiert werden. ' +
-                'Eingehende Nachrichten werden dann als Benachrichtigung angezeigt. Diese Funktion kann später vielleicht mit Terminen ' +
-                'kombiniert werden, sollte dies gewünscht sein.',
                 'Bei Bestellungen sollte es möglich sein die Unteraufträge/Projekte einzuklappen, um die ganze Ansicht übersichtlicher' +
                 ' zu gestalten.',
                 'Wenn Aufträge angenommen werden, wird der Ordner von Angebote in Projekte verschoben. Sollte eine Datei geöffnet sein ' +
@@ -54,12 +49,30 @@ export class InfoDialogComponent implements OnInit {
             ]
         },
         {
+            versionName: '0.9.1',
+            changes: [
+                'Der Chat zeigt nun nicht mehr die Anzahl an ungelesenen Nachrichten an, weil der Benutzer jetzt bei' +
+                ' jeder Nachricht eine Benachrichtigung erhält.',
+                'Spalten in Tabellen haben nur einen kleinen Abstand, um die Lesbarkeit zu erhöhen.',
+                'Die ESC-Taste hat nun die gleiche Funktion wie die Zurücktaste.',
+                'Abgeschlossene Aufträge werden nun in einen separaten Ordner verschoben.',
+                'Mehrwertsteuer und Rabatt werden nun im Angebot richtig angezeigt.',
+                'Suche nach Bestellungen in Aufträgen funktioniert nun auch auf Spalte "Herkunft"',
+                'Passwordmanager gibt mehr übersicht über geänderte Passwörter',
+                'Bis Logout Knopf verschoben wird, einen Bestätigungsdialog eingeführt',
+                'Zahlungen bei Ausgangsrechnungen sollte nun wieder funktionieren.',
+                'Tasten bei Zahlungen je nach Bezahlstatus geändert.'
+            ]
+        },
+        {
             versionName: '0.9.0',
             changes: [
-                'Das Programm wird nun bei einem Klick auf "Minimieren" oder "Schließen" immer rechts unten als in die Taskleiste ' +
-                'geschoben. Wieder geöffnet kann das Programm wie gewohnt über die Verknüpfung oder mit Rechtsklick auf die Taskleiste und ' +
+                'Das Programm wird nun bei einem Klick auf "Minimieren" oder "Schließen" immer rechts ' +
+                'unten als in die Taskleiste ' +
+                'geschoben. Wieder geöffnet kann das Programm wie gewohnt über die Verknüpfung oder ' +
+                'mit Rechtsklick auf die Taskleiste und ' +
                 '"Offnen". Wichtig: Ein vollständiges Schließen ist nur über die Option "Schließen" in der Taskleiste möglich.',
-
+                'Der aktuelle Tag wird nun im Kalender farbig markiert.'
             ]
         },
         {

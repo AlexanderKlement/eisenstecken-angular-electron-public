@@ -30,9 +30,6 @@ export class CalendarsChatFrameComponent implements OnInit, OnDestroy {
     this.checkIfUnreadMessagesInterval = setInterval(() => {
       this.resetUnreadChatMessageCountIfActive();
     }, 1000 * this.secondsCheckIfUnreadMessages);
-    this.chatService.getAmountOfUnreadMessages().subscribe((amountOfUnreadChatMessages) => {
-      this.chatTabName = 'Chat ' + amountOfUnreadChatMessages.toString();
-    });
   }
 
   ngOnDestroy(): void {

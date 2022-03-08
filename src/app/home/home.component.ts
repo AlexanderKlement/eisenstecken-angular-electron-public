@@ -3,6 +3,7 @@ import {AuthService} from '../shared/services/auth.service';
 import {InfoDialogComponent} from './info-dialog/info-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
+import {ConfirmDialogComponent} from '../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
     selector: 'app-home',
@@ -41,7 +42,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     logoutClicked(): void {
-        this.authService.doLogout();
+        const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+            width: '400px',
+            data: {
+                title: 'Abmelden?',
+                text: 'Soll der Benutzer abgemeldet werden?'
+            }
+        });
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.authService.doLogout();
+            }
+        });
     }
 
     onLogoDoubleClick() {

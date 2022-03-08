@@ -25,17 +25,21 @@ export class IngoingComponent implements OnInit {
 
     buttons: TableButton[] = [
         {
-            name: 'Zahlung',
+            name: (condition: any) => (condition) ? 'Zahlung entfernen' : ' Zahlung hinzufügen',
+            class: (condition: any) => (condition) ? 'paid' : ' unpaid',
             navigate: ($event: any, id: number) => {
                 this.paidClicked($event, id);
             },
+            color: (_) => 'primary',
             selectedField: 'id',
         },
         {
-            name: 'Löschen',
+            name: (_) => 'Löschen',
+            class: (_) => '',
             navigate: ($event: any, id: number) => {
                 this.deleteClicked($event, id);
             },
+            color: (_) => 'primary',
             selectedField: 'id',
         },
     ];
@@ -126,7 +130,9 @@ export class IngoingComponent implements OnInit {
                                 name: dataSource.name,
                                 date: moment(dataSource.date).format('L'),
                                 id: dataSource.id,
+                                total: formatCurrency(dataSource.total, 'de-DE', 'EUR'),
                                 paid: dataSource.paid ? 'Ja' : 'Nein',
+                                condition: dataSource.paid
                             },
                             route: () => {
                                 this.router.navigateByUrl('/invoice/ingoing/' + dataSource.id.toString());
@@ -139,7 +145,7 @@ export class IngoingComponent implements OnInit {
                 {name: 'name', headerName: 'Firma'},
                 {name: 'rgNum', headerName: 'Nummer'},
                 {name: 'date', headerName: 'Datum'},
-                {name: 'paid', headerName: 'Bezahlt'}
+                {name: 'total', headerName: 'Gesamtpreis [mit MwSt.]'},
             ],
             (api) => api.countIngoingInvoicesIngoingInvoiceCountGet()
         );
@@ -161,6 +167,8 @@ export class IngoingComponent implements OnInit {
                                 name: dataSource.name,
                                 date: moment(dataSource.date).format('L'),
                                 id: dataSource.id,
+                                total: formatCurrency(dataSource.total, 'de-DE', 'EUR'),
+                                condition: dataSource.paid
                             },
                             route: () => {
                                 this.router.navigateByUrl('/invoice/ingoing/' + dataSource.id.toString());
@@ -173,6 +181,7 @@ export class IngoingComponent implements OnInit {
                 {name: 'name', headerName: 'Firma'},
                 {name: 'rgNum', headerName: 'Nummer'},
                 {name: 'date', headerName: 'Datum'},
+                {name: 'total', headerName: 'Gesamtpreis [mit MwSt.]'},
             ],
             (api) => api.countIngoingInvoicesIngoingInvoiceCountGet(true)
         );
@@ -195,6 +204,7 @@ export class IngoingComponent implements OnInit {
                                 date: moment(dataSource.date).format('L'),
                                 total: formatCurrency(dataSource.total, 'de-DE', 'EUR'),
                                 id: dataSource.id,
+                                condition: dataSource.paid
                             },
                             route: () => {
                                 this.router.navigateByUrl('/invoice/ingoing/' + dataSource.id.toString());

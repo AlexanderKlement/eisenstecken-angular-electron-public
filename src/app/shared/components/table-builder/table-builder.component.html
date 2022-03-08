@@ -21,9 +21,9 @@
         <ng-container *ngIf="buttons.length > 0" matColumnDef="actions">
             <mat-header-cell *matHeaderCellDef>Aktionen</mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <button *ngFor="let button of buttons" color="primary"
+                <button *ngFor="let button of buttons" [color]="button.color(element.values['condition'])" [class]="button.class(element.values['condition'])"
                         (click)="button.navigate($event, element.values['id'])"
-                        mat-raised-button>{{button.name}}</button>
+                        mat-raised-button>{{button.name(element.values['condition'])}}</button>
             </mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="dataSource.columnIdentifiers; sticky: true"></mat-header-row>

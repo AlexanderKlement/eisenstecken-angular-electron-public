@@ -4,9 +4,12 @@ import {MatPaginator} from '@angular/material/paginator';
 import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 import {fromEvent, Subscription} from 'rxjs';
 import {DataSourceClass} from '../../types';
+import {ThemePalette} from '@angular/material/core';
 
 export interface TableButton {
-    name: string;
+    name: (values: any) => string;
+    class: (values: any) => string;
+    color: (values: any) => ThemePalette;
     navigate: ($event: any, id: number) => void;
     selectedField: string;
 }

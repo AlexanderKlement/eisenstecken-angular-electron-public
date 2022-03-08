@@ -201,6 +201,8 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
                     // eslint-disable-next-line @typescript-eslint/naming-convention
                     discount_amount: offer.discount_amount,
                     // eslint-disable-next-line @typescript-eslint/naming-convention
+                    vat_id: offer.vat.id,
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
                     material_description: offer.material_description
                 });
                 this.jobId = offer.job_id;

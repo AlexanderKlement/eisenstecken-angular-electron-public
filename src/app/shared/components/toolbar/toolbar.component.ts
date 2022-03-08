@@ -24,9 +24,12 @@ export class ToolbarComponent implements OnInit {
     // @ts-ignore
     @HostListener('window:popstate', ['$event'])
 
-    //@HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
-    //    this.backClicked();
-    //}
+    @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+        if (event.key === 'Escape') {
+            console.log('Escape pressed');
+            this.navigation.back();
+        }
+    }
 
     onBrowserBackBtnClose(event: Event): void {
         event.preventDefault();
