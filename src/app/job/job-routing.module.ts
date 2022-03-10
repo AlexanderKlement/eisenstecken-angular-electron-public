@@ -12,12 +12,18 @@ const routes: Routes = [
     {
         path: 'job',
         component: JobComponent,
-        data: {requiresLogin: true}
+        data: {
+            requiresLogin: true,
+            shouldDetach: true
+        }
     },
     {
         path: 'job/:id',
         component: JobDetailComponent,
-        data: {requiresLogin: true},
+        data: {
+            requiresLogin: true,
+            shouldDetach: true
+        },
         canActivate: [AccessGuard]
     },
     {
@@ -71,7 +77,10 @@ const routes: Routes = [
     {
         path: 'work_hours/:job_id',
         component: WorkHoursComponent,
-        data: {requiresLogin: true},
+        data: {
+            requiresLogin: true,
+            shouldDetach: true
+        },
         canActivate: [AccessGuard]
     },
 ];

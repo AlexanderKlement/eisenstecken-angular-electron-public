@@ -11,12 +11,18 @@ const routes: Routes = [
     {
         path: 'supplier',
         component: SupplierComponent,
-        data: {requiresLogin: true}
+        data: {
+            requiresLogin: true,
+            shouldDetach: true
+        }
     },
     {
         path: 'supplier/:id',
         component: SupplierDetailComponent,
-        data: {requiresLogin: true}
+        data: {
+            requiresLogin: true,
+            shouldDetach: true
+        }
     },
     {
         path: 'supplier/edit/:id',
@@ -26,7 +32,10 @@ const routes: Routes = [
     {
         path: 'stock/:id',
         component: StockDetailComponent,
-        data: {requiresLogin: true}
+        data: {
+            requiresLogin: true,
+            shouldDetach: true
+        }
     },
     {
         path: 'stock/edit/:id',

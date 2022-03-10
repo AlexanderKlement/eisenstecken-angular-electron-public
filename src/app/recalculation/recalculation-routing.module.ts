@@ -9,12 +9,18 @@ const routes: Routes = [
     {
         path: 'recalculation',
         component: RecalculationComponent,
-        data: {requiresLogin: true}
+        data: {
+            requiresLogin: true,
+            shouldDetach: true
+        }
     },
     {
         path: 'recalculation/:id',
         component: RecalculationDetailComponent,
-        data: {requiresLogin: true}
+        data: {
+            requiresLogin: true,
+            shouldDetach: true
+        }
     },
     {
         path: 'recalculation/edit/:id/:job_id',

@@ -98,7 +98,7 @@ export class ChatService implements OnDestroy {
                         this.lastId = message.id;
                     }
                     this.messageSubscriber.next(message);
-                    if (!this.chatComponentRegistered) {//if (!this.chatComponentRegistered && !message.own && (this.lastReadId < message.id)) {
+                    if (!this.chatComponentRegistered) {
                         this.tray.showBalloon('Neue Nachricht von ' + message.sender.fullname, message.text);
                     }
                     this.checkIfUnreadMessageCountNeedsIncrement(message);
@@ -131,7 +131,7 @@ export class ChatService implements OnDestroy {
             return;
         }
         this.amountOfUnreadMessages++;
-        this.pushUnreadMessageCountToSubscriber();
+        //this.pushUnreadMessageCountToSubscriber();
     }
 
 

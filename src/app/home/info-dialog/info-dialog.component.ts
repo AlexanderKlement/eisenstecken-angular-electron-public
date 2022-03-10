@@ -49,6 +49,14 @@ export class InfoDialogComponent implements OnInit {
             ]
         },
         {
+            versionName: '0.9.2',
+            changes: [
+                'Alle Seiten merken sich nun ihren jeweiligen Status. Das heißt, das Such oder Filteroptionen auch noch ' +
+                'verfügbar sind wenn man eine andere Seite geöffnet hat.',
+
+            ]
+        },
+        {
             versionName: '0.9.1',
             changes: [
                 'Der Chat zeigt nun nicht mehr die Anzahl an ungelesenen Nachrichten an, weil der Benutzer jetzt bei' +
@@ -58,7 +66,7 @@ export class InfoDialogComponent implements OnInit {
                 'Abgeschlossene Aufträge werden nun in einen separaten Ordner verschoben.',
                 'Mehrwertsteuer und Rabatt werden nun im Angebot richtig angezeigt.',
                 'Suche nach Bestellungen in Aufträgen funktioniert nun auch auf Spalte "Herkunft"',
-                'Passwordmanager gibt mehr übersicht über geänderte Passwörter',
+                'Passwordmanager gibt mehr Übersicht über geänderte Passwörter',
                 'Bis Logout Knopf verschoben wird, einen Bestätigungsdialog eingeführt',
                 'Zahlungen bei Ausgangsrechnungen sollte nun wieder funktionieren.',
                 'Tasten bei Zahlungen je nach Bezahlstatus geändert.'

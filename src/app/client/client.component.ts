@@ -37,6 +37,10 @@ export class ClientComponent implements OnInit {
         });
     }
 
+    public onAttach(): void {
+        console.log('Client attaching');
+    }
+
     private initPrivateClients() {
         this.privateClientDataSource = new TableDataSource(
             this.api,

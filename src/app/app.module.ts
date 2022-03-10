@@ -5,6 +5,8 @@ import {HttpClientModule, HttpClient, HTTP_INTERCEPTORS} from '@angular/common/h
 import {CoreModule} from './core/core.module';
 import {SharedModule} from './shared/shared.module';
 import {AppRoutingModule} from './app-routing.module';
+import {RouteReuseStrategy} from '@angular/router';
+import {AppRouterOutletDirective} from './router-outlet';
 
 // NG Translate
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
@@ -54,6 +56,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
 import {DebugModule} from './debug/debug.module';
 import {LocalConfigRenderer} from './LocalConfigRenderer';
+import {CustomReuseStrategy} from './reuse-strategy';
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader => new TranslateHttpLoader(http, './assets/i18n/', '.json');
 
@@ -67,7 +70,7 @@ export function apiConfigFactory(): Configuration {
 }
 
 @NgModule({
-    declarations: [AppComponent],
+    declarations: [AppComponent, AppRouterOutletDirective],
     imports: [
         CommonModule,
         BrowserModule,
@@ -162,6 +165,7 @@ export function apiConfigFactory(): Configuration {
             },
             {provide: MatPaginatorIntl, useValue: getGermanPaginatorIntl()},
             {provide: HTTP_INTERCEPTORS, useClass: GlobalHttpInterceptorService, multi: true},
+            {provide: RouteReuseStrategy, useClass: CustomReuseStrategy}
         ],
     bootstrap: [AppComponent]
 })

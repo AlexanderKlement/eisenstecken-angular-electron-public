@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {ElectronService} from './core/services';
 import {TranslateService} from '@ngx-translate/core';
-import {DefaultService} from 'eisenstecken-openapi-angular-library';
 import {APP_CONFIG} from '../environments/environment';
 
 @Component({

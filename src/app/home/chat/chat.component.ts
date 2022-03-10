@@ -40,9 +40,11 @@ export class ChatComponent implements OnInit, OnDestroy {
             }));
         this.recipients$ = this.chatService.getRecipients(); //unsubscribes automatically
         console.log('Chat component started');
-        this.electron.ipcRenderer.on('app-shown', () => {
-            this.chatService.subscribe();
-        });
+        if (this.electron.isElectron) {
+            this.electron.ipcRenderer.on('app-shown', () => {
+                this.chatService.subscribe();
+            });
+        }
     }
 
     ngOnDestroy(): void {

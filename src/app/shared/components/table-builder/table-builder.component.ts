@@ -28,6 +28,8 @@ export class TableBuilderComponent<T extends DataSourceClass> implements OnInit,
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild('input') input: ElementRef;
     subscription: Subscription;
+    refreshInterval: NodeJS.Timeout;
+    refreshRateSeconds = 60;
 
     constructor() {
     }
@@ -41,6 +43,10 @@ export class TableBuilderComponent<T extends DataSourceClass> implements OnInit,
                 headerName: 'Aktionen',
             });
         }
+        this.refreshInterval = setInterval(() => {
+            console.log('Refreshing Table');
+            this.loadDataPage(false);
+        }, this.refreshRateSeconds * 1000);
     }
 
     ngAfterViewInit(): void {
@@ -52,15 +58,21 @@ export class TableBuilderComponent<T extends DataSourceClass> implements OnInit,
         this.subscription.add(this.paginator.page.pipe(tap(() => this.loadDataPage())).subscribe());
     }
 
+    onAttach(): void {
+        console.log('Table getting reattached');
+        this.loadDataPage(); //This seems not work
+    }
+
     ngOnDestroy(): void {
         this.subscription.unsubscribe();
+        clearInterval(this.refreshInterval);
     }
 
     public rowClicked(route: VoidFunction): void {
         route();
     }
 
-    private loadDataPage() {
-        this.dataSource.loadData(this.input.nativeElement.value, '', this.paginator.pageIndex, this.paginator.pageSize);
+    private loadDataPage(enableLoading: boolean = true) {
+        this.dataSource.loadData(this.input.nativeElement.value, '', this.paginator.pageIndex, this.paginator.pageSize, enableLoading);
     }
 }

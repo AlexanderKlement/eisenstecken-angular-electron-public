@@ -24,7 +24,10 @@ const routes: Routes = [
         //redirectTo: 'home',
         component: HomeComponent,
         //pathMatch: 'full',
-        data: {requiresLogin: true},
+        data: {
+            requiresLogin: true,
+            shouldDetach: true
+        },
         canActivate: [AccessGuard]
     },
     {

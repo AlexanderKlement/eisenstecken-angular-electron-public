@@ -10,12 +10,18 @@ const routes: Routes = [
     {
         path: 'employee',
         component: EmployeeComponent,
-        data: {requiresLogin: true}
+        data: {
+            requiresLogin: true,
+            shouldDetach: true
+        }
     },
     {
         path: 'employee/:id',
         component: EmployeeDetailComponent,
-        data: {requiresLogin: true}
+        data: {
+            requiresLogin: true,
+            shouldDetach: true
+        }
     },
     {
         path: 'work_day/new/:id',
@@ -25,12 +31,18 @@ const routes: Routes = [
     {
         path: 'meal/:id',
         component: MealComponent,
-        data: {requiresLogin: true}
+        data: {
+            requiresLogin: true,
+            shouldDetach: true
+        }
     },
     {
         path: 'service/:id',
         component: ServiceComponent,
-        data: {requiresLogin: true}
+        data: {
+            requiresLogin: true,
+            shouldDetach: true
+        }
     }
 ];
 

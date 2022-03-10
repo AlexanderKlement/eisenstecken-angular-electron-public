@@ -7,7 +7,10 @@ const routes: Routes = [
     {
         path: 'delivery_note',
         component: DeliveryNoteComponent,
-        data: {requiresLogin: true}
+        data: {
+            requiresLogin: true,
+            shouldDetach: true
+        }
     },
     {
         path: 'delivery_note/:id',

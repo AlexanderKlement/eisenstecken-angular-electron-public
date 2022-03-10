@@ -8,12 +8,18 @@ const routes: Routes = [
     {
         path: 'invoice',
         component: InvoiceComponent,
-        data: {requiresLogin: true}
+        data: {
+            requiresLogin: true,
+            shouldDetach: true
+        }
     },
     {
         path: 'invoice/ingoing/:id',
         component: IngoingDetailComponent,
-        data: {requiresLogin: true},
+        data: {
+            requiresLogin: true,
+            shouldDetach: true
+        },
         canActivate: [AccessGuard]
     },
 ];

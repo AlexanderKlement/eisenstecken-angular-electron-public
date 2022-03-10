@@ -110,9 +110,12 @@ export class TableDataSource<T extends DataSourceClass> extends DataSource<Row<T
         this.loadingSubject.complete();
     }
 
-    public loadData(filter?: string, sortDirection?: string, pageIndex?: number, pageSize?: number): void {
+    public loadData(filter?: string, sortDirection?: string, pageIndex?: number, pageSize?: number, enableLoading: boolean = true): void {
 
-        this.loadingSubject.next(true);
+        if (enableLoading) {
+            this.loadingSubject.next(true);
+        }
+
 
         this.findData(filter || defaultValues.filter,
             sortDirection || defaultValues.sortDirection,
