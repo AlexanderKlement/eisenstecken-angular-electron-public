@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ComponentRef, OnInit, ViewChild} from '@angular/core';
 import {Client, DefaultService, Job} from 'eisenstecken-openapi-angular-library';
 import {InfoDataSource} from '../../shared/components/info-builder/info-builder.datasource';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -10,6 +10,7 @@ import {first} from 'rxjs/operators';
 import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
+import {Observable, Subscriber} from 'rxjs';
 
 @Component({
     selector: 'app-client-detail',
@@ -25,9 +26,23 @@ export class ClientDetailComponent implements OnInit {
     public buttons: CustomButton[] = [];
     jobsAvailable = false;
 
+    public $refresh: Observable<void>;
+    private $refreshSubscriber: Subscriber<void>;
+
     constructor(private api: DefaultService, private dialog: MatDialog,
                 private snackBar: MatSnackBar, private router: Router, private route: ActivatedRoute,
                 private authService: AuthService) {
+    }
+
+    initRefreshObservables(): void {
+        this.$refresh = new Observable<void>((subscriber => {
+            this.$refreshSubscriber = subscriber;
+        }));
+    }
+
+    onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+        console.log('Getting attached');
+        this.$refreshSubscriber.next();
     }
 
     ngOnInit(): void {
@@ -76,6 +91,7 @@ export class ClientDetailComponent implements OnInit {
                 );
             }
         });
+        this.initRefreshObservables();
     }
 
     private initInfoDataSource() {

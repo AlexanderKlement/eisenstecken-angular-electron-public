@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ComponentRef, OnInit} from '@angular/core';
 import {TableDataSource} from '../shared/components/table-builder/table-builder.datasource';
 import {DefaultService, Client} from 'eisenstecken-openapi-angular-library';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {CustomButton} from '../shared/components/toolbar/toolbar.component';
 import {AuthService} from '../shared/services/auth.service';
 import {first} from 'rxjs/operators';
+import {Observable, Subscriber} from 'rxjs';
 
 @Component({
     selector: 'app-client',
@@ -18,6 +19,8 @@ export class ClientComponent implements OnInit {
     public businessClientDataSource: TableDataSource<Client>;
 
     public buttons: CustomButton[] = [];
+    public $refresh: Observable<void>;
+    private $refreshSubscriber: Subscriber<void>;
 
     constructor(private api: DefaultService, private router: Router, private authService: AuthService) {
     }
@@ -35,10 +38,18 @@ export class ClientComponent implements OnInit {
                 });
             }
         });
+        this.initRefreshObservables();
     }
 
-    public onAttach(): void {
-        console.log('Client attaching');
+    initRefreshObservables(): void {
+        this.$refresh = new Observable<void>((subscriber => {
+            this.$refreshSubscriber = subscriber;
+        }));
+    }
+
+    onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+        console.log('Getting attached');
+        this.$refreshSubscriber.next();
     }
 
     private initPrivateClients() {

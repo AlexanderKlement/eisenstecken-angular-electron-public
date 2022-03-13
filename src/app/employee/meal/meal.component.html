@@ -1,4 +1,4 @@
 <app-toolbar [title]="title"></app-toolbar>
 <div class="window-container">
-    <app-table-builder [dataSource]="mealDataSource"></app-table-builder>
+    <app-table-builder  [$refresh]="$refresh" [dataSource]="mealDataSource"></app-table-builder>
 </div>

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {TableDataSource} from '../../shared/components/table-builder/table-builder.datasource';
 import {DefaultService, OutgoingInvoice} from 'eisenstecken-openapi-angular-library';
 import {LockService} from '../../shared/services/lock.service';
@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import {TableButton} from '../../shared/components/table-builder/table-builder.component';
 import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
+import {Observable} from 'rxjs';
 
 @Component({
     selector: 'app-outgoing',
@@ -16,9 +17,12 @@ import {MatDialog} from '@angular/material/dialog';
 })
 export class OutgoingComponent implements OnInit {
 
+
+    @Input() $refresh: Observable<void>;
     allOutgoingInvoiceDataSource: TableDataSource<OutgoingInvoice>;
     unPaidOutgoingInvoiceDataSource: TableDataSource<OutgoingInvoice>;
     paidOutgoingInvoiceDataSource: TableDataSource<OutgoingInvoice>;
+
     buttons: TableButton[] = [
         {
             name: (condition: any) => (condition) ? 'Zahlung entfernen' : ' Zahlung hinzufügen',

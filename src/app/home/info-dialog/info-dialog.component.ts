@@ -49,11 +49,20 @@ export class InfoDialogComponent implements OnInit {
             ]
         },
         {
+            versionName: '0.9.3',
+            changes: [
+                'Da die Tabellen nun nicht immer neu geladen werden, kann es vorkommen, dass beim Erstellen eines Auftrags,' +
+                ' Lieferschein, Rechnung usw. der neue Eintrag nicht sofort in der Tabelle erscheint. Daher wird beim Erstellen nun ' +
+                'der lokale Inhalt mit dem Server verglichen und gegebenenfalls synchronisiert. Des weiteren wird ein solcher Check ' +
+                'alle 60 Sekunden asugeführt um Updates anderer Benutzer zeitnah zu sehen.',
+            ]
+        },
+        {
             versionName: '0.9.2',
             changes: [
-                'Alle Seiten merken sich nun ihren jeweiligen Status. Das heißt, das Such oder Filteroptionen auch noch ' +
-                'verfügbar sind wenn man eine andere Seite geöffnet hat.',
-
+                'Die meisten Seiten merken sich nun ihren jeweiligen Status. Das heißt, das Such oder Filteroptionen auch noch ' +
+                'verfügbar sind wenn man eine andere Seite geöffnet hat. Dies trifft nicht auf Seiten zu die den Name "Erstellen" ' +
+                'oder "Bearbeiten" im Titel tragen.',
             ]
         },
         {

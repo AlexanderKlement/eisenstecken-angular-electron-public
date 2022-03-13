@@ -1,11 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ComponentRef, OnInit} from '@angular/core';
 import {TableDataSource} from '../shared/components/table-builder/table-builder.datasource';
 import {DefaultService, Stock, Supplier} from 'eisenstecken-openapi-angular-library';
 import {LockService} from '../shared/services/lock.service';
 import {CustomButton} from '../shared/components/toolbar/toolbar.component';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {first} from 'rxjs/operators';
 import {AuthService} from '../shared/services/auth.service';
+import {Observable, Subscriber} from 'rxjs';
 
 @Component({
     selector: 'app-supplier',
@@ -19,6 +20,9 @@ export class SupplierComponent implements OnInit {
     suppliersReadAllowed = false;
     stocksReadAllowed = false;
 
+    public $refresh: Observable<void>;
+    private $refreshSubscriber: Subscriber<void>;
+
 
     constructor(private api: DefaultService, private locker: LockService, private router: Router, private authService: AuthService) {
     }
@@ -26,6 +30,18 @@ export class SupplierComponent implements OnInit {
     ngOnInit(): void {
         this.initSupplierDataSource();
         this.initStockDataSource();
+        this.initRefreshObservables();
+    }
+
+    initRefreshObservables(): void {
+        this.$refresh = new Observable<void>((subscriber => {
+            this.$refreshSubscriber = subscriber;
+        }));
+    }
+
+    onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+        console.log('Getting attached');
+        this.$refreshSubscriber.next();
     }
 
     private initSupplierDataSource(): void {

@@ -2,10 +2,10 @@
 <div class="window-container">
     <mat-tab-group (selectedIndexChange)="selectedTabChanged($event)">
         <mat-tab *ngIf="outgoingInvoicesAvailable" label="Ausgangsrechnungen">
-            <app-outgoing></app-outgoing>
+            <app-outgoing [$refresh]="$refresh"></app-outgoing>
         </mat-tab>
         <mat-tab *ngIf="ingoingInvoicesAvailable" label="Eingangsrechnungen">
-            <app-ingoing [updateTables$]="updateChildTables$"></app-ingoing>
+            <app-ingoing [$refresh]="$refresh" [updateTables$]="updateChildTables$"></app-ingoing>
         </mat-tab>
     </mat-tab-group>
 </div>

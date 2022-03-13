@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ComponentRef, OnInit} from '@angular/core';
 import {DefaultService, Order, OrderableType, OrderBundle, Supplier} from 'eisenstecken-openapi-angular-library';
 import {InfoDataSource} from '../../shared/components/info-builder/info-builder.datasource';
 import {TableDataSource} from '../../shared/components/table-builder/table-builder.datasource';
@@ -14,6 +14,7 @@ import {EmailService} from '../../shared/services/email.service';
 import {SupplierDetailComponent} from '../../supplier/supplier-detail/supplier-detail.component';
 import {AuthService} from '../../shared/services/auth.service';
 import {OrderDetailComponent} from '../order-detail/order-detail.component';
+import {Observable, Subscriber} from 'rxjs';
 
 @Component({
     selector: 'app-order-bundle-detail',
@@ -23,7 +24,8 @@ import {OrderDetailComponent} from '../order-detail/order-detail.component';
 export class OrderBundleDetailComponent implements OnInit {
     orderDataSource: TableDataSource<Order>;
     infoDataSource: InfoDataSource<OrderBundle>;
-
+    public $refresh: Observable<void>;
+    private $refreshSubscriber: Subscriber<void>;
     orderBundleId: number;
 
     buttons: CustomButton[] = [
@@ -63,6 +65,18 @@ export class OrderBundleDetailComponent implements OnInit {
             this.initOrderDataSource();
             this.initInfoDataSource();
         });
+        this.initRefreshObservables();
+    }
+
+    initRefreshObservables(): void {
+        this.$refresh = new Observable<void>((subscriber => {
+            this.$refreshSubscriber = subscriber;
+        }));
+    }
+
+    onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+        console.log('Getting attached');
+        this.$refreshSubscriber.next();
     }
 
     orderDeleteClicked(): void {

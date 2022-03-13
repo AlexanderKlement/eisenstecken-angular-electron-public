@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ComponentRef, OnInit, ViewChild} from '@angular/core';
 import {InfoBuilderComponent} from '../../shared/components/info-builder/info-builder.component';
 import {
     DefaultService,
@@ -20,6 +20,7 @@ import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/con
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {OrderDateReturnData, OrderDialogComponent} from '../supplier-detail/order-dialog/order-dialog.component';
 import {FileService} from '../../shared/services/file.service';
+import {Observable, Subscriber} from 'rxjs';
 
 @Component({
     selector: 'app-stock-detail',
@@ -34,6 +35,9 @@ export class StockDetailComponent implements OnInit {
     ingoingDataSource: TableDataSource<Order>;
     outgoingDataSource: TableDataSource<Order>;
     buttons: CustomButton[] = [];
+
+    public $refresh: Observable<void>;
+    private $refreshSubscriber: Subscriber<void>;
 
     constructor(private api: DefaultService, private authService: AuthService,
                 private router: Router, private snackBar: MatSnackBar,
@@ -93,6 +97,18 @@ export class StockDetailComponent implements OnInit {
                 });
             }
         });
+        this.initRefreshObservables();
+    }
+
+    initRefreshObservables(): void {
+        this.$refresh = new Observable<void>((subscriber => {
+            this.$refreshSubscriber = subscriber;
+        }));
+    }
+
+    onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+        console.log('Getting attached');
+        this.$refreshSubscriber.next();
     }
 
     private initStockDetail(id: number): void {

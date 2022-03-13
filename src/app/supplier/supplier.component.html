@@ -2,11 +2,11 @@
 <div class="window-container">
     <mat-tab-group>
         <mat-tab label="Lieferanten">
-            <app-table-builder *ngIf="suppliersReadAllowed" title="Lieferanten"
+            <app-table-builder [$refresh]="$refresh" *ngIf="suppliersReadAllowed" title="Lieferanten"
                                [dataSource]="supplierTableDataSource"></app-table-builder>
         </mat-tab>
         <mat-tab label="Lager">
-            <app-table-builder *ngIf="stocksReadAllowed" title="Lager"
+            <app-table-builder [$refresh]="$refresh" *ngIf="stocksReadAllowed" title="Lager"
                                [dataSource]="stockTableDataSource"></app-table-builder>
         </mat-tab>
     </mat-tab-group>

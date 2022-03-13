@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ComponentRef, OnInit} from '@angular/core';
 import {DefaultService, Order, OrderableType, OrderBundle, OrderedArticle} from 'eisenstecken-openapi-angular-library';
 import {ActivatedRoute, Router} from '@angular/router';
 import {InfoDataSource} from '../../shared/components/info-builder/info-builder.datasource';
@@ -13,6 +13,7 @@ import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/con
 import {OrderDialogComponent} from '../../supplier/supplier-detail/order-dialog/order-dialog.component';
 import {OrderedArticleMoveDialogComponent} from './ordered-article-move-dialog/ordered-article-move-dialog.component';
 import {formatCurrency} from '@angular/common';
+import {Observable, Subscriber} from 'rxjs';
 
 @Component({
     selector: 'app-order-detail',
@@ -25,6 +26,9 @@ export class OrderDetailComponent implements OnInit {
 
     orderId: number;
     gotoNavigationTarget = '';
+
+    public $refresh: Observable<void>;
+    private $refreshSubscriber: Subscriber<void>;
 
     buttons: CustomButton[] = [
         {
@@ -66,6 +70,18 @@ export class OrderDetailComponent implements OnInit {
             this.initInfoDataSource();
             this.initGoToButton();
         });
+        this.initRefreshObservables();
+    }
+
+    initRefreshObservables(): void {
+        this.$refresh = new Observable<void>((subscriber => {
+            this.$refreshSubscriber = subscriber;
+        }));
+    }
+
+    onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+        console.log('Getting attached');
+        this.$refreshSubscriber.next();
     }
 
     private initInfoDataSource(): void {

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ComponentRef, OnInit} from '@angular/core';
 import {TableDataSource} from '../../shared/components/table-builder/table-builder.datasource';
 import {
     Journey,
@@ -60,6 +60,9 @@ export class EmployeeDetailComponent implements OnInit {
     ];
     title = '';
 
+    public $refresh: Observable<void>;
+    private $refreshSubscriber: Subscriber<void>;
+
 
     constructor(private api: DefaultService, private route: ActivatedRoute, private router: Router,
                 private dialog: MatDialog, private snackBar: MatSnackBar) {
@@ -85,6 +88,18 @@ export class EmployeeDetailComponent implements OnInit {
         this.workDay$ = new Observable<WorkDay>(subscriber => {
             this.workDaySubscriber$ = subscriber;
         });
+        this.initRefreshObservables();
+    }
+
+    initRefreshObservables(): void {
+        this.$refresh = new Observable<void>((subscriber => {
+            this.$refreshSubscriber = subscriber;
+        }));
+    }
+
+    onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+        console.log('Getting attached');
+        this.$refreshSubscriber.next();
     }
 
     workDayChanged(event: MatSelectChange): void {

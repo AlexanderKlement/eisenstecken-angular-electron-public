@@ -1,10 +1,11 @@
-import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ComponentRef, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {TableDataSource} from './table-builder.datasource';
 import {MatPaginator} from '@angular/material/paginator';
 import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
-import {fromEvent, Subscription} from 'rxjs';
+import {fromEvent, Observable, Subscription} from 'rxjs';
 import {DataSourceClass} from '../../types';
 import {ThemePalette} from '@angular/material/core';
+import {ActivatedRoute} from '@angular/router';
 
 export interface TableButton {
     name: (values: any) => string;
@@ -25,6 +26,7 @@ export class TableBuilderComponent<T extends DataSourceClass> implements OnInit,
     @Input() dataSource: TableDataSource<T>;
     @Input() title?: string;
     @Input() buttons?: TableButton[] = [];
+    @Input() $refresh?: Observable<void>;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild('input') input: ElementRef;
     subscription: Subscription;
@@ -47,6 +49,12 @@ export class TableBuilderComponent<T extends DataSourceClass> implements OnInit,
             console.log('Refreshing Table');
             this.loadDataPage(false);
         }, this.refreshRateSeconds * 1000);
+        if (!!this.$refresh) {
+            this.subscription.add(this.$refresh.subscribe(() => {
+                console.log('Got refreshed');
+                this.loadDataPage(false);
+            }));
+        }
     }
 
     ngAfterViewInit(): void {
@@ -56,11 +64,6 @@ export class TableBuilderComponent<T extends DataSourceClass> implements OnInit,
         })).subscribe());
 
         this.subscription.add(this.paginator.page.pipe(tap(() => this.loadDataPage())).subscribe());
-    }
-
-    onAttach(): void {
-        console.log('Table getting reattached');
-        this.loadDataPage(); //This seems not work
     }
 
     ngOnDestroy(): void {

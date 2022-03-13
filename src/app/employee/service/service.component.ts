@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ComponentRef, OnInit} from '@angular/core';
 import {TableDataSource} from '../../shared/components/table-builder/table-builder.datasource';
 import {DefaultService, Service} from 'eisenstecken-openapi-angular-library';
 import {MatDialog} from '@angular/material/dialog';
@@ -10,6 +10,7 @@ import {CustomButton} from '../../shared/components/toolbar/toolbar.component';
 import {ServiceCreateDialogComponent} from './service-create-dialog/service-create-dialog.component';
 import {first} from 'rxjs/operators';
 import {minutesToDisplayableString} from '../../shared/date.util';
+import {Observable, Subscriber} from 'rxjs';
 
 @Component({
     selector: 'app-service',
@@ -28,6 +29,8 @@ export class ServiceComponent implements OnInit {
         }
     ];
     title = '';
+    public $refresh: Observable<void>;
+    private $refreshSubscriber: Subscriber<void>;
 
     constructor(private api: DefaultService, private dialog: MatDialog, private snackBar: MatSnackBar, private route: ActivatedRoute) {
     }
@@ -43,7 +46,18 @@ export class ServiceComponent implements OnInit {
             });
             this.initServiceDataSource();
         });
+        this.initRefreshObservables();
+    }
 
+    initRefreshObservables(): void {
+        this.$refresh = new Observable<void>((subscriber => {
+            this.$refreshSubscriber = subscriber;
+        }));
+    }
+
+    onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+        console.log('Getting attached');
+        this.$refreshSubscriber.next();
     }
 
     private initServiceDataSource(): void {

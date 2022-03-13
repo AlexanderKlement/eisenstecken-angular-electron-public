@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ComponentRef, OnInit, ViewChild} from '@angular/core';
 import {InfoDataSource} from '../../shared/components/info-builder/info-builder.datasource';
 import {Job, DefaultService, Offer, OutgoingInvoice, Order} from 'eisenstecken-openapi-angular-library';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -19,6 +19,7 @@ import {OrderPrintDialogComponent} from './order-print-dialog/order-print-dialog
 import {FileService} from '../../shared/services/file.service';
 import {ChangePathDialogComponent} from './change-path-dialog/change-path-dialog.component';
 import {OrderDetailComponent} from '../../order/order-detail/order-detail.component';
+import {Observable, Subscriber} from 'rxjs';
 
 @Component({
     selector: 'app-job-detail',
@@ -47,6 +48,8 @@ export class JobDetailComponent implements OnInit {
     outgoingInvoicesAllowed = false;
     offersAllowed = false;
     title = '';
+    public $refresh: Observable<void>;
+    private $refreshSubscriber: Subscriber<void>;
 
     constructor(private api: DefaultService, private router: Router, private route: ActivatedRoute, private snackBar: MatSnackBar,
                 private locker: LockService, private authService: AuthService, private dialog: MatDialog, private file: FileService) {
@@ -76,6 +79,18 @@ export class JobDetailComponent implements OnInit {
             this.initOrderTable();
         });
         this.initAccessRights();
+        this.initRefreshObservables();
+    }
+
+    initRefreshObservables(): void {
+        this.$refresh = new Observable<void>((subscriber => {
+            this.$refreshSubscriber = subscriber;
+        }));
+    }
+
+    onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+        console.log('Getting attached');
+        this.$refreshSubscriber.next();
     }
 
     initSubJobTable() {

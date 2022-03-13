@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ComponentRef, OnInit} from '@angular/core';
 import {
     DefaultService,
     Expense,
@@ -12,7 +12,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {TableDataSource} from '../../shared/components/table-builder/table-builder.datasource';
 import * as moment from 'moment';
 import {first, map} from 'rxjs/operators';
-import {Observable} from 'rxjs';
+import {Observable, Subscriber} from 'rxjs';
 import {CustomButton} from '../../shared/components/toolbar/toolbar.component';
 import {LockService} from '../../shared/services/lock.service';
 import {AuthService} from '../../shared/services/auth.service';
@@ -40,6 +40,9 @@ export class RecalculationDetailComponent implements OnInit {
     jobName$: Observable<string>;
 
     buttons: CustomButton[] = [];
+
+    public $refresh: Observable<void>;
+    private $refreshSubscriber: Subscriber<void>;
 
     constructor(private api: DefaultService, private router: Router, private route: ActivatedRoute,
                 private locker: LockService, private authService: AuthService, private snackBar: MatSnackBar) {
@@ -84,6 +87,18 @@ export class RecalculationDetailComponent implements OnInit {
                 });
             }
         });
+        this.initRefreshObservables();
+    }
+
+    initRefreshObservables(): void {
+        this.$refresh = new Observable<void>((subscriber => {
+            this.$refreshSubscriber = subscriber;
+        }));
+    }
+
+    onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+        console.log('Getting attached');
+        this.$refreshSubscriber.next();
     }
 
     initRecalculation(): void {

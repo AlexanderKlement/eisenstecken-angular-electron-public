@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ComponentRef, OnInit, ViewChild} from '@angular/core';
 import {InfoDataSource} from '../../shared/components/info-builder/info-builder.datasource';
 import {DefaultService, Order, OrderBundle, OrderBundleCreate, Supplier} from 'eisenstecken-openapi-angular-library';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -14,7 +14,7 @@ import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/con
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {FileService} from '../../shared/services/file.service';
 import {EmailService} from '../../shared/services/email.service';
-import {combineLatest} from 'rxjs';
+import {combineLatest, Observable, Subscriber} from 'rxjs';
 
 @Component({
     selector: 'app-supplier-detail',
@@ -31,6 +31,9 @@ export class SupplierDetailComponent implements OnInit {
     deliveredOrderDataSource: TableDataSource<OrderBundle>;
     requestOrderDataSource: TableDataSource<OrderBundle>;
     buttons: CustomButton[] = [];
+
+    public $refresh: Observable<void>;
+    private $refreshSubscriber: Subscriber<void>;
 
 
     constructor(private api: DefaultService, private authService: AuthService,
@@ -119,6 +122,18 @@ export class SupplierDetailComponent implements OnInit {
                 });
             }
         });
+        this.initRefreshObservables();
+    }
+
+    initRefreshObservables(): void {
+        this.$refresh = new Observable<void>((subscriber => {
+            this.$refreshSubscriber = subscriber;
+        }));
+    }
+
+    onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+        console.log('Getting attached');
+        this.$refreshSubscriber.next();
     }
 
     private initSupplierDetail(id: number): void {

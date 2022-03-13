@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ComponentRef, OnInit} from '@angular/core';
 import {DefaultService, Workload} from 'eisenstecken-openapi-angular-library';
 import {TableDataSource} from '../../shared/components/table-builder/table-builder.datasource';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -8,6 +8,7 @@ import {CustomButton} from '../../shared/components/toolbar/toolbar.component';
 import {AuthService} from '../../shared/services/auth.service';
 import {first} from 'rxjs/operators';
 import {minutesToDisplayableString} from '../../shared/date.util';
+import {Observable, Subscriber} from 'rxjs';
 
 @Component({
     selector: 'app-work-hours',
@@ -18,6 +19,8 @@ export class WorkHoursComponent implements OnInit {
     buttons: CustomButton[] = [];
     workloadDataSource: TableDataSource<Workload>;
     jobId: number;
+    public $refresh: Observable<void>;
+    private $refreshSubscriber: Subscriber<void>;
 
 
     constructor(private api: DefaultService, private route: ActivatedRoute,
@@ -45,6 +48,18 @@ export class WorkHoursComponent implements OnInit {
                 });
             }
         });
+        this.initRefreshObservables();
+    }
+
+    initRefreshObservables(): void {
+        this.$refresh = new Observable<void>((subscriber => {
+            this.$refreshSubscriber = subscriber;
+        }));
+    }
+
+    onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+        console.log('Getting attached');
+        this.$refreshSubscriber.next();
     }
 
     workHourClicked(userId: number): void {

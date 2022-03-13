@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ComponentRef, OnInit} from '@angular/core';
 import {TableDataSource} from '../shared/components/table-builder/table-builder.datasource';
 import {DefaultService, Job} from 'eisenstecken-openapi-angular-library';
-import {Router} from '@angular/router';
-import {concat, merge} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
+import {concat, merge, Observable, Subscriber} from 'rxjs';
 import {CustomButton} from '../shared/components/toolbar/toolbar.component';
 
 @Component({
@@ -22,12 +22,27 @@ export class RecalculationComponent implements OnInit {
         },
     ];
 
+    public $refresh: Observable<void>;
+    private $refreshSubscriber: Subscriber<void>;
+
 
     constructor(private api: DefaultService, private router: Router) {
     }
 
     ngOnInit(): void {
         this.initJobDataSource();
+        this.initRefreshObservables();
+    }
+
+    initRefreshObservables(): void {
+        this.$refresh = new Observable<void>((subscriber => {
+            this.$refreshSubscriber = subscriber;
+        }));
+    }
+
+    onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+        console.log('Getting attached');
+        this.$refreshSubscriber.next();
     }
 
     initJobDataSource(): void {

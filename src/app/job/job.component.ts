@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ComponentRef, OnInit} from '@angular/core';
 import {TableDataSource} from '../shared/components/table-builder/table-builder.datasource';
 import {DefaultService, Job, Stock} from 'eisenstecken-openapi-angular-library';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Observable, Subscriber} from 'rxjs';
 
 @Component({
     selector: 'app-job',
@@ -15,6 +16,9 @@ export class JobComponent implements OnInit {
     declinedJobDataSource: TableDataSource<Job>;
     stockTableDataSource: TableDataSource<Stock>;
 
+    public $refresh: Observable<void>;
+    private $refreshSubscriber: Subscriber<void>;
+
     constructor(private api: DefaultService, private router: Router) {
     }
 
@@ -24,6 +28,18 @@ export class JobComponent implements OnInit {
         this.initJobsFinished();
         this.initJobsDeclined();
         this.initStocks();
+        this.initRefreshObservables();
+    }
+
+    initRefreshObservables(): void {
+        this.$refresh = new Observable<void>((subscriber => {
+            this.$refreshSubscriber = subscriber;
+        }));
+    }
+
+    onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+        console.log('Getting attached');
+        this.$refreshSubscriber.next();
     }
 
     private initJobCreated(): void {

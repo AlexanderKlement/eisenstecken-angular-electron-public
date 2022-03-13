@@ -19,6 +19,7 @@ import {formatCurrency} from '@angular/common';
 export class IngoingComponent implements OnInit {
 
     @Input() updateTables$: Observable<void>;
+    @Input() $refresh: Observable<void>;
     allIngoingInvoiceDataSource: TableDataSource<IngoingInvoice>;
     paidIngoingInvoiceDataSource: TableDataSource<IngoingInvoice>;
     unPaidIngoingInvoiceDataSource: TableDataSource<IngoingInvoice>;

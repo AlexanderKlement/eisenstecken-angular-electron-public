@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ComponentRef, OnInit} from '@angular/core';
 import {InfoDataSource} from '../../../shared/components/info-builder/info-builder.datasource';
 import {DefaultService, DescriptiveArticle, IngoingInvoice} from 'eisenstecken-openapi-angular-library';
 import {first} from 'rxjs/operators';
 import {ActivatedRoute} from '@angular/router';
 import {TableDataSource} from '../../../shared/components/table-builder/table-builder.datasource';
 import {formatCurrency, formatNumber} from '@angular/common';
+import {Observable, Subscriber} from 'rxjs';
 
 @Component({
     selector: 'app-ingoing-detail',
@@ -17,6 +18,8 @@ export class IngoingDetailComponent implements OnInit {
     descriptiveArticleSource: TableDataSource<DescriptiveArticle>;
     id: number;
     title: 'Rechnung: Details';
+    public $refresh: Observable<void>;
+    private $refreshSubscriber: Subscriber<void>;
 
     constructor(private api: DefaultService, private route: ActivatedRoute) {
     }
@@ -35,6 +38,18 @@ export class IngoingDetailComponent implements OnInit {
             this.initIngoingInvoiceDetail();
             this.initDescriptiveArticleTable();
         });
+        this.initRefreshObservables();
+    }
+
+    initRefreshObservables(): void {
+        this.$refresh = new Observable<void>((subscriber => {
+            this.$refreshSubscriber = subscriber;
+        }));
+    }
+
+    onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+        console.log('Getting attached');
+        this.$refreshSubscriber.next();
     }
 
     initIngoingInvoiceDetail(): void {

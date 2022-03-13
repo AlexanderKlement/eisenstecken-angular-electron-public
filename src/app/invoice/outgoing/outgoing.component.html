@@ -1,12 +1,12 @@
 <mat-tab-group selectedIndex="1">
     <mat-tab label="Alle">
-        <app-table-builder [buttons]="buttons" [dataSource]="allOutgoingInvoiceDataSource"></app-table-builder>
+        <app-table-builder [$refresh]="$refresh" [buttons]="buttons" [dataSource]="allOutgoingInvoiceDataSource"></app-table-builder>
     </mat-tab>
     <mat-tab label="Unbezahlt">
-        <app-table-builder [buttons]="buttons" [dataSource]="unPaidOutgoingInvoiceDataSource"></app-table-builder>
+        <app-table-builder [$refresh]="$refresh" [buttons]="buttons" [dataSource]="unPaidOutgoingInvoiceDataSource"></app-table-builder>
     </mat-tab>
     <mat-tab label="Bezahlt">
-        <app-table-builder [buttons]="buttons" [dataSource]="paidOutgoingInvoiceDataSource"></app-table-builder>
+        <app-table-builder [$refresh]="$refresh" [buttons]="buttons" [dataSource]="paidOutgoingInvoiceDataSource"></app-table-builder>
     </mat-tab>
 </mat-tab-group>
 

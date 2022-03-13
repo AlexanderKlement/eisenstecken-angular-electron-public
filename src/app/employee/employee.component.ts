@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ComponentRef, OnInit} from '@angular/core';
 import {TableDataSource} from '../shared/components/table-builder/table-builder.datasource';
 import {
     AdditionalWorkload,
@@ -12,13 +12,14 @@ import {
 } from 'eisenstecken-openapi-angular-library';
 import {CustomButton} from '../shared/components/toolbar/toolbar.component';
 import {LockService} from '../shared/services/lock.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import * as moment from 'moment';
 import {ConfirmDialogComponent} from '../shared/components/confirm-dialog/confirm-dialog.component';
 import {first} from 'rxjs/operators';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {minutesToDisplayableString} from '../shared/date.util';
+import {Observable, Subscriber} from 'rxjs';
 
 @Component({
     selector: 'app-employee',
@@ -43,6 +44,9 @@ export class EmployeeComponent implements OnInit {
         }
     ];
 
+    public $refresh: Observable<void>;
+    private $refreshSubscriber: Subscriber<void>;
+
 
     constructor(private api: DefaultService, private locker: LockService, private router: Router,
                 private dialog: MatDialog, private snackBar: MatSnackBar) {
@@ -56,6 +60,18 @@ export class EmployeeComponent implements OnInit {
         this.initMaintenanceDataSource();
         this.initServiceDataSource();
         this.initAdditionalDataSource();
+        this.initRefreshObservables();
+    }
+
+    initRefreshObservables(): void {
+        this.$refresh = new Observable<void>((subscriber => {
+            this.$refreshSubscriber = subscriber;
+        }));
+    }
+
+    onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+        console.log('Getting attached');
+        this.$refreshSubscriber.next();
     }
 
     private initUserDataSource(): void {

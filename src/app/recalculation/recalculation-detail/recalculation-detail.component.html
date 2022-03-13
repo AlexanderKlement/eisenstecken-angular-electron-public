@@ -9,11 +9,11 @@
                        matInput>
             </mat-form-field>
         </div>
-        <app-table-builder [dataSource]="woodListDataSource" title="Preise Holzlisten"></app-table-builder>
-        <app-table-builder [dataSource]="paintDataSource" title="Oberflächen"></app-table-builder>
-        <app-table-builder [dataSource]="expenseDataSource" title="Ausgaben"></app-table-builder>
-        <app-table-builder [dataSource]="orderDataSource" title="Bestellungen"></app-table-builder>
-        <app-table-builder [dataSource]="workloadDataSource" title="Arbeitszeit"></app-table-builder>
+        <app-table-builder [$refresh]="$refresh" [dataSource]="woodListDataSource" title="Preise Holzlisten"></app-table-builder>
+        <app-table-builder [$refresh]="$refresh" [dataSource]="paintDataSource" title="Oberflächen"></app-table-builder>
+        <app-table-builder [$refresh]="$refresh" [dataSource]="expenseDataSource" title="Ausgaben"></app-table-builder>
+        <app-table-builder [$refresh]="$refresh" [dataSource]="orderDataSource" title="Bestellungen"></app-table-builder>
+        <app-table-builder [$refresh]="$refresh" [dataSource]="workloadDataSource" title="Arbeitszeit"></app-table-builder>
     </div>
 </div>
 

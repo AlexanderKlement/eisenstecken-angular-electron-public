@@ -3,16 +3,16 @@
   <app-info-builder [dataSource]="infoDataSource"></app-info-builder>
   <mat-tab-group>
     <mat-tab label="Noch zu bestellen">
-      <app-table-builder [dataSource]="createdOrderDataSource" title="Artikel"></app-table-builder>
+      <app-table-builder [$refresh]="$refresh" [dataSource]="createdOrderDataSource" title="Artikel"></app-table-builder>
     </mat-tab>
     <mat-tab label="Offene Bestellungen">
-      <app-table-builder [dataSource]="orderedOrderDataSource" title="Bestellungen"></app-table-builder>
+      <app-table-builder [$refresh]="$refresh" [dataSource]="orderedOrderDataSource" title="Bestellungen"></app-table-builder>
     </mat-tab>
     <mat-tab label="Erhaltene Bestellungen">
-      <app-table-builder [dataSource]="deliveredOrderDataSource" title="Bestellungen"></app-table-builder>
+      <app-table-builder [$refresh]="$refresh" [dataSource]="deliveredOrderDataSource" title="Bestellungen"></app-table-builder>
     </mat-tab>
     <mat-tab label="Anfragen">
-      <app-table-builder [dataSource]="requestOrderDataSource" title="Anfragen"></app-table-builder>
+      <app-table-builder [$refresh]="$refresh" [dataSource]="requestOrderDataSource" title="Anfragen"></app-table-builder>
     </mat-tab>
   </mat-tab-group>
 </div>

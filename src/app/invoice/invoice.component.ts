@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ComponentRef, OnInit} from '@angular/core';
 import {AuthService} from '../shared/services/auth.service';
 import {first} from 'rxjs/operators';
 import {CustomButton} from '../shared/components/toolbar/toolbar.component';
@@ -11,6 +11,7 @@ import {Observable, Subscriber} from 'rxjs';
 import {ConfirmDialogComponent} from '../shared/components/confirm-dialog/confirm-dialog.component';
 import {DefaultService} from 'eisenstecken-openapi-angular-library';
 import {FileService} from '../shared/services/file.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
     selector: 'app-invoice',
@@ -26,36 +27,33 @@ export class InvoiceComponent implements OnInit {
     outgoingInvoicesTabIndex = 0;
     ingoingInvoicesTabIndex = 1;
 
+    public $refresh: Observable<void>;
     nextRgNumButton = {
         name: 'Nächste Rechnungsnummer setzen',
         navigate: (): void => {
             this.outgoingInvoiceNumberClicked();
         }
     };
-
     importIngoingInvoicesButton = {
         name: 'Eingangsrechnungen importieren',
         navigate: (): void => {
             this.importIngoingInvoiceClicked();
         }
     };
-
-
     printUnpaidIngoingInvoices = {
         name: 'Unbezahlte drucken',
         navigate: (): void => {
             this.printUnpaidIngoingInvoicesClicked();
         }
     };
-
     printUnpaidOutgoingInvoices = {
         name: 'Unbezahlte drucken',
         navigate: (): void => {
             this.printUnpaidOutgoingInvoicesClicked();
         }
     };
-
     buttons: CustomButton[] = [];
+    private $refreshSubscriber: Subscriber<void>;
 
     constructor(private authService: AuthService, private dialog: MatDialog, private api: DefaultService, private file: FileService) {
     }
@@ -71,6 +69,18 @@ export class InvoiceComponent implements OnInit {
             this.updateChildTablesSubscriber = subscriber;
         }));
         this.pushOutgoingInvoiceButtons();
+        this.initRefreshObservables();
+    }
+
+    initRefreshObservables(): void {
+        this.$refresh = new Observable<void>((subscriber => {
+            this.$refreshSubscriber = subscriber;
+        }));
+    }
+
+    onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+        console.log('Getting attached');
+        this.$refreshSubscriber.next();
     }
 
     selectedTabChanged($event: number) {
