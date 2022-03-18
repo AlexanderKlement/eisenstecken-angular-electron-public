@@ -51,7 +51,12 @@ export class InfoDialogComponent implements OnInit {
         {
             versionName: '0.9.5',
             changes: [
-                'Ob ein Artikel eine Anfrage ist, kann nun nachträglich nicht mehr geändert werden.'
+                'Ob ein Artikel eine Anfrage ist, kann nun nachträglich nicht mehr geändert werden.',
+                'Unteraufträge in Bestellungen sind nun standartmäßig unter dem Hauptauftrag versteckt. Beim Klick auf ' +
+                'einen Hauptauftrag werden alle Unteraufträge eingeklappt und die jeweiligen ausgeklappt. Dies sollte die ' +
+                'Übersichtlichkeit erhöhen. Sollten Abtrennungen oder ähnliches gewünscht sein, bitte melden. Denke aber, ' +
+                'dass zu viele Elemente die Ansicht nur überladen.',
+                'Aufträge werden nun nach Datum sortiert. Bzw. es wird jeweils nur ein Jahr in Aufträgen dargestellt. '
             ]
         },
         {
