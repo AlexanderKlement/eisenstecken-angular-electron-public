@@ -25,6 +25,7 @@ export interface OrderDialogData {
     position: string;
     delete: boolean;
     create: boolean;
+    blockRequestChange: boolean;
 }
 
 @Component({
@@ -41,12 +42,15 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
     priceSubscription: Subscription;
     singlePrice = true;
     createMode: boolean;
+    blockRequestChange = false;
 
     constructor(public dialogRef: MatDialogRef<ProductEditDialogComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: OrderDialogData, private api: DefaultService) {
     }
 
-    public static roundTo2Decimals(input: number): number { //TODO: move bitch get out the way
+    public static roundTo2Decimals(input: number): number {
+        //TODO: move bitch get out the way
+        // -> i guess i was trying to say: move this to a utils class
         return Math.round(input * 100) / 100;
     }
 
@@ -55,6 +59,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
         this.priceSubscription = new Subscription();
         this.vatOptions$ = this.api.readVatsVatGet();
         this.unitOptions$ = this.api.readUnitsUnitGet();
+        this.blockRequestChange = this.data.blockRequestChange;
         this.initProductEditGroup();
         this.createMode = this.data.create;
     }
@@ -97,6 +102,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
             position: this.productEditGroup.get('position').value,
             delete: deleteOrder,
             create: this.data.create,
+            blockRequestChange: this.blockRequestChange,
         };
     }
 

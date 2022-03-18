@@ -46,12 +46,10 @@ export class TableBuilderComponent<T extends DataSourceClass> implements OnInit,
             });
         }
         this.refreshInterval = setInterval(() => {
-            console.log('Refreshing Table');
             this.loadDataPage(false);
         }, this.refreshRateSeconds * 1000);
         if (!!this.$refresh) {
             this.subscription.add(this.$refresh.subscribe(() => {
-                console.log('Got refreshed');
                 this.loadDataPage(false);
             }));
         }

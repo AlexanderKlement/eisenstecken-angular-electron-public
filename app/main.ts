@@ -348,8 +348,6 @@ function initIPC() {
         //I'll just do both of them, one of them should open correctly.
         //If it opens twice we should add a check here
         console.log("Showing tray balloon: ");
-        console.log(arg[0]);
-        console.log(arg[1]);
         const image = require('electron').nativeImage.createFromPath(eisensteckenIconPng);
         tray.displayBalloon({
             icon: image,

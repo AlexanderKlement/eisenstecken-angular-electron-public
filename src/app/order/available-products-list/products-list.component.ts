@@ -41,7 +41,8 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     constructor(public dialog: MatDialog, private api: DefaultService, private snackBar: MatSnackBar) {
     }
 
-    public static createEditDialogData(orderedArticle: OrderedArticle, title: string, api: DefaultService): Observable<OrderDialogData> {
+    public static createEditDialogData(orderedArticle: OrderedArticle, title: string, api: DefaultService,
+                                       blockRequestChange: boolean = false): Observable<OrderDialogData> {
         return new Observable<OrderDialogData>((dialogDataSubscriber) => {
             api.readVatByAmountVatVatAmountGet(orderedArticle.vat).pipe(first()).subscribe((vat) => {
                 const dialogData = ProductsListComponent.createEmptyDialogData(title, orderedArticle.article);
@@ -55,6 +56,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
                 dialogData.comment = orderedArticle.comment;
                 dialogData.position = orderedArticle.position;
                 dialogData.create = false;
+                dialogData.blockRequestChange = blockRequestChange;
                 dialogDataSubscriber.next(dialogData);
             });
         });
@@ -151,6 +153,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
                 position: '',
                 delete: false,
                 create: true,
+                blockRequestChange: false,
             };
         }
         return {
@@ -172,7 +175,8 @@ export class ProductsListComponent implements OnInit, OnDestroy {
             comment: '',
             position: '',
             delete: false,
-            create: true
+            create: true,
+            blockRequestChange: false
         };
     }
 
@@ -284,7 +288,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
 
     editButtonClicked(orderedArticle: OrderedArticle):
         void {
-        const dialogData$ = ProductsListComponent.createEditDialogData(orderedArticle, 'Produkt bearbeiten', this.api);
+        const dialogData$ = ProductsListComponent.createEditDialogData(orderedArticle, 'Produkt bearbeiten', this.api, false);
         const closeFunction = (result: any) => {
             if (result === undefined) {
                 return;

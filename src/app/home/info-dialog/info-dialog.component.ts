@@ -49,6 +49,21 @@ export class InfoDialogComponent implements OnInit {
             ]
         },
         {
+            versionName: '0.9.5',
+            changes: [
+                'Ob ein Artikel eine Anfrage ist, kann nun nachträglich nicht mehr geändert werden.'
+            ]
+        },
+        {
+            versionName: '0.9.4',
+            changes: [
+                'Falls ein Auftrag gelöscht wird, wird der Benutzer nun nicht mehr durch hunderte Fehlermeldungen generft',
+                'Neue Spalten in Rechnungen Fenster eingefügt.',
+                'Lieferscheine werden nun wirklich nach Datum geordnet.',
+                'Prozentsätze bei Angebot stimmen nun'
+            ]
+        },
+        {
             versionName: '0.9.3',
             changes: [
                 'Da die Tabellen nun nicht immer neu geladen werden, kann es vorkommen, dass beim Erstellen eines Auftrags,' +

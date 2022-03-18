@@ -52,7 +52,6 @@ export class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> imp
     }
 
     loadOrders(): void {
-        console.log('load orders');
         this.api.readOrdersByOrderBundleOrderBundleOrdersOrderBundleIdGet(this.orderBundleId).pipe(first()).subscribe(orders => {
             for (const order of orders) {
                 this.getOrderFormArray().push(this.initOrder(order));

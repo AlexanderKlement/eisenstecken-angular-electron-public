@@ -130,6 +130,8 @@ export class IngoingComponent implements OnInit {
                                 rgNum: dataSource.number,
                                 name: dataSource.name,
                                 date: moment(dataSource.date).format('L'),
+                                // eslint-disable-next-line @typescript-eslint/naming-convention
+                                payment_date: moment(dataSource.payment_date).format('L'),
                                 id: dataSource.id,
                                 total: formatCurrency(dataSource.total, 'de-DE', 'EUR'),
                                 paid: dataSource.paid ? 'Ja' : 'Nein',
@@ -145,7 +147,8 @@ export class IngoingComponent implements OnInit {
             [
                 {name: 'name', headerName: 'Firma'},
                 {name: 'rgNum', headerName: 'Nummer'},
-                {name: 'date', headerName: 'Datum'},
+                {name: 'date', headerName: 'Rechnungsdatum'},
+                {name: 'payment_date', headerName: 'Fälligkeitsdatum'},
                 {name: 'total', headerName: 'Gesamtpreis [mit MwSt.]'},
             ],
             (api) => api.countIngoingInvoicesIngoingInvoiceCountGet()
@@ -168,6 +171,8 @@ export class IngoingComponent implements OnInit {
                                 name: dataSource.name,
                                 date: moment(dataSource.date).format('L'),
                                 id: dataSource.id,
+                                // eslint-disable-next-line @typescript-eslint/naming-convention
+                                payment_date: moment(dataSource.payment_date).format('L'),
                                 total: formatCurrency(dataSource.total, 'de-DE', 'EUR'),
                                 condition: dataSource.paid
                             },
@@ -181,7 +186,8 @@ export class IngoingComponent implements OnInit {
             [
                 {name: 'name', headerName: 'Firma'},
                 {name: 'rgNum', headerName: 'Nummer'},
-                {name: 'date', headerName: 'Datum'},
+                {name: 'date', headerName: 'Rechnungsdatum'},
+                {name: 'payment_date', headerName: 'Fälligkeitsdatum'},
                 {name: 'total', headerName: 'Gesamtpreis [mit MwSt.]'},
             ],
             (api) => api.countIngoingInvoicesIngoingInvoiceCountGet(true)
@@ -205,6 +211,8 @@ export class IngoingComponent implements OnInit {
                                 date: moment(dataSource.date).format('L'),
                                 total: formatCurrency(dataSource.total, 'de-DE', 'EUR'),
                                 id: dataSource.id,
+                                // eslint-disable-next-line @typescript-eslint/naming-convention
+                                payment_date: moment(dataSource.payment_date).format('L'),
                                 condition: dataSource.paid
                             },
                             route: () => {
@@ -217,7 +225,8 @@ export class IngoingComponent implements OnInit {
             [
                 {name: 'name', headerName: 'Firma'},
                 {name: 'rgNum', headerName: 'Nummer'},
-                {name: 'date', headerName: 'Datum'},
+                {name: 'date', headerName: 'Rechnungsdatum'},
+                {name: 'payment_date', headerName: 'Fälligkeitsdatum'},
                 {name: 'total', headerName: 'Gesamtpreis [mit MwSt.]'},
             ],
             (api) => api.countIngoingInvoicesIngoingInvoiceCountGet(false)

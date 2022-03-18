@@ -22,6 +22,11 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
             catchError((error) => {
                 console.log('Intercepting error');
                 console.error(error);
+                if (error.status === 404) {
+                    console.log('Not sending error message');
+                    return;
+                }
+
                 if ('error' in error && 'body' in error.error) {
                     this.snackBar.open(error.error.body, 'Ok', {
                         duration: 10000

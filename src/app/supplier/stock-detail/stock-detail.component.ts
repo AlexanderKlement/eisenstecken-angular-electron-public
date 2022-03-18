@@ -107,7 +107,6 @@ export class StockDetailComponent implements OnInit {
     }
 
     onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
-        console.log('Getting attached');
         this.$refreshSubscriber.next();
     }
 
@@ -239,7 +238,6 @@ export class StockDetailComponent implements OnInit {
 
 
         dialogRef.afterClosed().subscribe(result => {
-            console.log('The dialog was closed');
             this.ordersToOrderSelected(result);
         });
     }

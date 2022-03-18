@@ -9,6 +9,7 @@ import {TableButton} from '../../shared/components/table-builder/table-builder.c
 import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
+import {formatCurrency} from '@angular/common';
 
 @Component({
     selector: 'app-outgoing',
@@ -113,7 +114,9 @@ export class OutgoingComponent implements OnInit {
                                 date: moment(dataSource.date, 'YYYY-MM-DD').format('L'),
                                 rgNum: dataSource.number,
                                 id: dataSource.id,
-                                paid: dataSource.paid ? 'Ja' : 'Nein',
+                                total: formatCurrency(dataSource.full_price_with_vat, 'de-DE', 'EUR'),
+                                // eslint-disable-next-line @typescript-eslint/naming-convention
+                                payment_date: moment(dataSource.payment_date, 'YYYY-MM-DD').format('L'),
                                 condition: dataSource.paid
                             },
                             route: () => {
@@ -135,7 +138,9 @@ export class OutgoingComponent implements OnInit {
             [
                 {name: 'client_name', headerName: 'Kunde'},
                 {name: 'rgNum', headerName: 'Nummer'},
-                {name: 'date', headerName: 'Datum'},
+                {name: 'date', headerName: 'Ausstellungsdatum'},
+                {name: 'payment_date', headerName: 'Fälligkeitsdatum'},
+                {name: 'total', headerName: 'Preis [mit MwSt.]'},
             ],
             (api) => api.countOutgoingInvoicesOutgoingInvoiceCountGet()
         );
@@ -158,6 +163,9 @@ export class OutgoingComponent implements OnInit {
                                 date: moment(dataSource.date, 'YYYY-MM-DD').format('L'),
                                 rgNum: dataSource.number,
                                 id: dataSource.id,
+                                total: formatCurrency(dataSource.full_price_with_vat, 'de-DE', 'EUR'),
+                                // eslint-disable-next-line @typescript-eslint/naming-convention
+                                payment_date: moment(dataSource.payment_date, 'YYYY-MM-DD').format('L'),
                                 condition: dataSource.paid
                             },
                             route: () => {
@@ -179,7 +187,9 @@ export class OutgoingComponent implements OnInit {
             [
                 {name: 'client_name', headerName: 'Kunde'},
                 {name: 'rgNum', headerName: 'Nummer'},
-                {name: 'date', headerName: 'Datum'},
+                {name: 'date', headerName: 'Ausstellungsdatum'},
+                {name: 'payment_date', headerName: 'Fälligkeitsdatum'},
+                {name: 'total', headerName: 'Preis [mit MwSt.]'},
             ],
             (api) => api.countOutgoingInvoicesOutgoingInvoiceCountGet(true)
         );
@@ -202,6 +212,9 @@ export class OutgoingComponent implements OnInit {
                                 date: moment(dataSource.date, 'YYYY-MM-DD').format('L'),
                                 rgNum: dataSource.number,
                                 id: dataSource.id,
+                                total: formatCurrency(dataSource.full_price_with_vat, 'de-DE', 'EUR'),
+                                // eslint-disable-next-line @typescript-eslint/naming-convention
+                                payment_date: moment(dataSource.payment_date, 'YYYY-MM-DD').format('L'),
                                 condition: dataSource.paid
                             },
                             route: () => {
@@ -223,7 +236,9 @@ export class OutgoingComponent implements OnInit {
             [
                 {name: 'client_name', headerName: 'Kunde'},
                 {name: 'rgNum', headerName: 'Nummer'},
-                {name: 'date', headerName: 'Datum'},
+                {name: 'date', headerName: 'Ausstellungsdatum'},
+                {name: 'payment_date', headerName: 'Fälligkeitsdatum'},
+                {name: 'total', headerName: 'Preis [mit MwSt.]'},
             ],
             (api) => api.countOutgoingInvoicesOutgoingInvoiceCountGet(false)
         );

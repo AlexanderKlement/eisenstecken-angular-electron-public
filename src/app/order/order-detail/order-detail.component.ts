@@ -3,14 +3,13 @@ import {DefaultService, Order, OrderableType, OrderBundle, OrderedArticle} from 
 import {ActivatedRoute, Router} from '@angular/router';
 import {InfoDataSource} from '../../shared/components/info-builder/info-builder.datasource';
 import {TableDataSource} from '../../shared/components/table-builder/table-builder.datasource';
-import {first, map} from 'rxjs/operators';
+import {first} from 'rxjs/operators';
 import {ProductsListComponent} from '../available-products-list/products-list.component';
 import {ProductEditDialogComponent} from '../available-products-list/product-edit-dialog/product-edit-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {CustomButton} from '../../shared/components/toolbar/toolbar.component';
 import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/confirm-dialog.component';
-import {OrderDialogComponent} from '../../supplier/supplier-detail/order-dialog/order-dialog.component';
 import {OrderedArticleMoveDialogComponent} from './ordered-article-move-dialog/ordered-article-move-dialog.component';
 import {formatCurrency} from '@angular/common';
 import {Observable, Subscriber} from 'rxjs';
@@ -28,8 +27,6 @@ export class OrderDetailComponent implements OnInit {
     gotoNavigationTarget = '';
 
     public $refresh: Observable<void>;
-    private $refreshSubscriber: Subscriber<void>;
-
     buttons: CustomButton[] = [
         {
             name: 'Löschen',
@@ -44,7 +41,7 @@ export class OrderDetailComponent implements OnInit {
             }
         }
     ];
-
+    private $refreshSubscriber: Subscriber<void>;
 
     constructor(private api: DefaultService, private route: ActivatedRoute, private router: Router,
                 private dialog: MatDialog, private snackBar: MatSnackBar) {
@@ -80,7 +77,6 @@ export class OrderDetailComponent implements OnInit {
     }
 
     onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
-        console.log('Getting attached');
         this.$refreshSubscriber.next();
     }
 
@@ -125,7 +121,8 @@ export class OrderDetailComponent implements OnInit {
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
                                 'ordered_unit.name.translation_de': dataSource.ordered_unit.name.translation_de,
                                 price: formatCurrency(dataSource.price, 'de-DE', 'EUR'),
-                                discount: formatCurrency(dataSource.price * dataSource.amount * (1 - dataSource.discount / 100), 'de-DE', 'EUR'),
+                                discount: formatCurrency(dataSource.price * dataSource.amount *
+                                    (1 - dataSource.discount / 100), 'de-DE', 'EUR'),
                             },
                             route: () => {
                                 this.orderedArticleClicked(dataSource.id);
@@ -150,7 +147,7 @@ export class OrderDetailComponent implements OnInit {
 
     private orderedArticleClicked(id: number): void {
         this.api.readOrderedArticleOrderedArticleOrderedArticleIdGet(id).pipe(first()).subscribe((orderedArticle) => {
-            const dialogData$ = ProductsListComponent.createEditDialogData(orderedArticle, 'Produkt bearbeiten', this.api);
+            const dialogData$ = ProductsListComponent.createEditDialogData(orderedArticle, 'Produkt bearbeiten', this.api, true);
             const closeFunction = (result: any) => {
                 if (result === undefined) {
                     return;

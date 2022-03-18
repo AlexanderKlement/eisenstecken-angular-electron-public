@@ -2,9 +2,8 @@ import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {DefaultService} from 'eisenstecken-openapi-angular-library';
 import {catchError, finalize, map} from 'rxjs/operators';
-import {DataSourceClass, RecursiveKeyOf} from '../../types';
+import {DataSourceClass} from '../../types';
 import {MatPaginatorIntl} from '@angular/material/paginator';
-import {Input} from '@angular/core';
 
 export interface Column<T> {
     name: string; // RecursiveKeyOf<T>; Maybe this is better this way
@@ -84,6 +83,8 @@ export class TableDataSource<T extends DataSourceClass> extends DataSource<Row<T
     private readonly parseFunction: ParseFunction<T>;
     private dataSubject = new BehaviorSubject<Row<T>[]>([]);
 
+    private stopLoading = false;
+
     constructor(private api: DefaultService,
                 loadFunction: LoadFunction<T>,
                 parseFunction: ParseFunction<T>,
@@ -112,6 +113,10 @@ export class TableDataSource<T extends DataSourceClass> extends DataSource<Row<T
 
     public loadData(filter?: string, sortDirection?: string, pageIndex?: number, pageSize?: number, enableLoading: boolean = true): void {
 
+        if (this.stopLoading) {
+            return;
+        }
+
         if (enableLoading) {
             this.loadingSubject.next(true);
         }
@@ -121,10 +126,18 @@ export class TableDataSource<T extends DataSourceClass> extends DataSource<Row<T
             sortDirection || defaultValues.sortDirection,
             pageIndex || defaultValues.pageIndex,
             pageSize || defaultValues.pageSize).pipe(
-            catchError(() => of([])), // TODO implement error function
+            catchError(() => of([])),
             finalize(() => this.loadingSubject.next(false)),
             map(row => this.parseFunction(row))
-        ).subscribe(data => this.dataSubject.next(data));
+        ).subscribe({
+            next: data => {
+                this.dataSubject.next(data);
+            },
+            error: error => {
+                console.log(error);
+                this.stopLoading = true;
+            }
+        });
     }
 
     private findData(filter: string, sortDirection: string, pageIndex: number, pageSize: number): Observable<T[]> {

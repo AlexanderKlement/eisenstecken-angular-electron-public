@@ -33,7 +33,7 @@
         <div fxLayout="row" fxLayoutAlign="space-between start">
             <mat-form-field appearance="fill">
                 <mat-label>Anfrage</mat-label>
-                <mat-select formControlName="request">
+                <mat-select formControlName="request" [disabled]="blockRequestChange">
                     <mat-option [value]="true">
                         Ja
                     </mat-option>
