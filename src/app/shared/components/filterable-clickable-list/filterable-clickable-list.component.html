@@ -11,7 +11,8 @@
             <mat-icon *ngIf="isListItemFavorite(listElement.item)">star</mat-icon>
             <mat-icon *ngIf="!isListItemFavorite(listElement.item)">star_border</mat-icon>
         </button>
-        <mat-list-option [value]="listElement">
+        <mat-list-option [value]="listElement"
+                         [class.collapsed]="listElement.collapse !== false && listElement.collapse !== toListUnCollapse" [class.uncollapsed]="listElement.collapse === toListUnCollapse">
             {{listElement.name}}
         </mat-list-option>
     </div>

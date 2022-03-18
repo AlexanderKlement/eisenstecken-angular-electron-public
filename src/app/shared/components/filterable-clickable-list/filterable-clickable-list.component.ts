@@ -16,6 +16,7 @@ export class FilterableClickableListComponent implements OnInit, OnDestroy {
     @Input() listElements$: Observable<ListItem[]>;
     @Input() name: string;
     @Output() clickEventEmitter = new EventEmitter<ListItem>();
+    @Input() toListUnCollapse?: string;
 
     loading = true;
     listElements: ListItem[];

@@ -12,6 +12,15 @@ mat-form-field {
   &:hover, &:focus {
     background: rgba(#fdc400, 0.2);
   }
+  animation: height ease-in-out 0.5s;
+  &.collapsed {
+    height: 0 !important;
+    visibility: hidden;
+    display: none;
+  }
+  &.uncollapsed {
+    padding-left: 2em;
+  }
 }
 
 .mat-list-single-selected-option {

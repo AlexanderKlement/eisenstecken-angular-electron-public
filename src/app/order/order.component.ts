@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable, Subscriber, combineLatest} from 'rxjs';
 import {
+    isJob,
     ListItem,
     SupportedListElements
 } from '../shared/components/filterable-clickable-list/filterable-clickable-list.types';
@@ -21,6 +22,8 @@ export class OrderComponent implements OnInit {
     toList$: Observable<ListItem[]>; //Here go stocks and suppliers
     toListSubscriber: Subscriber<ListItem[]>;
     toListSelected: ListItem;
+
+    toListUncollapse = '';
 
     fromListName = 'Bestelle von Lieferanten oder Lager';
     fromList$: Observable<ListItem[]>;
@@ -49,9 +52,22 @@ export class OrderComponent implements OnInit {
             const listItem: ListItem = {
                 name: elem.displayable_name,
                 item: elem,
-                type: elem.type
+                type: elem.type,
+                collapse:false,
             };
+
             listItems.push(listItem);
+            if(isJob(elem)){
+                elem.sub_jobs.forEach((subJob)=>{
+                    listItems.push({
+                        name: subJob.displayable_name,
+                        item: subJob,
+                        type: subJob.type,
+                        collapse: elem.displayable_name,
+                    });
+                });
+            }
+
         }
         return listItems;
     }
@@ -72,8 +88,16 @@ export class OrderComponent implements OnInit {
         });
     }
 
+    toggleChildren(listItem: ListItem): void{
+        if(listItem.type === 'job' && listItem.collapse === false){
+            this.toListUncollapse = this.toListUncollapse === listItem.name ? '' : listItem.name;
+        } else if(listItem.collapse !== this.toListUncollapse)
+            this.toListUncollapse = '';
+    }
+
     toListItemClicked(listItem: ListItem): void {
         this.resetProductWindows();
+        this.toggleChildren(listItem);
         this.decideWhichFromListToLoad(listItem);
         this.toListSelected = listItem;
         this.step = 1;
@@ -147,7 +171,7 @@ export class OrderComponent implements OnInit {
 
     private loadToList() {
         const stocks$ = this.api.readStocksStockGet().pipe(first());
-        const jobs$ = this.api.readJobsJobGet(0, 1000, '', undefined, 'JOBSTATUS_ACCEPTED').pipe(first());
+        const jobs$ = this.api.readJobsJobGet(0, 1000, '', undefined, 'JOBSTATUS_ACCEPTED', true).pipe(first());
 
         combineLatest([stocks$, jobs$]).subscribe(([stocks, jobs]) => {
             const stockListItems = OrderComponent.createListItems(stocks);
