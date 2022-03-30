@@ -27,11 +27,37 @@ import {InfoDialogComponent} from './info-dialog/info-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
-    declarations: [HomeComponent, ChatComponent, ChatMessageComponent, NoteComponent, SingleNoteComponent, MenuTilesComponent, SingleMenuTileComponent, CalendarsChatFrameComponent, InfoDialogComponent],
+    declarations: [
+        HomeComponent,
+        ChatComponent,
+        ChatMessageComponent,
+        NoteComponent,
+        SingleNoteComponent,
+        MenuTilesComponent,
+        SingleMenuTileComponent,
+        CalendarsChatFrameComponent,
+        InfoDialogComponent
+    ],
     exports: [
         ChatComponent
     ],
-    imports: [CommonModule, SharedModule, HomeRoutingModule, MatCardModule, FlexLayoutModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, ReactiveFormsModule, MatGridListModule, MatProgressSpinnerModule, MatTabsModule, MatIconModule, MatDialogModule]
+    imports: [
+        CommonModule,
+        SharedModule,
+        HomeRoutingModule,
+        MatCardModule,
+        FlexLayoutModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatButtonModule,
+        ReactiveFormsModule,
+        MatGridListModule,
+        MatProgressSpinnerModule,
+        MatTabsModule,
+        MatIconModule,
+        MatDialogModule
+    ]
 })
 export class HomeModule {
 }

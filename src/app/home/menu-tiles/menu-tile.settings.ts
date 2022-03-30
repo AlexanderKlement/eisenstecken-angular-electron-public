@@ -26,6 +26,7 @@ export const availableMenuTiles: MenuTileDetail[] = [
     {title: 'Benutzer', icon: 'person', link: '/user', requiredRights: ['users:all']},
     {title: 'Einstellungen', icon: 'settings', link: '/settings', requiredRights: ['parameters:set']},
     {title: 'Arbeitstag', icon: 'schedule', link: '/work_day', requiredRights: ['nobody:hours:insert']},
+    {title: 'Ereignisse', icon: 'calendar_today', link: '/calendar', requiredRights: ['info_pages:all']},
 ];
 
 export function matchRightsToMenuTiles(rights: Right[]): MenuTileDetail[] {

@@ -1,6 +1,6 @@
 {
   "name": "eisenstecken-eibel",
-  "version": "0.9.5",
+  "version": "0.9.6",
   "description": "Eisenstecken internal administration software",
   "homepage": "https://kivi.bz.it",
   "author": {
@@ -47,6 +47,7 @@
     "package:msi": "node build_installer_msi.js"
   },
   "dependencies": {
+    "@angular-material-components/datetime-picker": "7.0.1",
     "@angular/animations": "13.0.1",
     "@angular/cdk": "13.0.1",
     "@angular/common": "13.0.1",
@@ -62,8 +63,10 @@
     "@angular/service-worker": "13.0.2",
     "@sentry/angular": "6.15.0",
     "@sentry/tracing": "6.15.0",
+    "angular-calendar": "0.29.0",
     "canvas-confetti": "1.4.0",
-    "eisenstecken-openapi-angular-library": "8.9.1",
+    "date-fns": "2.28.0",
+    "eisenstecken-openapi-angular-library": "8.10.1",
     "electron-squirrel-startup": "1.0.0",
     "material-design-icons": "3.0.1",
     "moment": "2.29.1",

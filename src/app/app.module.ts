@@ -57,6 +57,10 @@ import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
 import {DebugModule} from './debug/debug.module';
 import {LocalConfigRenderer} from './LocalConfigRenderer';
 import {CustomReuseStrategy} from './reuse-strategy';
+import {CalendarModule, DateAdapter} from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import {NgxMatDatetimePickerModule} from '@angular-material-components/datetime-picker';
+import {EventCalendarModule} from './calendar/event-calendar.module';
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader => new TranslateHttpLoader(http, './assets/i18n/', '.json');
 
@@ -74,6 +78,11 @@ export function apiConfigFactory(): Configuration {
     imports: [
         CommonModule,
         BrowserModule,
+        BrowserAnimationsModule,
+        CalendarModule.forRoot({
+            provide: DateAdapter,
+            useFactory: adapterFactory,
+        }),
         FormsModule,
         HttpClientModule,
         CoreModule,
@@ -89,6 +98,8 @@ export function apiConfigFactory(): Configuration {
         MatBottomSheetModule,
         InvoiceModule,
         EmployeeModule,
+        EventCalendarModule,
+        NgxMatDatetimePickerModule,
         WorkDayModule,
         RecalculationModule,
         ApiModule.forRoot(apiConfigFactory),

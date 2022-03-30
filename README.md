@@ -49,7 +49,7 @@ The build and deploy with:
 
 `electron:deploy`
 
-Go to GitHub open the release and 
+Go to GitHub open the release and
 
 ### Hour register Website (with Serviceworker)
 
@@ -115,3 +115,8 @@ First we have to change the version numbers in `package.json` in the root and ro
 
 The build the update exe and publish the release on GitHub
 
+## Adding new modules:
+
+- `ng generate module NAME --routing`
+- `ng generate component NAME`
+- Register in `app.module.ts` and `app-routing.module.ts`

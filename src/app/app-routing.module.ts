@@ -17,6 +17,7 @@ import {EmployeeRoutingModule} from './employee/employee-routing.module';
 import {AccessGuard} from './shared/services/access-guard.service';
 import {DeliveryNoteRoutingModule} from './delivery-note/delivery-note-routing.module';
 import {DebugRoutingModule} from './debug/debug-routing.module';
+import {EventCalendarRoutingModule} from './calendar/event-calendar-routing.module';
 
 const routes: Routes = [
     {
@@ -49,6 +50,7 @@ const routes: Routes = [
         InvoiceRoutingModule,
         UserRoutingModule,
         SupplierRoutingModule,
+        EventCalendarRoutingModule,
         DebugRoutingModule,
         WorkDayRoutingModule,
         EmployeeRoutingModule,

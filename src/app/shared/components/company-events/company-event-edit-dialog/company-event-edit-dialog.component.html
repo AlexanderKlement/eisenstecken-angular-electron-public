@@ -1,0 +1,40 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<div mat-dialog-content>
+    <form [formGroup]="companyEventFormGroup">
+        <div fxLayout="column" fxLayoutAlign="space-around center">
+            <mat-form-field>
+                <mat-label>Beschreibung</mat-label>
+                <input class="form-control" type="text" formControlName="title" matInput>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Start Zeitpunkt</mat-label>
+                <input matInput [ngxMatDatetimePicker]="startPicker" placeholder="Start" formControlName="startTime">
+                <mat-datepicker-toggle matSuffix [for]="$any(startPicker)"></mat-datepicker-toggle>
+                <ngx-mat-datetime-picker #startPicker [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+                                         [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond"
+                                         [touchUi]="touchUi" [enableMeridian]="enableMeridian"
+                                         [disableMinute]="disableMinute" [hideTime]="hideTime">
+                </ngx-mat-datetime-picker>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>End Zeitpunkt</mat-label>
+                <input matInput [ngxMatDatetimePicker]="endPicker" placeholder="Ende" formControlName="endTime">
+                <mat-datepicker-toggle matSuffix [for]="$any(endPicker)"></mat-datepicker-toggle>
+                <ngx-mat-datetime-picker #endPicker [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+                                         [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond"
+                                         [touchUi]="touchUi" [enableMeridian]="enableMeridian"
+                                         [disableMinute]="disableMinute" [hideTime]="hideTime">
+                </ngx-mat-datetime-picker>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Attachment</mat-label>
+                <input class="form-control" type="text" formControlName="color" matInput>
+            </mat-form-field>
+            <button mat-raised-button type="submit">Senden</button>
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onCancelClick()">Abbrechen</button>
+    <button mat-button (click)="onSubmitClick()">Speichern</button>
+</div>

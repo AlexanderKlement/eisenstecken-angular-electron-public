@@ -1,6 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {DefaultService} from 'eisenstecken-openapi-angular-library';
-import {ActivatedRoute, Router} from '@angular/router';
 import {DayManager} from './day.manager';
 import {MatDialog} from '@angular/material/dialog';
 import {CalendarData, CalendarEditComponent} from './calendar-edit/calendar-edit.component';
@@ -11,10 +9,10 @@ import {AuthService} from '../../services/auth.service';
 
 @Component({
     selector: 'app-calendar',
-    templateUrl: './calendar.component.html',
-    styleUrls: ['./calendar.component.scss']
+    templateUrl: './simple-calendar.component.html',
+    styleUrls: ['./simple-calendar.component.scss']
 })
-export class CalendarComponent implements OnInit {
+export class SimpleCalendarComponent implements OnInit {
 
     @Input() calendarId: number;
     @Input() public: boolean;
