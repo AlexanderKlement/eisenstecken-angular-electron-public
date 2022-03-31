@@ -34,6 +34,8 @@ export class CompanyEventsComponent implements OnInit, OnDestroy {
 
     currentYear: number;
 
+    //TODO: dont forget to update events if current year changes
+
     refreshTimeout: NodeJS.Timeout;
     refreshIntervalSeconds = 10;
     events: CalendarEvent[] = [];
@@ -75,6 +77,7 @@ export class CompanyEventsComponent implements OnInit, OnDestroy {
         this.api.readCompanyEventsByYearCompanyEventYearYearGet(this.currentYear)
             .pipe(first()).subscribe((companyEvents) => {
             this.events = this.transformCompanyEventsToCalendarEvents(companyEvents);
+            this.refresh.next();
         });
     }
 
@@ -93,24 +96,25 @@ export class CompanyEventsComponent implements OnInit, OnDestroy {
     handleEvent(action: string, event: CalendarEvent): void {
         console.log('HandlingEvent', action, event);
         let dialog;
-        if (action === 'Edited') {
+        if (action === 'Edit') {
             dialog = this.dialog.open(CompanyEventEditDialogComponent, {
                 width: '400px',
                 data: {id: event.id}
             });
-        } else if (action === 'Deleted') {
+        } else if (action === 'Delete') {
             this.deleteEvent(event);
-        } else if (action === 'Created') {
+        } else if (action === 'Create') {
             dialog = this.dialog.open(CompanyEventEditDialogComponent, {
                 width: '400px',
                 data: {id: -1}
             });
         } else {
-            console.warn('Wrong action');
+            console.warn('Wrong action', action);
             return;
         }
 
         dialog.afterClosed().subscribe((result) => {
+            console.log(result);
             if (result) {
                 this.loadCalendarEvents();
             }
@@ -123,6 +127,7 @@ export class CompanyEventsComponent implements OnInit, OnDestroy {
         if (typeof eventToDelete.id === 'number') {
             this.api.deleteCompanyEventCompanyEventCompanyEventIdDelete(eventToDelete.id)
                 .pipe(first()).subscribe((success) => {
+                console.log(success);
                 if (success) {
                     this.loadCalendarEvents();
                 }

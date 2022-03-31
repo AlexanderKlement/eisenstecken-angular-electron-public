@@ -27,12 +27,16 @@
                 </ngx-mat-datetime-picker>
             </mat-form-field>
             <mat-form-field>
-                <mat-label>Attachment</mat-label>
-                <input class="form-control" type="text" formControlName="color" matInput>
+                <mat-label>Farbe</mat-label>
+                <mat-select formControlName="color">
+                    <mat-option *ngFor="let color of colors | keyvalue" [value]="color.key">
+                        {{color.value.name}}
+                    </mat-option>
+                </mat-select>
             </mat-form-field>
-            <button mat-raised-button type="submit">Senden</button>
         </div>
     </form>
+
 </div>
 <div mat-dialog-actions>
     <button mat-button (click)="onCancelClick()">Abbrechen</button>

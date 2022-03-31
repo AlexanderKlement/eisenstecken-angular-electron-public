@@ -30,8 +30,6 @@ export class CompanyEventEditDialogComponent implements OnInit {
     enableMeridian = false;
     disableMinute = false;
     hideTime = false;
-    //color=
-    //[color]="color"
 
     companyEventFormGroup: FormGroup;
 
@@ -61,8 +59,6 @@ export class CompanyEventEditDialogComponent implements OnInit {
                 });
             });
         }
-
-
     }
 
     initCompanyEventFormGroup(): void {
@@ -71,7 +67,7 @@ export class CompanyEventEditDialogComponent implements OnInit {
             allDay: new FormControl(false),
             startTime: new FormControl(new Date()),
             endTime: new FormControl(new Date()),
-            color: new FormControl(this.colors.blue)
+            color: new FormControl('blue')
         });
     }
 

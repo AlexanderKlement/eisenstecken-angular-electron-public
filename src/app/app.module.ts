@@ -59,8 +59,9 @@ import {LocalConfigRenderer} from './LocalConfigRenderer';
 import {CustomReuseStrategy} from './reuse-strategy';
 import {CalendarModule, DateAdapter} from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
-import {NgxMatDatetimePickerModule} from '@angular-material-components/datetime-picker';
+import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from '@angular-material-components/datetime-picker';
 import {EventCalendarModule} from './calendar/event-calendar.module';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader => new TranslateHttpLoader(http, './assets/i18n/', '.json');
 
@@ -101,6 +102,8 @@ export function apiConfigFactory(): Configuration {
         EventCalendarModule,
         NgxMatDatetimePickerModule,
         WorkDayModule,
+        MatDatepickerModule,
+        NgxMatNativeDateModule,
         RecalculationModule,
         ApiModule.forRoot(apiConfigFactory),
         AppRoutingModule,
