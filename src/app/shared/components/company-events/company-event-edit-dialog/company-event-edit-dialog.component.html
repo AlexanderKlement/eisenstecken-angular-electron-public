@@ -39,6 +39,8 @@
 
 </div>
 <div mat-dialog-actions>
+    <button *ngIf="!create" mat-button (click)="onDeleteClick()">Löschen</button>
+    <span class="spacer"></span>
     <button mat-button (click)="onCancelClick()">Abbrechen</button>
     <button mat-button (click)="onSubmitClick()">Speichern</button>
 </div>

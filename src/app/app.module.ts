@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {APP_INITIALIZER, ErrorHandler, LOCALE_ID, NgModule} from '@angular/core';
+import {APP_INITIALIZER, ErrorHandler, Injectable, LOCALE_ID, NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule, HttpClient, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {CoreModule} from './core/core.module';
@@ -57,11 +57,16 @@ import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
 import {DebugModule} from './debug/debug.module';
 import {LocalConfigRenderer} from './LocalConfigRenderer';
 import {CustomReuseStrategy} from './reuse-strategy';
-import {CalendarModule, DateAdapter} from 'angular-calendar';
-import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import {
+    CalendarDateFormatter,
+    CalendarModule,
+    CalendarNativeDateFormatter,
+    DateAdapter,
+    DateFormatterParams
+} from 'angular-calendar';
+import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
 import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from '@angular-material-components/datetime-picker';
 import {EventCalendarModule} from './calendar/event-calendar.module';
-import {MatDatepickerModule} from '@angular/material/datepicker';
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader => new TranslateHttpLoader(http, './assets/i18n/', '.json');
 
@@ -72,6 +77,16 @@ export function apiConfigFactory(): Configuration {
         basePath: LocalConfigRenderer.getInstance().getApi(),
     };
     return new Configuration(params);
+}
+
+@Injectable()
+class CustomDateFormatter extends CalendarNativeDateFormatter {
+
+    public dayViewHour({date, locale}: DateFormatterParams): string {
+        // change this to return a different date format
+        return new Intl.DateTimeFormat(locale, {hour: 'numeric'}).format(date);
+    }
+
 }
 
 @NgModule({
@@ -100,10 +115,9 @@ export function apiConfigFactory(): Configuration {
         InvoiceModule,
         EmployeeModule,
         EventCalendarModule,
+        NgxMatNativeDateModule,
         NgxMatDatetimePickerModule,
         WorkDayModule,
-        MatDatepickerModule,
-        NgxMatNativeDateModule,
         RecalculationModule,
         ApiModule.forRoot(apiConfigFactory),
         AppRoutingModule,
@@ -179,7 +193,8 @@ export function apiConfigFactory(): Configuration {
             },
             {provide: MatPaginatorIntl, useValue: getGermanPaginatorIntl()},
             {provide: HTTP_INTERCEPTORS, useClass: GlobalHttpInterceptorService, multi: true},
-            {provide: RouteReuseStrategy, useClass: CustomReuseStrategy}
+            {provide: RouteReuseStrategy, useClass: CustomReuseStrategy},
+            {provide: CalendarDateFormatter, useClass: CustomDateFormatter}
         ],
     bootstrap: [AppComponent]
 })

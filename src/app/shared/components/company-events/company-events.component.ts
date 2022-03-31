@@ -112,27 +112,39 @@ export class CompanyEventsComponent implements OnInit, OnDestroy {
             console.warn('Wrong action', action);
             return;
         }
+        if (typeof dialog !== 'undefined') {
+            dialog.afterClosed().subscribe((result) => {
+                console.log(result);
+                if (typeof result !== 'undefined' && result.hasOwnProperty('action')) {
+                    switch (result.action) {
+                        case 'refresh':
+                            this.loadCalendarEvents();
+                            break;
+                        case'delete':
+                            this.deleteEventById(result.id);
+                    }
+                }
+            });
 
-        dialog.afterClosed().subscribe((result) => {
-            console.log(result);
-            if (result) {
-                this.loadCalendarEvents();
-            }
-        });
+        }
+
 
     }
 
 
     deleteEvent(eventToDelete: CalendarEvent) {
         if (typeof eventToDelete.id === 'number') {
-            this.api.deleteCompanyEventCompanyEventCompanyEventIdDelete(eventToDelete.id)
-                .pipe(first()).subscribe((success) => {
-                console.log(success);
-                if (success) {
-                    this.loadCalendarEvents();
-                }
-            });
+            this.deleteEventById(eventToDelete.id);
         }
+    }
+
+    deleteEventById(id: number) {
+        this.api.deleteCompanyEventCompanyEventCompanyEventIdDelete(id)
+            .pipe(first()).subscribe((success) => {
+            if (success) {
+                this.loadCalendarEvents();
+            }
+        });
     }
 
     setView(view: CalendarView) {

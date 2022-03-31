@@ -62,11 +62,12 @@ export class CompanyEventEditDialogComponent implements OnInit {
     }
 
     initCompanyEventFormGroup(): void {
+        const today = new Date();
         this.companyEventFormGroup = new FormGroup({
             title: new FormControl(''),
             allDay: new FormControl(false),
-            startTime: new FormControl(new Date()),
-            endTime: new FormControl(new Date()),
+            startTime: new FormControl(today),
+            endTime: new FormControl(today.setHours(today.getHours() + 1)),
             color: new FormControl('blue')
         });
     }
@@ -89,14 +90,18 @@ export class CompanyEventEditDialogComponent implements OnInit {
         };
         if (this.create) {
             this.api.createCompanyEventCompanyEventPost(companyEventCreateUpdate).pipe(first()).subscribe(() => {
-                this.dialogRef.close(true);
+                this.dialogRef.close({action: 'refresh'});
             });
         } else {
             this.api.updateCompanyEventCompanyEventCompanyEventIdPut(this.data.id, companyEventCreateUpdate).pipe(first()).subscribe(() => {
-                this.dialogRef.close(true);
+                this.dialogRef.close({action: 'refresh'});
             });
         }
 
+    }
+
+    onDeleteClick(): void {
+        this.dialogRef.close({action: 'delete', id: this.data.id});
     }
 
 }
