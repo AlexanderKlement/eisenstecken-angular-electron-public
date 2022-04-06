@@ -34,7 +34,8 @@ export class CompanyEventsComponent implements OnInit, OnDestroy {
 
     currentYear: number;
 
-    //TODO: dont forget to update events if current year changes
+    //TODO: dont forget to update events if current year changes#
+    //TODO: Change shown times from 6 to 20
 
     refreshTimeout: NodeJS.Timeout;
     refreshIntervalSeconds = 10;
@@ -154,6 +155,7 @@ export class CompanyEventsComponent implements OnInit, OnDestroy {
     closeOpenMonthViewDay() {
         this.activeDayIsOpen = false;
     }
+
 
     private transformCompanyEventsToCalendarEvents(companyEvents: CompanyEvent[]) {
         const newCompanyEvents: CalendarEvent[] = [];

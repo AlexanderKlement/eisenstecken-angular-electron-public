@@ -48,6 +48,8 @@ import {
     CompanyEventEditDialogComponent
 } from './components/company-events/company-event-edit-dialog/company-event-edit-dialog.component';
 import {NgxMatDatetimePickerModule} from '@angular-material-components/datetime-picker';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 @NgModule({
     declarations: [
@@ -99,7 +101,9 @@ import {NgxMatDatetimePickerModule} from '@angular-material-components/datetime-
         NgxMaterialTimepickerModule.setLocale('de-DE'),
         MatTooltipModule,
         CalendarModule,
-        NgxMatDatetimePickerModule
+        NgxMatDatetimePickerModule,
+        MatButtonToggleModule,
+        MatSlideToggleModule
     ],
     exports: [
         TranslateModule,

@@ -49,6 +49,20 @@ export class InfoDialogComponent implements OnInit {
             ]
         },
         {
+            versionName: '0.9.7',
+            changes: [
+                'Empfängerkodex wird nun standartmäßig mit "0000000" eingeführt.',
+                'Sollte man Artikel löschen wollen, wird nun ein Bestätigungsdialog geöffnet.'
+            ]
+        },
+        {
+            versionName: '0.9.6',
+            changes: [
+                'Experimenteller Kalender hinzugefügt. Wird in seiner nächsten Form wahrscheinlich ziemlich' +
+                ' überarbeitet.'
+            ]
+        },
+        {
             versionName: '0.9.5',
             changes: [
                 'Ob ein Artikel eine Anfrage ist, kann nun nachträglich nicht mehr geändert werden.',
@@ -299,7 +313,7 @@ export class InfoDialogComponent implements OnInit {
     initUserDataSource(): void {
         this.userDataSource = new TableDataSource(
             this.api,
-            (api, filter, sortDirection, skip, limit) => api.readUsersUsersGet(skip, filter, limit),
+            (api, filter, sortDirection, skip, limit) => api.readUsersUsersGet(skip, filter, limit, true),
             (dataSourceClasses) => {
                 const rows = [];
                 dataSourceClasses.forEach((dataSource) => {

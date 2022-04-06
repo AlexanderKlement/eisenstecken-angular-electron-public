@@ -46,7 +46,7 @@ export class ClientEditComponent extends BaseEditComponent<Client> implements On
             // eslint-disable-next-line @typescript-eslint/naming-convention
             fiscal_code: new FormControl(''),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            codice_destinatario: new FormControl(''),
+            codice_destinatario: new FormControl('0000000'),
             pec: new FormControl(''),
             gender: new FormControl('M'),
             language: new FormControl('DE'),

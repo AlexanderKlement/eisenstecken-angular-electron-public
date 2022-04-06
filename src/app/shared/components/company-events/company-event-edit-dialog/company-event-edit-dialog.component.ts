@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {CompanyEventCreate, DefaultService} from 'eisenstecken-openapi-angular-library';
 import {FormControl, FormGroup} from '@angular/forms';
@@ -11,6 +11,7 @@ export interface CompanyEventEditData {
 
 @Component({
     selector: 'app-company-event-edit-dialog',
+    changeDetection: ChangeDetectionStrategy.Default,
     templateUrl: './company-event-edit-dialog.component.html',
     styleUrls: ['./company-event-edit-dialog.component.scss']
 })
@@ -104,4 +105,12 @@ export class CompanyEventEditDialogComponent implements OnInit {
         this.dialogRef.close({action: 'delete', id: this.data.id});
     }
 
+    allDayChanged() {
+        if (this.companyEventFormGroup.get('allDay').value) {
+            this.hideTime = true;
+        } else {
+            this.hideTime = false;
+        }
+
+    }
 }

@@ -1,9 +1,10 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {ArticleCreate, ArticleUpdateFull, DefaultService, Unit, Vat} from 'eisenstecken-openapi-angular-library';
 import {Observable} from 'rxjs';
 import {first} from 'rxjs/operators';
+import {ConfirmDialogComponent} from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 export interface ArticleEditDialogData {
     id: number;
@@ -24,7 +25,7 @@ export class ArticleEditDialogComponent implements OnInit {
     unitOptions$: Observable<Unit[]>;
 
 
-    constructor(public dialogRef: MatDialogRef<ArticleEditDialogData>,
+    constructor(public dialogRef: MatDialogRef<ArticleEditDialogData>, private dialog: MatDialog,
                 @Inject(MAT_DIALOG_DATA) public data: ArticleEditDialogData, private api: DefaultService) {
     }
 
@@ -95,8 +96,19 @@ export class ArticleEditDialogComponent implements OnInit {
     }
 
     onDeleteClick() {
-        this.api.deleteArticleArticleArticleIdDelete(this.data.id).pipe(first()).subscribe(() => {
-            this.dialogRef.close(true);
+        const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+            width: '400px',
+            data: {
+                title: 'Artikel löschen?',
+                text: 'Dieser Schritt kann nicht rückgängig gemacht werden.'
+            }
+        });
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.api.deleteArticleArticleArticleIdDelete(this.data.id).pipe(first()).subscribe(() => {
+                    this.dialogRef.close(true);
+                });
+            }
         });
     }
 

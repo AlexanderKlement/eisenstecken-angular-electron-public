@@ -26,11 +26,12 @@
                                          [disableMinute]="disableMinute" [hideTime]="hideTime">
                 </ngx-mat-datetime-picker>
             </mat-form-field>
+            <mat-slide-toggle color="primary" formControlName="allDay" (change)="allDayChanged()">Ganztags</mat-slide-toggle>
             <mat-form-field>
                 <mat-label>Farbe</mat-label>
                 <mat-select formControlName="color">
                     <mat-option *ngFor="let color of colors | keyvalue" [value]="color.key">
-                        {{color.value.name}}
+                        {{color.value["name"]}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
