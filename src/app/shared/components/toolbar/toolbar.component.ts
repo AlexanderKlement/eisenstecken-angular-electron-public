@@ -16,13 +16,12 @@ export class ToolbarComponent implements OnInit {
     @Input() buttonList?: CustomButton[];
     @Input() beforeBackFunction?: (afterBackFunction: VoidFunction) => void;
     @Input() title = '';
+    @Input() showBackButton =  true;
+    @Input() catchBackButton = true;
 
     // eslint-disable-next-line @typescript-eslint/member-ordering
     constructor(private navigation: NavigationService) {
     }
-
-    // @ts-ignore
-    @HostListener('window:popstate', ['$event'])
 
     @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
         if (event.key === 'Escape') {
@@ -31,10 +30,12 @@ export class ToolbarComponent implements OnInit {
         }
     }
 
-    onBrowserBackBtnClose(event: Event): void {
-        event.preventDefault();
-        this.navigation.backEvent();
-        this.backClicked();
+    @HostListener('window:popstate', ['$event']) onBrowserBackBtnClose(event: Event): void {
+        if(this.catchBackButton) {
+            event.preventDefault();
+            this.navigation.backEvent();
+            this.backClicked();
+        }
     }
 
     ngOnInit(): void {

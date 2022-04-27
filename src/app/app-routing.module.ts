@@ -18,6 +18,7 @@ import {AccessGuard} from './shared/services/access-guard.service';
 import {DeliveryNoteRoutingModule} from './delivery-note/delivery-note-routing.module';
 import {DebugRoutingModule} from './debug/debug-routing.module';
 import {EventCalendarRoutingModule} from './calendar/event-calendar-routing.module';
+import {MobileAppRoutingModule} from './mobile-app/mobile-app-routing.module';
 
 const routes: Routes = [
     {
@@ -47,6 +48,7 @@ const routes: Routes = [
         RecalculationRoutingModule,
         OrderRoutingModule,
         SettingsRoutingModule,
+        MobileAppRoutingModule,
         InvoiceRoutingModule,
         UserRoutingModule,
         SupplierRoutingModule,

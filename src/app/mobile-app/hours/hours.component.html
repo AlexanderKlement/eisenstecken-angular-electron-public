@@ -1,0 +1,9 @@
+<app-toolbar title="" [buttonList]="buttons" showBackButton="false" catchBackButton="false"></app-toolbar>
+<div *ngIf="loading" fxFlexFill class="loading">
+    <mat-spinner class="spinner"></mat-spinner>
+</div>
+<app-hours-stepper
+        *ngIf="showStepper"
+        [backStepper$]="stepBackObservable$"
+        (firstSiteGoBack)="goBack()">
+</app-hours-stepper>

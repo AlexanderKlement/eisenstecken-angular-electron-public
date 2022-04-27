@@ -133,7 +133,11 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
                 this.submitted = false;
                 this.file.open(deliveryNote.pdf);
                 this.router.navigateByUrl('delivery_note');
-            }, this.createUpdateError);
+            }, (err) => {
+                this.createUpdateError(err);
+            }, () => {
+                this.createUpdateComplete();
+            });
         } else {
             const deliveryNoteUpdate: DeliveryNoteUpdate = {
                 // eslint-disable-next-line id-blacklist
@@ -159,7 +163,11 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
                 this.submitted = false;
                 this.file.open(deliveryNote.pdf);
                 this.router.navigateByUrl('delivery_note');
-            }, this.createUpdateError);
+            }, (err) => {
+                this.createUpdateError(err);
+            }, () => {
+                this.createUpdateComplete();
+            });
         }
     }
 

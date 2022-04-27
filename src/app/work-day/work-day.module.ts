@@ -11,7 +11,6 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSelectModule} from '@angular/material/select';
-import { WorkDayGeneralComponent } from './work-day-general/work-day-general.component';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { StopwatchComponent } from './work-day-general/stopwatch/stopwatch.component';
@@ -20,11 +19,9 @@ import { StopwatchComponent } from './work-day-general/stopwatch/stopwatch.compo
 @NgModule({
     declarations: [
         WorkDayComponent,
-        WorkDayGeneralComponent,
         StopwatchComponent
     ],
     exports: [
-        WorkDayGeneralComponent
     ],
     imports: [
         CommonModule,

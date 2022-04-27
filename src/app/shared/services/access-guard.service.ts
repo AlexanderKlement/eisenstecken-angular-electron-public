@@ -34,9 +34,9 @@ export class AccessGuard implements CanActivate {
     private redirectWorkHours(): void {
         console.log('Host is: ' + window.location.hostname);
         if (this.limitAccessHosts.includes(window.location.hostname)) {
-            if (!this.router.url.startsWith('/work_day') || !this.router.url.startsWith('/login')) {
+            if (!this.router.url.startsWith('/mobile') || !this.router.url.startsWith('/login')) {
                 if (!this.electron.isElectron) {
-                    this.router.navigateByUrl('/work_day'); //before introducing this again, s
+                    this.router.navigateByUrl('/mobile'); //before introducing this again, s
                 }
             }
         } else {

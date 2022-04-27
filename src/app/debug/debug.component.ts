@@ -3,6 +3,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {EmailService} from '../shared/services/email.service';
 import {FileService} from '../shared/services/file.service';
 import {TrayService} from '../shared/services/tray.service';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-debug',
@@ -16,7 +17,8 @@ export class DebugComponent implements OnInit {
     selectFolderFormGroup: FormGroup;
     trayBalloonFormGroup: FormGroup;
 
-    constructor(private email: EmailService, private file: FileService, private tray: TrayService) {
+    constructor(private email: EmailService, private file: FileService, private tray: TrayService,
+                private router: Router) {
     }
 
     ngOnInit(): void {
@@ -65,6 +67,10 @@ export class DebugComponent implements OnInit {
             console.log(result);
             this.selectFolderFormGroup.get('path').setValue(result);
         });
+    }
+
+    mobileClicked(): void {
+        this.router.navigateByUrl('mobile');
     }
 
     private initEmailGroup() {

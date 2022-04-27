@@ -37,8 +37,6 @@ export class InfoDialogComponent implements OnInit {
         {
             versionName: 'In Bearbeitung:',
             changes: [
-                'Bei Bestellungen sollte es möglich sein die Unteraufträge/Projekte einzuklappen, um die ganze Ansicht übersichtlicher' +
-                ' zu gestalten.',
                 'Wenn Aufträge angenommen werden, wird der Ordner von Angebote in Projekte verschoben. Sollte eine Datei geöffnet sein ' +
                 '(oder der Server anderweitig keine Schreibberechtigung auf eine oder mehrere Dateien erhält),' +
                 ' werden die restlichen Dateien ' +
@@ -46,6 +44,14 @@ export class InfoDialogComponent implements OnInit {
                 ' Projekte). mit jeweils mindestens' +
                 ' einer Datei. Hier entwerder die Operation nicht durchführen, oder bei Fehlern wieder rückgängig machen.',
                 'Mail die sich bei Bestellung öffnet ist nicht optimal formatiert.'
+            ]
+        },
+        {
+            versionName: '0.9.8',
+            changes: [
+                'Lieferschein lässt nun erneutes Speichern bei Fehler zu.',
+                'Neues Restaurant hinzugefügt: Valentin',
+                'Montage bei Lieferschein nun auch auf PDF.'
             ]
         },
         {

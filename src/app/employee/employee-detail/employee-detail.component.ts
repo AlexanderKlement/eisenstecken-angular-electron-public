@@ -1,13 +1,7 @@
 import {Component, ComponentRef, OnInit} from '@angular/core';
 import {TableDataSource} from '../../shared/components/table-builder/table-builder.datasource';
 import {
-    Journey,
-    Fee,
-    Meal,
-    DefaultService,
-    WorkDay,
-    Service,
-    AdditionalWorkload
+    Journey, Fee, Meal, DefaultService, WorkDay, Service, AdditionalWorkload
 } from 'eisenstecken-openapi-angular-library';
 import {ActivatedRoute, Router} from '@angular/router';
 import {first} from 'rxjs/operators';
@@ -15,7 +9,6 @@ import {CustomButton} from '../../shared/components/toolbar/toolbar.component';
 import {Observable, Subject, Subscriber} from 'rxjs';
 import {MatSelectChange} from '@angular/material/select';
 import * as moment from 'moment';
-import {WorkDayGeneralComponent} from '../../work-day/work-day-general/work-day-general.component';
 import {ServiceDialogComponent} from '../service/service-dialog/service-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {ServiceCreateDialogComponent} from '../service/service-create-dialog/service-create-dialog.component';
@@ -84,7 +77,7 @@ export class EmployeeDetailComponent implements OnInit {
             this.initServiceDataSource();
             this.initAdditionalDataSource();
         });
-        this.workDays$ = this.api.getWorkDaysByUserWorkDayUserUserIdGet(this.userId);
+        //this.workDays$ = this.api.getWorkDaysByUserWorkDayUserUserIdGet(this.userId);
         this.workDay$ = new Observable<WorkDay>(subscriber => {
             this.workDaySubscriber$ = subscriber;
         });
@@ -103,8 +96,8 @@ export class EmployeeDetailComponent implements OnInit {
     }
 
     workDayChanged(event: MatSelectChange): void {
-        this.workDayLoading = true;
-        this.api.getWorkDayWorkDayWorkDayIdGet(event.value).pipe(first()).subscribe(workDay => {
+        this.workDayLoading = true; //TODO: change this to user id
+        this.api.getCurrentWorkDayByUserWorkDayCurrentUserIdGet(event.value).pipe(first()).subscribe(workDay => {
             this.workDay = workDay;
             //this.workDaySubscriber$.next(workDay);
             this.workDayLoading = false;
@@ -135,10 +128,12 @@ export class EmployeeDetailComponent implements OnInit {
             this.todayWorkDay = workDay;
             this.todayWorkDayLoading = false;
         });
+        /*
         this.api.getFinishedWorkDayByUserWorkDayFinishedUserIdGet(this.userId).pipe(first()).subscribe(workDay => {
             this.finishWorkDay = workDay;
             this.finishedWorkDayLoading = false;
         });
+         */
     }
 
     private initFeeDataSource(): void {
@@ -346,7 +341,6 @@ export class EmployeeDetailComponent implements OnInit {
                         });
                     }
                 });
-
             }
         });
     }

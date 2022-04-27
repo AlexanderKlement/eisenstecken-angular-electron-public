@@ -70,6 +70,7 @@ export class WorkDayGeneralComponent implements OnInit {
     maxMinutes = 0;
     remainingMinutes = 0;
 
+
     workDayStartable = false;
     workDayStopable = false;
     workDayFinishable = false;

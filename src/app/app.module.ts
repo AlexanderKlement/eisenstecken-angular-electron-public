@@ -67,6 +67,7 @@ import {
 import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
 import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from '@angular-material-components/datetime-picker';
 import {EventCalendarModule} from './calendar/event-calendar.module';
+import {MobileAppModule} from './mobile-app/mobile-app.module';
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader => new TranslateHttpLoader(http, './assets/i18n/', '.json');
 
@@ -117,6 +118,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
         EventCalendarModule,
         NgxMatNativeDateModule,
         NgxMatDatetimePickerModule,
+        MobileAppModule,
         WorkDayModule,
         RecalculationModule,
         ApiModule.forRoot(apiConfigFactory),
