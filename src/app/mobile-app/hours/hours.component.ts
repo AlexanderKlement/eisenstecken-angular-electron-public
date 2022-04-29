@@ -2,7 +2,7 @@ import {Component, HostListener, OnInit} from '@angular/core';
 import {CustomButton} from '../../shared/components/toolbar/toolbar.component';
 import {Observable, Subscriber} from 'rxjs';
 import {NavigationService} from '../../shared/services/navigation.service';
-import {DefaultService} from 'eisenstecken-openapi-angular-library';
+import {DefaultService, WorkDay} from 'eisenstecken-openapi-angular-library';
 import {first} from 'rxjs/operators';
 
 
@@ -13,11 +13,12 @@ import {first} from 'rxjs/operators';
 })
 export class HoursComponent implements OnInit {
 
-    loading = false;
-    showStepper = true;
+    loading = true;
     buttons: CustomButton[] = [];
     stepBackObservable$: Observable<void>;
     stepBackSubscriber$: Subscriber<void>;
+    todaysWorkDayFinished = false;
+    workDay: WorkDay;
 
     constructor(private navigation: NavigationService, private api: DefaultService) {
     }
@@ -37,8 +38,13 @@ export class HoursComponent implements OnInit {
                 this.stepBackSubscriber$ = subscriber;
             }
         });
-        this.api.getCurrentWorkDayWorkDayCurrentGet().pipe(first()).subscribe((workDay)=> {
-
+        this.api.getCurrentWorkDayWorkDayCurrentGet().pipe(first()).subscribe((workDay) => {
+            if (workDay) {
+                this.todaysWorkDayFinished = true;
+            }
+            console.log(workDay);
+            this.workDay = workDay;
+            this.loading = false;
         });
     }
 
@@ -46,4 +52,7 @@ export class HoursComponent implements OnInit {
         this.navigation.back();
     }
 
+    editButtonClicked() {
+        this.todaysWorkDayFinished = false;
+    }
 }

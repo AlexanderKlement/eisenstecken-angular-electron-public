@@ -33,6 +33,8 @@ export class HoursSummaryComponent implements OnInit {
         this.expensesJourneyGroup.valueChanges.subscribe(() => {
             this.refreshDrives();
         });
+        this.refreshEatingPlace();
+        this.refreshDrives();
     }
 
     getWorkedHoursString(): string {

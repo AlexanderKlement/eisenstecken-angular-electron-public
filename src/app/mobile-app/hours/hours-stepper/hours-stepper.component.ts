@@ -19,7 +19,7 @@ import {
     EatingPlace,
     Expense,
     ExpenseCreate,
-    Job,
+    Job, JobSection,
     JobSectionCreate,
     UserEssential,
     WorkDay,
@@ -56,9 +56,10 @@ function greaterThanValidator(value: number): ValidatorFn {
 })
 export class HoursStepperComponent implements OnInit {
 
-    @Input() workDay: WorkDay = undefined;
+    @Input() workDay: WorkDay;
     @Input() userId: number = undefined;
     @Input() backStepper$: Observable<void> = undefined;
+    @Input() showOnlySummary = false;
     @Output() firstSiteGoBack = new EventEmitter();
     user: UserEssential;
     buttons: CustomButton[] = [];
@@ -99,7 +100,11 @@ export class HoursStepperComponent implements OnInit {
         }
         this.initFormGroups();
         this.getData();
+        if (this.workDay) {
+            this.fillData();
+        }
         this.refreshShownHoursMinutes();
+        this.refreshSpentMinutes();
     }
 
     stepBackStepBro() {
@@ -134,6 +139,9 @@ export class HoursStepperComponent implements OnInit {
     addMinutesToJob(minutesToAdd: number, index: number, direction: boolean) {
         const fieldName = direction ? 'minutesDirection' : 'minutes';
         const actualMinutes = parseInt(this.getJobs().at(index).get(fieldName).value, 10);
+        if ((actualMinutes + minutesToAdd) < 0) {
+            return;
+        }
         this.getJobs().at(index).get(fieldName).setValue(actualMinutes + minutesToAdd);
         this.refreshSpentMinutes();
     }
@@ -174,7 +182,7 @@ export class HoursStepperComponent implements OnInit {
             return new FormGroup({
                 km: new FormControl(drive.km),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                car_id: new FormControl(drive.id)
+                car_id: new FormControl(drive.car.id)
             });
         }
     }
@@ -248,6 +256,12 @@ export class HoursStepperComponent implements OnInit {
         }
 
         const additionalWorkloadCreates: AdditionalWorkloadCreate[] = [];
+        if (parseInt(this.jobFormGroup.get('additionalJob').get('minutes').value, 10) > 0) {
+            additionalWorkloadCreates.push({
+                minutes: parseInt(this.jobFormGroup.get('additionalJob').get('minutes').value, 10),
+                description: this.jobFormGroup.get('additionalJob').get('description').value
+            });
+        }
 
         return {
             minutes: parseInt(this.hourFormGroup.get('minutes').value, 10),
@@ -274,6 +288,20 @@ export class HoursStepperComponent implements OnInit {
         }
     }
 
+    addMinutesToAddtionalJob(addMinutes: number) {
+        const minutes = parseInt(this.jobFormGroup.get('additionalJob').get('minutes').value, 10);
+        if ((addMinutes + minutes) < 0) {
+            return;
+        }
+        this.jobFormGroup.get('additionalJob').get('minutes').setValue(minutes + addMinutes);
+        this.refreshSpentMinutes();
+    }
+
+    getMinutesFromAddtionalJob(): string {
+        const minutes = parseInt(this.jobFormGroup.get('additionalJob').get('minutes').value, 10);
+        return HoursStepperComponent.generateHourString(Math.floor(minutes / 60), minutes % 60);
+    }
+
     private initFormGroups() {
         this.hourFormGroup = new FormGroup({
             minutes: new FormControl(0, [greaterThanValidator(0)]),
@@ -283,6 +311,10 @@ export class HoursStepperComponent implements OnInit {
         this.jobFormGroup = new FormGroup({
             spendableMinutes: new FormControl(0),
             jobs: new FormArray([]),
+            additionalJob: new FormGroup({
+                minutes: new FormControl(0),
+                description: new FormControl('')
+            })
         }, [jobGroupValidator]);
         this.mealFormGroup = new FormGroup({
             eatingPlaceId: new FormControl(0, [Validators.required]),
@@ -305,6 +337,7 @@ export class HoursStepperComponent implements OnInit {
             spendMinutes += parseInt(job.get('minutes').value, 10);
             spendMinutes += parseInt(job.get('minutesDirection').value, 10);
         }
+        spendMinutes += parseInt(this.jobFormGroup.get('additionalJob').get('minutes').value, 10);
         const spendableMinutes = parseInt(this.hourFormGroup.get('minutes').value, 10) - spendMinutes;
         this.jobFormGroup.get('spendableMinutes').setValue(spendableMinutes);
         this.availableHoursString = this.getAvailableHoursString();
@@ -316,6 +349,9 @@ export class HoursStepperComponent implements OnInit {
                 this.getJobs().push(this.initSingleJob(0, 0, job));
             }
             this.jobsLoaded = true;
+            if (this.workDay) {
+                this.fillDataJobs();
+            }
         });
     }
 
@@ -341,5 +377,33 @@ export class HoursStepperComponent implements OnInit {
         });
         this.cars$ = this.api.getCarsCarGet();
         this.eatingPlaces$ = this.api.getEatingPlacesEatingPlaceGet();
+    }
+
+    private fillData() {
+        this.hourFormGroup.get('minutes').setValue(this.workDay.minutes);
+
+        this.mealFormGroup.get('eatingPlaceId').setValue([this.workDay.eating_place.id]);
+
+
+        for (const expense of this.workDay.expenses) {
+            this.getExpenses().push(this.initExpense(expense));
+        }
+
+        for (const drive of this.workDay.drives) {
+            this.getDrives().push(this.initDrive(drive));
+        }
+
+    }
+
+    private fillDataJobs() {
+        for (const jobControl of this.getJobs().controls) {
+            for (const jobSection of this.workDay.job_sections) {
+                if (jobSection.job.id === parseInt(jobControl.get('jobId').value, 10)) {
+                    jobControl.get('minutes').setValue(jobSection.minutes);
+                    jobControl.get('minutesDirection').setValue(jobSection.minutes_direction);
+                }
+            }
+        }
+        this.refreshSpentMinutes();
     }
 }

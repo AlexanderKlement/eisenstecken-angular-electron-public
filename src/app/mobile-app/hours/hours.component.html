@@ -2,8 +2,12 @@
 <div *ngIf="loading" fxFlexFill class="loading">
     <mat-spinner class="spinner"></mat-spinner>
 </div>
-<app-hours-stepper
-        *ngIf="showStepper"
-        [backStepper$]="stepBackObservable$"
-        (firstSiteGoBack)="goBack()">
-</app-hours-stepper>
+<div *ngIf="!loading" fxLayout="column" fxLayoutAlign="space-around center">
+    <app-hours-stepper
+            [showOnlySummary]="todaysWorkDayFinished"
+            [workDay]="workDay"
+            [backStepper$]="stepBackObservable$"
+            (firstSiteGoBack)="goBack()">
+    </app-hours-stepper>
+    <button *ngIf="todaysWorkDayFinished" (click)="editButtonClicked()">Bearbeiten</button>
+</div>

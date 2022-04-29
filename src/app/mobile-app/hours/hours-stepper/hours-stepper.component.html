@@ -1,4 +1,4 @@
-<div fxLayout="column" fxLayoutAlign="space-around center">
+<div *ngIf="!showOnlySummary" fxLayout="column" fxLayoutAlign="space-around center">
     <mat-stepper linear="true" #stepper>
         <mat-step [stepControl]="hourFormGroup">
             <ng-template matStepLabel>Stunden eintragen</ng-template>
@@ -86,6 +86,29 @@
                         </div>
                     </div>
                 </div>
+                <div fxLayout="row" fxLayoutAlign="space-around center" formGroupName="additionalJob">
+                    <button mat-mini-fab aria-label="1 Stunde abziehen"
+                            (click)="addMinutesToAddtionalJob(-60)">
+                        -1 h
+                    </button>
+                    <button mat-mini-fab aria-label="15 Minuten abziehen"
+                            (click)="addMinutesToAddtionalJob(-15)">
+                        -15 min
+                    </button>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Beschreibung</mat-label>
+                        <input class="form-control" formControlName="description" matInput>
+                    </mat-form-field>
+                    <p>{{getMinutesFromAddtionalJob()}}</p>
+                    <button mat-mini-fab aria-label="15 Minuten abziehen"
+                            (click)="addMinutesToAddtionalJob(15)">
+                        +15 min
+                    </button>
+                    <button mat-mini-fab aria-label="1 Stunde abziehen"
+                            (click)="addMinutesToAddtionalJob(60)">
+                        +1 h
+                    </button>
+                </div>
                 <div>
                     <button mat-button matStepperPrevious>Zurück</button>
                     <button mat-button (click)="jobsNextClicked();">Weiter</button>
@@ -94,7 +117,7 @@
         </mat-step>
         <mat-step [stepControl]="mealFormGroup">
             <ng-template matStepLabel>Essen</ng-template>
-            <p>Genau einen </p>
+            <p>Genau eine Wahl treffen</p>
             <form [formGroup]="mealFormGroup">
                 <mat-selection-list formControlName="eatingPlaceId" [multiple]="false">
                     <mat-list-option *ngFor="let eatingPlace of eatingPlaces$ | async" [value]="eatingPlace.id">
@@ -196,4 +219,11 @@
         </mat-step>
     </mat-stepper>
 </div>
+<app-hours-summary
+        *ngIf="showOnlySummary"
+        [hourFormGroup]="hourFormGroup"
+        [jobFormGroup]="jobFormGroup"
+        [mealFormGroup]="mealFormGroup"
+        [expensesJourneyGroup]="expensesJourneyGroup">
+</app-hours-summary>
 
