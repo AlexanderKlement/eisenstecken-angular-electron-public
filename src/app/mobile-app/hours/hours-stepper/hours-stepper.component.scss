@@ -1,0 +1,28 @@
+mat-stepper {
+  max-width: 100%;
+}
+
+mat-step-header {
+  padding: 12px 12px;
+}
+
+.mat-vertical-content-container {
+  margin-left: 18px;
+}
+
+.mat-vertical-content {
+  padding: 0 12px 12px 12px;
+}
+
+.jobs-list {
+  max-height: 500px;
+  overflow-y: scroll;
+
+  > div:nth-child(2n) {
+    background: rgba(0, 0, 0, 0.1);
+  }
+}
+
+.additional-hours{
+  margin-top: 10px;
+}

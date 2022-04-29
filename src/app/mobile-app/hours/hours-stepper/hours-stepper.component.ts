@@ -28,7 +28,7 @@ import {
 import {AuthService} from '../../../shared/services/auth.service';
 import {first} from 'rxjs/operators';
 import {Router} from '@angular/router';
-import {MatStepper} from '@angular/material/stepper';
+import {MatStepper, StepperOrientation} from '@angular/material/stepper';
 
 function jobGroupValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -72,16 +72,17 @@ export class HoursStepperComponent implements OnInit {
     cars$: Observable<Car[]>;
     jobsLoaded = false;
     availableHoursString = '';
+    stepperOrientation: StepperOrientation = 'horizontal';
     @ViewChild('stepper') private stepper: MatStepper;
 
     constructor(private api: DefaultService, private authService: AuthService, private router: Router) {
     }
 
-    static generateHourString(hours: number, minutes: number): string {
-        let workedHoursString = hours.toString();
+    static generateHourString(hours: number, minutes: number, mobile: boolean = false): string {
+        let workedHoursString = (mobile? '<br />' : '')+hours.toString();
         workedHoursString += ' ';
         workedHoursString += (hours === 1) ? 'Stunde' : 'Stunden';
-        workedHoursString += ' ';
+        workedHoursString += (mobile? '<br />' : ' ');
         workedHoursString += minutes.toString();
         workedHoursString += ' ';
         workedHoursString += (minutes === 1) ? 'Minute' : 'Minuten';
@@ -89,6 +90,8 @@ export class HoursStepperComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        if(window.innerWidth < 600)
+          {this.stepperOrientation = 'vertical';}
         if (this.userId === undefined) {
             this.authService.getCurrentUser().pipe(first()).subscribe((user) => {
                 this.user = user;
@@ -150,7 +153,7 @@ export class HoursStepperComponent implements OnInit {
     getMinutesFromJob(index: number, direction: boolean): string {
         const fieldName = direction ? 'minutesDirection' : 'minutes';
         const minutes = parseInt(this.getJobs().at(index).get(fieldName).value, 10);
-        return HoursStepperComponent.generateHourString(Math.floor(minutes / 60), minutes % 60);
+        return (direction ? 'Regie: ' : 'Normal: ')+HoursStepperComponent.generateHourString(Math.floor(minutes / 60), minutes % 60,this.stepperOrientation === 'vertical');
     }
 
     getNameFromJob(i: number): string {
@@ -288,7 +291,7 @@ export class HoursStepperComponent implements OnInit {
         }
     }
 
-    addMinutesToAddtionalJob(addMinutes: number) {
+    addMinutesToAdditionalJob(addMinutes: number) {
         const minutes = parseInt(this.jobFormGroup.get('additionalJob').get('minutes').value, 10);
         if ((addMinutes + minutes) < 0) {
             return;
