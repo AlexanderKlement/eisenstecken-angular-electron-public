@@ -43,10 +43,8 @@ export class EmployeeComponent implements OnInit {
             }
         }
     ];
-
     public $refresh: Observable<void>;
     private $refreshSubscriber: Subscriber<void>;
-
 
     constructor(private api: DefaultService, private locker: LockService, private router: Router,
                 private dialog: MatDialog, private snackBar: MatSnackBar) {
@@ -223,7 +221,6 @@ export class EmployeeComponent implements OnInit {
                         });
                     }
                 });
-
             }
         });
     }
@@ -378,7 +375,6 @@ export class EmployeeComponent implements OnInit {
                         });
                     }
                 });
-
             }
         });
     }

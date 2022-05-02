@@ -3,6 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {AccessGuard} from '../shared/services/access-guard.service';
 import {MobileAppComponent} from './mobile-app.component';
 import {HoursComponent} from './hours/hours.component';
+import {RedirectComponent} from './hours/redirect/redirect.component';
 
 const routes: Routes = [
     {
@@ -23,7 +24,7 @@ const routes: Routes = [
     },
     {
         path: 'mobile/hours/redirect',
-        component: HoursComponent,
+        component: RedirectComponent,
         data: {
             requiresLogin: true
         },

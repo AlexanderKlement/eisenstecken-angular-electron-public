@@ -21,6 +21,8 @@ export class HoursSummaryComponent implements OnInit {
     eatingPlaceName = '';
     driveStrings: string[] = [];
     showJobs = false;
+    maintenanceString = '';
+    additionalWorkloadString = '';
 
     constructor(private api: DefaultService) {
     }
@@ -37,11 +39,34 @@ export class HoursSummaryComponent implements OnInit {
         });
         this.refreshEatingPlace();
         this.refreshDrives();
-        this.jobsReady$.subscribe(() =>  {
+        this.refreshMaintenanceString();
+        this.refreshAdditionalWorkloadString();
+        this.jobsReady$.subscribe(() => {
             console.log('Refresh Jobs');
             this.showJobs = false;
             this.showJobs = true;
+            this.refreshMaintenanceString();
+            this.refreshAdditionalWorkloadString();
         });
+    }
+
+    refreshAdditionalWorkloadString(): void {
+        const additionaWorkloadMinutes = parseInt(this.jobFormGroup.get('additionalJob').get('minutes').value, 10);
+        if (additionaWorkloadMinutes > 0) {
+            const description = this.jobFormGroup.get('additionalJob').get('description').value;
+            this.additionalWorkloadString = description + ': ' + this.getHoursStringFromMinutes(additionaWorkloadMinutes);
+        }
+    }
+
+    refreshMaintenanceString(): void {
+        const minutes = parseInt(this.jobFormGroup.get('maintenanceMinutes').value, 10)
+        this.maintenanceString = 'Instandhaltung: ' + this.getHoursStringFromMinutes(minutes);
+    }
+
+    getHoursStringFromMinutes(inputMinutes: number): string {
+        const hours = Math.floor(inputMinutes / 60);
+        const minutes = inputMinutes % 60;
+        return HoursStepperComponent.generateHourString(hours, minutes);
     }
 
     getWorkedHoursString(): string {
@@ -57,8 +82,6 @@ export class HoursSummaryComponent implements OnInit {
     showJob(job: AbstractControl): boolean {
         const minutes = parseInt(job.get('minutes').value, 10);
         const minutesDirection = parseInt(job.get('minutesDirection').value, 10);
-        console.log(minutes, minutesDirection);
-        console.log(minutes > 0 || minutesDirection > 0);
         return minutes > 0 || minutesDirection > 0;
     }
 

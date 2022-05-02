@@ -1,5 +1,7 @@
 <div fxLayout="column" fxLayoutAlign="space-around center">
     <p>Arbeitszeit: {{getWorkedHoursString()}}</p>
+    <p>{{maintenanceString}}</p>
+    <p *ngIf="additionalWorkloadString.length > 0">{{additionalWorkloadString}}</p>
     <div *ngIf="showJobs">
         <div *ngFor="let job of getJobs().controls">
             <div fxLayout="column" fxLayoutAlign="space-around center" *ngIf="showJob(job)">
@@ -9,15 +11,15 @@
             </div>
         </div>
     </div>
-    <p>Essen: {{eatingPlaceName}}</p>
+    <p><strong>Essen: {{eatingPlaceName}}</strong></p>
     <div fxLayout="column" fxLayoutAlign="space-around center">
-        <p>Ausgaben:</p>
+        <p><strong>Ausgaben:</strong></p>
         <p *ngFor="let expense of getExpenses().controls">
             {{expense.get('name').value}}: {{expense.get('amount').value}} €
         </p>
     </div>
     <div fxLayout="column" fxLayoutAlign="space-around center">
-        <p>Fahrten:</p>
+        <p><strong>Fahrten:</strong></p>
         <p *ngFor="let driveString of driveStrings">{{driveString}}</p>
     </div>
 </div>

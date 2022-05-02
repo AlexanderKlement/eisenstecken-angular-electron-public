@@ -17,6 +17,7 @@ import {MatSelectModule} from '@angular/material/select';
 import { HoursSummaryComponent } from './hours/hours-summary/hours-summary.component';
 import { HoursStepperComponent } from './hours/hours-stepper/hours-stepper.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { RedirectComponent } from './hours/redirect/redirect.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     MobileAppComponent,
     HoursComponent,
     HoursSummaryComponent,
-    HoursStepperComponent
+    HoursStepperComponent,
+    RedirectComponent
   ],
   imports: [
     CommonModule,

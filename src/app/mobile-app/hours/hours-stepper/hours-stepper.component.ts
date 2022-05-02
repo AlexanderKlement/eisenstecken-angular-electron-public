@@ -1,4 +1,4 @@
-import {Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {CustomButton} from '../../../shared/components/toolbar/toolbar.component';
 import {
     AbstractControl,
@@ -19,7 +19,7 @@ import {
     EatingPlace,
     Expense,
     ExpenseCreate,
-    Job, JobSection,
+    Job,
     JobSectionCreate,
     UserEssential,
     WorkDay,
@@ -75,6 +75,7 @@ export class HoursStepperComponent implements OnInit {
     stepperOrientation: StepperOrientation = 'horizontal';
     jobsReady$: Observable<void>;
     jobsReadySubscriber$: Subscriber<void>;
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     @ViewChild('stepper') private stepper: MatStepper;
 
     constructor(private api: DefaultService, private authService: AuthService, private router: Router) {
@@ -89,6 +90,17 @@ export class HoursStepperComponent implements OnInit {
         workedHoursString += ' ';
         workedHoursString += (minutes === 1) ? 'Minute' : 'Minuten';
         return workedHoursString;
+    }
+
+    private static initSingleJob(minutes: number, minutesDirection: number, job: Job): FormGroup {
+        const name = job.code + ' ' + job.client.fullname;
+        return new FormGroup({
+            minutes: new FormControl(minutes),
+            minutesDirection: new FormControl(minutesDirection),
+            jobId: new FormControl(job.id),
+            name: new FormControl(name),
+            job: new FormControl(job)
+        });
     }
 
     ngOnInit(): void {
@@ -119,7 +131,6 @@ export class HoursStepperComponent implements OnInit {
     stepBackStepBro() {
         this.stepper.previous();
     }
-
 
     addTotalMinutes(minutesToAdd: number): void {
         const actualMinutes = parseInt(this.hourFormGroup.get('minutes').value, 10);
@@ -155,10 +166,10 @@ export class HoursStepperComponent implements OnInit {
         this.refreshSpentMinutes();
     }
 
-
     getMinutesFromJob(index: number, direction: boolean): string {
         const fieldName = direction ? 'minutesDirection' : 'minutes';
         const minutes = parseInt(this.getJobs().at(index).get(fieldName).value, 10);
+        // eslint-disable-next-line max-len
         return (direction ? 'Regie: ' : 'Normal: ') + HoursStepperComponent.generateHourString(Math.floor(minutes / 60), minutes % 60, this.stepperOrientation === 'vertical');
     }
 
@@ -220,12 +231,10 @@ export class HoursStepperComponent implements OnInit {
         this.getExpenses().push(this.initExpense());
     }
 
-
     submitClicked() {
         const workDayCreate = this.createWorkDayCreate();
         this.api.createWorkDayWorkDayOwnPost(workDayCreate).pipe(first()).subscribe(() => {
             this.router.navigateByUrl('/mobile/hours/redirect', {replaceUrl: true});
-            //window.location.reload();
         });
     }
 
@@ -241,6 +250,19 @@ export class HoursStepperComponent implements OnInit {
                     job_id: jobSection.get('jobId').value,
                 });
             }
+        }
+
+        const minutesMaintenance = parseInt(this.jobFormGroup.get('maintenanceMinutes').value, 10);
+
+        if (minutesMaintenance > 0) {
+            jobSectionsCreates.push({
+                minutes: minutesMaintenance,
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                minutes_direction: 0,
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                job_id: 0
+            });
+
         }
 
         const expensesCreates: ExpenseCreate[] = [];
@@ -312,6 +334,20 @@ export class HoursStepperComponent implements OnInit {
         return HoursStepperComponent.generateHourString(Math.floor(minutes / 60), minutes % 60);
     }
 
+    getMinutesFromMaintenance(): string {
+        const minutes = parseInt(this.jobFormGroup.get('maintenanceMinutes').value, 10);
+        return HoursStepperComponent.generateHourString(Math.floor(minutes / 60), minutes % 60);
+    }
+
+    addMinutesToMaintenance(newMinutes: number): void {
+        const minutes = parseInt(this.jobFormGroup.get('maintenanceMinutes').value, 10);
+        if (minutes + newMinutes < 0) {
+            return;
+        }
+        this.jobFormGroup.get('maintenanceMinutes').setValue(minutes + newMinutes);
+        this.refreshSpentMinutes();
+    }
+
     private initFormGroups() {
         this.hourFormGroup = new FormGroup({
             minutes: new FormControl(0, [greaterThanValidator(0)]),
@@ -320,11 +356,12 @@ export class HoursStepperComponent implements OnInit {
         });
         this.jobFormGroup = new FormGroup({
             spendableMinutes: new FormControl(0),
+            maintenanceMinutes: new FormControl(0),
             jobs: new FormArray([]),
             additionalJob: new FormGroup({
                 minutes: new FormControl(0),
                 description: new FormControl('')
-            })
+            }),
         }, [jobGroupValidator]);
         this.mealFormGroup = new FormGroup({
             eatingPlaceId: new FormControl(0, [Validators.required]),
@@ -348,6 +385,8 @@ export class HoursStepperComponent implements OnInit {
             spendMinutes += parseInt(job.get('minutesDirection').value, 10);
         }
         spendMinutes += parseInt(this.jobFormGroup.get('additionalJob').get('minutes').value, 10);
+        spendMinutes += parseInt(this.jobFormGroup.get('maintenanceMinutes').value, 10);
+
         const spendableMinutes = parseInt(this.hourFormGroup.get('minutes').value, 10) - spendMinutes;
         this.jobFormGroup.get('spendableMinutes').setValue(spendableMinutes);
         this.availableHoursString = this.getAvailableHoursString();
@@ -356,23 +395,12 @@ export class HoursStepperComponent implements OnInit {
     private initJobs(): void {
         this.jobs$.pipe(first()).subscribe((jobs) => {
             for (const job of jobs) {
-                this.getJobs().push(this.initSingleJob(0, 0, job));
+                this.getJobs().push(HoursStepperComponent.initSingleJob(0, 0, job));
             }
             this.jobsLoaded = true;
             if (this.workDay) {
                 this.fillDataJobs();
             }
-        });
-    }
-
-    private initSingleJob(minutes: number, minutesDirection: number, job: Job): FormGroup {
-        const name = job.code + ' ' + job.client.fullname;
-        return new FormGroup({
-            minutes: new FormControl(minutes),
-            minutesDirection: new FormControl(minutesDirection),
-            jobId: new FormControl(job.id),
-            name: new FormControl(name),
-            job: new FormControl(job)
         });
     }
 
@@ -394,6 +422,12 @@ export class HoursStepperComponent implements OnInit {
 
         this.mealFormGroup.get('eatingPlaceId').setValue([this.workDay.eating_place.id]);
 
+        if (this.workDay.additional_workloads.length > 0) {
+            const additionalJobGroup = this.jobFormGroup.get('additionalJob');
+            additionalJobGroup.get('minutes').setValue(this.workDay.additional_workloads[0].minutes);
+            additionalJobGroup.get('description').setValue(this.workDay.additional_workloads[0].description);
+        }
+
 
         for (const expense of this.workDay.expenses) {
             this.getExpenses().push(this.initExpense(expense));
@@ -408,13 +442,16 @@ export class HoursStepperComponent implements OnInit {
     private fillDataJobs() {
         for (const jobControl of this.getJobs().controls) {
             for (const jobSection of this.workDay.job_sections) {
+                if (!jobSection.job) {
+                    this.jobFormGroup.get('maintenanceMinutes').setValue(jobSection.minutes);
+                    continue;
+                }
                 if (jobSection.job.id === parseInt(jobControl.get('jobId').value, 10)) {
                     jobControl.get('minutes').setValue(jobSection.minutes);
                     jobControl.get('minutesDirection').setValue(jobSection.minutes_direction);
                 }
             }
         }
-        console.log('Jobs filled');
         this.refreshSpentMinutes();
         this.jobsReadySubscriber$.next();
     }
