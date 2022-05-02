@@ -9,7 +9,7 @@ import {
     ValidatorFn,
     Validators
 } from '@angular/forms';
-import {Observable} from 'rxjs';
+import {Observable, Subscriber} from 'rxjs';
 import {
     AdditionalWorkloadCreate,
     Car,
@@ -73,16 +73,18 @@ export class HoursStepperComponent implements OnInit {
     jobsLoaded = false;
     availableHoursString = '';
     stepperOrientation: StepperOrientation = 'horizontal';
+    jobsReady$: Observable<void>;
+    jobsReadySubscriber$: Subscriber<void>;
     @ViewChild('stepper') private stepper: MatStepper;
 
     constructor(private api: DefaultService, private authService: AuthService, private router: Router) {
     }
 
     static generateHourString(hours: number, minutes: number, mobile: boolean = false): string {
-        let workedHoursString = (mobile? '<br />' : '')+hours.toString();
+        let workedHoursString = (mobile ? '<br />' : '') + hours.toString();
         workedHoursString += ' ';
         workedHoursString += (hours === 1) ? 'Stunde' : 'Stunden';
-        workedHoursString += (mobile? '<br />' : ' ');
+        workedHoursString += (mobile ? '<br />' : ' ');
         workedHoursString += minutes.toString();
         workedHoursString += ' ';
         workedHoursString += (minutes === 1) ? 'Minute' : 'Minuten';
@@ -90,8 +92,9 @@ export class HoursStepperComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        if(window.innerWidth < 600)
-          {this.stepperOrientation = 'vertical';}
+        if (window.innerWidth < 600) {
+            this.stepperOrientation = 'vertical';
+        }
         if (this.userId === undefined) {
             this.authService.getCurrentUser().pipe(first()).subscribe((user) => {
                 this.user = user;
@@ -108,6 +111,9 @@ export class HoursStepperComponent implements OnInit {
         }
         this.refreshShownHoursMinutes();
         this.refreshSpentMinutes();
+        this.jobsReady$ = new Observable<void>((subscriber) => {
+            this.jobsReadySubscriber$ = subscriber;
+        });
     }
 
     stepBackStepBro() {
@@ -153,7 +159,7 @@ export class HoursStepperComponent implements OnInit {
     getMinutesFromJob(index: number, direction: boolean): string {
         const fieldName = direction ? 'minutesDirection' : 'minutes';
         const minutes = parseInt(this.getJobs().at(index).get(fieldName).value, 10);
-        return (direction ? 'Regie: ' : 'Normal: ')+HoursStepperComponent.generateHourString(Math.floor(minutes / 60), minutes % 60,this.stepperOrientation === 'vertical');
+        return (direction ? 'Regie: ' : 'Normal: ') + HoursStepperComponent.generateHourString(Math.floor(minutes / 60), minutes % 60, this.stepperOrientation === 'vertical');
     }
 
     getNameFromJob(i: number): string {
@@ -287,6 +293,7 @@ export class HoursStepperComponent implements OnInit {
 
     mealNextClicked() {
         if (parseInt(this.mealFormGroup.get('eatingPlaceId').value, 10) > 0) {
+            this.jobsReadySubscriber$.next();
             this.stepper.next();
         }
     }
@@ -407,6 +414,8 @@ export class HoursStepperComponent implements OnInit {
                 }
             }
         }
+        console.log('Jobs filled');
         this.refreshSpentMinutes();
+        this.jobsReadySubscriber$.next();
     }
 }

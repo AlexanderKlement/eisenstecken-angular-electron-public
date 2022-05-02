@@ -1,236 +1,241 @@
 <div *ngIf="!showOnlySummary" fxLayout="column" fxLayoutAlign="space-around center">
-  <mat-stepper linear="true" #stepper [orientation]="stepperOrientation">
-    <mat-step [stepControl]="hourFormGroup">
-      <ng-template matStepLabel>Stunden eintragen</ng-template>
-      <form [formGroup]="hourFormGroup">
-        <div fxLayout="column" fxLayoutAlign="start center">
-          <p>Wie lange hast du heute gearbeitet? (ohne Mittagspause)</p>
-          <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
-            <button mat-mini-fab aria-label="Stunde abziehen" (click)="addTotalMinutes(-60)">
-              -1
-            </button>
-            <mat-form-field appearance="fill">
-              <mat-label>Stunden</mat-label>
-              <input readonly matInput type="number" formControlName="showingHours">
-            </mat-form-field>
-            <button mat-mini-fab aria-label="Stunde hinzufügen" (click)="addTotalMinutes(60)">
-              +1
-            </button>
-          </div>
-          <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
-            <button mat-mini-fab aria-label="15 Minuten abziehen" (click)="addTotalMinutes(-15)">
-              -15
-            </button>
-            <mat-form-field appearance="fill">
-              <mat-label>Minuten</mat-label>
-              <input readonly matInput type=number formControlName="showingMinutes">
-            </mat-form-field>
-            <button mat-mini-fab aria-label="15 Minuten " (click)="addTotalMinutes(15)">
-              +15
-            </button>
-          </div>
-          <div fxLayout="row" fxLayoutAlign="end center" fxFlexFill>
-            <button mat-raised-button matStepperNext>Weiter</button>
-          </div>
-        </div>
-      </form>
-    </mat-step>
-    <mat-step [stepControl]="jobFormGroup">
-      <ng-template matStepLabel class="step-header">Stunden zuteilen</ng-template>
-      <form *ngIf="jobsLoaded" [formGroup]="jobFormGroup">
-        <p>Bitte die ganze Arbeitszeit auf Projekte oder Instandhaltung aufteilen.</p>
-        <p>Arbeitszeit: {{getWorkedHoursString()}}</p>
-        <p>Aufzuteilen: {{availableHoursString}}</p>
-        <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill formGroupName="additionalJob"
-             class="additional-hours">
-          <button mat-mini-fab aria-label="1 Stunde abziehen"
-                  (click)="addMinutesToAdditionalJob(-60)">
-            -1 h
-          </button>
-          <button mat-mini-fab aria-label="15 Minuten abziehen"
-                  (click)="addMinutesToAdditionalJob(-15)">
-            -15 min
-          </button>
-          <mat-form-field appearance="fill">
-            <mat-label>Beschreibung</mat-label>
-            <input class="form-control" formControlName="description" matInput>
-            <mat-hint>{{getMinutesFromAddtionalJob()}}</mat-hint>
-          </mat-form-field>
-          <button mat-mini-fab aria-label="15 Minuten abziehen"
-                  (click)="addMinutesToAdditionalJob(15)">
-            +15 min
-          </button>
-          <button mat-mini-fab aria-label="1 Stunde abziehen"
-                  (click)="addMinutesToAdditionalJob(60)">
-            +1 h
-          </button>
-        </div>
-        <div class="jobs-list">
-          <div *ngFor="let job of getJobs().controls; let i = index"> <!-- TODO: this div has to be scrollable -->
-            <div fxLayout="column" fxLayoutAlign="space-around center">
-              <div>
-                <p>{{getNameFromJob(i)}}</p>
-              </div>
-              <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
-                <button mat-mini-fab aria-label="1 Stunde abziehen"
-                        (click)="addMinutesToJob(-60, i, false)">
-                  -1 h
-                </button>
-                <button mat-mini-fab aria-label="15 Minuten abziehen"
-                        (click)="addMinutesToJob(-15, i, false)">
-                  -15 min
-                </button>
-                <div>
-                  <p [innerHTML]="getMinutesFromJob(i,false)"></p>
+    <mat-stepper linear="true" #stepper [orientation]="stepperOrientation">
+        <mat-step [stepControl]="hourFormGroup">
+            <ng-template matStepLabel>Stunden eintragen</ng-template>
+            <form [formGroup]="hourFormGroup">
+                <div fxLayout="column" fxLayoutAlign="start center">
+                    <p>Wie lange hast du heute gearbeitet? (ohne Mittagspause)</p>
+                    <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
+                        <button mat-raised-button aria-label="Stunde abziehen" (click)="addTotalMinutes(-60)">
+                            -1
+                        </button>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Stunden</mat-label>
+                            <input readonly matInput type="number" formControlName="showingHours">
+                        </mat-form-field>
+                        <button mat-raised-button aria-label="Stunde hinzufügen" (click)="addTotalMinutes(60)">
+                            +1
+                        </button>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
+                        <button mat-raised-button aria-label="15 Minuten abziehen" (click)="addTotalMinutes(-15)">
+                            -15
+                        </button>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Minuten</mat-label>
+                            <input readonly matInput type=number formControlName="showingMinutes">
+                        </mat-form-field>
+                        <button mat-raised-button aria-label="15 Minuten " (click)="addTotalMinutes(15)">
+                            +15
+                        </button>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="end center" fxFlexFill>
+                        <button mat-raised-button matStepperNext>Weiter</button>
+                    </div>
                 </div>
-                <button mat-mini-fab aria-label="15 Minuten abziehen"
-                        (click)="addMinutesToJob(15, i, false)">
-                  +15 min
-                </button>
-                <button mat-mini-fab aria-label="1 Stunde abziehen"
-                        (click)="addMinutesToJob(60, i, false)">
-                  +1 h
-                </button>
-              </div>
-              <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
-                <button mat-mini-fab aria-label="1 Stunde abziehen"
-                        (click)="addMinutesToJob(-60, i, true)">
-                  -1 h
-                </button>
-                <button mat-mini-fab aria-label="15 Minuten abziehen"
-                        (click)="addMinutesToJob(-15, i, true)">
-                  -15 min
-                </button>
-                <p [innerHTML]="getMinutesFromJob(i,true)"></p>
-                <button mat-mini-fab aria-label="15 Minuten abziehen"
-                        (click)="addMinutesToJob(15, i, true)">
-                  +15 min
-                </button>
-                <button mat-mini-fab aria-label="1 Stunde abziehen"
-                        (click)="addMinutesToJob(60, i, true)">
-                  +1 h
-                </button>
-              </div>
+            </form>
+        </mat-step>
+        <mat-step [stepControl]="jobFormGroup">
+            <ng-template matStepLabel class="step-header">Stunden zuteilen</ng-template>
+            <form *ngIf="jobsLoaded" [formGroup]="jobFormGroup">
+                <p>Bitte die ganze Arbeitszeit auf Projekte oder Instandhaltung aufteilen.</p>
+                <p>Arbeitszeit: {{getWorkedHoursString()}}</p>
+                <p>Aufzuteilen: {{availableHoursString}}</p>
+                <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill formGroupName="additionalJob"
+                     class="additional-hours">
+                    <button mat-raised-button aria-label="1 Stunde abziehen"
+                            (click)="addMinutesToAdditionalJob(-60)">
+                        -1 h
+                    </button>
+                    <button mat-raised-button aria-label="15 Minuten abziehen"
+                            (click)="addMinutesToAdditionalJob(-15)">
+                        -15 min
+                    </button>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Beschreibung</mat-label>
+                        <input class="form-control" formControlName="description" matInput>
+                        <mat-hint>{{getMinutesFromAddtionalJob()}}</mat-hint>
+                    </mat-form-field>
+                    <button mat-raised-button aria-label="15 Minuten abziehen"
+                            (click)="addMinutesToAdditionalJob(15)">
+                        +15 min
+                    </button>
+                    <button mat-raised-button aria-label="1 Stunde abziehen"
+                            (click)="addMinutesToAdditionalJob(60)">
+                        +1 h
+                    </button>
+                </div>
+                <div class="jobs-list">
+                    <div *ngFor="let job of getJobs().controls; let i = index">
+                        <!-- TODO: this div has to be scrollable -->
+                        <div fxLayout="column" fxLayoutAlign="space-around center">
+                            <div>
+                                <p><strong>{{getNameFromJob(i)}}</strong></p>
+                            </div>
+                            <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
+                                <button mat-raised-button aria-label="1 Stunde abziehen"
+                                        (click)="addMinutesToJob(-60, i, false)">
+                                    -1 h
+                                </button>
+                                <button mat-raised-button aria-label="15 Minuten abziehen"
+                                        (click)="addMinutesToJob(-15, i, false)">
+                                    -15 min
+                                </button>
+                                <div>
+                                    <p [innerHTML]="getMinutesFromJob(i,false)"></p>
+                                </div>
+                                <button mat-raised-button aria-label="15 Minuten abziehen"
+                                        (click)="addMinutesToJob(15, i, false)">
+                                    +15 min
+                                </button>
+                                <button mat-raised-button aria-label="1 Stunde abziehen"
+                                        (click)="addMinutesToJob(60, i, false)">
+                                    +1 h
+                                </button>
+                            </div>
+                            <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
+                                <button mat-raised-button aria-label="1 Stunde abziehen"
+                                        (click)="addMinutesToJob(-60, i, true)">
+                                    -1 h
+                                </button>
+                                <button mat-raised-button aria-label="15 Minuten abziehen"
+                                        (click)="addMinutesToJob(-15, i, true)">
+                                    -15 min
+                                </button>
+                                <p [innerHTML]="getMinutesFromJob(i,true)"></p>
+                                <button mat-raised-button aria-label="15 Minuten abziehen"
+                                        (click)="addMinutesToJob(15, i, true)">
+                                    +15 min
+                                </button>
+                                <button mat-raised-button aria-label="1 Stunde abziehen"
+                                        (click)="addMinutesToJob(60, i, true)">
+                                    +1 h
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
+                    <button mat-raised-button matStepperPrevious>Zurück</button>
+                    <button mat-raised-button (click)="jobsNextClicked();">Weiter</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step [stepControl]="mealFormGroup">
+            <ng-template matStepLabel>Essen</ng-template>
+            <p>Genau eine Wahl treffen</p>
+            <form [formGroup]="mealFormGroup">
+                <mat-selection-list formControlName="eatingPlaceId" [multiple]="false">
+                    <mat-list-option *ngFor="let eatingPlace of eatingPlaces$ | async" [value]="eatingPlace.id">
+                        {{eatingPlace.name}}
+                    </mat-list-option>
+                </mat-selection-list>
+                <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
+                    <button mat-raised-button matStepperPrevious>Zurück</button>
+                    <button mat-raised-button (click)="mealNextClicked();">Weiter</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Fahrten & Spesen</ng-template>
+            <form [formGroup]="expensesJourneyGroup">
+                <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="expenses" fxFlexFill>
+                    <h4>Ausgaben eintragen</h4>
+                    <div *ngFor="let expense of getExpenses().controls; let i = index">
+                        <div fxLayout="row" fxLayoutAlign="space-around center" [formGroupName]="i"
+                             fxLayout.lt-sm="column">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Beschreibung</mat-label>
+                                <input class="form-control" formControlName="name" matInput>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Euro</mat-label>
+                                <input class="form-control" formControlName="amount" type="number" matInput>
+                                <!--<span matSuffix>€</span> -->
+                            </mat-form-field>
+                            <button type="button" mat-button (click)="onRemoveExpenseClick(i)"
+                                    title="Ausgabe entfernen"
+                                    fxFlex.lt-sm="0"
+                                    class="remove-button">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <button type="button" mat-fab (click)="onRemoveExpenseClick(i)"
+                                    title="Ausgabe entfernen"
+                                    fxFlex.gt-sm="0" class="remove-button-mobile">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <button mat-fab type="button" (click)="onAddExpenseClick()"
+                            title="Weitere Ausgabe hinzufügen">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+                <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="drives" fxFlexFill>
+                    <h4>Fahrten eintragen</h4>
+                    <div *ngFor="let drive of getDrives().controls; let i = index">
+                        <div fxLayout="row" fxLayoutAlign="space-around center" [formGroupName]="i"
+                             fxLayout.lt-sm="column">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Distanz [km]</mat-label>
+                                <input class="form-control" formControlName="km" matInput type="number" value="">
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Auto</mat-label>
+                                <mat-select formControlName="car_id">
+                                    <mat-option *ngFor="let car of cars$ |  async" [value]="car.id">
+                                        {{car.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <button type="button" mat-button (click)="onRemoveDriveClick(i)"
+                                    title="Fahrt entfernen"
+                                    fxFlex.lt-sm="0"
+                                    class="remove-button">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <button type="button" mat-fab (click)="onRemoveDriveClick(i)"
+                                    title="Fahrt entfernen"
+                                    class="remove-button-mobile" fxFlex.gt-sm="0">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <button mat-fab type="button" (click)="onAddCarClick()"
+                            title="Weitere Fahrt hinzufügen">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
+                    <button mat-raised-button matStepperPrevious>Zurück</button>
+                    <button mat-raised-button matStepperNext>Weiter</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Zusammenfassung</ng-template>
+            <app-hours-summary
+                    [hourFormGroup]="hourFormGroup"
+                    [jobFormGroup]="jobFormGroup"
+                    [mealFormGroup]="mealFormGroup"
+                    [expensesJourneyGroup]="expensesJourneyGroup"
+                    [jobsReady$]="jobsReady$"
+            >
+            </app-hours-summary>
+            <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
+                <button mat-raised-button matStepperPrevious>Zurück</button>
+                <button mat-raised-button (click)="submitClicked()">Abschließen</button>
             </div>
-          </div>
-        </div>
-        <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
-          <button mat-raised-button matStepperPrevious>Zurück</button>
-          <button mat-raised-button (click)="jobsNextClicked();">Weiter</button>
-        </div>
-      </form>
-    </mat-step>
-    <mat-step [stepControl]="mealFormGroup">
-      <ng-template matStepLabel>Essen</ng-template>
-      <p>Genau eine Wahl treffen</p>
-      <form [formGroup]="mealFormGroup">
-        <mat-selection-list formControlName="eatingPlaceId" [multiple]="false">
-          <mat-list-option *ngFor="let eatingPlace of eatingPlaces$ | async" [value]="eatingPlace.id">
-            {{eatingPlace.name}}
-          </mat-list-option>
-        </mat-selection-list>
-        <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
-          <button mat-raised-button matStepperPrevious>Zurück</button>
-          <button mat-raised-button (click)="mealNextClicked();">Weiter</button>
-        </div>
-      </form>
-    </mat-step>
-    <mat-step>
-      <ng-template matStepLabel>Fahrten & Spesen</ng-template>
-      <form [formGroup]="expensesJourneyGroup">
-        <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="expenses" fxFlexFill>
-          <h4>Ausgaben eintragen</h4>
-          <div *ngFor="let expense of getExpenses().controls; let i = index">
-            <div fxLayout="row" fxLayoutAlign="space-around center" [formGroupName]="i"
-                 fxLayout.lt-sm="column">
-              <mat-form-field appearance="fill">
-                <mat-label>Beschreibung</mat-label>
-                <input class="form-control" formControlName="name" matInput>
-              </mat-form-field>
-              <mat-form-field appearance="fill">
-                <mat-label>Euro</mat-label>
-                <input class="form-control" formControlName="amount" type="number" matInput>
-                <!--<span matSuffix>€</span> -->
-              </mat-form-field>
-              <button type="button" mat-button (click)="onRemoveExpenseClick(i)"
-                      title="Ausgabe entfernen"
-                      fxFlex.lt-sm="0"
-                      class="remove-button">
-                <mat-icon>delete</mat-icon>
-              </button>
-              <button type="button" mat-fab (click)="onRemoveExpenseClick(i)"
-                      title="Ausgabe entfernen"
-                      fxFlex.gt-sm="0" class="remove-button-mobile">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
-          </div>
-          <button mat-fab type="button" (click)="onAddExpenseClick()"
-                  title="Weitere Ausgabe hinzufügen">
-            <mat-icon>add</mat-icon>
-          </button>
-        </div>
-        <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="drives" fxFlexFill>
-          <h4>Fahrten eintragen</h4>
-          <div *ngFor="let drive of getDrives().controls; let i = index">
-            <div fxLayout="row" fxLayoutAlign="space-around center" [formGroupName]="i"
-                 fxLayout.lt-sm="column">
-              <mat-form-field appearance="fill">
-                <mat-label>Distanz [km]</mat-label>
-                <input class="form-control" formControlName="km" matInput type="number" value="">
-              </mat-form-field>
-              <mat-form-field appearance="fill">
-                <mat-label>Auto</mat-label>
-                <mat-select formControlName="car_id">
-                  <mat-option *ngFor="let car of cars$ |  async" [value]="car.id">
-                    {{car.name}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <button type="button" mat-button (click)="onRemoveDriveClick(i)"
-                      title="Fahrt entfernen"
-                      fxFlex.lt-sm="0"
-                      class="remove-button">
-                <mat-icon>delete</mat-icon>
-              </button>
-              <button type="button" mat-fab (click)="onRemoveDriveClick(i)"
-                      title="Fahrt entfernen"
-                      class="remove-button-mobile" fxFlex.gt-sm="0">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
-          </div>
-          <button mat-fab type="button" (click)="onAddCarClick()"
-                  title="Weitere Fahrt hinzufügen">
-            <mat-icon>add</mat-icon>
-          </button>
-        </div>
-        <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
-          <button mat-raised-button matStepperPrevious>Zurück</button>
-          <button mat-raised-button matStepperNext>Weiter</button>
-        </div>
-      </form>
-    </mat-step>
-    <mat-step>
-      <ng-template matStepLabel>Zusammenfassung</ng-template>
-      <app-hours-summary
+        </mat-step>
+    </mat-stepper>
+</div>
+<app-hours-summary
+        *ngIf="showOnlySummary"
         [hourFormGroup]="hourFormGroup"
         [jobFormGroup]="jobFormGroup"
         [mealFormGroup]="mealFormGroup"
-        [expensesJourneyGroup]="expensesJourneyGroup">
-      </app-hours-summary>
-      <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
-        <button mat-raised-button matStepperPrevious>Zurück</button>
-        <button mat-raised-button (click)="submitClicked()">Abschließen</button>
-      </div>
-    </mat-step>
-  </mat-stepper>
-</div>
-<app-hours-summary
-  *ngIf="showOnlySummary"
-  [hourFormGroup]="hourFormGroup"
-  [jobFormGroup]="jobFormGroup"
-  [mealFormGroup]="mealFormGroup"
-  [expensesJourneyGroup]="expensesJourneyGroup">
+        [expensesJourneyGroup]="expensesJourneyGroup"
+        [jobsReady$]="jobsReady$"
+>
 </app-hours-summary>
 

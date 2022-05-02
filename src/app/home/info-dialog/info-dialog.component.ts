@@ -43,7 +43,24 @@ export class InfoDialogComponent implements OnInit {
                 'trotzdem verschoben. Nach Abschluss dieser Operation sind zwei Ordner vorhanden (Angebote und' +
                 ' Projekte). mit jeweils mindestens' +
                 ' einer Datei. Hier entwerder die Operation nicht durchführen, oder bei Fehlern wieder rückgängig machen.',
-                'Mail die sich bei Bestellung öffnet ist nicht optimal formatiert.'
+                'Mail die sich bei Bestellung öffnet ist nicht optimal formatiert.',
+                'Beide Kalender auf der Startseite zusammenfassen. Dies erhöht die Möglichkeit Termine zu finden.',
+                'Spalten bei Bestellung ausgleichen, damit eventuell längere Kodexe möglich sind. ' +
+                'Momentan noch aufgeschoben,' +
+                ' da dies vielleicht irgendwo anders zu Problemen führen könnte.'
+            ]
+        },
+        {
+            versionName: '0.9.9',
+            changes: [
+                'Stunden eintragen überarbeitet. Die Zeit wird nun nicht mehr gestoppt, sondern der Benutzer trägt die ' +
+                'Daten einfach selbst ein. Das Eintragen selbst wurde in verschiedene Teile aufgeteilt, um die Übersicht ' +
+                'zu erhöhen.',
+                'Ausgangsrechnungen können nun auch nach Kundennamen durchsucht werden.',
+                'Beim Erstellen/Bearbeiten von Rechnungen, hat das Beschreibungen-Feld nun mehrere Zeilen.',
+                'Mod Nummber bei Bestellungen hat nun eine maximale Länge von 30 Zeichen',
+                'Fehler behoben, wo bei Anfragen senden auch andere Artikel von diesem Lieferanten verschwunden sind.',
+                'Angebote haben nun ein Feld wo Kunden unterschreiben können.',
             ]
         },
         {

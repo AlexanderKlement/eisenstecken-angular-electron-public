@@ -26,7 +26,7 @@
             </mat-form-field>
             <mat-form-field appearance="fill">
                 <mat-label>Mod Nummer</mat-label>
-                <input matInput formControlName="mod_number">
+                <input [maxLength]="30" matInput formControlName="mod_number">
             </mat-form-field>
 
         </div>

@@ -1,12 +1,14 @@
 <div fxLayout="column" fxLayoutAlign="space-around center">
     <p>Arbeitszeit: {{getWorkedHoursString()}}</p>
-    <template *ngFor="let job of getJobs().controls">
-        <div fxLayout="column" fxLayoutAlign="space-around center" *ngIf="showJob(job)">
-            <h4>{{job.get('name').value}}</h4>
-            <p>Normal: {{getMinutesStringByJob(job, false)}}</p>
-            <p>Regie: {{getMinutesStringByJob(job, true)}}</p>
+    <div *ngIf="showJobs">
+        <div *ngFor="let job of getJobs().controls">
+            <div fxLayout="column" fxLayoutAlign="space-around center" *ngIf="showJob(job)">
+                <h4><strong>{{job.get('name').value}}</strong></h4>
+                <p>Normal: {{getMinutesStringByJob(job, false)}}</p>
+                <p>Regie: {{getMinutesStringByJob(job, true)}}</p>
+            </div>
         </div>
-    </template>
+    </div>
     <p>Essen: {{eatingPlaceName}}</p>
     <div fxLayout="column" fxLayoutAlign="space-around center">
         <p>Ausgaben:</p>

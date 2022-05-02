@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AbstractControl, FormArray, FormGroup} from '@angular/forms';
 import {HoursStepperComponent} from '../hours-stepper/hours-stepper.component';
-import { DefaultService} from 'eisenstecken-openapi-angular-library';
+import {DefaultService} from 'eisenstecken-openapi-angular-library';
 import {first, map} from 'rxjs/operators';
 import {forkJoin, Observable} from 'rxjs';
 
@@ -16,9 +16,11 @@ export class HoursSummaryComponent implements OnInit {
     @Input() jobFormGroup: FormGroup;
     @Input() mealFormGroup: FormGroup;
     @Input() expensesJourneyGroup: FormGroup;
+    @Input() jobsReady$: Observable<void>;
 
     eatingPlaceName = '';
     driveStrings: string[] = [];
+    showJobs = false;
 
     constructor(private api: DefaultService) {
     }
@@ -35,6 +37,11 @@ export class HoursSummaryComponent implements OnInit {
         });
         this.refreshEatingPlace();
         this.refreshDrives();
+        this.jobsReady$.subscribe(() =>  {
+            console.log('Refresh Jobs');
+            this.showJobs = false;
+            this.showJobs = true;
+        });
     }
 
     getWorkedHoursString(): string {
@@ -49,7 +56,9 @@ export class HoursSummaryComponent implements OnInit {
 
     showJob(job: AbstractControl): boolean {
         const minutes = parseInt(job.get('minutes').value, 10);
-        const minutesDirection = parseInt(job.get('minutes').value, 10);
+        const minutesDirection = parseInt(job.get('minutesDirection').value, 10);
+        console.log(minutes, minutesDirection);
+        console.log(minutes > 0 || minutesDirection > 0);
         return minutes > 0 || minutesDirection > 0;
     }
 
@@ -73,7 +82,9 @@ export class HoursSummaryComponent implements OnInit {
     private refreshEatingPlace(): void {
         const eatingPlaceId = parseInt(this.mealFormGroup.get('eatingPlaceId').value, 10);
         this.api.getEatingPlacesEatingPlaceEatingPlaceIdGet(eatingPlaceId).pipe(first()).subscribe((eatingPlace) => {
-            this.eatingPlaceName = eatingPlace.name;
+            if (eatingPlace) {
+                this.eatingPlaceName = eatingPlace.name;
+            }
         });
     }
 
