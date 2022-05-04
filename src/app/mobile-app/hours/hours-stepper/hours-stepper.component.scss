@@ -1,3 +1,5 @@
+/*
+
 mat-stepper {
   max-width: 100%;
 }
@@ -13,16 +15,41 @@ mat-step-header {
 .mat-vertical-content {
   padding: 0 12px 12px 12px;
 }
+*/
 
 .jobs-list {
   max-height: 500px;
   overflow-y: scroll;
+  min-width: 30vw;
 
   > div:nth-child(2n) {
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(254, 237, 179, 0.4);
   }
 }
 
-.additional-hours{
+.additional-hours {
   margin-top: 10px;
+}
+
+.blue {
+  color: cornflowerblue;
+}
+
+.mat-list-option,
+.mat-nav-list .mat-list-item,
+.mat-action-list .mat-list-item {
+  &:hover, &:focus {
+    background: rgba(#fdc400, 0.2);
+  }
+}
+
+.mat-list-single-selected-option {
+  &, &:hover, &:focus {
+    background: rgba(#fdc400, 0.6);
+  }
+}
+
+
+.desktop-min-width {
+  min-width: 30vw;
 }

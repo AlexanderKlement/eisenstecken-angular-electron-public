@@ -38,7 +38,7 @@
               "path": "./angular.webpack.js",
               "replaceDuplicatePlugins": true
             },
-            "serviceWorker": false,
+            "serviceWorker": true,
             "ngswConfigPath": "ngsw-config.json"
           },
           "configurations": {

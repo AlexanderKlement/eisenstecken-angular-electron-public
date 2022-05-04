@@ -51,6 +51,15 @@ export class InfoDialogComponent implements OnInit {
             ]
         },
         {
+            versionName: '1.0.0',
+            changes: [
+                'Fehler behoben, bei dem Mehrfachrabatte bei Eingangsrechnungen falsch berechnet wurden. Dies hat nur Einzelsummen ' +
+                'beeinflusst und hatte keine Auswirkung auf Gesamtsummen. ACHTUNG: Dies korrigiert nur Rechnungen, welche ' +
+                'ab jetzt importiert werden.',
+
+            ]
+        },
+        {
             versionName: '0.9.9',
             changes: [
                 'Stunden eintragen überarbeitet. Die Zeit wird nun nicht mehr gestoppt, sondern der Benutzer trägt die ' +
