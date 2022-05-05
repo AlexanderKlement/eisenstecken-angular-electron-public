@@ -1,16 +1,16 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormArray, FormGroup} from '@angular/forms';
-import {HoursStepperComponent} from '../hours-stepper/hours-stepper.component';
+import {HoursStepperComponent, JobEnum} from '../hours-stepper/hours-stepper.component';
 import {DefaultService} from 'eisenstecken-openapi-angular-library';
 import {first, map} from 'rxjs/operators';
-import {forkJoin, Observable} from 'rxjs';
+import {forkJoin, Observable, Subscription} from 'rxjs';
 
 @Component({
     selector: 'app-hours-summary',
     templateUrl: './hours-summary.component.html',
     styleUrls: ['./hours-summary.component.scss']
 })
-export class HoursSummaryComponent implements OnInit {
+export class HoursSummaryComponent implements OnInit, OnDestroy {
 
     @Input() hourFormGroup: FormGroup;
     @Input() jobFormGroup: FormGroup;
@@ -23,20 +23,17 @@ export class HoursSummaryComponent implements OnInit {
     showJobs = false;
     maintenanceString = '';
     additionalWorkloadString = '';
+    refreshInterval: NodeJS.Timeout;
+    refreshRateSeconds = 0.8;
 
     constructor(private api: DefaultService) {
     }
 
     ngOnInit(): void {
-        this.mealFormGroup.valueChanges.subscribe(() => {
+        this.refreshInterval = setInterval(() => {
             this.refreshEatingPlace();
-            this.mealFormGroup.get('eatingPlaceId').valueChanges.subscribe(() => {
-                this.refreshEatingPlace();
-            });
-        });
-        this.expensesJourneyGroup.valueChanges.subscribe(() => {
             this.refreshDrives();
-        });
+        }, this.refreshRateSeconds * 1000);
         this.refreshEatingPlace();
         this.refreshDrives();
         this.refreshMaintenanceString();
@@ -50,6 +47,10 @@ export class HoursSummaryComponent implements OnInit {
         });
     }
 
+    ngOnDestroy(): void {
+        clearInterval(this.refreshInterval);
+    }
+
     refreshAdditionalWorkloadString(): void {
         const additionaWorkloadMinutes = parseInt(this.jobFormGroup.get('additionalJob').get('minutes').value, 10);
         if (additionaWorkloadMinutes > 0) {
@@ -59,7 +60,7 @@ export class HoursSummaryComponent implements OnInit {
     }
 
     refreshMaintenanceString(): void {
-        const minutes = parseInt(this.jobFormGroup.get('maintenanceMinutes').value, 10)
+        const minutes = parseInt(this.jobFormGroup.get('maintenanceMinutes').value, 10);
         this.maintenanceString = 'Instandhaltung: ' + this.getHoursStringFromMinutes(minutes);
     }
 
@@ -75,8 +76,22 @@ export class HoursSummaryComponent implements OnInit {
         return HoursStepperComponent.generateHourString(hours, minutes);
     }
 
-    getJobs(): FormArray {
-        return this.jobFormGroup.get('jobs') as FormArray;
+    getJobs(jobEnum: JobEnum): FormArray {
+        console.log('Get jobs:', jobEnum);
+        switch (jobEnum) {
+            case JobEnum.accepted:
+                return this.jobFormGroup.get('jobsAccepted') as FormArray;
+            case JobEnum.created:
+                return this.jobFormGroup.get('jobsCreated') as FormArray;
+        }
+    }
+
+    getAllJobs(): FormArray[] {
+        console.log('Get all jobs');
+        return [
+            this.getJobs(JobEnum.accepted),
+            this.getJobs(JobEnum.created)
+        ];
     }
 
     showJob(job: AbstractControl): boolean {

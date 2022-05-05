@@ -3,11 +3,13 @@
     <p>{{maintenanceString}}</p>
     <p *ngIf="additionalWorkloadString.length > 0">{{additionalWorkloadString}}</p>
     <div *ngIf="showJobs">
-        <div *ngFor="let job of getJobs().controls">
-            <div fxLayout="column" fxLayoutAlign="space-around center" *ngIf="showJob(job)">
-                <h4><strong>{{job.get('name').value}}</strong></h4>
-                <p>Normal: {{getMinutesStringByJob(job, false)}}</p>
-                <p>Regie: {{getMinutesStringByJob(job, true)}}</p>
+        <div *ngFor="let jobList of this.getAllJobs(); let i = index">
+            <div *ngFor="let job of getJobs(i).controls">
+                <div fxLayout="column" fxLayoutAlign="space-around center" *ngIf="showJob(job)">
+                    <h4><strong>{{job.get('name').value}}</strong></h4>
+                    <p>Normal: {{getMinutesStringByJob(job, false)}}</p>
+                    <p>Regie: {{getMinutesStringByJob(job, true)}}</p>
+                </div>
             </div>
         </div>
     </div>

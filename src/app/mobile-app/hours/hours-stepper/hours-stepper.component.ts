@@ -326,7 +326,7 @@ export class HoursStepperComponent implements OnInit {
 
     mealNextClicked() {
         if (parseInt(this.mealFormGroup.get('eatingPlaceId').value, 10) > 0) {
-            this.jobsReadySubscriber$.next();
+            //this.jobsReadySubscriber$.next();
             this.stepper.next();
         }
     }
@@ -340,7 +340,7 @@ export class HoursStepperComponent implements OnInit {
         this.refreshSpentMinutes();
     }
 
-    getMinutesFromAddtionalJob(): string {
+    getMinutesFromAdditionalJob(): string {
         const minutes = parseInt(this.jobFormGroup.get('additionalJob').get('minutes').value, 10);
         return HoursStepperComponent.generateHourString(Math.floor(minutes / 60), minutes % 60);
     }
