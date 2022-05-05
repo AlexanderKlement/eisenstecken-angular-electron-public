@@ -18,36 +18,37 @@ export class AccessGuard implements CanActivate {
     constructor(private authService: AuthService, private router: Router, private electron: ElectronService) {
     }
 
+    public static urlStartsWith(route: ActivatedRouteSnapshot, url: string): boolean {
+        if (route.url.length > 0) {
+            return route.url[0].path.startsWith(url);
+        }
+        return false;
+    }
+
     canActivate(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
         const requiresLogin = route.data.requiresLogin || true;
         if (requiresLogin) {
             if (!this.authService.isLoggedIn()) {
-                this.router.navigate(['login']);
+                console.warn('Not logged in!');
+                return this.router.parseUrl('login');
             }
         }
-        this.redirectWorkHours();
-        return true;
+        return this.redirectWorkHours(route);
     }
 
-    private redirectWorkHours(): void {
-        console.log('Host is: ' + window.location.hostname);
+    private redirectWorkHours(route: ActivatedRouteSnapshot): boolean | UrlTree {
         if (this.limitAccessHosts.includes(window.location.hostname)) {
-            // eslint-disable-next-line no-console
-            console.info('LIMITED ACCESS HOST');
-            if (!this.router.url.startsWith('/mobile') || !this.router.url.startsWith('/login')) {
-                console.log('URL starts not  with mobile or login', this.router.url);
+            if (!AccessGuard.urlStartsWith(route, 'mobile')) {
                 if (!this.electron.isElectron) {
-                    console.log('Not electron: navigating!');
-                    //this.router.navigateByUrl('mobile', {replaceUrl: true}); //before introducing this again, s
+                    return this.router.parseUrl('mobile');
                 } else {
                     console.log(this.electron);
                 }
             }
-        } else {
-            console.log('Internal Route');
         }
+        return true;
     }
 
 }

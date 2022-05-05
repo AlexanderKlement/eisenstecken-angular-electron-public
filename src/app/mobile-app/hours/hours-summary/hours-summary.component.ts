@@ -77,7 +77,6 @@ export class HoursSummaryComponent implements OnInit, OnDestroy {
     }
 
     getJobs(jobEnum: JobEnum): FormArray {
-        console.log('Get jobs:', jobEnum);
         switch (jobEnum) {
             case JobEnum.accepted:
                 return this.jobFormGroup.get('jobsAccepted') as FormArray;
@@ -87,7 +86,6 @@ export class HoursSummaryComponent implements OnInit, OnDestroy {
     }
 
     getAllJobs(): FormArray[] {
-        console.log('Get all jobs');
         return [
             this.getJobs(JobEnum.accepted),
             this.getJobs(JobEnum.created)
