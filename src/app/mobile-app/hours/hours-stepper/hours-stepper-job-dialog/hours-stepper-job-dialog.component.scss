@@ -1,0 +1,17 @@
+.jobs-list {
+  max-height: 50vh;
+  overflow-y: scroll;
+  min-width: 30vw;
+
+  > div:nth-child(2n) {
+    background: rgba(254, 237, 179, 0.4);
+  }
+}
+
+.additional-hours {
+  margin-top: 10px;
+}
+
+.blue {
+  color: cornflowerblue;
+}

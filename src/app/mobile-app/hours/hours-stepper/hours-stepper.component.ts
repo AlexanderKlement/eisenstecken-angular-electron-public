@@ -29,6 +29,11 @@ import {AuthService} from '../../../shared/services/auth.service';
 import {first} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {MatStepper, StepperOrientation} from '@angular/material/stepper';
+import {MatDialog} from '@angular/material/dialog';
+import {
+    HoursStepperJobDialogComponent,
+    HoursStepperVariantEnum
+} from './hours-stepper-job-dialog/hours-stepper-job-dialog.component';
 
 
 function greaterThanValidator(value: number): ValidatorFn {
@@ -75,7 +80,8 @@ export class HoursStepperComponent implements OnInit {
     // eslint-disable-next-line @typescript-eslint/member-ordering
     @ViewChild('stepper') private stepper: MatStepper;
 
-    constructor(private api: DefaultService, private authService: AuthService, private router: Router) {
+    constructor(private api: DefaultService, private dialog: MatDialog,
+                private authService: AuthService, private router: Router) {
     }
 
     static generateHourString(hours: number, minutes: number, mobile: boolean = false): string {
@@ -175,7 +181,7 @@ export class HoursStepperComponent implements OnInit {
         ];
     }
 
-    getMinutesFromJob(index: number, direction: boolean, jobEnum: JobEnum): string {
+    getMinutesStringFromJob(index: number, direction: boolean, jobEnum: JobEnum): string {
         const fieldName = direction ? 'minutesDirection' : 'minutes';
         const minutes = parseInt(this.getJobs(jobEnum).at(index).get(fieldName).value, 10);
         // eslint-disable-next-line max-len
@@ -184,6 +190,15 @@ export class HoursStepperComponent implements OnInit {
 
     getNameFromJob(i: number, jobEnum: JobEnum): string {
         return this.getJobs(jobEnum).at(i).get('name').value;
+    }
+
+    getIdFromJob(i: number, jobEnum: JobEnum): string {
+        return this.getJobs(jobEnum).at(i).get('jobId').value;
+    }
+
+    getMinutesFromJob(i: number, jobEnum: JobEnum, direction): number {
+        const fieldName = direction ? 'minutesDirection' : 'minutes';
+        return parseInt(this.getJobs(jobEnum).at(i).get(fieldName).value, 10);
     }
 
     initExpense(expense?: Expense): FormGroup {
@@ -345,6 +360,10 @@ export class HoursStepperComponent implements OnInit {
         return HoursStepperComponent.generateHourString(Math.floor(minutes / 60), minutes % 60);
     }
 
+    getNameFromAdditionalJob(): string {
+        return this.jobFormGroup.get('additionalJob').get('description').value;
+    }
+
     getMinutesFromMaintenance(): string {
         const minutes = parseInt(this.jobFormGroup.get('maintenanceMinutes').value, 10);
         return HoursStepperComponent.generateHourString(Math.floor(minutes / 60), minutes % 60);
@@ -366,6 +385,49 @@ export class HoursStepperComponent implements OnInit {
             case JobEnum.created:
                 return 'Erstellt';
         }
+    }
+
+
+    openDialogClicked(variant: HoursStepperVariantEnum, selectedJobIndex?: number, selectedJobList?: number): void {
+        const data = {
+            jobGroup: this.jobFormGroup,
+            additionalJobs: this.jobFormGroup.get('additionalJob') as FormGroup,
+            variant,
+            hourFormGroup: this.hourFormGroup,
+            selectedJobList: -1,
+            selectedJobIndex: -1,
+        };
+        if (selectedJobIndex !== undefined && selectedJobList !== undefined) {
+            data.selectedJobList = selectedJobList;
+            data.selectedJobIndex = selectedJobIndex;
+        }
+        const dialogRef = this.dialog.open(HoursStepperJobDialogComponent, {
+            width: '90vw',
+            maxWidth: '1000px',
+            data
+        });
+        dialogRef.afterClosed().subscribe((result) => {
+            console.log(result);
+            if (result) {
+                this.jobFormGroup = result.jobGroup;
+                this.jobFormGroup.setControl('additionalJob', result.additionalJobs);
+                this.hourFormGroup = result.hourFormGroup;
+                this.refreshSpentMinutes();
+            }
+        });
+
+    }
+
+    showMaintenance(): boolean {
+        return parseInt(this.jobFormGroup.get('maintenanceMinutes').value, 10) > 0;
+    }
+
+    showAdditionalMinutes() {
+        return parseInt(this.jobFormGroup.get('additionalJob').get('minutes').value, 10) > 0;
+    }
+
+    showJob(i: number, jobEnum: JobEnum): boolean {
+        return parseInt(this.getJobs(jobEnum).at(i).get('minutes').value, 10) > 0;
     }
 
     private initFormGroups() {

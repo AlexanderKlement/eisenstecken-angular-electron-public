@@ -18,6 +18,8 @@ import { HoursSummaryComponent } from './hours/hours-summary/hours-summary.compo
 import { HoursStepperComponent } from './hours/hours-stepper/hours-stepper.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { RedirectComponent } from './hours/redirect/redirect.component';
+import { HoursStepperJobDialogComponent } from './hours/hours-stepper/hours-stepper-job-dialog/hours-stepper-job-dialog.component';
+import {MatDialogModule} from '@angular/material/dialog';
 
 
 @NgModule({
@@ -26,7 +28,8 @@ import { RedirectComponent } from './hours/redirect/redirect.component';
     HoursComponent,
     HoursSummaryComponent,
     HoursStepperComponent,
-    RedirectComponent
+    RedirectComponent,
+    HoursStepperJobDialogComponent
   ],
   imports: [
     CommonModule,
@@ -41,7 +44,8 @@ import { RedirectComponent } from './hours/redirect/redirect.component';
     MatIconModule,
     MatListModule,
     MatSelectModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatDialogModule
   ]
 })
 export class MobileAppModule { }
