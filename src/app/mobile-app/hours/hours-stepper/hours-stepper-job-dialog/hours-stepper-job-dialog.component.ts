@@ -57,13 +57,13 @@ export class HoursStepperJobDialogComponent implements OnInit {
                 this.title = 'Kunde';
                 break;
             case HoursStepperVariantEnum.custom:
-                this.showMaintenance = true;
-                this.title = 'Instandhaltung';
+                this.showAdditionalJobs = true;
                 this.confirmDisabled = false;
+                this.title = 'Frei eintragen';
                 break;
             case HoursStepperVariantEnum.maintenance:
-                this.showAdditionalJobs = true;
-                this.title = 'Frei eintragen';
+                this.showMaintenance = true;
+                this.title = 'Instandhaltung';
                 this.confirmDisabled = false;
                 break;
         }
@@ -71,14 +71,13 @@ export class HoursStepperJobDialogComponent implements OnInit {
         if (window.innerWidth < 600) {
             this.stepperOrientation = 'vertical';
         }
-
-        console.log('Indexes:', this.data.selectedJobIndex, this.data.selectedJobList);
         if (this.data.selectedJobIndex >= 0 && this.data.selectedJobList >= 0) {
             this.selectedJobList = this.data.selectedJobList;
             this.selectedJobIndex = this.data.selectedJobIndex;
             this.confirmDisabled = false;
             this.selectedStepperIndex = 1;
         }
+        this.refreshSpentMinutes();
     }
 
     onConfirmClick(): void {
@@ -109,7 +108,7 @@ export class HoursStepperJobDialogComponent implements OnInit {
 
     getMinutesFromMaintenance(): string {
         const minutes = parseInt(this.jobFormGroup.get('maintenanceMinutes').value, 10);
-        return HoursStepperComponent.generateHourString(Math.floor(minutes / 60), minutes % 60);
+        return HoursStepperComponent.generateHourString(Math.trunc(minutes / 60), minutes % 60);
     }
 
     addMinutesToMaintenance(newMinutes: number): void {
@@ -139,7 +138,7 @@ export class HoursStepperJobDialogComponent implements OnInit {
 
     getAvailableHoursString(): string {
         const spendableMinutes = parseInt(this.jobFormGroup.get('spendableMinutes').value, 10);
-        const hours = Math.floor(spendableMinutes / 60);
+        const hours = Math.trunc(spendableMinutes / 60);
         const minutes = spendableMinutes % 60;
         return HoursStepperComponent.generateHourString(hours, minutes);
     }
@@ -155,7 +154,7 @@ export class HoursStepperJobDialogComponent implements OnInit {
 
     getMinutesFromAdditionalJob(): string {
         const minutes = parseInt(this.jobFormGroup.get('additionalJob').get('minutes').value, 10);
-        return HoursStepperComponent.generateHourString(Math.floor(minutes / 60), minutes % 60);
+        return HoursStepperComponent.generateHourString(Math.trunc(minutes / 60), minutes % 60);
     }
 
     getNameFromJob(i: number, jobEnum: JobEnum): string {
@@ -178,7 +177,7 @@ export class HoursStepperJobDialogComponent implements OnInit {
         const fieldName = direction ? 'minutesDirection' : 'minutes';
         const minutes = parseInt(this.getJobs(jobEnum).at(index).get(fieldName).value, 10);
         // eslint-disable-next-line max-len
-        return HoursStepperComponent.generateHourString(Math.floor(minutes / 60), minutes % 60);
+        return HoursStepperComponent.generateHourString(Math.trunc(minutes / 60), minutes % 60);
     }
 
     addMinutesToJob(minutesToAdd: number, index: number, direction: boolean, jobEnum: JobEnum) {
@@ -201,7 +200,6 @@ export class HoursStepperJobDialogComponent implements OnInit {
         }
         spendMinutes += parseInt(this.jobFormGroup.get('additionalJob').get('minutes').value, 10);
         spendMinutes += parseInt(this.jobFormGroup.get('maintenanceMinutes').value, 10);
-
         const spendableMinutes = parseInt(this.hourFormGroup.get('minutes').value, 10) - spendMinutes;
         this.jobFormGroup.get('spendableMinutes').setValue(spendableMinutes);
         this.availableHoursString = this.getAvailableHoursString();

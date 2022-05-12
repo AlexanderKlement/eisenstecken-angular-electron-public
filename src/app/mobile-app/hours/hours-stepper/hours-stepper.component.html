@@ -38,7 +38,7 @@
         <mat-step [stepControl]="jobFormGroup">
             <ng-template matStepLabel class="step-header">Stunden zuteilen</ng-template>
             <form *ngIf="jobsLoaded" [formGroup]="jobFormGroup">
-                <div fxLayout="column" fxLayoutAlign="space-between center">
+                <div fxLayout="column" fxLayoutAlign="space-between start">
                     <p>Bitte die ganze Arbeitszeit auf Projekte oder Instandhaltung aufteilen.</p>
                     <div fxFlexAlign="center">
                         <p>Arbeitszeit: {{getWorkedHoursString()}}</p>
@@ -46,12 +46,13 @@
                     <div fxFlexAlign="center">
                         <p><strong>Aufzuteilen: {{availableHoursString}}</strong></p>
                     </div>
-                    <p class="blue">Blau -> Regiestunden</p>
-                    <button mat-raised-button (click)="openDialogClicked(0)">Kunde</button>
-                    <button mat-raised-button (click)="openDialogClicked(1)">Instandhaltung</button>
-                    <button mat-raised-button (click)="openDialogClicked(2)">Frei eintragen</button>
+                    <mat-action-list fxFlexAlign="center">
+                        <button mat-raised-button (click)="openDialogClicked(0)">Kunde</button>
+                        <button mat-raised-button (click)="openDialogClicked(1)">Instandhaltung</button>
+                        <button mat-raised-button (click)="openDialogClicked(2)">Frei eintragen</button>
+                    </mat-action-list>
                     <div *ngFor="let jobList of getAllJobs(); let j = index" class="desktop-min-width">
-                        <div fxLayout="column" fxLayoutAlign="space-between center" fxFlexFill>
+                        <div fxLayout="column" fxLayoutAlign="space-between start" fxFlexFill>
                             <div *ngFor="let job of jobList.controls; let i = index">
                                 <div *ngIf="showJob(i, j)" fxLayout="column" fxLayoutAlign="space-around start">
                                     <div (click)="openDialogClicked(0, i, j)">
@@ -63,11 +64,11 @@
                             </div>
                         </div>
                     </div>
-                    <div *ngIf="showMaintenance()">
+                    <div *ngIf="showMaintenance()" (click)="openDialogClicked(1)">
                         <p><strong>Instandhaltung</strong></p>
                         <p>{{getMinutesFromMaintenance()}}</p>
                     </div>
-                    <div *ngIf="showAdditionalMinutes()">
+                    <div *ngIf="showAdditionalMinutes()" (click)="openDialogClicked(2)">
                         <p><strong>{{getNameFromAdditionalJob()}}</strong></p>
                         <p>{{getMinutesFromAdditionalJob()}}</p>
                     </div>

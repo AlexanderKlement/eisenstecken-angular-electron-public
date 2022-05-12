@@ -18,13 +18,17 @@ mat-step-header {
 */
 
 .jobs-list {
-  max-height: 50vh;
   overflow-y: scroll;
-  min-width: 30vw;
 
   > div:nth-child(2n) {
     background: rgba(254, 237, 179, 0.4);
   }
+}
+
+.list {
+  overflow: hidden;
+  min-width: 30vw;
+  max-height: 50vh;
 }
 
 .additional-hours {

@@ -1,9 +1,10 @@
 <h1 mat-dialog-title>{{title}}</h1>
 <div mat-dialog-content>
-    <div fxFlexAlign="center">
+    <div>
         <p><strong>Aufzuteilen: {{availableHoursString}}</strong></p>
     </div>
-    <div *ngIf="showMaintenance">
+    <p *ngIf="showClients" class="blue">Blau -> Regiestunden</p>
+    <div *ngIf="showMaintenance" class="list">
         <p>Instandhaltung: {{getMinutesFromMaintenance()}}</p>
         <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill
              class="additional-hours">
@@ -15,11 +16,11 @@
                     (click)="addMinutesToMaintenance(-15)">
                 -15 min
             </button>
-            <button mat-raised-button aria-label="15 Minuten abziehen"
+            <button mat-raised-button aria-label="15 Minuten hinzufügen"
                     (click)="addMinutesToMaintenance(15)">
                 +15 min
             </button>
-            <button mat-raised-button aria-label="1 Stunde abziehen"
+            <button mat-raised-button aria-label="1 Stunde hinzufügen"
                     (click)="addMinutesToMaintenance(60)">
                 +1 h
             </button>
@@ -30,15 +31,19 @@
             <mat-step>
                 <ng-template matStepLabel class="step-header">Auftrag auswählen</ng-template>
                 <form [formGroup]="jobFormGroup">
-                    <div fxLayout="column" fxLayoutAlign="space-around center" fxLayout.gt-sm="row">
-                        <div fxLayout="column" fxLayoutAlign="start center"
+                    <div fxLayout="column" fxLayoutAlign="space-around start" fxLayout.gt-sm="row"
+                         class="desktop-min-width">
+                        <div fxLayout="column" fxLayoutAlign="start start "
                              *ngFor="let jobList of getAllJobs(); let j = index" class="desktop-min-width">
-                            <h4>{{getJobListName(j)}}</h4>
-                            <div class="jobs-list" fxLayout="column" fxLayoutAlign="space-between center" fxFlexFill>
-                                <div *ngFor="let job of jobList.controls; let i = index">
-                                    <div fxLayout="column" fxLayoutAlign="space-around start">
-                                        <div>
-                                            <p (click)="jobClicked(i, j)"><strong>{{getNameFromJob(i, j)}}</strong></p>
+                            <h4 class="desktop-min-width">{{getJobListName(j)}}</h4>
+                            <div class="jobs-list list" fxLayout="column" fxLayoutAlign="start start" fxFlexFill>
+                                <div *ngFor="let job of jobList.controls; let i = index" class="desktop-min-width">
+                                    <div fxLayout="column" fxLayoutAlign="space-around start" class="desktop-min-width">
+                                        <div class="desktop-min-width">
+                                            <p (click)="jobClicked(i, j)" class="desktop-min-width">
+                                                <strong class="desktop-min-width">{{getNameFromJob(i, j)}}
+                                                </strong>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -61,11 +66,11 @@
                             (click)="addMinutesToJob(-15, selectedJobIndex, false, selectedJobList)">
                         -15 min
                     </button>
-                    <button mat-raised-button aria-label="15 Minuten abziehen"
+                    <button mat-raised-button aria-label="15 Minuten hinzufügen"
                             (click)="addMinutesToJob(15,  selectedJobIndex, false, selectedJobList)">
                         +15 min
                     </button>
-                    <button mat-raised-button aria-label="1 Stunde abziehen"
+                    <button mat-raised-button aria-label="1 Stunde hinzufügen"
                             (click)="addMinutesToJob(60, selectedJobIndex, false, selectedJobList)">
                         +1 h
                     </button>
@@ -80,11 +85,11 @@
                             (click)="addMinutesToJob(-15,selectedJobIndex, true, selectedJobList)">
                         -15 min
                     </button>
-                    <button mat-raised-button aria-label="15 Minuten abziehen"
+                    <button mat-raised-button aria-label="15 Minuten hinzufügen"
                             (click)="addMinutesToJob(15,selectedJobIndex, true, selectedJobList)">
                         +15 min
                     </button>
-                    <button mat-raised-button aria-label="1 Stunde abziehen"
+                    <button mat-raised-button aria-label="1 Stunde hinzufügen"
                             (click)="addMinutesToJob(60,selectedJobIndex, true, selectedJobList)">
                         +1 h
                     </button>
@@ -92,16 +97,17 @@
             </mat-step>
         </mat-stepper>
     </div>
-    <div *ngIf="showAdditionalJobs">
-        <div formGroupName="additionalJob">
-            <mat-form-field appearance="fill" style="width:80vw">
-                <mat-label>Beschreibung</mat-label>
-                <input class="form-control" formControlName="description" matInput>
-                <mat-hint>{{getMinutesFromAdditionalJob()}}</mat-hint>
-            </mat-form-field>
-        </div>
-        <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill formGroupName="additionalJob"
-             class="additional-hours">
+    <div *ngIf="showAdditionalJobs" class="list">
+        <p>{{getMinutesFromAdditionalJob()}}</p>
+        <form [formGroup]="jobFormGroup">
+            <div formGroupName="additionalJob" fxLayout="column" fxLayoutAlign="space-around center">
+                <mat-form-field appearance="fill" style="min-width:50vw">
+                    <mat-label>Beschreibung</mat-label>
+                    <input class="form-control" formControlName="description" matInput>
+                </mat-form-field>
+            </div>
+        </form>
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="additional-hours">
             <button mat-raised-button aria-label="1 Stunde abziehen"
                     (click)="addMinutesToAdditionalJob(-60)">
                 -1 h
@@ -110,11 +116,11 @@
                     (click)="addMinutesToAdditionalJob(-15)">
                 -15 min
             </button>
-            <button mat-raised-button aria-label="15 Minuten abziehen"
+            <button mat-raised-button aria-label="15 Minuten hinzufügen"
                     (click)="addMinutesToAdditionalJob(15)">
                 +15 min
             </button>
-            <button mat-raised-button aria-label="1 Stunde abziehen"
+            <button mat-raised-button aria-label="1 Stunde hinzufügen"
                     (click)="addMinutesToAdditionalJob(60)">
                 +1 h
             </button>

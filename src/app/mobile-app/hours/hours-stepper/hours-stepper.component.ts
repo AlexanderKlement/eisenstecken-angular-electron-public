@@ -150,7 +150,7 @@ export class HoursStepperComponent implements OnInit {
 
     getAvailableHoursString(): string {
         const spendableMinutes = parseInt(this.jobFormGroup.get('spendableMinutes').value, 10);
-        const hours = Math.floor(spendableMinutes / 60);
+        const hours = Math.trunc(spendableMinutes / 60);
         const minutes = spendableMinutes % 60;
         return HoursStepperComponent.generateHourString(hours, minutes);
     }
@@ -185,7 +185,7 @@ export class HoursStepperComponent implements OnInit {
         const fieldName = direction ? 'minutesDirection' : 'minutes';
         const minutes = parseInt(this.getJobs(jobEnum).at(index).get(fieldName).value, 10);
         // eslint-disable-next-line max-len
-        return HoursStepperComponent.generateHourString(Math.floor(minutes / 60), minutes % 60);
+        return HoursStepperComponent.generateHourString(Math.trunc(minutes / 60), minutes % 60);
     }
 
     getNameFromJob(i: number, jobEnum: JobEnum): string {
@@ -357,7 +357,7 @@ export class HoursStepperComponent implements OnInit {
 
     getMinutesFromAdditionalJob(): string {
         const minutes = parseInt(this.jobFormGroup.get('additionalJob').get('minutes').value, 10);
-        return HoursStepperComponent.generateHourString(Math.floor(minutes / 60), minutes % 60);
+        return HoursStepperComponent.generateHourString(Math.trunc(minutes / 60), minutes % 60);
     }
 
     getNameFromAdditionalJob(): string {
@@ -366,7 +366,7 @@ export class HoursStepperComponent implements OnInit {
 
     getMinutesFromMaintenance(): string {
         const minutes = parseInt(this.jobFormGroup.get('maintenanceMinutes').value, 10);
-        return HoursStepperComponent.generateHourString(Math.floor(minutes / 60), minutes % 60);
+        return HoursStepperComponent.generateHourString(Math.trunc(minutes / 60), minutes % 60);
     }
 
     addMinutesToMaintenance(newMinutes: number): void {
@@ -403,7 +403,7 @@ export class HoursStepperComponent implements OnInit {
         }
         const dialogRef = this.dialog.open(HoursStepperJobDialogComponent, {
             width: '90vw',
-            maxWidth: '1000px',
+            maxWidth: '1400px',
             data
         });
         dialogRef.afterClosed().subscribe((result) => {
@@ -457,22 +457,26 @@ export class HoursStepperComponent implements OnInit {
 
     private refreshShownHoursMinutes(): void {
         const actualMinutes = parseInt(this.hourFormGroup.get('minutes').value, 10);
-        this.hourFormGroup.get('showingHours').setValue(Math.floor(actualMinutes / 60));
+        this.hourFormGroup.get('showingHours').setValue(Math.trunc(actualMinutes / 60));
         this.hourFormGroup.get('showingMinutes').setValue(actualMinutes % 60);
     }
 
     private refreshSpentMinutes(): void {
         let spendMinutes = 0;
+        console.log(spendMinutes);
         for (const jobList of this.getAllJobs()) {
             for (const job of jobList.controls) {
                 spendMinutes += parseInt(job.get('minutes').value, 10);
                 spendMinutes += parseInt(job.get('minutesDirection').value, 10);
             }
         }
+        console.log(spendMinutes);
         spendMinutes += parseInt(this.jobFormGroup.get('additionalJob').get('minutes').value, 10);
+        console.log(spendMinutes);
         spendMinutes += parseInt(this.jobFormGroup.get('maintenanceMinutes').value, 10);
-
+        console.log(spendMinutes);
         const spendableMinutes = parseInt(this.hourFormGroup.get('minutes').value, 10) - spendMinutes;
+        console.log('MINUTES', parseInt(this.hourFormGroup.get('minutes').value, 10));
         this.jobFormGroup.get('spendableMinutes').setValue(spendableMinutes);
         this.availableHoursString = this.getAvailableHoursString();
     }
