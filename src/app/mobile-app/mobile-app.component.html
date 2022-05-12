@@ -1,5 +1,15 @@
-<app-toolbar title="" [buttonList]="buttons" [showBackButton]="false"></app-toolbar>
-<div fxLayout="column" fxLayoutAlign="space-around center">
-    <button (click)="hourButtonClicked()" mat-raised-button>Stunden eintragen</button>
-    <button mat-raised-button>Kalender</button>
-</div>
+<app-toolbar title="" [buttonList]="buttons" [showBackButton]="true" [showLogoutButton]="true"></app-toolbar>
+<mat-nav-list>
+    <mat-list-item>
+        <button mat-icon-button (click)="hourButtonClicked()">
+            <mat-icon>watch_later</mat-icon>
+            Stunden eintragen
+        </button>
+    </mat-list-item>
+    <mat-list-item>
+        <button mat-icon-button>
+            <mat-icon>calendar_today</mat-icon>
+            Kalender
+        </button>
+    </mat-list-item>
+</mat-nav-list>

@@ -77,6 +77,7 @@ export class HoursStepperComponent implements OnInit {
     stepperOrientation: StepperOrientation = 'horizontal';
     jobsReady$: Observable<void>;
     jobsReadySubscriber$: Subscriber<void>;
+    mobile = false;
     // eslint-disable-next-line @typescript-eslint/member-ordering
     @ViewChild('stepper') private stepper: MatStepper;
 
@@ -109,6 +110,7 @@ export class HoursStepperComponent implements OnInit {
     ngOnInit(): void {
         if (window.innerWidth < 600) {
             this.stepperOrientation = 'vertical';
+            this.mobile = true;
         }
         if (this.userId === undefined) {
             this.authService.getCurrentUser().pipe(first()).subscribe((user) => {
@@ -402,7 +404,7 @@ export class HoursStepperComponent implements OnInit {
             data.selectedJobIndex = selectedJobIndex;
         }
         const dialogRef = this.dialog.open(HoursStepperJobDialogComponent, {
-            width: '90vw',
+            width: '100vw',
             maxWidth: '1400px',
             data
         });
@@ -413,6 +415,7 @@ export class HoursStepperComponent implements OnInit {
                 this.jobFormGroup.setControl('additionalJob', result.additionalJobs);
                 this.hourFormGroup = result.hourFormGroup;
                 this.refreshSpentMinutes();
+                this.jobsReadySubscriber$.next();
             }
         });
 

@@ -1,5 +1,8 @@
 import {Component, HostListener, Input, OnInit} from '@angular/core';
 import {NavigationService} from '../../services/navigation.service';
+import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
+import {MatDialog} from '@angular/material/dialog';
+import {AuthService} from '../../services/auth.service';
 
 export interface CustomButton {
     name: string;
@@ -16,11 +19,12 @@ export class ToolbarComponent implements OnInit {
     @Input() buttonList?: CustomButton[];
     @Input() beforeBackFunction?: (afterBackFunction: VoidFunction) => void;
     @Input() title = '';
-    @Input() showBackButton =  true;
+    @Input() showBackButton = true;
     @Input() catchBackButton = true;
+    @Input() showLogoutButton = false;
 
     // eslint-disable-next-line @typescript-eslint/member-ordering
-    constructor(private navigation: NavigationService) {
+    constructor(private navigation: NavigationService, private dialog: MatDialog, private authService: AuthService) {
     }
 
     @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
@@ -31,7 +35,7 @@ export class ToolbarComponent implements OnInit {
     }
 
     @HostListener('window:popstate', ['$event']) onBrowserBackBtnClose(event: Event): void {
-        if(this.catchBackButton) {
+        if (this.catchBackButton) {
             event.preventDefault();
             this.navigation.backEvent();
             this.backClicked();
@@ -58,6 +62,21 @@ export class ToolbarComponent implements OnInit {
     buttonClicked(button: CustomButton): void {
         console.log('Toolbar: ' + button.name + ' clicked');
         button.navigate();
+    }
+
+    logoutClicked(): void {
+        const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+            width: '400px',
+            data: {
+                title: 'Abmelden?',
+                text: 'Soll der Benutzer abgemeldet werden?'
+            }
+        });
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.authService.doLogout();
+            }
+        });
     }
 
 }

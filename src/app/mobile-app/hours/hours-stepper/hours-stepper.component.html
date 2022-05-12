@@ -6,26 +6,30 @@
                 <div fxLayout="column" fxLayoutAlign="start center">
                     <p>Wie lange hast du heute gearbeitet? (ohne Mittagspause)</p>
                     <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
-                        <button mat-raised-button aria-label="Stunde abziehen" (click)="addTotalMinutes(-60)">
+                        <button [ngClass]="{'high-button': mobile}" mat-raised-button aria-label="Stunde abziehen"
+                                (click)="addTotalMinutes(-60)">
                             -1
                         </button>
                         <mat-form-field appearance="fill">
                             <mat-label>Stunden</mat-label>
                             <input readonly matInput type="number" formControlName="showingHours">
                         </mat-form-field>
-                        <button mat-raised-button aria-label="Stunde hinzufügen" (click)="addTotalMinutes(60)">
+                        <button [ngClass]="{'high-button': mobile}" mat-raised-button aria-label="Stunde hinzufügen"
+                                (click)="addTotalMinutes(60)">
                             +1
                         </button>
                     </div>
                     <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
-                        <button mat-raised-button aria-label="15 Minuten abziehen" (click)="addTotalMinutes(-15)">
+                        <button [ngClass]="{'high-button': mobile}" mat-raised-button aria-label="15 Minuten abziehen"
+                                (click)="addTotalMinutes(-15)">
                             -15
                         </button>
                         <mat-form-field appearance="fill">
                             <mat-label>Minuten</mat-label>
                             <input readonly matInput type=number formControlName="showingMinutes">
                         </mat-form-field>
-                        <button mat-raised-button aria-label="15 Minuten " (click)="addTotalMinutes(15)">
+                        <button [ngClass]="{'high-button': mobile}" mat-raised-button aria-label="15 Minuten "
+                                (click)="addTotalMinutes(15)">
                             +15
                         </button>
                     </div>
@@ -163,8 +167,7 @@
                     [jobFormGroup]="jobFormGroup"
                     [mealFormGroup]="mealFormGroup"
                     [expensesJourneyGroup]="expensesJourneyGroup"
-                    [jobsReady$]="jobsReady$"
-            >
+                    [jobsReady$]="jobsReady$">
             </app-hours-summary>
             <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
                 <button mat-raised-button matStepperPrevious>Zurück</button>
