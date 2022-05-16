@@ -8,7 +8,7 @@ import {
     Recalculation,
     RecalculationCreate, RecalculationUpdate, TemplatePaint, Unit, WoodList, WoodListCreate, Workload
 } from 'eisenstecken-openapi-angular-library';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Navigation, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
 import {first, map} from 'rxjs/operators';
@@ -17,6 +17,7 @@ import * as moment from 'moment';
 import {minutesToDisplayableString} from '../../shared/date.util';
 import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import {FileService} from '../../shared/services/file.service';
+import {NavigationService} from '../../shared/services/navigation.service';
 
 @Component({
     selector: 'app-recalculation-edit',
@@ -35,7 +36,7 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
     workloadDataSource: TableDataSource<Workload>;
     title = 'Nachkalkulation: Bearbeiten';
 
-    constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private file: FileService) {
+    constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private file: FileService, private navigation: NavigationService) {
         super(api, router, route, dialog);
     }
 
@@ -245,6 +246,7 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
             };
             this.api.createRecalculationRecalculationJobIdPost(this.jobId, recalculationCreate).pipe(first()).subscribe(recalculation => {
                 this.file.open(recalculation.pdf);
+                this.navigation.dontAddNextRouteToHistory();
                 this.router.navigateByUrl('recalculation/' + this.jobId, {replaceUrl: true});
             });
         } else {
@@ -258,6 +260,7 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
             };
             this.api.updateRecalculationRecalculationJobIdPut(this.jobId, recalculationUpdate).pipe(first()).subscribe(recalculation => {
                 this.file.open(recalculation.pdf);
+                this.navigation.dontAddNextRouteToHistory();
                 this.router.navigateByUrl('recalculation/' + this.jobId, {replaceUrl: true});
             });
         }

@@ -19,6 +19,7 @@ import {formatDateTransport} from '../../shared/date.util';
 import {CustomButton} from '../../shared/components/toolbar/toolbar.component';
 import {CurrencyPipe, getLocaleCurrencyCode} from '@angular/common';
 import {CdkTextareaAutosize} from '@angular/cdk/text-field';
+import {NavigationService} from '../../shared/services/navigation.service';
 
 @Component({
     selector: 'app-offer-edit',
@@ -38,7 +39,7 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
     subscription: Subscription;
 
     constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog,
-                private file: FileService, private currency: CurrencyPipe) {
+                private file: FileService, private currency: CurrencyPipe, private navigation: NavigationService) {
         super(api, router, route, dialog);
     }
 
@@ -180,6 +181,7 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
     createUpdateSuccess(offer: Offer): void {
         this.id = offer.id;
         this.file.open(offer.pdf);
+        this.navigation.dontAddNextRouteToHistory();
         this.router.navigateByUrl('job/' + this.jobId.toString(), {replaceUrl: true});
     }
 

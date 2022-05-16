@@ -3,6 +3,8 @@ import {NavigationService} from '../../services/navigation.service';
 import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {AuthService} from '../../services/auth.service';
+import {Location, PlatformLocation} from '@angular/common';
+import {NavigationEnd, NavigationStart, Router} from '@angular/router';
 
 export interface CustomButton {
     name: string;
@@ -20,29 +22,41 @@ export class ToolbarComponent implements OnInit {
     @Input() beforeBackFunction?: (afterBackFunction: VoidFunction) => void;
     @Input() title = '';
     @Input() showBackButton = true;
-    @Input() catchBackButton = true;
+    @Input() navigateBackOnPopstate = true;
     @Input() showLogoutButton = false;
 
-    // eslint-disable-next-line @typescript-eslint/member-ordering
-    constructor(private navigation: NavigationService, private dialog: MatDialog, private authService: AuthService) {
+    ignorePopState = true;
+
+
+    constructor(private navigation: NavigationService, private dialog: MatDialog,
+                private authService: AuthService, private router: Router) {
+        this.router.events.subscribe((event) => {
+            if (event instanceof NavigationStart) {
+                if (event.navigationTrigger === 'popstate') {
+                    console.log('Detected Popstate event');
+                    if (this.ignorePopState) {
+                        this.ignorePopState = false;
+                        console.log('Popstate ignored');
+                        const currentRoute = this.router.routerState;
+                        this.navigation.dontAddNextRouteToHistory();
+                        this.router.navigateByUrl(currentRoute.snapshot.url, {
+                            skipLocationChange: true,
+                            replaceUrl: true
+                        }).then(() => {
+                            if (this.navigateBackOnPopstate) {
+                                this.backClicked();
+                            }
+                        });
+                    }
+                }
+            }
+        });
     }
+
 
     @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
         if (event.key === 'Escape') {
             this.navigation.back();
-        }
-    }
-
-    @HostListener('window:popstate', ['$event']) onBrowserBackBtnClose(event: Event): void {
-        console.log('Back clicked');
-        event.preventDefault();
-
-        if (this.catchBackButton) {
-
-            this.navigation.backEvent();
-            this.backClicked();
-        } else {
-            console.warn('Preventing default back event');
         }
     }
 

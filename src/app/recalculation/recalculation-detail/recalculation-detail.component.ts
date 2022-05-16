@@ -19,6 +19,7 @@ import {AuthService} from '../../shared/services/auth.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {minutesToDisplayableString} from '../../shared/date.util';
 import {formatCurrency} from '@angular/common';
+import {NavigationService} from '../../shared/services/navigation.service';
 
 
 @Component({
@@ -45,7 +46,8 @@ export class RecalculationDetailComponent implements OnInit {
     private $refreshSubscriber: Subscriber<void>;
 
     constructor(private api: DefaultService, private router: Router, private route: ActivatedRoute,
-                private locker: LockService, private authService: AuthService, private snackBar: MatSnackBar) {
+                private locker: LockService, private authService: AuthService, private snackBar: MatSnackBar,
+                private navigation: NavigationService) {
     }
 
     ngOnInit(): void {
@@ -60,6 +62,7 @@ export class RecalculationDetailComponent implements OnInit {
                 if (recalculation === undefined || recalculation === null) {
                     this.authService.currentUserHasRight('recalculations:create').pipe(first()).subscribe(allowed => {
                         if (allowed) {
+                            this.navigation.dontAddNextRouteToHistory();
                             this.router.navigateByUrl('recalculation/edit/new/' + this.jobId.toString(), {replaceUrl: true});
                         } else {
                             this.snackBar.open('Sie sind nicht berechtigt Nachkalkulationen zu erstellen!'

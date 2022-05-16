@@ -1,39 +1,43 @@
 import {Injectable} from '@angular/core';
 import {Location} from '@angular/common';
-import {Router, NavigationEnd} from '@angular/router';
+import {Router, NavigationEnd, RoutesRecognized} from '@angular/router';
+import {filter, pairwise} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class NavigationService {
-    private history: string[] = [];
+    private history: string[];
     private backEventInProgress = false;
+    private ignoreNextRoute = false;
 
-    constructor(private router: Router, private location: Location) {
+    constructor(private router: Router) {
+        this.history = [];
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationEnd) {
-                console.info('Adding site to history: ' + event.urlAfterRedirects);
-                this.history.push(event.urlAfterRedirects);
+                if (!this.ignoreNextRoute) {
+                    console.log('Adding site to history: ' + event.urlAfterRedirects);
+                    this.history.push(event.urlAfterRedirects);
+                    console.log(this.history);
+                }
+                this.ignoreNextRoute = false;
             }
         });
     }
 
     back(): void {
-        if (this.backEventInProgress) {
-            // eslint-disable-next-line no-console
-            console.info('back navigation once prevented');
-            this.backEventInProgress = false;
-            return;
-        }
-        this.history.pop();
+        console.log('Navigation back called');
+        this.dontAddNextRouteToHistory();
         if (this.history.length > 0) {
-            this.location.back();
+            console.log('Going back to ', this.history);
+            this.router.navigateByUrl(this.history.pop(), {replaceUrl: true});
         } else {
-            this.router.navigateByUrl('/');
+            console.log('Going back to home');
+            this.router.navigateByUrl('/', {replaceUrl: true});
         }
+
     }
 
-    removeCurrentFromHistory() {
-        console.info('Removing current site from history');
-        this.history.pop();
+    dontAddNextRouteToHistory(): void {
+        this.ignoreNextRoute = true;
     }
 
     backEvent(): void {
@@ -41,6 +45,7 @@ export class NavigationService {
     }
 
     home(): void {
+        this.history = [];
         this.router.navigateByUrl('/');
     }
 
