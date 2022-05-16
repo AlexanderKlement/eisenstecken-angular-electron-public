@@ -10,8 +10,6 @@ export const timeValidator: ValidatorFn = (control: AbstractControl): Validation
     const exampleDate = '07.07.1993';
     const startTime = control.get('start_time').value;
     const endTime = control.get('end_time').value;
-    console.log(startTime);
-    console.log(endTime);
     if (startTime.length < 5 || endTime.length < 5) {
         return {timeValid: false};
     }
@@ -111,7 +109,6 @@ export class CalendarEditComponent implements OnInit {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             end_time: endDate.format()
         };
-        console.log('Submitting calendar entry');
         if (this.createMode) {
             this.api.createCalendarEntryCalendarCalendarIdPost(this.calendarId, calendarEntryCreate).pipe(first()).subscribe(
                 (calendarEntry) => {
@@ -143,7 +140,7 @@ export class CalendarEditComponent implements OnInit {
 
     createUpdateError(error: any): void {
         console.error('CalendarEditComponent: Could not complete ' + (this.createMode ? 'creation' : 'update'));
-        console.log(error);
+        console.error(error);
         this.submitted = false;
     }
 

@@ -10,7 +10,8 @@ var LocalConfigMain = /** @class */ (function () {
         this.configFileName = 'config_main.yml';
         this.defaultEncoding = 'utf8';
         this.defaultConfig = {
-            channel: 'latest'
+            channel: 'latest',
+            mail_processor: 'x86'
         };
         this.init();
     }
@@ -22,7 +23,7 @@ var LocalConfigMain = /** @class */ (function () {
     };
     LocalConfigMain.prototype.init = function () {
         this.loadedConfig = this.defaultConfig;
-        var appdataPath = electron_1.app.getAppPath();
+        var appdataPath = electron_1.app.getPath('userData');
         var path = require('path');
         var configFileFolderPath = path.join(appdataPath, this.configFileFolder);
         this.configFilePath = path.join(configFileFolderPath, this.configFileName);
@@ -49,6 +50,13 @@ var LocalConfigMain = /** @class */ (function () {
     LocalConfigMain.prototype.readConfig = function () {
         var configData = fs.readFileSync(this.configFilePath, { encoding: this.defaultEncoding });
         this.loadedConfig = yaml.parse(configData);
+    };
+    LocalConfigMain.prototype.setMailProcessor = function (processor) {
+        this.loadedConfig.mail_processor = processor;
+        this.writeConfig();
+    };
+    LocalConfigMain.prototype.getMailProcessor = function () {
+        return this.loadedConfig.mail_processor;
     };
     return LocalConfigMain;
 }());

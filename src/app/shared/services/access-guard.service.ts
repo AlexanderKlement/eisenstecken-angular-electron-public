@@ -43,8 +43,6 @@ export class AccessGuard implements CanActivate {
             if (!AccessGuard.urlStartsWith(route, 'mobile')) {
                 if (!this.electron.isElectron) {
                     return this.router.parseUrl('mobile');
-                } else {
-                    console.log(this.electron);
                 }
             }
         }

@@ -76,7 +76,7 @@ export class IngoingComponent implements OnInit {
                 .format('L')} an ${ingoingInvoice.name} `;
             let title = 'Zahlung ';
             let returnFunction = (result) => {
-                console.log(result);
+                console.info(result);
             };
             if (!ingoingInvoice.paid) {
                 text += 'als bezahlt markieren?';

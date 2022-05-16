@@ -47,8 +47,6 @@ export class CalendarService implements OnDestroy {
     }
 
     ngOnDestroy(): void {
-        //This should not really be necessary, because CalendarService only gets destroyed if main application is getting destroyed
-        console.log('Destroying CalendarService');
         clearInterval(this.notificationInterval);
     }
 

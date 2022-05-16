@@ -62,9 +62,7 @@ export class DebugComponent implements OnInit {
     }
 
     selectFolderClicked() {
-        console.log('Select Folder Started');
         this.file.selectFolder().then((result) => {
-            console.log(result);
             this.selectFolderFormGroup.get('path').setValue(result);
         });
     }

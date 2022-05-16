@@ -10,7 +10,7 @@ export class NavigationService {
     constructor(private router: Router, private location: Location) {
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationEnd) {
-                console.log('Adding site to history: ' + event.urlAfterRedirects);
+                console.info('Adding site to history: ' + event.urlAfterRedirects);
                 this.history.push(event.urlAfterRedirects);
             }
         });
@@ -32,7 +32,7 @@ export class NavigationService {
     }
 
     removeCurrentFromHistory() {
-        console.log('Removing current site from history');
+        console.info('Removing current site from history');
         this.history.pop();
     }
 

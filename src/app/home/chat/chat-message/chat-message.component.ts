@@ -9,7 +9,7 @@ import {ChatMessage} from 'eisenstecken-openapi-angular-library';
 export class ChatMessageComponent implements OnInit {
 
   @Input() message: ChatMessage;
-  @Input() ivan: boolean;
+  @Input() whatsapp: boolean;
 
   constructor() { }
 

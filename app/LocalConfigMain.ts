@@ -14,7 +14,8 @@ export class LocalConfigMain {
 
     private defaultEncoding: BufferEncoding = 'utf8';
     private defaultConfig = {
-        channel: 'latest'
+        channel: 'latest',
+        mail_processor: 'x86'
     };
 
     private loadedConfig;
@@ -33,7 +34,7 @@ export class LocalConfigMain {
 
     public init(): void {
         this.loadedConfig = this.defaultConfig;
-        const appdataPath = app.getAppPath();
+        const appdataPath = app.getPath('userData');
         const path = require('path');
         const configFileFolderPath = path.join(appdataPath, this.configFileFolder);
         this.configFilePath = path.join(configFileFolderPath, this.configFileName);
@@ -63,6 +64,15 @@ export class LocalConfigMain {
     private readConfig(): void {
         const configData = fs.readFileSync(this.configFilePath, {encoding: this.defaultEncoding});
         this.loadedConfig = yaml.parse(configData);
+    }
+
+    public setMailProcessor(processor: string): void {
+        this.loadedConfig.mail_processor = processor;
+        this.writeConfig();
+    }
+
+    public getMailProcessor(): string {
+        return this.loadedConfig.mail_processor;
     }
 
 }

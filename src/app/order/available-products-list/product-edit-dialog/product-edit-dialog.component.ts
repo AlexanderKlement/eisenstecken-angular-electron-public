@@ -157,10 +157,8 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
 
     private recalculateTotalPrice(): void {
         if (this.singlePrice) {
-            console.log(this.calcTotalPrice());
             this.productEditGroup.get('total_price').setValue(ProductEditDialogComponent.roundTo2Decimals(this.calcTotalPrice()));
         } else {
-            console.log(this.calcSinglePrice());
             this.productEditGroup.get('price').setValue(ProductEditDialogComponent.roundTo2Decimals(this.calcSinglePrice()));
         }
     }

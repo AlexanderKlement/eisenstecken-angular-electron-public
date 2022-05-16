@@ -11,7 +11,6 @@ export class PageNotFoundComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        console.log('PageNotFoundComponent INIT');
     }
 
     homeClicked() {

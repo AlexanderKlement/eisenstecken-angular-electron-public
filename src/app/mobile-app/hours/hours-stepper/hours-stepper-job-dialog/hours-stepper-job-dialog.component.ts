@@ -37,10 +37,10 @@ export class HoursStepperJobDialogComponent implements OnInit {
     jobFormGroup: FormGroup;
     hourFormGroup: FormGroup;
 
-    selectedStepperIndex = 0;
     selectedJobList = 0;
     selectedJobIndex = 0;
     stepperOrientation: StepperOrientation = 'horizontal';
+    clientsSite = 0;
     // eslint-disable-next-line @typescript-eslint/member-ordering
     @ViewChild('stepper') private stepper: MatStepper;
 
@@ -74,8 +74,7 @@ export class HoursStepperJobDialogComponent implements OnInit {
         if (this.data.selectedJobIndex >= 0 && this.data.selectedJobList >= 0) {
             this.selectedJobList = this.data.selectedJobList;
             this.selectedJobIndex = this.data.selectedJobIndex;
-            this.confirmDisabled = false;
-            this.selectedStepperIndex = 1;
+            this.refreshJobWidget();
         }
         this.refreshSpentMinutes();
     }
@@ -169,8 +168,13 @@ export class HoursStepperJobDialogComponent implements OnInit {
     jobClicked(i: number, j: number) {
         this.selectedJobIndex = i;
         this.selectedJobList = j;
+        this.refreshJobWidget();
+    }
+
+    refreshJobWidget(): void {
         this.confirmDisabled = false;
-        this.stepper.next();
+        this.clientsSite = 1;
+        this.title = 'Kunde: ' + this.getNameFromJob(this.selectedJobIndex, this.selectedJobList);
     }
 
     getMinutesStringFromJob(index: number, direction: boolean, jobEnum: JobEnum): string {

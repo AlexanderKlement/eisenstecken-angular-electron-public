@@ -14,15 +14,14 @@ export class AppComponent {
         private translate: TranslateService
     ) {
         this.translate.setDefaultLang('de');
-        console.log('APP_CONFIG', APP_CONFIG);
+        console.info('APP_CONFIG', APP_CONFIG);
 
         if (electronService.isElectron) {
-            console.log(process.env);
-            console.log('Run in electron');
-            //console.log('Electron ipcRenderer', this.electronService.ipcRenderer);
-            console.log('NodeJS childProcess', this.electronService.childProcess);
+            console.info(process.env);
+            console.info('Run in electron');
+            console.info('NodeJS childProcess', this.electronService.childProcess);
         } else {
-            console.log('Run in browser');
+            console.info('Run in browser');
         }
     }
 }

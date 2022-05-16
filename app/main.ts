@@ -50,7 +50,7 @@ try {
         app.quit()
     } else {
         app.on('second-instance', (event, commandLine, workingDirectory) => {
-            console.log("Second instance detected");
+            console.warn("Second instance detected");
             // Someone tried to run a second instance, we should focus our window.
             win.show();
             if (win) {
@@ -229,19 +229,42 @@ function initIPC() {
         });
     });
     ipcMain.on('send-mail-request', (event, arg) => {
-        //I'll just do both of them, one of them should open correctly.
-        //If it opens twice we should add a check here
-        console.log("Preparing mail: ");
-        child(mail32ExecutablePath, arg, function (err, data) {
-            console.log(err);
-            console.log(data);
-        });
-        child(mail64ExecutablePath, arg, function (err, data) {
-            console.log(err);
-            console.log(data);
+        console.log("Preparing mail: " + LocalConfigMain.getInstance().getMailProcessor());
+        let mailExecutablePath = mail32ExecutablePath;
+        if (LocalConfigMain.getInstance().getMailProcessor().includes('x64')) {
+            mailExecutablePath = mail64ExecutablePath;
+        }
+
+        let mailCommand = mailExecutablePath;
+
+        for(const singleArg of arg) {
+            mailCommand += ' ' + escapeShell(singleArg);
+        }
+
+        let cmd = "";
+        if (process.platform === "win32") {
+            cmd += "cmd /c chcp 65001>nul && ";
+        }
+        cmd += mailCommand;
+
+        require('child_process').exec(cmd, function (err, stdout: string, stderr: string): void {
+            if(stdout.trim().length < 5) {
+                event.reply('send-mail-reply', true);
+                return;
+            }
+            const errorString = stdout;
+            const doublePoint = errorString.indexOf(': ') + 2;
+            const firstAt = errorString.indexOf(' at ');
+            const extractedErrorString = errorString.slice(doublePoint, firstAt);
+            event.reply('send-mail-reply', extractedErrorString);
+            return;
         });
         event.reply('send-mail-reply', true);
     });
+    ipcMain.on('set-mail-processor-request', (event, arg) => {
+        LocalConfigMain.getInstance().setMailProcessor(arg[0]);
+        event.reply('set-mail-processor-replay', true);
+    })
     ipcMain.on('shell-item-request', (event, arg) => {
         shell.openPath(arg).then((response) => {
             event.reply('shell-item-reply', response);
@@ -280,7 +303,6 @@ function initIPC() {
             event.reply('select-folder-reply', '');
         }
     });
-
 
     /*
     Arg0: multi: [true, false]
@@ -347,7 +369,7 @@ function initIPC() {
     ipcMain.on('show-tray-balloon-request', (event, arg) => {
         //I'll just do both of them, one of them should open correctly.
         //If it opens twice we should add a check here
-        console.log("Showing tray balloon: ");
+        console.info("Showing tray balloon: ");
         const image = require('electron').nativeImage.createFromPath(eisensteckenIconPng);
         tray.displayBalloon({
             icon: image,
@@ -369,4 +391,9 @@ function appShown(): void {
 
 function appHidden(): void {
     win.webContents.send('app-hidden');
+}
+
+function escapeShell(cmd: string): string {
+    const replaced = '"' + cmd.replace(/(["'$`\\])/g, '\\$1') + '"';
+    return replaced.replace(/\n/g, '<br>');
 }

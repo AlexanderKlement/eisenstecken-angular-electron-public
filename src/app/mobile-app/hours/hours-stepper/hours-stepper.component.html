@@ -8,7 +8,7 @@
                     <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
                         <button [ngClass]="{'high-button': mobile}" mat-raised-button aria-label="Stunde abziehen"
                                 (click)="addTotalMinutes(-60)">
-                            -1
+                            -
                         </button>
                         <mat-form-field appearance="fill">
                             <mat-label>Stunden</mat-label>
@@ -16,13 +16,13 @@
                         </mat-form-field>
                         <button [ngClass]="{'high-button': mobile}" mat-raised-button aria-label="Stunde hinzufügen"
                                 (click)="addTotalMinutes(60)">
-                            +1
+                            +
                         </button>
                     </div>
                     <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
                         <button [ngClass]="{'high-button': mobile}" mat-raised-button aria-label="15 Minuten abziehen"
                                 (click)="addTotalMinutes(-15)">
-                            -15
+                            -
                         </button>
                         <mat-form-field appearance="fill">
                             <mat-label>Minuten</mat-label>
@@ -30,7 +30,7 @@
                         </mat-form-field>
                         <button [ngClass]="{'high-button': mobile}" mat-raised-button aria-label="15 Minuten "
                                 (click)="addTotalMinutes(15)">
-                            +15
+                            +
                         </button>
                     </div>
                     <div fxLayout="row" fxLayoutAlign="end center" fxFlexFill>

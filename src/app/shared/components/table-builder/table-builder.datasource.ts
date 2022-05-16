@@ -134,7 +134,7 @@ export class TableDataSource<T extends DataSourceClass> extends DataSource<Row<T
                 this.dataSubject.next(data);
             },
             error: error => {
-                console.log(error);
+                console.warn(error);
                 this.stopLoading = true;
             }
         });

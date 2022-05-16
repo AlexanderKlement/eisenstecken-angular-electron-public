@@ -29,16 +29,20 @@ export class ToolbarComponent implements OnInit {
 
     @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
         if (event.key === 'Escape') {
-            console.log('Escape pressed');
             this.navigation.back();
         }
     }
 
     @HostListener('window:popstate', ['$event']) onBrowserBackBtnClose(event: Event): void {
+        console.log('Back clicked');
+        event.preventDefault();
+
         if (this.catchBackButton) {
-            event.preventDefault();
+
             this.navigation.backEvent();
             this.backClicked();
+        } else {
+            console.warn('Preventing default back event');
         }
     }
 
@@ -60,7 +64,6 @@ export class ToolbarComponent implements OnInit {
     }
 
     buttonClicked(button: CustomButton): void {
-        console.log('Toolbar: ' + button.name + ' clicked');
         button.navigate();
     }
 

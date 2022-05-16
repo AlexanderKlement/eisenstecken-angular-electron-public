@@ -1,7 +1,7 @@
 <app-toolbar title="" [buttonList]="buttons" [showBackButton]="true" [showLogoutButton]="true"></app-toolbar>
 <mat-nav-list>
-    <mat-list-item>
-        <button mat-icon-button (click)="hourButtonClicked()">
+    <mat-list-item (click)="hourButtonClicked()">
+        <button mat-icon-button>
             <mat-icon>watch_later</mat-icon>
             Stunden eintragen
         </button>

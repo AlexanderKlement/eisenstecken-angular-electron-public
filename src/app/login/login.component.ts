@@ -26,7 +26,6 @@ export class LoginComponent implements OnInit {
     const loginSuccess = this.authService.login(this.loginForm.value.username, this.loginForm.value.password);
     loginSuccess.then((success) => {
       if (success) {
-        console.log('Login Success');
         this.router.navigate(['home']);
       } else {
         this.snackBar.open('Anmeldung fehlgeschlagen. Email/Password überprüfen', 'OK', {

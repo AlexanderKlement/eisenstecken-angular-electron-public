@@ -1,4 +1,4 @@
-<app-toolbar title="" [buttonList]="buttons" [showBackButton]="false" [catchBackButton]="false"></app-toolbar>
+<app-toolbar title="" [buttonList]="buttons" [catchBackButton]="false"></app-toolbar>
 <div *ngIf="loading" fxFlexFill class="loading">
     <mat-spinner class="spinner"></mat-spinner>
 </div>
@@ -6,8 +6,7 @@
     <app-hours-stepper
             [showOnlySummary]="todaysWorkDayFinished"
             [workDay]="workDay"
-            [backStepper$]="stepBackObservable$"
-            (firstSiteGoBack)="goBack()">
+            [backStepper$]="stepBackSubject$">
     </app-hours-stepper>
     <button mat-raised-button *ngIf="todaysWorkDayFinished" (click)="editButtonClicked()">Bearbeiten</button>
 </div>

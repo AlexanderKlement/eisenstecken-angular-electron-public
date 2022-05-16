@@ -9,7 +9,7 @@ import {
     ValidatorFn,
     Validators
 } from '@angular/forms';
-import {Observable, Subscriber} from 'rxjs';
+import {Observable, Subject, Subscriber} from 'rxjs';
 import {
     AdditionalWorkloadCreate,
     Car,
@@ -60,9 +60,8 @@ export class HoursStepperComponent implements OnInit {
 
     @Input() workDay: WorkDay;
     @Input() userId: number = undefined;
-    @Input() backStepper$: Observable<void> = undefined;
+    @Input() backStepper$: Subject<void>;
     @Input() showOnlySummary = false;
-    @Output() firstSiteGoBack = new EventEmitter();
     user: UserEssential;
     buttons: CustomButton[] = [];
     hourFormGroup: FormGroup;
@@ -130,6 +129,10 @@ export class HoursStepperComponent implements OnInit {
         this.refreshSpentMinutes();
         this.jobsReady$ = new Observable<void>((subscriber) => {
             this.jobsReadySubscriber$ = subscriber;
+        });
+        this.backStepper$.subscribe(() => {
+           this.stepper.previous();
+           //TODO: add check if first site
         });
     }
 
@@ -409,7 +412,6 @@ export class HoursStepperComponent implements OnInit {
             data
         });
         dialogRef.afterClosed().subscribe((result) => {
-            console.log(result);
             if (result) {
                 this.jobFormGroup = result.jobGroup;
                 this.jobFormGroup.setControl('additionalJob', result.additionalJobs);
@@ -466,20 +468,15 @@ export class HoursStepperComponent implements OnInit {
 
     private refreshSpentMinutes(): void {
         let spendMinutes = 0;
-        console.log(spendMinutes);
         for (const jobList of this.getAllJobs()) {
             for (const job of jobList.controls) {
                 spendMinutes += parseInt(job.get('minutes').value, 10);
                 spendMinutes += parseInt(job.get('minutesDirection').value, 10);
             }
         }
-        console.log(spendMinutes);
         spendMinutes += parseInt(this.jobFormGroup.get('additionalJob').get('minutes').value, 10);
-        console.log(spendMinutes);
         spendMinutes += parseInt(this.jobFormGroup.get('maintenanceMinutes').value, 10);
-        console.log(spendMinutes);
         const spendableMinutes = parseInt(this.hourFormGroup.get('minutes').value, 10) - spendMinutes;
-        console.log('MINUTES', parseInt(this.hourFormGroup.get('minutes').value, 10));
         this.jobFormGroup.get('spendableMinutes').setValue(spendableMinutes);
         this.availableHoursString = this.getAvailableHoursString();
     }

@@ -671,9 +671,7 @@ export class WorkDayGeneralComponent implements OnInit {
             let found = false;
             for (const jobSection of this.workDay.job_sections) {
                 found = false;
-                console.log(jobSection);
                 for (const jobSectionFormGroup of this.getJobSections().controls) {
-                    console.log(jobSectionFormGroup);
                     if (parseInt(jobSectionFormGroup.get('job_id').value, 10) === 0 && !jobSection.job) {
                         jobSectionFormGroup.get('minutes').setValue(jobSection.minutes); //direction does not exist for those
                         found = true;
@@ -681,8 +679,6 @@ export class WorkDayGeneralComponent implements OnInit {
                         if (jobSection.job === undefined || jobSection.job === null) {
                             continue;
                         }
-                        console.log(parseInt(jobSectionFormGroup.get('job_id').value, 10));
-                        console.log(jobSection.job.id);
                         if (parseInt(jobSectionFormGroup.get('job_id').value, 10) === jobSection.job.id) {
                             jobSectionFormGroup.get('minutes').setValue(jobSection.minutes);
                             jobSectionFormGroup.get('minutes_direction').setValue(jobSection.minutes_direction);

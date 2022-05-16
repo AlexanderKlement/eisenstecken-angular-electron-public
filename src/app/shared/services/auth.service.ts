@@ -48,14 +48,13 @@ export class AuthService {
         this.removeToken();
         this.user = undefined;
         this.router.navigateByUrl('login');
-        console.log('Login Success');
     }
 
     async getScopeString(): Promise<string> {
         const rights = await this.getRights();
         const rightArray: string[] = rights.map((elem) => elem.key);
         const scope = rightArray.join(' ');
-        console.log('Using scope:' + scope);
+        console.info('Using scope:' + scope);
         return scope;
     }
 

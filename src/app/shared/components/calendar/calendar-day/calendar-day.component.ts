@@ -45,7 +45,6 @@ export class CalendarDayComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        console.log('Calendar Day ' + this.day.toString() + ' getting destroyed');
     }
 
     onCalendarEntryClicked(id: number): void {

@@ -58,7 +58,7 @@ export class OutgoingComponent implements OnInit {
                 .format('L')} an ${outgoingInvoice.client_name} `;
             let title = 'Zahlung ';
             let returnFunction = (result) => {
-                console.log(result);
+                console.info(result);
             };
             if (!outgoingInvoice.paid) {
                 text += 'als bezahlt markieren?';

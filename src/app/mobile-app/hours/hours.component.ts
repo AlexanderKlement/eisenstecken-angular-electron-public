@@ -1,6 +1,6 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {CustomButton} from '../../shared/components/toolbar/toolbar.component';
-import {Observable, Subscriber} from 'rxjs';
+import {Observable, Subject, Subscriber} from 'rxjs';
 import {NavigationService} from '../../shared/services/navigation.service';
 import {DefaultService, WorkDay} from 'eisenstecken-openapi-angular-library';
 import {first} from 'rxjs/operators';
@@ -15,29 +15,24 @@ export class HoursComponent implements OnInit {
 
     loading = true;
     buttons: CustomButton[] = [];
-    stepBackObservable$: Observable<void>;
-    stepBackSubscriber$: Subscriber<void>;
+    stepBackSubject$: Subject<void> = new Subject<void>();
     todaysWorkDayFinished = false;
     workDay: WorkDay;
 
     constructor(private navigation: NavigationService, private api: DefaultService) {
     }
 
+    /*
     @HostListener('window:popstate', ['$event'])
-    onBrowserBackBtnClose(event: Event) {
+    onPopState(event) {
         console.log('CustomBackEvent');
         event.preventDefault();
-        this.stepBackSubscriber$.next();
+        this.stepBackSubject$.next();
     }
 
+     */
+
     ngOnInit(): void {
-        this.stepBackObservable$ = new Observable<void>(subscriber => {
-            if (this.stepBackSubscriber$ === undefined) {
-                console.error('Could not go back. The subscriber does not exist');
-            } else {
-                this.stepBackSubscriber$ = subscriber;
-            }
-        });
         this.api.getCurrentWorkDayWorkDayCurrentGet().pipe(first()).subscribe((workDay) => {
             if (workDay) {
                 this.todaysWorkDayFinished = true;
@@ -46,10 +41,6 @@ export class HoursComponent implements OnInit {
             this.workDay = workDay;
             this.loading = false;
         });
-    }
-
-    goBack(): void {
-        this.navigation.back();
     }
 
     editButtonClicked() {

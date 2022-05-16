@@ -47,7 +47,6 @@ export class ChatService implements OnDestroy {
     }
 
     ngOnDestroy(): void {
-        console.log('Destroying ChatService');
         for (const interval of this.intervals) {
             clearInterval(interval);
         }

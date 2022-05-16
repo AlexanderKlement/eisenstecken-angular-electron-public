@@ -20,10 +20,10 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
 
         return next.handle(req).pipe(
             catchError((error) => {
-                console.log('Intercepting error');
+                console.error('Intercepting error');
                 console.error(error);
                 if (error.status === 404) {
-                    console.log('Not sending error message');
+                    console.warn('Not sending error message');
                     return;
                 }
 

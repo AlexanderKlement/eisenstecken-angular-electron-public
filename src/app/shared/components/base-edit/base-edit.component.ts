@@ -48,7 +48,6 @@ export class BaseEditComponent<T extends DataSourceClass> implements OnInit, OnD
                 console.error('BaseEditComponent: Cannot parse given id');
                 this.goBack();
             }
-            console.log('Loading given datasource with id: ' + this.id.toString());
             if (!this.createMode) {
                 this.lockFunction(this.api, this.id).pipe(first()).subscribe(lock => {
                     if (!lock.locked) {//has to be locked, otherwise component is accessed directly {
@@ -88,7 +87,7 @@ export class BaseEditComponent<T extends DataSourceClass> implements OnInit, OnD
         if (!this.createMode) {
             this.unlockFunction(this.api, this.id).pipe(first()).subscribe((success) => {
                 if (success) {
-                    console.log('BaseEdit: SUCCESS: unlocked object with id: ' + this.id);
+                    console.info('BaseEdit: SUCCESS: unlocked object with id: ' + this.id);
                 } else {
                     console.warn('BaseEdit: FAIL: to unlock object with id: ' + this.id);
                 }
@@ -100,7 +99,7 @@ export class BaseEditComponent<T extends DataSourceClass> implements OnInit, OnD
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     createUpdateError(error: any): void {
         this.submitted = false;
-        console.log(error);
+        console.error(error);
         //an error handling should not be necessary, because it gets intercepted globally by a generic message
     }
 
@@ -109,7 +108,6 @@ export class BaseEditComponent<T extends DataSourceClass> implements OnInit, OnD
     }
 
     protected goBack(): void {
-        console.log('BaseEditComponent: Go Back is called');
         this.router.navigateByUrl(this.navigationTarget);
     }
 

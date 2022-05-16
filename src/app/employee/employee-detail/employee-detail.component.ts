@@ -91,7 +91,6 @@ export class EmployeeDetailComponent implements OnInit {
     }
 
     onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
-        console.log('Getting attached');
         this.$refreshSubscriber.next();
     }
 

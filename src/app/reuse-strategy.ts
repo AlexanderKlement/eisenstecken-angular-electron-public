@@ -37,7 +37,7 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
         if (route.data.hasOwnProperty('shouldDetach') && route.data.shouldDetach) {
             detach = true;
         }
-        console.log('detaching', route, 'return: ', detach);
+        //console.log('detaching', route, 'return: ', detach);
         return detach;
     }
 
@@ -53,7 +53,7 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
             handle
         };
 
-        console.log('store:', storedRoute, 'into: ', this.storedRoutes);
+        //console.log('store:', storedRoute, 'into: ', this.storedRoutes);
         // routes are stored by path - the key is the path name, and the handle is stored under it
         // so that you can only ever have one object stored for a single path
         this.storedRoutes[route.routeConfig.path] = storedRoute;
@@ -75,17 +75,17 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
         // so, if the route.params and route.queryParams also match, then we should reuse the component
         if (canAttach) {
             const willAttach = true;
-            console.log('param comparison:');
-            console.log(this.compareObjects(route.params, this.storedRoutes[route.routeConfig.path].snapshot.params));
-            console.log('query param comparison');
-            console.log(this.compareObjects(route.queryParams, this.storedRoutes[route.routeConfig.path].snapshot.queryParams));
+            //console.log('param comparison:');
+            //console.log(this.compareObjects(route.params, this.storedRoutes[route.routeConfig.path].snapshot.params));
+            //console.log('query param comparison');
+            //console.log(this.compareObjects(route.queryParams, this.storedRoutes[route.routeConfig.path].snapshot.queryParams));
 
             const paramsMatch: boolean = this.compareObjects(route.params, this.storedRoutes[route.routeConfig.path].snapshot.params);
             const queryParamsMatch: boolean = this.compareObjects(route.queryParams, this.storedRoutes[route.routeConfig.path]
                 .snapshot.queryParams);
 
-            console.log('deciding to attach...', route, 'does it match?', this.storedRoutes[route
-                .routeConfig.path].snapshot, 'return: ', paramsMatch && queryParamsMatch);
+            //console.log('deciding to attach...', route, 'does it match?', this.storedRoutes[route
+            //    .routeConfig.path].snapshot, 'return: ', paramsMatch && queryParamsMatch);
             return paramsMatch && queryParamsMatch;
         } else {
             return false;
@@ -104,7 +104,7 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
         if (!route.routeConfig || !this.storedRoutes[route.routeConfig.path]) {
             return null;
         }
-        console.log('retrieving', 'return: ', this.storedRoutes[route.routeConfig.path]);
+        //console.log('retrieving', 'return: ', this.storedRoutes[route.routeConfig.path]);
 
         /** returns handle when the route.routeConfig.path is already stored */
         return this.storedRoutes[route.routeConfig.path].handle;
@@ -118,8 +118,8 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
      * @returns boolean basically indicating true if the user intends to leave the current route
      */
     shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean {
-        console.log('deciding to reuse', 'future', future.routeConfig, 'current', curr.routeConfig,
-            'return: ', future.routeConfig === curr.routeConfig);
+        //console.log('deciding to reuse', 'future', future.routeConfig, 'current', curr.routeConfig,
+        //   'return: ', future.routeConfig === curr.routeConfig);
         return future.routeConfig === curr.routeConfig;
     }
 

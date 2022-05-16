@@ -5,6 +5,8 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {Observable, Subscription} from 'rxjs';
 import {first} from 'rxjs/operators';
 import {ElectronService} from '../../core/services';
+import {Router} from '@angular/router';
+import {EmailService} from '../../shared/services/email.service';
 
 @Component({
     selector: 'app-chat',
@@ -17,7 +19,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
     messages: ChatMessage[] = [];
     recipients$: Observable<ChatRecipient[]>; //This will fail if we have more than 1 chat component -> ReplaySubject
-    ivan: boolean;
+    whatsapp: boolean;
     chatGroup: FormGroup = new FormGroup({
         messageInput: new FormControl(''),
         recipientSelect: new FormControl(0)
@@ -27,7 +29,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
     subscription: Subscription;
 
-    constructor(private chatService: ChatService, private electron: ElectronService) {
+    constructor(private chatService: ChatService, private electron: ElectronService, private router: Router, private email: EmailService) {
     }
 
     ngOnInit(): void {
@@ -39,7 +41,6 @@ export class ChatComponent implements OnInit, OnDestroy {
                 this.messages.push(message);
             }));
         this.recipients$ = this.chatService.getRecipients(); //unsubscribes automatically
-        console.log('Chat component started');
         if (this.electron.isElectron) {
             this.electron.ipcRenderer.on('app-shown', () => {
                 this.chatService.subscribe();
@@ -50,7 +51,6 @@ export class ChatComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         this.subscription.unsubscribe();
         this.chatService.unsubscribe();
-        console.log('Chat component destroyed');
     }
 
     public scrollToBottom(): void {
@@ -65,7 +65,7 @@ export class ChatComponent implements OnInit, OnDestroy {
         if (this.chatGroup.value.messageInput == null || this.chatGroup.value.messageInput.length === 0) {
             return;
         }
-        this.parseIvanStuff();
+        this.parseCommands();
         this.lockSendButton();
         if (this.chatGroup.value.messageInput.length === 0) {
             return;
@@ -98,27 +98,36 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
 
     private initIvanStuff(): void {
-        const iv = localStorage.getItem('ivan');
-        if (iv) {
-            this.ivan = iv === '1';
+        const whatsappSetting = localStorage.getItem('chat-style-whatsapp');
+        if (whatsappSetting) {
+            this.whatsapp = whatsappSetting === '1';
         } else {
-            this.ivan = false;
+            this.whatsapp = false;
         }
     }
 
-    private parseIvanStuff() {
-        if (this.chatGroup.value.messageInput.startsWith('!beautify') ||
-            this.chatGroup.value.messageInput.startsWith('!whatsapp')) {
-            this.ivan = true;
-            localStorage.setItem('ivan', '1');
+    private parseCommands() {
+        const chatInput = this.chatGroup.value.messageInput;
+        if (chatInput.startsWith('!beautify')) {
+            this.whatsapp = true;
+            localStorage.setItem('chat-style-whatsapp', '1');
             this.resetChatControl();
             return;
         }
-        if (this.chatGroup.value.messageInput.startsWith('!uglify')) {
-            this.ivan = false;
-            localStorage.setItem('ivan', '0');
+        if (chatInput.startsWith('!uglify')) {
+            this.whatsapp = false;
+            localStorage.setItem('chat-style-whatsapp', '0');
             this.resetChatControl();
             return;
+        }
+        if(chatInput.startsWith('!debug')) {
+            this.router.navigateByUrl('debug');
+        }
+        if(chatInput.startsWith('!mail64')) {
+            this.email.setMailPorcessor64();
+        }
+        if(chatInput.startsWith('!mail86')) {
+            this.email.setMailProcessor86();
         }
     }
 }

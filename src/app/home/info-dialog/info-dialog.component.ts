@@ -47,7 +47,36 @@ export class InfoDialogComponent implements OnInit {
                 'Beide Kalender auf der Startseite zusammenfassen. Dies erhöht die Möglichkeit Termine zu finden.',
                 'Spalten bei Bestellung ausgleichen, damit eventuell längere Kodexe möglich sind. ' +
                 'Momentan noch aufgeschoben,' +
-                ' da dies vielleicht irgendwo anders zu Problemen führen könnte.'
+                ' da dies vielleicht irgendwo anders zu Problemen führen könnte.',
+                'Wenn man auf eine Bestellung "hovert" erscheint in tooltip mit dem Inhalt. Dieser wird beim klicken nicht ' +
+                'entfernt.',
+                'Betriebsergeignisse überarbeiten. Zukünftig werden Ereignisse in 3 Kategorien unterteilt und nebeneinander ' +
+                'angezeigt. (Urlaube von Mitarbeiter, Betriebferien, Besondere "andere" Ereignisse). Großaugenmerk wird hier ' +
+                'auf die mobile Seite gelegt.',
+                'Bei Aufträgen löschen mehr Fehlermeldung anzeigen. Mögliche Uhrsachen wenn das Löschen nicht möglich ist: ' +
+                'Ordner nicht mehr vorhanden, Eingetragenen  Stunden noch nicht archiviert.',
+                'Den Text der Titelleiste nach rechts oder Mitte verschieben',
+            ]
+        },
+        {
+            versionName: '1.0.2',
+            changes: [
+                'Masterpassword eingeführt',
+                'Anmeldebildschirm für Smartphones vergrößert',
+                'Fehler behoben, bei dem die Zurücktaste nicht mehr funktioniert hat, nachdem man einen Kunden bearbeitet hat.',
+                'Nachkalkulation wird nun in Ordner generiert "9_Nachkalkulation"',
+                'Suche für Kunden mit mehreren Namen optimiert (Bsp: Kerschbaumer Konrad)',
+                'Lehrlingslogo für pdfs auf 2022 aktualisiert.',
+                'Mail versand optimiert: "Mails sollten nun nicht mehr Vorlagen erzeugen und geben eine Fehlermeldung zurück, ' +
+                'falls nicht gesandt werden.',
+                ''
+            ]
+        },
+        {
+            versionName: '1.0.1',
+            changes: [
+                'Mobile app kann nun installiert werden. Farbe der Taskleiste wurde von blau auf gelb geändert.',
+                'Stunden eintragen Oberfläche leicht überarbeitet'
             ]
         },
         {
@@ -56,7 +85,9 @@ export class InfoDialogComponent implements OnInit {
                 'Fehler behoben, bei dem Mehrfachrabatte bei Eingangsrechnungen falsch berechnet wurden. Dies hat nur Einzelsummen ' +
                 'beeinflusst und hatte keine Auswirkung auf Gesamtsummen. ACHTUNG: Dies korrigiert nur Rechnungen, welche ' +
                 'ab jetzt importiert werden.',
-
+                'Kleineren Übersetzungsfehler auf Lieferschein korrigiert',
+                'Stunden eintragen überarbeitet, um die Übersicht zu erhöhen. Aufträge eintragen in eigenen Dialog ausgelagert. ' +
+                'So müssen weniger Elemente auf der initalen Seite angezeigt werden.'
             ]
         },
         {
