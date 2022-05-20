@@ -20,7 +20,8 @@ const routes: Routes = [
             requiresLogin: true,
             shouldDetach: true
         },
-        canActivate: [AccessGuard]
+        canActivate: [AccessGuard],
+        canDeactivate: [AccessGuard]
     },
 ];
 

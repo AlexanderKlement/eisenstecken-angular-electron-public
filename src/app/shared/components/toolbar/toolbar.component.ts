@@ -25,8 +25,6 @@ export class ToolbarComponent implements OnInit {
     @Input() navigateBackOnPopstate = true;
     @Input() showLogoutButton = false;
 
-    ignorePopState = true;
-
 
     constructor(private navigation: NavigationService, private dialog: MatDialog,
                 private authService: AuthService, private router: Router) {
@@ -34,19 +32,8 @@ export class ToolbarComponent implements OnInit {
             if (event instanceof NavigationStart) {
                 if (event.navigationTrigger === 'popstate') {
                     console.log('Detected Popstate event');
-                    if (this.ignorePopState) {
-                        this.ignorePopState = false;
-                        console.log('Popstate ignored');
-                        const currentRoute = this.router.routerState;
-                        this.navigation.dontAddNextRouteToHistory();
-                        this.router.navigateByUrl(currentRoute.snapshot.url, {
-                            skipLocationChange: true,
-                            replaceUrl: true
-                        }).then(() => {
-                            if (this.navigateBackOnPopstate) {
-                                this.backClicked();
-                            }
-                        });
+                    if (this.navigateBackOnPopstate) {
+                        this.backClicked();
                     }
                 }
             }

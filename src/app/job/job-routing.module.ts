@@ -24,55 +24,64 @@ const routes: Routes = [
             requiresLogin: true,
             shouldDetach: true
         },
-        canActivate: [AccessGuard]
+        canActivate: [AccessGuard],
+        canDeactivate: [AccessGuard]
     },
     {
         path: 'job/edit/:id',
         component: JobEditComponent,
         data: {requiresLogin: true},
-        canActivate: [AccessGuard]
+        canActivate: [AccessGuard],
+        canDeactivate: [AccessGuard]
     },
     {
         path: 'job/:id/new',
         component: JobEditComponent,
         data: {requiresLogin: true},
-        canActivate: [AccessGuard]
+        canActivate: [AccessGuard],
+        canDeactivate: [AccessGuard]
     },
     {
         path: 'job/edit/:id/:client_id',
         component: JobEditComponent,
         data: {requiresLogin: true},
-        canActivate: [AccessGuard]
+        canActivate: [AccessGuard],
+        canDeactivate: [AccessGuard]
     },
     {
         path: 'job/edit/:id/:job_id/:sub',
         component: JobEditComponent,
         data: {requiresLogin: true},
-        canActivate: [AccessGuard]
+        canActivate: [AccessGuard],
+        canDeactivate: [AccessGuard]
     },
     {
         path: 'offer/edit/:id',
         component: OfferEditComponent,
         data: {requiresLogin: true},
-        canActivate: [AccessGuard]
+        canActivate: [AccessGuard],
+        canDeactivate: [AccessGuard]
     },
     {
         path: 'offer/edit/:id/:job_id',
         component: OfferEditComponent,
         data: {requiresLogin: true},
-        canActivate: [AccessGuard]
+        canActivate: [AccessGuard],
+        canDeactivate: [AccessGuard]
     },
     {
         path: 'outgoing_invoice/edit/:id',
         component: OutgoingInvoiceEditComponent,
         data: {requiresLogin: true},
-        canActivate: [AccessGuard]
+        canActivate: [AccessGuard],
+        canDeactivate: [AccessGuard]
     },
     {
         path: 'outgoing_invoice/edit/:id/:job_id',
         component: OutgoingInvoiceEditComponent,
         data: {requiresLogin: true},
-        canActivate: [AccessGuard]
+        canActivate: [AccessGuard],
+        canDeactivate: [AccessGuard]
     },
     {
         path: 'work_hours/:job_id',
@@ -81,7 +90,8 @@ const routes: Routes = [
             requiresLogin: true,
             shouldDetach: true
         },
-        canActivate: [AccessGuard]
+        canActivate: [AccessGuard],
+        canDeactivate: [AccessGuard]
     },
 ];
 

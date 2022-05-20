@@ -16,7 +16,7 @@ import {NavigationService} from '../../shared/services/navigation.service';
 export class StockEditComponent extends BaseEditComponent<Stock> implements OnInit, OnDestroy {
     stockGroup: FormGroup;
     navigationTarget = 'stock';
-    title = 'Lager: Bearbeiten'
+    title = 'Lager: Bearbeiten';
 
     constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private navigation: NavigationService) {
         super(api, router, route, dialog);

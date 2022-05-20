@@ -10,7 +10,16 @@ export class NavigationService {
     private ignoreNextRoute = false;
 
     constructor(private router: Router) {
+        console.log('NavigationService initialized');
         this.history = [];
+        this.router.events
+            .pipe(filter((evt: any) => evt instanceof RoutesRecognized), pairwise())
+            .subscribe((events: RoutesRecognized[]) => {
+                this.history.push(events[0].urlAfterRedirects);
+                console.log(this.history);
+            });
+
+        /*
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationEnd) {
                 if (!this.ignoreNextRoute) {
@@ -21,6 +30,8 @@ export class NavigationService {
                 this.ignoreNextRoute = false;
             }
         });
+
+         */
     }
 
     back(): void {

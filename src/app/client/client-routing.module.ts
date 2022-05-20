@@ -14,7 +14,8 @@ const routes: Routes = [
             requiresLogin: true,
             shouldDetach: true
         },
-        canActivate: [AccessGuard]
+        canActivate: [AccessGuard],
+        canDeactivate: [AccessGuard]
     },
     {
         path: 'client/:id',
@@ -23,13 +24,15 @@ const routes: Routes = [
             requiresLogin: true,
             shouldDetach: true
         },
-        canActivate: [AccessGuard]
+        canActivate: [AccessGuard],
+        canDeactivate: [AccessGuard]
     },
     {
         path: 'client/edit/:id',
         component: ClientEditComponent,
         data: {requiresLogin: true},
-        canActivate: [AccessGuard]
+        canActivate: [AccessGuard],
+        canDeactivate: [AccessGuard]
     },
 ];
 

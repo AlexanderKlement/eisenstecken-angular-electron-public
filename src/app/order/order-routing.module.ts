@@ -13,7 +13,8 @@ const routes: Routes = [
         data: {
             requiresLogin: true
         },
-        canActivate: [AccessGuard]
+        canActivate: [AccessGuard],
+        canDeactivate: [AccessGuard]
     },
     {
         path: 'order/:id',
@@ -22,7 +23,8 @@ const routes: Routes = [
             requiresLogin: true,
             shouldDetach: true
         },
-        canActivate: [AccessGuard]
+        canActivate: [AccessGuard],
+        canDeactivate: [AccessGuard]
     },
     {
         path: 'order_bundle/:id',
@@ -31,13 +33,15 @@ const routes: Routes = [
             requiresLogin: true,
             shouldDetach: true
         },
-        canActivate: [AccessGuard]
+        canActivate: [AccessGuard],
+        canDeactivate: [AccessGuard]
     },
     {
         path: 'order_bundle/edit/:id',
         component: OrderBundleEditComponent,
         data: {requiresLogin: true},
-        canActivate: [AccessGuard]
+        canActivate: [AccessGuard],
+        canDeactivate: [AccessGuard]
     },
 ];
 

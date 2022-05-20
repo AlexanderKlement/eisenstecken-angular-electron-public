@@ -1,13 +1,22 @@
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
+import {
+    ActivatedRouteSnapshot,
+    CanActivate,
+    CanDeactivate, NavigationStart,
+    Router,
+    RouterStateSnapshot,
+    UrlTree
+} from '@angular/router';
 import {Observable} from 'rxjs';
 import {AuthService} from './auth.service';
 import {ElectronService} from '../../core/services';
 
+export type CanDeactivateComponent = any;
+
 @Injectable({
     providedIn: 'root'
 })
-export class AccessGuard implements CanActivate {
+export class AccessGuard implements CanActivate, CanDeactivate<any> {
 
     limitAccessHosts: string[] = [
         'stunden.eisenstecken.kivi.bz.it',
@@ -15,7 +24,17 @@ export class AccessGuard implements CanActivate {
         'time.app.eisenstecken.it'
     ];
 
+    backButtonPressed = false;
+
     constructor(private authService: AuthService, private router: Router, private electron: ElectronService) {
+        this.router.events.subscribe((event) => {
+            if (event instanceof NavigationStart) {
+                if (event.navigationTrigger === 'popstate') {
+                    console.log('Detected Popstate event');
+                    this.backButtonPressed = true;
+                }
+            }
+        });
     }
 
     public static urlStartsWith(route: ActivatedRouteSnapshot, url: string): boolean {
@@ -36,6 +55,18 @@ export class AccessGuard implements CanActivate {
             }
         }
         return this.redirectWorkHours(route);
+    }
+
+    canDeactivate(component: any, currentRoute: ActivatedRouteSnapshot,
+                  currentState: RouterStateSnapshot, nextState: RouterStateSnapshot) {
+        // Allow navigation only if the user is not going back
+        if(this.backButtonPressed) {
+            console.log('Prevent navigation on Backbutton pressed');
+            this.backButtonPressed = false;
+            return false;
+        }
+        console.log('Allowing navigation');
+        return true;
     }
 
     private redirectWorkHours(route: ActivatedRouteSnapshot): boolean | UrlTree {

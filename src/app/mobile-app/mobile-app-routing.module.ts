@@ -12,7 +12,8 @@ const routes: Routes = [
         data: {
             requiresLogin: true
         },
-        canActivate: [AccessGuard]
+        canActivate: [AccessGuard],
+        canDeactivate: [AccessGuard]
     },
     {
         path: 'mobile/hours',
@@ -20,7 +21,8 @@ const routes: Routes = [
         data: {
             requiresLogin: true
         },
-        canActivate: [AccessGuard]
+        canActivate: [AccessGuard],
+        canDeactivate: [AccessGuard]
     },
     {
         path: 'mobile/hours/redirect',
@@ -28,7 +30,8 @@ const routes: Routes = [
         data: {
             requiresLogin: true
         },
-        canActivate: [AccessGuard]
+        canActivate: [AccessGuard],
+        canDeactivate: [AccessGuard]
     }
 ];
 
