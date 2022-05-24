@@ -11,8 +11,14 @@
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-                <div *ngIf="!workDayLoading">
-                </div>
+                <app-hours-stepper
+                        [showOnlySummary]="showSummaryOnly"
+                        [workDay$]="workDay$">
+                </app-hours-stepper>
+                <button *ngIf="showSummaryOnly" mat-raised-button (click)="editWorkDayButtonClicked()">
+                    Bearbeiten
+                </button>
+
             </div>
         </mat-tab>
         <mat-tab label="Spesen">

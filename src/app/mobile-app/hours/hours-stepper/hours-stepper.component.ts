@@ -34,6 +34,7 @@ import {
     HoursStepperJobDialogComponent,
     HoursStepperVariantEnum
 } from './hours-stepper-job-dialog/hours-stepper-job-dialog.component';
+import {formatDateTransport} from '../../../shared/date.util';
 
 
 function greaterThanValidator(value: number): ValidatorFn {
@@ -58,10 +59,12 @@ export enum JobEnum {
 })
 export class HoursStepperComponent implements OnInit {
 
-    @Input() workDay: WorkDay;
+    @Input() workDay$: Subject<WorkDay>;
     @Input() userId: number = undefined;
     @Input() backStepper$: Subject<void>;
     @Input() showOnlySummary = false;
+    @Input() date: Date = undefined;
+    workDay: WorkDay;
     user: UserEssential;
     buttons: CustomButton[] = [];
     hourFormGroup: FormGroup;
@@ -122,18 +125,27 @@ export class HoursStepperComponent implements OnInit {
         }
         this.initFormGroups();
         this.getData();
-        if (this.workDay) {
+        this.workDay$.subscribe((workDay) => {
+            this.workDay = workDay;
             this.fillData();
+            this.fillDataJobs();
+            this.refreshData();
+        });
+        if (this.backStepper$ !== undefined) {
+            this.backStepper$.subscribe(() => {
+                this.stepper.previous();
+                //TODO: add check if first site
+            });
         }
+        this.jobsReady$ = new Observable<void>((subscriber => {
+            this.jobsReadySubscriber$ = subscriber;
+        }));
+        this.refreshData();
+    }
+
+    refreshData(): void {
         this.refreshShownHoursMinutes();
         this.refreshSpentMinutes();
-        this.jobsReady$ = new Observable<void>((subscriber) => {
-            this.jobsReadySubscriber$ = subscriber;
-        });
-        this.backStepper$.subscribe(() => {
-           this.stepper.previous();
-           //TODO: add check if first site
-        });
     }
 
     stepBackStepBro() {
@@ -262,9 +274,16 @@ export class HoursStepperComponent implements OnInit {
 
     submitClicked() {
         const workDayCreate = this.createWorkDayCreate();
-        this.api.createWorkDayWorkDayOwnPost(workDayCreate).pipe(first()).subscribe(() => {
-            this.router.navigateByUrl('/mobile/hours/redirect', {replaceUrl: true});
-        });
+        if (this.date !== undefined && this.userId !== undefined) {
+            this.api.createWorkDayWorkDayUserIdPost(this.userId, formatDateTransport(this.date.toDateString()), workDayCreate)
+                .pipe(first()).subscribe(() => {
+                this.router.navigateByUrl('/service/' + this.userId.toString(), {replaceUrl: true});
+            });
+        } else {
+            this.api.createWorkDayOwnWorkDayOwnPost(workDayCreate).pipe(first()).subscribe(() => {
+                this.router.navigateByUrl('/mobile/hours/redirect', {replaceUrl: true});
+            });
+        }
     }
 
     createWorkDayCreate(): WorkDayCreate {
@@ -522,11 +541,12 @@ export class HoursStepperComponent implements OnInit {
             additionalJobGroup.get('description').setValue(this.workDay.additional_workloads[0].description);
         }
 
-
+        this.getExpenses().clear();
         for (const expense of this.workDay.expenses) {
             this.getExpenses().push(this.initExpense(expense));
         }
 
+        this.getDrives().clear();
         for (const drive of this.workDay.drives) {
             this.getDrives().push(this.initDrive(drive));
         }
@@ -534,8 +554,11 @@ export class HoursStepperComponent implements OnInit {
     }
 
     private fillDataJobs() {
+        this.jobFormGroup.get('maintenanceMinutes').setValue(0);
         for (const jobControlList of this.getAllJobs()) {
             for (const jobControl of jobControlList.controls) {
+                jobControl.get('minutes').setValue(0);
+                jobControl.get('minutesDirection').setValue(0);
                 for (const jobSection of this.workDay.job_sections) {
                     if (!jobSection.job) {
                         this.jobFormGroup.get('maintenanceMinutes').setValue(jobSection.minutes);

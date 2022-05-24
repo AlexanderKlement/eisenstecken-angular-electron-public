@@ -33,7 +33,6 @@ export class EmployeeComponent implements OnInit {
     journeyDataSource: TableDataSource<Journey>;
     mealDataSource: TableDataSource<MealSum>;
     maintenanceDataSource: TableDataSource<Maintenance>;
-    serviceDataSource: TableDataSource<ServiceSum>;
     additionalWorkloadDataSource: TableDataSource<AdditionalWorkload>;
     public buttons: CustomButton[] = [
         {
@@ -56,7 +55,7 @@ export class EmployeeComponent implements OnInit {
         this.initJourneyDataSource();
         this.initMealDataSource();
         this.initMaintenanceDataSource();
-        this.initServiceDataSource();
+
         this.initAdditionalDataSource();
         this.initRefreshObservables();
     }
@@ -281,40 +280,7 @@ export class EmployeeComponent implements OnInit {
         this.maintenanceDataSource.loadData();
     }
 
-    private initServiceDataSource(): void {
-        this.serviceDataSource = new TableDataSource(
-            this.api,
-            (api, filter, sortDirection, skip, limit) =>
-                api.readServiceSumsServiceSumGet(skip, limit, filter),
-            (dataSourceClasses) => {
-                const rows = [];
-                dataSourceClasses.forEach((dataSource) => {
-                    rows.push(
-                        {
-                            values: {
-                                month: moment(dataSource.month).format('MMMM YYYY'),
-                                // eslint-disable-next-line @typescript-eslint/naming-convention
-                                'user.fullname': dataSource.user.fullname,
-                                internal: minutesToDisplayableString(dataSource.internal),
-                                external: minutesToDisplayableString(dataSource.external),
-                            },
-                            route: () => {
-                                this.router.navigateByUrl('service/' + dataSource.user.id.toString());
-                            }
-                        });
-                });
-                return rows;
-            },
-            [
-                {name: 'month', headerName: 'Zeitraum'},
-                {name: 'user.fullname', headerName: 'Name'},
-                {name: 'internal', headerName: 'Intern'},
-                {name: 'external', headerName: 'Extern'}
-            ],
-            (api) => api.readServiceSumCountServiceSumCountGet()
-        );
-        this.serviceDataSource.loadData();
-    }
+
 
     private maintenanceClicked(): void {
 

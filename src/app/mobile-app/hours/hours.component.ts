@@ -17,7 +17,7 @@ export class HoursComponent implements OnInit {
     buttons: CustomButton[] = [];
     stepBackSubject$: Subject<void> = new Subject<void>();
     todaysWorkDayFinished = false;
-    workDay: WorkDay;
+    workDay$: Subject<WorkDay>;
 
     constructor(private navigation: NavigationService, private api: DefaultService) {
     }
@@ -33,12 +33,13 @@ export class HoursComponent implements OnInit {
      */
 
     ngOnInit(): void {
+        this.workDay$ = new Subject<WorkDay>();
         this.api.getCurrentWorkDayWorkDayCurrentGet().pipe(first()).subscribe((workDay) => {
             if (workDay) {
                 this.todaysWorkDayFinished = true;
             }
             console.log(workDay);
-            this.workDay = workDay;
+            this.workDay$.next(workDay);
             this.loading = false;
         });
     }

@@ -14,10 +14,10 @@ import {Observable, Subscriber} from 'rxjs';
 
 @Component({
     selector: 'app-service',
-    templateUrl: './service.component.html',
-    styleUrls: ['./service.component.scss']
+    templateUrl: './employee-service.component.html',
+    styleUrls: ['./employee-service.component.scss']
 })
-export class ServiceComponent implements OnInit {
+export class EmployeeServiceComponent implements OnInit {
     serviceDataSource: TableDataSource<Service>;
     userId: number;
     buttons: CustomButton[] = [

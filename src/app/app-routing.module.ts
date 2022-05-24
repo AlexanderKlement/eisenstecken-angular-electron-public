@@ -11,7 +11,6 @@ import {InvoiceRoutingModule} from './invoice/invoice-routing.module';
 import {SupplierRoutingModule} from './supplier/supplier-routing.module';
 import {OrderRoutingModule} from './order/order-routing.module';
 import {SettingsRoutingModule} from './settings/settings-routing.module';
-import {WorkDayRoutingModule} from './work-day/work-day-routing.module';
 import {RecalculationRoutingModule} from './recalculation/recalculation-routing.module';
 import {EmployeeRoutingModule} from './employee/employee-routing.module';
 import {AccessGuard} from './shared/services/access-guard.service';
@@ -19,6 +18,7 @@ import {DeliveryNoteRoutingModule} from './delivery-note/delivery-note-routing.m
 import {DebugRoutingModule} from './debug/debug-routing.module';
 import {EventCalendarRoutingModule} from './calendar/event-calendar-routing.module';
 import {MobileAppRoutingModule} from './mobile-app/mobile-app-routing.module';
+import {ServiceRoutingModule} from './service/service-routing.module';
 
 const routes: Routes = [
     {
@@ -54,9 +54,9 @@ const routes: Routes = [
         SupplierRoutingModule,
         EventCalendarRoutingModule,
         DebugRoutingModule,
-        WorkDayRoutingModule,
         EmployeeRoutingModule,
-        DeliveryNoteRoutingModule
+        DeliveryNoteRoutingModule,
+        ServiceRoutingModule
     ],
     exports: [RouterModule]
 })

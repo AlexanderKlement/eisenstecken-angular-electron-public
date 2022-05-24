@@ -5,7 +5,7 @@
 <div *ngIf="!loading" fxLayout="column" fxLayoutAlign="space-around center">
     <app-hours-stepper
             [showOnlySummary]="todaysWorkDayFinished"
-            [workDay]="workDay"
+            [workDay$]="workDay$"
             [backStepper$]="stepBackSubject$">
     </app-hours-stepper>
     <button mat-raised-button *ngIf="todaysWorkDayFinished" (click)="editButtonClicked()">Bearbeiten</button>

@@ -1,3 +1,13 @@
 <app-toolbar title="Arbeitstag"></app-toolbar>
-<div class="window-container">
+<div class="window-container" fxLayout="column" fxLayoutAlign="start center">
+    <mat-form-field appearance="fill">
+        <mat-label>Datum</mat-label>
+        <input matInput [matDatepicker]="picker" [formControl]="dateFormControl">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <app-hours-stepper
+            [showOnlySummary]="false" [userId]="userId" [date]="selectedDate">
+    </app-hours-stepper>
 </div>

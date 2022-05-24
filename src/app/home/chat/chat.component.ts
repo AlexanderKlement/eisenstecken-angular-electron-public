@@ -68,6 +68,7 @@ export class ChatComponent implements OnInit, OnDestroy {
         this.parseCommands();
         this.lockSendButton();
         if (this.chatGroup.value.messageInput.length === 0) {
+            this.releaseSendButton();
             return;
         }
         const chatMessageObservable = this.chatService.sendMessage(this.chatGroup.value.messageInput, this.chatGroup.value.recipientSelect);
@@ -111,23 +112,25 @@ export class ChatComponent implements OnInit, OnDestroy {
         if (chatInput.startsWith('!beautify')) {
             this.whatsapp = true;
             localStorage.setItem('chat-style-whatsapp', '1');
-            this.resetChatControl();
-            return;
         }
         if (chatInput.startsWith('!uglify')) {
             this.whatsapp = false;
             localStorage.setItem('chat-style-whatsapp', '0');
-            this.resetChatControl();
-            return;
         }
-        if(chatInput.startsWith('!debug')) {
+        if (chatInput.startsWith('!debug')) {
             this.router.navigateByUrl('debug');
         }
-        if(chatInput.startsWith('!mail64')) {
+        if (chatInput.startsWith('!mail64')) {
             this.email.setMailPorcessor64();
         }
-        if(chatInput.startsWith('!mail86')) {
+        if (chatInput.startsWith('!mail86')) {
             this.email.setMailProcessor86();
+        }
+        if (chatInput.startsWith('!stunden')) {
+            this.router.navigateByUrl('service');
+        }
+        if (chatInput.startsWith('!')) {
+            this.resetChatControl();
         }
     }
 }

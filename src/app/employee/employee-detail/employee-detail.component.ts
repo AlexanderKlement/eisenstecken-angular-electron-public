@@ -37,9 +37,8 @@ export class EmployeeDetailComponent implements OnInit {
 
     workDayLoading = true;
     workDays$: Observable<WorkDay[]>;
-    workDay$: Observable<WorkDay>;
-    workDaySubscriber$: Subscriber<WorkDay>;
-    workDay: WorkDay;
+    workDay$: Subject<WorkDay>;
+    selectedWorkDay: WorkDay;
 
     serviceTabIndex = 4;
 
@@ -54,8 +53,8 @@ export class EmployeeDetailComponent implements OnInit {
     title = '';
 
     public $refresh: Observable<void>;
+    showSummaryOnly = true;
     private $refreshSubscriber: Subscriber<void>;
-
 
     constructor(private api: DefaultService, private route: ActivatedRoute, private router: Router,
                 private dialog: MatDialog, private snackBar: MatSnackBar) {
@@ -70,16 +69,14 @@ export class EmployeeDetailComponent implements OnInit {
             this.api.readUserUsersUserIdGet(this.userId).pipe(first()).subscribe(user => {
                 this.title = 'Stundenzettel: ' + user.fullname;
             });
+            this.workDays$ = this.api.getWorkDaysByUserWorkDayUserUserIdGet(this.userId);
             this.initWorkDays();
             this.initFeeDataSource();
             this.initJourneyDataSource();
             this.initMealDataSource();
             this.initServiceDataSource();
             this.initAdditionalDataSource();
-        });
-        //this.workDays$ = this.api.getWorkDaysByUserWorkDayUserUserIdGet(this.userId);
-        this.workDay$ = new Observable<WorkDay>(subscriber => {
-            this.workDaySubscriber$ = subscriber;
+            this.workDay$ = new Subject<WorkDay>();
         });
         this.initRefreshObservables();
     }
@@ -96,8 +93,11 @@ export class EmployeeDetailComponent implements OnInit {
 
     workDayChanged(event: MatSelectChange): void {
         this.workDayLoading = true; //TODO: change this to user id
-        this.api.getCurrentWorkDayByUserWorkDayCurrentUserIdGet(event.value).pipe(first()).subscribe(workDay => {
-            this.workDay = workDay;
+        this.api.getWorkDayWorkDayWorkDayIdGet(event.value).pipe(first()).subscribe(workDay => {
+            console.log(event);
+            console.log(event.value);
+            this.workDay$.next(workDay);
+            console.log(workDay);
             //this.workDaySubscriber$.next(workDay);
             this.workDayLoading = false;
         });
@@ -120,6 +120,10 @@ export class EmployeeDetailComponent implements OnInit {
                 }
             }
         }
+    }
+
+    editWorkDayButtonClicked() {
+        this.showSummaryOnly = false;
     }
 
     private initWorkDays() {

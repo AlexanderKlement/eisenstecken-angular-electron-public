@@ -7,13 +7,12 @@ import {SharedModule} from '../shared/shared.module';
 import { EmployeeDetailComponent } from './employee-detail/employee-detail.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {WorkDayModule} from '../work-day/work-day.module';
 import { WorkDayNewComponent } from './work-day-new/work-day-new.component';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import {FlexModule} from '@angular/flex-layout';
 import { MealComponent } from './meal/meal.component';
-import { ServiceComponent } from './service/service.component';
+import { EmployeeServiceComponent } from './service/employee-service.component';
 import { ServiceDialogComponent } from './service/service-dialog/service-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatButtonModule} from '@angular/material/button';
@@ -21,6 +20,7 @@ import { ServiceCreateDialogComponent } from './service/service-create-dialog/se
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatInputModule} from '@angular/material/input';
 import {ReactiveFormsModule} from '@angular/forms';
+import {MobileAppModule} from '../mobile-app/mobile-app.module';
 
 
 @NgModule({
@@ -29,7 +29,7 @@ import {ReactiveFormsModule} from '@angular/forms';
     EmployeeDetailComponent,
     WorkDayNewComponent,
     MealComponent,
-    ServiceComponent,
+    EmployeeServiceComponent,
     ServiceDialogComponent,
     ServiceCreateDialogComponent
   ],
@@ -39,7 +39,6 @@ import {ReactiveFormsModule} from '@angular/forms';
         SharedModule,
         MatTabsModule,
         MatProgressSpinnerModule,
-        WorkDayModule,
         MatFormFieldModule,
         MatSelectModule,
         FlexModule,
@@ -47,7 +46,8 @@ import {ReactiveFormsModule} from '@angular/forms';
         MatButtonModule,
         MatDatepickerModule,
         MatInputModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MobileAppModule
     ]
 })
 export class EmployeeModule { }

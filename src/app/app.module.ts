@@ -46,7 +46,6 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {InvoiceModule} from './invoice/invoice.module';
 import {SupplierModule} from './supplier/supplier.module';
 import {getGermanPaginatorIntl} from './shared/components/table-builder/table-builder.datasource';
-import {WorkDayModule} from './work-day/work-day.module';
 import {RecalculationModule} from './recalculation/recalculation.module';
 import {EmployeeModule} from './employee/employee.module';
 import {GlobalHttpInterceptorService} from './global-http-inceptor.service';
@@ -68,6 +67,7 @@ import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
 import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from '@angular-material-components/datetime-picker';
 import {EventCalendarModule} from './calendar/event-calendar.module';
 import {MobileAppModule} from './mobile-app/mobile-app.module';
+import {ServiceModule} from './service/service.module';
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader => new TranslateHttpLoader(http, './assets/i18n/', '.json');
 
@@ -119,13 +119,13 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
         NgxMatNativeDateModule,
         NgxMatDatetimePickerModule,
         MobileAppModule,
-        WorkDayModule,
         RecalculationModule,
         ApiModule.forRoot(apiConfigFactory),
         AppRoutingModule,
         FlexLayoutModule,
         DeliveryNoteModule,
         DebugModule,
+        ServiceModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

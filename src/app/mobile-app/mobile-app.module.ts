@@ -23,29 +23,32 @@ import {MatDialogModule} from '@angular/material/dialog';
 
 
 @NgModule({
-  declarations: [
-    MobileAppComponent,
-    HoursComponent,
-    HoursSummaryComponent,
-    HoursStepperComponent,
-    RedirectComponent,
-    HoursStepperJobDialogComponent
-  ],
-  imports: [
-    CommonModule,
-    MobileAppRoutingModule,
-    SharedModule,
-    FlexModule,
-    MatButtonModule,
-    MatStepperModule,
-    MatFormFieldModule,
-    ReactiveFormsModule,
-    MatInputModule,
-    MatIconModule,
-    MatListModule,
-    MatSelectModule,
-    MatProgressSpinnerModule,
-    MatDialogModule
-  ]
+    declarations: [
+        MobileAppComponent,
+        HoursComponent,
+        HoursSummaryComponent,
+        HoursStepperComponent,
+        RedirectComponent,
+        HoursStepperJobDialogComponent
+    ],
+    exports: [
+        HoursStepperComponent
+    ],
+    imports: [
+        CommonModule,
+        MobileAppRoutingModule,
+        SharedModule,
+        FlexModule,
+        MatButtonModule,
+        MatStepperModule,
+        MatFormFieldModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatIconModule,
+        MatListModule,
+        MatSelectModule,
+        MatProgressSpinnerModule,
+        MatDialogModule
+    ]
 })
 export class MobileAppModule { }
