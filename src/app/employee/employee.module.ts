@@ -21,6 +21,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatInputModule} from '@angular/material/input';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MobileAppModule} from '../mobile-app/mobile-app.module';
+import { EmployeeRedirectComponent } from './employee-redirect/employee-redirect.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import {MobileAppModule} from '../mobile-app/mobile-app.module';
     MealComponent,
     EmployeeServiceComponent,
     ServiceDialogComponent,
-    ServiceCreateDialogComponent
+    ServiceCreateDialogComponent,
+    EmployeeRedirectComponent
   ],
     imports: [
         CommonModule,

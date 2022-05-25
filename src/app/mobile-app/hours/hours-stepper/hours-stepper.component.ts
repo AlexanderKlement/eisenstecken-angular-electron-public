@@ -279,10 +279,11 @@ export class HoursStepperComponent implements OnInit, OnChanges {
 
     submitClicked() {
         const workDayCreate = this.createWorkDayCreate();
+        console.log(this.date, this.userId);
         if (this.date !== undefined && this.userId !== undefined) {
             this.api.createWorkDayWorkDayUserIdPost(this.userId, formatDateTransport(this.date.toDateString()), workDayCreate)
                 .pipe(first()).subscribe(() => {
-                this.router.navigateByUrl('/employee/' + this.userId.toString(), {replaceUrl: true});
+                this.router.navigateByUrl('/employee/redirect/' + this.userId.toString(), {replaceUrl: true});
             });
         } else {
             this.api.createWorkDayOwnWorkDayOwnPost(workDayCreate).pipe(first()).subscribe(() => {

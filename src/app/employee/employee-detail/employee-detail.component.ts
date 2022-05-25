@@ -32,7 +32,7 @@ export class EmployeeDetailComponent implements OnInit {
     todayWorkDayLoading = true;
     finishWorkDay: WorkDay;
     todayWorkDay: WorkDay;
-
+    selectedDate: Date;
 
     workDayLoading = true;
     workDays$: Observable<WorkDay[]>;
@@ -94,6 +94,7 @@ export class EmployeeDetailComponent implements OnInit {
     workDayChanged(event: MatSelectChange): void {
         this.api.getWorkDayWorkDayWorkDayIdGet(event.value).pipe(first()).subscribe(workDay => {
             console.log(workDay);
+            this.selectedDate = new Date(workDay.date);
             this.showWorkDay = true;
             this.workDay$.next(workDay);
         });

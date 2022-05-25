@@ -5,6 +5,7 @@ import {EmployeeDetailComponent} from './employee-detail/employee-detail.compone
 import {WorkDayNewComponent} from './work-day-new/work-day-new.component';
 import {MealComponent} from './meal/meal.component';
 import {EmployeeServiceComponent} from './service/employee-service.component';
+import {EmployeeRedirectComponent} from './employee-redirect/employee-redirect.component';
 
 const routes: Routes = [
     {
@@ -17,6 +18,13 @@ const routes: Routes = [
     {
         path: 'employee/:id',
         component: EmployeeDetailComponent,
+        data: {
+            requiresLogin: true,
+        }
+    },
+    {
+        path: 'employee/redirect/:id',
+        component: EmployeeRedirectComponent,
         data: {
             requiresLogin: true,
         }

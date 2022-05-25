@@ -12,6 +12,7 @@
                     </mat-select>
                 </mat-form-field>
                 <app-hours-stepper
+                        [date]="selectedDate" [userId]="userId"
                                    [showOnlySummary]="showSummaryOnly"
                                    [workDay$]="workDay$">
                 </app-hours-stepper>
