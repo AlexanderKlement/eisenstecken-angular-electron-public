@@ -29,7 +29,6 @@ export class EmployeeDetailComponent implements OnInit {
     additionalWorkloadDataSource: TableDataSource<AdditionalWorkload>;
     userId: number;
 
-    finishedWorkDayLoading = true;
     todayWorkDayLoading = true;
     finishWorkDay: WorkDay;
     todayWorkDay: WorkDay;
@@ -39,6 +38,7 @@ export class EmployeeDetailComponent implements OnInit {
     workDays$: Observable<WorkDay[]>;
     workDay$: Subject<WorkDay>;
     selectedWorkDay: WorkDay;
+    showWorkDay = false;
 
     serviceTabIndex = 4;
 
@@ -92,14 +92,10 @@ export class EmployeeDetailComponent implements OnInit {
     }
 
     workDayChanged(event: MatSelectChange): void {
-        this.workDayLoading = true; //TODO: change this to user id
         this.api.getWorkDayWorkDayWorkDayIdGet(event.value).pipe(first()).subscribe(workDay => {
-            console.log(event);
-            console.log(event.value);
-            this.workDay$.next(workDay);
             console.log(workDay);
-            //this.workDaySubscriber$.next(workDay);
-            this.workDayLoading = false;
+            this.showWorkDay = true;
+            this.workDay$.next(workDay);
         });
     }
 
@@ -129,7 +125,6 @@ export class EmployeeDetailComponent implements OnInit {
     private initWorkDays() {
         this.api.getCurrentWorkDayByUserWorkDayCurrentUserIdGet(this.userId).pipe(first()).subscribe(workDay => {
             this.todayWorkDay = workDay;
-            this.todayWorkDayLoading = false;
         });
         /*
         this.api.getFinishedWorkDayByUserWorkDayFinishedUserIdGet(this.userId).pipe(first()).subscribe(workDay => {

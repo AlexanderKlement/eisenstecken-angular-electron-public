@@ -1,4 +1,14 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnInit,
+    Output,
+    SimpleChange,
+    SimpleChanges,
+    ViewChild
+} from '@angular/core';
 import {CustomButton} from '../../../shared/components/toolbar/toolbar.component';
 import {
     AbstractControl,
@@ -57,7 +67,7 @@ export enum JobEnum {
     templateUrl: './hours-stepper.component.html',
     styleUrls: ['./hours-stepper.component.scss']
 })
-export class HoursStepperComponent implements OnInit {
+export class HoursStepperComponent implements OnInit, OnChanges {
 
     @Input() workDay$: Subject<WorkDay>;
     @Input() userId: number = undefined;
@@ -125,12 +135,7 @@ export class HoursStepperComponent implements OnInit {
         }
         this.initFormGroups();
         this.getData();
-        this.workDay$.subscribe((workDay) => {
-            this.workDay = workDay;
-            this.fillData();
-            this.fillDataJobs();
-            this.refreshData();
-        });
+        this.subscribeToWorkday();
         if (this.backStepper$ !== undefined) {
             this.backStepper$.subscribe(() => {
                 this.stepper.previous();
@@ -277,7 +282,7 @@ export class HoursStepperComponent implements OnInit {
         if (this.date !== undefined && this.userId !== undefined) {
             this.api.createWorkDayWorkDayUserIdPost(this.userId, formatDateTransport(this.date.toDateString()), workDayCreate)
                 .pipe(first()).subscribe(() => {
-                this.router.navigateByUrl('/service/' + this.userId.toString(), {replaceUrl: true});
+                this.router.navigateByUrl('/employee/' + this.userId.toString(), {replaceUrl: true});
             });
         } else {
             this.api.createWorkDayOwnWorkDayOwnPost(workDayCreate).pipe(first()).subscribe(() => {
@@ -454,6 +459,10 @@ export class HoursStepperComponent implements OnInit {
         return parseInt(this.getJobs(jobEnum).at(i).get('minutes').value, 10) > 0;
     }
 
+    ngOnChanges(changes: SimpleChanges): void {
+        console.log('ChangeEvent', changes);
+    }
+
     private initFormGroups() {
         this.hourFormGroup = new FormGroup({
             minutes: new FormControl(0, [greaterThanValidator(0)]),
@@ -573,5 +582,18 @@ export class HoursStepperComponent implements OnInit {
         }
         this.refreshSpentMinutes();
         this.jobsReadySubscriber$.next();
+    }
+
+    private subscribeToWorkday() {
+        console.log(this.workDay$);
+        if (this.workDay$ !== undefined) {
+            this.workDay$.subscribe((workDay) => {
+                console.log('Got new workday', workDay);
+                this.workDay = workDay;
+                this.fillData();
+                this.fillDataJobs();
+                this.refreshData();
+            });
+        }
     }
 }
