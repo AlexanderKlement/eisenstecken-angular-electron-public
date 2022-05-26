@@ -30,8 +30,7 @@ import {
     Expense,
     ExpenseCreate,
     Job,
-    JobSectionCreate,
-    UserEssential,
+    JobSectionCreate, User,
     WorkDay,
     WorkDayCreate
 } from 'eisenstecken-openapi-angular-library';
@@ -45,6 +44,10 @@ import {
     HoursStepperVariantEnum
 } from './hours-stepper-job-dialog/hours-stepper-job-dialog.component';
 import {formatDateTransport} from '../../../shared/date.util';
+import {
+    HoursStepperDriveDialogComponent,
+    HoursStepperDriveDialogData
+} from './hours-stepper-drive-dialog/hours-stepper-drive-dialog.component';
 
 
 function greaterThanValidator(value: number): ValidatorFn {
@@ -75,7 +78,7 @@ export class HoursStepperComponent implements OnInit, OnChanges {
     @Input() showOnlySummary = false;
     @Input() date: Date = undefined;
     workDay: WorkDay;
-    user: UserEssential;
+    user: User;
     buttons: CustomButton[] = [];
     hourFormGroup: FormGroup;
     jobFormGroup: FormGroup;
@@ -237,18 +240,27 @@ export class HoursStepperComponent implements OnInit, OnChanges {
         }
     }
 
-    initDrive(drive?: Drive): FormGroup {
+    initDrive(drive?: Drive, reasonString?: string): FormGroup {
         if (drive === undefined) {
             return new FormGroup({
                 km: new FormControl(0.0),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                car_id: new FormControl(1)
+                car_id: new FormControl(1),
+                reasonString: new FormControl(reasonString),
             });
         } else {
+            let reason = '';
+            if (drive.reason !== undefined) {
+                reason = drive.reason;
+            }
+            if (drive.job !== undefined) {
+                reason = drive.job.name;
+            }
             return new FormGroup({
                 km: new FormControl(drive.km),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                car_id: new FormControl(drive.car.id)
+                car_id: new FormControl(drive.car.id),
+                reasonString: new FormControl(reason)
             });
         }
     }
@@ -266,7 +278,31 @@ export class HoursStepperComponent implements OnInit, OnChanges {
     }
 
     onAddCarClick(): void {
-        this.getDrives().push(this.initDrive());
+        const jobEnums = [JobEnum.accepted];
+        if (this.user.office) {
+            jobEnums.push(JobEnum.created);
+        }
+        const data: HoursStepperDriveDialogData = {
+            jobEnums,
+            jobFormGroup: this.jobFormGroup
+        };
+        const dialogRef = this.dialog.open(HoursStepperDriveDialogComponent, {
+            width: '100vw',
+            maxWidth: '1400px',
+            data
+        });
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result) {
+                if (result.reason !== undefined) {
+                    this.getDrives().push(this.initDrive(undefined, result.reason));
+                }
+                if (result.jobId !== undefined) {
+                    this.api.readJobJobJobIdGet(result.jobId).pipe(first()).subscribe((job) => {
+                        this.getDrives().push(this.initDrive(undefined, job.code + ' ' + job.client.fullname));
+                    });
+                }
+            }
+        });
     }
 
     onRemoveExpenseClick(index: number): void {

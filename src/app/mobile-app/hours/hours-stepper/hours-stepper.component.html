@@ -129,24 +129,30 @@
                 <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="drives" fxFlexFill>
                     <h4>Fahrten eintragen</h4>
                     <div *ngFor="let drive of getDrives().controls; let i = index">
-                        <div fxLayout="row" fxLayoutAlign="space-around center" [formGroupName]="i"
-                             fxLayout.lt-sm="column">
+                        <div fxLayout="column" fxLayoutAlign="space-around center" [formGroupName]="i">
+                            <div fxLayout="row" fxLayoutAlign="space-around center"
+                                 fxLayout.lt-sm="column">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Distanz [km]</mat-label>
+                                    <input class="form-control" formControlName="km" matInput type="number" value="">
+                                </mat-form-field>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Auto</mat-label>
+                                    <mat-select formControlName="car_id">
+                                        <mat-option *ngFor="let car of cars$ |  async" [value]="car.id">
+                                            {{car.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <button type="button" mat-button (click)="onRemoveDriveClick(i)"
+                                        title="Fahrt entfernen">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
                             <mat-form-field appearance="fill">
-                                <mat-label>Distanz [km]</mat-label>
-                                <input class="form-control" formControlName="km" matInput type="number" value="">
+                                <mat-label>Grund</mat-label>
+                                <input readonly class="form-control" formControlName="reasonString" matInput>
                             </mat-form-field>
-                            <mat-form-field appearance="fill">
-                                <mat-label>Auto</mat-label>
-                                <mat-select formControlName="car_id">
-                                    <mat-option *ngFor="let car of cars$ |  async" [value]="car.id">
-                                        {{car.name}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <button type="button" mat-button (click)="onRemoveDriveClick(i)"
-                                    title="Fahrt entfernen">
-                                <mat-icon>delete</mat-icon>
-                            </button>
                         </div>
                     </div>
                     <button mat-button type="button" (click)="onAddCarClick()"

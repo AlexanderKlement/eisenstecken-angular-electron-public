@@ -1,0 +1,35 @@
+<h1 mat-dialog-title>Fahrtgrund auswählen</h1>
+
+<div mat-dialog-content>
+    <div fxLayout="column" fxLayoutAlign="space-around center">
+        <div fxLayout="column" fxLayoutAlign="space-around start" fxLayout.gt-sm="row"
+             class="desktop-min-width">
+            <div fxLayout="column" fxLayoutAlign="start start "
+                 *ngFor="let jobList of getAllJobs(); let j = index" class="desktop-min-width">
+                <h4 class="desktop-min-width">{{getJobListName(j)}}</h4>
+                <div class="jobs-list list" fxLayout="column" fxLayoutAlign="start start" fxFlexFill>
+                    <div *ngFor="let job of jobList.controls; let i = index" class="desktop-min-width">
+                        <div fxLayout="column" fxLayoutAlign="space-around start" class="desktop-min-width">
+                            <div class="desktop-min-width">
+                                <p (click)="jobClicked(i, j)" class="desktop-min-width">
+                                    <strong class="desktop-min-width">{{getNameFromJob(i, j)}}
+                                    </strong>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form [formGroup]="reasonGroup">
+            <mat-form-field appearance="fill">
+                <mat-label>Selbst eintragen</mat-label>
+                <input class="form-control" formControlName="reason" matInput>
+            </mat-form-field>
+        </form>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onCancelClick()">Abbrechen</button>
+    <button [disabled]="confirmDisabled" mat-button (click)="onConfirmClick()">Speichern</button>
+</div>

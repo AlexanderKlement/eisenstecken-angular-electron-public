@@ -20,6 +20,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { RedirectComponent } from './hours/redirect/redirect.component';
 import { HoursStepperJobDialogComponent } from './hours/hours-stepper/hours-stepper-job-dialog/hours-stepper-job-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
+import { HoursStepperDriveDialogComponent } from './hours/hours-stepper/hours-stepper-drive-dialog/hours-stepper-drive-dialog.component';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import {MatDialogModule} from '@angular/material/dialog';
         HoursSummaryComponent,
         HoursStepperComponent,
         RedirectComponent,
-        HoursStepperJobDialogComponent
+        HoursStepperJobDialogComponent,
+        HoursStepperDriveDialogComponent
     ],
     exports: [
         HoursStepperComponent
