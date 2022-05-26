@@ -130,7 +130,7 @@ export class HoursSummaryComponent implements OnInit, OnDestroy {
         for (const drive of this.getDrives().controls) {
             const carId = parseInt(drive.get('car_id').value, 10);
             carObservables$.push(this.api.getCarCarCarIdGet(carId).pipe(map((car) => {
-                const driveString = car.name + ': ' + drive.get('km').value + ' km';
+                const driveString = drive.get('reasonString').value + ': ' + car.name + ': ' + drive.get('km').value + ' km';
                 newDriveStrings.push(driveString);
             })));
         }

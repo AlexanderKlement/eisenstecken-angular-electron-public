@@ -1,12 +1,7 @@
 import {
     Component,
-    EventEmitter,
     Input,
-    OnChanges,
     OnInit,
-    Output,
-    SimpleChange,
-    SimpleChanges,
     ViewChild
 } from '@angular/core';
 import {CustomButton} from '../../../shared/components/toolbar/toolbar.component';
@@ -70,7 +65,7 @@ export enum JobEnum {
     templateUrl: './hours-stepper.component.html',
     styleUrls: ['./hours-stepper.component.scss']
 })
-export class HoursStepperComponent implements OnInit, OnChanges {
+export class HoursStepperComponent implements OnInit {
 
     @Input() workDay$: Subject<WorkDay>;
     @Input() userId: number = undefined;
@@ -240,27 +235,39 @@ export class HoursStepperComponent implements OnInit, OnChanges {
         }
     }
 
-    initDrive(drive?: Drive, reasonString?: string): FormGroup {
+    initDrive(drive?: Drive, jobId?: number, reasonString?: string): FormGroup {
         if (drive === undefined) {
             return new FormGroup({
                 km: new FormControl(0.0),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 car_id: new FormControl(1),
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                job_id: new FormControl(jobId),
                 reasonString: new FormControl(reasonString),
             });
         } else {
             let reason = '';
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            let job_id = -1;
+            console.log('Initdrive: ');
+            console.log(drive);
             if (drive.reason !== undefined) {
                 reason = drive.reason;
             }
+            console.log(reason);
             if (drive.job !== undefined) {
-                reason = drive.job.name;
+                reason = drive.job.code + ' ' + drive.job.client.fullname;
+                job_id = drive.job.id;
             }
+            console.log(reason);
             return new FormGroup({
                 km: new FormControl(drive.km),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
+                job_id: new FormControl(job_id),
+                // eslint-disable-next-line @typescript-eslint/naming-convention
                 car_id: new FormControl(drive.car.id),
-                reasonString: new FormControl(reason)
+                reasonString: new FormControl(reason),
+
             });
         }
     }
@@ -294,11 +301,11 @@ export class HoursStepperComponent implements OnInit, OnChanges {
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
                 if (result.reason !== undefined) {
-                    this.getDrives().push(this.initDrive(undefined, result.reason));
+                    this.getDrives().push(this.initDrive(undefined, -1, result.reason));
                 }
                 if (result.jobId !== undefined) {
                     this.api.readJobJobJobIdGet(result.jobId).pipe(first()).subscribe((job) => {
-                        this.getDrives().push(this.initDrive(undefined, job.code + ' ' + job.client.fullname));
+                        this.getDrives().push(this.initDrive(undefined, result.jobId, job.code + ' ' + job.client.fullname));
                     });
                 }
             }
@@ -370,11 +377,18 @@ export class HoursStepperComponent implements OnInit, OnChanges {
         const driveCreates: DriveCreate[] = [];
         for (const drive of this.getDrives().controls) {
             if (parseFloat(drive.get('km').value) > 0) {
-                driveCreates.push({
+                const driveCreate: DriveCreate = {
                     km: parseFloat(drive.get('km').value),
                     // eslint-disable-next-line @typescript-eslint/naming-convention
                     car_id: parseInt(drive.get('car_id').value, 10)
-                });
+                };
+                const driveJobId = parseInt(drive.get('job_id').value, 10);
+                if (driveJobId > 0) {
+                    driveCreate.job_id = driveJobId;
+                } else {
+                    driveCreate.reason = drive.get('reason').value;
+                }
+                driveCreates.push(driveCreate);
             }
         }
 
@@ -494,10 +508,6 @@ export class HoursStepperComponent implements OnInit, OnChanges {
 
     showJob(i: number, jobEnum: JobEnum): boolean {
         return parseInt(this.getJobs(jobEnum).at(i).get('minutes').value, 10) > 0;
-    }
-
-    ngOnChanges(changes: SimpleChanges): void {
-        console.log('ChangeEvent', changes);
     }
 
     private initFormGroups() {
@@ -622,8 +632,9 @@ export class HoursStepperComponent implements OnInit, OnChanges {
     }
 
     private subscribeToWorkday() {
-        console.log(this.workDay$);
+        console.log('Workday subject', this.workDay$);
         if (this.workDay$ !== undefined) {
+            console.log('Subscribing to workday subject');
             this.workDay$.subscribe((workDay) => {
                 console.log('Got new workday', workDay);
                 this.workDay = workDay;
@@ -632,5 +643,6 @@ export class HoursStepperComponent implements OnInit, OnChanges {
                 this.refreshData();
             });
         }
+
     }
 }

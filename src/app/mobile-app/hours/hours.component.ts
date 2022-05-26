@@ -38,7 +38,7 @@ export class HoursComponent implements OnInit {
             if (workDay) {
                 this.todaysWorkDayFinished = true;
             }
-            console.log(workDay);
+            console.log('HoursComponent: Downloading Subject', workDay);
             this.workDay$.next(workDay);
             this.loading = false;
         });

@@ -1,8 +1,5 @@
 <app-toolbar title="" [buttonList]="buttons" [catchBackButton]="false"></app-toolbar>
-<div *ngIf="loading" fxFlexFill class="loading">
-    <mat-spinner class="spinner"></mat-spinner>
-</div>
-<div *ngIf="!loading" fxLayout="column" fxLayoutAlign="space-around center">
+<div fxLayout="column" fxLayoutAlign="space-around center">
     <app-hours-stepper
             [showOnlySummary]="todaysWorkDayFinished"
             [workDay$]="workDay$"
