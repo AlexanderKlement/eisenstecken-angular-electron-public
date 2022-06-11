@@ -44,7 +44,6 @@ export class InfoDialogComponent implements OnInit {
                 ' Projekte). mit jeweils mindestens' +
                 ' einer Datei. Hier entwerder die Operation nicht durchführen, oder bei Fehlern wieder rückgängig machen.',
                 'Mail die sich bei Bestellung öffnet ist nicht optimal formatiert.',
-                'Beide Kalender auf der Startseite zusammenfassen. Dies erhöht die Möglichkeit Termine zu finden.',
                 'Spalten bei Bestellung ausgleichen, damit eventuell längere Kodexe möglich sind. ' +
                 'Momentan noch aufgeschoben,' +
                 ' da dies vielleicht irgendwo anders zu Problemen führen könnte.',
@@ -53,9 +52,23 @@ export class InfoDialogComponent implements OnInit {
                 'Betriebsergeignisse überarbeiten. Zukünftig werden Ereignisse in 3 Kategorien unterteilt und nebeneinander ' +
                 'angezeigt. (Urlaube von Mitarbeiter, Betriebferien, Besondere "andere" Ereignisse). Großaugenmerk wird hier ' +
                 'auf die mobile Seite gelegt.',
-                'Bei Aufträgen löschen mehr Fehlermeldung anzeigen. Mögliche Uhrsachen wenn das Löschen nicht möglich ist: ' +
-                'Ordner nicht mehr vorhanden, Eingetragenen  Stunden noch nicht archiviert.',
                 'Den Text der Titelleiste nach rechts oder Mitte verschieben',
+                'Instandhaltung kann nicht gelöscht werden',
+                'Die Möglichkeit einbauen, die Kosten aller Autos zu verändern',
+                'Zeitzonen von Chat-Nachrichten anpassen',
+                'Emails bei Bestellungen (oft Pichler) gehen nicht auf wenn Bestellung versandt wird.'
+            ]
+        },
+        {
+            versionName: '1.0.3',
+            changes: [
+                'Fahrten müssen nun mit Aufträgen oder eigenen Beschreibungen versehen werden.',
+                'Kalender auf Startseite nun nebeneinander positioniert, um mehr Überblick zu erhalten',
+                'Nachkalkulation-PDF enthält nun auch Einheit',
+                'Fahrten sind nun (sofern mit Job verknüpft) auch in der Nachkalkulation sichtbar.',
+                'Fahrten können mit einem Preis ausgestattet werden, der in der Nachkalkulation angepasst werden kann',
+                'Fehler behoben, bei dem die Nachkalkulation beim Erstellen einfriert und das Programm abstürzen lässt.',
+                'Digitale Rechnung sollte nun auch die Steuernummer von Privatekunden direkt eintragen'
             ]
         },
         {
@@ -68,8 +81,7 @@ export class InfoDialogComponent implements OnInit {
                 'Suche für Kunden mit mehreren Namen optimiert (Bsp: Kerschbaumer Konrad)',
                 'Lehrlingslogo für pdfs auf 2022 aktualisiert.',
                 'Mail versand optimiert: "Mails sollten nun nicht mehr Vorlagen erzeugen und geben eine Fehlermeldung zurück, ' +
-                'falls nicht gesandt werden.',
-                ''
+                'falls nicht gesandt werden.'
             ]
         },
         {

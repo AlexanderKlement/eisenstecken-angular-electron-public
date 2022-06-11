@@ -69,6 +69,12 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
                     this.addAtLeastOne();
                 });
             } else {
+                this.api.getParameterParameterKeyGet('cost_per_km').pipe(first()).subscribe((cost) => {
+                    this.recalculationGroup.get('cost').setValue(cost);
+                });
+                this.api.readDriveDistanceByJobJourneyDistanceJobIdGet(this.jobId).pipe(first()).subscribe((km) => {
+                    this.recalculationGroup.get('km').setValue(km);
+                });
                 this.addAtLeastOne();
             }
         });
@@ -78,13 +84,13 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
     }
 
     addAtLeastOne(): void {
-        if (this.getExpenses().length === 0){
+        if (this.getExpenses().length === 0) {
             this.addExpense();
         }
         if (this.getPaints().length === 0) {
             this.addPaint();
         }
-        if(this.getWoodLists().length === 0) {
+        if (this.getWoodLists().length === 0) {
             this.addWoodList();
         }
     }
@@ -97,7 +103,9 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
             // eslint-disable-next-line @typescript-eslint/naming-convention
             wood_lists: new FormArray([]),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            material_charge_percent: new FormControl(30, Validators.compose([Validators.min(0), Validators.max(100)]))
+            material_charge_percent: new FormControl(30, Validators.compose([Validators.min(0), Validators.max(100)])),
+            km: new FormControl(0.0),
+            cost: new FormControl(0.0)
         });
         this.api.getParameterParameterKeyGet('recalculation_percent').pipe(first()).subscribe((paramter) => {
             this.recalculationGroup.get('material_charge_percent').setValue(parseFloat(paramter));
@@ -114,6 +122,8 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
         for (const woodList of recalculation.wood_lists) {
             this.addWoodList(woodList);
         }
+        this.recalculationGroup.get('km').setValue(recalculation.km);
+        this.recalculationGroup.get('cost').setValue(recalculation.cost);
     }
 
     getExpenses(): FormArray {
@@ -242,6 +252,8 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
                 wood_lists: woodLists,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 material_charge_percent: this.recalculationGroup.get('material_charge_percent').value,
+                km: this.recalculationGroup.get('km').value,
+                cost: this.recalculationGroup.get('cost').value
             };
             this.api.createRecalculationRecalculationJobIdPost(this.jobId, recalculationCreate).pipe(first()).subscribe(recalculation => {
                 this.file.open(recalculation.pdf);
@@ -255,6 +267,8 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
                 wood_lists: woodLists,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 material_charge_percent: this.recalculationGroup.get('material_charge_percent').value,
+                km: this.recalculationGroup.get('km').value,
+                cost: this.recalculationGroup.get('cost').value
             };
             this.api.updateRecalculationRecalculationJobIdPut(this.jobId, recalculationUpdate).pipe(first()).subscribe(recalculation => {
                 this.file.open(recalculation.pdf);

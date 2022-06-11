@@ -97,7 +97,6 @@ export class RecalculationDetailComponent implements OnInit {
     }
 
     onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
-        this.$refreshSubscriber.next();
     }
 
     initRecalculation(): void {

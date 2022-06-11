@@ -106,6 +106,19 @@
         <app-table-builder [dataSource]="orderDataSource" title="Bestellungen"></app-table-builder>
         <app-table-builder [dataSource]="workloadDataSource" title="Arbeitszeit"></app-table-builder>
         <div fxLayout="column" fxLayoutAlign="space-around center">
+            <h3>Fahrten</h3>
+            <div fxLayout="row" fxLayoutAlign="space-around center">
+                <mat-form-field appearance="fill">
+                    <mat-label>Kilometer</mat-label>
+                    <input class="form-control" readonly formControlName="km" matInput>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Kosten / Kilometer</mat-label>
+                    <input class="form-control" formControlName="cost" matInput>
+                </mat-form-field>
+            </div>
+        </div>
+        <div fxLayout="column" fxLayoutAlign="space-around center">
             <button [disabled]="submitted" mat-raised-button type="submit">Speichern</button>
         </div>
     </form>

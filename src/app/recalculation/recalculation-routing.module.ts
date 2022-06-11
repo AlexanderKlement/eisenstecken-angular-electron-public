@@ -19,7 +19,6 @@ const routes: Routes = [
         component: RecalculationDetailComponent,
         data: {
             requiresLogin: true,
-            shouldDetach: true
         }
     },
     {
