@@ -16,8 +16,8 @@ export class AppRouterOutletDirective extends RouterOutlet {
 
     attach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
         super.attach(ref, activatedRoute);
-        console.log('Check to attach');
-        console.log(ref, activatedRoute);
+        //console.log('Check to attach');
+        //console.log(ref, activatedRoute);
         if (ref.instance && typeof ref.instance.onAttach === 'function') {
             ref.instance.onAttach(ref, activatedRoute);
         }
