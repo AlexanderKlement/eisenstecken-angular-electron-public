@@ -1,38 +1,23 @@
-import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../shared/services/auth.service';
 import {InfoDialogComponent} from './info-dialog/info-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
-import {Router} from '@angular/router';
 import {ConfirmDialogComponent} from '../shared/components/confirm-dialog/confirm-dialog.component';
+import {ListenerService} from '../shared/services/listener.service';
 
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit {
 
-    private static debugCode = 'DEBUG';
-    private static debugTimeoutLengthSeconds = 10;
-
-    private debugTimer: NodeJS.Timeout;
-    private keyBoardEntries = '';
-
-    constructor(private authService: AuthService, private dialog: MatDialog, private router: Router) {
+    constructor(private authService: AuthService, private dialog: MatDialog, private listener: ListenerService) {
     }
-
-    @HostListener('document:keypress', ['$event'])
-    handleKeyboardEvent(event: KeyboardEvent) {
-        this.keyBoardEntries += event.key.toUpperCase();
-    }
-
 
     ngOnInit(): void {
     }
 
-    ngOnDestroy() {
-        clearInterval(this.debugTimer);
-    }
 
     showInfoClicked(): void {
         this.dialog.open(InfoDialogComponent, {
@@ -54,21 +39,6 @@ export class HomeComponent implements OnInit, OnDestroy {
                 this.authService.doLogout();
             }
         });
-    }
-
-    onLogoDoubleClick() {
-        this.keyBoardEntries = '';
-        this.debugTimer = setTimeout(
-            () => {
-                this.checkCode();
-            }, HomeComponent.debugTimeoutLengthSeconds * 1000
-        );
-    }
-
-    private checkCode(): void {
-        if (this.keyBoardEntries.indexOf(HomeComponent.debugCode) >= 0) {
-            this.router.navigateByUrl('debug');
-        }
     }
 }
 

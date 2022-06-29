@@ -1,4 +1,4 @@
-<app-toolbar [buttonList]="buttons" [title]="title"></app-toolbar>
+<app-toolbar [buttonList]="buttons" [title]="title" [showConfirmDialog]="true"></app-toolbar>
 <div class="window-container">
     <button type="button" mat-icon-button mat-raised-button (click)="toggleCollapseDescriptiveArticle(-1)"
             class="position-fold-all" title="{{isHidden(-1) ?  'Alle aufklappen':'Alle zusammenklappen'}}">
@@ -46,7 +46,8 @@
                              *ngFor="let sub_descriptive_article of getSubDescriptiveArticles(descriptiveArticle).controls; let j = index"
                              class="descriptive-sub-article">
                             <mat-form-field appearance="fill" fxFlex="70">
-                                <mat-label>Beschreibung <strong>{{(i + 1).toString()}}.{{(j + 1).toString()}}</strong></mat-label>
+                                <mat-label>Beschreibung <strong>{{(i + 1).toString()}}.{{(j + 1).toString()}}</strong>
+                                </mat-label>
                                 <textarea cdkTextareaAutosize
                                           cdkAutosizeMinRows="1"
                                           cdkAutosizeMaxRows="10" class="form-control description"

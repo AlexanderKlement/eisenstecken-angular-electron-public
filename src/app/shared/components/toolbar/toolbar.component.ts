@@ -3,6 +3,7 @@ import {NavigationService} from '../../services/navigation.service';
 import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {AuthService} from '../../services/auth.service';
+import {ListenerService} from '../../services/listener.service';
 
 export interface CustomButton {
     name: string;
@@ -20,43 +21,14 @@ export class ToolbarComponent implements OnInit {
     @Input() beforeBackFunction?: (afterBackFunction: VoidFunction) => void;
     @Input() title = '';
     @Input() showBackButton = true;
-    @Input() catchBackButton = true;
     @Input() showLogoutButton = false;
 
     // eslint-disable-next-line @typescript-eslint/member-ordering
-    constructor(private navigation: NavigationService, private dialog: MatDialog, private authService: AuthService) {
+    constructor(private navigation: NavigationService, private dialog: MatDialog, private authService: AuthService, private listener: ListenerService) {
     }
 
-    @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
-        if (event.key === 'Escape') {
-            this.navigation.back();
-        }
-    }
-
-    @HostListener('window:popstate', ['$event']) onBrowserBackBtnClose(event: Event): void {
-        console.log('Back clicked');
-        event.preventDefault();
-
-        if (this.catchBackButton) {
-
-            this.navigation.backEvent();
-            this.backClicked();
-        } else {
-            console.warn('Preventing default back event');
-        }
-    }
 
     ngOnInit(): void {
-    }
-
-    backClicked(): void {
-        if (this.beforeBackFunction != null) {
-            this.beforeBackFunction(() => {
-                this.navigation.back();
-            });
-        } else {
-            this.navigation.back();
-        }
     }
 
     homeClicked(): void {
