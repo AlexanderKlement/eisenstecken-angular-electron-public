@@ -19,6 +19,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {CustomButton} from '../../shared/components/toolbar/toolbar.component';
 import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import {AuthService} from '../../shared/services/auth.service';
+import {NavigationService} from '../../shared/services/navigation.service';
 
 const titles = {
     users: 'Benutzer',
@@ -72,7 +73,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
     grantRightsAvailable = false;
     title = 'Benutzer: Bearbeiten';
 
-    constructor(private snackBar: MatSnackBar, private authService: AuthService, api: DefaultService,
+    constructor(private snackBar: MatSnackBar, private authService: AuthService, api: DefaultService, private navigation: NavigationService,
                 router: Router, route: ActivatedRoute, dialog: MatDialog) {
         super(api, router, route, dialog);
     }
@@ -245,6 +246,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
         this.id = user.id;
         this.navigationTarget = 'user/edit/' + user.id.toString();
         this.userRights = user.rights;
+        this.navigation.removeLastUrl();
         this.router.navigateByUrl(this.navigationTarget, {replaceUrl: true});
         this.snackBar.open('Speichern erfolgreich!', 'Ok', {
             duration: 3000

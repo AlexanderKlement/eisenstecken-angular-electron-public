@@ -11,6 +11,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {FormControl, FormGroup} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
+import {NavigationService} from '../../shared/services/navigation.service';
 
 @Component({
     selector: 'app-supplier-edit',
@@ -25,7 +26,7 @@ export class SupplierEditComponent extends BaseEditComponent<Supplier> implement
     languageOptions$: Observable<Language[]>;
     title = 'Lieferant: Bearbeiten';
 
-    constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog) {
+    constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private navigation: NavigationService) {
         super(api, router, route, dialog);
     }
 
@@ -94,9 +95,11 @@ export class SupplierEditComponent extends BaseEditComponent<Supplier> implement
 
     createUpdateSuccess(supplier: Supplier): void {
         this.id = supplier.id;
-        if(this.createMode){
+        if (this.createMode) {
+            this.navigation.removeLastUrl();
             this.router.navigateByUrl('supplier', {replaceUrl: true});
         } else {
+            this.navigation.removeLastUrl();
             this.router.navigateByUrl('supplier/' + supplier.id.toString(), {replaceUrl: true});
         }
 

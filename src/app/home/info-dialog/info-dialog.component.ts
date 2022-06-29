@@ -60,6 +60,15 @@ export class InfoDialogComponent implements OnInit {
             ]
         },
         {
+            versionName: '1.0.4',
+            changes: [
+                'Rechnungen, Angebote und Lieferscheine, markieren sich selbst als "bearbeitet", wenn mindestens ein Eingabefeld ' +
+                'modifiziert wurde. Falls das Fenster nun ohne zu speichern verlassen wird, kann wird der Benutzer auf die ungespeicherten ' +
+                'Änderungen hingewiesen. Achtung: Hier wird nicht der Inhalt verglichen, sondern jediglich darauf geachtet ob mindestens eine ' +
+                'Änderung vorgenommen wurde.'
+            ]
+        },
+        {
             versionName: '1.0.3',
             changes: [
                 'Fahrten müssen nun mit Aufträgen oder eigenen Beschreibungen versehen werden.',

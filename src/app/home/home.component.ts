@@ -3,7 +3,6 @@ import {AuthService} from '../shared/services/auth.service';
 import {InfoDialogComponent} from './info-dialog/info-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {ConfirmDialogComponent} from '../shared/components/confirm-dialog/confirm-dialog.component';
-import {ListenerService} from '../shared/services/listener.service';
 
 @Component({
     selector: 'app-home',
@@ -12,7 +11,7 @@ import {ListenerService} from '../shared/services/listener.service';
 })
 export class HomeComponent implements OnInit {
 
-    constructor(private authService: AuthService, private dialog: MatDialog, private listener: ListenerService) {
+    constructor(private authService: AuthService, private dialog: MatDialog) {
     }
 
     ngOnInit(): void {

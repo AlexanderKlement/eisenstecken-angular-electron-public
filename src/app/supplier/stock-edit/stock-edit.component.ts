@@ -6,6 +6,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
 import {first} from 'rxjs/operators';
+import {NavigationService} from '../../shared/services/navigation.service';
 
 @Component({
     selector: 'app-stock-edit',
@@ -15,9 +16,9 @@ import {first} from 'rxjs/operators';
 export class StockEditComponent extends BaseEditComponent<Stock> implements OnInit, OnDestroy {
     stockGroup: FormGroup;
     navigationTarget = 'stock';
-    title = "Lager: Bearbeiten"
+    title = 'Lager: Bearbeiten';
 
-    constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog) {
+    constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private navigation: NavigationService) {
         super(api, router, route, dialog);
     }
 
@@ -76,8 +77,10 @@ export class StockEditComponent extends BaseEditComponent<Stock> implements OnIn
     createUpdateSuccess(stock: Stock): void {
         this.id = stock.id;
         if(this.createMode){
+            this.navigation.removeLastUrl();
             this.router.navigateByUrl('supplier', {replaceUrl: true});
         } else {
+            this.navigation.removeLastUrl();
             this.router.navigateByUrl('stock/' + stock.id.toString(), {replaceUrl: true});
         }
     }

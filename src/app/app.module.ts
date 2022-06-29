@@ -68,6 +68,7 @@ import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from '@angular-mater
 import {EventCalendarModule} from './calendar/event-calendar.module';
 import {MobileAppModule} from './mobile-app/mobile-app.module';
 import {ServiceModule} from './service/service.module';
+import {BackButtonDisableModule} from 'angular-disable-browser-back-button';
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader => new TranslateHttpLoader(http, './assets/i18n/', '.json');
 
@@ -106,6 +107,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
         SharedModule,
         HomeModule,
         JobModule,
+        BackButtonDisableModule.forRoot(),
         ClientModule,
         UserModule,
         SettingsModule,

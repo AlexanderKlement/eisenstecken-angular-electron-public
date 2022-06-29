@@ -14,6 +14,7 @@ import {BaseEditComponent} from '../../shared/components/base-edit/base-edit.com
 import {MatDialog} from '@angular/material/dialog';
 import {first, map, tap} from 'rxjs/operators';
 import {AuthService} from '../../shared/services/auth.service';
+import {NavigationService} from '../../shared/services/navigation.service';
 
 @Component({
     selector: 'app-job-edit',
@@ -36,7 +37,7 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
 
     users$: Observable<User[]>;
 
-    constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private authService: AuthService) {
+    constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private authService: AuthService, private navigation: NavigationService) {
         super(api, router, route, dialog);
     }
 
@@ -138,6 +139,7 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
         if (redirectMain) {
             job.id = this.mainJobId;
         }
+        this.navigation.removeLastUrl();
         this.router.navigateByUrl('job/' + job.id.toString(), {replaceUrl: true});
     }
 

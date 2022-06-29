@@ -6,6 +6,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {tap} from 'rxjs/operators';
+import {NavigationService} from '../../shared/services/navigation.service';
 
 @Component({
     selector: 'app-client-edit',
@@ -21,7 +22,7 @@ export class ClientEditComponent extends BaseEditComponent<Client> implements On
     genderOptions$: Observable<Gender[]>;
     languageOptions$: Observable<Language[]>;
 
-    constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog) {
+    constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private navigation: NavigationService) {
         super(api, router, route, dialog);
     }
 
@@ -137,6 +138,7 @@ export class ClientEditComponent extends BaseEditComponent<Client> implements On
 
     createUpdateSuccess(client: Client): void {
         this.id = client.id;
+        this.navigation.removeLastUrl();
         this.router.navigateByUrl('client/' + this.id.toString(), {replaceUrl: true});
     }
 

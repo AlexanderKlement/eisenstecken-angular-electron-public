@@ -43,6 +43,7 @@ import {
     HoursStepperDriveDialogComponent,
     HoursStepperDriveDialogData
 } from './hours-stepper-drive-dialog/hours-stepper-drive-dialog.component';
+import {NavigationService} from '../../../shared/services/navigation.service';
 
 
 function greaterThanValidator(value: number): ValidatorFn {
@@ -91,7 +92,7 @@ export class HoursStepperComponent implements OnInit {
     // eslint-disable-next-line @typescript-eslint/member-ordering
     @ViewChild('stepper') private stepper: MatStepper;
 
-    constructor(private api: DefaultService, private dialog: MatDialog,
+    constructor(private api: DefaultService, private dialog: MatDialog, private navigation: NavigationService,
                 private authService: AuthService, private router: Router) {
     }
 
@@ -326,10 +327,12 @@ export class HoursStepperComponent implements OnInit {
         if (this.date !== undefined && this.userId !== undefined) {
             this.api.createWorkDayWorkDayUserIdPost(this.userId, formatDateTransport(this.date.toDateString()), workDayCreate)
                 .pipe(first()).subscribe(() => {
+                this.navigation.removeLastUrl();
                 this.router.navigateByUrl('/employee/redirect/' + this.userId.toString(), {replaceUrl: true});
             });
         } else {
             this.api.createWorkDayOwnWorkDayOwnPost(workDayCreate).pipe(first()).subscribe(() => {
+                this.navigation.removeLastUrl();
                 this.router.navigateByUrl('/mobile/hours/redirect', {replaceUrl: true});
             });
         }

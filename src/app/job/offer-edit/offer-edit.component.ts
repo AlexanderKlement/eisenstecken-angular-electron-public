@@ -1,4 +1,4 @@
-import {Component, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormArray, FormControl, FormGroup} from '@angular/forms';
 import {BaseEditComponent} from '../../shared/components/base-edit/base-edit.component';
 import {
@@ -19,6 +19,7 @@ import {formatDateTransport} from '../../shared/date.util';
 import {CustomButton} from '../../shared/components/toolbar/toolbar.component';
 import {CurrencyPipe, getLocaleCurrencyCode} from '@angular/common';
 import {CdkTextareaAutosize} from '@angular/cdk/text-field';
+import {NavigationService} from '../../shared/services/navigation.service';
 
 @Component({
     selector: 'app-offer-edit',
@@ -37,7 +38,7 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
     buttons: CustomButton[] = [];
     subscription: Subscription;
 
-    constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog,
+    constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private navigation: NavigationService,
                 private file: FileService, private currency: CurrencyPipe) {
         super(api, router, route, dialog);
     }
@@ -180,6 +181,7 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
     createUpdateSuccess(offer: Offer): void {
         this.id = offer.id;
         this.file.open(offer.pdf);
+        this.navigation.removeLastUrl();
         this.router.navigateByUrl('job/' + this.jobId.toString(), {replaceUrl: true});
     }
 

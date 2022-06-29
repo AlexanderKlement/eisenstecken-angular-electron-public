@@ -1,4 +1,4 @@
-<app-toolbar [buttonList]="buttons" [title]="title" [showConfirmDialog]="true"></app-toolbar>
+<app-toolbar [buttonList]="buttons" [title]="title" [controlsBeforeBack]="[this.offerGroup]"></app-toolbar>
 <div class="window-container">
     <button type="button" mat-icon-button mat-raised-button (click)="toggleCollapseDescriptiveArticle(-1)"
             class="position-fold-all" title="{{isHidden(-1) ?  'Alle aufklappen':'Alle zusammenklappen'}}">
