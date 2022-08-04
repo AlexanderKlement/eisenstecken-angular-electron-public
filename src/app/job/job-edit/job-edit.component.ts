@@ -15,6 +15,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {first, map, tap} from 'rxjs/operators';
 import {AuthService} from '../../shared/services/auth.service';
 import {NavigationService} from '../../shared/services/navigation.service';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-job-edit',
@@ -37,7 +38,8 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
 
     users$: Observable<User[]>;
 
-    constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private authService: AuthService, private navigation: NavigationService) {
+    constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog,
+                private authService: AuthService, private navigation: NavigationService) {
         super(api, router, route, dialog);
     }
 
@@ -93,6 +95,7 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
                 minijob: new FormControl(false),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 responsible_id: new FormControl(1),
+                year: new FormControl(moment().year()),
                 address: new FormGroup({
                     // eslint-disable-next-line @typescript-eslint/naming-convention
                     street_number: new FormControl(''),
@@ -173,6 +176,7 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
             client_id: this.clientId,
             // eslint-disable-next-line @typescript-eslint/naming-convention
             responsible_id: parseInt(this.jobGroup.get('responsible_id').value, 10),
+            year: parseInt(this.jobGroup.get('year').value, 10),
             address: {
                 name: this.jobGroup.get('name').value,
                 // eslint-disable-next-line @typescript-eslint/naming-convention

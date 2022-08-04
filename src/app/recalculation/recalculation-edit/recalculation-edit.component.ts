@@ -125,6 +125,7 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
         }
         this.recalculationGroup.get('km').setValue(recalculation.km);
         this.recalculationGroup.get('cost').setValue(recalculation.cost);
+        this.recalculationGroup.get('material_charge_percent').setValue(recalculation.material_charge_percent);
     }
 
     getExpenses(): FormArray {

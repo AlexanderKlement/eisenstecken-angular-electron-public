@@ -56,7 +56,25 @@ export class InfoDialogComponent implements OnInit {
                 'Instandhaltung kann nicht gelöscht werden',
                 'Die Möglichkeit einbauen, die Kosten aller Autos zu verändern',
                 'Zeitzonen von Chat-Nachrichten anpassen',
-                'Emails bei Bestellungen (oft Pichler) gehen nicht auf wenn Bestellung versandt wird.'
+                'Emails bei Bestellungen (oft Pichler) gehen nicht auf wenn Bestellung versandt wird. UPDATE: Wird demnächst gelöst!'
+            ]
+        },
+        {
+            versionName: '1.0.6',
+            changes: [
+                'Materialkostenaufschlag wird nun korrekt gespeichert.',
+                'Rechnungen werden nun wieder im korrekten Ordner abgespeichert und korrekt nach dem Erzeugen geöffnet.',
+                'Frischeis Bestellungen sollten nun korrekt in Outlook geöffnet werden.',
+            ]
+        },
+        {
+            versionName: '1.0.5',
+            changes: [
+                'Artikellisten-PDF enthält nun auch das Feld "Bemerkung (intern)" unter jedem Artikel',
+                'Aufträge können beim Erstellen nun auch auf andere Jahre gelegt werden. Das Erstellfenster füllt das ' +
+                'derzeitige Jahr aus, der Benutzer kann dies jedoch ändern.',
+                'Teamsitzungen wurden von 9 auf 14 uhr verschoben',
+
             ]
         },
         {

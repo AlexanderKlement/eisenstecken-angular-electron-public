@@ -107,6 +107,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
     }
 
     private initProductEditGroup(): void {
+        console.log(this.data.unit_id);
         this.productEditGroup = new FormGroup({
             title: new FormControl(this.data.title),
             name: new FormControl(this.data.name, Validators.required),
