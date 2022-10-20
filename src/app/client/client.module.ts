@@ -14,6 +14,7 @@ import {MatInputModule} from '@angular/material/input';
 import {FlexModule} from '@angular/flex-layout';
 import {MatButtonModule} from '@angular/material/button';
 import {MatTabsModule} from '@angular/material/tabs';
+import {MatIconModule} from '@angular/material/icon';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import {MatTabsModule} from '@angular/material/tabs';
         FlexModule,
         MatButtonModule,
         MatTabsModule,
+        MatIconModule,
     ]
 })
 export class ClientModule { }

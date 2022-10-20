@@ -1,6 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {BaseEditComponent} from '../../shared/components/base-edit/base-edit.component';
 import {
+    Contact, ContactCreate,
     DefaultService,
     Language,
     Lock,
@@ -8,7 +9,7 @@ import {
 } from 'eisenstecken-openapi-angular-library';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-import {FormControl, FormGroup} from '@angular/forms';
+import {FormArray, FormControl, FormGroup} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {NavigationService} from '../../shared/services/navigation.service';
@@ -51,7 +52,22 @@ export class SupplierEditComponent extends BaseEditComponent<Supplier> implement
     onSubmit(): void {
         this.submitted = true;
 
+        const contacts: ContactCreate[] = [];
+
+        for (const contactGroup of this.getContacts().controls) {
+            contacts.push({
+                id: parseInt(contactGroup.get('id').value, 10),
+                name: contactGroup.get('name').value,
+                name1: contactGroup.get('name1').value,
+                tel: contactGroup.get('tel').value,
+                mail: contactGroup.get('mail').value,
+                note: contactGroup.get('note').value,
+            });
+        }
+
+
         const supplierCreate: SupplierCreate = {
+            contacts,
             name: this.supplierGroup.get('name').value,
             mail1: this.supplierGroup.get('mail1').value,
             mail2: this.supplierGroup.get('mail2').value,
@@ -120,9 +136,47 @@ export class SupplierEditComponent extends BaseEditComponent<Supplier> implement
                             country: client.address.country.code
                         }
                     });
+                for (const contact of client.contacts) {
+                    this.addContact(contact);
+                }
                 }
             );
         }
+    }
+
+    getContacts(): FormArray {
+        return this.supplierGroup.get('contacts') as FormArray;
+    }
+
+    addContact(contact?: Contact): void {
+        this.getContacts().push(this.createContact(contact));
+    }
+
+    createContact(contact?: Contact): FormGroup {
+        if (contact !== undefined) {
+            return new FormGroup({
+                id: new FormControl(contact.id),
+                name: new FormControl(contact.name),
+                name1: new FormControl(contact.name1),
+                tel: new FormControl(contact.tel),
+                mail: new FormControl(contact.mail),
+                note: new FormControl(contact.note)
+
+            });
+        } else {
+            return new FormGroup({
+                id: new FormControl(-1),
+                name: new FormControl(''),
+                name1: new FormControl(''),
+                tel: new FormControl(''),
+                mail: new FormControl(''),
+                note: new FormControl('')
+            });
+        }
+    }
+
+    removeContactAt(index: number): void {
+        this.getContacts().removeAt(index);
     }
 
 
@@ -136,6 +190,7 @@ export class SupplierEditComponent extends BaseEditComponent<Supplier> implement
             language: new FormControl('DE'),
             // eslint-disable-next-line @typescript-eslint/naming-convention
             contact_person: new FormControl(''),
+            contacts: new FormArray([]),
             // eslint-disable-next-line @typescript-eslint/naming-convention
             destination_code: new FormControl(''),
             address: new FormGroup({

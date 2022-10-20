@@ -9,6 +9,7 @@ import {ConfirmDialogComponent} from '../../../shared/components/confirm-dialog/
 export interface ArticleEditDialogData {
     id: number;
     supplierId: number;
+    type: string;
 }
 
 @Component({

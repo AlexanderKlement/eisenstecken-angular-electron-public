@@ -1,0 +1,17 @@
+<app-toolbar title="Kunden" [buttonList]="buttons"></app-toolbar>
+<div class="window-container">
+    <mat-tab-group>
+        <mat-tab label="Alle">
+            <app-table-builder [dataSource]="allContactsDataSource"></app-table-builder>
+        </mat-tab>
+        <mat-tab label="Kunden">
+            <app-table-builder [dataSource]="clientContactsDataSource"></app-table-builder>
+        </mat-tab>
+        <mat-tab label="Lieferanten">
+            <app-table-builder [dataSource]="supplierContactsDataSource"></app-table-builder>
+        </mat-tab>
+        <mat-tab label="Normal">
+            <app-table-builder [dataSource]="normalContactsDataSource"></app-table-builder>
+        </mat-tab>
+    </mat-tab-group>
+</div>

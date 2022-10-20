@@ -24,6 +24,7 @@ import { StockDetailComponent } from './stock-detail/stock-detail.component';
 import { StockEditComponent } from './stock-edit/stock-edit.component';
 import { ArticleSupplierComponent } from './article-supplier/article-supplier.component';
 import { ArticleEditDialogComponent } from './article-supplier/article-edit-dialog/article-edit-dialog.component';
+import {MatIconModule} from '@angular/material/icon';
 
 
 @NgModule({
@@ -53,7 +54,8 @@ import { ArticleEditDialogComponent } from './article-supplier/article-edit-dial
         MatDialogModule,
         MatListModule,
         MatProgressSpinnerModule,
-        MatDatepickerModule
+        MatDatepickerModule,
+        MatIconModule
     ]
 })
 export class SupplierModule {

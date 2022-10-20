@@ -19,6 +19,7 @@ import {DebugRoutingModule} from './debug/debug-routing.module';
 import {EventCalendarRoutingModule} from './calendar/event-calendar-routing.module';
 import {MobileAppRoutingModule} from './mobile-app/mobile-app-routing.module';
 import {ServiceRoutingModule} from './service/service-routing.module';
+import {PhoneBookRoutingModule} from './phone-book/phone-book-routing.module';
 
 const routes: Routes = [
     {
@@ -56,7 +57,8 @@ const routes: Routes = [
         DebugRoutingModule,
         EmployeeRoutingModule,
         DeliveryNoteRoutingModule,
-        ServiceRoutingModule
+        ServiceRoutingModule,
+        PhoneBookRoutingModule
     ],
     exports: [RouterModule]
 })

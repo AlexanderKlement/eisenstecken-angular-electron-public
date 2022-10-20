@@ -69,6 +69,7 @@ import {EventCalendarModule} from './calendar/event-calendar.module';
 import {MobileAppModule} from './mobile-app/mobile-app.module';
 import {ServiceModule} from './service/service.module';
 import {BackButtonDisableModule} from 'angular-disable-browser-back-button';
+import {PhoneBookModule} from './phone-book/phone-book.module';
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader => new TranslateHttpLoader(http, './assets/i18n/', '.json');
 
@@ -147,6 +148,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
         MatButtonModule,
         MatToolbarModule,
         MatNativeDateModule,
+        PhoneBookModule,
         MatSnackBarModule,
         ServiceWorkerModule.register('ngsw-worker.js', {
             enabled: APP_CONFIG.production,

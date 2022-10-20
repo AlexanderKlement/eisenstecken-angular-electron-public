@@ -51,7 +51,7 @@ try {
     } else {
         app.on('second-instance', (event, commandLine, workingDirectory) => {
             console.warn("Second instance detected");
-            // Someone tried to run a second instance, we should focus our window.
+            // Someone tried to run a second instance, we should focus our window
             win.show();
             if (win) {
                 if (win.isMinimized()) win.restore()
@@ -237,7 +237,7 @@ function initIPC() {
 
         let mailCommand = mailExecutablePath;
 
-        for(const singleArg of arg) {
+        for (const singleArg of arg) {
             mailCommand += ' ' + escapeShell(singleArg);
         }
 
@@ -248,7 +248,7 @@ function initIPC() {
         cmd += mailCommand;
 
         require('child_process').exec(cmd, function (err, stdout: string, stderr: string): void {
-            if(stdout.trim().length < 5) {
+            if (stdout.trim().length < 5) {
                 event.reply('send-mail-reply', true);
                 return;
             }
@@ -385,6 +385,7 @@ function initIPC() {
 
 
 function appShown(): void {
+    win.maximize(); // This should be removed if it does not improve the situation
     win.webContents.send('app-shown');
 }
 

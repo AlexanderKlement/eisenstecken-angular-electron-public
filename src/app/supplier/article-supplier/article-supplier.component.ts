@@ -18,6 +18,7 @@ export class ArticleSupplierComponent implements OnInit {
     articleTableSource: TableDataSource<Article>;
     supplierId: number;
     title = 'Artikel';
+    type: string;
 
     columns: Column<Article>[] = [
         {name: 'name', headerName: 'Name'},
@@ -58,27 +59,32 @@ export class ArticleSupplierComponent implements OnInit {
     ngOnInit(): void {
         this.route.params.subscribe((params) => {
             this.supplierId = parseInt(params.supplier_id, 10);
+            console.log(this.supplierId);
             if (isNaN(this.supplierId)) {
                 console.error('RecalculationDetail: Cannot parse jobId');
                 this.router.navigateByUrl('supplier');
                 return;
             }
             this.route.data.subscribe((data) => {
+                this.type = data.type;
                 if (data.type === 'supplier') {
                     this.initArticleSupplierTable();
+                    this.api.readSupplierSupplierSupplierIdGet(this.supplierId).pipe(first()).subscribe((supplier) => {
+                        this.title += ': ' + supplier.name;
+                    });
                 } else {
                     this.initArticleStockTable();
+                    this.api.readStockStockStockIdGet(this.supplierId).pipe(first()).subscribe((stock) => {
+                        this.title += ': ' + stock.name;
+                    });
                 }
             });
         });
         this.buttons.push({
             name: 'Neuer Artikel',
             navigate: () => {
-                this.openArticleDialog(-1, this.supplierId);
+                this.openArticleDialog(-1, this.supplierId, this.type);
             }
-        });
-        this.api.readSupplierSupplierSupplierIdGet(this.supplierId).pipe(first()).subscribe((supplier) => {
-            this.title += ': ' + supplier.name;
         });
     }
 
@@ -107,12 +113,13 @@ export class ArticleSupplierComponent implements OnInit {
     }
 
     private articleClicked(id: number) {
-        this.openArticleDialog(id, -1);
+        this.openArticleDialog(id, -1, this.type);
     }
 
-    private openArticleDialog(id: number, supplierId: number) {
+    private openArticleDialog(id: number, supplierId: number, type: string) {
         const dialogData: ArticleEditDialogData = {
             id,
+            type,
             supplierId, //this is not really important, since i can get it from the article her
         };
         const dialogRef = this.dialog.open(ArticleEditDialogComponent, {

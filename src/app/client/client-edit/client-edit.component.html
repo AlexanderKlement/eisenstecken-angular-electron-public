@@ -11,22 +11,40 @@
                 <mat-label>Nachname</mat-label>
                 <input class="form-control" formControlName="lastname" matInput>
             </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>Mail1</mat-label>
-                <input class="form-control" formControlName="mail1" matInput>
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>Mail2</mat-label>
-                <input class="form-control" formControlName="mail2" matInput>
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>Tel1</mat-label>
-                <input class="form-control" formControlName="tel1" matInput>
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>Tel2</mat-label>
-                <input class="form-control" formControlName="tel2" matInput>
-            </mat-form-field>
+            <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="contacts">
+                <h3>Kontakte</h3>
+                <div *ngFor="let contact of getContacts().controls; let i = index" [formGroupName]="i" fxLayout="row"
+                     fxLayoutAlign="space-around center">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Name</mat-label>
+                        <input class="form-control" formControlName="name" matInput>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Firma</mat-label>
+                        <input class="form-control" formControlName="name1" matInput>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Telefon</mat-label>
+                        <input class="form-control" formControlName="tel" matInput>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Mail</mat-label>
+                        <input class="form-control" formControlName="mail" matInput>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Notiz</mat-label>
+                        <input class="form-control" formControlName="note" matInput>
+                    </mat-form-field>
+                    <button type="button" mat-icon-button mat-raised-button (click)="removeContactAt(i)"
+                            class="position-delete">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+                <button type="button" mat-button
+                        (click)="addContact()">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
             <mat-form-field appearance="fill">
                 <mat-label>Ansprechpartner</mat-label>
                 <input class="form-control" formControlName="contact_person" matInput>

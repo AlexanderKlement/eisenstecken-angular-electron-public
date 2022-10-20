@@ -99,6 +99,7 @@ export class InfoSettingsComponent implements OnInit {
         const contactUpdates: ContactUpdate[] = [];
         this.getContactFormArray().controls.forEach((contact) => {
             contactUpdates.push({
+                id: -1, //TODO: get the right id here
                 name: contact.get('name').value,
                 tel: contact.get('tel').value,
                 mail: contact.get('mail').value,
