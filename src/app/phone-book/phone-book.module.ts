@@ -5,17 +5,31 @@ import { PhoneBookRoutingModule } from './phone-book-routing.module';
 import { PhoneBookComponent } from './phone-book.component';
 import {SharedModule} from '../shared/shared.module';
 import {MatTabsModule} from '@angular/material/tabs';
+import { ContactEditDialogComponent } from './contact-edit-dialog/contact-edit-dialog.component';
+import {ReactiveFormsModule} from '@angular/forms';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {FlexModule} from '@angular/flex-layout';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatButtonModule} from '@angular/material/button';
 
 
 @NgModule({
   declarations: [
-    PhoneBookComponent
+    PhoneBookComponent,
+    ContactEditDialogComponent
   ],
-  imports: [
-    CommonModule,
-    PhoneBookRoutingModule,
-    SharedModule,
-    MatTabsModule
-  ]
+    imports: [
+        CommonModule,
+        PhoneBookRoutingModule,
+        SharedModule,
+        MatTabsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        FlexModule,
+        MatDialogModule,
+        MatButtonModule
+    ]
 })
 export class PhoneBookModule { }

@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>{{title}}</h1>
-<div mat-dialog-content fxLayout="column" fxLayoutAlign="start stretch" class="dialog-content">
+<div mat-dialog-content fxLayout="column" fxLayoutAlign="space-around center" class="dialog-content">
     <form (submit)="onSaveClick()" [formGroup]="articleEditGroup">
-        <div fxLayout="column" fxLayoutAlign="space-between start">
+        <div fxLayout="column" fxLayoutAlign="space-around center">
             <mat-form-field appearance="fill">
                 <mat-label>Name</mat-label>
                 <input matInput formControlName="name">

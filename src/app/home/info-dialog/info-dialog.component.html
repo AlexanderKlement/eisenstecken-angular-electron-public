@@ -3,7 +3,6 @@
     <mat-tab-group>
         <mat-tab label="Kontakte">
             <app-table-builder title="Intern" [dataSource]="userDataSource"></app-table-builder>
-            <app-table-builder title="Andere" [dataSource]="contactDataSource"></app-table-builder>
         </mat-tab>
         <mat-tab label="Preise" *ngIf="userCanViewPrice">
             <app-table-builder title="Preise" [dataSource]="priceDataSource"></app-table-builder>

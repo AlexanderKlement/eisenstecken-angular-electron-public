@@ -2,6 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {TableDataSource} from '../shared/components/table-builder/table-builder.datasource';
 import {Contact, ContactTypeEnum, DefaultService} from 'eisenstecken-openapi-angular-library';
 import {Router} from '@angular/router';
+import {first} from 'rxjs/operators';
+import {MatDialog} from '@angular/material/dialog';
+import {ContactDialogData, ContactEditDialogComponent} from './contact-edit-dialog/contact-edit-dialog.component';
 
 @Component({
     selector: 'app-phone-book',
@@ -16,7 +19,7 @@ export class PhoneBookComponent implements OnInit {
     normalContactsDataSource: TableDataSource<Contact>;
     buttons = [];
 
-    constructor(private api: DefaultService, private router: Router) {
+    constructor(private api: DefaultService, private router: Router, private dialog: MatDialog) {
 
     }
 
@@ -30,6 +33,28 @@ export class PhoneBookComponent implements OnInit {
         this.initSupplierContactsDataSource();
         this.initClientContactsDataSource();
 
+    }
+
+    private reloadData(): void {
+        this.allContactsDataSource.loadData();
+        this.normalContactsDataSource.loadData();
+        this.supplierContactsDataSource.loadData();
+        this.clientContactsDataSource.loadData();
+    }
+
+    private openContactDialog(id: number) {
+        const dialogData: ContactDialogData = {
+            id
+        };
+        const dialogRef = this.dialog.open(ContactEditDialogComponent, {
+            width: '500px',
+            data: dialogData
+        });
+        dialogRef.afterClosed().pipe(first()).subscribe(result => {
+            if (result) {
+                this.reloadData();
+            }
+        });
     }
 
     private initAllContactsDataSource(): void {
@@ -50,7 +75,7 @@ export class PhoneBookComponent implements OnInit {
                                 note: dataSource.note,
                             },
                             route: () => {
-                                //this.router.navigateByUrl('/job/' + dataSource.id.toString());
+                                this.openContactDialog(dataSource.id);
                             }
                         });
                 });
@@ -85,7 +110,7 @@ export class PhoneBookComponent implements OnInit {
                                 note: dataSource.note,
                             },
                             route: () => {
-                                //this.router.navigateByUrl('/job/' + dataSource.id.toString());
+                                this.openContactDialog(dataSource.id);
                             }
                         });
                 });
@@ -120,7 +145,7 @@ export class PhoneBookComponent implements OnInit {
                                 note: dataSource.note,
                             },
                             route: () => {
-                                //this.router.navigateByUrl('/job/' + dataSource.id.toString());
+                                this.openContactDialog(dataSource.id);
                             }
                         });
                 });
@@ -155,7 +180,7 @@ export class PhoneBookComponent implements OnInit {
                                 note: dataSource.note,
                             },
                             route: () => {
-                                //this.router.navigateByUrl('/job/' + dataSource.id.toString());
+                                this.openContactDialog(dataSource.id);
                             }
                         });
                 });

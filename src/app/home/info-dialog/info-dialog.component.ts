@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {
-    Contact,
     DefaultService,
     Price,
     TechnicalData,
@@ -26,7 +25,6 @@ interface Update {
 })
 export class InfoDialogComponent implements OnInit {
     userDataSource: TableDataSource<User>;
-    contactDataSource: TableDataSource<Contact>;
     priceDataSource: TableDataSource<Price>;
     technicalDataDataSource: TableDataSource<TechnicalData>;
     credentialDataSource: TableDataSource<Credential>;
@@ -57,6 +55,15 @@ export class InfoDialogComponent implements OnInit {
                 'Die Möglichkeit einbauen, die Kosten aller Autos zu verändern',
                 'Zeitzonen von Chat-Nachrichten anpassen',
                 'Emails bei Bestellungen (oft Pichler) gehen nicht auf wenn Bestellung versandt wird. UPDATE: Wird demnächst gelöst!'
+            ]
+        },
+        {
+            versionName: '1.1.0',
+            changes: [
+                'Kontakte von Konverto Telefonbuch in Eisenstecken Telefonbuch importiert',
+                'Telefonnummern und Mails von Lieferanten und Kunden auf Telefonbuch migiriert',
+                'Telefonbuch wird nun im Hauptmenü angezeigt',
+                'Kontakte vom Infoscreen im Hauptmenü entfernt'
             ]
         },
         {
@@ -406,7 +413,6 @@ export class InfoDialogComponent implements OnInit {
     ngOnInit():
         void {
         this.initUserDataSource();
-        this.initContactDataSource();
         this.initPriceDataSource();
         this.initTechnicalDataDataSource();
         this.initCredentialDataSource();
@@ -449,38 +455,6 @@ export class InfoDialogComponent implements OnInit {
             (api) => api.readUserCountUsersEmployeeCountGet()
         );
         this.userDataSource.loadData();
-    }
-
-    initContactDataSource(): void {
-        this.contactDataSource = new TableDataSource(
-            this.api,
-            (api, filter, sortDirection, skip, limit) => api.readContactsContactGet(skip, limit, filter),
-            (dataSourceClasses) => {
-                const rows = [];
-                dataSourceClasses.forEach((dataSource) => {
-                    rows.push(
-                        {
-                            values: {
-                                name: dataSource.name,
-                                tel: dataSource.tel,
-                                mail: dataSource.mail,
-                                note: dataSource.note,
-                            },
-                            route: () => {
-                            }
-                        });
-                });
-                return rows;
-            },
-            [
-                {name: 'name', headerName: 'Name'},
-                {name: 'mail', headerName: 'Email'},
-                {name: 'tel', headerName: 'Telefon'},
-                {name: 'note', headerName: 'Notiz'},
-            ],
-            (api) => api.readContactCountContactCountGet()
-        );
-        this.contactDataSource.loadData();
     }
 
     initPriceDataSource(): void {

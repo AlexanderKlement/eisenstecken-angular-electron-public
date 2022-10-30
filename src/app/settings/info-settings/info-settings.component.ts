@@ -19,7 +19,6 @@ import {ThemePalette} from '@angular/material/core';
 })
 export class InfoSettingsComponent implements OnInit {
 
-    contactGroup: FormGroup;
     credentialGroup: FormGroup;
     priceGroup: FormGroup;
     technicalDataGroup: FormGroup;
@@ -30,49 +29,12 @@ export class InfoSettingsComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.initContacts();
         this.initCredentials();
         this.initPrices();
         this.initTechnicalData();
 
     }
 
-    initContacts(): void {
-        this.contactGroup = new FormGroup({
-            contacts: new FormArray([]),
-        });
-        this.api.readContactsContactGet(0, 1000).pipe(first()).subscribe((contacts) => {
-            this.addContactArrayToFormGroup(contacts);
-        });
-    }
-
-    addContactArrayToFormGroup(contacts: Contact[]): void {
-        for (const contact of contacts) {
-            this.getContactFormArray().push(this.createContact(contact));
-        }
-    }
-
-    createContact(contact?: Contact): FormGroup {
-        if (contact === undefined) {
-            return new FormGroup({
-                name: new FormControl(''),
-                tel: new FormControl(''),
-                mail: new FormControl(''),
-                note: new FormControl(''),
-            });
-        } else {
-            return new FormGroup({
-                name: new FormControl(contact.name),
-                tel: new FormControl(contact.tel),
-                mail: new FormControl(contact.mail),
-                note: new FormControl(contact.note),
-            });
-        }
-    }
-
-    getContactFormArray(): FormArray {
-        return this.contactGroup.get('contacts') as FormArray;
-    }
 
     clearFormArray(formArray: FormArray): void {
         while (formArray.length > 0) {
@@ -80,38 +42,6 @@ export class InfoSettingsComponent implements OnInit {
         }
     }
 
-    updateContactsSuccess(contacts: Contact[]): void {
-        this.submitted = false;
-        this.showSuccess();
-    }
-
-    removeContactAt(index: number): void {
-        this.getContactFormArray().removeAt(index);
-    }
-
-    addNewContact(): void {
-        this.getContactFormArray().push(this.createContact());
-    }
-
-
-    onSubmitContacts() {
-        this.submitted = true;
-        const contactUpdates: ContactUpdate[] = [];
-        this.getContactFormArray().controls.forEach((contact) => {
-            contactUpdates.push({
-                id: -1, //TODO: get the right id here
-                name: contact.get('name').value,
-                tel: contact.get('tel').value,
-                mail: contact.get('mail').value,
-                note: contact.get('note').value,
-            });
-        });
-        this.api.bulkUpdateContactsContactBulkPut(contactUpdates).pipe(first()).subscribe({
-            next: this.updateContactsSuccess.bind(this),
-            error: this.updateError.bind(this),
-            complete: this.updateComplete.bind(this)
-        });
-    }
 
     initCredentials(): void {
         this.credentialGroup = new FormGroup({
@@ -321,14 +251,6 @@ export class InfoSettingsComponent implements OnInit {
             error: this.updateError.bind(this),
             complete: this.updateComplete.bind(this)
         });
-    }
-
-    moveContactUpClicked(i: number) {
-        this.moveDescriptiveArticleUp(this.getContactFormArray(), i);
-    }
-
-    moveContactDownClicked(i: number) {
-        this.moveDescriptiveArticleDown(this.getContactFormArray(), i);
     }
 
     moveDescriptiveArticleUp(formArray: FormArray, index: number) {

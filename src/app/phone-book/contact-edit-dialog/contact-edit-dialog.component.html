@@ -1,0 +1,35 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<div mat-dialog-content fxLayout="column" fxLayoutAlign="start stretch" class="dialog-content">
+    <form (submit)="onSaveClick()" [formGroup]="contactGroup">
+        <div fxLayout="column" fxLayoutAlign="space-between center">
+            <mat-form-field appearance="fill">
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Firma</mat-label>
+                <input matInput formControlName="name1">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Telefon</mat-label>
+                <input matInput formControlName="tel">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Mail</mat-label>
+                <input matInput formControlName="mail">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Note</mat-label>
+                <input matInput formControlName="note">
+            </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-around start">
+            <button *ngIf="!createMode" type="button" mat-button (click)="onDeleteClick()">Löschen</button>
+            <span class="spacer"></span>
+            <button type="button" mat-button (click)="onCancelClick()">Abbrechen</button>
+            <button type="submit" mat-button class="add-button">
+                Speichern
+            </button>
+        </div>
+    </form>
+</div>
