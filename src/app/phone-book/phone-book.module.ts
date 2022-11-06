@@ -12,6 +12,8 @@ import {MatInputModule} from '@angular/material/input';
 import {FlexModule} from '@angular/flex-layout';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatButtonModule} from '@angular/material/button';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 
 @NgModule({
@@ -29,7 +31,9 @@ import {MatButtonModule} from '@angular/material/button';
         MatInputModule,
         FlexModule,
         MatDialogModule,
-        MatButtonModule
+        MatButtonModule,
+        MatButtonToggleModule,
+        MatAutocompleteModule
     ]
 })
 export class PhoneBookModule { }

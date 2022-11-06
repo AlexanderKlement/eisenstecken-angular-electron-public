@@ -10,8 +10,11 @@
         <mat-tab label="Lieferanten">
             <app-table-builder [dataSource]="supplierContactsDataSource"></app-table-builder>
         </mat-tab>
-        <mat-tab label="Normal">
-            <app-table-builder [dataSource]="normalContactsDataSource"></app-table-builder>
+        <mat-tab label="Betrieb">
+            <app-table-builder [dataSource]="businessContactsDataSource"></app-table-builder>
+        </mat-tab>
+        <mat-tab label="Verwaltung">
+            <app-table-builder [dataSource]="managementContactsDataSource"></app-table-builder>
         </mat-tab>
     </mat-tab-group>
 </div>

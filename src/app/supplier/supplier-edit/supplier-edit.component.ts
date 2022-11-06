@@ -161,7 +161,6 @@ export class SupplierEditComponent extends BaseEditComponent<Supplier> implement
                 tel: new FormControl(contact.tel),
                 mail: new FormControl(contact.mail),
                 note: new FormControl(contact.note)
-
             });
         } else {
             return new FormGroup({

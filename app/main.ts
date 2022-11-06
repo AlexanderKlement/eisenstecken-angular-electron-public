@@ -353,8 +353,17 @@ function initIPC() {
     });
 
     ipcMain.on('restart_app', () => {
-        forceClose = true;
-        autoUpdater.quitAndInstall();
+        isQuiting = true;
+        try {
+            autoUpdater.quitAndInstall();
+            setTimeout(() => {
+                app.relaunch();
+                app.exit(0);
+            }, 6000);
+        } catch (e) {
+            dialog.showErrorBox('Error', 'Failed to install updates');
+        }
+
     });
 
     //IPC for get information

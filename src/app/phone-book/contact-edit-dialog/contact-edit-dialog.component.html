@@ -7,7 +7,7 @@
                 <input matInput formControlName="name">
             </mat-form-field>
             <mat-form-field appearance="fill">
-                <mat-label>Firma</mat-label>
+                <mat-label>Nachname</mat-label>
                 <input matInput formControlName="name1">
             </mat-form-field>
             <mat-form-field appearance="fill">
@@ -19,10 +19,40 @@
                 <input matInput formControlName="mail">
             </mat-form-field>
             <mat-form-field appearance="fill">
-                <mat-label>Note</mat-label>
+                <mat-label>Notiz</mat-label>
                 <input matInput formControlName="note">
             </mat-form-field>
+            <mat-button-toggle-group [formControl]="contactType">
+                <mat-button-toggle [value]="supplierEnum">Lieferant</mat-button-toggle>
+                <mat-button-toggle [value]="clientEnum">Kunde</mat-button-toggle>
+                <mat-button-toggle [value]="businessEnum">Betrieb</mat-button-toggle>
+                <mat-button-toggle [value]="managementEnum">Verwaltung</mat-button-toggle>
+            </mat-button-toggle-group>
+
+            <mat-form-field *ngIf="showClientAutoComplete" appearance="fill">
+                <mat-label>Kunde</mat-label>
+                <input type="text" matInput [formControl]="clientAutoCompleteText" [matAutocomplete]="autoClient">
+                <mat-autocomplete #autoClient="matAutocomplete" [displayWith]="displayFn"
+                                  (optionSelected)="getClientId($event.option.value)">
+                    <mat-option *ngFor="let option of filteredClientOptions | async" [value]="option">
+                        {{option.name}}
+                    </mat-option>
+                </mat-autocomplete>
+                <span *ngIf="!createMode">Vorher: {{clientSelectedName}}</span>
+            </mat-form-field>
+            <mat-form-field *ngIf="showSupplierAutoComplete" appearance="fill">
+                <mat-label>Lieferant</mat-label>
+                <input type="text" matInput [formControl]="supplierAutoCompleteText" [matAutocomplete]="autoSupplier">
+                <mat-autocomplete #autoSupplier="matAutocomplete" [displayWith]="displayFn"
+                                  (optionSelected)="getSupplierId($event.option.value)">
+                    <mat-option *ngFor="let option of filteredSupplierOptions | async" [value]="option">
+                        {{option.name}}
+                    </mat-option>
+                </mat-autocomplete>
+                <span *ngIf="!createMode">Vorher: {{supplierSelectedName}}</span>
+            </mat-form-field>
         </div>
+        <span class="spacer"></span>
         <div fxLayout="row" fxLayoutAlign="space-around start">
             <button *ngIf="!createMode" type="button" mat-button (click)="onDeleteClick()">Löschen</button>
             <span class="spacer"></span>

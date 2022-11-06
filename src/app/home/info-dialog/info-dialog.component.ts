@@ -58,6 +58,21 @@ export class InfoDialogComponent implements OnInit {
             ]
         },
         {
+            versionName: '1.1.1',
+            changes: [
+                'Kontakupdate fast abgeschlossen',
+                'Neue Kategorien für Kontakte hinzugefügt',
+                'Kontakte können nun auch direkt im Telefonbuch bearbeitet werden',
+                'Fehler behoben, der die Ordnung in Angeboten durcheinander gebracht hat'
+            ]
+        },
+        {
+            versionName: '1.1.1',
+            changes: [
+                'Neustart bei Update sollte ab dieser Version wieder funktionieren'
+            ]
+        },
+        {
             versionName: '1.1.0',
             changes: [
                 'Kontakte von Konverto Telefonbuch in Eisenstecken Telefonbuch importiert',
