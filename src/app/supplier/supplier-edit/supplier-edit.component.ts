@@ -26,6 +26,7 @@ export class SupplierEditComponent extends BaseEditComponent<Supplier> implement
     navigationTarget = 'supplier';
     languageOptions$: Observable<Language[]>;
     title = 'Lieferant: Bearbeiten';
+    showInOrders = true;
 
     constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private navigation: NavigationService) {
         super(api, router, route, dialog);
@@ -55,10 +56,14 @@ export class SupplierEditComponent extends BaseEditComponent<Supplier> implement
         const contacts: ContactCreate[] = [];
 
         for (const contactGroup of this.getContacts().controls) {
+            if (contactGroup.get('tel').value.trim().length <= 3 && contactGroup.get('mail').value.trim().length === 0) {
+                continue;
+            }
             contacts.push({
                 id: parseInt(contactGroup.get('id').value, 10),
                 name: contactGroup.get('name').value,
                 name1: contactGroup.get('name1').value,
+                lastname: contactGroup.get('lastname').value,
                 tel: contactGroup.get('tel').value,
                 mail: contactGroup.get('mail').value,
                 note: contactGroup.get('note').value,
@@ -88,6 +93,8 @@ export class SupplierEditComponent extends BaseEditComponent<Supplier> implement
             },
             // eslint-disable-next-line @typescript-eslint/naming-convention
             language_code: this.supplierGroup.get('language').value,
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            show_in_orders: this.showInOrders,
         };
 
         if (this.createMode) {
@@ -107,6 +114,11 @@ export class SupplierEditComponent extends BaseEditComponent<Supplier> implement
                 this.createUpdateComplete();
             });
         }
+    }
+
+    numberOnly(event): boolean {
+        const charCode = (event.which) ? event.which : event.keyCode;
+        return !(charCode > 31 && (charCode < 48 || charCode > 57)) || charCode === 43;
     }
 
     createUpdateSuccess(supplier: Supplier): void {
@@ -136,9 +148,10 @@ export class SupplierEditComponent extends BaseEditComponent<Supplier> implement
                             country: client.address.country.code
                         }
                     });
-                for (const contact of client.contacts) {
-                    this.addContact(contact);
-                }
+                    this.showInOrders = client.show_in_orders;
+                    for (const contact of client.contacts) {
+                        this.addContact(contact);
+                    }
                 }
             );
         }
@@ -158,6 +171,7 @@ export class SupplierEditComponent extends BaseEditComponent<Supplier> implement
                 id: new FormControl(contact.id),
                 name: new FormControl(contact.name),
                 name1: new FormControl(contact.name1),
+                lastname: new FormControl(contact.lastname),
                 tel: new FormControl(contact.tel),
                 mail: new FormControl(contact.mail),
                 note: new FormControl(contact.note)
@@ -166,8 +180,9 @@ export class SupplierEditComponent extends BaseEditComponent<Supplier> implement
             return new FormGroup({
                 id: new FormControl(-1),
                 name: new FormControl(''),
-                name1: new FormControl(''),
-                tel: new FormControl(''),
+                name1: new FormControl(this.supplierGroup.get('name').value),
+                lastname: new FormControl(''),
+                tel: new FormControl('+39'),
                 mail: new FormControl(''),
                 note: new FormControl('')
             });
@@ -178,6 +193,9 @@ export class SupplierEditComponent extends BaseEditComponent<Supplier> implement
         this.getContacts().removeAt(index);
     }
 
+    showInOrdersCheckBoxClicked() {
+        this.showInOrders = !this.showInOrders;
+    }
 
     private initSupplierGroup() {
         this.supplierGroup = new FormGroup({
@@ -200,7 +218,10 @@ export class SupplierEditComponent extends BaseEditComponent<Supplier> implement
                 country: new FormControl('IT')
             }),
         });
+        this.supplierGroup.get('name').valueChanges.subscribe(() => {
+            for (const contact of this.getContacts().controls) {
+                contact.get('name1').setValue(this.supplierGroup.get('name').value);
+            }
+        });
     }
-
-
 }

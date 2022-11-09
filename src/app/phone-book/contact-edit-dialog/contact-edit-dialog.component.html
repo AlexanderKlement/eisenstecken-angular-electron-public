@@ -8,11 +8,15 @@
             </mat-form-field>
             <mat-form-field appearance="fill">
                 <mat-label>Nachname</mat-label>
+                <input matInput formControlName="lastname">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Geschäftskunde</mat-label>
                 <input matInput formControlName="name1">
             </mat-form-field>
             <mat-form-field appearance="fill">
                 <mat-label>Telefon</mat-label>
-                <input matInput formControlName="tel">
+                <input (keypress)="numberOnly($event)" matInput formControlName="tel">
             </mat-form-field>
             <mat-form-field appearance="fill">
                 <mat-label>Mail</mat-label>
@@ -57,7 +61,7 @@
             <button *ngIf="!createMode" type="button" mat-button (click)="onDeleteClick()">Löschen</button>
             <span class="spacer"></span>
             <button type="button" mat-button (click)="onCancelClick()">Abbrechen</button>
-            <button type="submit" mat-button class="add-button">
+            <button [disabled]="canSave()" type="submit" mat-button class="add-button">
                 Speichern
             </button>
         </div>

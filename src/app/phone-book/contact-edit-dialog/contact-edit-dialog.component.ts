@@ -65,6 +65,7 @@ export class ContactEditDialogComponent implements OnInit {
             this.api.readContactContactContactIdGet(this.data.id).pipe(first()).subscribe((contact) => {
                 this.contactGroup.get('name').setValue(contact.name);
                 this.contactGroup.get('name1').setValue(contact.name1);
+                this.contactGroup.get('lastname').setValue(contact.lastname);
                 this.contactGroup.get('tel').setValue(contact.tel);
                 this.contactGroup.get('mail').setValue(contact.mail);
                 this.contactGroup.get('note').setValue(contact.note);
@@ -120,8 +121,16 @@ export class ContactEditDialogComponent implements OnInit {
                 }),
             );
         });
+    }
 
 
+    canSave(): boolean {
+        return (this.contactGroup.get('tel').value.trim().length <= 3 && this.contactGroup.get('mail').value.trim().length === 0);
+    }
+
+    numberOnly(event): boolean {
+        const charCode = (event.which) ? event.which : event.keyCode;
+        return !(charCode > 31 && (charCode < 48 || charCode > 57)) || charCode === 43;
     }
 
     displayFn(autoCompleteOption: AutoCompleteOption): string {
@@ -153,6 +162,7 @@ export class ContactEditDialogComponent implements OnInit {
         const contactCreate: ContactCreate = {
             name: this.contactGroup.get('name').value,
             name1: this.contactGroup.get('name1').value,
+            lastname: this.contactGroup.get('lastname').value,
             tel: this.contactGroup.get('tel').value,
             mail: this.contactGroup.get('mail').value,
             note: this.contactGroup.get('note').value,
@@ -209,7 +219,8 @@ export class ContactEditDialogComponent implements OnInit {
         this.contactGroup = new FormGroup({
             name: new FormControl(''),
             name1: new FormControl(''),
-            tel: new FormControl(''),
+            lastname: new FormControl(''),
+            tel: new FormControl('+39'),
             mail: new FormControl(''),
             note: new FormControl('')
         });

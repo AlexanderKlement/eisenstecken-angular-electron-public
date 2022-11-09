@@ -53,12 +53,12 @@ export class OrderComponent implements OnInit {
                 name: elem.displayable_name,
                 item: elem,
                 type: elem.type,
-                collapse:false,
+                collapse: false,
             };
 
             listItems.push(listItem);
-            if(isJob(elem)){
-                elem.sub_jobs.forEach((subJob)=>{
+            if (isJob(elem)) {
+                elem.sub_jobs.forEach((subJob) => {
                     listItems.push({
                         name: subJob.displayable_name,
                         item: subJob,
@@ -88,11 +88,12 @@ export class OrderComponent implements OnInit {
         });
     }
 
-    toggleChildren(listItem: ListItem): void{
-        if(listItem.type === 'job' && listItem.collapse === false){
+    toggleChildren(listItem: ListItem): void {
+        if (listItem.type === 'job' && listItem.collapse === false) {
             this.toListUncollapse = this.toListUncollapse === listItem.name ? '' : listItem.name;
-        } else if(listItem.collapse !== this.toListUncollapse)
+        } else if (listItem.collapse !== this.toListUncollapse) {
             this.toListUncollapse = '';
+        }
     }
 
     toListItemClicked(listItem: ListItem): void {

@@ -20,12 +20,16 @@
                         <input class="form-control" formControlName="name" matInput>
                     </mat-form-field>
                     <mat-form-field appearance="fill">
-                        <mat-label>Nachname/Firma</mat-label>
+                        <mat-label>Nachname</mat-label>
+                        <input class="form-control" formControlName="lastname" matInput>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Extra</mat-label>
                         <input class="form-control" formControlName="name1" matInput>
                     </mat-form-field>
                     <mat-form-field appearance="fill">
                         <mat-label>Telefon</mat-label>
-                        <input class="form-control" formControlName="tel" matInput>
+                        <input (keypress)="numberOnly($event)" class="form-control" formControlName="tel" matInput>
                     </mat-form-field>
                     <mat-form-field appearance="fill">
                         <mat-label>Mail</mat-label>

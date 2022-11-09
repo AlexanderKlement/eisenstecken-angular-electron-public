@@ -73,6 +73,18 @@ export class ClientEditComponent extends BaseEditComponent<Client> implements On
         if (this.createMode) {
             this.title = 'Kunde: Erstellen';
         }
+
+        this.clientGroup.get('name').valueChanges.subscribe(() => {
+            for (const contact of this.getContacts().controls) {
+                contact.get('name').setValue(this.clientGroup.get('name').value);
+            }
+        });
+
+        this.clientGroup.get('lastname').valueChanges.subscribe(() => {
+            for (const contact of this.getContacts().controls) {
+                contact.get('lastname').setValue(this.clientGroup.get('lastname').value);
+            }
+        });
     }
 
     ngOnDestroy(): void {
@@ -91,10 +103,14 @@ export class ClientEditComponent extends BaseEditComponent<Client> implements On
         const contacts: ContactCreate[] = [];
 
         for (const contactGroup of this.getContacts().controls) {
+            if (contactGroup.get('tel').value.trim().length <= 3 && contactGroup.get('mail').value.trim().length === 0) {
+                continue;
+            }
             contacts.push({
                 id: parseInt(contactGroup.get('id').value, 10),
                 name: contactGroup.get('name').value,
                 name1: contactGroup.get('name1').value,
+                lastname: contactGroup.get('lastname').value,
                 tel: contactGroup.get('tel').value,
                 mail: contactGroup.get('mail').value,
                 note: contactGroup.get('note').value,
@@ -159,6 +175,11 @@ export class ClientEditComponent extends BaseEditComponent<Client> implements On
         }
     }
 
+    numberOnly(event): boolean {
+        const charCode = (event.which) ? event.which : event.keyCode;
+        return !(charCode > 31 && (charCode < 48 || charCode > 57)) || charCode === 43;
+    }
+
     createUpdateSuccess(client: Client): void {
         this.id = client.id;
         this.navigation.removeLastUrl();
@@ -207,6 +228,7 @@ export class ClientEditComponent extends BaseEditComponent<Client> implements On
                 id: new FormControl(contact.id),
                 name: new FormControl(contact.name),
                 name1: new FormControl(contact.name1),
+                lastname: new FormControl(contact.lastname),
                 tel: new FormControl(contact.tel),
                 mail: new FormControl(contact.mail),
                 note: new FormControl(contact.note)
@@ -215,9 +237,10 @@ export class ClientEditComponent extends BaseEditComponent<Client> implements On
         } else {
             return new FormGroup({
                 id: new FormControl(-1),
-                name: new FormControl(''),
+                name: new FormControl(this.clientGroup.get('name').value),
                 name1: new FormControl(''),
-                tel: new FormControl(''),
+                lastname: new FormControl(this.clientGroup.get('lastname').value),
+                tel: new FormControl('+39'),
                 mail: new FormControl(''),
                 note: new FormControl('')
             });

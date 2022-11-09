@@ -15,8 +15,12 @@
                         <input class="form-control" formControlName="name" matInput>
                     </mat-form-field>
                     <mat-form-field appearance="fill">
+                        <mat-label>Nachname</mat-label>
+                        <input class="form-control" formControlName="lastname" matInput>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
                         <mat-label>Telefon</mat-label>
-                        <input class="form-control" formControlName="tel" matInput>
+                        <input (keypress)="numberOnly($event)" class="form-control" formControlName="tel" matInput>
                     </mat-form-field>
                     <mat-form-field appearance="fill">
                         <mat-label>Mail</mat-label>
@@ -48,6 +52,8 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
+            <mat-checkbox [checked]="showInOrders" (change)="showInOrdersCheckBoxClicked()">In Bestell-Liste anzeigen
+            </mat-checkbox>
             <app-address-form [address]="getAddressGroup()" fxFlexFill></app-address-form>
             <button [disabled]="submitted" mat-raised-button type="submit">Speichern</button>
         </div>

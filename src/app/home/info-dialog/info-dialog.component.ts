@@ -58,6 +58,17 @@ export class InfoDialogComponent implements OnInit {
             ]
         },
         {
+            versionName: '1.1.3',
+            changes: [
+                'Suche bei Kontakten verbessert. Achtung: Die Suche scheint in anderen Orten noch nicht zu funktionieren',
+                'Kontakte füllen nun in Kunden und Lieferanten teile bereits aus',
+                'Lieferanten in Unternehmen unbenannt',
+                'Telefonnummen können nun nur noch Ziffern und "+" sein',
+                'Falls ein Kontakt keine Telefonnummer oder Email enthält, kann er nicht gespeichert werden.',
+                'Lieferanten können nun aus der Bestellliste ausgeblendet werden'
+            ]
+        },
+        {
             versionName: '1.1.1',
             changes: [
                 'Kontakupdate fast abgeschlossen',
