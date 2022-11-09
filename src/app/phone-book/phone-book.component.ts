@@ -113,7 +113,7 @@ export class PhoneBookComponent implements OnInit {
                     rows.push(
                         {
                             values: {
-                                name: dataSource.name1 ? `${dataSource.name} ${dataSource.name1}` : dataSource.name,
+                                name: `${dataSource.name1} ${dataSource.lastname} ${dataSource.name}`.trim(),
                                 tel: dataSource.tel,
                                 mail: dataSource.mail,
                                 note: dataSource.note,
@@ -148,7 +148,7 @@ export class PhoneBookComponent implements OnInit {
                     rows.push(
                         {
                             values: {
-                                name: dataSource.name1 ? `${dataSource.name} ${dataSource.name1}` : dataSource.name,
+                                name: `${dataSource.name1} ${dataSource.lastname} ${dataSource.name}`.trim(),
                                 tel: dataSource.tel,
                                 mail: dataSource.mail,
                                 note: dataSource.note,
@@ -183,7 +183,7 @@ export class PhoneBookComponent implements OnInit {
                     rows.push(
                         {
                             values: {
-                                name: dataSource.name1 ? `${dataSource.name} ${dataSource.name1}` : dataSource.name,
+                                name: `${dataSource.name1} ${dataSource.lastname} ${dataSource.name}`.trim(),
                                 tel: dataSource.tel,
                                 mail: dataSource.mail,
                                 note: dataSource.note,
