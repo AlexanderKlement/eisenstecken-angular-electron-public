@@ -53,9 +53,7 @@ export class AuthService {
     async getScopeString(): Promise<string> {
         const rights = await this.getRights();
         const rightArray: string[] = rights.map((elem) => elem.key);
-        const scope = rightArray.join(' ');
-        console.info('Using scope:' + scope);
-        return scope;
+        return rightArray.join(' ');
     }
 
     async getRights(): Promise<Right[]> {

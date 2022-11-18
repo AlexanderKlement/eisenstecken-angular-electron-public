@@ -58,6 +58,13 @@ export class InfoDialogComponent implements OnInit {
             ]
         },
         {
+            versionName: '1.1.4',
+            changes: [
+                'Suche bei Ein- und Ausgangsrechnungen repariert',
+                'Erste Version des Anrufens über das Programm implementiert'
+            ]
+        },
+        {
             versionName: '1.1.3',
             changes: [
                 'Suche bei Kontakten verbessert. Achtung: Die Suche scheint in anderen Orten noch nicht zu funktionieren',

@@ -2,19 +2,16 @@
 <div class="window-container">
     <mat-tab-group>
         <mat-tab label="Alle">
-            <app-table-builder [dataSource]="allContactsDataSource"></app-table-builder>
+            <app-table-builder [buttons]="tableButtons" [dataSource]="allContactsDataSource"></app-table-builder>
         </mat-tab>
         <mat-tab label="Kunden">
-            <app-table-builder [dataSource]="clientContactsDataSource"></app-table-builder>
+            <app-table-builder [buttons]="tableButtons" [dataSource]="clientContactsDataSource"></app-table-builder>
         </mat-tab>
         <mat-tab label="Unternehmen">
-            <app-table-builder [dataSource]="supplierContactsDataSource"></app-table-builder>
-        </mat-tab>
-        <mat-tab label="Betrieb">
-            <app-table-builder [dataSource]="businessContactsDataSource"></app-table-builder>
+            <app-table-builder [buttons]="tableButtons" [dataSource]="supplierContactsDataSource"></app-table-builder>
         </mat-tab>
         <mat-tab label="Verwaltung">
-            <app-table-builder [dataSource]="managementContactsDataSource"></app-table-builder>
+            <app-table-builder [buttons]="tableButtons" [dataSource]="managementContactsDataSource"></app-table-builder>
         </mat-tab>
     </mat-tab-group>
 </div>

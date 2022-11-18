@@ -136,7 +136,11 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
             dial: new FormControl(''),
             cost: new FormControl(''),
             chat: new FormControl(false),
-            hours: new FormControl(true)
+            hours: new FormControl(true),
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            innovaphone_user: new FormControl(''),
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            innovaphone_pass: new FormControl('')
         });
         this.passwordGroup = new FormGroup({
             password: new FormControl('')
@@ -274,6 +278,10 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
                 cost: this.userGroup.get('cost').value,
                 chat: this.userGroup.get('chat').value,
                 hours: this.userGroup.get('hours').value,
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                innovaphone_user: this.userGroup.get('innovaphone_user').value,
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                innovaphone_pass: this.userGroup.get('innovaphone_pass').value,
             };
             this.api.createUserUsersPost(userCreate).pipe(first()).subscribe((user) => {
                 this.createUpdateSuccess(user);
@@ -296,6 +304,10 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
                 cost: this.userGroup.get('cost').value,
                 chat: this.userGroup.get('chat').value,
                 hours: this.userGroup.get('hours').value,
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                innovaphone_user: this.userGroup.get('innovaphone_user').value,
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                innovaphone_pass: this.userGroup.get('innovaphone_pass').value,
             };
             this.api.updateUserUsersUserIdPut(this.id, userUpdate).pipe(first()).subscribe((user) => {
                 this.createUpdateSuccess(user);

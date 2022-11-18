@@ -1,0 +1,4 @@
+node_modules/*
+release/*
+dist/*
+app/node_modules/*

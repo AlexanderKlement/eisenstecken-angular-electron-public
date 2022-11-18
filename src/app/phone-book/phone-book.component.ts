@@ -5,6 +5,9 @@ import {Router} from '@angular/router';
 import {first} from 'rxjs/operators';
 import {MatDialog} from '@angular/material/dialog';
 import {ContactDialogData, ContactEditDialogComponent} from './contact-edit-dialog/contact-edit-dialog.component';
+import {TableButton} from '../shared/components/table-builder/table-builder.component';
+import {PhoneService} from '../shared/services/phone.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-phone-book',
@@ -16,7 +19,6 @@ export class PhoneBookComponent implements OnInit {
     allContactsDataSource: TableDataSource<Contact>;
     clientContactsDataSource: TableDataSource<Contact>;
     supplierContactsDataSource: TableDataSource<Contact>;
-    businessContactsDataSource: TableDataSource<Contact>;
     managementContactsDataSource: TableDataSource<Contact>;
     buttons = [
         {
@@ -26,8 +28,36 @@ export class PhoneBookComponent implements OnInit {
             }
         }];
 
-    constructor(private api: DefaultService, private router: Router, private dialog: MatDialog) {
+    tableButtons: TableButton[] = [
+        {
+            name: (_) => 'Anrufen',
+            class: (_) => 'call',
+            navigate: ($event: any, id: number) => {
+                this.callClicked($event, id);
+            },
+            color: (_) => 'primary',
+            selectedField: 'id',
+        },
+    ];
 
+    constructor(private api: DefaultService, private router: Router, private dialog: MatDialog,
+                private phoneService: PhoneService, private snackBar: MatSnackBar) {
+
+    }
+
+    callClicked($event: any, id: number) {
+        console.log(id);
+        $event.stopPropagation();
+        this.api.readContactContactContactIdGet(id).pipe(first()).subscribe((contact) => {
+            const callPromise = this.phoneService.call(contact.tel);
+            callPromise.then(() => {
+            });
+            callPromise.catch(() => {
+                this.snackBar.open('Anruf fehlgeschlagen. Benutzerdaten überprüfen', 'Ok', {
+                    duration: 10000
+                });
+            });
+        });
     }
 
     ngOnInit(): void {
@@ -36,7 +66,6 @@ export class PhoneBookComponent implements OnInit {
 
     private initContactsDataSources(): void {
         this.initAllContactsDataSource();
-        this.initBusinessContactsDataSource();
         this.initManagementContactsDataSource();
         this.initSupplierContactsDataSource();
         this.initClientContactsDataSource();
@@ -45,7 +74,6 @@ export class PhoneBookComponent implements OnInit {
 
     private reloadData(): void {
         this.allContactsDataSource.loadData();
-        this.businessContactsDataSource.loadData();
         this.supplierContactsDataSource.loadData();
         this.clientContactsDataSource.loadData();
         this.managementContactsDataSource.loadData();
@@ -82,6 +110,7 @@ export class PhoneBookComponent implements OnInit {
                                 tel: dataSource.tel,
                                 mail: dataSource.mail,
                                 note: dataSource.note,
+                                id: dataSource.id
                             },
                             route: () => {
                                 this.openContactDialog(dataSource.id);
@@ -113,10 +142,11 @@ export class PhoneBookComponent implements OnInit {
                     rows.push(
                         {
                             values: {
-                                name: `${dataSource.name1} ${dataSource.lastname} ${dataSource.name}`.trim(),
+                                name: `${dataSource.name1} - ${dataSource.lastname} ${dataSource.name}`.trim(),
                                 tel: dataSource.tel,
                                 mail: dataSource.mail,
                                 note: dataSource.note,
+                                id: dataSource.id
                             },
                             route: () => {
                                 this.openContactDialog(dataSource.id);
@@ -152,6 +182,7 @@ export class PhoneBookComponent implements OnInit {
                                 tel: dataSource.tel,
                                 mail: dataSource.mail,
                                 note: dataSource.note,
+                                id: dataSource.id
                             },
                             route: () => {
                                 this.openContactDialog(dataSource.id);
@@ -171,41 +202,6 @@ export class PhoneBookComponent implements OnInit {
         this.clientContactsDataSource.loadData();
     }
 
-    private initBusinessContactsDataSource(): void {
-        this.businessContactsDataSource = new TableDataSource(
-            this.api,
-            (api, filter, sortDirection, skip, limit) =>
-                api.readContactsContactGet(skip, limit, filter, ContactTypeEnum.Business)
-            ,
-            (dataSourceClasses) => {
-                const rows = [];
-                dataSourceClasses.forEach((dataSource) => {
-                    rows.push(
-                        {
-                            values: {
-                                name: `${dataSource.name1} ${dataSource.lastname} ${dataSource.name}`.trim(),
-                                tel: dataSource.tel,
-                                mail: dataSource.mail,
-                                note: dataSource.note,
-                            },
-                            route: () => {
-                                this.openContactDialog(dataSource.id);
-                            }
-                        });
-                });
-                return rows;
-            },
-            [
-                {name: 'name', headerName: 'Name'},
-                {name: 'tel', headerName: 'Telefon'},
-                {name: 'mail', headerName: 'Mail'},
-                {name: 'note', headerName: 'Notiz'}
-            ],
-            (api) => api.readContactCountContactCountGet(ContactTypeEnum.Business, '',)
-        );
-        this.businessContactsDataSource.loadData();
-    }
-
     private initManagementContactsDataSource(): void {
         this.managementContactsDataSource = new TableDataSource(
             this.api,
@@ -222,6 +218,7 @@ export class PhoneBookComponent implements OnInit {
                                 tel: dataSource.tel,
                                 mail: dataSource.mail,
                                 note: dataSource.note,
+                                id: dataSource.id
                             },
                             route: () => {
                                 this.openContactDialog(dataSource.id);
