@@ -58,6 +58,17 @@ export class InfoDialogComponent implements OnInit {
             ]
         },
         {
+            versionName: '1.1.5',
+            changes: [
+                'Telefonieren sollte jetzt möglich sein, ACHTUNG: diese Funktion befindet sich momentan noch ' +
+                'in der Testphase.',
+                'Alle Kontake von Betrieb wurden auf Verwaltung migriert und die Kategorie Betrieb wurde entfernt.',
+                'Neues Feld zu Benutzer hinzugefügt um die Benutzerdaten von Innovaphone hinzuzufügen',
+                'Einige Fehler in Sortierungen behoben',
+                'Lieferanten können nun vom Bestelldialog ausgeblendet werden'
+            ]
+        },
+        {
             versionName: '1.1.4',
             changes: [
                 'Suche bei Ein- und Ausgangsrechnungen repariert',
