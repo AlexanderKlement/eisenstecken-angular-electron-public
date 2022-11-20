@@ -49,14 +49,12 @@ export class PhoneBookComponent implements OnInit {
     console.log(id);
     $event.stopPropagation();
     this.api.readContactContactContactIdGet(id).pipe(first()).subscribe((contact) => {
-      const callPromise = this.phoneService.call(contact.tel);
-      callPromise.then(() => {
+      this.phoneService.call(contact.tel).then(() => {
         this.phoneService.close();
-      });
-      callPromise.catch((err) => {
+      }, (error) => {
+        console.log(this.phoneService.getLog());
         this.phoneService.close();
-        console.log(err);
-        this.snackBar.open('Anruf fehlgeschlagen. Benutzerdaten überprüfen', 'Ok', {
+        this.snackBar.open('Anruf fehlgeschlagen: ' + error, 'Ok', {
           duration: 10000
         });
       });

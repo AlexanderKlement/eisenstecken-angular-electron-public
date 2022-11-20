@@ -17,6 +17,7 @@ export class PhoneService {
   private log: string[] = [];
   private ws1: WebSocket;
   private ws2: WebSocket;
+  private build = '132772';
   private activeCall: {
     mt: string;
     api: string;
@@ -41,18 +42,23 @@ export class PhoneService {
   call(cellNumber: string): Promise<void> {
     return new Promise((resolve, reject) => {
       this.authService.getCurrentUser().pipe(first()).subscribe((user) => {
+        const timeout = setTimeout(() => {
+          reject('Bitte Innovaphone (myApps) öffnen');
+        }, 30000);
         const initPromise = this.init(user.innovaphone_user, user.innovaphone_pass);
-        console.log(user.innovaphone_user, user.innovaphone_pass);
         initPromise.then(() => {
           const dialPromise = this.dial(cellNumber);
           dialPromise.then(() => {
+            clearTimeout(timeout);
             resolve();
           });
           dialPromise.catch((err) => {
+            clearTimeout(timeout);
             reject(err);
           });
         });
         initPromise.catch((err) => {
+          clearTimeout(timeout);
           reject(err);
         });
       });
@@ -96,11 +102,15 @@ export class PhoneService {
           } else if (obj.mt === 'AppLoginResult' && obj.ok) {
             this.ws2.send(JSON.stringify({
               mt: 'CheckBuild',
-              url: baseUrl + '/APPS/phone/132772/phone.htm'
+              url: baseUrl + '/APPS/phone/' + this.build + '/phone.htm'
             }));
           } else if (obj.mt === 'AppLoginResult' && !obj.ok) {
-            reject('Auth Error');
+            reject('Innovaphone Benutzername oder Password Falsch');
           } else if (obj.mt === 'CheckBuildResult') {
+            if (obj.build !== this.build) {
+              this.addLog('Innovaphone wurde geupdated, bitte Kalle kontaktieren');
+            }
+            //reject('Innovaphone wurde geupdated, bitte Kalle kontaktieren');
             this.ws2.send(JSON.stringify({
               mt: 'Attach',
               api: 'EpSignal',
@@ -223,7 +233,7 @@ export class PhoneService {
             if (obj.error) {
               loginError = obj.error;
               this.addLog('Authentication failed ' + loginError);
-              reject('Auth Error');
+              reject('Innovaphone Benutzername oder Password Falsch');
             } else {
               digest = sha256(
                 'innovaphoneAppClient:loginresult:' +
@@ -295,7 +305,7 @@ export class PhoneService {
       };
       this.ws1.onclose = () => {
         this.addLog('myApps disconnected!');
-        reject();
+        reject('Bitte Innovaphone (myApps) öffnen');
       };
     });
   }
@@ -329,7 +339,7 @@ export class PhoneService {
         this.callid++;
         this.ws2.send(JSON.stringify(this.activeCall));
       } else {
-        reject('not jet Initialized');
+        reject('Innovaphone wurde nicht initialisiert, bitte Kalle kontaktieren');
       }
     });
   }
