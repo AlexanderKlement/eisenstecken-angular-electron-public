@@ -47,18 +47,16 @@ export class PhoneService {
       }, 30000);
       this.authService.getCurrentUser().pipe(first()).subscribe((user) => {
         this.init(user.innovaphone_user, user.innovaphone_pass).then(() => {
-          const dialPromise = this.dial(cellNumber);
-          dialPromise.then(() => {
-            resolve();
-          }).catch((err) => {
-            reject(err);
+          this.dial(cellNumber).then(resolve).catch(reject).finally(() => {
+            if (callTimeout !== undefined) {
+              clearTimeout(callTimeout);
+            }
           });
         }).catch((err) => {
-          reject(err);
-        }).finally(() => {
           if (callTimeout !== undefined) {
             clearTimeout(callTimeout);
           }
+          reject(err);
         });
       });
     });
