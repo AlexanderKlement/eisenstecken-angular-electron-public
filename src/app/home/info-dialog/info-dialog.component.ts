@@ -58,6 +58,17 @@ export class InfoDialogComponent implements OnInit {
             ]
         },
         {
+            versionName: '1.1.6',
+            changes: [
+                'Notizen sollten nun nicht mehr die Reihenfolge verändern',
+                'Neustarten knopf sollte nach diesem Update wirklich funktionieren',
+                'Bei Lieferscheinen sollte nach dem Bearbeiten die Zurücktaste wie gewohnt funktionieren.',
+                'Kontake können nun nach "Kunden" oder "Unternehmen" verschoben werden ohne das der entsprechende Kunde ' +
+                'im System angelegt werden muss',
+                'Kontakte werden nun im Telefonbuch besser dargestellt.'
+            ]
+        },
+        {
             versionName: '1.1.5',
             changes: [
                 'Telefonieren sollte jetzt möglich sein, ACHTUNG: diese Funktion befindet sich momentan noch ' +

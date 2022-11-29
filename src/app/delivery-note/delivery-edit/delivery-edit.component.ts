@@ -18,6 +18,7 @@ import {CustomButton} from '../../shared/components/toolbar/toolbar.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {formatDateTransport} from '../../shared/date.util';
 import {FileService} from '../../shared/services/file.service';
+import {NavigationService} from '../../shared/services/navigation.service';
 
 
 export interface JobMinimal {
@@ -40,7 +41,7 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
     buttons: CustomButton[] = [];
     title = 'Lieferschein: Bearbeiten';
 
-    constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog,
+    constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private navigation: NavigationService,
                 private authService: AuthService, private snackBar: MatSnackBar, private file: FileService) {
         super(api, router, route, dialog);
     }
@@ -132,7 +133,8 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
             this.api.createDeliveryNoteDeliveryNotePost(deliveryNoteCreate).pipe(first()).subscribe(deliveryNote => {
                 this.submitted = false;
                 this.file.open(deliveryNote.pdf);
-                this.router.navigateByUrl('delivery_note');
+                this.navigation.removeLastUrl();
+                this.router.navigateByUrl('delivery_note', {replaceUrl: true});
             }, (err) => {
                 this.createUpdateError(err);
             }, () => {
@@ -162,7 +164,8 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
             this.api.updateDeliveryNoteDeliveryNoteDeliveryNoteIdPut(this.id, deliveryNoteUpdate).pipe(first()).subscribe(deliveryNote => {
                 this.submitted = false;
                 this.file.open(deliveryNote.pdf);
-                this.router.navigateByUrl('delivery_note');
+                this.navigation.removeLastUrl();
+                this.router.navigateByUrl('delivery_note', {replaceUrl: true});
             }, (err) => {
                 this.createUpdateError(err);
             }, () => {

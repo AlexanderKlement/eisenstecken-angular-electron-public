@@ -44,7 +44,7 @@
                 <span *ngIf="!createMode">Vorher: {{clientSelectedName}}</span>
             </mat-form-field>
             <mat-form-field *ngIf="showSupplierAutoComplete" appearance="fill">
-                <mat-label>Lieferant</mat-label>
+                <mat-label>Unternehmen</mat-label>
                 <input type="text" matInput [formControl]="supplierAutoCompleteText" [matAutocomplete]="autoSupplier">
                 <mat-autocomplete #autoSupplier="matAutocomplete" [displayWith]="displayFn"
                                   (optionSelected)="getSupplierId($event.option.value)">

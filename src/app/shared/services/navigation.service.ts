@@ -33,7 +33,6 @@ export class NavigationService {
 
 
     removeCurrentFromHistory() {
-        console.info('Removing current site from history');
         this.history.pop();
     }
 
