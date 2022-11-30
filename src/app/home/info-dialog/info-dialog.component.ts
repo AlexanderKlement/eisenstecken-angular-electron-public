@@ -65,7 +65,9 @@ export class InfoDialogComponent implements OnInit {
                 'Bei Lieferscheinen sollte nach dem Bearbeiten die Zurücktaste wie gewohnt funktionieren.',
                 'Kontake können nun nach "Kunden" oder "Unternehmen" verschoben werden ohne das der entsprechende Kunde ' +
                 'im System angelegt werden muss',
-                'Kontakte werden nun im Telefonbuch besser dargestellt.'
+                'Kontakte werden nun im Telefonbuch besser dargestellt.',
+                'Fehler behoben, der das Telefonieren verhindert hat.',
+                'Erinnerungs Mails hinzugefügt'
             ]
         },
         {
