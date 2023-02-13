@@ -4,7 +4,7 @@
 .single-note {
   border-style: solid;
   border-width: thin;
-  border-color: map.get($mat-accent, main);
+  border-color: map.get($mat-accent, lighter);
   overflow: visible;
   width: calc(100% - 20px); //clamp(10px, calc(100% - 20px), 290px);
   height: calc(100% - 20px); //clamp(10px, calc(100% - 20px), 290px);

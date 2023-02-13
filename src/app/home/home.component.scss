@@ -1,22 +1,39 @@
-
-.logo {
-  height: 90%;
-}
-
 .root {
   width: 100vw;
   height: 100vh;
   padding: 10px;
+
   .container {
     max-height: 85%;
   }
 
 }
 
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  background-color: transparent;
+}
+
+img.logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+button.info {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+}
+
 .window-container {
   padding: 0 20px;
   width: 100%;
-  margin:0 auto;
+  margin: 0 auto;
   margin-top: 20px;
 
   /*  position: relative;
@@ -37,10 +54,12 @@
   */
 
 }
-form{
-  mat-form-field{
+
+form {
+  mat-form-field {
     min-width: 180px;
     max-width: 500px;
     width: 100%;
   }
 }
+

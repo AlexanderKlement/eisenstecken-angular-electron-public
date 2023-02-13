@@ -1,5 +1,8 @@
 <mat-toolbar color="accent" class="toolbar">
-    <img class="logo" src="assets/logos/ESS-Logo-RGB-Neg-Small.png" alt="Eisenstecken-logo" (click)="homeClicked()">
+    <button class="logo-button" type="button" (click)="homeClicked()">
+        <img class="logo" src="assets/logos/ESS-Logo-RGB-Neg-Small.png" alt="Eisenstecken-logo">
+    </button>
+
     <span class="title">{{title}}</span>
     <span class="toolbar-spacer"></span>
     <div>

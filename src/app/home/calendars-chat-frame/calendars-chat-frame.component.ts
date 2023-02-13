@@ -15,7 +15,7 @@ export class CalendarsChatFrameComponent implements OnInit, OnDestroy {
 
     calendars$: Observable<Calendar[]>;
     loading = true;
-    chatTabName = 'Chat';
+    chatTabName = '  Chat';
 
     checkIfUnreadMessagesInterval: NodeJS.Timeout;
     secondsCheckIfUnreadMessages = 10;

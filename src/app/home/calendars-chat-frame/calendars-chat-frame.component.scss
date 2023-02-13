@@ -10,7 +10,17 @@ app-loading {
 .app-calendar {
   width: 50%;
 }
-.calenderside{
-  min-width: 50%;
-  width: 50%;
+
+.calenderside {
+  min-width: 48%;
+  max-width: 50%;
+  margin-right: 10px;
 }
+
+.tab-left {
+  ::ng-deep .mat-tab-label {
+    padding: 0px !important; // adjust this to whatever padding you need
+    justify-content: left !important;
+  }
+}
+

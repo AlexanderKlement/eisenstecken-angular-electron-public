@@ -7,6 +7,7 @@ import {first} from 'rxjs/operators';
 import {ElectronService} from '../../core/services';
 import {Router} from '@angular/router';
 import {EmailService} from '../../shared/services/email.service';
+import {AuthService} from '../../shared/services/auth.service';
 
 @Component({
     selector: 'app-chat',
@@ -29,7 +30,8 @@ export class ChatComponent implements OnInit, OnDestroy {
 
     subscription: Subscription;
 
-    constructor(private chatService: ChatService, private electron: ElectronService, private router: Router, private email: EmailService) {
+    constructor(private chatService: ChatService, private electron: ElectronService,
+                private router: Router, private email: EmailService, private authService: AuthService) {
     }
 
     ngOnInit(): void {
@@ -128,6 +130,9 @@ export class ChatComponent implements OnInit, OnDestroy {
         }
         if (chatInput.startsWith('!stunden')) {
             this.router.navigateByUrl('service');
+        }
+        if (chatInput.startsWith('!logout')) {
+            this.authService.doLogout();
         }
         if (chatInput.startsWith('!')) {
             this.resetChatControl();

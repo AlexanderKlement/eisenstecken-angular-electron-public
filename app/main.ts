@@ -105,7 +105,7 @@ function createWindow(): BrowserWindow {
         width: size.width,
         height: size.height,
         icon: 'src/logo.ico',
-        title: "Eisenstecken - Eibel",
+        title: "Eibel",
         autoHideMenuBar: true,
         webPreferences: {
             nodeIntegration: true,

@@ -50,11 +50,23 @@ export class InfoDialogComponent implements OnInit {
                 'Betriebsergeignisse überarbeiten. Zukünftig werden Ereignisse in 3 Kategorien unterteilt und nebeneinander ' +
                 'angezeigt. (Urlaube von Mitarbeiter, Betriebferien, Besondere "andere" Ereignisse). Großaugenmerk wird hier ' +
                 'auf die mobile Seite gelegt.',
-                'Den Text der Titelleiste nach rechts oder Mitte verschieben',
                 'Instandhaltung kann nicht gelöscht werden',
                 'Die Möglichkeit einbauen, die Kosten aller Autos zu verändern',
                 'Zeitzonen von Chat-Nachrichten anpassen',
                 'Emails bei Bestellungen (oft Pichler) gehen nicht auf wenn Bestellung versandt wird. UPDATE: Wird demnächst gelöst!'
+            ]
+        },
+        {
+            versionName: '1.1.7',
+            changes: [
+                'Notizen auf dem Homedisplay werden nun immer in der gleichen Reihenfolge dargestellt',
+                'Programmname "Eisenstecken - Eibel" in Windows auf "Eibel" beschränkt. Dies betrifft den Betreff oben links' +
+                ' und die Beschreibung in der Miniaturansicht',
+                'Kalender und Chat Tabs sind nun auf dem Homescreen linksbündig',
+                'Das Bild im Knopf in der Taskleiste ist nun kleiner. Das Feld zum klicken bleibt gleich groß',
+                'Die Ausloggen taste wurde entfernt. Ausloggen kann nun erreicht werden, wenn man "!logout" in den Chat eingibt',
+                'Mehr Abstand zwischen den beiden Kalendern auf der Startseite',
+                'Notizen auf der Startseite haben nun die gleiche Farbe wie die anderen Akzentlinien'
             ]
         },
         {
