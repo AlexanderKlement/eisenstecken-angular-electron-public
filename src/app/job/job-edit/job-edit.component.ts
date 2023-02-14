@@ -187,6 +187,7 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
                 country_code: this.jobGroup.get('address.country').value,
             },
             type: this.jobGroup.get('minijob').value ? 'JOBYTPE_MINI' : 'JOBTYPE_MAIN',
+            completion: '',
         };
         this.api.createJobJobPost(jobCreate).subscribe((job) => {
             this.createUpdateSuccess(job);
@@ -226,7 +227,8 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
                 cap: this.jobGroup.get('address.cap').value,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 country_code: this.jobGroup.get('address.country').value,
-            }
+            },
+            completion: ''
         };
         this.api.updateJobJobJobIdPut(this.id, jobUpdate).subscribe((job) => {
             this.createUpdateSuccess(job);

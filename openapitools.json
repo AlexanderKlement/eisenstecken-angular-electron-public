@@ -1,0 +1,22 @@
+{
+  "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "6.3.0",
+    "generators": {
+      "eisenstecken": {
+        "generatorName": "typescript-angular",
+        "output": "#{cwd}/eisenstecken-openapi-angular-library",
+        "inputSpec": "https://api.eisenstecken.kivi.bz.it/openapi.json",
+        "additionalProperties": {
+          "ngVersion": "13.0.1",
+          "npmName": "eisenstecken-openapi-angular-library",
+          "supportsES6": true,
+          "npmVersion": "9.2.0",
+          "withInterfaces": true,
+          "providedIn": "root"
+        }
+      }
+    }
+  }
+}
