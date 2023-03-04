@@ -53,7 +53,7 @@ export class DeliveryNoteComponent implements OnInit {
         this.deliveryNoteDataSource = new TableDataSource(
             this.api,
             (api, filter, sortDirection, skip, limit) =>
-                api.readDeliveryNotesDeliveryNoteGet(skip, limit),
+                api.readDeliveryNotesDeliveryNoteGet(skip, limit, filter),
             (dataSourceClasses) => {
                 const rows = [];
                 dataSourceClasses.forEach((dataSource) => {
@@ -65,6 +65,8 @@ export class DeliveryNoteComponent implements OnInit {
                                 name: dataSource.name,
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
                                 delivery_address: dataSource.delivery_address,
+                                // eslint-disable-next-line @typescript-eslint/naming-convention
+                                'job.displayable_name': dataSource.job ? dataSource.job.code + ' - ' + dataSource.job.displayable_name : '',
                             },
                             route: () => {
                                 this.authService.currentUserHasRight('delivery_notes:modify').pipe(first()).subscribe(allowed => {
@@ -87,6 +89,7 @@ export class DeliveryNoteComponent implements OnInit {
                 {name: 'date', headerName: 'Datum'},
                 {name: 'name', headerName: 'Empfänger'},
                 {name: 'delivery_address', headerName: 'Adresse'},
+                {name: 'job.displayable_name', headerName: 'Auftrag'}
             ],
             (api) => api.readDeliveryNoteCountDeliveryNoteCountGet()
         );

@@ -21,6 +21,10 @@
                 <mat-label>Jahr</mat-label>
                 <input class="form-control" [readonly]="!createMode" formControlName="year" type="number" matInput>
             </mat-form-field>
+            <mat-form-field *ngIf="!subMode" appearance="fill">
+                <mat-label>Fertigstellung</mat-label>
+                <input class="form-control" formControlName="completion" matInput>
+            </mat-form-field>
 
             <app-address-form *ngIf="!subMode && !addressDeactivated" [address]="getAddressGroup()"
                               fxFlexFill></app-address-form>

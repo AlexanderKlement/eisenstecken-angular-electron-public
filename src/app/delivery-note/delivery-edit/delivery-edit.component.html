@@ -22,7 +22,10 @@
                     <div fxLayout="row" fxLayoutAlign="space-between center" [formGroupName]="i">
                         <mat-form-field appearance="fill" fxFlex="75">
                             <mat-label>Beschreibung</mat-label>
-                            <input class="form-control" formControlName="description" matInput>
+                            <textarea cdkTextareaAutosize
+                                      cdkAutosizeMinRows="1"
+                                      cdkAutosizeMaxRows="10" class="form-control" formControlName="description"
+                                      matInput></textarea>
                         </mat-form-field>
                         <mat-form-field appearance="fill" fxFlex="5">
                             <mat-label>Menge</mat-label>

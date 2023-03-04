@@ -72,6 +72,7 @@ export class JobComponent implements OnInit {
                                 code: dataSource.code,
                                 'client.name': dataSource.client.fullname,
                                 'responsible.fullname': dataSource.responsible.fullname,
+                                completion: dataSource.completion
                             },
                             route: () => {
                                 this.router.navigateByUrl('/job/' + dataSource.id.toString());
@@ -84,7 +85,8 @@ export class JobComponent implements OnInit {
                 {name: 'code', headerName: 'Kommissionsnummer'},
                 {name: 'name', headerName: 'Kommission'},
                 {name: 'client.name', headerName: 'Kunde'},
-                {name: 'responsible.fullname', headerName: 'Zuständig'}
+                {name: 'responsible.fullname', headerName: 'Zuständig'},
+                {name: 'completion', headerName: 'Fertigstellung'}
             ],
             (api) => api.readJobCountJobCountGet('JOBSTATUS_CREATED', true, undefined, this.selectedYear)
         );
@@ -107,6 +109,7 @@ export class JobComponent implements OnInit {
                                 code: dataSource.code,
                                 'client.name': dataSource.client.fullname,
                                 'responsible.fullname': dataSource.responsible.fullname,
+                                completion: dataSource.completion
                             },
                             route: () => {
                                 this.router.navigateByUrl('/job/' + dataSource.id.toString());
@@ -119,7 +122,8 @@ export class JobComponent implements OnInit {
                 {name: 'code', headerName: 'Kommissionsnummer'},
                 {name: 'name', headerName: 'Kommission'},
                 {name: 'client.name', headerName: 'Kunde'},
-                {name: 'responsible.fullname', headerName: 'Zuständig'}
+                {name: 'responsible.fullname', headerName: 'Zuständig'},
+                {name: 'completion', headerName: 'Fertigstellung'}
             ],
             (api) => api.readJobCountJobCountGet('JOBSTATUS_ACCEPTED', true, undefined, this.selectedYear)
         );
@@ -142,6 +146,7 @@ export class JobComponent implements OnInit {
                                 code: dataSource.code,
                                 'client.name': dataSource.client.fullname,
                                 'responsible.fullname': dataSource.responsible.fullname,
+                                completion: dataSource.completion
                             },
                             route: () => {
                                 this.router.navigateByUrl('/job/' + dataSource.id.toString());
@@ -154,7 +159,8 @@ export class JobComponent implements OnInit {
                 {name: 'code', headerName: 'Kommissionsnummer'},
                 {name: 'name', headerName: 'Kommission'},
                 {name: 'client.name', headerName: 'Kunde'},
-                {name: 'responsible.fullname', headerName: 'Zuständig'}
+                {name: 'responsible.fullname', headerName: 'Zuständig'},
+                {name: 'completion', headerName: 'Fertigstellung'}
             ],
             (api) => api.readJobCountJobCountGet('JOBSTATUS_COMPLETED', true, undefined, this.selectedYear)
         );
@@ -177,6 +183,7 @@ export class JobComponent implements OnInit {
                                 code: dataSource.code,
                                 'client.name': dataSource.client.fullname,
                                 'responsible.fullname': dataSource.responsible.fullname,
+                                completion: dataSource.completion
                             },
                             route: () => {
                                 this.router.navigateByUrl('/job/' + dataSource.id.toString());
@@ -189,7 +196,8 @@ export class JobComponent implements OnInit {
                 {name: 'code', headerName: 'Kommissionsnummer'},
                 {name: 'name', headerName: 'Kommission'},
                 {name: 'client.name', headerName: 'Kunde'},
-                {name: 'responsible.fullname', headerName: 'Zuständig'}
+                {name: 'responsible.fullname', headerName: 'Zuständig'},
+                {name: 'completion', headerName: 'Fertigstellung'}
             ],
             (api) => api.readJobCountJobCountGet('JOBSTATUS_DECLINED', true, undefined, this.selectedYear)
         );

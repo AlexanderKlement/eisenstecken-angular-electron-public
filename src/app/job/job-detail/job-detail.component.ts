@@ -277,6 +277,18 @@ export class JobDetailComponent implements OnInit {
 
 
     private initAccessRights() {
+        this.buttonsMain.push({
+            name: 'Zum Kunde',
+            navigate: (): void => {
+                this.router.navigateByUrl('/client/' + this.clientId);
+            }
+        });
+        this.buttonsSub.push({
+            name: 'Zum Kunde',
+            navigate: (): void => {
+                this.router.navigateByUrl('/client/' + this.clientId);
+            }
+        });
         this.authService.currentUserHasRight('orders:all').pipe(first()).subscribe(allowed => {
             this.ordersAllowed = allowed;
         });

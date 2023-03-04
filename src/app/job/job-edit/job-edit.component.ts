@@ -72,7 +72,6 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
                         this.router.navigateByUrl(this.navigationTarget);
                     }
                 }
-
             });
         }
         if (this.createMode && !this.subMode) {
@@ -103,6 +102,7 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
                     cap: new FormControl(''),
                     country: new FormControl('IT')
                 }),
+                completion: new FormControl(''),
             });
         } else {
             this.jobGroup = new FormGroup({
@@ -116,6 +116,7 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
                     cap: new FormControl(''),
                     country: new FormControl('IT')
                 }),
+                completion: new FormControl(''),
             });
         }
     }
@@ -158,7 +159,8 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
                     responsible_id: job.responsible.id,
                     address: {
                         country: job.address.country.code
-                    }
+                    },
+                    completion: job.completion
                 });
             });
         }
@@ -187,7 +189,7 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
                 country_code: this.jobGroup.get('address.country').value,
             },
             type: this.jobGroup.get('minijob').value ? 'JOBYTPE_MINI' : 'JOBTYPE_MAIN',
-            completion: '',
+            completion: this.jobGroup.get('completion').value,
         };
         this.api.createJobJobPost(jobCreate).subscribe((job) => {
             this.createUpdateSuccess(job);
@@ -228,7 +230,7 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 country_code: this.jobGroup.get('address.country').value,
             },
-            completion: ''
+            completion: this.jobGroup.get('completion').value
         };
         this.api.updateJobJobJobIdPut(this.id, jobUpdate).subscribe((job) => {
             this.createUpdateSuccess(job);

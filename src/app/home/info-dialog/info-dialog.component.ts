@@ -66,7 +66,15 @@ export class InfoDialogComponent implements OnInit {
                 'Das Bild im Knopf in der Taskleiste ist nun kleiner. Das Feld zum klicken bleibt gleich groß',
                 'Die Ausloggen taste wurde entfernt. Ausloggen kann nun erreicht werden, wenn man "!logout" in den Chat eingibt',
                 'Mehr Abstand zwischen den beiden Kalendern auf der Startseite',
-                'Notizen auf der Startseite haben nun die gleiche Farbe wie die anderen Akzentlinien'
+                'Notizen auf der Startseite haben nun die gleiche Farbe wie die anderen Akzentlinien',
+                'Aufträge können nun mit dem Text Fertigstellung versehen werden.',
+                'Die PDF generierung neu gestaltet, um die Überlappungsprobleme die wir zurzeit haben zu vermeiden. ' +
+                'Dies sollte uns auch mehr Möglichkeiten geben um die PDFs anders zu gestalten.',
+                'Neues PDF hinzugefügt: Angenommene Aufträge als kurze Übersicht für die Werkstatt',
+                'Sucher in Lieferscheinen repariert',
+                'Bei Lieferscheinen neue Spalte "Aufträge" hinzugefügt',
+                'Bei Aufträgen kann nun direkt auf den Kunden gesprungen werden.',
+                'Lieferscheine unterstützen nun mehrere Zeilen in der Artikelbeschreibung'
             ]
         },
         {
