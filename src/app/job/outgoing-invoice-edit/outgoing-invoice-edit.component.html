@@ -20,24 +20,24 @@
                         <mat-icon>arrow_downward</mat-icon>
                     </button>
                     <div fxLayout="row" fxLayoutAlign="space-between center" [formGroupName]="i">
-                        <mat-form-field appearance="fill" fxFlex="70">
+                        <mat-form-field appearance="fill" fxFlex="80">
                             <mat-label>Position</mat-label>
                             <textarea rows="3" class="form-control" formControlName="description" maxlength="10000"
                                       matInput></textarea>
                         </mat-form-field>
-                        <mat-form-field appearance="fill" fxFlex="6">
+                        <mat-form-field appearance="fill" fxFlex="4">
                             <mat-label>Menge</mat-label>
                             <input class="form-control" type=number formControlName="amount" matInput>
                         </mat-form-field>
-                        <mat-form-field appearance="fill" fxFlex="6">
+                        <mat-form-field appearance="fill" fxFlex="4">
                             <mat-label>Einzelpreis</mat-label>
                             <input class="form-control" type=number formControlName="single_price" matInput>
                         </mat-form-field>
-                        <mat-form-field appearance="fill" fxFlex="6">
+                        <mat-form-field appearance="fill" fxFlex="4">
                             <mat-label>Gesamtpreis</mat-label>
                             <input readonly class="form-control" formControlName="total_price" matInput>
                         </mat-form-field>
-                        <div fxFlex="10" fxLayout="row" fxLayoutAlign="space-around center">
+                        <div fxFlex="8" fxLayout="row" fxLayoutAlign="space-around center">
                             <button type="button" mat-icon-button mat-raised-button
                                     (click)="removeDescriptiveArticle(i)"
                                     [disabled]="i === 0" class="position-delete">

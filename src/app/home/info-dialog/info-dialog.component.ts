@@ -74,7 +74,8 @@ export class InfoDialogComponent implements OnInit {
                 'Sucher in Lieferscheinen repariert',
                 'Bei Lieferscheinen neue Spalte "Aufträge" hinzugefügt',
                 'Bei Aufträgen kann nun direkt auf den Kunden gesprungen werden.',
-                'Lieferscheine unterstützen nun mehrere Zeilen in der Artikelbeschreibung'
+                'Lieferscheine unterstützen nun mehrere Zeilen in der Artikelbeschreibung',
+                'Kleiner Anpassungen im Kunden- und Aufträge erstellen/bearbeiten Fenster.'
             ]
         },
         {
