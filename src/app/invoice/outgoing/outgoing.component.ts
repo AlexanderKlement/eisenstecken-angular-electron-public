@@ -24,6 +24,9 @@ export class OutgoingComponent implements OnInit {
     unPaidOutgoingInvoiceDataSource: TableDataSource<OutgoingInvoice>;
     paidOutgoingInvoiceDataSource: TableDataSource<OutgoingInvoice>;
 
+    public selectedYear = moment().year();
+    public $year: Observable<number[]>;
+
     buttons: TableButton[] = [
         {
             name: (condition: any) => (condition) ? 'Zahlung entfernen' : ' Zahlung hinzufügen',
@@ -40,6 +43,11 @@ export class OutgoingComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.initDataSources();
+        this.$year = this.api.getAvailableYearsOutgoingInvoiceAvailableYearsGet();
+    }
+
+    initDataSources() {
         this.initAllOutgoingInvoiceDataSource();
         this.initPaidOutgoingInvoiceDataSource();
         this.initUnPaidOutgoingInvoiceDataSource();
@@ -98,11 +106,15 @@ export class OutgoingComponent implements OnInit {
         });
     }
 
+    yearChanged() {
+        this.initDataSources();
+    }
+
     private initAllOutgoingInvoiceDataSource(): void {
         this.allOutgoingInvoiceDataSource = new TableDataSource(
             this.api,
             (api, filter, sortDirection, skip, limit) =>
-                api.readOutgoingInvoicesOutgoingInvoiceGet(skip, filter, limit),
+                api.readOutgoingInvoicesOutgoingInvoiceGet(skip, filter, limit, undefined, this.selectedYear),
             (dataSourceClasses) => {
                 const rows = [];
                 dataSourceClasses.forEach((dataSource) => {
@@ -142,7 +154,7 @@ export class OutgoingComponent implements OnInit {
                 {name: 'payment_date', headerName: 'Fälligkeitsdatum'},
                 {name: 'total', headerName: 'Preis [mit MwSt.]'},
             ],
-            (api) => api.countOutgoingInvoicesOutgoingInvoiceCountGet()
+            (api) => api.countOutgoingInvoicesOutgoingInvoiceCountGet(undefined, this.selectedYear)
         );
         this.allOutgoingInvoiceDataSource.loadData();
     }
@@ -151,7 +163,7 @@ export class OutgoingComponent implements OnInit {
         this.paidOutgoingInvoiceDataSource = new TableDataSource(
             this.api,
             (api, filter, sortDirection, skip, limit) =>
-                api.readOutgoingInvoicesOutgoingInvoiceGet(skip, filter, limit, true),
+                api.readOutgoingInvoicesOutgoingInvoiceGet(skip, filter, limit, true, this.selectedYear),
             (dataSourceClasses) => {
                 const rows = [];
                 dataSourceClasses.forEach((dataSource) => {
@@ -191,7 +203,7 @@ export class OutgoingComponent implements OnInit {
                 {name: 'payment_date', headerName: 'Fälligkeitsdatum'},
                 {name: 'total', headerName: 'Preis [mit MwSt.]'},
             ],
-            (api) => api.countOutgoingInvoicesOutgoingInvoiceCountGet(true)
+            (api) => api.countOutgoingInvoicesOutgoingInvoiceCountGet(true, this.selectedYear)
         );
         this.paidOutgoingInvoiceDataSource.loadData();
     }
@@ -200,7 +212,7 @@ export class OutgoingComponent implements OnInit {
         this.unPaidOutgoingInvoiceDataSource = new TableDataSource(
             this.api,
             (api, filter, sortDirection, skip, limit) =>
-                api.readOutgoingInvoicesOutgoingInvoiceGet(skip, filter, limit, false),
+                api.readOutgoingInvoicesOutgoingInvoiceGet(skip, filter, limit, false, this.selectedYear),
             (dataSourceClasses) => {
                 const rows = [];
                 dataSourceClasses.forEach((dataSource) => {
@@ -240,8 +252,10 @@ export class OutgoingComponent implements OnInit {
                 {name: 'payment_date', headerName: 'Fälligkeitsdatum'},
                 {name: 'total', headerName: 'Preis [mit MwSt.]'},
             ],
-            (api) => api.countOutgoingInvoicesOutgoingInvoiceCountGet(false)
+            (api) => api.countOutgoingInvoicesOutgoingInvoiceCountGet(false, this.selectedYear)
         );
         this.unPaidOutgoingInvoiceDataSource.loadData();
     }
+
+
 }

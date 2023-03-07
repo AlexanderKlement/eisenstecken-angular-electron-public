@@ -192,8 +192,9 @@ export interface DefaultServiceInterface {
      * Count Ingoing Invoices
      * 
      * @param paid 
+     * @param year 
      */
-    countIngoingInvoicesIngoingInvoiceCountGet(paid?: boolean, extraHttpRequestParams?: any): Observable<number>;
+    countIngoingInvoicesIngoingInvoiceCountGet(paid?: boolean, year?: number, extraHttpRequestParams?: any): Observable<number>;
 
     /**
      * Count Offers By Job
@@ -213,8 +214,9 @@ export interface DefaultServiceInterface {
      * Count Outgoing Invoices
      * 
      * @param paid 
+     * @param year 
      */
-    countOutgoingInvoicesOutgoingInvoiceCountGet(paid?: boolean, extraHttpRequestParams?: any): Observable<number>;
+    countOutgoingInvoicesOutgoingInvoiceCountGet(paid?: boolean, year?: number, extraHttpRequestParams?: any): Observable<number>;
 
     /**
      * Create Article
@@ -673,6 +675,12 @@ export interface DefaultServiceInterface {
     exportContactsExportContactsPost(extraHttpRequestParams?: any): Observable<any>;
 
     /**
+     * Generate Jobs Pdf
+     * 
+     */
+    generateJobsPdfJobGenerateJobsPdfPost(extraHttpRequestParams?: any): Observable<string>;
+
+    /**
      * Generate Order Pdf
      * 
      * @param requestBody 
@@ -696,6 +704,24 @@ export interface DefaultServiceInterface {
      * 
      */
     generateUnpaidOutgoingInvoicesPdfOutgoingInvoicePdfUnpaidGet(extraHttpRequestParams?: any): Observable<string>;
+
+    /**
+     * Get Available Years
+     * 
+     */
+    getAvailableYearsDeliveryNoteAvailableYearsGet(extraHttpRequestParams?: any): Observable<Array<number>>;
+
+    /**
+     * Get Available Years
+     * 
+     */
+    getAvailableYearsIngoingInvoiceAvailableYearsGet(extraHttpRequestParams?: any): Observable<Array<number>>;
+
+    /**
+     * Get Available Years
+     * 
+     */
+    getAvailableYearsOutgoingInvoiceAvailableYearsGet(extraHttpRequestParams?: any): Observable<Array<number>>;
 
     /**
      * Get Bulk Parameter By Key
@@ -1335,8 +1361,9 @@ export interface DefaultServiceInterface {
      * 
      * @param jobId 
      * @param userId 
+     * @param year 
      */
-    readDeliveryNoteCountDeliveryNoteCountGet(jobId?: number, userId?: number, extraHttpRequestParams?: any): Observable<number>;
+    readDeliveryNoteCountDeliveryNoteCountGet(jobId?: number, userId?: number, year?: number, extraHttpRequestParams?: any): Observable<number>;
 
     /**
      * Read Delivery Note
@@ -1366,8 +1393,9 @@ export interface DefaultServiceInterface {
      * @param filterString 
      * @param jobId 
      * @param userId 
+     * @param year 
      */
-    readDeliveryNotesDeliveryNoteGet(skip?: number, limit?: number, filterString?: string, jobId?: number, userId?: number, extraHttpRequestParams?: any): Observable<Array<DeliveryNote>>;
+    readDeliveryNotesDeliveryNoteGet(skip?: number, limit?: number, filterString?: string, jobId?: number, userId?: number, year?: number, extraHttpRequestParams?: any): Observable<Array<DeliveryNote>>;
 
     /**
      * Read Drive Distance By Job
@@ -1464,8 +1492,9 @@ export interface DefaultServiceInterface {
      * @param limit 
      * @param filter 
      * @param paid 
+     * @param year 
      */
-    readIngoingInvoicesIngoingInvoiceGet(skip?: number, limit?: number, filter?: string, paid?: boolean, extraHttpRequestParams?: any): Observable<Array<IngoingInvoice>>;
+    readIngoingInvoicesIngoingInvoiceGet(skip?: number, limit?: number, filter?: string, paid?: boolean, year?: number, extraHttpRequestParams?: any): Observable<Array<IngoingInvoice>>;
 
     /**
      * Read Job Count
@@ -1811,8 +1840,9 @@ export interface DefaultServiceInterface {
      * @param filterString 
      * @param limit 
      * @param paid 
+     * @param year 
      */
-    readOutgoingInvoicesOutgoingInvoiceGet(skip?: number, filterString?: string, limit?: number, paid?: boolean, extraHttpRequestParams?: any): Observable<Array<OutgoingInvoice>>;
+    readOutgoingInvoicesOutgoingInvoiceGet(skip?: number, filterString?: string, limit?: number, paid?: boolean, year?: number, extraHttpRequestParams?: any): Observable<Array<OutgoingInvoice>>;
 
     /**
      * Read Paint Count
@@ -2181,6 +2211,12 @@ export interface DefaultServiceInterface {
      * 
      */
     testNotificationTestNotificationPost(extraHttpRequestParams?: any): Observable<any>;
+
+    /**
+     * Test Pdf
+     * 
+     */
+    testPdfTestTestPdfPost(extraHttpRequestParams?: any): Observable<any>;
 
     /**
      * Test Upload Last Wuerth File

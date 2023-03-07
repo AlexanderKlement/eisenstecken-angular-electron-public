@@ -1,5 +1,15 @@
 <app-toolbar title="Lieferscheine" [buttonList]="buttons"></app-toolbar>
 <div class="window-container">
+    <div fxLayout="row" fxLayoutAlign="end center">
+        <mat-form-field appearance="fill">
+            <mat-label>Jahr</mat-label>
+            <mat-select [(value)]="selectedYear" (valueChange)="this.yearChanged()">
+                <mat-option *ngFor="let year of $year | async" [value]="year">
+                    {{year}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
     <app-table-builder [$refresh]="$refresh" [dataSource]="deliveryNoteDataSource" title="Lieferscheine"></app-table-builder>
 </div>
 

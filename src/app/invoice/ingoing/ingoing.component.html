@@ -1,3 +1,13 @@
+<div fxLayout="row" fxLayoutAlign="end center">
+    <mat-form-field appearance="fill">
+        <mat-label>Jahr</mat-label>
+        <mat-select [(value)]="selectedYear" (valueChange)="this.yearChanged()">
+            <mat-option *ngFor="let year of $year | async" [value]="year">
+                {{year}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
 <mat-tab-group selectedIndex="1">
     <mat-tab label="Alle">
         <app-table-builder [$refresh]="$refresh" [buttons]="buttons" [dataSource]="allIngoingInvoiceDataSource"></app-table-builder>

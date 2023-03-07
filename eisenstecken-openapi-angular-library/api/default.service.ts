@@ -810,18 +810,23 @@ export class DefaultService implements DefaultServiceInterface {
     /**
      * Count Ingoing Invoices
      * @param paid 
+     * @param year 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public countIngoingInvoicesIngoingInvoiceCountGet(paid?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<number>;
-    public countIngoingInvoicesIngoingInvoiceCountGet(paid?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<number>>;
-    public countIngoingInvoicesIngoingInvoiceCountGet(paid?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<number>>;
-    public countIngoingInvoicesIngoingInvoiceCountGet(paid?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public countIngoingInvoicesIngoingInvoiceCountGet(paid?: boolean, year?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<number>;
+    public countIngoingInvoicesIngoingInvoiceCountGet(paid?: boolean, year?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<number>>;
+    public countIngoingInvoicesIngoingInvoiceCountGet(paid?: boolean, year?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<number>>;
+    public countIngoingInvoicesIngoingInvoiceCountGet(paid?: boolean, year?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (paid !== undefined && paid !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>paid, 'paid');
+        }
+        if (year !== undefined && year !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>year, 'year');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1009,18 +1014,23 @@ export class DefaultService implements DefaultServiceInterface {
     /**
      * Count Outgoing Invoices
      * @param paid 
+     * @param year 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public countOutgoingInvoicesOutgoingInvoiceCountGet(paid?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<number>;
-    public countOutgoingInvoicesOutgoingInvoiceCountGet(paid?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<number>>;
-    public countOutgoingInvoicesOutgoingInvoiceCountGet(paid?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<number>>;
-    public countOutgoingInvoicesOutgoingInvoiceCountGet(paid?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public countOutgoingInvoicesOutgoingInvoiceCountGet(paid?: boolean, year?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<number>;
+    public countOutgoingInvoicesOutgoingInvoiceCountGet(paid?: boolean, year?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<number>>;
+    public countOutgoingInvoicesOutgoingInvoiceCountGet(paid?: boolean, year?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<number>>;
+    public countOutgoingInvoicesOutgoingInvoiceCountGet(paid?: boolean, year?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (paid !== undefined && paid !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>paid, 'paid');
+        }
+        if (year !== undefined && year !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>year, 'year');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -5613,6 +5623,67 @@ export class DefaultService implements DefaultServiceInterface {
     }
 
     /**
+     * Generate Jobs Pdf
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public generateJobsPdfJobGenerateJobsPdfPost(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<string>;
+    public generateJobsPdfJobGenerateJobsPdfPost(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<string>>;
+    public generateJobsPdfJobGenerateJobsPdfPost(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<string>>;
+    public generateJobsPdfJobGenerateJobsPdfPost(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (OAuth2PasswordBearer) required
+        localVarCredential = this.configuration.lookupCredential('OAuth2PasswordBearer');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/job/generate_jobs_pdf`;
+        return this.httpClient.request<string>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Generate Order Pdf
      * @param requestBody 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -5852,6 +5923,189 @@ export class DefaultService implements DefaultServiceInterface {
 
         let localVarPath = `/outgoing_invoice/pdf/unpaid`;
         return this.httpClient.request<string>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Available Years
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getAvailableYearsDeliveryNoteAvailableYearsGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<number>>;
+    public getAvailableYearsDeliveryNoteAvailableYearsGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<number>>>;
+    public getAvailableYearsDeliveryNoteAvailableYearsGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<number>>>;
+    public getAvailableYearsDeliveryNoteAvailableYearsGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (OAuth2PasswordBearer) required
+        localVarCredential = this.configuration.lookupCredential('OAuth2PasswordBearer');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/delivery_note/available_years`;
+        return this.httpClient.request<Array<number>>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Available Years
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getAvailableYearsIngoingInvoiceAvailableYearsGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<number>>;
+    public getAvailableYearsIngoingInvoiceAvailableYearsGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<number>>>;
+    public getAvailableYearsIngoingInvoiceAvailableYearsGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<number>>>;
+    public getAvailableYearsIngoingInvoiceAvailableYearsGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (OAuth2PasswordBearer) required
+        localVarCredential = this.configuration.lookupCredential('OAuth2PasswordBearer');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/ingoing_invoice/available_years`;
+        return this.httpClient.request<Array<number>>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Available Years
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getAvailableYearsOutgoingInvoiceAvailableYearsGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<number>>;
+    public getAvailableYearsOutgoingInvoiceAvailableYearsGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<number>>>;
+    public getAvailableYearsOutgoingInvoiceAvailableYearsGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<number>>>;
+    public getAvailableYearsOutgoingInvoiceAvailableYearsGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (OAuth2PasswordBearer) required
+        localVarCredential = this.configuration.lookupCredential('OAuth2PasswordBearer');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/outgoing_invoice/available_years`;
+        return this.httpClient.request<Array<number>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -11701,13 +11955,14 @@ export class DefaultService implements DefaultServiceInterface {
      * Read Delivery Note Count
      * @param jobId 
      * @param userId 
+     * @param year 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readDeliveryNoteCountDeliveryNoteCountGet(jobId?: number, userId?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<number>;
-    public readDeliveryNoteCountDeliveryNoteCountGet(jobId?: number, userId?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<number>>;
-    public readDeliveryNoteCountDeliveryNoteCountGet(jobId?: number, userId?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<number>>;
-    public readDeliveryNoteCountDeliveryNoteCountGet(jobId?: number, userId?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public readDeliveryNoteCountDeliveryNoteCountGet(jobId?: number, userId?: number, year?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<number>;
+    public readDeliveryNoteCountDeliveryNoteCountGet(jobId?: number, userId?: number, year?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<number>>;
+    public readDeliveryNoteCountDeliveryNoteCountGet(jobId?: number, userId?: number, year?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<number>>;
+    public readDeliveryNoteCountDeliveryNoteCountGet(jobId?: number, userId?: number, year?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (jobId !== undefined && jobId !== null) {
@@ -11717,6 +11972,10 @@ export class DefaultService implements DefaultServiceInterface {
         if (userId !== undefined && userId !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>userId, 'user_id');
+        }
+        if (year !== undefined && year !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>year, 'year');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -11969,13 +12228,14 @@ export class DefaultService implements DefaultServiceInterface {
      * @param filterString 
      * @param jobId 
      * @param userId 
+     * @param year 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readDeliveryNotesDeliveryNoteGet(skip?: number, limit?: number, filterString?: string, jobId?: number, userId?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<DeliveryNote>>;
-    public readDeliveryNotesDeliveryNoteGet(skip?: number, limit?: number, filterString?: string, jobId?: number, userId?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<DeliveryNote>>>;
-    public readDeliveryNotesDeliveryNoteGet(skip?: number, limit?: number, filterString?: string, jobId?: number, userId?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<DeliveryNote>>>;
-    public readDeliveryNotesDeliveryNoteGet(skip?: number, limit?: number, filterString?: string, jobId?: number, userId?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public readDeliveryNotesDeliveryNoteGet(skip?: number, limit?: number, filterString?: string, jobId?: number, userId?: number, year?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<DeliveryNote>>;
+    public readDeliveryNotesDeliveryNoteGet(skip?: number, limit?: number, filterString?: string, jobId?: number, userId?: number, year?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<DeliveryNote>>>;
+    public readDeliveryNotesDeliveryNoteGet(skip?: number, limit?: number, filterString?: string, jobId?: number, userId?: number, year?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<DeliveryNote>>>;
+    public readDeliveryNotesDeliveryNoteGet(skip?: number, limit?: number, filterString?: string, jobId?: number, userId?: number, year?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (skip !== undefined && skip !== null) {
@@ -11997,6 +12257,10 @@ export class DefaultService implements DefaultServiceInterface {
         if (userId !== undefined && userId !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>userId, 'user_id');
+        }
+        if (year !== undefined && year !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>year, 'year');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -12847,13 +13111,14 @@ export class DefaultService implements DefaultServiceInterface {
      * @param limit 
      * @param filter 
      * @param paid 
+     * @param year 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readIngoingInvoicesIngoingInvoiceGet(skip?: number, limit?: number, filter?: string, paid?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<IngoingInvoice>>;
-    public readIngoingInvoicesIngoingInvoiceGet(skip?: number, limit?: number, filter?: string, paid?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<IngoingInvoice>>>;
-    public readIngoingInvoicesIngoingInvoiceGet(skip?: number, limit?: number, filter?: string, paid?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<IngoingInvoice>>>;
-    public readIngoingInvoicesIngoingInvoiceGet(skip?: number, limit?: number, filter?: string, paid?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public readIngoingInvoicesIngoingInvoiceGet(skip?: number, limit?: number, filter?: string, paid?: boolean, year?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<IngoingInvoice>>;
+    public readIngoingInvoicesIngoingInvoiceGet(skip?: number, limit?: number, filter?: string, paid?: boolean, year?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<IngoingInvoice>>>;
+    public readIngoingInvoicesIngoingInvoiceGet(skip?: number, limit?: number, filter?: string, paid?: boolean, year?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<IngoingInvoice>>>;
+    public readIngoingInvoicesIngoingInvoiceGet(skip?: number, limit?: number, filter?: string, paid?: boolean, year?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (skip !== undefined && skip !== null) {
@@ -12871,6 +13136,10 @@ export class DefaultService implements DefaultServiceInterface {
         if (paid !== undefined && paid !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>paid, 'paid');
+        }
+        if (year !== undefined && year !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>year, 'year');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -15867,13 +16136,14 @@ export class DefaultService implements DefaultServiceInterface {
      * @param filterString 
      * @param limit 
      * @param paid 
+     * @param year 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readOutgoingInvoicesOutgoingInvoiceGet(skip?: number, filterString?: string, limit?: number, paid?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<OutgoingInvoice>>;
-    public readOutgoingInvoicesOutgoingInvoiceGet(skip?: number, filterString?: string, limit?: number, paid?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<OutgoingInvoice>>>;
-    public readOutgoingInvoicesOutgoingInvoiceGet(skip?: number, filterString?: string, limit?: number, paid?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<OutgoingInvoice>>>;
-    public readOutgoingInvoicesOutgoingInvoiceGet(skip?: number, filterString?: string, limit?: number, paid?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public readOutgoingInvoicesOutgoingInvoiceGet(skip?: number, filterString?: string, limit?: number, paid?: boolean, year?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<OutgoingInvoice>>;
+    public readOutgoingInvoicesOutgoingInvoiceGet(skip?: number, filterString?: string, limit?: number, paid?: boolean, year?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<OutgoingInvoice>>>;
+    public readOutgoingInvoicesOutgoingInvoiceGet(skip?: number, filterString?: string, limit?: number, paid?: boolean, year?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<OutgoingInvoice>>>;
+    public readOutgoingInvoicesOutgoingInvoiceGet(skip?: number, filterString?: string, limit?: number, paid?: boolean, year?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (skip !== undefined && skip !== null) {
@@ -15891,6 +16161,10 @@ export class DefaultService implements DefaultServiceInterface {
         if (paid !== undefined && paid !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>paid, 'paid');
+        }
+        if (year !== undefined && year !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>year, 'year');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -19290,6 +19564,60 @@ export class DefaultService implements DefaultServiceInterface {
         }
 
         let localVarPath = `/test_notification`;
+        return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Test Pdf
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public testPdfTestTestPdfPost(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
+    public testPdfTestTestPdfPost(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
+    public testPdfTestTestPdfPost(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
+    public testPdfTestTestPdfPost(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/test/test_pdf`;
         return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

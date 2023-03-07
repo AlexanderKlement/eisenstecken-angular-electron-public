@@ -19,6 +19,10 @@ export class DeliveryNoteComponent implements OnInit {
     deliveryNoteDataSource: TableDataSource<DeliveryNote>;
 
     public $refresh: Observable<void>;
+
+    public selectedYear = moment().year();
+    public $year: Observable<number[]>;
+
     private $refreshSubscriber: Subscriber<void>;
 
     constructor(private api: DefaultService, private locker: LockService, private router: Router, private authService: AuthService) {
@@ -37,6 +41,7 @@ export class DeliveryNoteComponent implements OnInit {
             }
         });
         this.initRefreshObservables();
+        this.$year = this.api.getAvailableYearsDeliveryNoteAvailableYearsGet();
     }
 
     initRefreshObservables(): void {
@@ -49,11 +54,15 @@ export class DeliveryNoteComponent implements OnInit {
         this.$refreshSubscriber.next();
     }
 
+    yearChanged() {
+        this.initDeliveryNotes();
+    }
+
     private initDeliveryNotes(): void {
         this.deliveryNoteDataSource = new TableDataSource(
             this.api,
             (api, filter, sortDirection, skip, limit) =>
-                api.readDeliveryNotesDeliveryNoteGet(skip, limit, filter),
+                api.readDeliveryNotesDeliveryNoteGet(skip, limit, filter, undefined, undefined, this.selectedYear),
             (dataSourceClasses) => {
                 const rows = [];
                 dataSourceClasses.forEach((dataSource) => {
@@ -91,8 +100,10 @@ export class DeliveryNoteComponent implements OnInit {
                 {name: 'delivery_address', headerName: 'Adresse'},
                 {name: 'job.displayable_name', headerName: 'Auftrag'}
             ],
-            (api) => api.readDeliveryNoteCountDeliveryNoteCountGet()
+            (api) => api.readDeliveryNoteCountDeliveryNoteCountGet(undefined, undefined, this.selectedYear)
         );
         this.deliveryNoteDataSource.loadData();
     }
+
+
 }

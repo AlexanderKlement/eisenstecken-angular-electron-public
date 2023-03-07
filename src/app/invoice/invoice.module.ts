@@ -18,6 +18,7 @@ import { ImportXmlDialogComponent } from './ingoing/import-xml-dialog/import-xml
 import {MatListModule} from '@angular/material/list';
 import {MatIconModule} from '@angular/material/icon';
 import { IngoingDetailComponent } from './ingoing/ingoing-detail/ingoing-detail.component';
+import {MatSelectModule} from '@angular/material/select';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { IngoingDetailComponent } from './ingoing/ingoing-detail/ingoing-detail.
         ReactiveFormsModule,
         MatInputModule,
         MatListModule,
-        MatIconModule
+        MatIconModule,
+        MatSelectModule
     ]
 })
 export class InvoiceModule { }
