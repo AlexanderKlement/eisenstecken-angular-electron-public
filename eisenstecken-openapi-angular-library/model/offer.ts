@@ -22,7 +22,9 @@ export interface Offer {
     payment: string;
     delivery: string;
     discount_amount: number;
+    discount_percentage: number;
     material_description: string;
+    material_description_title: string;
     id: number;
     timestamp: string;
     descriptive_articles?: Array<DescriptiveArticle>;

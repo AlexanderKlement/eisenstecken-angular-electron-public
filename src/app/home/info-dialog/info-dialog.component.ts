@@ -75,7 +75,13 @@ export class InfoDialogComponent implements OnInit {
                 'Bei Lieferscheinen neue Spalte "Aufträge" hinzugefügt',
                 'Bei Aufträgen kann nun direkt auf den Kunden gesprungen werden.',
                 'Lieferscheine unterstützen nun mehrere Zeilen in der Artikelbeschreibung',
-                'Kleiner Anpassungen im Kunden- und Aufträge erstellen/bearbeiten Fenster.'
+                'Kleiner Anpassungen im Kunden- und Aufträge erstellen/bearbeiten Fenster.',
+                'Lieferscheine, Ein- und Ausgangsrechnungen werden nun nach Jahren sortiert angezeigt. Ähnlich wie dies ' +
+                'bei Aufträgen der Fall ist.',
+                'Grafische Änderungen bei Rechnungen erstellen/bearbeiten',
+                'Titel "Allgemeine Materialbeschreibung" kann nun auch unbenannt werden',
+                'Angebot können nun auch mit Prozenten rabattiert werden',
+
             ]
         },
         {

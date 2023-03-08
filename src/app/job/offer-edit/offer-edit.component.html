@@ -95,6 +95,12 @@
             </div>
             <div fxFlex="30" fxLayout="column" fxLayoutAlign="space-around center">
                 <mat-form-field appearance="fill">
+                    <mat-label>Allgemeine Materialbeschreibung - Titel</mat-label>
+                    <textarea class="form-control" formControlName="material_description_title" matInput
+                              cdkTextareaAutosize
+                              cdkAutosizeMinRows="2"></textarea>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
                     <mat-label>Allgemeine Materialbeschreibung:</mat-label>
                     <textarea class="form-control" formControlName="material_description"
                               placeholder="Wird weggelassen falls leer"
@@ -133,12 +139,20 @@
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
-                <mat-form-field appearance="fill">
-                    <mat-label>Rabatt [€]</mat-label>
-                    <input class="form-control" type=number formControlName="discount_amount"
-                           (change)="discountAmountChanged()"
-                           placeholder="Wird weggelassen falls leer" matInput>
-                </mat-form-field>
+                <div fxLayout="row" fxLayoutAlign="space-between center" class="amount-box">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Rabatt [€]</mat-label>
+                        <input class="form-control" type=number formControlName="discount_amount"
+                               (change)="discountChanged()"
+                               placeholder="Wird weggelassen falls leer" matInput>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Rabatt [%]</mat-label>
+                        <input class="form-control" type=number formControlName="discount_percentage"
+                               (change)="discountChanged()"
+                               placeholder="Wird weggelassen falls leer" matInput>
+                    </mat-form-field>
+                </div>
                 <mat-form-field appearance="fill">
                     <mat-label>Gesamtsumme</mat-label>
                     <input class="form-control" readonly formControlName="offer_price" matInput>

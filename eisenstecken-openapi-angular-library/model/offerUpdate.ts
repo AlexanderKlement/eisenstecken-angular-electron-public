@@ -19,7 +19,9 @@ export interface OfferUpdate {
     payment: string;
     delivery: string;
     discount_amount: number;
+    discount_percentage: number;
     material_description: string;
+    material_description_title: string;
     descriptive_articles: Array<DescriptiveArticleCreate>;
     vat_id: number;
 }

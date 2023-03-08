@@ -2190,7 +2190,7 @@ export interface DefaultServiceInterface {
      * Root
      * 
      */
-    rootGet(extraHttpRequestParams?: any): Observable<any>;
+    rootGet(extraHttpRequestParams?: any): Observable<{ [key: string]: string; }>;
 
     /**
      * Set Bulk Parameter By Key
@@ -2217,6 +2217,12 @@ export interface DefaultServiceInterface {
      * 
      */
     testPdfTestTestPdfPost(extraHttpRequestParams?: any): Observable<any>;
+
+    /**
+     * Test Reminder Mail
+     * 
+     */
+    testReminderMailTestTestReminderMailPost(extraHttpRequestParams?: any): Observable<any>;
 
     /**
      * Test Upload Last Wuerth File

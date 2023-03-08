@@ -142,7 +142,11 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 discount_amount: this.offerGroup.get('discount_amount').value,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                material_description: this.offerGroup.get('material_description').value
+                discount_percentage: this.offerGroup.get('discount_percentage').value,
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                material_description: this.offerGroup.get('material_description').value,
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                material_description_title: this.offerGroup.get('material_description_title').value
             };
             this.api.createOfferOfferPost(offerCreate).pipe(first()).subscribe((offer) => {
                 this.createUpdateSuccess(offer);
@@ -166,7 +170,11 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 discount_amount: this.offerGroup.get('discount_amount').value,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                material_description: this.offerGroup.get('material_description').value
+                discount_percentage: this.offerGroup.get('discount_percentage').value,
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                material_description: this.offerGroup.get('material_description').value,
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                material_description_title: this.offerGroup.get('material_description_title').value
             };
             this.api.updateOfferOfferOfferIdPut(this.id, offerUpdate).subscribe((offer) => {
                 this.createUpdateSuccess(offer);
@@ -203,9 +211,13 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
                     // eslint-disable-next-line @typescript-eslint/naming-convention
                     discount_amount: offer.discount_amount,
                     // eslint-disable-next-line @typescript-eslint/naming-convention
+                    discount_percentage: offer.discount_percentage,
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
                     vat_id: offer.vat.id,
                     // eslint-disable-next-line @typescript-eslint/naming-convention
-                    material_description: offer.material_description
+                    material_description: offer.material_description,
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
+                    material_description_title: offer.material_description_title
                 });
                 this.jobId = offer.job_id;
                 this.recalculateOfferPrice();
@@ -296,7 +308,7 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
         });
     }
 
-    discountAmountChanged(): void {
+    discountChanged(): void {
         this.recalculateOfferPrice();
     }
 
@@ -414,7 +426,11 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
             // eslint-disable-next-line @typescript-eslint/naming-convention
             discount_amount: new FormControl(0),
             // eslint-disable-next-line @typescript-eslint/naming-convention
+            discount_percentage: new FormControl(0.0),
+            // eslint-disable-next-line @typescript-eslint/naming-convention
             material_description: new FormControl(''),
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            material_description_title: new FormControl('Allgemeine Materialbeschreibung'),
             // eslint-disable-next-line @typescript-eslint/naming-convention
             descriptive_articles: new FormArray([
                 this.initDescriptiveArticles()
@@ -425,6 +441,12 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
     }
 
     private recalculateOfferPrice(): void {
+        if (this.offerGroup.get('discount_amount').value == null) {
+            this.offerGroup.get('discount_amount').setValue(0);
+        }
+        if (this.offerGroup.get('discount_percentage').value == null) {
+            this.offerGroup.get('discount_percentage').setValue(0);
+        }
         let offerPrice = 0.0;
         this.getDescriptiveArticles().controls.forEach((descriptiveArticleControl) => {
             (descriptiveArticleControl.get('sub_descriptive_articles') as FormArray).controls.forEach((subDescriptiveArticleControl) => {
@@ -436,6 +458,7 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
             });
         });
         offerPrice -= this.offerGroup.get('discount_amount').value;
+        offerPrice *= 1 - this.offerGroup.get('discount_percentage').value / 100;
         this.offerGroup.get('offer_price').setValue(this.currency.transform(offerPrice, getLocaleCurrencyCode('de_DE')));
     }
 }

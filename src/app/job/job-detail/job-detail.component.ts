@@ -399,13 +399,13 @@ export class JobDetailComponent implements OnInit {
                     }
                 });
                 this.buttonsMain.push({
-                    name: 'Bestellungen drucken',
+                    name: 'Artikelliste drucken',
                     navigate: (): void => {
                         this.printOrdersClicked();
                     }
                 });
                 this.buttonsSub.push({
-                    name: 'Bestellungen drucken',
+                    name: 'Artikelliste drucken',
                     navigate: (): void => {
                         this.printOrdersClicked();
                     }

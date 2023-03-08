@@ -19,7 +19,9 @@ export interface OfferCreate {
     payment: string;
     delivery: string;
     discount_amount: number;
+    discount_percentage: number;
     material_description: string;
+    material_description_title: string;
     job_id: number;
     descriptive_articles: Array<DescriptiveArticleCreate>;
     vat_id: number;
