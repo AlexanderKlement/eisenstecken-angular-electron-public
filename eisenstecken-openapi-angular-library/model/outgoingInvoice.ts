@@ -11,6 +11,7 @@
  */
 import { Payment } from './payment';
 import { Reminder } from './reminder';
+import { Address } from './address';
 import { DescriptiveArticle } from './descriptiveArticle';
 import { Vat } from './vat';
 import { Lock } from './lock';
@@ -22,6 +23,12 @@ export interface OutgoingInvoice {
     date: string;
     payment_condition: string;
     payment_date: string;
+    name: string;
+    vat_number: string;
+    fiscal_code: string;
+    codice_destinatario: string;
+    pec: string;
+    isCompany: boolean;
     id: number;
     timestamp: string;
     pdf?: string;
@@ -35,5 +42,6 @@ export interface OutgoingInvoice {
     full_price_with_vat: number;
     client_name: string;
     paid: boolean;
+    address: Address;
 }
 

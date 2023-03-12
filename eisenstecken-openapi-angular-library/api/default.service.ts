@@ -5623,6 +5623,60 @@ export class DefaultService implements DefaultServiceInterface {
     }
 
     /**
+     * Generate Job Pdf
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public generateJobPdfJobPdfPost(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<string>;
+    public generateJobPdfJobPdfPost(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<string>>;
+    public generateJobPdfJobPdfPost(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<string>>;
+    public generateJobPdfJobPdfPost(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/job/pdf`;
+        return this.httpClient.request<string>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Generate Jobs Pdf
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -6720,6 +6774,67 @@ export class DefaultService implements DefaultServiceInterface {
         }
 
         let localVarPath = `/delivery_note/number`;
+        return this.httpClient.request<string>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Next Rg Number
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getNextRgNumberOutgoingInvoiceRgNumberGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<string>;
+    public getNextRgNumberOutgoingInvoiceRgNumberGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<string>>;
+    public getNextRgNumberOutgoingInvoiceRgNumberGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<string>>;
+    public getNextRgNumberOutgoingInvoiceRgNumberGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (OAuth2PasswordBearer) required
+        localVarCredential = this.configuration.lookupCredential('OAuth2PasswordBearer');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/outgoing_invoice/rg_number`;
         return this.httpClient.request<string>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -19578,6 +19693,7 @@ export class DefaultService implements DefaultServiceInterface {
 
     /**
      * Test Pdf
+     * offer_crud.generate_offer_pdf_new(session&#x3D;session, offer_id&#x3D;134, custom_path&#x3D;\&quot;/media/CAD/TEST/test_offer.pdf\&quot;) unpaid_outgoing_invoices &#x3D; outgoing_invoice_crud.get_outgoing_invoices(session&#x3D;session, paid&#x3D;False,                                                                        order_by_payment_date&#x3D;True) pdf.build_unpaid_outgoing_invoice_pdf(session&#x3D;session, db_invoices&#x3D;unpaid_outgoing_invoices,                                       path&#x3D;\&quot;/media/CAD/TEST/test_unpaid_outgoing_invoices.pdf\&quot;)  outgoing_invoice_crud.generate_outgoing_invoice_pdf_new(session&#x3D;session, outgoing_invoice_id&#x3D;130,                                                         custom_path&#x3D;\&quot;/media/CAD/TEST/test_outgoing_invoice.pdf\&quot;)    recalculation_crud.generate_recalculation_pdf_new(session&#x3D;session, recalculation_id&#x3D;86,                                                   custom_path&#x3D;\&quot;/media/CAD/TEST/test_recalculation.pdf\&quot;)   order_bundle_crud.generate_order_bundle_pdf_intern_new(session&#x3D;session, order_bundle_id&#x3D;34024,                                                        author&#x3D;\&quot;Alexander Klement\&quot;,                                                      custom_path&#x3D;\&quot;/media/CAD/TEST/test_order_bundle_int.pdf\&quot;) db_orders &#x3D; order_crud.get_orders(session&#x3D;session, order_to_id&#x3D;2493) order_ids &#x3D; [db_order.id for db_order in db_orders]  order_crud.generate_article_list_pdf_new(session&#x3D;session, user_id&#x3D;1, order_ids&#x3D;order_ids,                                          custom_path&#x3D;\&quot;/media/CAD/TEST/test_article_list.pdf\&quot;)  job_crud.generate_jobs_pdf(session&#x3D;session, custom_path&#x3D;\&quot;/media/CAD/TEST/test_jobs.pdf\&quot;)   unpaid_ingoing_invoices &#x3D; ingoing_invoice_crud.get_ingoing_invoices(session&#x3D;session, paid&#x3D;False,                                                                     order_by_payment_date&#x3D;True) pdf.build_unpaid_ingoing_invoice_pdf(session&#x3D;session, db_invoices&#x3D;unpaid_ingoing_invoices,                                      path&#x3D;\&quot;/media/CAD/TEST/test_unpaid_ingoing_invoices.pdf\&quot;)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */

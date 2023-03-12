@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { AddressCreate } from './addressCreate';
 import { DescriptiveArticleCreate } from './descriptiveArticleCreate';
 
 
@@ -17,8 +18,15 @@ export interface OutgoingInvoiceCreate {
     date: string;
     payment_condition: string;
     payment_date: string;
+    name: string;
+    vat_number: string;
+    fiscal_code: string;
+    codice_destinatario: string;
+    pec: string;
+    isCompany: boolean;
     descriptive_articles: Array<DescriptiveArticleCreate>;
     vat_id: number;
     job_id: number;
+    address: AddressCreate;
 }
 

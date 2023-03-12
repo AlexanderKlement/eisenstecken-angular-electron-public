@@ -39,7 +39,7 @@ export class CalendarService implements OnDestroy {
                     if (this.calendarEntriesAlreadyNotified.includes(calendarEntry.id)) {
                         continue;
                     }
-                    this.tray.showBalloon('Termin in Kürze:', calendarEntry.title);
+                    //this.tray.showBalloon('Termin in Kürze:', calendarEntry.title);
                     this.calendarEntriesAlreadyNotified.push(calendarEntry.id);
                 }
             });
