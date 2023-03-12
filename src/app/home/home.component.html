@@ -1,15 +1,19 @@
-<div fxLayout="column" fxLayoutAlign="space-between stretch" class="root">
-    <div fxFlex="15" class="top-bar">
-        <img class="logo" src="assets/logos/ESS-Logo-RGB-Pos-Small.jpg" alt="Eisenstecken-logo">
+<div class="root" fxLayout="column" fxLayoutAlign="space-between stretch">
+  <div class="top-bar" fxFlex="15">
+    <div fxFlex="40" fxFlexFill></div>
+    <div fxFlex="30" fxFlexFill fxLayoutAlign="center center">
+      <img alt="Eisenstecken-logo" class="logo" src="assets/logos/ESS-Logo-RGB-Pos-Small.jpg">
     </div>
-    <div fxLayout="row" fxLayoutAlign="space-between center" fxFlex="85" class="window-container">
-        <app-calendars-frame fxFlex="40" fxFlexFill></app-calendars-frame>
-        <app-note fxFlex="30" fxFlexFill></app-note>
-        <app-menu-tiles fxFlex="25" fxFlexFill></app-menu-tiles>
-    </div>
+    <div fxFlex="25" fxFlexFill></div>
+  </div>
+  <div class="window-container" fxFlex="85" fxLayout="row" fxLayoutAlign="space-between center">
+    <app-calendars-frame fxFlex="40" fxFlexFill></app-calendars-frame>
+    <app-note fxFlex="30" fxFlexFill></app-note>
+    <app-menu-tiles fxFlex="25" fxFlexFill></app-menu-tiles>
+  </div>
 </div>
-<button class="info" mat-raised-button mat-icon-button (click)="showInfoClicked()" title="Info">
-    <mat-icon>info</mat-icon>
+<button (click)="showInfoClicked()" class="info" mat-icon-button mat-raised-button title="Info">
+  <mat-icon>info</mat-icon>
 </button>
 
 <!--- bitte amol do lossn :) resolution 2560x1440
