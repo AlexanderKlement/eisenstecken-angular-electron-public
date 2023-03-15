@@ -181,6 +181,13 @@ export interface DefaultServiceInterface {
     bulkUpdateTechnicalDataTechnicalDataBulkPut(technicalDataUpdate: Array<TechnicalDataUpdate>, extraHttpRequestParams?: any): Observable<Array<TechnicalData>>;
 
     /**
+     * Convert Request
+     * 
+     * @param requestBody 
+     */
+    convertRequestOrderedArticleConvertRequestsPost(requestBody: Array<number>, extraHttpRequestParams?: any): Observable<Array<OrderedArticle>>;
+
+    /**
      * Copy Article And Modify
      * 
      * @param articleId 

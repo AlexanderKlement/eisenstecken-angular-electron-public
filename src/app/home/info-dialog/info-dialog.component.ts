@@ -53,7 +53,21 @@ export class InfoDialogComponent implements OnInit {
         'Instandhaltung kann nicht gelöscht werden',
         'Die Möglichkeit einbauen, die Kosten aller Autos zu verändern',
         'Zeitzonen von Chat-Nachrichten anpassen',
-        'Emails bei Bestellungen (oft Pichler) gehen nicht auf wenn Bestellung versandt wird. UPDATE: Wird demnächst gelöst!'
+      ]
+    },
+    {
+      versionName: '1.1.9',
+      changes: [
+        'Bestellte Artikel in "Ausgewählte Artikel" werden nun richtig geordnet',
+        'Die Adressen bei PDF sind nun in der richtigen Reihenfolge',
+        'Anfragen können nun in Bestellungen umgewandelt werden'
+      ]
+    },
+    {
+      versionName: '1.1.8',
+      changes: [
+        'Ausgangsrechnungen werden nun richtig geordnet',
+        'Bei Kunden werden nun andere Informationen angezeigt'
       ]
     },
     {

@@ -22,6 +22,7 @@ import { OrderBundleEditComponent } from './order-bundle-edit/order-bundle-edit.
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { OrderedArticleMoveDialogComponent } from './order-detail/ordered-article-move-dialog/ordered-article-move-dialog.component';
 import {MatStepperModule} from '@angular/material/stepper';
+import { ConvertRequestDialogComponent } from './order-detail/convert-request-dialog/convert-request-dialog.component';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import {MatStepperModule} from '@angular/material/stepper';
     OrderDetailComponent,
     OrderBundleDetailComponent,
     OrderBundleEditComponent,
-    OrderedArticleMoveDialogComponent
+    OrderedArticleMoveDialogComponent,
+    ConvertRequestDialogComponent
   ],
     imports: [
         CommonModule,
