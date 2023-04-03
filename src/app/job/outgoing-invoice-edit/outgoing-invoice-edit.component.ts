@@ -81,9 +81,6 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
         this.api.readJobJobJobIdGet(this.jobId).pipe(first()).subscribe((job) => {
           this.fillRightSidebar(job.client);
         });
-        this.api.getParameterParameterKeyGet('invoice_number').pipe(first()).subscribe((invoiceNumberString) => {
-          this.invoiceGroup.get('number').setValue(invoiceNumberString);
-        });
         this.addOtherInvoices();
       });
     }
@@ -320,17 +317,8 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
 
   createUpdateSuccess(invoice: OutgoingInvoice): void {
     this.id = invoice.id;
-    this.api.getParameterParameterKeyGet('invoice_number').pipe(first()).subscribe((invoiceNumberString) => {
-      const invoiceNumber = parseInt(invoiceNumberString, 10) + 1;
-      this.api.setParameterParameterPost({
-        key: 'invoice_number',
-        value: invoiceNumber.toString()
-      }).pipe(first()).subscribe(() => {
-        this.file.open(invoice.pdf);
-        this.navigation.back();
-        //this.router.navigateByUrl('job/' + this.jobId.toString(), {replaceUrl: true});
-      });
-    });
+    this.file.open(invoice.pdf);
+    this.navigation.back();
   }
 
   observableReady(): void {

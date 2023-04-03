@@ -42,6 +42,15 @@ export class InfoDialogComponent implements OnInit {
       ]
     },
     {
+      versionName: '1.1.12',
+      changes: [
+        'Angebote sollten nun die Rabatte korrekt berechnen',
+        'Rechnungen sollten nun neue Zeilen bei einem Zeilenumbruch nehmen',
+        'Die nächste Rechnungsnummer wird nun richtig berechnet.',
+        ''
+      ]
+    },
+    {
       versionName: '1.1.11',
       changes: [
         'Bei Ausgangsrechnung erstellen wird bei Privatkunden nun Name statt Vorname angezeigt',
