@@ -60,6 +60,7 @@ import { Job } from '../model/models';
 import { JobCreate } from '../model/models';
 import { JobStatus } from '../model/models';
 import { JobStatusType } from '../model/models';
+import { JobStatusUpdateResponse } from '../model/models';
 import { JobUpdate } from '../model/models';
 import { Journey } from '../model/models';
 import { Language } from '../model/models';
@@ -158,6 +159,13 @@ export interface DefaultServiceInterface {
      * @param subJobCreate 
      */
     addSubjobToJobJobSubJobJobIdPost(jobId: number, subJobCreate: SubJobCreate, extraHttpRequestParams?: any): Observable<Job>;
+
+    /**
+     * Backup Job
+     * 
+     * @param jobId 
+     */
+    backupJobJobBackupJobIdPost(jobId: number, extraHttpRequestParams?: any): Observable<any>;
 
     /**
      * Bulk Update Credentials
@@ -2244,10 +2252,10 @@ export interface DefaultServiceInterface {
     testReminderMailTestTestReminderMailPost(extraHttpRequestParams?: any): Observable<any>;
 
     /**
-     * Test Upload Last Wuerth File
+     * Test Smb Share
      * 
      */
-    testUploadLastWuerthFileTestTestUploadLastWuerthFilePost(extraHttpRequestParams?: any): Observable<any>;
+    testSmbShareTestTestSmbSharePost(extraHttpRequestParams?: any): Observable<any>;
 
     /**
      * Toggle Article Favorite
@@ -2443,7 +2451,7 @@ export interface DefaultServiceInterface {
      * @param jobId 
      * @param jobStatus 
      */
-    updateJobStatusJobStatusJobIdPost(jobId: number, jobStatus: JobStatusType, extraHttpRequestParams?: any): Observable<JobStatusType>;
+    updateJobStatusJobStatusJobIdPost(jobId: number, jobStatus: JobStatusType, extraHttpRequestParams?: any): Observable<JobStatusUpdateResponse>;
 
     /**
      * Update Maintenance

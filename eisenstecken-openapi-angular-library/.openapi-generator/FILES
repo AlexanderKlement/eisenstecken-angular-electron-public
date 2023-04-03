@@ -64,6 +64,7 @@ model/jobSection.ts
 model/jobSectionCreate.ts
 model/jobStatus.ts
 model/jobStatusType.ts
+model/jobStatusUpdateResponse.ts
 model/jobTypeType.ts
 model/jobUpdate.ts
 model/journey.ts

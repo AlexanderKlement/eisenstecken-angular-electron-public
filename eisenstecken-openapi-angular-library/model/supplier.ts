@@ -33,6 +33,7 @@ export interface Supplier {
     language: Language;
     favorite: boolean;
     contacts: Array<Contact>;
+    send_mail: boolean;
 }
 export namespace Supplier {
 }

@@ -1,6 +1,6 @@
 {
   "name": "eisenstecken-openapi-angular-library",
-  "version": "9.3.4",
+  "version": "9.3.6",
   "description": "OpenAPI client for eisenstecken-openapi-angular-library",
   "author": "OpenAPI-Generator Contributors",
   "repository": {
@@ -30,4 +30,5 @@
     "rxjs": "^7.4.0",
     "typescript": ">=4.4.2 <4.5.0",
     "zone.js": "^0.11.4"
-  }}
+  }
+}

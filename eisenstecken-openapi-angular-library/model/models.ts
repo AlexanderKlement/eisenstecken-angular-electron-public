@@ -54,6 +54,7 @@ export * from './jobSection';
 export * from './jobSectionCreate';
 export * from './jobStatus';
 export * from './jobStatusType';
+export * from './jobStatusUpdateResponse';
 export * from './jobTypeType';
 export * from './jobUpdate';
 export * from './journey';

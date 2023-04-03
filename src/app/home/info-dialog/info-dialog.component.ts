@@ -35,24 +35,31 @@ export class InfoDialogComponent implements OnInit {
     {
       versionName: 'In Bearbeitung:',
       changes: [
-        'Wenn Aufträge angenommen werden, wird der Ordner von Angebote in Projekte verschoben. Sollte eine Datei geöffnet sein ' +
-        '(oder der Server anderweitig keine Schreibberechtigung auf eine oder mehrere Dateien erhält),' +
-        ' werden die restlichen Dateien ' +
-        'trotzdem verschoben. Nach Abschluss dieser Operation sind zwei Ordner vorhanden (Angebote und' +
-        ' Projekte). mit jeweils mindestens' +
-        ' einer Datei. Hier entwerder die Operation nicht durchführen, oder bei Fehlern wieder rückgängig machen.',
-        'Mail die sich bei Bestellung öffnet ist nicht optimal formatiert.',
-        'Spalten bei Bestellung ausgleichen, damit eventuell längere Kodexe möglich sind. ' +
-        'Momentan noch aufgeschoben,' +
-        ' da dies vielleicht irgendwo anders zu Problemen führen könnte.',
-        'Wenn man auf eine Bestellung "hovert" erscheint in tooltip mit dem Inhalt. Dieser wird beim klicken nicht ' +
-        'entfernt.',
         'Betriebsergeignisse überarbeiten. Zukünftig werden Ereignisse in 3 Kategorien unterteilt und nebeneinander ' +
-        'angezeigt. (Urlaube von Mitarbeiter, Betriebferien, Besondere "andere" Ereignisse). Großaugenmerk wird hier ' +
-        'auf die mobile Seite gelegt.',
-        'Instandhaltung kann nicht gelöscht werden',
+        'angezeigt. (Urlaube von Mitarbeiter, Betriebferien, Besondere "andere" Ereignisse)',
         'Die Möglichkeit einbauen, die Kosten aller Autos zu verändern',
         'Zeitzonen von Chat-Nachrichten anpassen',
+      ]
+    },
+    {
+      versionName: '1.1.11',
+      changes: [
+        'Bei Ausgangsrechnung erstellen wird bei Privatkunden nun Name statt Vorname angezeigt',
+        'Bei Ausgangsrechnungen wird nun auf dem PDF neue Zeile genommen wenn im Programm neue Zeile genommen wird.',
+        'Ausgangsrechnungen sollten nun beim ersten mal speichern schon erstellt werden.',
+        'Elektronische Rechnung entfernt nun auch das IT vor dem Codice Fiscale',
+        'Checkbox hinzugefügt, damit Tom eingehende Artikel abhaken kann',
+        'Absender zu Bestellungs-PDF hinzugefügt',
+      ]
+    },
+    {
+      versionName: '1.1.10',
+      changes: [
+        'Da die Statusänderung von Aufträgen auch Ordner verschiebt, wird nun vor jeder Änderung überprüft, ob Benutzer Dateien ' +
+        'geöffnet haben. Sollte dies der Fall sein, werden diese dem Nutzer angezeigt, der dann entsprechende Maßnahmen treffen kannt. ' +
+        'Achtung: Noch könnte es eventuell vorkommen, dass der Benutzername des sperrenden Benutzers nicht richtig angezeigt wird.',
+        'Sollte die Seite gewechselt werden, während man über eine Bestellung hovert, wird der Tooltip nun entsprechend ausgeblendet',
+        'Fehler behoben, bei dem Artikelliste nicht generiert werden konnte.'
       ]
     },
     {
