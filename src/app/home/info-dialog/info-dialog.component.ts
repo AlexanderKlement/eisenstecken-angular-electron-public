@@ -42,12 +42,18 @@ export class InfoDialogComponent implements OnInit {
       ]
     },
     {
+      versionName: '1.1.13',
+      changes: [
+        'Sollten Kundendaten beim Erstellen einer Rechnung nicht ausgefüllt sein, wird man nun nicht mehr in einer Endlosschleife gefangen',
+        'Beim Ausgangsrechnungen PDF werden nun zwei Zeilen angezeigt um Kontostände zu notieren'
+      ]
+    },
+    {
       versionName: '1.1.12',
       changes: [
         'Angebote sollten nun die Rabatte korrekt berechnen',
         'Rechnungen sollten nun neue Zeilen bei einem Zeilenumbruch nehmen',
-        'Die nächste Rechnungsnummer wird nun richtig berechnet.',
-        ''
+        'Die nächste Rechnungsnummer wird nun richtig berechnet.'
       ]
     },
     {

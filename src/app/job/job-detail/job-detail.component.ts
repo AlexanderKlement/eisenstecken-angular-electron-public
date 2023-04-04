@@ -456,7 +456,12 @@ export class JobDetailComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(result => {
           if (result) {
-            this.router.navigateByUrl('/client/edit/' + this.clientId.toString());
+            this.locker.getLockAndTryNavigate(
+              this.api.islockedClientClientIslockedClientIdGet(this.clientId),
+              this.api.lockClientClientLockClientIdPost(this.clientId),
+              this.api.unlockClientClientUnlockClientIdPost(this.clientId),
+              '/client/edit/' + this.clientId.toString()
+            );
           }
         });
       }
