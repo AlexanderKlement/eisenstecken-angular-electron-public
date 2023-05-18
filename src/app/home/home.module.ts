@@ -26,12 +26,12 @@ import {MatIconModule} from '@angular/material/icon';
 import {InfoDialogComponent} from './info-dialog/info-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { EventCalendarComponent } from './event-calendar/event-calendar.component';
-import { EventCalendarWeekComponent } from './event-calendar/event-calendar-week/event-calendar-week.component';
 import { EventCalendarDayComponent } from './event-calendar/event-calendar-day/event-calendar-day.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { EventCalendarDialogComponent } from './event-calendar/event-calendar-dialog/event-calendar-dialog.component';
 import {MatListModule} from '@angular/material/list';
 import { EventCalendarEventComponent } from './event-calendar/event-calendar-event/event-calendar-event.component';
+import {MatTableModule} from '@angular/material/table';
 
 @NgModule({
     declarations: [
@@ -45,7 +45,6 @@ import { EventCalendarEventComponent } from './event-calendar/event-calendar-eve
         CalendarsChatFrameComponent,
         InfoDialogComponent,
         EventCalendarComponent,
-        EventCalendarWeekComponent,
         EventCalendarDayComponent,
         EventCalendarDialogComponent,
         EventCalendarEventComponent
@@ -70,7 +69,8 @@ import { EventCalendarEventComponent } from './event-calendar/event-calendar-eve
         MatIconModule,
         MatDialogModule,
         MatToolbarModule,
-        MatListModule
+        MatListModule,
+        MatTableModule
     ]
 })
 export class HomeModule {

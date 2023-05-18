@@ -14,11 +14,23 @@
       </div>
     </mat-toolbar>
 
-    <div fxLayout="row" fxLayoutAlign="space-around center" fxFlex="90">
-      <div *ngFor="let i of weeks" fxFlex>
-        <app-event-calendar-week [week]="selectedCalendarWeek + i"
-                                 [year]="selectedYear"></app-event-calendar-week>
-      </div>
+    <div fxLayout="row" fxLayoutAlign="space-around center" fxFlex="90" fxFlexFill>
+      <mat-table>
+        <mat-header-row>
+          <mat-header-cell></mat-header-cell>
+          <mat-header-cell *ngFor="let i of weeks">
+            {{weekTitle(selectedCalendarWeek + i,selectedYear)}}
+          </mat-header-cell>
+        </mat-header-row>
+        <mat-row *ngFor="let i of days">
+          <mat-header-cell>
+            {{dayTitle(i)}}
+          </mat-header-cell>
+          <mat-cell *ngFor="let j of weeks">
+            <app-event-calendar-day [week]="j" [day]="i" [year]="selectedYear" />
+          </mat-cell>
+        </mat-row>
+      </mat-table>
     </div>
   </div>
 </div>

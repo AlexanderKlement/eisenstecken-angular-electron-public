@@ -13,10 +13,21 @@ export class EventCalendarComponent implements OnInit {
   offset = 0;
   amountWeeks = 4;
   weeks: number[] = Array(this.amountWeeks).fill(0).map((x, i) => i);
+  days: number[] = Array(7).fill(0).map((x, i) => i);
+
 
   constructor() {
   }
 
+  weekTitle(week: number, year: number): string {
+    const date = moment().year(year).isoWeek(week);
+    return 'KW ' + date.isoWeek() + ' ' + date.year();
+  }
+
+  dayTitle(day: number): string{
+    const date = moment().isoWeekday(day + 1);
+    return date.format('dddd');
+  }
   ngOnInit(): void {
     this.changeWeek(0);
   }
