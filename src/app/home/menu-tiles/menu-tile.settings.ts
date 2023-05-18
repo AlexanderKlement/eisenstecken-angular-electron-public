@@ -25,7 +25,6 @@ export const availableMenuTiles: MenuTileDetail[] = [
     {title: 'Stundenzettel', icon: 'work', link: '/employee', requiredRights: ['hours:modify']},
     {title: 'Benutzer', icon: 'person', link: '/user', requiredRights: ['users:all']},
     {title: 'Arbeitstag', icon: 'schedule', link: '/work_day', requiredRights: ['nobody:hours:insert']},
-    {title: 'Ereignisse', icon: 'calendar_today', link: '/calendar', requiredRights: ['info_pages:all']},
     {title: 'Stunden', icon: 'watch_later', link: '/mobile/hours', requiredRights: ['hours:insert']},
     {title: 'Einstellungen', icon: 'settings', link: '/settings', requiredRights: ['parameters:set']},
     {title: 'Kontakte', icon: 'phone', link: '/phone_book', requiredRights: ['clients:all']},

@@ -30,6 +30,7 @@ model/clientCreate.ts
 model/clientValidation.ts
 model/companyEvent.ts
 model/companyEventCreate.ts
+model/companyEventEnum.ts
 model/companyEventUpdate.ts
 model/contact.ts
 model/contactCreate.ts

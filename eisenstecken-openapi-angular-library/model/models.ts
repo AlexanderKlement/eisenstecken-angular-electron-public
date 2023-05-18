@@ -20,6 +20,7 @@ export * from './clientCreate';
 export * from './clientValidation';
 export * from './companyEvent';
 export * from './companyEventCreate';
+export * from './companyEventEnum';
 export * from './companyEventUpdate';
 export * from './contact';
 export * from './contactCreate';

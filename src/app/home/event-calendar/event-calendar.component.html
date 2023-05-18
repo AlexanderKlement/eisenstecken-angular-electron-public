@@ -1,0 +1,24 @@
+<div fxLayout="column" fxLayoutAlign="space-around center">
+  <div fxLayout="column" fxLayoutAlign="start stretch" fxFlexFill>
+    <mat-toolbar color="primary" fxFlex="10">
+      <div fxShow="true" fxLayout="row" fxLayoutAlign="end center">
+        <button mat-icon-button (click)="changeWeek(-amountWeeks)" title="zurück">
+          <mat-icon>navigate_before</mat-icon>
+        </button>
+        <button mat-icon-button (click)="ngOnInit()" title="zurück">
+          <mat-icon>today</mat-icon>
+        </button>
+        <button mat-icon-button (click)="changeWeek(+amountWeeks)" title="weiter">
+          <mat-icon>navigate_next</mat-icon>
+        </button>
+      </div>
+    </mat-toolbar>
+
+    <div fxLayout="row" fxLayoutAlign="space-around center" fxFlex="90">
+      <div *ngFor="let i of weeks" fxFlex>
+        <app-event-calendar-week [week]="selectedCalendarWeek + i"
+                                 [year]="selectedYear"></app-event-calendar-week>
+      </div>
+    </div>
+  </div>
+</div>

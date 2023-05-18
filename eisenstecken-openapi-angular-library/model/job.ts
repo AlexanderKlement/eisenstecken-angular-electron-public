@@ -25,10 +25,10 @@ export interface Job {
     lock: Lock;
     description: string;
     timestamp: string;
+    address: Address;
     year: number;
     code: string;
     client: Client;
-    address: Address;
     archive: boolean;
     path: string;
     status: JobStatus;

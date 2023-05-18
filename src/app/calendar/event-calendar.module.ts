@@ -10,6 +10,9 @@ import {SharedModule} from '../shared/shared.module';
     declarations: [
         EventCalendarComponent
     ],
+    exports: [
+        EventCalendarComponent
+    ],
     imports: [
         CommonModule,
         EventCalendarRoutingModule,

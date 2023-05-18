@@ -9,13 +9,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { CompanyEventEnum } from './companyEventEnum';
 
 
 export interface CompanyEventUpdate { 
     title: string;
-    all_day: boolean;
-    start_time: string;
-    end_time: string;
-    color: string;
+    date: string;
+    event_type: CompanyEventEnum;
 }
+export namespace CompanyEventUpdate {
+}
+
 

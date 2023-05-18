@@ -859,6 +859,12 @@ export interface DefaultServiceInterface {
     grantRightsToUserUsersRightsUserIdPost(userId: number, requestBody: Array<string>, extraHttpRequestParams?: any): Observable<User>;
 
     /**
+     * Import Json
+     * 
+     */
+    importJsonTestImportJsonPost(extraHttpRequestParams?: any): Observable<any>;
+
+    /**
      * Islocked Client
      * 
      * @param clientId 
@@ -1296,24 +1302,18 @@ export interface DefaultServiceInterface {
     readClientsClientGet(skip?: number, limit?: number, filter?: string, privateOnly?: boolean, companyOnly?: boolean, extraHttpRequestParams?: any): Observable<Array<Client>>;
 
     /**
+     * Read Company Event By Date
+     * 
+     * @param date 
+     */
+    readCompanyEventByDateCompanyEventGet(date: string, extraHttpRequestParams?: any): Observable<Array<CompanyEvent>>;
+
+    /**
      * Read Company Event
      * 
      * @param companyEventId 
      */
     readCompanyEventCompanyEventCompanyEventIdGet(companyEventId: number, extraHttpRequestParams?: any): Observable<CompanyEvent>;
-
-    /**
-     * Read Company Events By Year
-     * 
-     * @param year 
-     */
-    readCompanyEventsByYearCompanyEventYearYearGet(year: number, extraHttpRequestParams?: any): Observable<Array<CompanyEvent>>;
-
-    /**
-     * Read Company Events
-     * 
-     */
-    readCompanyEventsCompanyEventGet(extraHttpRequestParams?: any): Observable<Array<CompanyEvent>>;
 
     /**
      * Read Contact
@@ -2241,15 +2241,9 @@ export interface DefaultServiceInterface {
 
     /**
      * Test Pdf
-     * offer_crud.generate_offer_pdf_new(session&#x3D;session, offer_id&#x3D;134, custom_path&#x3D;\&quot;/media/CAD/TEST/test_offer.pdf\&quot;) unpaid_outgoing_invoices &#x3D; outgoing_invoice_crud.get_outgoing_invoices(session&#x3D;session, paid&#x3D;False,                                                                        order_by_payment_date&#x3D;True) pdf.build_unpaid_outgoing_invoice_pdf(session&#x3D;session, db_invoices&#x3D;unpaid_outgoing_invoices,                                       path&#x3D;\&quot;/media/CAD/TEST/test_unpaid_outgoing_invoices.pdf\&quot;)  outgoing_invoice_crud.generate_outgoing_invoice_pdf_new(session&#x3D;session, outgoing_invoice_id&#x3D;130,                                                         custom_path&#x3D;\&quot;/media/CAD/TEST/test_outgoing_invoice.pdf\&quot;)    recalculation_crud.generate_recalculation_pdf_new(session&#x3D;session, recalculation_id&#x3D;86,                                                   custom_path&#x3D;\&quot;/media/CAD/TEST/test_recalculation.pdf\&quot;)   order_bundle_crud.generate_order_bundle_pdf_intern_new(session&#x3D;session, order_bundle_id&#x3D;34024,                                                        author&#x3D;\&quot;Alexander Klement\&quot;,                                                      custom_path&#x3D;\&quot;/media/CAD/TEST/test_order_bundle_int.pdf\&quot;) db_orders &#x3D; order_crud.get_orders(session&#x3D;session, order_to_id&#x3D;2493) order_ids &#x3D; [db_order.id for db_order in db_orders]  order_crud.generate_article_list_pdf_new(session&#x3D;session, user_id&#x3D;1, order_ids&#x3D;order_ids,                                          custom_path&#x3D;\&quot;/media/CAD/TEST/test_article_list.pdf\&quot;)  job_crud.generate_jobs_pdf(session&#x3D;session, custom_path&#x3D;\&quot;/media/CAD/TEST/test_jobs.pdf\&quot;)   unpaid_ingoing_invoices &#x3D; ingoing_invoice_crud.get_ingoing_invoices(session&#x3D;session, paid&#x3D;False,                                                                     order_by_payment_date&#x3D;True) pdf.build_unpaid_ingoing_invoice_pdf(session&#x3D;session, db_invoices&#x3D;unpaid_ingoing_invoices,                                      path&#x3D;\&quot;/media/CAD/TEST/test_unpaid_ingoing_invoices.pdf\&quot;)
-     */
-    testPdfTestTestPdfPost(extraHttpRequestParams?: any): Observable<any>;
-
-    /**
-     * Test Reminder Mail
      * 
      */
-    testReminderMailTestTestReminderMailPost(extraHttpRequestParams?: any): Observable<any>;
+    testPdfTestTestPdfPost(extraHttpRequestParams?: any): Observable<any>;
 
     /**
      * Test Smb Share

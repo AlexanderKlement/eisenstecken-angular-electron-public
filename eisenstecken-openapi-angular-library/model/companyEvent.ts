@@ -10,16 +10,18 @@
  * Do not edit the class manually.
  */
 import { UserEssential } from './userEssential';
+import { CompanyEventEnum } from './companyEventEnum';
 
 
 export interface CompanyEvent { 
     title: string;
-    all_day: boolean;
-    start_time: string;
-    end_time: string;
-    color: string;
+    date: string;
+    event_type: CompanyEventEnum;
     id: number;
     timestamp: string;
     user: UserEssential;
 }
+export namespace CompanyEvent {
+}
+
 

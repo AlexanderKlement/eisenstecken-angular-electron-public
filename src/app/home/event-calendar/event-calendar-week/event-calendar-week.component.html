@@ -1,0 +1,7 @@
+<div fxLayout="column" fxLayoutAlign="space-around center">
+  <div>{{weekTitle()}}</div>
+  <div *ngFor="let i of days" fxFlex>
+    <app-event-calendar-day [week]="week" [day]="i" [year]="year"></app-event-calendar-day>
+  </div>
+</div>
+

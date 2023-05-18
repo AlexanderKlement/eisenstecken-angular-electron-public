@@ -1,0 +1,9 @@
+<div fxLayout="column" fxLayoutAlign="space-around start" class="day">
+  <div (click)="addEvent()">
+    {{dateFormatted}}
+  </div>
+
+  <div *ngFor="let event of events" (click)="editEvent(event.id)" fxLayout="column" fxLayoutAlign="space-around start">
+    <app-event-calendar-event [event]="event"></app-event-calendar-event>
+  </div>
+</div>
