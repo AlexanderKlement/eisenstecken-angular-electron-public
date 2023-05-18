@@ -70,6 +70,4 @@ export class EventCalendarDayComponent implements OnInit, OnChanges {
 
     this.dateFormatted = this.date.format('dddd, DD.MM');
   }
-
-
 }
