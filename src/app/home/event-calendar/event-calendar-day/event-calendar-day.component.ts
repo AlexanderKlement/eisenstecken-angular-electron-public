@@ -68,6 +68,6 @@ export class EventCalendarDayComponent implements OnInit, OnChanges {
   private updateDate(): void {
     this.date = moment().year(this.year).isoWeek(this.week).isoWeekday(this.day + 1);
 
-    this.dateFormatted = this.date.format('dddd, DD.MM');
+    this.dateFormatted = this.date.format('DD.MM');
   }
 }

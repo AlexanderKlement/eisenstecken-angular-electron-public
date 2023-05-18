@@ -14,23 +14,20 @@
       </div>
     </mat-toolbar>
 
-    <div fxLayout="row" fxLayoutAlign="space-around center" fxFlex="90" fxFlexFill>
-      <mat-table>
-        <mat-header-row>
-          <mat-header-cell></mat-header-cell>
-          <mat-header-cell *ngFor="let i of weeks">
-            {{weekTitle(selectedCalendarWeek + i,selectedYear)}}
-          </mat-header-cell>
-        </mat-header-row>
-        <mat-row *ngFor="let i of days">
-          <mat-header-cell>
-            {{dayTitle(i)}}
-          </mat-header-cell>
-          <mat-cell *ngFor="let j of weeks">
-            <app-event-calendar-day [week]="j" [day]="i" [year]="selectedYear" />
-          </mat-cell>
-        </mat-row>
-      </mat-table>
-    </div>
+    <mat-table [dataSource]="dataSource" fxFlexFill class="week-calendar mat-elevation-z2">
+      <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns">
+        <th mat-header-cell *matHeaderCellDef class="header-week">{{weekTitle(column)}}</th>
+        <td mat-cell *matCellDef="let day">
+          <app-event-calendar-day *ngIf="column !== 'week-1'" [week]="day[column].week" [year]="selectedYear"
+                                  [day]="day[column].day"></app-event-calendar-day>
+          <div *ngIf="column === 'week-1'" fxLayout="column" fxLayoutAlign="space-around start">
+            <span class="header-day">{{day[column]}}</span>
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </mat-table>
   </div>
 </div>
