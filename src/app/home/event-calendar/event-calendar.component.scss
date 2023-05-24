@@ -1,14 +1,19 @@
-.week-calendar{
+.week-calendar {
   display: table;
 }
 
-.header-week{
+.header-week {
   font-size: 120%;
 }
-.header-day{
+
+.header-day {
   font-size: 100%;
 }
 
-tr.mat-row{
+tr.mat-row {
   height: 90px;
+}
+
+.spacer {
+  flex: 1 1 auto;
 }

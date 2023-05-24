@@ -66,7 +66,6 @@ export class EventCalendarDialogComponent implements OnInit {
         this.availableEventTypes.push(CompanyEventEnum.Event);
       }
 
-
       if (this.data.id) {
         this.api.readCompanyEventCompanyEventCompanyEventIdGet(this.data.id).subscribe(event => {
           this.dialogFormGroup.get('title').setValue(event.title);
@@ -78,8 +77,6 @@ export class EventCalendarDialogComponent implements OnInit {
         this.showDescription = selectedEventType[0] === CompanyEventEnum.Event;
       });
     });
-
-
   }
 
   onCancelClick(): void {
