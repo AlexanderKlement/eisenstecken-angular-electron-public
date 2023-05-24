@@ -1,11 +1,13 @@
 .day {
   margin-top: 0.25rem;
+
   .title {
     color: rgba(0, 0, 0, 0.7);
     text-align: center;
     cursor: pointer;
   }
-  .events{
+
+  .events {
     cursor: pointer;
     flex: 1;
     overflow-y: scroll;
@@ -13,3 +15,6 @@
 }
 
 
+.closed {
+  background-color: lightgray;
+}

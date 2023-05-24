@@ -41,6 +41,7 @@ export class EventCalendarDialogComponent implements OnInit {
   ];
 
   dialogFormGroup: FormGroup;
+  showDescription = false;
 
   constructor(public dialogRef: MatDialogRef<EventCalendarDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: EventCalendarDialogData,
@@ -53,24 +54,32 @@ export class EventCalendarDialogComponent implements OnInit {
       this.title = 'Eintrag bearbeiten';
     }
 
-    this.authService.getCurrentUser().subscribe(user => {
-      if (user.id < 3) {
-        this.availableEventTypes.push(CompanyEventEnum.Vacation);
-        this.availableEventTypes.push(CompanyEventEnum.Event);
-      }
-    });
-
     this.dialogFormGroup = new FormGroup({
       title: new FormControl(''),
       eventType: new FormControl([])
     });
 
-    if (this.data.id) {
-      this.api.readCompanyEventCompanyEventCompanyEventIdGet(this.data.id).subscribe(event => {
-        this.dialogFormGroup.get('title').setValue(event.title);
-        this.dialogFormGroup.get('eventType').setValue(event.event_type);
+    this.authService.getCurrentUser().subscribe(user => {
+
+      if (user.id <= 5) {
+        this.availableEventTypes.push(CompanyEventEnum.Vacation);
+        this.availableEventTypes.push(CompanyEventEnum.Event);
+      }
+
+
+      if (this.data.id) {
+        this.api.readCompanyEventCompanyEventCompanyEventIdGet(this.data.id).subscribe(event => {
+          this.dialogFormGroup.get('title').setValue(event.title);
+          this.dialogFormGroup.get('eventType').setValue([event.event_type]);
+        });
+      }
+
+      this.dialogFormGroup.get('eventType').valueChanges.subscribe((selectedEventType: string | string[]) => {
+        this.showDescription = selectedEventType[0] === CompanyEventEnum.Event;
       });
-    }
+    });
+
+
   }
 
   onCancelClick(): void {
@@ -100,6 +109,12 @@ export class EventCalendarDialogComponent implements OnInit {
         this.dialogRef.close(true);
       });
     }
+  }
+
+  onDeleteClick(): void {
+    this.api.deleteCompanyEventCompanyEventCompanyEventIdDelete(this.data.id).subscribe(() => {
+      this.dialogRef.close(true);
+    });
   }
 
   translate(event: CompanyEventEnum): string {

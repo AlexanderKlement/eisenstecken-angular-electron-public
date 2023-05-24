@@ -1,10 +1,12 @@
-<div fxLayout="column" fxLayoutAlign="start stretch" class="day">
-  <div (click)="addEvent()" class="title" fxLayout="row" fxLayoutAlign="center center">
+<div fxLayout="column" (click)="eventDayClicked()" fxLayoutAlign="start stretch" class="day"
+     [ngClass]="{'closed': companyClosed}">
+  <div class="title" fxLayout="row" fxLayoutAlign="center center">
     <span class="title-text">{{dateFormatted}}</span>
     <mat-icon>add</mat-icon>
   </div>
 
-  <div *ngFor="let event of events" (click)="editEvent(event.id)" fxLayout="column" fxLayoutAlign="space-around stretch" class="events">
+  <div *ngFor="let event of events" fxLayout="column" fxLayoutAlign="space-around stretch"
+       class="events">
     <app-event-calendar-event [event]="event"></app-event-calendar-event>
   </div>
 </div>

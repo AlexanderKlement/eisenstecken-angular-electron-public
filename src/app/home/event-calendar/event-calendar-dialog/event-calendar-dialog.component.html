@@ -9,13 +9,15 @@
         {{ translate(companyEvent) }}
       </mat-list-option>
     </mat-selection-list>
-    <mat-form-field appearance="fill">
-      <mat-label>Beschreibung (optional)</mat-label>
+    <mat-form-field appearance="fill" *ngIf="showDescription">
+      <mat-label>Beschreibung</mat-label>
       <input class="form-control" formControlName="title" matInput>
     </mat-form-field>
   </form>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onCancelClick()">Abbrechen</button>
+  <button mat-button (click)="onDeleteClick()">Löschen</button>
+  <span class="spacer"></span>
   <button mat-button (click)="onSaveClick()">Speichern</button>
 </div>

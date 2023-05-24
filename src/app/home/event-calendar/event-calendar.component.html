@@ -18,7 +18,8 @@
       <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns">
         <th mat-header-cell *matHeaderCellDef class="header-week">{{weekTitle(column)}}</th>
         <td mat-cell *matCellDef="let day">
-          <app-event-calendar-day *ngIf="column !== 'week-1'" [week]="day[column].week" [year]="selectedYear"
+          <app-event-calendar-day *ngIf="column !== 'week-1'" [week]="day[column].week" [updateSubject]="updateSubject"
+                                  [year]="selectedYear"
                                   [day]="day[column].day"></app-event-calendar-day>
           <div *ngIf="column === 'week-1'" fxLayout="column" fxLayoutAlign="space-around start">
             <span class="header-day">{{day[column]}}</span>

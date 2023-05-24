@@ -35,10 +35,19 @@ export class InfoDialogComponent implements OnInit {
     {
       versionName: 'In Bearbeitung:',
       changes: [
-        'Betriebsergeignisse überarbeiten. Zukünftig werden Ereignisse in 3 Kategorien unterteilt und nebeneinander ' +
-        'angezeigt. (Urlaube von Mitarbeiter, Betriebferien, Besondere "andere" Ereignisse)',
         'Die Möglichkeit einbauen, die Kosten aller Autos zu verändern',
         'Zeitzonen von Chat-Nachrichten anpassen',
+      ]
+    },
+    {
+      versionName: '1.1.14',
+      changes: [
+        'Betreibskalender neu gemacht. Zukünftig wird dieser auf dem Home Bildschirm angezeigt',
+        'Homescreen neugestaltet. Dieser ist nun viel schlichter.',
+        'Fehler behoben, bei dem beim Rechnung erstellen nur der Vorname angegeben wurde.',
+        'Angebot zeigt nun bei Alternativpositionen wieder einen Preis > 0,00€ an',
+        'Fehler behoben, bei dem beim Rechnung erstellen nur der Vorname angegeben wurde.',
+
       ]
     },
     {

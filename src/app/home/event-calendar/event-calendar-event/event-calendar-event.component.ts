@@ -16,8 +16,16 @@ export class EventCalendarEventComponent implements OnInit {
   constructor() {
   }
 
-  translate(eventType: CompanyEventEnum): string {
-    return getEventTranslation(eventType);
+  getEventText(event: CompanyEvent): string {
+    switch (event.event_type) {
+      case CompanyEventEnum.Event:
+        return event.title;
+      case CompanyEventEnum.Holiday:
+        return event.user.fullname;
+      case CompanyEventEnum.Illness:
+        return event.user.fullname;
+    }
+    return getEventTranslation(event.event_type);
   }
 
   ngOnInit(): void {

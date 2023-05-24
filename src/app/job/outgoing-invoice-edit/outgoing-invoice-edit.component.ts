@@ -444,7 +444,7 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
     const langCodeLower = client.language.code.toLowerCase();
     this.getAndFillParameters('payment_condition', 'invoice_payment_condition_' + langCodeLower);
     this.company = client.isCompany;
-    this.invoiceGroup.get('name').setValue(client.name);
+    this.invoiceGroup.get('name').setValue(client.fullname ? client.fullname : client.name);
     this.invoiceGroup.get('address').patchValue({
       name: client.name,
       // eslint-disable-next-line @typescript-eslint/naming-convention
