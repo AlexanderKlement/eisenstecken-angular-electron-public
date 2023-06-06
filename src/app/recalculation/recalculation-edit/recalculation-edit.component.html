@@ -1,125 +1,125 @@
 <app-toolbar [title]="title"></app-toolbar>
 <div class="window-container">
+  <div fxLayout="column" fxLayoutAlign="space-around center">
+    <h3>{{title}}</h3>
+    <h3>{{jobName$ | async}}</h3>
+  </div>
+  <form [formGroup]="recalculationGroup" (submit)="onSubmit()">
     <div fxLayout="column" fxLayoutAlign="space-around center">
-        <h3>{{title}}</h3>
-        <h3>{{jobName$ | async}}</h3>
+      <mat-form-field appearance="fill">
+        <mat-label>Materialkostenaufschlag [%]</mat-label>
+        <input type=number class="form-control" formControlName="material_charge_percent" matInput>
+      </mat-form-field>
     </div>
-    <form [formGroup]="recalculationGroup" (submit)="onSubmit()">
+    <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="wood_lists">
+      <h3>Preise Holzlisten</h3>
+      <div *ngFor="let wood_list of getWoodLists().controls; let i = index" [formGroupName]="i" fxLayout="row"
+           fxLayoutAlign="space-around center">
+        <mat-form-field appearance="fill">
+          <mat-label>Bezeichnung</mat-label>
+          <input class="form-control" formControlName="name" matInput>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Preis [€]</mat-label>
+          <input type=number class="form-control" formControlName="price" matInput>
+        </mat-form-field>
+        <button type="button" mat-icon-button mat-raised-button (click)="removeWoodListAt(i)"
+                class="position-delete">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+      <button type="button" mat-button
+              (click)="addWoodList()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="paints">
+      <h3>Oberflächen</h3>
+      <div fxLayout="row" fxLayoutAlign="space-between start">
         <div fxLayout="column" fxLayoutAlign="space-around center">
+          <h4>Benutzt</h4>
+          <div *ngFor="let paint of getPaints().controls; let i = index" [formGroupName]="i" fxLayout="row"
+               fxLayoutAlign="space-around center">
             <mat-form-field appearance="fill">
-                <mat-label>Materialkostenaufschlag [%]</mat-label>
-                <input type=number class="form-control" formControlName="material_charge_percent" matInput>
+              <mat-label>Bezeichnung</mat-label>
+              <input class="form-control" formControlName="name" matInput>
             </mat-form-field>
-        </div>
-        <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="wood_lists">
-            <h3>Preise Holzlisten</h3>
-            <div *ngFor="let wood_list of getWoodLists().controls; let i = index" [formGroupName]="i" fxLayout="row"
-                 fxLayoutAlign="space-around center">
-                <mat-form-field appearance="fill">
-                    <mat-label>Bezeichnung</mat-label>
-                    <input class="form-control" formControlName="name" matInput>
-                </mat-form-field>
-                <mat-form-field appearance="fill">
-                    <mat-label>Preis [€]</mat-label>
-                    <input type=number class="form-control" formControlName="price" matInput>
-                </mat-form-field>
-                <button type="button" mat-icon-button mat-raised-button (click)="removeWoodListAt(i)"
-                        class="position-delete">
-                    <mat-icon>delete</mat-icon>
-                </button>
-            </div>
-            <button type="button" mat-button
-                    (click)="addWoodList()">
-                <mat-icon>add</mat-icon>
+            <mat-form-field appearance="fill">
+              <mat-label>Menge</mat-label>
+              <input type=number class="form-control" formControlName="amount" matInput>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Einheit</mat-label>
+              <mat-select formControlName="unit_id">
+                <mat-option *ngFor="let unit of units$ | async" [value]="unit.id">
+                  {{unit.name.translation}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Preis [€]</mat-label>
+              <input type=number class="form-control" formControlName="price" matInput>
+            </mat-form-field>
+            <button type="button" mat-icon-button mat-raised-button (click)="removePaintAt(i)"
+                    class="position-delete">
+              <mat-icon>delete</mat-icon>
             </button>
+          </div>
+          <button type="button" mat-button
+                  (click)="addPaint()">
+            <mat-icon>add</mat-icon>
+          </button>
         </div>
-        <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="paints">
-            <h3>Oberflächen</h3>
-            <div fxLayout="row" fxLayoutAlign="space-between start">
-                <div fxLayout="column" fxLayoutAlign="space-around center">
-                    <h4>Benutzt</h4>
-                    <div *ngFor="let paint of getPaints().controls; let i = index" [formGroupName]="i" fxLayout="row"
-                         fxLayoutAlign="space-around center">
-                        <mat-form-field appearance="fill">
-                            <mat-label>Bezeichnung</mat-label>
-                            <input class="form-control" formControlName="name" matInput>
-                        </mat-form-field>
-                        <mat-form-field appearance="fill">
-                            <mat-label>Menge</mat-label>
-                            <input type=number class="form-control" formControlName="amount" matInput>
-                        </mat-form-field>
-                        <mat-form-field appearance="fill">
-                            <mat-label>Einheit</mat-label>
-                            <mat-select formControlName="unit_id">
-                                <mat-option *ngFor="let unit of units$ | async" [value]="unit.id">
-                                    {{unit.name.translation}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <mat-form-field appearance="fill">
-                            <mat-label>Preis [€]</mat-label>
-                            <input type=number class="form-control" formControlName="price" matInput>
-                        </mat-form-field>
-                        <button type="button" mat-icon-button mat-raised-button (click)="removePaintAt(i)"
-                                class="position-delete">
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                    </div>
-                    <button type="button" mat-button
-                            (click)="addPaint()">
-                        <mat-icon>add</mat-icon>
-                    </button>
-                </div>
-                <div fxLayout="column" fxLayoutAlign="space-around center" class="separator-left">
-                    <h4>Vorlagen</h4>
-                    <mat-action-list>
-                        <button *ngFor="let templatePaint of (templatePaints$ | async)" mat-list-item
-                                (click)="templatePaintClicked(templatePaint)">
-                            {{templatePaint.name}}
-                        </button>
-                    </mat-action-list>
-                </div>
-            </div>
-        </div>
-        <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="expenses">
-            <h3>Zusatzkosten</h3>
-            <div *ngFor="let expense of getExpenses().controls; let i = index" [formGroupName]="i" fxLayout="row"
-                 fxLayoutAlign="space-around center">
-                <mat-form-field appearance="fill">
-                    <mat-label>Bezeichnung</mat-label>
-                    <input class="form-control" formControlName="name" matInput>
-                </mat-form-field>
-                <mat-form-field appearance="fill">
-                    <mat-label>Preis [€]</mat-label>
-                    <input type=number class="form-control" formControlName="amount" matInput>
-                </mat-form-field>
-                <button type="button" mat-icon-button mat-raised-button (click)="removeExpenseAt(i)"
-                        class="position-delete">
-                    <mat-icon>delete</mat-icon>
-                </button>
-            </div>
-            <button type="button" mat-button
-                    (click)="addExpense()">
-                <mat-icon>add</mat-icon>
+        <div fxLayout="column" fxLayoutAlign="space-around center" class="separator-left">
+          <h4>Vorlagen</h4>
+          <mat-action-list>
+            <button *ngFor="let templatePaint of (templatePaints$ | async)" mat-list-item
+                    (click)="templatePaintClicked(templatePaint)">
+              {{templatePaint.name}}
             </button>
+          </mat-action-list>
         </div>
-        <app-table-builder [dataSource]="orderDataSource" title="Bestellungen"></app-table-builder>
-        <app-table-builder [dataSource]="workloadDataSource" title="Arbeitszeit"></app-table-builder>
-        <div fxLayout="column" fxLayoutAlign="space-around center">
-            <h3>Fahrten</h3>
-            <div fxLayout="row" fxLayoutAlign="space-around center">
-                <mat-form-field appearance="fill">
-                    <mat-label>Kilometer</mat-label>
-                    <input class="form-control" readonly formControlName="km" matInput>
-                </mat-form-field>
-                <mat-form-field appearance="fill">
-                    <mat-label>Kosten / Kilometer</mat-label>
-                    <input class="form-control" formControlName="cost" matInput>
-                </mat-form-field>
-            </div>
-        </div>
-        <div fxLayout="column" fxLayoutAlign="space-around center">
-            <button [disabled]="submitted" mat-raised-button type="submit">Speichern</button>
-        </div>
-    </form>
+      </div>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="expenses">
+      <h3>Zusatzkosten</h3>
+      <div *ngFor="let expense of getExpenses().controls; let i = index" [formGroupName]="i" fxLayout="row" class="wide"
+           fxLayoutAlign="center center">
+        <mat-form-field appearance="fill" class="wide">
+          <mat-label>Bezeichnung</mat-label>
+          <input class="form-control" formControlName="name" matInput>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Preis [€]</mat-label>
+          <input type=number class="form-control" formControlName="amount" matInput>
+        </mat-form-field>
+        <button type="button" mat-icon-button mat-raised-button (click)="removeExpenseAt(i)"
+                class="position-delete">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+      <button type="button" mat-button
+              (click)="addExpense()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+    <app-table-builder [dataSource]="orderDataSource" title="Bestellungen"></app-table-builder>
+    <app-table-builder [dataSource]="workloadDataSource" title="Arbeitszeit"></app-table-builder>
+    <div fxLayout="column" fxLayoutAlign="space-around center">
+      <h3>Fahrten</h3>
+      <div fxLayout="row" fxLayoutAlign="center center" class="wide">
+        <mat-form-field appearance="fill" class="wide">
+          <mat-label>Kilometer</mat-label>
+          <input class="form-control" formControlName="km" matInput>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Kosten / Kilometer</mat-label>
+          <input class="form-control" formControlName="cost" matInput>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="space-around center">
+      <button [disabled]="submitted" mat-raised-button type="submit">Speichern</button>
+    </div>
+  </form>
 </div>

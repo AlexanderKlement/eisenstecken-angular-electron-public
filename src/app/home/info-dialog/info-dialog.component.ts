@@ -37,6 +37,7 @@ export class InfoDialogComponent implements OnInit {
       changes: [
         'Die Möglichkeit einbauen, die Kosten aller Autos zu verändern',
         'Zeitzonen von Chat-Nachrichten anpassen',
+        'Chat sollte anzeigen ob neue Nachrichten vorhanden sind',
       ]
     },
     {
@@ -45,9 +46,14 @@ export class InfoDialogComponent implements OnInit {
         'Betreibskalender neu gemacht. Zukünftig wird dieser auf dem Home Bildschirm angezeigt',
         'Homescreen neugestaltet. Dieser ist nun viel schlichter.',
         'Fehler behoben, bei dem beim Rechnung erstellen nur der Vorname angegeben wurde.',
-        'Angebot zeigt nun bei Alternativpositionen wieder einen Preis > 0,00€ an',
+        'Angebot PDF zeigt nun bei Alternativpositionen wieder einen Preis > 0,00€ an',
         'Fehler behoben, bei dem beim Rechnung erstellen nur der Vorname angegeben wurde.',
-
+        'Angebot PDF versucht nun Positionen auf einer Seite zu halten.',
+        'Name bei Adressen fasst nun 200 statt 50 Zeichen',
+        'Fehler behoben, bei dem Anfragen nicht verschoben werden konnten.',
+        'Zeilen bei Nachkalkulation breiter gemacht',
+        'Kilometer bei Nachkalkulation kann jetzt verändert werden',
+        'Zeitzone bei Mails korrigiert'
       ]
     },
     {
