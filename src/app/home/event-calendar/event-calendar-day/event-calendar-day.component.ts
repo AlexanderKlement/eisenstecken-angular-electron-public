@@ -73,6 +73,7 @@ export class EventCalendarDayComponent implements OnInit, OnChanges, OnDestroy {
   updateEvents() {
     this.api.readCompanyEventByDateCompanyEventGet(this.isoDateString).subscribe(events => {
       this.events = [];
+      this.companyClosed = false;
       for (const event of events) {
         if (event.event_type === CompanyEventEnum.Vacation) {
           this.companyClosed = true;
