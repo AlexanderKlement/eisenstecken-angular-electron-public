@@ -58,7 +58,7 @@ export class CalendarDayComponent implements OnInit, OnDestroy {
         });
         dialogRef.afterClosed().pipe(first()).subscribe(result => {
             if (result !== undefined) {
-                this.calendar.refreshCalendar(parseInt(result.calendar.id, 10), this.day);
+                this.calendar.refreshCalendar(this.calendarId, this.day);
             }
         });
     }

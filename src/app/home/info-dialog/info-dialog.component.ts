@@ -53,7 +53,9 @@ export class InfoDialogComponent implements OnInit {
         'Fehler behoben, bei dem Anfragen nicht verschoben werden konnten.',
         'Zeilen bei Nachkalkulation breiter gemacht',
         'Kilometer bei Nachkalkulation kann jetzt verändert werden',
-        'Zeitzone bei Mails korrigiert'
+        'Zeitzone bei Mails korrigiert',
+        'Erinnerungmails werden nun früher versandt (30 Minuten)',
+        'Termine löschen sollte nun richtig funktionieren',
       ]
     },
     {

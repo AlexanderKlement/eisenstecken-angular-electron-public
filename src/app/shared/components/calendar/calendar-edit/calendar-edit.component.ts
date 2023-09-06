@@ -159,7 +159,7 @@ export class CalendarEditComponent implements OnInit {
 
     deleteCalendarEntry(): void {
         this.api.deleteCalendarEntryCalendarCalendarIdDelete(this.calendarEntryId).pipe(first()).subscribe(() => {
-            this.dialogRef.close();
+            this.dialogRef.close(true);
         });
     }
 
