@@ -56,6 +56,8 @@ export class InfoDialogComponent implements OnInit {
         'Zeitzone bei Mails korrigiert',
         'Erinnerungmails werden nun früher versandt (30 Minuten)',
         'Termine löschen sollte nun richtig funktionieren',
+        'Artikel verschieben komplett überarbeitet. Es sollte nun nicht mehr passieren, dass Artikel komplett ' +
+        'verschwinden. Sorry Luki, dass des so long gedauert hot!'
       ]
     },
     {
