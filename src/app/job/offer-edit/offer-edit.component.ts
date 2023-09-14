@@ -318,7 +318,8 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
 
   transformAmount(i: number, j: number) {
     const subDescriptiveArticle = this.getSubDescriptiveArticles(this.getDescriptiveArticles().at(i)).at(j);
-    const singlePrice = parseFloat(subDescriptiveArticle.get('singlePriceFormatted').value.replace('€', '').replace(',', '.'));
+    const singlePrice = parseFloat(subDescriptiveArticle.get('singlePriceFormatted').value
+      .replace('€', '').replace('.', '').replace(',', '.'));
     const formattedAmount = this.currency.transform(singlePrice, getLocaleCurrencyCode('de_DE'));
     subDescriptiveArticle.get('single_price').setValue(singlePrice);
     subDescriptiveArticle.get('singlePriceFormatted').setValue(formattedAmount);

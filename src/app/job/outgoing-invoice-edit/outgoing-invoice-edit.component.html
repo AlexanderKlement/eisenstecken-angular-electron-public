@@ -31,7 +31,8 @@
             </mat-form-field>
             <mat-form-field appearance="fill" fxFlex="4">
               <mat-label>Einzelpreis</mat-label>
-              <input class="form-control" type=number formControlName="single_price" matInput>
+              <input class="form-control" type=text formControlName="singlePriceFormatted" (blur)="transformAmount(i)"
+                     matInput>
             </mat-form-field>
             <mat-form-field appearance="fill" fxFlex="8">
               <mat-label>Gesamtpreis</mat-label>

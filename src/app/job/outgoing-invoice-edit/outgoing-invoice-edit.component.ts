@@ -210,6 +210,14 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
     this.getDescriptiveArticles().insert(index + 1, descriptiveArticle);
   }
 
+  transformAmount(i: number) {
+    const descriptiveArticle = this.getDescriptiveArticles().at(i);
+    const singlePrice = parseFloat(descriptiveArticle.get('singlePriceFormatted').value.replace('€', '').replace('.', '').replace(',', '.'));
+    const formattedAmount = this.currency.transform(singlePrice, getLocaleCurrencyCode('de_DE'));
+    descriptiveArticle.get('single_price').setValue(singlePrice);
+    descriptiveArticle.get('singlePriceFormatted').setValue(formattedAmount);
+  }
+
   onSubmit(): void {
     this.submitted = true;
     const descriptiveArticles = [];
@@ -352,6 +360,7 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
       amount: new FormControl('0'),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       single_price: new FormControl('0'),
+      singlePriceFormatted: new FormControl('0,00 €'),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       total_price: new FormControl('0')
     });
@@ -371,6 +380,8 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
         amount: descriptiveArticle.amount,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         single_price: descriptiveArticle.single_price,
+        singlePriceFormatted: this.currency.transform(descriptiveArticle.single_price,
+          getLocaleCurrencyCode('de_DE')),
       });
     }
 
@@ -383,6 +394,8 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
       amount: new FormControl(amount),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       single_price: new FormControl(singlePrice),
+      singlePriceFormatted: new FormControl(this.currency.transform(singlePrice,
+        getLocaleCurrencyCode('de_DE'))),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       total_price: new FormControl(totalPrice)
     });
