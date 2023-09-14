@@ -38,6 +38,19 @@ export class InfoDialogComponent implements OnInit {
         'Die Möglichkeit einbauen, die Kosten aller Autos zu verändern',
         'Zeitzonen von Chat-Nachrichten anpassen',
         'Chat sollte anzeigen ob neue Nachrichten vorhanden sind',
+        'Navigation funktioniert nicht richtig: Änderungen verwerden Dialog kann nicht geschlossen werden'
+      ]
+    },
+    {
+      versionName: '1.1.15',
+      changes: [
+        'Angebote bearbeiten, Rechnungen bearbeiten und Dialog bei Bestellungen und Artikeln fügt nun automatisch das Eurozeichen' +
+        ' und 2 Nachkommastellen hinzu',
+        'Sollte Ordner verschieben fehlschlagen, da eine Datei noch geöffnet ist, ergibt sich ein inkonsitenter Zustand, bei dem' +
+        ' ein Teil der Dateien verschoben ist. Dadurch lässt sich der Status eines Auftrags nicht mehr ändern. Mit diesem Update wird' +
+        ' dieser Zustand erkannt und behoben.',
+        '@Luki: Online Bestellungen deaktiviert. Bestellungen von Grohe oder Würth funktionieren nun wieder wie zuvor. In Zukunft werden ' +
+        'Onlinebestellungen so angepasst, dass nur noch Internetbestellungen importiert werden.'
       ]
     },
     {

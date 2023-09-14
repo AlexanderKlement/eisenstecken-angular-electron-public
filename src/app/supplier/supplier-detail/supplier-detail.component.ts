@@ -339,14 +339,8 @@ export class SupplierDetailComponent implements OnInit {
         this.deliveredOrderDataSource.loadData();
         this.orderedOrderDataSource.loadData();
         this.createdOrderDataSource.loadData();
-        if (supplier.send_mail) {
-          SupplierDetailComponent.sendAndDisplayOrderBundlePdf(this.api, this.authService, this.email,
-            this.file, newOrderBundle, supplier, request);
-        } else {
-          this.snackBar.open('Erfolgreich bestellt! Sie erhalten in wenigen Minuten eine Bestätigungsmail', 'Ok', {
-            duration: 1000
-          });
-        }
+        SupplierDetailComponent.sendAndDisplayOrderBundlePdf(this.api, this.authService, this.email,
+          this.file, newOrderBundle, supplier, request);
       });
     });
   }
