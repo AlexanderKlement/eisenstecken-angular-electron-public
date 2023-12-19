@@ -20,6 +20,7 @@ import {FileService} from '../../shared/services/file.service';
 import {ChangePathDialogComponent} from './change-path-dialog/change-path-dialog.component';
 import {OrderDetailComponent} from '../../order/order-detail/order-detail.component';
 import {Observable, Subscriber} from 'rxjs';
+import {MoveJobDialogComponent} from './move-job-dialog/move-job-dialog.component';
 
 @Component({
   selector: 'app-job-detail',
@@ -67,20 +68,14 @@ export class JobDetailComponent implements OnInit {
         return;
       }
       this.jobId = id;
-      this.api.readJobJobJobIdGet(this.jobId).pipe(first()).subscribe((job) => {
-        this.isMainJob = job.is_main;
-        this.title = 'Auftrag: ' + job.displayable_name;
-        this.clientId = job.client.id;
-      });
-      this.initOfferTable();
-      this.initSubJobTable();
-      this.initOutgoingInvoiceTable();
-      this.initJobDetail(id);
-      this.initOrderTable();
+      this.initData();
     });
     this.initAccessRights();
     this.initRefreshObservables();
   }
+
+
+
 
   initRefreshObservables(): void {
     this.$refresh = new Observable<void>((subscriber => {
@@ -319,6 +314,12 @@ export class JobDetailComponent implements OnInit {
             this.child.editButtonClicked();
           }
         });
+        this.buttonsMain.push({
+          name: 'Verschieben',
+          navigate: (): void => {
+            this.moveButtonClicked();
+          }
+        });
       }
     });
 
@@ -438,6 +439,19 @@ export class JobDetailComponent implements OnInit {
     });
   }
 
+  private initData() {
+    this.api.readJobJobJobIdGet(this.jobId).pipe(first()).subscribe((job) => {
+      this.isMainJob = job.is_main;
+      this.title = 'Auftrag: ' + job.displayable_name;
+      this.clientId = job.client.id;
+    });
+    this.initOfferTable();
+    this.initSubJobTable();
+    this.initOutgoingInvoiceTable();
+    this.initJobDetail(this.jobId);
+    this.initOrderTable();
+  }
+
   private newInvoiceClicked() {
     this.api.getClientValidationClientValidationClientIdGet(this.clientId).pipe(first()).subscribe((clientValidation) => {
       if (clientValidation.success) {
@@ -504,6 +518,25 @@ export class JobDetailComponent implements OnInit {
           , 'Ok', {
             duration: 5000
           });
+      }
+    });
+  }
+
+
+  private moveButtonClicked() {
+    const dialogRef = this.dialog.open(MoveJobDialogComponent, {
+      width: '600px',
+      data: {
+        id: this.jobId,
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.snackBar.open('Jahr erfolgreich geändert'
+          , 'Ok', {
+            duration: 5000
+          });
+        this.initData();
       }
     });
   }

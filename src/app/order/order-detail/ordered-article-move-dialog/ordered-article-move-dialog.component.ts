@@ -82,7 +82,7 @@ export class OrderedArticleMoveDialogComponent implements OnInit {
             this.getSelectedOrderable(), this.getSelectedArticleIds())
             .pipe(first()).subscribe((result) => {
             const response: OrderedArticleReturnDialogData = {
-                success: result,
+                success: result !== undefined
             };
             this.dialogRef.close(response);
         });

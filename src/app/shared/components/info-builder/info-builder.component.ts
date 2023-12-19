@@ -46,4 +46,5 @@ export class InfoBuilderComponent<T extends DataSourceClass> implements OnInit {
       this.dataSource.navigationTarget
     );
   }
+
 }

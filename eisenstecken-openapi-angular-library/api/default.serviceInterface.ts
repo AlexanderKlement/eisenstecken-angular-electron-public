@@ -506,7 +506,7 @@ export interface DefaultServiceInterface {
      * 
      * @param calendarId 
      */
-    deleteCalendarEntryCalendarCalendarIdDelete(calendarId: number, extraHttpRequestParams?: any): Observable<CalendarEntry>;
+    deleteCalendarEntryCalendarCalendarIdDelete(calendarId: number, extraHttpRequestParams?: any): Observable<boolean>;
 
     /**
      * Delete Category
@@ -1102,13 +1102,21 @@ export interface DefaultServiceInterface {
     loginForAccessTokenTokenPost(username: string, password: string, allScopes?: boolean, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, extraHttpRequestParams?: any): Observable<Token>;
 
     /**
+     * Move Job To Year
+     * 
+     * @param jobId 
+     * @param year 
+     */
+    moveJobToYearJobMoveJobToYearJobIdPost(jobId: number, year: number, extraHttpRequestParams?: any): Observable<any>;
+
+    /**
      * Move Ordered Articles
      * 
      * @param oldOrderId 
      * @param newOrderableToId 
      * @param requestBody 
      */
-    moveOrderedArticlesOrderMoveOldOrderIdNewOrderableToIdPost(oldOrderId: number, newOrderableToId: number, requestBody: Array<number>, extraHttpRequestParams?: any): Observable<boolean>;
+    moveOrderedArticlesOrderMoveOldOrderIdNewOrderableToIdPost(oldOrderId: number, newOrderableToId: number, requestBody: Array<number>, extraHttpRequestParams?: any): Observable<Order>;
 
     /**
      * Patch Article
@@ -2250,6 +2258,12 @@ export interface DefaultServiceInterface {
      * 
      */
     testSmbShareTestTestSmbSharePost(extraHttpRequestParams?: any): Observable<any>;
+
+    /**
+     * Test
+     * 
+     */
+    testTestOfferGet(extraHttpRequestParams?: any): Observable<any>;
 
     /**
      * Toggle Article Favorite

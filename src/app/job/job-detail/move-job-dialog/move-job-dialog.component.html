@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<div mat-dialog-content>
+    <form [formGroup]="moveJobFormGroup">
+        <div fxLayout="column" fxLayoutAlign="space-around center">
+            <mat-form-field appearance="fill">
+                <mat-label>Jahr</mat-label>
+                <input matInput formControlName="year">
+            </mat-form-field>
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-button type="button" (click)="onCancelClick()">Abbrechen</button>
+    <button mat-button type="button" (click)="onSubmitClick()">Speichern</button>
+</div>
