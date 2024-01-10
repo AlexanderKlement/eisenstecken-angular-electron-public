@@ -1,4 +1,14 @@
-import {AfterViewInit, Component, ComponentRef, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ComponentRef,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import {TableDataSource} from './table-builder.datasource';
 import {MatPaginator} from '@angular/material/paginator';
 import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
@@ -38,13 +48,7 @@ export class TableBuilderComponent<T extends DataSourceClass> implements OnInit,
 
     ngOnInit(): void {
         this.subscription = new Subscription();
-        if (this.buttons.length > 0) {
-            this.dataSource.columnIdentifiers.push('actions');
-            this.dataSource.columns.push({
-                name: 'actions',
-                headerName: 'Aktionen',
-            });
-        }
+        this.addButtons();
         this.refreshInterval = setInterval(() => {
             this.loadDataPage(false);
         }, this.refreshRateSeconds * 1000);
@@ -52,6 +56,22 @@ export class TableBuilderComponent<T extends DataSourceClass> implements OnInit,
             this.subscription.add(this.$refresh.subscribe(() => {
                 this.loadDataPage(false);
             }));
+        }
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+    if (changes.dataSource && !changes.dataSource.firstChange) {
+      this.addButtons();
+    }
+  }
+
+    addButtons(): void {
+      if (this.buttons.length > 0) {
+            this.dataSource.columnIdentifiers.push('actions');
+            this.dataSource.columns.push({
+                name: 'actions',
+                headerName: 'Aktionen',
+            });
         }
     }
 

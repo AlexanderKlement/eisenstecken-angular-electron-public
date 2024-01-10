@@ -42,6 +42,19 @@ export class InfoDialogComponent implements OnInit {
       ]
     },
     {
+      versionName: '1.1.17',
+      changes: [
+        'Benutzer wird ausgeloggt wenn sein token verfällt.',
+        'Buttons werden nun wieder hinzugefügt wenn sich die Daten ändern.',
+      ]
+    },
+    {
+      versionName: '1.1.16',
+      changes: [
+        'Aufträge können nun in andere Jahre verschoben werden.'
+      ]
+    },
+    {
       versionName: '1.1.15',
       changes: [
         'Angebote bearbeiten, Rechnungen bearbeiten und Dialog bei Bestellungen und Artikeln fügt nun automatisch das Eurozeichen' +
