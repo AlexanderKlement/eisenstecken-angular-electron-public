@@ -217,10 +217,10 @@
     "@angular-eslint/bundled-angular-compiler" "13.0.0-alpha.0"
     "@typescript-eslint/experimental-utils" "5.3.0"
 
-"@angular-material-components/datetime-picker@7.0.1":
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/@angular-material-components/datetime-picker/-/datetime-picker-7.0.1.tgz#466026f46d5198c1204be180e7596ecf3379ecf5"
-  integrity sha512-ukNFdmab++bPF35+56SXFkzWz7F2If3s/rRae37Yq3g7QWWh3kmS7KEbvtSIz000yj3/wGHDV1v9ChGiqsNsgA==
+"@angular-material-components/datetime-picker@16.0.1":
+  version "16.0.1"
+  resolved "https://registry.yarnpkg.com/@angular-material-components/datetime-picker/-/datetime-picker-16.0.1.tgz#f6813332066ab1aed69f1adb7e00d844099c8a34"
+  integrity sha512-dbkwWiC8qL7NVlMclb1hvuZvuP2l1nvfnnmijEc/zGsoWeoLNDXn/+z/UQtMcbUphcwCzFt9CfHhhpGUGgQLgw==
   dependencies:
     tslib "^2.3.0"
 
