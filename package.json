@@ -82,7 +82,7 @@
     "url": "https://github.com/AlexanderKlement/eisenstecken-angular-electron-public.git"
   },
   "devDependencies": {
-    "@angular-builders/custom-webpack": "17.0.0",
+    "@angular-builders/custom-webpack": "16.0.0",
     "@angular/cli": "16.2.11",
     "@ngx-translate/core": "14.0.0",
     "@ngx-translate/http-loader": "7.0.0",
