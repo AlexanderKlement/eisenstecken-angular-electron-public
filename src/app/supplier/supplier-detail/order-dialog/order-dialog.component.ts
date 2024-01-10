@@ -4,7 +4,7 @@ import {Order} from 'eisenstecken-openapi-angular-library';
 import {MatSelectionList} from '@angular/material/list';
 import {Observable} from 'rxjs';
 import * as moment from 'moment';
-import {FormControl} from '@angular/forms';
+import {UntypedFormControl} from '@angular/forms';
 
 export interface OrderDialogData {
     name: Observable<string>;
@@ -24,7 +24,7 @@ export interface OrderDateReturnData {
 export class OrderDialogComponent implements OnInit {
 
     @ViewChild('orders') ordersSelected: MatSelectionList;
-    dateControl: FormControl;
+    dateControl: UntypedFormControl;
     error = false;
 
     constructor(public dialogRef: MatDialogRef<OrderDialogComponent>,
@@ -32,7 +32,7 @@ export class OrderDialogComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.dateControl = new FormControl(new Date());
+        this.dateControl = new UntypedFormControl(new Date());
     }
 
     onCancelClick(): void {

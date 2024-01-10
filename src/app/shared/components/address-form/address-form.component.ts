@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {FormGroup} from '@angular/forms';
+import {UntypedFormGroup} from '@angular/forms';
 import {Country, DefaultService} from 'eisenstecken-openapi-angular-library';
 import {Observable} from 'rxjs';
 
@@ -10,7 +10,7 @@ import {Observable} from 'rxjs';
 })
 export class AddressFormComponent implements OnInit {
 
-  @Input() address: FormGroup;
+  @Input() address: UntypedFormGroup;
   countryOptions$: Observable<Country[]>;
 
   constructor(private api: DefaultService) { }

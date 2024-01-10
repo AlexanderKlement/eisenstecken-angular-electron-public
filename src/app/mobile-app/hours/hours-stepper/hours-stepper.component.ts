@@ -7,9 +7,9 @@ import {
 import {CustomButton} from '../../../shared/components/toolbar/toolbar.component';
 import {
     AbstractControl,
-    FormArray,
-    FormControl,
-    FormGroup,
+    UntypedFormArray,
+    UntypedFormControl,
+    UntypedFormGroup,
     ValidationErrors,
     ValidatorFn,
     Validators
@@ -76,10 +76,10 @@ export class HoursStepperComponent implements OnInit {
     workDay: WorkDay;
     user: User;
     buttons: CustomButton[] = [];
-    hourFormGroup: FormGroup;
-    jobFormGroup: FormGroup;
-    mealFormGroup: FormGroup;
-    expensesJourneyGroup: FormGroup;
+    hourFormGroup: UntypedFormGroup;
+    jobFormGroup: UntypedFormGroup;
+    mealFormGroup: UntypedFormGroup;
+    expensesJourneyGroup: UntypedFormGroup;
     eatingPlaces$: Observable<EatingPlace[]>;
     jobs$: Observable<Job[]>;
     cars$: Observable<Car[]>;
@@ -107,14 +107,14 @@ export class HoursStepperComponent implements OnInit {
         return workedHoursString;
     }
 
-    private static initSingleJob(minutes: number, minutesDirection: number, job: Job): FormGroup {
+    private static initSingleJob(minutes: number, minutesDirection: number, job: Job): UntypedFormGroup {
         const name = job.code + ' ' + job.client.fullname;
-        return new FormGroup({
-            minutes: new FormControl(minutes),
-            minutesDirection: new FormControl(minutesDirection),
-            jobId: new FormControl(job.id),
-            name: new FormControl(name),
-            job: new FormControl(job)
+        return new UntypedFormGroup({
+            minutes: new UntypedFormControl(minutes),
+            minutesDirection: new UntypedFormControl(minutesDirection),
+            jobId: new UntypedFormControl(job.id),
+            name: new UntypedFormControl(name),
+            job: new UntypedFormControl(job)
         });
     }
 
@@ -176,12 +176,12 @@ export class HoursStepperComponent implements OnInit {
         return HoursStepperComponent.generateHourString(hours, minutes);
     }
 
-    getJobs(jobEnum: JobEnum): FormArray {
+    getJobs(jobEnum: JobEnum): UntypedFormArray {
         switch (jobEnum) {
             case JobEnum.accepted:
-                return this.jobFormGroup.get('jobsAccepted') as FormArray;
+                return this.jobFormGroup.get('jobsAccepted') as UntypedFormArray;
             case JobEnum.created:
-                return this.jobFormGroup.get('jobsCreated') as FormArray;
+                return this.jobFormGroup.get('jobsCreated') as UntypedFormArray;
         }
     }
 
@@ -195,7 +195,7 @@ export class HoursStepperComponent implements OnInit {
         this.refreshSpentMinutes();
     }
 
-    getAllJobs(): FormArray[] {
+    getAllJobs(): UntypedFormArray[] {
         return [
             this.getJobs(JobEnum.accepted),
             this.getJobs(JobEnum.created)
@@ -222,29 +222,29 @@ export class HoursStepperComponent implements OnInit {
         return parseInt(this.getJobs(jobEnum).at(i).get(fieldName).value, 10);
     }
 
-    initExpense(expense?: Expense): FormGroup {
+    initExpense(expense?: Expense): UntypedFormGroup {
         if (expense === undefined) {
-            return new FormGroup({
-                name: new FormControl(''),
-                amount: new FormControl('')
+            return new UntypedFormGroup({
+                name: new UntypedFormControl(''),
+                amount: new UntypedFormControl('')
             });
         } else {
-            return new FormGroup({
-                name: new FormControl(expense.name),
-                amount: new FormControl(expense.amount)
+            return new UntypedFormGroup({
+                name: new UntypedFormControl(expense.name),
+                amount: new UntypedFormControl(expense.amount)
             });
         }
     }
 
-    initDrive(drive?: Drive, jobId?: number, reasonString?: string): FormGroup {
+    initDrive(drive?: Drive, jobId?: number, reasonString?: string): UntypedFormGroup {
         if (drive === undefined) {
-            return new FormGroup({
-                km: new FormControl(0.0),
+            return new UntypedFormGroup({
+                km: new UntypedFormControl(0.0),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                car_id: new FormControl(1),
+                car_id: new UntypedFormControl(1),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                job_id: new FormControl(jobId),
-                reasonString: new FormControl(reasonString),
+                job_id: new UntypedFormControl(jobId),
+                reasonString: new UntypedFormControl(reasonString),
             });
         } else {
             let reason = '';
@@ -261,24 +261,24 @@ export class HoursStepperComponent implements OnInit {
                 job_id = drive.job.id;
             }
             console.log(reason);
-            return new FormGroup({
-                km: new FormControl(drive.km),
+            return new UntypedFormGroup({
+                km: new UntypedFormControl(drive.km),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                job_id: new FormControl(job_id),
+                job_id: new UntypedFormControl(job_id),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                car_id: new FormControl(drive.car.id),
-                reasonString: new FormControl(reason),
+                car_id: new UntypedFormControl(drive.car.id),
+                reasonString: new UntypedFormControl(reason),
 
             });
         }
     }
 
-    getDrives(): FormArray {
-        return this.expensesJourneyGroup.get('drives') as FormArray;
+    getDrives(): UntypedFormArray {
+        return this.expensesJourneyGroup.get('drives') as UntypedFormArray;
     }
 
-    getExpenses(): FormArray {
-        return this.expensesJourneyGroup.get('expenses') as FormArray;
+    getExpenses(): UntypedFormArray {
+        return this.expensesJourneyGroup.get('expenses') as UntypedFormArray;
     }
 
     onRemoveDriveClick(i: number): void {
@@ -474,7 +474,7 @@ export class HoursStepperComponent implements OnInit {
     openDialogClicked(variant: HoursStepperVariantEnum, selectedJobIndex?: number, selectedJobList?: number): void {
         const data = {
             jobGroup: this.jobFormGroup,
-            additionalJobs: this.jobFormGroup.get('additionalJob') as FormGroup,
+            additionalJobs: this.jobFormGroup.get('additionalJob') as UntypedFormGroup,
             variant,
             hourFormGroup: this.hourFormGroup,
             selectedJobList: -1,
@@ -514,27 +514,27 @@ export class HoursStepperComponent implements OnInit {
     }
 
     private initFormGroups() {
-        this.hourFormGroup = new FormGroup({
-            minutes: new FormControl(0, [greaterThanValidator(0)]),
-            showingHours: new FormControl(0),
-            showingMinutes: new FormControl(0),
+        this.hourFormGroup = new UntypedFormGroup({
+            minutes: new UntypedFormControl(0, [greaterThanValidator(0)]),
+            showingHours: new UntypedFormControl(0),
+            showingMinutes: new UntypedFormControl(0),
         });
-        this.jobFormGroup = new FormGroup({
-            spendableMinutes: new FormControl(0),
-            maintenanceMinutes: new FormControl(0),
-            jobsAccepted: new FormArray([]),
-            jobsCreated: new FormArray([]),
-            additionalJob: new FormGroup({
-                minutes: new FormControl(0),
-                description: new FormControl('')
+        this.jobFormGroup = new UntypedFormGroup({
+            spendableMinutes: new UntypedFormControl(0),
+            maintenanceMinutes: new UntypedFormControl(0),
+            jobsAccepted: new UntypedFormArray([]),
+            jobsCreated: new UntypedFormArray([]),
+            additionalJob: new UntypedFormGroup({
+                minutes: new UntypedFormControl(0),
+                description: new UntypedFormControl('')
             }),
         });
-        this.mealFormGroup = new FormGroup({
-            eatingPlaceId: new FormControl(0, [Validators.required]),
+        this.mealFormGroup = new UntypedFormGroup({
+            eatingPlaceId: new UntypedFormControl(0, [Validators.required]),
         });
-        this.expensesJourneyGroup = new FormGroup({
-            expenses: new FormArray([]),
-            drives: new FormArray([]),
+        this.expensesJourneyGroup = new UntypedFormGroup({
+            expenses: new UntypedFormArray([]),
+            drives: new UntypedFormArray([]),
         });
     }
 

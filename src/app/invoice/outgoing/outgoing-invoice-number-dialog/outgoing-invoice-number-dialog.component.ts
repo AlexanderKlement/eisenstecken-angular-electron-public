@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {DefaultService, ParameterCreate} from 'eisenstecken-openapi-angular-library';
 import {first} from 'rxjs/operators';
 import { MatDialogRef} from '@angular/material/dialog';
@@ -12,7 +12,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 })
 export class OutgoingInvoiceNumberDialogComponent implements OnInit {
 
-    outgoingInvoiceNumberFormGroup: FormGroup;
+    outgoingInvoiceNumberFormGroup: UntypedFormGroup;
 
     constructor(public dialogRef: MatDialogRef<OutgoingInvoiceNumberDialogComponent>,
                 private api: DefaultService) {
@@ -20,9 +20,9 @@ export class OutgoingInvoiceNumberDialogComponent implements OnInit {
 
 
     ngOnInit(): void {
-        this.outgoingInvoiceNumberFormGroup = new FormGroup({
+        this.outgoingInvoiceNumberFormGroup = new UntypedFormGroup({
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            invoice_number: new FormControl('')
+            invoice_number: new UntypedFormControl('')
         });
         this.api.getParameterParameterKeyGet('invoice_number').pipe(first()).subscribe((invoiceNumberString) => {
             this.outgoingInvoiceNumberFormGroup.get('invoice_number').setValue(invoiceNumberString);

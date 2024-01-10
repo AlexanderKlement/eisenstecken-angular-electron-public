@@ -3,7 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DefaultService, User, Workload, WorkloadCreate, WorkloadUpdate} from 'eisenstecken-openapi-angular-library';
 import {Observable} from 'rxjs';
 import {first, map} from 'rxjs/operators';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 
 export interface WorkHourEditDialogData {
     jobId: number;
@@ -23,7 +23,7 @@ export class WorkHourEditDialogComponent implements OnInit {
     workloadId: number;
     users$: Observable<User[]>;
     selectedUserName$: Observable<string>;
-    workHourGroup: FormGroup;
+    workHourGroup: UntypedFormGroup;
     loading = true;
 
     constructor(
@@ -58,12 +58,12 @@ export class WorkHourEditDialogComponent implements OnInit {
             minutes = workload.minutes;
             minutesDirection = workload.minutes_direction;
         }
-        this.workHourGroup = new FormGroup({
-            minutes: new FormControl(minutes),
+        this.workHourGroup = new UntypedFormGroup({
+            minutes: new UntypedFormControl(minutes),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            minutes_direction: new FormControl(minutesDirection),
+            minutes_direction: new UntypedFormControl(minutesDirection),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            selected_user_id: new FormControl(this.create ? 1 : this.userId),
+            selected_user_id: new UntypedFormControl(this.create ? 1 : this.userId),
         });
     }
 
@@ -72,16 +72,16 @@ export class WorkHourEditDialogComponent implements OnInit {
         this.closeDialog(false);
     }
 
-    getMinuteControl(): FormControl {
-        return this.workHourGroup.get('minutes') as FormControl;
+    getMinuteControl(): UntypedFormControl {
+        return this.workHourGroup.get('minutes') as UntypedFormControl;
     }
 
-    getMinuteDirectionControl(): FormControl {
-        return this.workHourGroup.get('minutes_direction') as FormControl;
+    getMinuteDirectionControl(): UntypedFormControl {
+        return this.workHourGroup.get('minutes_direction') as UntypedFormControl;
     }
 
-    getSelectedUserControl(): FormControl {
-        return this.workHourGroup.get('selected_user_id') as FormControl;
+    getSelectedUserControl(): UntypedFormControl {
+        return this.workHourGroup.get('selected_user_id') as UntypedFormControl;
     }
 
     onSubmitClick() {

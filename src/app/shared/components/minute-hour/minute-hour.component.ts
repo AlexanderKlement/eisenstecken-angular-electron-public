@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs';
 
 @Component({
@@ -8,20 +8,20 @@ import {Subscription} from 'rxjs';
     styleUrls: ['./minute-hour.component.scss']
 })
 export class MinuteHourComponent implements OnInit, OnDestroy {
-    @Input() minuteControl: FormControl;
+    @Input() minuteControl: UntypedFormControl;
     @Input() editDisabled = false;
     @Input() title = '';
     @Output() minutesChanged = new EventEmitter<number>();
-    minuteHourGroup: FormGroup;
+    minuteHourGroup: UntypedFormGroup;
     private subscriptions: Subscription = new Subscription();
 
     constructor() {
     }
 
     ngOnInit(): void {
-        this.minuteHourGroup = new FormGroup({
-            hours: new FormControl(0),
-            minutes: new FormControl(0)
+        this.minuteHourGroup = new UntypedFormGroup({
+            hours: new UntypedFormControl(0),
+            minutes: new UntypedFormControl(0)
         });
         if (!this.minuteControl) {
             console.error('MinuteHourComponent: Cannot bootstrap without an external FormControl');

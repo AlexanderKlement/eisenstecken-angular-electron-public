@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormArray, FormControl, FormGroup} from '@angular/forms';
+import {AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {BaseEditComponent} from '../../shared/components/base-edit/base-edit.component';
 import {
   DefaultService,
@@ -30,7 +30,7 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
 
   navigationTarget = 'job';
   jobId: number;
-  offerGroup: FormGroup;
+  offerGroup: UntypedFormGroup;
   submitted: boolean;
   vatOptions$: Observable<Vat[]>;
   hiddenDescriptives: number[];
@@ -43,8 +43,8 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
     super(api, router, route, dialog);
   }
 
-  get discountAmount(): FormControl {
-    return this.offerGroup.get('discount_amount') as FormControl;
+  get discountAmount(): UntypedFormControl {
+    return this.offerGroup.get('discount_amount') as UntypedFormControl;
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> => api.islockedOfferOfferIslockedOfferIdGet(id);
@@ -226,12 +226,12 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
     }
   }
 
-  getDescriptiveArticles(): FormArray {
-    return this.offerGroup.get('descriptive_articles') as FormArray;
+  getDescriptiveArticles(): UntypedFormArray {
+    return this.offerGroup.get('descriptive_articles') as UntypedFormArray;
   }
 
-  getSubDescriptiveArticles(formGroup: AbstractControl): FormArray {
-    return formGroup.get('sub_descriptive_articles') as FormArray;
+  getSubDescriptiveArticles(formGroup: AbstractControl): UntypedFormArray {
+    return formGroup.get('sub_descriptive_articles') as UntypedFormArray;
   }
 
   toggleCollapseDescriptiveArticle(index: number | undefined): void {
@@ -325,48 +325,48 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
     subDescriptiveArticle.get('singlePriceFormatted').setValue(formattedAmount);
   }
 
-  private initDescriptiveArticles(descriptiveArticle?: DescriptiveArticle): FormGroup {
+  private initDescriptiveArticles(descriptiveArticle?: DescriptiveArticle): UntypedFormGroup {
     if (descriptiveArticle === undefined) {
-      return new FormGroup({
-        description: new FormControl(''),
+      return new UntypedFormGroup({
+        description: new UntypedFormControl(''),
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        sub_descriptive_articles: new FormArray([
+        sub_descriptive_articles: new UntypedFormArray([
           this.initSubDescriptiveArticles()
         ])
       });
     } else {
-      const subDescriptiveArticles: FormGroup[] = [];
+      const subDescriptiveArticles: UntypedFormGroup[] = [];
       descriptiveArticle.descriptive_article.forEach((subDescriptiveArticle) => {
         subDescriptiveArticles.push(this.initSubDescriptiveArticles(subDescriptiveArticle));
       });
-      return new FormGroup({
-        description: new FormControl(descriptiveArticle.description),
+      return new UntypedFormGroup({
+        description: new UntypedFormControl(descriptiveArticle.description),
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        sub_descriptive_articles: new FormArray(subDescriptiveArticles)
+        sub_descriptive_articles: new UntypedFormArray(subDescriptiveArticles)
       });
     }
   }
 
-  private initSubDescriptiveArticles(subDescriptiveArticle?: DescriptiveArticle): FormGroup {
+  private initSubDescriptiveArticles(subDescriptiveArticle?: DescriptiveArticle): UntypedFormGroup {
     let subDescriptiveArticleGroup;
     if (subDescriptiveArticle === undefined) {
-      subDescriptiveArticleGroup = new FormGroup({
-        description: new FormControl(''),
-        amount: new FormControl(1),
+      subDescriptiveArticleGroup = new UntypedFormGroup({
+        description: new UntypedFormControl(''),
+        amount: new UntypedFormControl(1),
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        single_price: new FormControl(0.0),
-        singlePriceFormatted: new FormControl('0,00 €'),
-        alternative: new FormControl(false)
+        single_price: new UntypedFormControl(0.0),
+        singlePriceFormatted: new UntypedFormControl('0,00 €'),
+        alternative: new UntypedFormControl(false)
       });
     } else {
-      subDescriptiveArticleGroup = new FormGroup({
-        description: new FormControl(subDescriptiveArticle.description),
-        amount: new FormControl(subDescriptiveArticle.amount),
+      subDescriptiveArticleGroup = new UntypedFormGroup({
+        description: new UntypedFormControl(subDescriptiveArticle.description),
+        amount: new UntypedFormControl(subDescriptiveArticle.amount),
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        single_price: new FormControl(subDescriptiveArticle.single_price),
-        singlePriceFormatted: new FormControl(this.currency.transform(subDescriptiveArticle.single_price,
+        single_price: new UntypedFormControl(subDescriptiveArticle.single_price),
+        singlePriceFormatted: new UntypedFormControl(this.currency.transform(subDescriptiveArticle.single_price,
           getLocaleCurrencyCode('de_DE'))),
-        alternative: new FormControl(subDescriptiveArticle.alternative)
+        alternative: new UntypedFormControl(subDescriptiveArticle.alternative)
       });
     }
 
@@ -426,29 +426,29 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
   }
 
   private initOfferGroup() {
-    this.offerGroup = new FormGroup({
+    this.offerGroup = new UntypedFormGroup({
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      in_price_included: new FormControl(''),
-      validity: new FormControl(''),
-      payment: new FormControl(''),
-      delivery: new FormControl(''),
-      date: new FormControl((new Date()).toISOString()),
+      in_price_included: new UntypedFormControl(''),
+      validity: new UntypedFormControl(''),
+      payment: new UntypedFormControl(''),
+      delivery: new UntypedFormControl(''),
+      date: new UntypedFormControl((new Date()).toISOString()),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      vat_id: new FormControl(3),
+      vat_id: new UntypedFormControl(3),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      discount_amount: new FormControl(0),
+      discount_amount: new UntypedFormControl(0),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      discount_percentage: new FormControl(0.0),
+      discount_percentage: new UntypedFormControl(0.0),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      material_description: new FormControl(''),
+      material_description: new UntypedFormControl(''),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      material_description_title: new FormControl('Allgemeine Materialbeschreibung'),
+      material_description_title: new UntypedFormControl('Allgemeine Materialbeschreibung'),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      descriptive_articles: new FormArray([
+      descriptive_articles: new UntypedFormArray([
         this.initDescriptiveArticles()
       ]),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      offer_price: new FormControl('')
+      offer_price: new UntypedFormControl('')
     });
   }
 
@@ -461,7 +461,7 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
     }
     let offerPrice = 0.0;
     this.getDescriptiveArticles().controls.forEach((descriptiveArticleControl) => {
-      (descriptiveArticleControl.get('sub_descriptive_articles') as FormArray).controls.forEach((subDescriptiveArticleControl) => {
+      (descriptiveArticleControl.get('sub_descriptive_articles') as UntypedFormArray).controls.forEach((subDescriptiveArticleControl) => {
         if (subDescriptiveArticleControl.get('alternative').value) {
           return;
         }

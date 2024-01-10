@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {FormControl} from '@angular/forms';
+import {UntypedFormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-work-day-new',
@@ -12,12 +12,12 @@ export class WorkDayNewComponent implements OnInit {
   loading = true;
   userId: number;
   selectedDate: Date;
-  dateFormControl: FormControl;
+  dateFormControl: UntypedFormControl;
 
   constructor(private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
-    this.dateFormControl = new FormControl(new Date());
+    this.dateFormControl = new UntypedFormControl(new Date());
     this.dateFormControl.valueChanges.subscribe(() =>  {
         this.selectedDate = new Date(this.dateFormControl.value);
         console.log(this.selectedDate);

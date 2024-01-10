@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {BaseEditComponent} from '../../shared/components/base-edit/base-edit.component';
 import {DefaultService, Lock, Stock, StockCreate, StockUpdate} from 'eisenstecken-openapi-angular-library';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -14,7 +14,7 @@ import {NavigationService} from '../../shared/services/navigation.service';
     styleUrls: ['./stock-edit.component.scss']
 })
 export class StockEditComponent extends BaseEditComponent<Stock> implements OnInit, OnDestroy {
-    stockGroup: FormGroup;
+    stockGroup: UntypedFormGroup;
     navigationTarget = 'stock';
     title = 'Lager: Bearbeiten';
 
@@ -86,8 +86,8 @@ export class StockEditComponent extends BaseEditComponent<Stock> implements OnIn
     }
 
     private initStockGroup(): void {
-        this.stockGroup = new FormGroup({
-            name: new FormControl(''),
+        this.stockGroup = new UntypedFormGroup({
+            name: new UntypedFormControl(''),
         });
     }
 

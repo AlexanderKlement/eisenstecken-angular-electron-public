@@ -7,7 +7,7 @@ import {
     OrderedArticle,
     OrderedArticleCreate
 } from 'eisenstecken-openapi-angular-library';
-import {FormControl} from '@angular/forms';
+import {UntypedFormControl} from '@angular/forms';
 import {debounceTime, first, startWith, switchMap} from 'rxjs/operators';
 import {MatDialog} from '@angular/material/dialog';
 import {OrderDialogData, ProductEditDialogComponent} from './product-edit-dialog/product-edit-dialog.component';
@@ -31,7 +31,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     @Output() refreshOrderedArticleListEmitter = new EventEmitter();
     @Output() refreshAvailableArticleListEmitter = new EventEmitter();
 
-    search: FormControl;
+    search: UntypedFormControl;
     searchAvailableArticles$: Observable<Article[]>;
     searchOrderedArticles$: Observable<OrderedArticle[]>;
     orderedArticles: OrderedArticle[];
@@ -192,7 +192,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.subscription = new Subscription();
-        this.search = new FormControl('');
+        this.search = new UntypedFormControl('');
         if (this.available) {
             this.articles = [];
             this.subscription.add(this.availableProducts$.subscribe((products) => {

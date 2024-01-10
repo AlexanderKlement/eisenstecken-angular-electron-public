@@ -1,6 +1,6 @@
 import {DefaultService, ParameterCreate} from 'eisenstecken-openapi-angular-library';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {first} from 'rxjs/operators';
 import {Component} from '@angular/core';
 
@@ -9,7 +9,7 @@ import {Component} from '@angular/core';
 })
 export abstract class BaseSettingsComponent {
 
-    formGroup: FormGroup;
+    formGroup: UntypedFormGroup;
     submitted = false;
 
     abstract keyList: string[];
@@ -24,9 +24,9 @@ export abstract class BaseSettingsComponent {
 
 
     ngOnInit(): void {
-        this.formGroup = new FormGroup({});
+        this.formGroup = new UntypedFormGroup({});
         this.keyList.forEach((key) => {
-            this.formGroup.addControl(key, new FormControl(''));
+            this.formGroup.addControl(key, new UntypedFormControl(''));
         });
         this.getAndPushParametersOntoFormGroup();
     }

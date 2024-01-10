@@ -11,7 +11,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
 import {first} from 'rxjs/operators';
-import {FormArray, FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormArray, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
@@ -24,7 +24,7 @@ export class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> imp
 
     orderBundleId: number;
     navigationTarget = 'supplier';
-    orderBundleGroup: FormGroup;
+    orderBundleGroup: UntypedFormGroup;
 
     constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private snackbar: MatSnackBar) {
         super(api, router, route, dialog);
@@ -60,38 +60,38 @@ export class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> imp
     }
 
     initOrderBundleGroup() {
-        this.orderBundleGroup = new FormGroup({
-            orders: new FormArray([])
+        this.orderBundleGroup = new UntypedFormGroup({
+            orders: new UntypedFormArray([])
         });
     }
 
-    getOrderFormArray(): FormArray {
-        return this.orderBundleGroup.get('orders') as FormArray;
+    getOrderFormArray(): UntypedFormArray {
+        return this.orderBundleGroup.get('orders') as UntypedFormArray;
     }
 
-    getArticlesAt(index: number): FormArray {
-        return this.getOrderFormArray().at(index).get('articles') as FormArray;
+    getArticlesAt(index: number): UntypedFormArray {
+        return this.getOrderFormArray().at(index).get('articles') as UntypedFormArray;
     }
 
-    initOrder(order: Order): FormGroup {
-        const articleFormArray = new FormArray([]);
+    initOrder(order: Order): UntypedFormGroup {
+        const articleFormArray = new UntypedFormArray([]);
         for (const article of order.articles) {
-            articleFormArray.push(new FormGroup({
-                id: new FormControl(article.id),
-                name: new FormControl(article.article.name.translation_de),
-                amount: new FormControl(article.amount),
+            articleFormArray.push(new UntypedFormGroup({
+                id: new UntypedFormControl(article.id),
+                name: new UntypedFormControl(article.article.name.translation_de),
+                amount: new UntypedFormControl(article.amount),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                mod_number: new FormControl(article.article.mod_number),
-                unit: new FormControl(article.ordered_unit.name.translation_de),
-                price: new FormControl(article.price)
+                mod_number: new UntypedFormControl(article.article.mod_number),
+                unit: new UntypedFormControl(article.ordered_unit.name.translation_de),
+                price: new UntypedFormControl(article.price)
             }));
         }
 
-        return new FormGroup({
+        return new UntypedFormGroup({
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            order_from: new FormControl(order.order_from.displayable_name),
+            order_from: new UntypedFormControl(order.order_from.displayable_name),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            order_to: new FormControl(order.order_to.displayable_name),
+            order_to: new UntypedFormControl(order.order_to.displayable_name),
             articles: articleFormArray,
         });
     }
@@ -99,7 +99,7 @@ export class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> imp
     onSubmit(): void {
         const priceUpdate: OrderedArticlePriceUpdate[] = [];
         for (const order of this.getOrderFormArray().controls) {
-            for (const article of (order.get('articles') as FormArray).controls) {
+            for (const article of (order.get('articles') as UntypedFormArray).controls) {
                 priceUpdate.push({
                     id: parseInt(article.get('id').value, 10),
                     price: parseFloat(article.get('price').value),

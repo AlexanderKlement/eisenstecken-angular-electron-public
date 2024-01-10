@@ -1,14 +1,14 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {JobEnum} from '../hours-stepper.component';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {FormArray, FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormArray, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 
 
 export interface HoursStepperDriveDialogData {
     jobEnums: JobEnum[];
     reason?: string;
     jobId?: number;
-    jobFormGroup: FormGroup;
+    jobFormGroup: UntypedFormGroup;
 }
 
 @Component({
@@ -18,8 +18,8 @@ export interface HoursStepperDriveDialogData {
 })
 export class HoursStepperDriveDialogComponent implements OnInit {
     confirmDisabled: true;
-    jobFormGroup: FormGroup;
-    reasonGroup: FormGroup;
+    jobFormGroup: UntypedFormGroup;
+    reasonGroup: UntypedFormGroup;
 
     constructor(public dialogRef: MatDialogRef<HoursStepperDriveDialogComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: HoursStepperDriveDialogData) {
@@ -27,8 +27,8 @@ export class HoursStepperDriveDialogComponent implements OnInit {
 
     ngOnInit(): void {
         this.jobFormGroup = this.data.jobFormGroup;
-        this.reasonGroup = new FormGroup({
-            reason: new FormControl(''),
+        this.reasonGroup = new UntypedFormGroup({
+            reason: new UntypedFormControl(''),
         });
     }
 
@@ -41,19 +41,19 @@ export class HoursStepperDriveDialogComponent implements OnInit {
         }
     }
 
-    getAllJobs(): FormArray[] {
+    getAllJobs(): UntypedFormArray[] {
         return [
             this.getJobs(JobEnum.accepted),
             this.getJobs(JobEnum.created)
         ];
     }
 
-    getJobs(jobEnum: JobEnum): FormArray {
+    getJobs(jobEnum: JobEnum): UntypedFormArray {
         switch (jobEnum) {
             case JobEnum.accepted:
-                return this.jobFormGroup.get('jobsAccepted') as FormArray;
+                return this.jobFormGroup.get('jobsAccepted') as UntypedFormArray;
             case JobEnum.created:
-                return this.jobFormGroup.get('jobsCreated') as FormArray;
+                return this.jobFormGroup.get('jobsCreated') as UntypedFormArray;
         }
     }
 

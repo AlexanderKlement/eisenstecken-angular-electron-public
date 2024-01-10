@@ -2,7 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA,  MatDialogRef} from '@angular/material/dialog';
 import {DefaultService, ServiceCreate, User} from 'eisenstecken-openapi-angular-library';
 import {first} from 'rxjs/operators';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {formatDateTransport} from '../../../shared/date.util';
 
 export interface ServiceCreateDialogData {
@@ -18,7 +18,7 @@ export class ServiceCreateDialogComponent implements OnInit {
 
     user: User;
     loading = true;
-    serviceGroup: FormGroup;
+    serviceGroup: UntypedFormGroup;
 
     constructor(public dialogRef: MatDialogRef<ServiceCreateDialogComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: ServiceCreateDialogData,
@@ -28,20 +28,20 @@ export class ServiceCreateDialogComponent implements OnInit {
     ngOnInit(): void {
         this.api.readUserUsersUserIdGet(this.data.userId).pipe(first()).subscribe((user) => {
             this.user = user;
-            this.serviceGroup = new FormGroup({
-                minutes: new FormControl(0),
-                date: new FormControl(new Date().toISOString())
+            this.serviceGroup = new UntypedFormGroup({
+                minutes: new UntypedFormControl(0),
+                date: new UntypedFormControl(new Date().toISOString())
             });
             this.loading = false;
         });
     }
 
-    getDateControl(): FormControl {
-        return this.serviceGroup.get('date') as FormControl;
+    getDateControl(): UntypedFormControl {
+        return this.serviceGroup.get('date') as UntypedFormControl;
     }
 
-    getMinuteControl(): FormControl {
-        return this.serviceGroup.get('minutes') as FormControl;
+    getMinuteControl(): UntypedFormControl {
+        return this.serviceGroup.get('minutes') as UntypedFormControl;
     }
 
     onNoClick() {

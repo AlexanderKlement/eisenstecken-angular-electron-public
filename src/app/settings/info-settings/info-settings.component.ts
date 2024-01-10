@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormArray, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {
     Contact,
     ContactUpdate,
@@ -19,9 +19,9 @@ import {ThemePalette} from '@angular/material/core';
 })
 export class InfoSettingsComponent implements OnInit {
 
-    credentialGroup: FormGroup;
-    priceGroup: FormGroup;
-    technicalDataGroup: FormGroup;
+    credentialGroup: UntypedFormGroup;
+    priceGroup: UntypedFormGroup;
+    technicalDataGroup: UntypedFormGroup;
     submitted = false;
 
 
@@ -36,7 +36,7 @@ export class InfoSettingsComponent implements OnInit {
     }
 
 
-    clearFormArray(formArray: FormArray): void {
+    clearFormArray(formArray: UntypedFormArray): void {
         while (formArray.length > 0) {
             formArray.removeAt(0);
         }
@@ -44,8 +44,8 @@ export class InfoSettingsComponent implements OnInit {
 
 
     initCredentials(): void {
-        this.credentialGroup = new FormGroup({
-            credentials: new FormArray([]),
+        this.credentialGroup = new UntypedFormGroup({
+            credentials: new UntypedFormArray([]),
         });
         this.api.readCredentialsCredentialGet(0, 1000).pipe(first()).subscribe((credentials) => {
             this.addCredentialArrayToFormGroup(credentials);
@@ -58,26 +58,26 @@ export class InfoSettingsComponent implements OnInit {
         }
     }
 
-    createCredential(credential?: Credential): FormGroup {
+    createCredential(credential?: Credential): UntypedFormGroup {
         if (credential === undefined) {
-            return new FormGroup({
-                name: new FormControl(''),
-                url: new FormControl(''),
-                username: new FormControl(''),
-                password: new FormControl(''),
+            return new UntypedFormGroup({
+                name: new UntypedFormControl(''),
+                url: new UntypedFormControl(''),
+                username: new UntypedFormControl(''),
+                password: new UntypedFormControl(''),
             });
         } else {
-            return new FormGroup({
-                name: new FormControl(credential.name),
-                url: new FormControl(credential.url),
-                username: new FormControl(credential.username),
-                password: new FormControl(credential.password),
+            return new UntypedFormGroup({
+                name: new UntypedFormControl(credential.name),
+                url: new UntypedFormControl(credential.url),
+                username: new UntypedFormControl(credential.username),
+                password: new UntypedFormControl(credential.password),
             });
         }
     }
 
-    getCredentialFormArray(): FormArray {
-        return this.credentialGroup.get('credentials') as FormArray;
+    getCredentialFormArray(): UntypedFormArray {
+        return this.credentialGroup.get('credentials') as UntypedFormArray;
     }
 
     updateCredentialsSuccess(credentials: Credential[]): void {
@@ -115,8 +115,8 @@ export class InfoSettingsComponent implements OnInit {
     }
 
     initPrices(): void {
-        this.priceGroup = new FormGroup({
-            prices: new FormArray([]),
+        this.priceGroup = new UntypedFormGroup({
+            prices: new UntypedFormArray([]),
         });
         this.api.readPricesPriceGet(0, 1000).pipe(first()).subscribe((prices) => {
             this.addPriceArrayToFormGroup(prices);
@@ -129,24 +129,24 @@ export class InfoSettingsComponent implements OnInit {
         }
     }
 
-    createPrice(price?: Price): FormGroup {
+    createPrice(price?: Price): UntypedFormGroup {
         if (price === undefined) {
-            return new FormGroup({
-                name: new FormControl(''),
-                price: new FormControl(''),
-                comment: new FormControl(''),
+            return new UntypedFormGroup({
+                name: new UntypedFormControl(''),
+                price: new UntypedFormControl(''),
+                comment: new UntypedFormControl(''),
             });
         } else {
-            return new FormGroup({
-                name: new FormControl(price.name),
-                price: new FormControl(price.price),
-                comment: new FormControl(price.comment),
+            return new UntypedFormGroup({
+                name: new UntypedFormControl(price.name),
+                price: new UntypedFormControl(price.price),
+                comment: new UntypedFormControl(price.comment),
             });
         }
     }
 
-    getPriceFormArray(): FormArray {
-        return this.priceGroup.get('prices') as FormArray;
+    getPriceFormArray(): UntypedFormArray {
+        return this.priceGroup.get('prices') as UntypedFormArray;
     }
 
     updatePricesSuccess(prices: Price[]): void {
@@ -183,8 +183,8 @@ export class InfoSettingsComponent implements OnInit {
     }
 
     initTechnicalData(): void {
-        this.technicalDataGroup = new FormGroup({
-            technicalData: new FormArray([]),
+        this.technicalDataGroup = new UntypedFormGroup({
+            technicalData: new UntypedFormArray([]),
         });
         this.api.readTechnicalDatasTechnicalDataGet(0, 1000).pipe(first()).subscribe((technicalData) => {
             this.addTechnicalDataArrayToFormGroup(technicalData);
@@ -197,26 +197,26 @@ export class InfoSettingsComponent implements OnInit {
         }
     }
 
-    createTechnicalData(technicalData?: TechnicalData): FormGroup {
+    createTechnicalData(technicalData?: TechnicalData): UntypedFormGroup {
         if (technicalData === undefined) {
-            return new FormGroup({
-                name: new FormControl(''),
-                height: new FormControl(''),
-                width: new FormControl(''),
-                length: new FormControl(''),
+            return new UntypedFormGroup({
+                name: new UntypedFormControl(''),
+                height: new UntypedFormControl(''),
+                width: new UntypedFormControl(''),
+                length: new UntypedFormControl(''),
             });
         } else {
-            return new FormGroup({
-                name: new FormControl(technicalData.name),
-                height: new FormControl(technicalData.height),
-                width: new FormControl(technicalData.width),
-                length: new FormControl(technicalData.length),
+            return new UntypedFormGroup({
+                name: new UntypedFormControl(technicalData.name),
+                height: new UntypedFormControl(technicalData.height),
+                width: new UntypedFormControl(technicalData.width),
+                length: new UntypedFormControl(technicalData.length),
             });
         }
     }
 
-    getTechnicalDataFormArray(): FormArray {
-        return this.technicalDataGroup.get('technicalData') as FormArray;
+    getTechnicalDataFormArray(): UntypedFormArray {
+        return this.technicalDataGroup.get('technicalData') as UntypedFormArray;
     }
 
     updateTechnicalDataSuccess(technicalData: TechnicalData[]): void {
@@ -253,13 +253,13 @@ export class InfoSettingsComponent implements OnInit {
         });
     }
 
-    moveDescriptiveArticleUp(formArray: FormArray, index: number) {
+    moveDescriptiveArticleUp(formArray: UntypedFormArray, index: number) {
         const descriptiveArticle = formArray.at(index);
         formArray.removeAt(index);
         formArray.insert(index - 1, descriptiveArticle);
     }
 
-    moveDescriptiveArticleDown(formArray: FormArray, index: number) {
+    moveDescriptiveArticleDown(formArray: UntypedFormArray, index: number) {
         const descriptiveArticle = formArray.at(index);
         formArray.removeAt(index);
         formArray.insert(index + 1, descriptiveArticle);

@@ -10,7 +10,7 @@ import {
 } from 'eisenstecken-openapi-angular-library';
 import {Observable} from 'rxjs';
 import {BaseEditComponent} from '../../shared/components/base-edit/base-edit.component';
-import {FormArray, FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormArray, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {tap} from 'rxjs/operators';
@@ -25,7 +25,7 @@ export class ClientEditComponent extends BaseEditComponent<Client> implements On
 
     title = 'Kunde: Bearbeiten';
     navigationTarget = '/client';
-    clientGroup: FormGroup;
+    clientGroup: UntypedFormGroup;
     company = false;
     genderOptions$: Observable<Gender[]>;
     languageOptions$: Observable<Language[]>;
@@ -40,32 +40,32 @@ export class ClientEditComponent extends BaseEditComponent<Client> implements On
 
     ngOnInit(): void {
         super.ngOnInit();
-        this.clientGroup = new FormGroup({
-            name: new FormControl(''),
-            lastname: new FormControl(''),
-            isCompany: new FormControl(''),
-            mail1: new FormControl(''),
-            mail2: new FormControl(''),
-            tel1: new FormControl('+39'),
-            tel2: new FormControl('+39'),
-            contacts: new FormArray([]),
+        this.clientGroup = new UntypedFormGroup({
+            name: new UntypedFormControl(''),
+            lastname: new UntypedFormControl(''),
+            isCompany: new UntypedFormControl(''),
+            mail1: new UntypedFormControl(''),
+            mail2: new UntypedFormControl(''),
+            tel1: new UntypedFormControl('+39'),
+            tel2: new UntypedFormControl('+39'),
+            contacts: new UntypedFormArray([]),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            contact_person: new FormControl(''),
+            contact_person: new UntypedFormControl(''),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            vat_number: new FormControl('IT'),
+            vat_number: new UntypedFormControl('IT'),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            fiscal_code: new FormControl(''),
+            fiscal_code: new UntypedFormControl(''),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            codice_destinatario: new FormControl('0000000'),
-            pec: new FormControl(''),
-            gender: new FormControl('M'),
-            language: new FormControl('DE'),
-            address: new FormGroup({
+            codice_destinatario: new UntypedFormControl('0000000'),
+            pec: new UntypedFormControl(''),
+            gender: new UntypedFormControl('M'),
+            language: new UntypedFormControl('DE'),
+            address: new UntypedFormGroup({
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                street_number: new FormControl(''),
-                city: new FormControl(''),
-                cap: new FormControl(''),
-                country: new FormControl('IT')
+                street_number: new UntypedFormControl(''),
+                city: new UntypedFormControl(''),
+                cap: new UntypedFormControl(''),
+                country: new UntypedFormControl('IT')
             }),
         });
         this.genderOptions$ = this.api.readGendersGenderGet();
@@ -210,39 +210,39 @@ export class ClientEditComponent extends BaseEditComponent<Client> implements On
         }
     }
 
-    getAddressGroup(): FormGroup {
-        return this.clientGroup.get('address') as FormGroup;
+    getAddressGroup(): UntypedFormGroup {
+        return this.clientGroup.get('address') as UntypedFormGroup;
     }
 
-    getContacts(): FormArray {
-        return this.clientGroup.get('contacts') as FormArray;
+    getContacts(): UntypedFormArray {
+        return this.clientGroup.get('contacts') as UntypedFormArray;
     }
 
     addContact(contact?: Contact): void {
         this.getContacts().push(this.createContact(contact));
     }
 
-    createContact(contact?: Contact): FormGroup {
+    createContact(contact?: Contact): UntypedFormGroup {
         if (contact !== undefined) {
-            return new FormGroup({
-                id: new FormControl(contact.id),
-                name: new FormControl(contact.name),
-                name1: new FormControl(contact.name1),
-                lastname: new FormControl(contact.lastname),
-                tel: new FormControl(contact.tel),
-                mail: new FormControl(contact.mail),
-                note: new FormControl(contact.note)
+            return new UntypedFormGroup({
+                id: new UntypedFormControl(contact.id),
+                name: new UntypedFormControl(contact.name),
+                name1: new UntypedFormControl(contact.name1),
+                lastname: new UntypedFormControl(contact.lastname),
+                tel: new UntypedFormControl(contact.tel),
+                mail: new UntypedFormControl(contact.mail),
+                note: new UntypedFormControl(contact.note)
 
             });
         } else {
-            return new FormGroup({
-                id: new FormControl(-1),
-                name: new FormControl(this.clientGroup.get('name').value),
-                name1: new FormControl(''),
-                lastname: new FormControl(this.clientGroup.get('lastname').value),
-                tel: new FormControl('+39'),
-                mail: new FormControl(''),
-                note: new FormControl('')
+            return new UntypedFormGroup({
+                id: new UntypedFormControl(-1),
+                name: new UntypedFormControl(this.clientGroup.get('name').value),
+                name1: new UntypedFormControl(''),
+                lastname: new UntypedFormControl(this.clientGroup.get('lastname').value),
+                tel: new UntypedFormControl('+39'),
+                mail: new UntypedFormControl(''),
+                note: new UntypedFormControl('')
             });
         }
     }

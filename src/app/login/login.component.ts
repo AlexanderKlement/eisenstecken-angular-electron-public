@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {AuthService} from '../shared/services/auth.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
@@ -11,9 +11,9 @@ import {Router} from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  loginForm = new FormGroup({
-    username: new FormControl(''),
-    password: new FormControl(''),
+  loginForm = new UntypedFormGroup({
+    username: new UntypedFormControl(''),
+    password: new UntypedFormControl(''),
   });
 
   constructor(private authService: AuthService, protected snackBar: MatSnackBar, private router: Router) {

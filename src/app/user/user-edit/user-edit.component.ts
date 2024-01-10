@@ -11,7 +11,7 @@ import {
 } from 'eisenstecken-openapi-angular-library';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {first, tap} from 'rxjs/operators';
 import {MatSelectionList} from '@angular/material/list';
@@ -60,8 +60,8 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
 
     @ViewChild('rights') rightsSelected: MatSelectionList;
 
-    userGroup: FormGroup;
-    passwordGroup: FormGroup;
+    userGroup: UntypedFormGroup;
+    passwordGroup: UntypedFormGroup;
     availableRights: Right[];
     availableRightCats: { key: string; open: boolean; title: string }[];
     userRights: Right[];
@@ -123,28 +123,28 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
     ngOnInit(): void {
         this.availableRightCats = [];
         super.ngOnInit();
-        this.userGroup = new FormGroup({
-            firstname: new FormControl(''),
-            secondname: new FormControl(''),
-            email: new FormControl(''),
-            tel: new FormControl(''),
-            password: new FormControl(''),
-            handy: new FormControl(''),
-            office: new FormControl(false),
-            employee: new FormControl(true),
-            position: new FormControl(''),
-            dial: new FormControl(''),
-            cost: new FormControl(''),
-            chat: new FormControl(false),
-            hours: new FormControl(true),
+        this.userGroup = new UntypedFormGroup({
+            firstname: new UntypedFormControl(''),
+            secondname: new UntypedFormControl(''),
+            email: new UntypedFormControl(''),
+            tel: new UntypedFormControl(''),
+            password: new UntypedFormControl(''),
+            handy: new UntypedFormControl(''),
+            office: new UntypedFormControl(false),
+            employee: new UntypedFormControl(true),
+            position: new UntypedFormControl(''),
+            dial: new UntypedFormControl(''),
+            cost: new UntypedFormControl(''),
+            chat: new UntypedFormControl(false),
+            hours: new UntypedFormControl(true),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            innovaphone_user: new FormControl(''),
+            innovaphone_user: new UntypedFormControl(''),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            innovaphone_pass: new FormControl(''),
-            notifications: new FormControl(true)
+            innovaphone_pass: new UntypedFormControl(''),
+            notifications: new UntypedFormControl(true)
         });
-        this.passwordGroup = new FormGroup({
-            password: new FormControl('')
+        this.passwordGroup = new UntypedFormGroup({
+            password: new UntypedFormControl('')
         });
         if (!this.createMode) {
             this.api.getRightsRightsGet().pipe(first()).subscribe((rights) => {

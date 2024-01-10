@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormArray, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {DefaultService, XmlFileStr} from 'eisenstecken-openapi-angular-library';
 import {FileService} from '../../../shared/services/file.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
@@ -13,7 +13,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
     styleUrls: ['./import-xml-dialog.component.scss']
 })
 export class ImportXmlDialogComponent implements OnInit {
-    selectXmlFormGroup: FormGroup;
+    selectXmlFormGroup: UntypedFormGroup;
     title: 'Digitale Rechnungen auswählen';
     loading = false;
 
@@ -22,14 +22,14 @@ export class ImportXmlDialogComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.selectXmlFormGroup = new FormGroup({
-            paths: new FormArray([]),
+        this.selectXmlFormGroup = new UntypedFormGroup({
+            paths: new UntypedFormArray([]),
         });
         //this.addPath('C:\\Users\\alexa\\Desktop\\temp\\IT02713280218_0WFw4.xml');
     }
 
-    getPaths(): FormArray {
-        return this.selectXmlFormGroup.get('paths') as FormArray;
+    getPaths(): UntypedFormArray {
+        return this.selectXmlFormGroup.get('paths') as UntypedFormArray;
     }
 
     getPathAt(index: number): string {
@@ -43,7 +43,7 @@ export class ImportXmlDialogComponent implements OnInit {
     }
 
     addPath(path: string): void {
-        this.getPaths().push(new FormControl(path));
+        this.getPaths().push(new UntypedFormControl(path));
     }
 
     deletePath(index: number): void {
