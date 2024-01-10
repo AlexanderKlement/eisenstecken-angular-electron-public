@@ -4743,13 +4743,6 @@ ee-first@1.1.1:
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
-eisenstecken-openapi-angular-library@9.3.9:
-  version "9.3.9"
-  resolved "https://registry.yarnpkg.com/eisenstecken-openapi-angular-library/-/eisenstecken-openapi-angular-library-9.3.9.tgz#66f6c6e9e1a50fba2ceb0253f6a3df9796511b10"
-  integrity sha512-dU2siXiY1TLTigNmnP2r96IKcOHU3406galUKcd43jGN6UHP3RMhVrBdPllm9PFGJsdTK45rDSVITFW/JThvXw==
-  dependencies:
-    tslib "^2.3.0"
-
 ejs@^3.1.5, ejs@^3.1.6:
   version "3.1.9"
   resolved "https://registry.yarnpkg.com/ejs/-/ejs-3.1.9.tgz#03c9e8777fe12686a9effcef22303ca3d8eeb361"

@@ -127,3 +127,6 @@ Removed dev dependencies:
 "@angular-devkit/build-angular": "13.0.1",
 "@angular-eslint/schematics": "13.0.0-alpha.0",
 "@angular/compiler-cli": "13.0.1",
+
+Removed dependencies:
+ "eisenstecken-openapi-angular-library": "9.3.9",
