@@ -120,3 +120,10 @@ The build the update exe and publish the release on GitHub
 - `ng generate module NAME --routing`
 - `ng generate component NAME`
 - Register in `app.module.ts` and `app-routing.module.ts`
+
+
+Removed dev dependencies:
+
+"@angular-devkit/build-angular": "13.0.1",
+"@angular-eslint/schematics": "13.0.0-alpha.0",
+"@angular/compiler-cli": "13.0.1",
