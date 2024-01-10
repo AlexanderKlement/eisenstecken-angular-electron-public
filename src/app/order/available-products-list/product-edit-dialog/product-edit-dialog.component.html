@@ -1,36 +1,36 @@
-<h1 mat-dialog-title>{{data.title}}</h1>
-<div mat-dialog-content fxLayout="column" fxLayoutAlign="start stretch" class="dialog-content">
+<h1 mat-dialog-title="">{{data.title}}</h1>
+<div mat-dialog-content="" class="dialog-content flex flex-col justify-start items-stretch flex-row">
     <form (submit)="onAddClick()" [formGroup]="productEditGroup">
-        <div fxLayout="row" fxLayoutAlign="space-between start">
+        <div class="flex flex-row justify-between items-start">
             <mat-form-field appearance="fill">
                 <mat-label>Name</mat-label>
-                <input matInput formControlName="name">
-            </mat-form-field>
+                <input matInput="" formControlName="name">
+            </input></mat-form-field>
         </div>
-        <div fxLayout="row" fxLayoutAlign="space-between start">
-            <mat-form-field appearance="fill" fxFlexFill>
+        <div class="flex flex-row justify-between items-start">
+            <mat-form-field appearance="fill" class="w-full h-full min-w-full min-h-full box-border">
                 <mat-label>Beschreibung (extern)</mat-label>
-                <textarea rows="5" matInput formControlName="custom_description"></textarea>
+                <textarea rows="5" matInput="" formControlName="custom_description"></textarea>
             </mat-form-field>
         </div>
-        <div fxLayout="row" fxLayoutAlign="space-between start">
-            <mat-form-field appearance="fill" fxFlexFill>
+        <div class="flex flex-row justify-between items-start">
+            <mat-form-field appearance="fill" class="w-full h-full min-w-full min-h-full box-border">
                 <mat-label>Bemerkung (intern)</mat-label>
-                <textarea rows="2" matInput formControlName="comment"></textarea>
+                <textarea rows="2" matInput="" formControlName="comment"></textarea>
             </mat-form-field>
         </div>
-        <div fxLayout="row" fxLayoutAlign="space-between start">
+        <div class="flex flex-row justify-between items-start">
             <mat-form-field appearance="fill">
                 <mat-label>Position</mat-label>
-                <input matInput type=text formControlName="position">
-            </mat-form-field>
+                <input matInput="" type="text" formControlName="position">
+            </input></mat-form-field>
             <mat-form-field appearance="fill">
                 <mat-label>Mod Nummer</mat-label>
-                <input [maxLength]="30" matInput formControlName="mod_number">
-            </mat-form-field>
+                <input [maxLength]="30" matInput="" formControlName="mod_number">
+            </input></mat-form-field>
 
         </div>
-        <div fxLayout="row" fxLayoutAlign="space-between start">
+        <div class="flex flex-row justify-between items-start">
             <mat-form-field appearance="fill">
                 <mat-label>Anfrage</mat-label>
                 <mat-select formControlName="request" [disabled]="blockRequestChange">
@@ -51,11 +51,11 @@
                 </mat-select>
             </mat-form-field>
         </div>
-        <div fxLayout="row" fxLayoutAlign="space-between start">
+        <div class="flex flex-row justify-between items-start">
             <mat-form-field appearance="fill">
                 <mat-label>Menge</mat-label>
-                <input matInput type=number formControlName="amount">
-            </mat-form-field>
+                <input matInput="" type="number" formControlName="amount">
+            </input></mat-form-field>
             <mat-form-field appearance="fill">
                 <mat-label>Einheit</mat-label>
                 <mat-select formControlName="unit_id">
@@ -65,33 +65,33 @@
                 </mat-select>
             </mat-form-field>
         </div>
-        <div fxLayout="row" fxLayoutAlign="space-between start">
+        <div class="flex flex-row justify-between items-start">
             <mat-form-field appearance="fill">
                 <mat-label>Preis</mat-label>
-                <input matInput type=text formControlName="priceFormatted" (blur)="transformAmount()" [readonly]="!singlePrice">
-            </mat-form-field>
+                <input matInput="" type="text" formControlName="priceFormatted" (blur)="transformAmount()" [readonly]="!singlePrice">
+            </input></mat-form-field>
             <mat-form-field appearance="fill">
                 <mat-label>Rabatt</mat-label>
-                <input matInput type=number formControlName="discount">
-            </mat-form-field>
+                <input matInput="" type="number" formControlName="discount">
+            </input></mat-form-field>
         </div>
-        <div fxLayout="row" fxLayoutAlign="space-between start">
-            <div fxFlex="30" class="checkbox">
+        <div class="flex flex-row justify-between items-start">
+            <div class="checkbox flex-[30_undefined_undefined] box-border">
                 <mat-checkbox formControlName="single_price_insert">Einzelpreis eingeben</mat-checkbox>
             </div>
-            <div fxFlex="70">
+            <div class="flex-[70_undefined_undefined] box-border">
                 <mat-form-field appearance="fill">
                     <mat-label>Gesamtpreis [€]</mat-label>
-                    <input matInput [readonly]="singlePrice" type="number" formControlName="total_price">
-                </mat-form-field>
+                    <input matInput="" [readonly]="singlePrice" type="number" formControlName="total_price">
+                </input></mat-form-field>
             </div>
 
         </div>
-        <div fxLayout="row" fxLayoutAlign="space-around start">
-            <button *ngIf="!createMode" type="button" mat-button (click)="onDeleteClick()">Löschen</button>
+        <div class="flex flex-row justify-around items-start">
+            <button *ngIf="!createMode" type="button" mat-button="" (click)="onDeleteClick()">Löschen</button>
             <span class="spacer"></span>
-            <button type="button" mat-button (click)="onNoClick()">Abbrechen</button>
-            <button type="submit" [disabled]="!productEditGroup.valid" mat-button class="add-button">Hinzufügen
+            <button type="button" mat-button="" (click)="onNoClick()">Abbrechen</button>
+            <button type="submit" [disabled]="!productEditGroup.valid" mat-button="" class="add-button">Hinzufügen
             </button>
         </div>
     </form>

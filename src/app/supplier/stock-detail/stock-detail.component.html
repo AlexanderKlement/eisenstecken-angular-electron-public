@@ -3,12 +3,10 @@
     <app-info-builder [dataSource]="infoDataSource"></app-info-builder>
     <mat-tab-group>
         <mat-tab label="Lieferanten">
-            <app-table-builder [$refresh]="$refresh" [dataSource]="ingoingDataSource"
-                               title="Bestellungen"></app-table-builder>
+            <app-table-builder [$refresh]="$refresh" [dataSource]="ingoingDataSource" title="Bestellungen"></app-table-builder>
         </mat-tab>
         <mat-tab label="Aufträge">
-            <app-table-builder [$refresh]="$refresh" [dataSource]="outgoingDataSource"
-                               title="Bestellungen"></app-table-builder>
+            <app-table-builder [$refresh]="$refresh" [dataSource]="outgoingDataSource" title="Bestellungen"></app-table-builder>
         </mat-tab>
     </mat-tab-group>
 </div>

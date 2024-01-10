@@ -1,9 +1,9 @@
 <div class="table">
-    <div fxLayout="row" fxLayoutAlign="space-around center">
+    <div class="flex flex-row justify-around items-center">
         <h3 *ngIf="title">{{title}}</h3>
         <mat-form-field>
-            <input matInput placeholder="Suchen" #input>
-        </mat-form-field>
+            <input matInput="" placeholder="Suchen" #input="">
+        </input></mat-form-field>
     </div>
 
     <div class="spinner-container" *ngIf="dataSource.loading$ | async">
@@ -11,7 +11,7 @@
     </div>
     <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
         <ng-container [matColumnDef]="column.name" *ngFor="let column of dataSource.columns">
-            <mat-header-cell *matHeaderCellDef>
+            <mat-header-cell *matHeaderCellDef="">
                 {{ column.headerName }}
             </mat-header-cell>
             <mat-cell *matCellDef="let element">
@@ -19,18 +19,13 @@
             </mat-cell>
         </ng-container>
         <ng-container *ngIf="buttons.length > 0" matColumnDef="actions">
-            <mat-header-cell *matHeaderCellDef>Aktionen</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef="">Aktionen</mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <button *ngFor="let button of buttons" [color]="button.color(element.values['condition'])" [class]="button.class(element.values['condition'])"
-                        (click)="button.navigate($event, element.values['id'])"
-                        mat-raised-button>{{button.name(element.values['condition'])}}</button>
+                <button *ngFor="let button of buttons" [color]="button.color(element.values['condition'])" [class]="button.class(element.values['condition'])" (click)="button.navigate($event, element.values['id'])" mat-raised-button="">{{button.name(element.values['condition'])}}</button>
             </mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="dataSource.columnIdentifiers; sticky: true"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: dataSource.columnIdentifiers" (click)="rowClicked(row.route)"
-                 matTooltip="{{row.toolTip}}"
-                 class="table-row"></mat-row>
+        <mat-row *matRowDef="let row; columns: dataSource.columnIdentifiers" (click)="rowClicked(row.route)" matTooltip="{{row.toolTip}}" class="table-row"></mat-row>
     </mat-table>
-    <mat-paginator [length]="(dataSource.amount$ | async)" [pageSize]="dataSource.pageSize"
-                   [pageSizeOptions]="dataSource.pageSizeOptions"></mat-paginator>
+    <mat-paginator [length]="(dataSource.amount$ | async)" [pageSize]="dataSource.pageSize" [pageSizeOptions]="dataSource.pageSizeOptions"></mat-paginator>
 </div>

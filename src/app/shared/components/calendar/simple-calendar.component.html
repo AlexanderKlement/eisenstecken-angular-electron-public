@@ -1,16 +1,16 @@
-<div fxLayout="column" fxLayoutAlign="start stretch" fxFlexFill>
-  <mat-toolbar color="accent" fxFlex="10">
-    <div fxShow="true" fxLayout="row" fxLayoutAlign="space-between center">
+<div class="flex flex-col justify-start items-stretch flex-row w-full h-full min-w-full min-h-full box-border">
+  <mat-toolbar color="accent" class="flex-[10_undefined_undefined] box-border">
+    <div fxShow="true" class="flex flex-row justify-between items-center">
 
-      <button mat-icon-button (click)="todayClicked()" title="Heute">
+      <button mat-icon-button="" (click)="todayClicked()" title="Heute">
         <mat-icon>today</mat-icon>
       </button>
       <div>
-        <button mat-icon-button (click)="previousWeekClicked()" title="Vorherige Woche">
+        <button mat-icon-button="" (click)="previousWeekClicked()" title="Vorherige Woche">
           <mat-icon>navigate_before</mat-icon>
         </button>
         <span>{{ dayManager.getStartDate() + " - " + dayManager.getEndDate()}}</span>
-        <button mat-icon-button (click)="nextWeekClicked()" title="Nächste Woche">
+        <button mat-icon-button="" (click)="nextWeekClicked()" title="Nächste Woche">
           <mat-icon>navigate_next</mat-icon>
         </button>
       </div>
@@ -26,14 +26,13 @@
         </mat-form-field>
       </div>
       -->
-      <button *ngIf="createAllowed" mat-icon-button (click)="newMeetingClicked()" class="add-button" title="Neuer Termin">
+      <button *ngIf="createAllowed" mat-icon-button="" (click)="newMeetingClicked()" class="add-button" title="Neuer Termin">
         <mat-icon>add</mat-icon>
       </button>
     </div>
   </mat-toolbar>
-  <div fxFlex="90" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="5px" class="calendar-days">
-    <app-calendar-day [day]="day" [calendarId]="calendarId" [public]="public"
-                      *ngFor="let day of dayManager.getShownDayArray()">
+  <div class="calendar-days flex flex-col justify-start items-stretch flex-row gap-[5px] flex-[90_undefined_undefined] box-border">
+    <app-calendar-day [day]="day" [calendarId]="calendarId" [public]="public" *ngFor="let day of dayManager.getShownDayArray()">
     </app-calendar-day>
   </div>
 </div>

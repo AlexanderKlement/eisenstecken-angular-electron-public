@@ -7,8 +7,7 @@
     </div>
     <span class="statusbar-spacer"></span>
     <div>
-      <a *ngFor="let status of jobStatusList | async" (click)="onStatusClicked(status)"
-         mat-button>{{status.text.translation}}</a>
+      <a *ngFor="let status of jobStatusList | async" (click)="onStatusClicked(status)" mat-button="">{{status.text.translation}}</a>
     </div>
   </mat-toolbar>
 </div>

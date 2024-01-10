@@ -1,5 +1,5 @@
-<h1 mat-dialog-title>Allgemeine Informationen</h1>
-<div mat-dialog-content>
+<h1 mat-dialog-title="">Allgemeine Informationen</h1>
+<div mat-dialog-content="">
     <mat-tab-group>
         <mat-tab label="Kontakte">
             <app-table-builder title="Intern" [dataSource]="userDataSource"></app-table-builder>
@@ -14,7 +14,7 @@
             <app-table-builder title="Zugangsdaten" [dataSource]="credentialDataSource"></app-table-builder>
         </mat-tab>
         <mat-tab *ngFor="let infoPage of infoPages$|async" [label]="infoPage.name">
-            <textarea rows="40" readonly class="form-control" matInput>{{infoPage.body}}</textarea>
+            <textarea rows="40" readonly="" class="form-control" matInput="">{{infoPage.body}}</textarea>
         </mat-tab>
         <mat-tab label="Änderungsprotokoll">
             <div *ngFor="let singleUpdate of updateList">
@@ -30,6 +30,6 @@
         </mat-tab>
     </mat-tab-group>
 </div>
-<div mat-dialog-actions>
-    <button mat-raised-button (click)="onCloseClick()">Schließen</button>
+<div mat-dialog-actions="">
+    <button mat-raised-button="" (click)="onCloseClick()">Schließen</button>
 </div>

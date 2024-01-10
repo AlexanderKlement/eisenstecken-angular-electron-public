@@ -1,80 +1,77 @@
 <app-toolbar [title]="title"></app-toolbar>
 <div class="window-container">
     <form (ngSubmit)="onSubmit()" [formGroup]="clientGroup">
-        <div fxLayout="column" fxLayoutAlign="space-around center">
+        <div class="flex flex-col justify-around items-center flex-row">
             <mat-checkbox [checked]="company" (change)="companyCheckBoxClicked()">Unternehmen</mat-checkbox>
             <br>
             <br>
             <mat-form-field *ngIf="company" appearance="fill">
                 <mat-label>Firmenbezeichnung</mat-label>
-                <input class="form-control" formControlName="name" matInput>
-            </mat-form-field>
+                <input class="form-control" formControlName="name" matInput="">
+            </input></mat-form-field>
             <mat-form-field *ngIf="!company" appearance="fill">
                 <mat-label>Vorname</mat-label>
-                <input class="form-control" formControlName="name" matInput>
-            </mat-form-field>
+                <input class="form-control" formControlName="name" matInput="">
+            </input></mat-form-field>
             <mat-form-field *ngIf="!company" appearance="fill">
                 <mat-label>Nachname</mat-label>
-                <input class="form-control" formControlName="lastname" matInput>
-            </mat-form-field>
-            <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="contacts">
+                <input class="form-control" formControlName="lastname" matInput="">
+            </input></mat-form-field>
+            <div formArrayName="contacts" class="flex flex-col justify-around items-center flex-row">
                 <h3>Kontakte</h3>
-                <div *ngFor="let contact of getContacts().controls; let i = index" [formGroupName]="i" fxLayout="row"
-                     fxLayoutAlign="space-around center">
+                <div *ngFor="let contact of getContacts().controls; let i = index" [formGroupName]="i" class="flex flex-row justify-around items-center">
                     <mat-form-field appearance="fill">
                         <mat-label>Name</mat-label>
-                        <input class="form-control" formControlName="name" matInput>
-                    </mat-form-field>
+                        <input class="form-control" formControlName="name" matInput="">
+                    </input></mat-form-field>
                     <mat-form-field appearance="fill">
                         <mat-label>Nachname</mat-label>
-                        <input class="form-control" formControlName="lastname" matInput>
-                    </mat-form-field>
+                        <input class="form-control" formControlName="lastname" matInput="">
+                    </input></mat-form-field>
                     <mat-form-field appearance="fill">
                         <mat-label>Extra</mat-label>
-                        <input class="form-control" formControlName="name1" matInput>
-                    </mat-form-field>
+                        <input class="form-control" formControlName="name1" matInput="">
+                    </input></mat-form-field>
                     <mat-form-field appearance="fill">
                         <mat-label>Telefon</mat-label>
-                        <input (keypress)="numberOnly($event)" class="form-control" formControlName="tel" matInput>
-                    </mat-form-field>
+                        <input (keypress)="numberOnly($event)" class="form-control" formControlName="tel" matInput="">
+                    </input></mat-form-field>
                     <mat-form-field appearance="fill">
                         <mat-label>Mail</mat-label>
-                        <input class="form-control" formControlName="mail" matInput>
-                    </mat-form-field>
+                        <input class="form-control" formControlName="mail" matInput="">
+                    </input></mat-form-field>
                     <mat-form-field appearance="fill">
                         <mat-label>Notiz</mat-label>
-                        <input class="form-control" formControlName="note" matInput>
-                    </mat-form-field>
-                    <button type="button" mat-icon-button mat-raised-button (click)="removeContactAt(i)"
-                            class="position-delete">
+                        <input class="form-control" formControlName="note" matInput="">
+                    </input></mat-form-field>
+                    <button type="button" mat-icon-button="" mat-raised-button="" (click)="removeContactAt(i)" class="position-delete">
                         <mat-icon>delete</mat-icon>
                     </button>
                 </div>
-                <button type="button" mat-button
-                        (click)="addContact()">
+                <button type="button" mat-button="" (click)="addContact()">
                     <mat-icon>add</mat-icon>
                 </button>
             </div>
             <mat-form-field appearance="fill">
                 <mat-label>Ansprechpartner</mat-label>
-                <input class="form-control" formControlName="contact_person" matInput>
-            </mat-form-field>
+                <input class="form-control" formControlName="contact_person" matInput="">
+            </input></mat-form-field>
             <mat-form-field *ngIf="company" appearance="fill">
                 <mat-label>P. IVA</mat-label>
-                <input class="form-control" formControlName="vat_number" matInput>
-            </mat-form-field>
+                <input class="form-control" formControlName="vat_number" matInput="">
+            </input></mat-form-field>
             <mat-form-field appearance="fill">
                 <mat-label>Steuernummer</mat-label>
-                <input class="form-control" formControlName="fiscal_code" matInput>
-            </mat-form-field>
+                <input class="form-control" formControlName="fiscal_code" matInput="">
+            </input></mat-form-field>
             <mat-form-field *ngIf="company" appearance="fill">
                 <mat-label>PEC</mat-label>
-                <input class="form-control" formControlName="pec" matInput>
-            </mat-form-field>
+                <input class="form-control" formControlName="pec" matInput="">
+            </input></mat-form-field>
             <mat-form-field *ngIf="company" appearance="fill">
                 <mat-label>Empfängerkodex</mat-label>
-                <input class="form-control" formControlName="codice_destinatario" matInput>
-            </mat-form-field>
+                <input class="form-control" formControlName="codice_destinatario" matInput="">
+            </input></mat-form-field>
             <mat-form-field *ngIf="!company && genderOptions$ | async as genderOptions" appearance="fill">
                 <mat-label>Geschlecht</mat-label>
                 <mat-select formControlName="gender">
@@ -91,8 +88,8 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <app-address-form [address]="getAddressGroup()" fxFlexFill></app-address-form>
-            <button [disabled]="submitted" mat-raised-button type="submit">Speichern</button>
-        </div>
+            <app-address-form [address]="getAddressGroup()" class="w-full h-full min-w-full min-h-full box-border"></app-address-form>
+            <button [disabled]="submitted" mat-raised-button="" type="submit">Speichern</button>
+        </br></br></div>
     </form>
 </div>

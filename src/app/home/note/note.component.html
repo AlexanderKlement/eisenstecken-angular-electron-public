@@ -1,12 +1,12 @@
-<div class="note" fxFlexFill fxLayout="column" fxLayoutAlign="start stretch">
+<div class="note flex flex-col justify-start items-stretch flex-row w-full h-full min-w-full min-h-full box-border">
 
-  <div fxLayout="column" fxLayoutAlign="space-between center" class="note-list" fxFlex="80">
-    <div class="single-note-container" *ngFor="let note of notes; let last = last" fxFlex="47">
-      <app-single-note (noteDeleted)="deleteNote(note)" [note]="note" fxFlexFill></app-single-note>
+  <div class="note-list flex flex-col justify-between items-center flex-row flex-[80_undefined_undefined] box-border">
+    <div class="single-note-container flex-[47_undefined_undefined] box-border" *ngFor="let note of notes; let last = last">
+      <app-single-note (noteDeleted)="deleteNote(note)" [note]="note" class="w-full h-full min-w-full min-h-full box-border"></app-single-note>
     </div>
   </div>
-  <div fxLayout="row" fxLayoutAlign="center center" fxFlex="20">
-    <button *ngIf="addNoteAvailable()" mat-fab (click)="newNoteClicked()" class="new-note-btn" title="Neue Notiz">
+  <div class="flex flex-row justify-center items-center flex-[20_undefined_undefined] box-border">
+    <button *ngIf="addNoteAvailable()" mat-fab="" (click)="newNoteClicked()" class="new-note-btn" title="Neue Notiz">
       <mat-icon>add</mat-icon>
     </button>
   </div>
