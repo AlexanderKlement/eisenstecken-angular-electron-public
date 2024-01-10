@@ -48,7 +48,7 @@
     "update-client": "openapi --input https://api.beta.clava-sports.com/openapi.json --output src/client/api --client axios --exportSchemas true"
   },
   "dependencies": {
-    "@angular-material-components/datetime-picker": "15.0.0",
+    "@angular-material-components/datetime-picker": "16.0.1",
     "@angular/animations": "16.2.12",
     "@angular/cdk": "15.2.9",
     "@angular/common": "16.2.12",
@@ -62,8 +62,7 @@
     "@angular/router": "16.2.12",
     "@angular/service-worker": "16.2.12",
     "@openapitools/openapi-generator-cli": "2.7.0",
-    "@sentry/angular": "7.37.2",
-    "@sentry/tracing": "7.37.2",
+    "@sentry/angular": "7.92.0",
     "angular-calendar": "0.29.0",
     "angular-disable-browser-back-button": "1.0.2",
     "canvas-confetti": "1.4.0",
