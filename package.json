@@ -45,8 +45,7 @@
     "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
     "lint": "ng lint",
     "package:msi": "node build_installer_msi.js",
-    "generate-client": "openapi-generator-cli generate && cd eisenstecken-openapi-angular-library && npm install && npm run build && npm publish ./dist",
-    "generate-init": "openapi-generator-cli generate -g typescript-angular -i https://api.eisenstecken.kivi.bz.it/openapi.json -o openapi-client --generator-key eisenstecken"
+    "update-client": "openapi --input https://api.beta.clava-sports.com/openapi.json --output src/client/api --client axios --exportSchemas true"
   },
   "dependencies": {
     "@angular-material-components/datetime-picker": "15.0.0",
@@ -73,6 +72,7 @@
     "material-design-icons": "3.0.1",
     "moment": "2.29.4",
     "ngx-material-timepicker": "5.5.3",
+    "openapi-typescript-codegen": "0.26.0",
     "rxjs": "^7.4.0",
     "tslib": "^2.1.0",
     "yaml": "1.10.2",
@@ -83,6 +83,7 @@
     "url": "https://github.com/AlexanderKlement/eisenstecken-angular-electron-public.git"
   },
   "devDependencies": {
+    "@angular-builders/custom-webpack": "17.0.0",
     "@angular/cli": "16.2.11",
     "@ngx-translate/core": "14.0.0",
     "@ngx-translate/http-loader": "7.0.0",
