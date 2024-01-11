@@ -1,14 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  DefaultService,
-  Client,
-  Lock,
-  Gender,
-  Language,
-  ClientCreate,
-  Contact,
-  ContactCreate,
-} from 'eisenstecken-openapi-angular-library';
 import { Observable } from 'rxjs';
 import { BaseEditComponent } from '../../shared/components/base-edit/base-edit.component';
 import {
@@ -20,6 +10,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { tap } from 'rxjs/operators';
 import { NavigationService } from '../../shared/services/navigation.service';
+import {
+  Client,
+  ClientCreate,
+  Contact,
+  ContactCreate,
+  DefaultService,
+  Gender,
+  Language,
+  Lock,
+} from '../../../client/api';
 
 @Component({
   selector: 'app-client-edit',

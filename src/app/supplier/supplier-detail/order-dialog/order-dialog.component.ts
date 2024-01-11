@@ -1,10 +1,10 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Order } from 'eisenstecken-openapi-angular-library';
 import { MatSelectionList } from '@angular/material/list';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import { UntypedFormControl } from '@angular/forms';
+import { Order } from '../../../../client/api';
 
 export interface OrderDialogData {
   name: Observable<string>;

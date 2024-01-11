@@ -7,11 +7,6 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import * as moment from 'moment';
-import {
-  CompanyEvent,
-  CompanyEventEnum,
-  DefaultService,
-} from 'eisenstecken-openapi-angular-library';
 import { MatDialog } from '@angular/material/dialog';
 import {
   EventCalendarDialogComponent,
@@ -20,6 +15,11 @@ import {
 import { first } from 'rxjs/operators';
 import { Subject, Subscription } from 'rxjs';
 import { AuthService } from '../../../shared/services/auth.service';
+import {
+  CompanyEvent,
+  CompanyEventEnum,
+  DefaultService,
+} from '../../../../client/api';
 
 @Component({
   selector: 'app-event-calendar-day',
@@ -89,7 +89,7 @@ export class EventCalendarDayComponent implements OnInit, OnChanges, OnDestroy {
         this.events = [];
         this.companyClosed = false;
         for (const event of events) {
-          if (event.event_type === CompanyEventEnum.Vacation) {
+          if (event.event_type === CompanyEventEnum.VACATION) {
             this.companyClosed = true;
             continue;
           }

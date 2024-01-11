@@ -1,11 +1,4 @@
 import { Component, ComponentRef, OnInit } from '@angular/core';
-import {
-  DefaultService,
-  Order,
-  OrderableType,
-  OrderBundle,
-  Supplier,
-} from 'eisenstecken-openapi-angular-library';
 import { InfoDataSource } from '../../shared/components/info-builder/info-builder.datasource';
 import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -21,6 +14,13 @@ import { SupplierDetailComponent } from '../../supplier/supplier-detail/supplier
 import { AuthService } from '../../shared/services/auth.service';
 import { OrderDetailComponent } from '../order-detail/order-detail.component';
 import { Observable, Subscriber } from 'rxjs';
+import {
+  DefaultService,
+  Order,
+  OrderableType,
+  OrderBundle,
+  Supplier,
+} from '../../../client/api';
 
 @Component({
   selector: 'app-order-bundle-detail',
@@ -62,7 +62,7 @@ export class OrderBundleDetailComponent implements OnInit {
   ) {}
 
   private static instanceOfSupplier(object: any): object is Supplier {
-    return object.type === OrderableType.Supplier;
+    return object.type === OrderableType.SUPPLIER;
   }
 
   ngOnInit(): void {

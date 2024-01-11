@@ -1,11 +1,8 @@
-import {
-  DefaultService,
-  ParameterCreate,
-} from 'eisenstecken-openapi-angular-library';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { Component } from '@angular/core';
+import { DefaultService, ParameterCreate } from '../../client/api';
 
 @Component({
   template: '',

@@ -1,14 +1,5 @@
 import { Component, ComponentRef, OnInit } from '@angular/core';
 import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
-import {
-  Journey,
-  Fee,
-  Meal,
-  DefaultService,
-  WorkDay,
-  Service,
-  AdditionalWorkload,
-} from 'eisenstecken-openapi-angular-library';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { CustomButton } from '../../shared/components/toolbar/toolbar.component';
@@ -21,6 +12,15 @@ import { ServiceCreateDialogComponent } from '../service/service-create-dialog/s
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { minutesToDisplayableString } from '../../shared/date.util';
+import {
+  AdditionalWorkload,
+  DefaultService,
+  Fee,
+  Journey,
+  Meal,
+  Service,
+  WorkDay,
+} from '../../../client/api';
 
 @Component({
   selector: 'app-employee-detail',

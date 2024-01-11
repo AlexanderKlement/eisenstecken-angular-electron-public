@@ -2,11 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { LanguageLocaleEnum } from './LanguageLocaleEnum';
-import type { Translation } from './Translation';
+import type { Text } from './Text';
 export type Language = {
-    locale: LanguageLocaleEnum;
+    code: string;
     id: number;
-    name: Translation;
+    name: Text;
 };
 

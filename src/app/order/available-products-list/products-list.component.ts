@@ -7,16 +7,6 @@ import {
   Output,
 } from '@angular/core';
 import { Observable, of, Subscription } from 'rxjs';
-import {
-  Article,
-  ArticleCreate,
-  ArticleUpdate,
-  ArticleUpdateFull,
-  DefaultService,
-  OrderableType,
-  OrderedArticle,
-  OrderedArticleCreate,
-} from 'eisenstecken-openapi-angular-library';
 import { UntypedFormControl } from '@angular/forms';
 import { debounceTime, first, startWith, switchMap } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
@@ -26,6 +16,15 @@ import {
 } from './product-edit-dialog/product-edit-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
+import {
+  Article,
+  ArticleCreate,
+  ArticleUpdateFull,
+  DefaultService,
+  OrderableType,
+  OrderedArticle,
+  OrderedArticleCreate,
+} from '../../../client/api';
 
 @Component({
   selector: 'app-products-list',
@@ -495,7 +494,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
         .subscribe(order => {
           const newArticle = ProductsListComponent.mapDialogData2ArticleCreate(
             result,
-            order.order_from.type === OrderableType.Supplier
+            order.order_from.type === OrderableType.SUPPLIER
               ? order.order_from.id
               : undefined
           );

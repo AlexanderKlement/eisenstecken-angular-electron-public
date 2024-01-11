@@ -1,15 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {
-  DefaultService,
-  User,
-  Workload,
-  WorkloadCreate,
-  WorkloadUpdate,
-} from 'eisenstecken-openapi-angular-library';
 import { Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { User } from '@sentry/angular-ivy';
+import {
+  DefaultService,
+  Workload,
+  WorkloadCreate,
+  WorkloadUpdate,
+} from '../../../../client/api';
 
 export interface WorkHourEditDialogData {
   jobId: number;

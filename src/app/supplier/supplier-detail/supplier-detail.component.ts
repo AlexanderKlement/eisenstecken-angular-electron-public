@@ -1,12 +1,5 @@
 import { Component, ComponentRef, OnInit, ViewChild } from '@angular/core';
 import { InfoDataSource } from '../../shared/components/info-builder/info-builder.datasource';
-import {
-  DefaultService,
-  Order,
-  OrderBundle,
-  OrderBundleCreate,
-  Supplier,
-} from 'eisenstecken-openapi-angular-library';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
 import { CustomButton } from '../../shared/components/toolbar/toolbar.component';
@@ -24,6 +17,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileService } from '../../shared/services/file.service';
 import { EmailService } from '../../shared/services/email.service';
 import { combineLatest, Observable, Subscriber } from 'rxjs';
+import {
+  DefaultService,
+  Order,
+  OrderBundle,
+  OrderBundleCreate,
+  OrderStatusType,
+  Supplier,
+} from '../../../client/api';
 
 @Component({
   selector: 'app-supplier-detail',
@@ -230,7 +231,7 @@ export class SupplierDetailComponent implements OnInit {
           skip,
           limit,
           filter,
-          'CREATED'
+          OrderStatusType.CREATED
         ),
       dataSourceClasses => {
         const rows = [];
@@ -258,7 +259,10 @@ export class SupplierDetailComponent implements OnInit {
         { name: 'user.fullname', headerName: 'Bestellt von' },
       ],
       api =>
-        api.readOrderCountOrderSupplierSupplierIdCountGet(supplierId, 'CREATED')
+        api.readOrderCountOrderSupplierSupplierIdCountGet(
+          supplierId,
+          OrderStatusType.CREATED
+        )
     );
     this.orderedOrderDataSource = new TableDataSource(
       this.api,
@@ -268,7 +272,7 @@ export class SupplierDetailComponent implements OnInit {
           skip,
           limit,
           filter,
-          'ORDERED'
+          OrderStatusType.ORDERED
         ),
       dataSourceClasses => {
         const rows = [];
@@ -298,7 +302,7 @@ export class SupplierDetailComponent implements OnInit {
       api =>
         api.readCountOfOrderBundleBySupplierAndStatusOrderBundleSupplierSupplierIdCountGet(
           supplierId,
-          'ORDERED'
+          OrderStatusType.ORDERED
         )
     );
     this.deliveredOrderDataSource = new TableDataSource(
@@ -309,7 +313,7 @@ export class SupplierDetailComponent implements OnInit {
           skip,
           limit,
           filter,
-          'DELIVERED'
+          OrderStatusType.DELIVERED
         ),
       dataSourceClasses => {
         const rows = [];
@@ -339,7 +343,7 @@ export class SupplierDetailComponent implements OnInit {
       api =>
         api.readCountOfOrderBundleBySupplierAndStatusOrderBundleSupplierSupplierIdCountGet(
           supplierId,
-          'DELIVERED'
+          OrderStatusType.DELIVERED
         )
     );
     this.requestOrderDataSource = new TableDataSource(
@@ -381,7 +385,7 @@ export class SupplierDetailComponent implements OnInit {
       api =>
         api.readCountOfOrderBundleBySupplierAndStatusOrderBundleSupplierSupplierIdCountGet(
           supplierId,
-          'DELIVERED'
+          OrderStatusType.DELIVERED
         )
     );
     this.createdOrderDataSource.loadData();
@@ -402,7 +406,7 @@ export class SupplierDetailComponent implements OnInit {
           0,
           1000,
           '',
-          'CREATED',
+          OrderStatusType.CREATED,
           request
         ),
       },

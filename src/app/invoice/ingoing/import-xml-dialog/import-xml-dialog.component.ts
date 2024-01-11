@@ -4,15 +4,12 @@ import {
   UntypedFormControl,
   UntypedFormGroup,
 } from '@angular/forms';
-import {
-  DefaultService,
-  XmlFileStr,
-} from 'eisenstecken-openapi-angular-library';
 import { FileService } from '../../../shared/services/file.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ElectronService } from '../../../core/services';
 import { first } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DefaultService, XmlFileStr } from '../../../../client/api';
 
 @Component({
   selector: 'app-import-xml-dialog',

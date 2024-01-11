@@ -4,12 +4,6 @@ import {
   Column,
   TableDataSource,
 } from '../../shared/components/table-builder/table-builder.datasource';
-import {
-  Article,
-  DefaultService,
-  Vat,
-  Unit,
-} from 'eisenstecken-openapi-angular-library';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import {
@@ -18,6 +12,7 @@ import {
 } from './article-edit-dialog/article-edit-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
+import { Article, DefaultService } from '../../../client/api';
 
 @Component({
   selector: 'app-article-supplier',

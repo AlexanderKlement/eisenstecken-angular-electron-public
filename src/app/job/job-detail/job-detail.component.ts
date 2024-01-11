@@ -1,12 +1,5 @@
 import { Component, ComponentRef, OnInit, ViewChild } from '@angular/core';
 import { InfoDataSource } from '../../shared/components/info-builder/info-builder.datasource';
-import {
-  Job,
-  DefaultService,
-  Offer,
-  OutgoingInvoice,
-  Order,
-} from 'eisenstecken-openapi-angular-library';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InfoBuilderComponent } from '../../shared/components/info-builder/info-builder.component';
 import { first, map } from 'rxjs/operators';
@@ -25,6 +18,13 @@ import { ChangePathDialogComponent } from './change-path-dialog/change-path-dial
 import { OrderDetailComponent } from '../../order/order-detail/order-detail.component';
 import { Observable, Subscriber } from 'rxjs';
 import { MoveJobDialogComponent } from './move-job-dialog/move-job-dialog.component';
+import {
+  DefaultService,
+  Job,
+  Offer,
+  Order,
+  OutgoingInvoice,
+} from '../../../client/api';
 
 @Component({
   selector: 'app-job-detail',

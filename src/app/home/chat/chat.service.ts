@@ -1,14 +1,14 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import {
-  DefaultService,
-  ChatMessageCreate,
-  ChatMessage,
-  ChatRecipient,
-} from 'eisenstecken-openapi-angular-library';
 import { Observable, Subscriber } from 'rxjs';
 import { first, tap } from 'rxjs/operators';
 import { ElectronService } from '../../core/services';
 import { TrayService } from '../../shared/services/tray.service';
+import {
+  ChatMessage,
+  ChatMessageCreate,
+  ChatRecipient,
+  DefaultService,
+} from '../../../client/api';
 
 @Injectable({
   providedIn: 'root',

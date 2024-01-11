@@ -1,14 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BaseEditComponent } from '../../shared/components/base-edit/base-edit.component';
-import {
-  DefaultService,
-  Lock,
-  Right,
-  User,
-  UserCreate,
-  UserPassword,
-  UserUpdate,
-} from 'eisenstecken-openapi-angular-library';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
@@ -20,6 +11,15 @@ import { CustomButton } from '../../shared/components/toolbar/toolbar.component'
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { AuthService } from '../../shared/services/auth.service';
 import { NavigationService } from '../../shared/services/navigation.service';
+import {
+  DefaultService,
+  Right,
+  User,
+  Lock,
+  UserCreate,
+  UserUpdate,
+  UserPassword,
+} from '../../../client/api';
 
 const titles = {
   users: 'Benutzer',

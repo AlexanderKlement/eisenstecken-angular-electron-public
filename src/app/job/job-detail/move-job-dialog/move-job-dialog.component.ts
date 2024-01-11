@@ -1,9 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { DefaultService } from 'eisenstecken-openapi-angular-library';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
 import { FileService } from '../../../shared/services/file.service';
+import { DefaultService } from '../../../../client/api';
 
 export interface ChangePathDialogData {
   id: number;

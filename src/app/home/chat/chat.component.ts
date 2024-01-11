@@ -6,10 +6,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ChatService } from './chat.service';
-import {
-  ChatMessage,
-  ChatRecipient,
-} from 'eisenstecken-openapi-angular-library';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
@@ -17,6 +13,7 @@ import { ElectronService } from '../../core/services';
 import { Router } from '@angular/router';
 import { EmailService } from '../../shared/services/email.service';
 import { AuthService } from '../../shared/services/auth.service';
+import { ChatMessage, ChatRecipient } from '../../../client/api';
 
 @Component({
   selector: 'app-chat',

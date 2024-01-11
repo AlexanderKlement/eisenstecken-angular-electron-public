@@ -11,7 +11,6 @@ import { OrderSettingsComponent } from './order-settings/order-settings.componen
 import { ReminderSettingsComponent } from './reminder-settings/reminder-settings.component';
 import { GeneralSettingsComponent } from './general-settings/general-settings.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FlexModule } from '@angular/flex-layout';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -40,7 +39,6 @@ import { MatDialogModule } from '@angular/material/dialog';
     SharedModule,
     MatTabsModule,
     ReactiveFormsModule,
-    FlexModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,

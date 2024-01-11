@@ -4,176 +4,81 @@
 /* eslint-disable */
 export const $User = {
     properties: {
+        email: {
+            type: 'string',
+            isRequired: true,
+        },
+        tel: {
+            type: 'string',
+            isRequired: true,
+        },
+        firstname: {
+            type: 'string',
+            isRequired: true,
+        },
+        secondname: {
+            type: 'string',
+            isRequired: true,
+        },
+        cost: {
+            type: 'number',
+            isRequired: true,
+        },
+        innovaphone_user: {
+            type: 'string',
+            isRequired: true,
+        },
+        innovaphone_pass: {
+            type: 'string',
+            isRequired: true,
+        },
+        notifications: {
+            type: 'boolean',
+            isRequired: true,
+        },
         id: {
             type: 'number',
             isRequired: true,
         },
-        username: {
+        fullname: {
             type: 'string',
             isRequired: true,
         },
-        givenName: {
-            type: 'any-of',
-            contains: [{
-                type: 'string',
-            }, {
-                type: 'null',
-            }],
+        handy: {
+            type: 'string',
             isRequired: true,
         },
-        familyName: {
-            type: 'any-of',
-            contains: [{
-                type: 'string',
-            }, {
-                type: 'null',
-            }],
+        dial: {
+            type: 'string',
             isRequired: true,
         },
-        email: {
-            type: 'any-of',
-            contains: [{
-                type: 'string',
-            }, {
-                type: 'null',
-            }],
-            isRequired: true,
+        disabled: {
+            type: 'boolean',
         },
-        tel: {
-            type: 'any-of',
-            contains: [{
-                type: 'string',
-            }, {
-                type: 'null',
-            }],
-            isRequired: true,
+        rights: {
+            type: 'array',
+            contains: {
+                type: 'Right',
+            },
         },
-        premium: {
+        employee: {
             type: 'boolean',
             isRequired: true,
         },
-        emailConfirmed: {
+        office: {
             type: 'boolean',
             isRequired: true,
         },
-        telConfirmed: {
+        hours: {
             type: 'boolean',
             isRequired: true,
         },
-        anonymous: {
+        chat: {
             type: 'boolean',
             isRequired: true,
         },
-        thumb: {
-            type: 'any-of',
-            contains: [{
-                type: 'File',
-            }, {
-                type: 'null',
-            }],
-            isRequired: true,
-        },
-        badges: {
-            type: 'array',
-            contains: {
-                type: 'UserBadge',
-            },
-            isRequired: true,
-        },
-        playerId: {
-            type: 'any-of',
-            contains: [{
-                type: 'number',
-            }, {
-                type: 'null',
-            }],
-            isRequired: true,
-        },
-        personId: {
-            type: 'any-of',
-            contains: [{
-                type: 'number',
-            }, {
-                type: 'null',
-            }],
-            isRequired: true,
-        },
-        language: {
-            type: 'Language',
-            isRequired: true,
-        },
-        groups: {
-            type: 'array',
-            contains: {
-                type: 'Group',
-            },
-            isRequired: true,
-        },
-        scopes: {
-            type: 'array',
-            contains: {
-                type: 'Scope',
-            },
-            isRequired: true,
-        },
-        areaOfInterest: {
-            type: 'AreaOfInterest',
-            isRequired: true,
-        },
-        favoriteMatches: {
-            type: 'array',
-            contains: {
-                type: 'MatchListMinimum',
-            },
-            isRequired: true,
-        },
-        favoriteTeams: {
-            type: 'array',
-            contains: {
-                type: 'TeamListMinimum',
-            },
-            isRequired: true,
-        },
-        favoriteLeagues: {
-            type: 'array',
-            contains: {
-                type: 'LeagueListMinimum',
-            },
-            isRequired: true,
-        },
-        player: {
-            type: 'any-of',
-            contains: [{
-                type: 'PlayerListElement',
-            }, {
-                type: 'null',
-            }],
-            isRequired: true,
-        },
-        person: {
-            type: 'any-of',
-            contains: [{
-                type: 'PersonListElement',
-            }, {
-                type: 'null',
-            }],
-            isRequired: true,
-        },
-        agbLevel: {
-            type: 'any-of',
-            contains: [{
-                type: 'string',
-            }, {
-                type: 'null',
-            }],
-            isRequired: true,
-        },
-        newsletter: {
-            type: 'boolean',
-            isRequired: true,
-        },
-        blocked: {
-            type: 'boolean',
+        position: {
+            type: 'string',
             isRequired: true,
         },
     },

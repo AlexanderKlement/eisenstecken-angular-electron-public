@@ -7,9 +7,9 @@ import { OutgoingInvoiceNumberDialogComponent } from './outgoing/outgoing-invoic
 import { ImportXmlDialogComponent } from './ingoing/import-xml-dialog/import-xml-dialog.component';
 import { Observable, Subscriber } from 'rxjs';
 import { ConfirmDialogComponent } from '../shared/components/confirm-dialog/confirm-dialog.component';
-import { DefaultService } from 'eisenstecken-openapi-angular-library';
 import { FileService } from '../shared/services/file.service';
 import { ActivatedRoute } from '@angular/router';
+import { DefaultService } from '../../client/api';
 
 @Component({
   selector: 'app-invoice',

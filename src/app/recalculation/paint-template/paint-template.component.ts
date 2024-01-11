@@ -1,11 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CustomButton } from '../../shared/components/toolbar/toolbar.component';
 import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
-import {
-  Article,
-  DefaultService,
-  TemplatePaint,
-} from 'eisenstecken-openapi-angular-library';
 import { formatCurrency } from '@angular/common';
 import {
   ArticleEditDialogComponent,
@@ -17,6 +12,7 @@ import {
   PaintTemplateEditDialogData,
 } from './paint-template-edit-dialog/paint-template-edit-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DefaultService, TemplatePaint } from '../../../client/api';
 
 @Component({
   selector: 'app-paint-template',

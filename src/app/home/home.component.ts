@@ -3,7 +3,7 @@ import { AuthService } from '../shared/services/auth.service';
 import { InfoDialogComponent } from './info-dialog/info-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../shared/components/confirm-dialog/confirm-dialog.component';
-import { DefaultService } from 'eisenstecken-openapi-angular-library';
+import { DefaultService } from '../../client/api';
 
 @Component({
   selector: 'app-home',

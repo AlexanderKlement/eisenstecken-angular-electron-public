@@ -1,9 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
-import {
-  DefaultService,
-  IngoingInvoice,
-} from 'eisenstecken-openapi-angular-library';
 import { LockService } from '../../shared/services/lock.service';
 import * as moment from 'moment';
 import { TableButton } from '../../shared/components/table-builder/table-builder.component';
@@ -13,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { formatCurrency } from '@angular/common';
+import { DefaultService, IngoingInvoice } from '../../../client/api';
 
 @Component({
   selector: 'app-ingoing',

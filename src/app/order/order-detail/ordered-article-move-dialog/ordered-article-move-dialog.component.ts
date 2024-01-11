@@ -2,15 +2,14 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectionList } from '@angular/material/list';
 import { combineLatest, Observable } from 'rxjs';
+import { first, map } from 'rxjs/operators';
 import {
   DefaultService,
   Job,
-  Orderable,
   OrderableType,
   OrderedArticle,
   Stock,
-} from 'eisenstecken-openapi-angular-library';
-import { first, map } from 'rxjs/operators';
+} from '../../../../client/api';
 
 export interface OrderedArticleMoveDialogData {
   orderId: number;
@@ -77,7 +76,7 @@ export class OrderedArticleMoveDialogComponent implements OnInit {
         const jobOrderables = jobs.map(this.jobStock2SimpleOrderable);
         this.orderableTargets$ = new Observable<SimpleOrderable[]>(
           subscriber => {
-            if (order.order_from.type === OrderableType.Supplier) {
+            if (order.order_from.type === OrderableType.SUPPLIER) {
               subscriber.next(stockOrderables.concat(jobOrderables));
             } else {
               subscriber.next(jobOrderables);

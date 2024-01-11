@@ -1,13 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { CompanyEventEnum } from '../../../../../eisenstecken-openapi-angular-library';
 import { AuthService } from '../../../shared/services/auth.service';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import {
   CompanyEventCreate,
+  CompanyEventEnum,
   CompanyEventUpdate,
   DefaultService,
-} from 'eisenstecken-openapi-angular-library';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+} from '../../../../client/api';
 
 export interface EventCalendarDialogData {
   id?: number;
@@ -16,13 +16,13 @@ export interface EventCalendarDialogData {
 
 export function getEventTranslation(companyEvent: CompanyEventEnum): string {
   switch (companyEvent) {
-    case CompanyEventEnum.Holiday:
+    case CompanyEventEnum.HOLIDAY:
       return 'Urlaub';
-    case CompanyEventEnum.Illness:
+    case CompanyEventEnum.ILLNESS:
       return 'Krankheit';
-    case CompanyEventEnum.Vacation:
+    case CompanyEventEnum.VACATION:
       return 'Betriebsferien';
-    case CompanyEventEnum.Event:
+    case CompanyEventEnum.EVENT:
       return 'Ereignis';
   }
 }
@@ -35,7 +35,7 @@ export function getEventTranslation(companyEvent: CompanyEventEnum): string {
 export class EventCalendarDialogComponent implements OnInit {
   title = 'Eintrag erstellen';
 
-  availableEventTypes = [CompanyEventEnum.Holiday, CompanyEventEnum.Illness];
+  availableEventTypes = [CompanyEventEnum.HOLIDAY, CompanyEventEnum.ILLNESS];
 
   dialogFormGroup: UntypedFormGroup;
   showDescription = false;
@@ -59,8 +59,8 @@ export class EventCalendarDialogComponent implements OnInit {
 
     this.authService.getCurrentUser().subscribe(user => {
       if (user.id <= 5) {
-        this.availableEventTypes.push(CompanyEventEnum.Vacation);
-        this.availableEventTypes.push(CompanyEventEnum.Event);
+        this.availableEventTypes.push(CompanyEventEnum.VACATION);
+        this.availableEventTypes.push(CompanyEventEnum.EVENT);
       }
 
       if (this.data.id) {
@@ -76,7 +76,7 @@ export class EventCalendarDialogComponent implements OnInit {
         .get('eventType')
         .valueChanges.subscribe((selectedEventType: string | string[]) => {
           this.showDescription =
-            selectedEventType[0] === CompanyEventEnum.Event;
+            selectedEventType[0] === CompanyEventEnum.EVENT;
         });
     });
   }

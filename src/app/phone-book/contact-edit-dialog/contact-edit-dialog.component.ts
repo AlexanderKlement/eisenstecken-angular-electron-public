@@ -4,15 +4,15 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import {
-  ContactCreate,
-  ContactTypeEnum,
-  DefaultService,
-} from 'eisenstecken-openapi-angular-library';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { first, map, startWith } from 'rxjs/operators';
 import { MatAutocomplete } from '@angular/material/autocomplete';
 import { Observable } from 'rxjs';
+import {
+  ContactCreate,
+  ContactTypeEnum,
+  DefaultService,
+} from '../../../client/api';
 
 export interface ContactDialogData {
   id: number;
@@ -41,10 +41,10 @@ export class ContactEditDialogComponent implements OnInit {
   clientSelectedId = -1;
   clientSelectedName = '';
 
-  businessEnum = ContactTypeEnum.Business;
-  clientEnum = ContactTypeEnum.Client;
-  supplierEnum = ContactTypeEnum.Supplier;
-  managementEnum = ContactTypeEnum.Management;
+  businessEnum = ContactTypeEnum.BUSINESS;
+  clientEnum = ContactTypeEnum.CLIENT;
+  supplierEnum = ContactTypeEnum.SUPPLIER;
+  managementEnum = ContactTypeEnum.MANAGEMENT;
 
   showAutoComplete = false;
   showClientAutoComplete = false;
@@ -63,7 +63,7 @@ export class ContactEditDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.contactType = new UntypedFormControl(ContactTypeEnum.Business);
+    this.contactType = new UntypedFormControl(ContactTypeEnum.BUSINESS);
     this.clientAutoCompleteText = new UntypedFormControl(-1);
     this.supplierAutoCompleteText = new UntypedFormControl(-1);
     this.initContactGroup();
@@ -82,7 +82,7 @@ export class ContactEditDialogComponent implements OnInit {
           this.contactGroup.get('mail').setValue(contact.mail);
           this.contactGroup.get('note').setValue(contact.note);
           this.contactType.setValue(contact.type);
-          if (contact.type === ContactTypeEnum.Supplier) {
+          if (contact.type === ContactTypeEnum.SUPPLIER) {
             this.showSupplierAutoComplete = true;
             this.api
               .readSupplierByContactSupplierContactContactIdGet(contact.id)
@@ -92,7 +92,7 @@ export class ContactEditDialogComponent implements OnInit {
                 this.supplierSelectedId = supplier.id;
               });
           }
-          if (contact.type === ContactTypeEnum.Client) {
+          if (contact.type === ContactTypeEnum.CLIENT) {
             this.showClientAutoComplete = true;
             this.api
               .readClientByContactClientContactContactIdGet(contact.id)
@@ -178,13 +178,13 @@ export class ContactEditDialogComponent implements OnInit {
     this.showSupplierAutoComplete = false;
 
     switch (contactType) {
-      case ContactTypeEnum.Business:
-      case ContactTypeEnum.Management:
+      case ContactTypeEnum.BUSINESS:
+      case ContactTypeEnum.MANAGEMENT:
         return;
-      case ContactTypeEnum.Supplier:
+      case ContactTypeEnum.SUPPLIER:
         this.showSupplierAutoComplete = true;
         break;
-      case ContactTypeEnum.Client:
+      case ContactTypeEnum.CLIENT:
         this.showClientAutoComplete = true;
         break;
     }
@@ -205,18 +205,18 @@ export class ContactEditDialogComponent implements OnInit {
       id: this.data.id,
     };
     let parentId: number;
-    if (this.contactType.value === ContactTypeEnum.Supplier) {
+    if (this.contactType.value === ContactTypeEnum.SUPPLIER) {
       console.log(this.supplierAutoCompleteText.value);
       parentId = this.supplierSelectedId;
     }
-    if (this.contactType.value === ContactTypeEnum.Client) {
+    if (this.contactType.value === ContactTypeEnum.CLIENT) {
       console.log(this.clientAutoCompleteText.value);
       parentId = this.clientSelectedId;
     }
     if (this.createMode) {
       this.api
         .createContactContactPost(
-          ContactTypeEnum.Business,
+          ContactTypeEnum.BUSINESS,
           contactCreate,
           parentId
         )

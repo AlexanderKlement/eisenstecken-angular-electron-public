@@ -2,6 +2,7 @@ import { ComponentRef, Directive } from '@angular/core';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
 
 @Directive({
+  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: 'app-router-outlet',
 })
 export class AppRouterOutletDirective extends RouterOutlet {

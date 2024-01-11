@@ -1,6 +1,5 @@
 import { Component, ComponentRef, OnInit } from '@angular/core';
 import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
-import { DefaultService, Service } from 'eisenstecken-openapi-angular-library';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as moment from 'moment';
@@ -11,6 +10,7 @@ import { ServiceCreateDialogComponent } from './service-create-dialog/service-cr
 import { first } from 'rxjs/operators';
 import { minutesToDisplayableString } from '../../shared/date.util';
 import { Observable, Subscriber } from 'rxjs';
+import { DefaultService, Service } from '../../../client/api';
 
 @Component({
   selector: 'app-service',

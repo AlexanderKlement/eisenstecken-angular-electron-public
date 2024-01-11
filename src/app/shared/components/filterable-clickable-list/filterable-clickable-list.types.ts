@@ -1,9 +1,4 @@
-import {
-  Job,
-  Stock,
-  Supplier,
-  OrderableType,
-} from 'eisenstecken-openapi-angular-library';
+import { Job, OrderableType, Stock, Supplier } from '../../../../client/api';
 
 export type SupportedListElements = Job | Stock | Supplier;
 

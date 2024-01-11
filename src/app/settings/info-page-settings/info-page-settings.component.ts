@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
-import { DefaultService, InfoPage } from 'eisenstecken-openapi-angular-library';
 import { first } from 'rxjs/operators';
 import { AuthService } from '../../shared/services/auth.service';
 import { CustomButton } from '../../shared/components/toolbar/toolbar.component';
 import { MatDialog } from '@angular/material/dialog';
 import { InfoPageSettingEditDialogComponent } from './info-page-setting-edit-dialog/info-page-setting-edit-dialog.component';
+import { DefaultService, InfoPage } from '../../../client/api';
 
 @Component({
   selector: 'app-info-page-settings',

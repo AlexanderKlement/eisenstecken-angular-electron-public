@@ -1,16 +1,12 @@
 import { Component, ComponentRef, OnInit } from '@angular/core';
 import { TableDataSource } from '../shared/components/table-builder/table-builder.datasource';
-import {
-  DefaultService,
-  Stock,
-  Supplier,
-} from 'eisenstecken-openapi-angular-library';
 import { LockService } from '../shared/services/lock.service';
 import { CustomButton } from '../shared/components/toolbar/toolbar.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { AuthService } from '../shared/services/auth.service';
 import { Observable, Subscriber } from 'rxjs';
+import { DefaultService, Stock, Supplier, Lock } from '../../client/api';
 
 @Component({
   selector: 'app-supplier',

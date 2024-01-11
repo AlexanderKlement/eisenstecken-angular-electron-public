@@ -1,13 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {
-  DefaultService,
-  ServiceCreate,
-  User,
-} from 'eisenstecken-openapi-angular-library';
 import { first } from 'rxjs/operators';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { formatDateTransport } from '../../../shared/date.util';
+import { DefaultService, ServiceCreate, User } from '../../../../client/api';
 
 export interface ServiceCreateDialogData {
   userId: number;

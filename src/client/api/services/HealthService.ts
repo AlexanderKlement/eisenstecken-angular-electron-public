@@ -2,17 +2,23 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { CancelablePromise } from '../core/CancelablePromise';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import type { Observable } from 'rxjs';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
+@Injectable({
+    providedIn: 'root',
+})
 export class HealthService {
+    constructor(public readonly http: HttpClient) {}
     /**
      * Get Health
      * @returns string Successful Response
      * @throws ApiError
      */
-    public static getHealthHealthPingGet(): CancelablePromise<string> {
-        return __request(OpenAPI, {
+    public getHealthHealthPingGet(): Observable<string> {
+        return __request(OpenAPI, this.http, {
             method: 'GET',
             url: '/health/ping',
         });

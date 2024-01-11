@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BaseSettingsComponent } from '../base-settings.component';
-import { DefaultService } from 'eisenstecken-openapi-angular-library';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DefaultService } from '../../../client/api';
 
 @Component({
   selector: 'app-offer-settings',

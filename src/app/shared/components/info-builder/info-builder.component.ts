@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { InfoDataSource } from './info-builder.datasource';
 import { DataSourceClass } from '../../types';
-import { DefaultService } from 'eisenstecken-openapi-angular-library';
 import { LockService } from '../../services/lock.service';
+import { DefaultService } from '../../../../client/api';
 
 @Component({
   selector: 'app-info-builder',

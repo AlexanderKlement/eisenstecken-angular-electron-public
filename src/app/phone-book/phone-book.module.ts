@@ -9,7 +9,6 @@ import { ContactEditDialogComponent } from './contact-edit-dialog/contact-edit-d
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { FlexModule } from '@angular/flex-layout';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -25,7 +24,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    FlexModule,
     MatDialogModule,
     MatButtonModule,
     MatButtonToggleModule,

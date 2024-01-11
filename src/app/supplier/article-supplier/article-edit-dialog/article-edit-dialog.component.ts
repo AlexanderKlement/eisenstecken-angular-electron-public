@@ -5,16 +5,16 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
+import { first } from 'rxjs/operators';
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import {
   ArticleCreate,
   ArticleUpdateFull,
   DefaultService,
   Unit,
   Vat,
-} from 'eisenstecken-openapi-angular-library';
-import { Observable } from 'rxjs';
-import { first } from 'rxjs/operators';
-import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+} from '../../../../client/api';
 
 export interface ArticleEditDialogData {
   id: number;

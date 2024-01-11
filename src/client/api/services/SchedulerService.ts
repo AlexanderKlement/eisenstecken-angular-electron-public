@@ -2,173 +2,69 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { CancelablePromise } from '../core/CancelablePromise';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import type { Observable } from 'rxjs';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
+@Injectable({
+    providedIn: 'root',
+})
 export class SchedulerService {
+    constructor(public readonly http: HttpClient) {}
     /**
-     * Refresh Statistics By League
+     * Check Offline Clients
      * @returns any Successful Response
      * @throws ApiError
      */
-    public static refreshStatisticsByLeagueSchedulerRefreshStatisticsByLeagueGet(): CancelablePromise<any> {
-        return __request(OpenAPI, {
+    public checkOfflineClientsSchedulerCheckNotificationGet(): Observable<any> {
+        return __request(OpenAPI, this.http, {
             method: 'GET',
-            url: '/scheduler/refresh_statistics_by_league',
+            url: '/scheduler/check_notification',
         });
     }
     /**
-     * Refresh Squads By Team
+     * Export Contacts
      * @returns any Successful Response
      * @throws ApiError
      */
-    public static refreshSquadsByTeamSchedulerRefreshSquadsByTeamGet(): CancelablePromise<any> {
-        return __request(OpenAPI, {
+    public exportContactsSchedulerExportContactsGet(): Observable<any> {
+        return __request(OpenAPI, this.http, {
             method: 'GET',
-            url: '/scheduler/refresh_squads_by_team',
+            url: '/scheduler/export_contacts',
         });
     }
     /**
-     * Refresh Squad Statistics By Team
+     * Get Order Confirmations
      * @returns any Successful Response
      * @throws ApiError
      */
-    public static refreshSquadStatisticsByTeamSchedulerRefreshSquadStatisticsByTeamGet(): CancelablePromise<any> {
-        return __request(OpenAPI, {
+    public getOrderConfirmationsSchedulerGetOrderConfirmationsGet(): Observable<any> {
+        return __request(OpenAPI, this.http, {
             method: 'GET',
-            url: '/scheduler/refresh_squad_statistics_by_team',
+            url: '/scheduler/get_order_confirmations',
         });
     }
     /**
-     * Add Missing Team Of The Week
+     * Archive Work Hours
      * @returns any Successful Response
      * @throws ApiError
      */
-    public static addMissingTeamOfTheWeekSchedulerAddMissingTeamOfTheWeekGet(): CancelablePromise<any> {
-        return __request(OpenAPI, {
+    public archiveWorkHoursSchedulerArchiveWorkHoursGet(): Observable<any> {
+        return __request(OpenAPI, this.http, {
             method: 'GET',
-            url: '/scheduler/add_missing_team_of_the_week',
+            url: '/scheduler/archive_work_hours',
         });
     }
     /**
-     * Refresh Player Statistics By Match
+     * Create Calendar Entries
      * @returns any Successful Response
      * @throws ApiError
      */
-    public static refreshPlayerStatisticsByMatchSchedulerRefreshPlayerStatisticsByMatchGet(): CancelablePromise<any> {
-        return __request(OpenAPI, {
+    public createCalendarEntriesSchedulerCreateCalendarEntriesGet(): Observable<any> {
+        return __request(OpenAPI, this.http, {
             method: 'GET',
-            url: '/scheduler/refresh_player_statistics_by_match',
-        });
-    }
-    /**
-     * Refresh All Team Of The Weeks
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static refreshAllTeamOfTheWeeksSchedulerRefreshAllTeamOfTheWeeksGet(): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/scheduler/refresh_all_team_of_the_weeks',
-        });
-    }
-    /**
-     * Delete Wrong Standings
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static deleteWrongStandingsSchedulerDeleteWrongStandingsGet(): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/scheduler/delete_wrong_standings',
-        });
-    }
-    /**
-     * Check Match End
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static checkMatchEndSchedulerCheckMatchEndGet(): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/scheduler/check_match_end',
-        });
-    }
-    /**
-     * Refresh Standings For Current Match Day
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static refreshStandingsForCurrentMatchDaySchedulerRefreshStandingsForCurrentMatchDayGet(): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/scheduler/refresh_standings_for_current_match_day',
-        });
-    }
-    /**
-     * Get Sportnews Bz Blogs
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static getSportnewsBzBlogsSchedulerGetSportnewsBzBlogsGet(): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/scheduler/get_sportnews_bz_blogs',
-        });
-    }
-    /**
-     * Get Communicati Figc Bz
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static getCommunicatiFigcBzSchedulerGetCommunicatiFigcBzGet(): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/scheduler/get_communicati_figc_bz',
-        });
-    }
-    /**
-     * Get Communicati Figc Bz
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static getCommunicatiFigcBzSchedulerGetCommunicatiFigcTnGet(): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/scheduler/get_communicati_figc_tn',
-        });
-    }
-    /**
-     * Award Insider Badges
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static awardInsiderBadgesSchedulerAwardInsiderBadgesGet(): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/scheduler/award_insider_badges',
-        });
-    }
-    /**
-     * Award Team Of The Week Badges
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static awardTeamOfTheWeekBadgesSchedulerAwardTeamOfTheWeekBadgesGet(): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/scheduler/award_team_of_the_week_badges',
-        });
-    }
-    /**
-     * Update Hockey Scores
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static updateHockeyScoresSchedulerUpdateHockeyScoresGet(): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/scheduler/update_hockey_scores',
+            url: '/scheduler/create_calendar_entries',
         });
     }
 }

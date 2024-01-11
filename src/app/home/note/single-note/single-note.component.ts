@@ -6,14 +6,10 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import {
-  DefaultService,
-  Note,
-  NoteCreate,
-} from 'eisenstecken-openapi-angular-library';
 import { UntypedFormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged, first } from 'rxjs/operators';
+import { DefaultService, Note, NoteCreate } from '../../../../client/api';
 
 @Component({
   selector: 'app-single-note',

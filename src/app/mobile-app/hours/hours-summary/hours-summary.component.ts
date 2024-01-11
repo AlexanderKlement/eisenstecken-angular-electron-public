@@ -8,9 +8,9 @@ import {
   HoursStepperComponent,
   JobEnum,
 } from '../hours-stepper/hours-stepper.component';
-import { DefaultService } from 'eisenstecken-openapi-angular-library';
 import { first, map } from 'rxjs/operators';
 import { forkJoin, Observable, Subscription } from 'rxjs';
+import { DefaultService } from '../../../../client/api';
 
 @Component({
   selector: 'app-hours-summary',

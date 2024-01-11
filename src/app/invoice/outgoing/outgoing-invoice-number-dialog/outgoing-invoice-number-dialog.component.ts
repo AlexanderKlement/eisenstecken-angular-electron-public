@@ -1,12 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import {
-  DefaultService,
-  ParameterCreate,
-} from 'eisenstecken-openapi-angular-library';
 import { first } from 'rxjs/operators';
 import { MatDialogRef } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { DefaultService, ParameterCreate } from '../../../../client/api';
 
 @Component({
   selector: 'app-outgoing-invoice-number-dialog',

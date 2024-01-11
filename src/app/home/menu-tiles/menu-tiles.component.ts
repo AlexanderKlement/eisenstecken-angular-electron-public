@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { DefaultService } from 'eisenstecken-openapi-angular-library';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { matchRightsToMenuTiles, MenuTileDetail } from './menu-tile.settings';
+import { DefaultService } from '../../../client/api';
 
 @Component({
   selector: 'app-menu-tiles',

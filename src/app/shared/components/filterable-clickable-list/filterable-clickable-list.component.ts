@@ -13,7 +13,7 @@ import {
 } from './filterable-clickable-list.types';
 import { UntypedFormControl } from '@angular/forms';
 import { debounceTime, first, startWith, switchMap } from 'rxjs/operators';
-import { DefaultService } from 'eisenstecken-openapi-angular-library';
+import { DefaultService } from '../../../../client/api';
 
 @Component({
   selector: 'app-filterable-clickable-list',

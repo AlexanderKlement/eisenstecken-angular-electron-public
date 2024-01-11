@@ -1,15 +1,15 @@
 import { Component, ComponentRef, OnInit } from '@angular/core';
 import { InfoDataSource } from '../../../shared/components/info-builder/info-builder.datasource';
-import {
-  DefaultService,
-  DescriptiveArticle,
-  IngoingInvoice,
-} from 'eisenstecken-openapi-angular-library';
-import { first } from 'rxjs/operators';
+
 import { ActivatedRoute } from '@angular/router';
 import { TableDataSource } from '../../../shared/components/table-builder/table-builder.datasource';
 import { formatCurrency, formatNumber } from '@angular/common';
 import { Observable, Subscriber } from 'rxjs';
+import {
+  DefaultService,
+  DescriptiveArticle,
+  IngoingInvoice,
+} from '../../../../client/api';
 
 @Component({
   selector: 'app-ingoing-detail',

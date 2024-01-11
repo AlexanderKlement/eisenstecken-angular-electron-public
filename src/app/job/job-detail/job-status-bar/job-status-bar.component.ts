@@ -1,14 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
+
+import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { first, map } from 'rxjs/operators';
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 import {
   DefaultService,
   JobStatus,
   JobStatusType,
-} from 'eisenstecken-openapi-angular-library';
-import { Observable, ReplaySubject, Subject } from 'rxjs';
-import { first, map } from 'rxjs/operators';
-import { cli } from 'webdriver-manager/built/lib/cli_instance';
-import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
+} from '../../../../client/api';
 
 @Component({
   selector: 'app-job-status-bar',
@@ -23,10 +23,10 @@ export class JobStatusBarComponent implements OnInit {
   public loading = true;
 
   private colorMap = [
-    [JobStatusType.Created, 'created'],
-    [JobStatusType.Accepted, 'accepted'],
-    [JobStatusType.Completed, 'completed'],
-    [JobStatusType.Declined, 'declined'],
+    [JobStatusType.JOBSTATUS_CREATED, 'created'],
+    [JobStatusType.JOBSTATUS_CREATED, 'accepted'],
+    [JobStatusType.JOBSTATUS_CREATED, 'completed'],
+    [JobStatusType.JOBSTATUS_CREATED, 'declined'],
   ];
 
   constructor(

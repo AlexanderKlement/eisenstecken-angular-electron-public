@@ -1,11 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
 import {
-  CalendarEntry,
-  CalendarEntryCreate,
-  DefaultService,
-} from 'eisenstecken-openapi-angular-library';
-import {
   AbstractControl,
   UntypedFormControl,
   UntypedFormGroup,
@@ -16,6 +11,11 @@ import {
 import * as moment from 'moment';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { timepickerTheme } from '../../../themes/timepicker.theme';
+import {
+  CalendarEntry,
+  CalendarEntryCreate,
+  DefaultService,
+} from '../../../../../client/api';
 
 export const timeValidator: ValidatorFn = (
   control: AbstractControl

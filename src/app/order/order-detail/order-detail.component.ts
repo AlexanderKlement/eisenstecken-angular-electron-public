@@ -1,11 +1,4 @@
 import { Component, ComponentRef, OnInit } from '@angular/core';
-import {
-  DefaultService,
-  Order,
-  OrderableType,
-  OrderBundle,
-  OrderedArticle,
-} from 'eisenstecken-openapi-angular-library';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InfoDataSource } from '../../shared/components/info-builder/info-builder.datasource';
 import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
@@ -20,6 +13,12 @@ import { OrderedArticleMoveDialogComponent } from './ordered-article-move-dialog
 import { formatCurrency } from '@angular/common';
 import { Observable, Subscriber } from 'rxjs';
 import { ConvertRequestDialogComponent } from './convert-request-dialog/convert-request-dialog.component';
+import {
+  DefaultService,
+  Order,
+  OrderableType,
+  OrderedArticle,
+} from '../../../client/api';
 
 @Component({
   selector: 'app-order-detail',
@@ -291,7 +290,7 @@ export class OrderDetailComponent implements OnInit {
       .readOrderOrderOrderIdGet(this.orderId)
       .pipe(first())
       .subscribe(order => {
-        if (order.order_from.type === OrderableType.Supplier) {
+        if (order.order_from.type === OrderableType.SUPPLIER) {
           this.buttons.push({
             name: 'Gehe zu Lieferant',
             navigate: (): void => {

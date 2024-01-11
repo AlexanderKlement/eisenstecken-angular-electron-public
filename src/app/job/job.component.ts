@@ -1,20 +1,10 @@
-import {
-  Component,
-  ComponentRef,
-  ElementRef,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, ComponentRef, OnInit } from '@angular/core';
 import { TableDataSource } from '../shared/components/table-builder/table-builder.datasource';
-import {
-  DefaultService,
-  Job,
-  Stock,
-} from 'eisenstecken-openapi-angular-library';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscriber } from 'rxjs';
 import * as moment from 'moment';
 import { FileService } from '../shared/services/file.service';
+import { DefaultService, Job, JobStatusType, Stock } from '../../client/api';
 
 @Component({
   selector: 'app-job',
@@ -119,7 +109,7 @@ export class JobComponent implements OnInit {
       ],
       api =>
         api.readJobCountJobCountGet(
-          'JOBSTATUS_CREATED',
+          JobStatusType.JOBSTATUS_CREATED,
           true,
           undefined,
           this.selectedYear
@@ -137,7 +127,7 @@ export class JobComponent implements OnInit {
           limit,
           filter,
           undefined,
-          'JOBSTATUS_ACCEPTED',
+          JobStatusType.JOBSTATUS_ACCEPTED,
           true,
           this.selectedYear
         ),
@@ -168,7 +158,7 @@ export class JobComponent implements OnInit {
       ],
       api =>
         api.readJobCountJobCountGet(
-          'JOBSTATUS_ACCEPTED',
+          JobStatusType.JOBSTATUS_ACCEPTED,
           true,
           undefined,
           this.selectedYear
@@ -217,7 +207,7 @@ export class JobComponent implements OnInit {
       ],
       api =>
         api.readJobCountJobCountGet(
-          'JOBSTATUS_COMPLETED',
+          JobStatusType.JOBSTATUS_COMPLETED,
           true,
           undefined,
           this.selectedYear
@@ -266,7 +256,7 @@ export class JobComponent implements OnInit {
       ],
       api =>
         api.readJobCountJobCountGet(
-          'JOBSTATUS_DECLINED',
+          JobStatusType.JOBSTATUS_DECLINED,
           true,
           undefined,
           this.selectedYear

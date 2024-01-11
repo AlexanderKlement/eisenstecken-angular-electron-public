@@ -10,7 +10,6 @@ import { OutgoingComponent } from './outgoing/outgoing.component';
 import { OutgoingInvoiceNumberDialogComponent } from './outgoing/outgoing-invoice-number-dialog/outgoing-invoice-number-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { FlexModule } from '@angular/flex-layout';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -36,7 +35,6 @@ import { MatSelectModule } from '@angular/material/select';
     MatTabsModule,
     MatDialogModule,
     MatButtonModule,
-    FlexModule,
     MatFormFieldModule,
     ReactiveFormsModule,
     MatInputModule,

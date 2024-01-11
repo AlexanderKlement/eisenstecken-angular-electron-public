@@ -1,9 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
-import {
-  DefaultService,
-  OutgoingInvoice,
-} from 'eisenstecken-openapi-angular-library';
 import { LockService } from '../../shared/services/lock.service';
 import { first } from 'rxjs/operators';
 import { AuthService } from '../../shared/services/auth.service';
@@ -13,6 +9,7 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { formatCurrency } from '@angular/common';
+import { DefaultService, OutgoingInvoice } from '../../../client/api';
 
 @Component({
   selector: 'app-outgoing',

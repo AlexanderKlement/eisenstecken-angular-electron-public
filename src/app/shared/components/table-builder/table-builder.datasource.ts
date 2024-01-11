@@ -1,9 +1,9 @@
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { DefaultService } from 'eisenstecken-openapi-angular-library';
 import { catchError, finalize, map } from 'rxjs/operators';
 import { DataSourceClass } from '../../types';
 import { MatPaginatorIntl } from '@angular/material/paginator';
+import { DefaultService } from '../../../../client/api';
 
 export interface Column<T> {
   name: string; // RecursiveKeyOf<T>; Maybe this is better this way

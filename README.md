@@ -120,3 +120,8 @@ The build the update exe and publish the release on GitHub
 - `ng generate module NAME --routing`
 - `ng generate component NAME`
 - Register in `app.module.ts` and `app-routing.module.ts`
+
+
+"generate-client": "openapi-generator-cli generate && cd eisenstecken-openapi-angular-library && npm install && npm run build && npm publish ./dist",
+    "generate-init": "openapi-generator-cli generate -g typescript-angular -i https://api.eisenstecken.kivi.bz.it/openapi.json -o openapi-client --generator-key eisenstecken"
+ 

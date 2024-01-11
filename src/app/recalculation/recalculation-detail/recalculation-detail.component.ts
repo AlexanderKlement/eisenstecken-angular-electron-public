@@ -1,13 +1,4 @@
 import { Component, ComponentRef, OnInit } from '@angular/core';
-import {
-  DefaultService,
-  Expense,
-  Order,
-  Paint,
-  Recalculation,
-  WoodList,
-  Workload,
-} from 'eisenstecken-openapi-angular-library';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
 import * as moment from 'moment';
@@ -20,6 +11,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { minutesToDisplayableString } from '../../shared/date.util';
 import { formatCurrency } from '@angular/common';
 import { NavigationService } from '../../shared/services/navigation.service';
+import {
+  DefaultService,
+  Expense,
+  Order,
+  Paint,
+  Recalculation,
+  WoodList,
+  Workload,
+} from '../../../client/api';
 
 @Component({
   selector: 'app-recalculation-detail',

@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Calendar, DefaultService } from 'eisenstecken-openapi-angular-library';
 import { Observable } from 'rxjs';
 import { first, tap } from 'rxjs/operators';
 import { ChatService } from '../chat/chat.service';
+import { Calendar, DefaultService } from '../../../client/api';
 
 @Component({
   selector: 'app-calendars-frame',

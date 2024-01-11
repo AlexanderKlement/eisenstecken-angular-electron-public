@@ -1,15 +1,5 @@
 import { Component, ComponentRef, OnInit } from '@angular/core';
 import { TableDataSource } from '../shared/components/table-builder/table-builder.datasource';
-import {
-  AdditionalWorkload,
-  DefaultService,
-  Fee,
-  Journey,
-  Maintenance,
-  MealSum,
-  ServiceSum,
-  User,
-} from 'eisenstecken-openapi-angular-library';
 import { CustomButton } from '../shared/components/toolbar/toolbar.component';
 import { LockService } from '../shared/services/lock.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,6 +10,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { minutesToDisplayableString } from '../shared/date.util';
 import { Observable, Subscriber } from 'rxjs';
+import {
+  AdditionalWorkload,
+  DefaultService,
+  Fee,
+  Journey,
+  Maintenance,
+  MealSum,
+  User,
+} from '../../client/api';
 
 @Component({
   selector: 'app-employee',
@@ -285,7 +284,9 @@ export class EmployeeComponent implements OnInit {
     this.maintenanceDataSource.loadData();
   }
 
-  private maintenanceClicked(): void {}
+  private maintenanceClicked(): void {
+    console.log('maintenanceClicked');
+  }
 
   private initAdditionalDataSource() {
     this.additionalWorkloadDataSource = new TableDataSource(

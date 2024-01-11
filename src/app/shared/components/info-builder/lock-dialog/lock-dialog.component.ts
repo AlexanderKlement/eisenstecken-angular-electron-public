@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Lock } from 'eisenstecken-openapi-angular-library';
 import { Observable } from 'rxjs';
+import { Lock } from '../../../../../client/api';
 import { first } from 'rxjs/operators';
 
 export interface LockDialogData {

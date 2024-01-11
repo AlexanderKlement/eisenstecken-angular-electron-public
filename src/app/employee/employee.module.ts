@@ -10,7 +10,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { WorkDayNewComponent } from './work-day-new/work-day-new.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { FlexModule } from '@angular/flex-layout';
 import { MealComponent } from './meal/meal.component';
 import { EmployeeServiceComponent } from './service/employee-service.component';
 import { ServiceDialogComponent } from './service/service-dialog/service-dialog.component';
@@ -42,7 +41,6 @@ import { EmployeeRedirectComponent } from './employee-redirect/employee-redirect
     MatProgressSpinnerModule,
     MatFormFieldModule,
     MatSelectModule,
-    FlexModule,
     MatDialogModule,
     MatButtonModule,
     MatDatepickerModule,

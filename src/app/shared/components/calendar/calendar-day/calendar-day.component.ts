@@ -1,9 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import {
-  CalendarEntry,
-  DefaultService,
-} from 'eisenstecken-openapi-angular-library';
 import { first, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
@@ -13,6 +9,7 @@ import {
   CalendarEditComponent,
 } from '../calendar-edit/calendar-edit.component';
 import { MatDialog } from '@angular/material/dialog';
+import { CalendarEntry, DefaultService } from '../../../../../client/api';
 
 @Component({
   selector: 'app-calendar-day',

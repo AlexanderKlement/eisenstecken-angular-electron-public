@@ -6,16 +6,6 @@ import {
   UntypedFormGroup,
 } from '@angular/forms';
 import { BaseEditComponent } from '../../shared/components/base-edit/base-edit.component';
-import {
-  DefaultService,
-  OfferCreate,
-  OfferUpdate,
-  Lock,
-  Offer,
-  DescriptiveArticleCreate,
-  Vat,
-  DescriptiveArticle,
-} from 'eisenstecken-openapi-angular-library';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subscription, take } from 'rxjs';
@@ -27,6 +17,16 @@ import { CustomButton } from '../../shared/components/toolbar/toolbar.component'
 import { CurrencyPipe, getLocaleCurrencyCode } from '@angular/common';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { NavigationService } from '../../shared/services/navigation.service';
+import {
+  DefaultService,
+  DescriptiveArticle,
+  DescriptiveArticleCreate,
+  Offer,
+  OfferCreate,
+  OfferUpdate,
+  Vat,
+  Lock,
+} from '../../../client/api';
 
 @Component({
   selector: 'app-offer-edit',

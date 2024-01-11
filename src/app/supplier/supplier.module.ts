@@ -12,7 +12,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { FlexModule } from '@angular/flex-layout';
 import { MatTabsModule } from '@angular/material/tabs';
 import { OrderDialogComponent } from './supplier-detail/order-dialog/order-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -48,7 +47,6 @@ import { MatIconModule } from '@angular/material/icon';
     MatSelectModule,
     MatButtonModule,
     MatInputModule,
-    FlexModule,
     MatTabsModule,
     MatDialogModule,
     MatListModule,

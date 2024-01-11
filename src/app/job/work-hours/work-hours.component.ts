@@ -1,5 +1,4 @@
 import { Component, ComponentRef, OnInit } from '@angular/core';
-import { DefaultService, Workload } from 'eisenstecken-openapi-angular-library';
 import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -9,6 +8,7 @@ import { AuthService } from '../../shared/services/auth.service';
 import { first } from 'rxjs/operators';
 import { minutesToDisplayableString } from '../../shared/date.util';
 import { Observable, Subscriber } from 'rxjs';
+import { DefaultService, Workload } from '../../../client/api';
 
 @Component({
   selector: 'app-work-hours',

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { DefaultService, Lock } from 'eisenstecken-openapi-angular-library';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { LockDialogComponent } from '../components/info-builder/lock-dialog/lock-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DefaultService, Lock } from '../../../client/api';
 
 @Injectable({
   providedIn: 'root',

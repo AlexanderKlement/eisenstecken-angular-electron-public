@@ -46,7 +46,6 @@ import {
 import { SettingsModule } from './settings/settings.module';
 import { OrderModule } from './order/order.module';
 import { LoginModule } from './login/login.module';
-import { Router } from '@angular/router';
 import localeDe from '@angular/common/locales/de';
 import localeDeExtra from '@angular/common/locales/extra/de';
 import * as Sentry from '@sentry/angular-ivy';
@@ -90,11 +89,14 @@ const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>
 
 registerLocaleData(localeDe, 'de-DE', localeDeExtra);
 
-export function apiConfigFactory(): Configuration {
-  const params: ConfigurationParameters = {
-    basePath: LocalConfigRenderer.getInstance().getApi(),
-  };
-  return new Configuration(params);
+export class Configuration {
+  accessToken: string;
+  basePath: string;
+
+  constructor(config: { accessToken: string; basePath: string }) {
+    this.accessToken = config.accessToken;
+    this.basePath = config.basePath;
+  }
 }
 
 @Injectable()
@@ -136,7 +138,6 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
     NgxMatDatetimePickerModule,
     MobileAppModule,
     RecalculationModule,
-    ApiModule.forRoot(apiConfigFactory),
     AppRoutingModule,
     DeliveryNoteModule,
     DebugModule,

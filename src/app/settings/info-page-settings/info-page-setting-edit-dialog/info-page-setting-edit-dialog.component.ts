@@ -4,15 +4,15 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import {
-  DefaultService,
-  InfoPageCreate,
-  InfoPageUpdate,
-} from 'eisenstecken-openapi-angular-library';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { AuthService } from '../../../shared/services/auth.service';
+import {
+  DefaultService,
+  InfoPageCreate,
+  InfoPageUpdate,
+} from '../../../../client/api';
 
 export interface InfoPageEditDialogData {
   id: number;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DefaultService } from 'eisenstecken-openapi-angular-library';
+import { DefaultService } from '../../../../client/api';
 
 @Component({
   selector: 'app-test',

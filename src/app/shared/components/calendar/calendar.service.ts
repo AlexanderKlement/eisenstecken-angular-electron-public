@@ -1,11 +1,8 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import {
-  CalendarEntry,
-  DefaultService,
-} from 'eisenstecken-openapi-angular-library';
 import { Observable, Subscriber } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { TrayService } from '../../services/tray.service';
+import { CalendarEntry, DefaultService } from '../../../../client/api';
 
 export interface CalendarDayListElement {
   day: number;

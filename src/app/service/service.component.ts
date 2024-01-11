@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { TableDataSource } from '../shared/components/table-builder/table-builder.datasource';
-import {
-  DefaultService,
-  ServiceSum,
-} from 'eisenstecken-openapi-angular-library';
+
 import * as moment from 'moment';
 import { minutesToDisplayableString } from '../shared/date.util';
 import { Router } from '@angular/router';
+import { DefaultService, ServiceSum } from '../../client/api';
 
 @Component({
   selector: 'app-service',

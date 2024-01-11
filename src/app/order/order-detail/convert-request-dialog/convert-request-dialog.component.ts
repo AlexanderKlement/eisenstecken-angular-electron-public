@@ -2,15 +2,8 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectionList } from '@angular/material/list';
 import { combineLatest, Observable } from 'rxjs';
-import {
-  DefaultService,
-  Job,
-  Orderable,
-  OrderableType,
-  OrderedArticle,
-  Stock,
-} from 'eisenstecken-openapi-angular-library';
 import { first, map } from 'rxjs/operators';
+import { DefaultService, OrderedArticle } from '../../../../client/api';
 
 export interface ConvertOrderedArticleReturnDialogData {
   orderId: number;

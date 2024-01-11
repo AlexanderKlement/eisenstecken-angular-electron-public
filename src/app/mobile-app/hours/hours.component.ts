@@ -2,8 +2,8 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { CustomButton } from '../../shared/components/toolbar/toolbar.component';
 import { Observable, Subject, Subscriber } from 'rxjs';
 import { NavigationService } from '../../shared/services/navigation.service';
-import { DefaultService, WorkDay } from 'eisenstecken-openapi-angular-library';
 import { first } from 'rxjs/operators';
+import { DefaultService, WorkDay } from '../../../client/api';
 
 @Component({
   selector: 'app-hours',

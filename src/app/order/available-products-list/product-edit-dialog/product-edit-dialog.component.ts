@@ -2,11 +2,6 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Observable, Subscription } from 'rxjs';
 import {
-  DefaultService,
-  Unit,
-  Vat,
-} from 'eisenstecken-openapi-angular-library';
-import {
   UntypedFormControl,
   UntypedFormGroup,
   Validators,
@@ -16,6 +11,7 @@ import {
   formatNumber,
   getLocaleCurrencyCode,
 } from '@angular/common';
+import { DefaultService, Unit, Vat } from '../../../../client/api';
 
 export interface OrderDialogData {
   title: string;

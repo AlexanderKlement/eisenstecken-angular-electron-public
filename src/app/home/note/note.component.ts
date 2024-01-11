@@ -1,10 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import {
-  DefaultService,
-  Note,
-  NoteCreate,
-} from 'eisenstecken-openapi-angular-library';
 import { first } from 'rxjs/operators';
+import { DefaultService, Note, NoteCreate } from '../../../client/api';
 
 @Component({
   selector: 'app-note',

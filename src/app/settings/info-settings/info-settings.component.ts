@@ -4,20 +4,19 @@ import {
   UntypedFormControl,
   UntypedFormGroup,
 } from '@angular/forms';
+
+import { first } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ThemePalette } from '@angular/material/core';
 import {
-  Contact,
-  ContactUpdate,
+  DefaultService,
   Credential,
   CredentialUpdate,
-  DefaultService,
   Price,
   PriceUpdate,
   TechnicalData,
   TechnicalDataUpdate,
-} from 'eisenstecken-openapi-angular-library';
-import { first } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ThemePalette } from '@angular/material/core';
+} from '../../../client/api';
 
 @Component({
   selector: 'app-info-settings',

@@ -3,10 +3,21 @@
 /* tslint:disable */
 /* eslint-disable */
 export type UserCreate = {
-    languageId: number;
-    deviceId: string;
-    areaOfInterestId: number;
-    firebaseToken?: (string | null);
-    deviceInfo: string;
+    email: string;
+    tel: string;
+    firstname: string;
+    secondname: string;
+    cost: number;
+    innovaphone_user: string;
+    innovaphone_pass: string;
+    notifications: boolean;
+    password: string;
+    handy: string;
+    dial: string;
+    employee: boolean;
+    office: boolean;
+    hours: boolean;
+    chat: boolean;
+    position: string;
 };
 

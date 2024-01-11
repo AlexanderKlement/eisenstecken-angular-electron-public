@@ -4,27 +4,67 @@
 /* eslint-disable */
 export const $UserCreate = {
     properties: {
-        languageId: {
-            type: 'number',
-            isRequired: true,
-        },
-        deviceId: {
+        email: {
             type: 'string',
             isRequired: true,
         },
-        areaOfInterestId: {
+        tel: {
+            type: 'string',
+            isRequired: true,
+        },
+        firstname: {
+            type: 'string',
+            isRequired: true,
+        },
+        secondname: {
+            type: 'string',
+            isRequired: true,
+        },
+        cost: {
             type: 'number',
             isRequired: true,
         },
-        firebaseToken: {
-            type: 'any-of',
-            contains: [{
-                type: 'string',
-            }, {
-                type: 'null',
-            }],
+        innovaphone_user: {
+            type: 'string',
+            isRequired: true,
         },
-        deviceInfo: {
+        innovaphone_pass: {
+            type: 'string',
+            isRequired: true,
+        },
+        notifications: {
+            type: 'boolean',
+            isRequired: true,
+        },
+        password: {
+            type: 'string',
+            isRequired: true,
+        },
+        handy: {
+            type: 'string',
+            isRequired: true,
+        },
+        dial: {
+            type: 'string',
+            isRequired: true,
+        },
+        employee: {
+            type: 'boolean',
+            isRequired: true,
+        },
+        office: {
+            type: 'boolean',
+            isRequired: true,
+        },
+        hours: {
+            type: 'boolean',
+            isRequired: true,
+        },
+        chat: {
+            type: 'boolean',
+            isRequired: true,
+        },
+        position: {
             type: 'string',
             isRequired: true,
         },

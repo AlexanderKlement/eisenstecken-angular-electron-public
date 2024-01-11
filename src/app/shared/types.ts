@@ -29,7 +29,7 @@ import {
   ServiceSum,
   InfoPage,
   WoodList,
-} from 'eisenstecken-openapi-angular-library';
+} from '../../client/api';
 
 export type DataSourceClass =
   | Client

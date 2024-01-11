@@ -1,14 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  DefaultService,
-  DeliveryNote,
-  DeliveryNoteCreate,
-  DeliveryNoteReason,
-  DeliveryNoteUpdate,
-  DescriptiveArticle,
-  DescriptiveArticleCreate,
-  Lock,
-} from 'eisenstecken-openapi-angular-library';
 import { BaseEditComponent } from '../../shared/components/base-edit/base-edit.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -27,6 +17,16 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { formatDateTransport } from '../../shared/date.util';
 import { FileService } from '../../shared/services/file.service';
 import { NavigationService } from '../../shared/services/navigation.service';
+import {
+  DefaultService,
+  DeliveryNote,
+  DeliveryNoteCreate,
+  DeliveryNoteReason,
+  DeliveryNoteUpdate,
+  DescriptiveArticle,
+  DescriptiveArticleCreate,
+  Lock,
+} from '../../../client/api';
 
 export interface JobMinimal {
   // eslint-disable-next-line @typescript-eslint/naming-convention

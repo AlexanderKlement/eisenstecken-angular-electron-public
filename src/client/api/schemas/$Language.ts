@@ -4,8 +4,8 @@
 /* eslint-disable */
 export const $Language = {
     properties: {
-        locale: {
-            type: 'LanguageLocaleEnum',
+        code: {
+            type: 'string',
             isRequired: true,
         },
         id: {
@@ -13,7 +13,7 @@ export const $Language = {
             isRequired: true,
         },
         name: {
-            type: 'Translation',
+            type: 'Text',
             isRequired: true,
         },
     },

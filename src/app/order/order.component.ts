@@ -5,15 +5,15 @@ import {
   ListItem,
   SupportedListElements,
 } from '../shared/components/filterable-clickable-list/filterable-clickable-list.types';
-import {
-  Article,
-  DefaultService,
-  OrderableType,
-  OrderedArticle,
-} from 'eisenstecken-openapi-angular-library';
 import { first } from 'rxjs/operators';
 import { CustomButton } from '../shared/components/toolbar/toolbar.component';
 import { Router } from '@angular/router';
+import {
+  Article,
+  OrderableType,
+  OrderedArticle,
+  DefaultService,
+} from '../../client/api';
 
 @Component({
   selector: 'app-order',
@@ -148,15 +148,15 @@ export class OrderComponent implements OnInit {
 
   decideWhichFromListToLoad(listItem: ListItem): void {
     switch (listItem.type) {
-      case OrderableType.Stock: {
+      case OrderableType.STOCK: {
         this.loadFromList(false);
         break;
       }
-      case OrderableType.Job: {
+      case OrderableType.JOB: {
         this.loadFromList(true);
         break;
       }
-      case OrderableType.Supplier: {
+      case OrderableType.SUPPLIER: {
         console.error(
           'OrderComponent: an item with type SUPPLIER has been clicked in TO list'
         );
@@ -214,7 +214,7 @@ export class OrderComponent implements OnInit {
 
   private loadAvailableArticlesAndButtons(): void {
     switch (this.fromListSelected.type) {
-      case OrderableType.Stock: {
+      case OrderableType.STOCK: {
         this.api
           .readArticlesByStockArticleStockStockIdGet(
             this.fromListSelected.item.id
@@ -232,13 +232,13 @@ export class OrderComponent implements OnInit {
         });
         break;
       }
-      case OrderableType.Job: {
+      case OrderableType.JOB: {
         console.error(
           'OrderComponent: an item with type JOB has been clicked in FROM list'
         );
         break;
       }
-      case OrderableType.Supplier: {
+      case OrderableType.SUPPLIER: {
         this.api
           .readArticlesBySupplierArticleSupplierSupplierIdGet(
             this.fromListSelected.item.id

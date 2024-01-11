@@ -5,14 +5,10 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
-import {
-  DefaultService,
-  Service,
-  ServiceUpdate,
-} from 'eisenstecken-openapi-angular-library';
 import { first } from 'rxjs/operators';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DefaultService, Service, ServiceUpdate } from '../../../../client/api';
 
 export interface ServiceDialogData {
   id: number;

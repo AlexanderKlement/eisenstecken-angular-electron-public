@@ -1,15 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  Client,
-  DefaultService,
-  DescriptiveArticle,
-  DescriptiveArticleCreate,
-  Lock,
-  OutgoingInvoice,
-  OutgoingInvoiceCreate,
-  OutgoingInvoiceUpdate,
-  Vat,
-} from 'eisenstecken-openapi-angular-library';
 import { BaseEditComponent } from '../../shared/components/base-edit/base-edit.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -29,6 +18,17 @@ import { formatDateTransport } from '../../shared/date.util';
 import { FileService } from '../../shared/services/file.service';
 import { CurrencyPipe, getLocaleCurrencyCode } from '@angular/common';
 import { NavigationService } from '../../shared/services/navigation.service';
+import {
+  Client,
+  DefaultService,
+  DescriptiveArticle,
+  DescriptiveArticleCreate,
+  OutgoingInvoice,
+  OutgoingInvoiceCreate,
+  OutgoingInvoiceUpdate,
+  Vat,
+  Lock,
+} from '../../../client/api';
 
 @Component({
   selector: 'app-outgoing-invoice-edit',

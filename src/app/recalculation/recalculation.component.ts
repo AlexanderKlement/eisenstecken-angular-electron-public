@@ -1,9 +1,9 @@
 import { Component, ComponentRef, OnInit } from '@angular/core';
 import { TableDataSource } from '../shared/components/table-builder/table-builder.datasource';
-import { DefaultService, Job } from 'eisenstecken-openapi-angular-library';
 import { ActivatedRoute, Router } from '@angular/router';
-import { concat, merge, Observable, Subscriber } from 'rxjs';
+import { Observable, Subscriber } from 'rxjs';
 import { CustomButton } from '../shared/components/toolbar/toolbar.component';
+import { DefaultService, Job, JobStatusType } from '../../client/api';
 
 @Component({
   selector: 'app-recalculation',
@@ -81,7 +81,8 @@ export class RecalculationComponent implements OnInit {
         { name: 'client.name', headerName: 'Kunde' },
         { name: 'responsible.fullname', headerName: 'Zuständig' },
       ],
-      api => api.readJobCountJobCountGet('JOBSTATUS_COMPLETED', true)
+      api =>
+        api.readJobCountJobCountGet(JobStatusType.JOBSTATUS_COMPLETED, true)
     );
     this.jobDataSource.loadData();
   }

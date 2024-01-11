@@ -1,14 +1,14 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { first } from 'rxjs/operators';
 import {
   DefaultService,
   TemplatePaintCreate,
   TemplatePaintUpdate,
   Unit,
-} from 'eisenstecken-openapi-angular-library';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { first } from 'rxjs/operators';
+} from '../../../../client/api';
 
 export interface PaintTemplateEditDialogData {
   id: number;

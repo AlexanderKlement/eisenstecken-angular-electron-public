@@ -1,12 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { BaseEditComponent } from '../../shared/components/base-edit/base-edit.component';
-import {
-  DefaultService,
-  Lock,
-  OrderedArticlePriceUpdate,
-  Order,
-  OrderBundle,
-} from 'eisenstecken-openapi-angular-library';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
@@ -18,6 +11,13 @@ import {
 } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
+import {
+  DefaultService,
+  Order,
+  OrderBundle,
+  OrderedArticlePriceUpdate,
+  Lock,
+} from '../../../client/api';
 
 @Component({
   selector: 'app-order-bundle-edit',

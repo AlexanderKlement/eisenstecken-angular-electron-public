@@ -1,9 +1,5 @@
 import { Component, ComponentRef, OnInit } from '@angular/core';
 import { TableDataSource } from '../shared/components/table-builder/table-builder.datasource';
-import {
-  DefaultService,
-  DeliveryNote,
-} from 'eisenstecken-openapi-angular-library';
 import * as moment from 'moment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LockService } from '../shared/services/lock.service';
@@ -11,6 +7,7 @@ import { CustomButton } from '../shared/components/toolbar/toolbar.component';
 import { AuthService } from '../shared/services/auth.service';
 import { first } from 'rxjs/operators';
 import { Observable, Subscriber } from 'rxjs';
+import { DefaultService, DeliveryNote } from '../../client/api';
 
 @Component({
   selector: 'app-delivery-note',

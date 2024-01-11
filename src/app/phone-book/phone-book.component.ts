@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TableDataSource } from '../shared/components/table-builder/table-builder.datasource';
-import {
-  Contact,
-  ContactTypeEnum,
-  DefaultService,
-} from 'eisenstecken-openapi-angular-library';
+
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
@@ -15,7 +11,8 @@ import {
 import { TableButton } from '../shared/components/table-builder/table-builder.component';
 import { PhoneService } from '../shared/services/phone.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import * as Sentry from '@sentry/angular';
+import * as Sentry from '@sentry/angular-ivy';
+import { Contact, ContactTypeEnum, DefaultService } from '../../client/api';
 
 @Component({
   selector: 'app-phone-book',
@@ -156,7 +153,7 @@ export class PhoneBookComponent implements OnInit {
           skip,
           limit,
           filter,
-          ContactTypeEnum.Supplier
+          ContactTypeEnum.SUPPLIER
         ),
       dataSourceClasses => {
         const rows = [];
@@ -182,7 +179,7 @@ export class PhoneBookComponent implements OnInit {
         { name: 'mail', headerName: 'Mail' },
         { name: 'note', headerName: 'Notiz' },
       ],
-      api => api.readContactCountContactCountGet(ContactTypeEnum.Supplier, '')
+      api => api.readContactCountContactCountGet(ContactTypeEnum.SUPPLIER, '')
     );
     this.supplierContactsDataSource.loadData();
   }
@@ -191,7 +188,7 @@ export class PhoneBookComponent implements OnInit {
     this.clientContactsDataSource = new TableDataSource(
       this.api,
       (api, filter, sortDirection, skip, limit) =>
-        api.readContactsContactGet(skip, limit, filter, ContactTypeEnum.Client),
+        api.readContactsContactGet(skip, limit, filter, ContactTypeEnum.CLIENT),
       dataSourceClasses => {
         const rows = [];
         dataSourceClasses.forEach(dataSource => {
@@ -216,7 +213,7 @@ export class PhoneBookComponent implements OnInit {
         { name: 'mail', headerName: 'Mail' },
         { name: 'note', headerName: 'Notiz' },
       ],
-      api => api.readContactCountContactCountGet(ContactTypeEnum.Client, '')
+      api => api.readContactCountContactCountGet(ContactTypeEnum.CLIENT, '')
     );
     this.clientContactsDataSource.loadData();
   }
@@ -229,7 +226,7 @@ export class PhoneBookComponent implements OnInit {
           skip,
           limit,
           filter,
-          ContactTypeEnum.Management
+          ContactTypeEnum.MANAGEMENT
         ),
       dataSourceClasses => {
         const rows = [];
@@ -255,7 +252,7 @@ export class PhoneBookComponent implements OnInit {
         { name: 'mail', headerName: 'Mail' },
         { name: 'note', headerName: 'Notiz' },
       ],
-      api => api.readContactCountContactCountGet(ContactTypeEnum.Management, '')
+      api => api.readContactCountContactCountGet(ContactTypeEnum.MANAGEMENT, '')
     );
     this.managementContactsDataSource.loadData();
   }

@@ -10,21 +10,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { Observable, Subject, Subscriber } from 'rxjs';
-import {
-  AdditionalWorkloadCreate,
-  Car,
-  DefaultService,
-  Drive,
-  DriveCreate,
-  EatingPlace,
-  Expense,
-  ExpenseCreate,
-  Job,
-  JobSectionCreate,
-  User,
-  WorkDay,
-  WorkDayCreate,
-} from 'eisenstecken-openapi-angular-library';
 import { AuthService } from '../../../shared/services/auth.service';
 import { first } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -40,6 +25,21 @@ import {
   HoursStepperDriveDialogData,
 } from './hours-stepper-drive-dialog/hours-stepper-drive-dialog.component';
 import { NavigationService } from '../../../shared/services/navigation.service';
+import {
+  AdditionalWorkloadCreate,
+  Car,
+  DefaultService,
+  Drive,
+  DriveCreate,
+  EatingPlace,
+  Expense,
+  ExpenseCreate,
+  Job,
+  JobSectionCreate,
+  WorkDay,
+  WorkDayCreate,
+} from '../../../../client/api';
+import { User } from '@sentry/angular-ivy';
 
 function greaterThanValidator(value: number): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {

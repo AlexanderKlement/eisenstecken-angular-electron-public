@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  DefaultService,
-  Price,
-  TechnicalData,
-  User,
-  Credential,
-  InfoPage,
-} from 'eisenstecken-openapi-angular-library';
 import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
 import { MatDialogRef } from '@angular/material/dialog';
 import { AuthService } from '../../shared/services/auth.service';
 import { first } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import {
+  DefaultService,
+  InfoPage,
+  Price,
+  TechnicalData,
+  User,
+  Credential,
+} from '../../../client/api';
 
 interface Update {
   versionName: string;
@@ -607,6 +607,7 @@ export class InfoDialogComponent implements OnInit {
               // eslint-disable-next-line no-underscore-dangle
               dial: dataSource.dial,
             },
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
             route: () => {},
           });
         });
@@ -638,6 +639,7 @@ export class InfoDialogComponent implements OnInit {
               price: dataSource.price,
               comment: dataSource.comment,
             },
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
             route: () => {},
           });
         });
@@ -668,6 +670,7 @@ export class InfoDialogComponent implements OnInit {
               width: dataSource.width,
               length: dataSource.length,
             },
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
             route: () => {},
           });
         });
@@ -699,6 +702,7 @@ export class InfoDialogComponent implements OnInit {
               password: dataSource.password,
               url: dataSource.url,
             },
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
             route: () => {},
           });
         });

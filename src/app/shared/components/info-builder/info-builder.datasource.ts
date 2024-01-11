@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { DataSourceClass, RecursiveKeyOf } from '../../types';
-import { Lock } from 'eisenstecken-openapi-angular-library';
+import { Lock } from '../../../../client/api';
 
 export interface Mapping<T> {
   property: string;

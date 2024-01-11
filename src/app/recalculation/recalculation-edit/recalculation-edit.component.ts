@@ -6,11 +6,20 @@ import {
   Validators,
 } from '@angular/forms';
 import { BaseEditComponent } from '../../shared/components/base-edit/base-edit.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
+import { first, map } from 'rxjs/operators';
+import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
+import * as moment from 'moment';
+import { minutesToDisplayableString } from '../../shared/date.util';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
+import { FileService } from '../../shared/services/file.service';
+import { NavigationService } from '../../shared/services/navigation.service';
 import {
   DefaultService,
   Expense,
   ExpenseCreate,
-  Lock,
   Order,
   Paint,
   PaintCreate,
@@ -22,17 +31,8 @@ import {
   WoodList,
   WoodListCreate,
   Workload,
-} from 'eisenstecken-openapi-angular-library';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
-import { first, map } from 'rxjs/operators';
-import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
-import * as moment from 'moment';
-import { minutesToDisplayableString } from '../../shared/date.util';
-import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
-import { FileService } from '../../shared/services/file.service';
-import { NavigationService } from '../../shared/services/navigation.service';
+  Lock,
+} from '../../../client/api';
 
 @Component({
   selector: 'app-recalculation-edit',

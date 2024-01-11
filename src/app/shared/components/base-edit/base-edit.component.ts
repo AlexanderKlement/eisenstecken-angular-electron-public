@@ -1,15 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import {
-  DefaultService,
-  Lock,
-  User,
-} from 'eisenstecken-openapi-angular-library';
 import { DataSourceClass } from '../../types';
 import { MatDialog } from '@angular/material/dialog';
 import { WarningDialogComponent } from './warning-dialog/warning-dialog.component';
 import { first } from 'rxjs/operators';
+import { DefaultService, User, Lock } from '../../../../client/api';
 
 @Component({
   selector: 'app-base-edit',

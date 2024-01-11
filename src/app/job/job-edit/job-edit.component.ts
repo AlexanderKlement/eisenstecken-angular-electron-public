@@ -1,13 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  DefaultService,
-  Job,
-  JobCreate,
-  JobUpdate,
-  Lock,
-  SubJobCreate,
-  User,
-} from 'eisenstecken-openapi-angular-library';
+
 import { Observable } from 'rxjs';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,6 +9,16 @@ import { first, map, tap } from 'rxjs/operators';
 import { AuthService } from '../../shared/services/auth.service';
 import { NavigationService } from '../../shared/services/navigation.service';
 import * as moment from 'moment';
+import {
+  DefaultService,
+  Job,
+  JobCreate,
+  JobTypeType,
+  JobUpdate,
+  Lock,
+  SubJobCreate,
+} from '../../../client/api';
+import { User } from '@sentry/angular-ivy';
 
 @Component({
   selector: 'app-job-edit',
@@ -211,8 +213,8 @@ export class JobEditComponent
         country_code: this.jobGroup.get('address.country').value,
       },
       type: this.jobGroup.get('minijob').value
-        ? 'JOBYTPE_MINI'
-        : 'JOBTYPE_MAIN',
+        ? JobTypeType.JOBYTPE_MINI
+        : JobTypeType.JOBTYPE_MAIN,
       completion: this.jobGroup.get('completion').value,
     };
     this.api.createJobJobPost(jobCreate).subscribe(

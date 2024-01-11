@@ -1,14 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BaseEditComponent } from '../../shared/components/base-edit/base-edit.component';
-import {
-  Contact,
-  ContactCreate,
-  DefaultService,
-  Language,
-  Lock,
-  Supplier,
-  SupplierCreate,
-} from 'eisenstecken-openapi-angular-library';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import {
@@ -19,6 +10,15 @@ import {
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { NavigationService } from '../../shared/services/navigation.service';
+import {
+  DefaultService,
+  Language,
+  Supplier,
+  Lock,
+  ContactCreate,
+  SupplierCreate,
+  Contact,
+} from '../../../client/api';
 
 @Component({
   selector: 'app-supplier-edit',

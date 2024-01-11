@@ -2,22 +2,16 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { File } from './File';
-import type { UserBadge } from './UserBadge';
 export type UserEssential = {
+    email: string;
+    tel: string;
+    firstname: string;
+    secondname: string;
+    cost: number;
+    innovaphone_user: string;
+    innovaphone_pass: string;
+    notifications: boolean;
     id: number;
-    username: string;
-    givenName: (string | null);
-    familyName: (string | null);
-    email: (string | null);
-    tel: (string | null);
-    premium: boolean;
-    emailConfirmed: boolean;
-    telConfirmed: boolean;
-    anonymous: boolean;
-    thumb: (File | null);
-    badges: Array<UserBadge>;
-    playerId: (number | null);
-    personId: (number | null);
+    fullname: string;
 };
 

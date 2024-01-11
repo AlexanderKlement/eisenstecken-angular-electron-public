@@ -1,13 +1,5 @@
 import { Component, ComponentRef, OnInit, ViewChild } from '@angular/core';
 import { InfoBuilderComponent } from '../../shared/components/info-builder/info-builder.component';
-import {
-  DefaultService,
-  Order,
-  OrderBundle,
-  OrderBundleCreate,
-  Stock,
-  Supplier,
-} from 'eisenstecken-openapi-angular-library';
 import { InfoDataSource } from '../../shared/components/info-builder/info-builder.datasource';
 import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
 import { CustomButton } from '../../shared/components/toolbar/toolbar.component';
@@ -24,6 +16,14 @@ import {
 } from '../supplier-detail/order-dialog/order-dialog.component';
 import { FileService } from '../../shared/services/file.service';
 import { Observable, Subscriber } from 'rxjs';
+import {
+  DefaultService,
+  Order,
+  OrderBundleCreate,
+  OrderStatusType,
+  Stock,
+  Supplier,
+} from '../../../client/api';
 
 @Component({
   selector: 'app-stock-detail',
@@ -273,7 +273,7 @@ export class StockDetailComponent implements OnInit {
           0,
           1000,
           '',
-          'CREATED'
+          OrderStatusType.CREATED
         ),
       },
     });

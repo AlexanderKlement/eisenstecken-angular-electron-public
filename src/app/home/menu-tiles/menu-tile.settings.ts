@@ -1,5 +1,5 @@
-import { Right } from 'eisenstecken-openapi-angular-library';
 import { containsRight } from '../../shared/services/auth.service';
+import { Right } from '../../../client/api';
 
 export interface MenuTileDetail {
   title: string;

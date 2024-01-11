@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { MobileAppRoutingModule } from './mobile-app-routing.module';
 import { MobileAppComponent } from './mobile-app.component';
 import { SharedModule } from '../shared/shared.module';
-import { FlexModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { HoursComponent } from './hours/hours.component';
 import { MatStepperModule } from '@angular/material/stepper';
@@ -37,7 +36,6 @@ import { HoursStepperDriveDialogComponent } from './hours/hours-stepper/hours-st
     CommonModule,
     MobileAppRoutingModule,
     SharedModule,
-    FlexModule,
     MatButtonModule,
     MatStepperModule,
     MatFormFieldModule,
