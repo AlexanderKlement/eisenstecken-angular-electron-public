@@ -1,29 +1,29 @@
-import {Component, NgZone, OnInit} from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import * as moment from 'moment';
-import {Subject} from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-event-calendar',
   templateUrl: './event-calendar.component.html',
-  styleUrls: ['./event-calendar.component.scss']
+  styleUrls: ['./event-calendar.component.scss'],
 })
-
-
 export class EventCalendarComponent implements OnInit {
-
   selectedCalendarWeek: number;
   selectedYear: number;
   offset = 0;
   amountWeeks = 4;
-  weeks: number[] = Array(this.amountWeeks).fill(0).map((x, i) => i);
-  days: number[] = Array(6).fill(0).map((x, i) => i);
+  weeks: number[] = Array(this.amountWeeks)
+    .fill(0)
+    .map((x, i) => i);
+  days: number[] = Array(6)
+    .fill(0)
+    .map((x, i) => i);
   dataSource = [];
   displayedColumns: string[] = [];
 
   updateSubject = new Subject<void>();
 
-  constructor() {
-  }
+  constructor() {}
 
   weekTitle(weekIdx: string): string {
     const week = parseInt(weekIdx.replace('week', ''), 10);
@@ -50,19 +50,21 @@ export class EventCalendarComponent implements OnInit {
     this.updateSubject.next();
   }
 
-
-
   changeWeek(weeksToAddSubtract: number): void {
     this.offset += weeksToAddSubtract;
     const date = moment().add(this.offset, 'weeks');
     this.selectedCalendarWeek = date.isoWeek();
     this.selectedYear = date.year();
-    this.displayedColumns = ['week-1'].concat(this.weeks.map((week) => `week${this.selectedCalendarWeek + week + this.offset}`));
+    this.displayedColumns = ['week-1'].concat(
+      this.weeks.map(
+        week => `week${this.selectedCalendarWeek + week + this.offset}`
+      )
+    );
     this.dataSource = this.days.map(day => {
-      const row: Record<string, any> = {'week-1': this.dayTitle(day)};
-      this.weeks.forEach((i) => {
+      const row: Record<string, any> = { 'week-1': this.dayTitle(day) };
+      this.weeks.forEach(i => {
         const week = this.selectedCalendarWeek + i + this.offset;
-        row[`week${week}`] = {week, day};
+        row[`week${week}`] = { week, day };
       });
       return row;
     });

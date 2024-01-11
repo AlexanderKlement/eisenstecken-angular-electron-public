@@ -1,27 +1,35 @@
 <div class="flex flex-col justify-around items-center flex-row">
-    <p>Arbeitszeit: {{getWorkedHoursString()}}</p>
-    <p>{{maintenanceString}}</p>
-    <p *ngIf="additionalWorkloadString.length > 0">{{additionalWorkloadString}}</p>
-    <div *ngIf="showJobs">
-        <div *ngFor="let jobList of this.getAllJobs(); let i = index">
-            <div *ngFor="let job of getJobs(i).controls">
-                <div *ngIf="showJob(job)" class="flex flex-col justify-around items-center flex-row">
-                    <h4><strong>{{job.get('name').value}}</strong></h4>
-                    <p>Normal: {{getMinutesStringByJob(job, false)}}</p>
-                    <p>Regie: {{getMinutesStringByJob(job, true)}}</p>
-                </div>
-            </div>
+  <p>Arbeitszeit: {{ getWorkedHoursString() }}</p>
+  <p>{{ maintenanceString }}</p>
+  <p *ngIf="additionalWorkloadString.length > 0">
+    {{ additionalWorkloadString }}
+  </p>
+  <div *ngIf="showJobs">
+    <div *ngFor="let jobList of this.getAllJobs(); let i = index">
+      <div *ngFor="let job of getJobs(i).controls">
+        <div
+          *ngIf="showJob(job)"
+          class="flex flex-col justify-around items-center flex-row">
+          <h4>
+            <strong>{{ job.get('name').value }}</strong>
+          </h4>
+          <p>Normal: {{ getMinutesStringByJob(job, false) }}</p>
+          <p>Regie: {{ getMinutesStringByJob(job, true) }}</p>
         </div>
+      </div>
     </div>
-    <p><strong>Essen: {{eatingPlaceName}}</strong></p>
-    <div class="flex flex-col justify-around items-center flex-row">
-        <p><strong>Ausgaben:</strong></p>
-        <p *ngFor="let expense of getExpenses().controls">
-            {{expense.get('name').value}}: {{expense.get('amount').value}} €
-        </p>
-    </div>
-    <div class="flex flex-col justify-around items-center flex-row">
-        <p><strong>Fahrten:</strong></p>
-        <p *ngFor="let driveString of driveStrings">{{driveString}}</p>
-    </div>
+  </div>
+  <p>
+    <strong>Essen: {{ eatingPlaceName }}</strong>
+  </p>
+  <div class="flex flex-col justify-around items-center flex-row">
+    <p><strong>Ausgaben:</strong></p>
+    <p *ngFor="let expense of getExpenses().controls">
+      {{ expense.get('name').value }}: {{ expense.get('amount').value }} €
+    </p>
+  </div>
+  <div class="flex flex-col justify-around items-center flex-row">
+    <p><strong>Fahrten:</strong></p>
+    <p *ngFor="let driveString of driveStrings">{{ driveString }}</p>
+  </div>
 </div>

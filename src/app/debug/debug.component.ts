@@ -1,16 +1,16 @@
-import {Component, OnInit} from '@angular/core';
-import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
-import {EmailService} from '../shared/services/email.service';
-import {FileService} from '../shared/services/file.service';
-import {TrayService} from '../shared/services/tray.service';
-import {Router} from '@angular/router';
-import {ipcRenderer} from 'electron';
-import {ElectronService} from '../core/services';
+import { Component, OnInit } from '@angular/core';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { EmailService } from '../shared/services/email.service';
+import { FileService } from '../shared/services/file.service';
+import { TrayService } from '../shared/services/tray.service';
+import { Router } from '@angular/router';
+import { ipcRenderer } from 'electron';
+import { ElectronService } from '../core/services';
 
 @Component({
   selector: 'app-debug',
   templateUrl: './debug.component.html',
-  styleUrls: ['./debug.component.scss']
+  styleUrls: ['./debug.component.scss'],
 })
 export class DebugComponent implements OnInit {
   emailFormGroup: UntypedFormGroup;
@@ -19,9 +19,13 @@ export class DebugComponent implements OnInit {
   selectFolderFormGroup: UntypedFormGroup;
   trayBalloonFormGroup: UntypedFormGroup;
 
-  constructor(private email: EmailService, private file: FileService, private tray: TrayService, private electronService: ElectronService,
-              private router: Router) {
-  }
+  constructor(
+    private email: EmailService,
+    private file: FileService,
+    private tray: TrayService,
+    private electronService: ElectronService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.initEmailGroup();
@@ -37,19 +41,19 @@ export class DebugComponent implements OnInit {
         this.emailFormGroup.get('email').value,
         this.emailFormGroup.get('subject').value,
         this.emailFormGroup.get('body').value,
-        this.emailFormGroup.get('attachment').value,
+        this.emailFormGroup.get('attachment').value
       );
     } else {
       this.email.sendMail(
         this.emailFormGroup.get('email').value,
         this.emailFormGroup.get('subject').value,
-        this.emailFormGroup.get('body').value,
+        this.emailFormGroup.get('body').value
       );
     }
   }
 
   openFileSubmit() {
-    this.file.open(this.openFileFormGroup.get('path').value).then((response) => {
+    this.file.open(this.openFileFormGroup.get('path').value).then(response => {
       this.openFileFormGroup.get('response').setValue(response);
     });
   }
@@ -59,12 +63,14 @@ export class DebugComponent implements OnInit {
   }
 
   trayBalloonSubmit() {
-    this.tray.showBalloon(this.trayBalloonFormGroup.get('title').value,
-      this.trayBalloonFormGroup.get('content').value);
+    this.tray.showBalloon(
+      this.trayBalloonFormGroup.get('title').value,
+      this.trayBalloonFormGroup.get('content').value
+    );
   }
 
   selectFolderClicked() {
-    this.file.selectFolder().then((result) => {
+    this.file.selectFolder().then(result => {
       this.selectFolderFormGroup.get('path').setValue(result);
     });
   }
@@ -84,20 +90,20 @@ export class DebugComponent implements OnInit {
       email: new UntypedFormControl(''),
       subject: new UntypedFormControl(''),
       body: new UntypedFormControl(''),
-      attachment: new UntypedFormControl('')
+      attachment: new UntypedFormControl(''),
     });
   }
 
   private initOpenFileGroup() {
     this.openFileFormGroup = new UntypedFormGroup({
       path: new UntypedFormControl(''),
-      response: new UntypedFormControl('')
+      response: new UntypedFormControl(''),
     });
   }
 
   private initShowFileGroup() {
     this.showFileFormGroup = new UntypedFormGroup({
-      path: new UntypedFormControl('')
+      path: new UntypedFormControl(''),
     });
   }
 
@@ -113,6 +119,4 @@ export class DebugComponent implements OnInit {
       content: new UntypedFormControl(''),
     });
   }
-
-
 }

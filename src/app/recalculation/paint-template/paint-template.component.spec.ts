@@ -8,9 +8,8 @@ describe('PaintTemplateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PaintTemplateComponent ]
-    })
-    .compileComponents();
+      declarations: [PaintTemplateComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

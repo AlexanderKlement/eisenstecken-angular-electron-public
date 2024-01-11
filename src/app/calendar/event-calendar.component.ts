@@ -1,18 +1,15 @@
-import {Component, OnInit} from '@angular/core';
-import {CustomButton} from '../shared/components/toolbar/toolbar.component';
+import { Component, OnInit } from '@angular/core';
+import { CustomButton } from '../shared/components/toolbar/toolbar.component';
 
 @Component({
-    selector: 'app-calendar',
-    templateUrl: './event-calendar.component.html',
-    styleUrls: ['./event-calendar.component.scss']
+  selector: 'app-calendar',
+  templateUrl: './event-calendar.component.html',
+  styleUrls: ['./event-calendar.component.scss'],
 })
 export class EventCalendarComponent implements OnInit {
-    buttons: CustomButton[] = [];
+  buttons: CustomButton[] = [];
 
-    constructor() {
-    }
+  constructor() {}
 
-    ngOnInit(): void {
-    }
-
+  ngOnInit(): void {}
 }

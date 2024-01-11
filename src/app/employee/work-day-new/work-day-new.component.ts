@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {UntypedFormControl} from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UntypedFormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-work-day-new',
   templateUrl: './work-day-new.component.html',
-  styleUrls: ['./work-day-new.component.scss']
+  styleUrls: ['./work-day-new.component.scss'],
 })
 export class WorkDayNewComponent implements OnInit {
   newWorkday: any;
@@ -14,13 +14,16 @@ export class WorkDayNewComponent implements OnInit {
   selectedDate: Date;
   dateFormControl: UntypedFormControl;
 
-  constructor(private route: ActivatedRoute, private router: Router) { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.dateFormControl = new UntypedFormControl(new Date());
-    this.dateFormControl.valueChanges.subscribe(() =>  {
-        this.selectedDate = new Date(this.dateFormControl.value);
-        console.log(this.selectedDate);
+    this.dateFormControl.valueChanges.subscribe(() => {
+      this.selectedDate = new Date(this.dateFormControl.value);
+      console.log(this.selectedDate);
     });
     this.route.params.subscribe(params => {
       this.userId = parseInt(params.id, 10);
@@ -32,5 +35,4 @@ export class WorkDayNewComponent implements OnInit {
       this.loading = false;
     });
   }
-
 }

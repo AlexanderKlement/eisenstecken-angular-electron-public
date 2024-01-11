@@ -8,9 +8,8 @@ describe('WorkHourEditDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WorkHourEditDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [WorkHourEditDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

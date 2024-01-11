@@ -1,8 +1,11 @@
-<div (click)="onTileClicked(tile.link)" class="menu-tile flex flex-col justify-start items-stretch flex-row w-full h-full min-w-full min-h-full box-border">
-  <div class="menu-tile-icon-container flex-[80_undefined_undefined] box-border">
-    <mat-icon class="menu-tile-icon">{{tile.icon}}</mat-icon>
+<div
+  (click)="onTileClicked(tile.link)"
+  class="menu-tile flex flex-col justify-start items-stretch flex-row w-full h-full min-w-full min-h-full box-border">
+  <div
+    class="menu-tile-icon-container flex-[80_undefined_undefined] box-border">
+    <mat-icon class="menu-tile-icon">{{ tile.icon }}</mat-icon>
   </div>
-  <strong class="title flex-[20_undefined_undefined] box-border">{{tile.title}}</strong>
+  <strong class="title flex-[20_undefined_undefined] box-border">{{
+    tile.title
+  }}</strong>
 </div>
-
-

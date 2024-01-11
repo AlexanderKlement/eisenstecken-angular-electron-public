@@ -8,9 +8,8 @@ describe('EventCalendarDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EventCalendarDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [EventCalendarDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

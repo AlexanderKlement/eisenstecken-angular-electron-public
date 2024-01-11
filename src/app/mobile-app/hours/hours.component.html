@@ -1,6 +1,14 @@
 <app-toolbar title="" [buttonList]="buttons"></app-toolbar>
 <div class="flex flex-col justify-around items-center flex-row">
-    <app-hours-stepper [showOnlySummary]="todaysWorkDayFinished" [workDay$]="workDay$" [backStepper$]="stepBackSubject$">
-    </app-hours-stepper>
-    <button mat-raised-button="" *ngIf="todaysWorkDayFinished" (click)="editButtonClicked()">Bearbeiten</button>
+  <app-hours-stepper
+    [showOnlySummary]="todaysWorkDayFinished"
+    [workDay$]="workDay$"
+    [backStepper$]="stepBackSubject$">
+  </app-hours-stepper>
+  <button
+    mat-raised-button=""
+    *ngIf="todaysWorkDayFinished"
+    (click)="editButtonClicked()">
+    Bearbeiten
+  </button>
 </div>

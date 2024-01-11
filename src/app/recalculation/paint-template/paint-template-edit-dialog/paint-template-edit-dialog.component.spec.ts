@@ -8,9 +8,8 @@ describe('PaintTemplateEditDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PaintTemplateEditDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [PaintTemplateEditDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

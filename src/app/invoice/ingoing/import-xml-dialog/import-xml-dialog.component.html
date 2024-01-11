@@ -1,24 +1,42 @@
-<h1 mat-dialog-title="">{{title}}</h1>
+<h1 mat-dialog-title="">{{ title }}</h1>
 <div mat-dialog-content="">
-    <form [formGroup]="selectXmlFormGroup">
-        <div class="flex flex-col justify-around items-center flex-row">
-            <button type="button" mat-raised-button="" (click)="selectXmlClicked()">Auswählen</button>
-            <mat-list>
-                <mat-list-item *ngFor="let path of getPaths().controls; let i = index">
-                    <div class="flex flex-row justify-around items-center">
-                        <p>
-                            {{getFileNameAt(i)}}
-                        </p>
-                        <button mat-button="" mat-icon-button="" (click)="deletePath(i)" title="Entfernen">
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                    </div>
-                </mat-list-item>
-            </mat-list>
-        </div>
-    </form>
+  <form [formGroup]="selectXmlFormGroup">
+    <div class="flex flex-col justify-around items-center flex-row">
+      <button type="button" mat-raised-button="" (click)="selectXmlClicked()">
+        Auswählen
+      </button>
+      <mat-list>
+        <mat-list-item *ngFor="let path of getPaths().controls; let i = index">
+          <div class="flex flex-row justify-around items-center">
+            <p>
+              {{ getFileNameAt(i) }}
+            </p>
+            <button
+              mat-button=""
+              mat-icon-button=""
+              (click)="deletePath(i)"
+              title="Entfernen">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </form>
 </div>
 <div mat-dialog-actions="">
-    <button mat-button="" [disabled]="loading" type="button" (click)="onCancelClick()">Abbrechen</button>
-    <button mat-button="" [disabled]="loading" type="button" (click)="onSubmitClick()">Importieren</button>
+  <button
+    mat-button=""
+    [disabled]="loading"
+    type="button"
+    (click)="onCancelClick()">
+    Abbrechen
+  </button>
+  <button
+    mat-button=""
+    [disabled]="loading"
+    type="button"
+    (click)="onSubmitClick()">
+    Importieren
+  </button>
 </div>

@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import {DefaultService} from 'eisenstecken-openapi-angular-library';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {BaseSettingsComponent} from '../base-settings.component';
+import { DefaultService } from 'eisenstecken-openapi-angular-library';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { BaseSettingsComponent } from '../base-settings.component';
 
 @Component({
   selector: 'app-general-settings',
   templateUrl: './general-settings.component.html',
-  styleUrls: ['./general-settings.component.scss']
+  styleUrls: ['./general-settings.component.scss'],
 })
-export class GeneralSettingsComponent extends BaseSettingsComponent  implements OnInit{
-
+export class GeneralSettingsComponent
+  extends BaseSettingsComponent
+  implements OnInit
+{
   keyList = [
     'general_name_pre',
     'general_name',
@@ -29,13 +31,14 @@ export class GeneralSettingsComponent extends BaseSettingsComponent  implements 
     'general_order_path',
   ];
 
-  constructor(protected api: DefaultService, protected snackBar: MatSnackBar) {
+  constructor(
+    protected api: DefaultService,
+    protected snackBar: MatSnackBar
+  ) {
     super(api, snackBar);
   }
 
   ngOnInit(): void {
     super.ngOnInit();
   }
-
-
 }

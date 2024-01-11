@@ -6,13 +6,13 @@ import { DetailComponent } from './detail.component';
 const routes: Routes = [
   {
     path: 'detail',
-    component: DetailComponent
-  }
+    component: DetailComponent,
+  },
 ];
 
 @NgModule({
   declarations: [],
   imports: [CommonModule, RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class DetailRoutingModule {}

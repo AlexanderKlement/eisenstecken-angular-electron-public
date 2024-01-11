@@ -1,20 +1,37 @@
 <app-loading [loading]="loading">
-  <mat-tab-group dynamicHeight="false" class="tab-group tab-left w-full h-full min-w-full min-h-full box-border" mat-align-tabs="start">
-    <mat-tab label="  Terminkalender" class="w-full h-full min-w-full min-h-full box-border">
-      <div class="container flex flex-row justify-center items-start w-full h-full min-w-full min-h-full box-border">
-        <div class="calenderside flex flex-col  items-stretch flex-row" *ngFor="let calendar of calendars$ | async">
-          <p class="w-full h-full min-w-full min-h-full box-border">{{calendar.name}}</p>
-          <app-calendar [public]="calendar.open" [calendarId]="calendar.id" class="w-full h-full min-w-full min-h-full box-border">
+  <mat-tab-group
+    dynamicHeight="false"
+    class="tab-group tab-left w-full h-full min-w-full min-h-full box-border"
+    mat-align-tabs="start">
+    <mat-tab
+      label="  Terminkalender"
+      class="w-full h-full min-w-full min-h-full box-border">
+      <div
+        class="container flex flex-row justify-center items-start w-full h-full min-w-full min-h-full box-border">
+        <div
+          class="calenderside flex flex-col items-stretch flex-row"
+          *ngFor="let calendar of calendars$ | async">
+          <p class="w-full h-full min-w-full min-h-full box-border">
+            {{ calendar.name }}
+          </p>
+          <app-calendar
+            [public]="calendar.open"
+            [calendarId]="calendar.id"
+            class="w-full h-full min-w-full min-h-full box-border">
           </app-calendar>
         </div>
       </div>
     </mat-tab>
-    <mat-tab label="{{eventTabName}}" class="w-full h-full min-w-full min-h-full box-border">
+    <mat-tab
+      label="{{ eventTabName }}"
+      class="w-full h-full min-w-full min-h-full box-border">
       <app-event-calendar></app-event-calendar>
     </mat-tab>
-    <mat-tab #chatTab="" label="{{chatTabName}}" class="w-full h-full min-w-full min-h-full box-border">
+    <mat-tab
+      #chatTab=""
+      label="{{ chatTabName }}"
+      class="w-full h-full min-w-full min-h-full box-border">
       <app-chat></app-chat>
     </mat-tab>
   </mat-tab-group>
 </app-loading>
-

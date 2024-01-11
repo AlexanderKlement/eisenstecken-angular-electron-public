@@ -1,22 +1,20 @@
-import {Component, OnInit} from '@angular/core';
-import {CustomButton} from '../shared/components/toolbar/toolbar.component';
-import {Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { CustomButton } from '../shared/components/toolbar/toolbar.component';
+import { Router } from '@angular/router';
 
 @Component({
-    selector: 'app-mobile-app',
-    templateUrl: './mobile-app.component.html',
-    styleUrls: ['./mobile-app.component.scss']
+  selector: 'app-mobile-app',
+  templateUrl: './mobile-app.component.html',
+  styleUrls: ['./mobile-app.component.scss'],
 })
 export class MobileAppComponent implements OnInit {
-    buttons: CustomButton[] = [];
+  buttons: CustomButton[] = [];
 
-    constructor(private router: Router) {
-    }
+  constructor(private router: Router) {}
 
-    ngOnInit(): void {
-    }
+  ngOnInit(): void {}
 
-    hourButtonClicked() {
-        this.router.navigateByUrl('mobile/hours');
-    }
+  hourButtonClicked() {
+    this.router.navigateByUrl('mobile/hours');
+  }
 }

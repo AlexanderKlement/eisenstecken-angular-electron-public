@@ -1,17 +1,25 @@
 <app-toolbar title="Kunden" [buttonList]="buttons"></app-toolbar>
 <div class="window-container">
-    <mat-tab-group>
-        <mat-tab label="Alle">
-            <app-table-builder [buttons]="tableButtons" [dataSource]="allContactsDataSource"></app-table-builder>
-        </mat-tab>
-        <mat-tab label="Kunden">
-            <app-table-builder [buttons]="tableButtons" [dataSource]="clientContactsDataSource"></app-table-builder>
-        </mat-tab>
-        <mat-tab label="Unternehmen">
-            <app-table-builder [buttons]="tableButtons" [dataSource]="supplierContactsDataSource"></app-table-builder>
-        </mat-tab>
-        <mat-tab label="Verwaltung">
-            <app-table-builder [buttons]="tableButtons" [dataSource]="managementContactsDataSource"></app-table-builder>
-        </mat-tab>
-    </mat-tab-group>
+  <mat-tab-group>
+    <mat-tab label="Alle">
+      <app-table-builder
+        [buttons]="tableButtons"
+        [dataSource]="allContactsDataSource"></app-table-builder>
+    </mat-tab>
+    <mat-tab label="Kunden">
+      <app-table-builder
+        [buttons]="tableButtons"
+        [dataSource]="clientContactsDataSource"></app-table-builder>
+    </mat-tab>
+    <mat-tab label="Unternehmen">
+      <app-table-builder
+        [buttons]="tableButtons"
+        [dataSource]="supplierContactsDataSource"></app-table-builder>
+    </mat-tab>
+    <mat-tab label="Verwaltung">
+      <app-table-builder
+        [buttons]="tableButtons"
+        [dataSource]="managementContactsDataSource"></app-table-builder>
+    </mat-tab>
+  </mat-tab-group>
 </div>

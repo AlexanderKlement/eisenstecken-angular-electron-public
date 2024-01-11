@@ -1,16 +1,17 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {DebugComponent} from './debug.component';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { DebugComponent } from './debug.component';
 
-const routes: Routes = [{
+const routes: Routes = [
+  {
     path: 'debug',
     component: DebugComponent,
-    data: {requiresLogin: true}
-}];
+    data: { requiresLogin: true },
+  },
+];
 
 @NgModule({
-    imports: [RouterModule.forChild(routes)],
-    exports: [RouterModule]
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
 })
-export class DebugRoutingModule {
-}
+export class DebugRoutingModule {}

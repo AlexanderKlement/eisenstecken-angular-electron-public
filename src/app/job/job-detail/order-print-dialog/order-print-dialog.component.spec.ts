@@ -8,9 +8,8 @@ describe('OrderPrintDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ OrderPrintDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [OrderPrintDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -8,9 +8,8 @@ describe('InvoiceSettingsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InvoiceSettingsComponent ]
-    })
-    .compileComponents();
+      declarations: [InvoiceSettingsComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

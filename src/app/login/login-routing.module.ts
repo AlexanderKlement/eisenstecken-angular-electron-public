@@ -7,13 +7,13 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
-    data:{requiresLogin: false}
-  }
+    data: { requiresLogin: false },
+  },
 ];
 
 @NgModule({
   declarations: [],
   imports: [CommonModule, RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class LoginRoutingModule {}

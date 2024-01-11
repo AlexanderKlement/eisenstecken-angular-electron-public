@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {SettingsComponent} from './settings.component';
-import {AccessGuard} from '../shared/services/access-guard.service';
+import { SettingsComponent } from './settings.component';
+import { AccessGuard } from '../shared/services/access-guard.service';
 
 const routes: Routes = [
   {
     path: 'settings',
     component: SettingsComponent,
-    data:{requiresLogin: true},
-    canActivate: [ AccessGuard ]
+    data: { requiresLogin: true },
+    canActivate: [AccessGuard],
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class SettingsRoutingModule { }
+export class SettingsRoutingModule {}

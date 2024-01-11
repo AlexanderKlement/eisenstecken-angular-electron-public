@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import {BaseSettingsComponent} from '../base-settings.component';
-import {DefaultService} from 'eisenstecken-openapi-angular-library';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import { BaseSettingsComponent } from '../base-settings.component';
+import { DefaultService } from 'eisenstecken-openapi-angular-library';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-offer-settings',
   templateUrl: './offer-settings.component.html',
-  styleUrls: ['./offer-settings.component.scss']
+  styleUrls: ['./offer-settings.component.scss'],
 })
-export class OfferSettingsComponent extends BaseSettingsComponent  implements OnInit {
-
+export class OfferSettingsComponent
+  extends BaseSettingsComponent
+  implements OnInit
+{
   keyList = [
     'offer_title_introduction_de',
     'offer_title_introduction_it',
@@ -20,11 +22,13 @@ export class OfferSettingsComponent extends BaseSettingsComponent  implements On
     'offer_delivery_de',
     'offer_delivery_it',
     'offer_payment_de',
-    'offer_payment_it'
+    'offer_payment_it',
   ];
 
-
-  constructor(protected api: DefaultService, protected snackBar: MatSnackBar) {
+  constructor(
+    protected api: DefaultService,
+    protected snackBar: MatSnackBar
+  ) {
     super(api, snackBar);
   }
 

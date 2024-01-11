@@ -1,4 +1,8 @@
-import {ActivatedRouteSnapshot, RouteReuseStrategy, DetachedRouteHandle} from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  RouteReuseStrategy,
+  DetachedRouteHandle,
+} from '@angular/router';
 
 //Stolen from:
 //https://stackoverflow.com/questions/41280471/how-to-implement-routereusestrategy-shoulddetach-for-specific-routes-in-angular
@@ -13,7 +17,6 @@ interface RouteStorageObject {
 }
 
 export class CustomReuseStrategy implements RouteReuseStrategy {
-
   /**
    * Object which will store RouteStorageObjects indexed by keys
    * The keys will all be a path (as in route.routeConfig.path)
@@ -50,7 +53,7 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
   store(route: ActivatedRouteSnapshot, handle: DetachedRouteHandle): void {
     const storedRoute: RouteStorageObject = {
       snapshot: route,
-      handle
+      handle,
     };
 
     while (document.getElementsByTagName('mat-tooltip-component').length > 0) {
@@ -70,9 +73,9 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
    * @returns boolean indicating whether or not to render the stored route
    */
   shouldAttach(route: ActivatedRouteSnapshot): boolean {
-
     // this will be true if the route has been stored before
-    const canAttach: boolean = !!route.routeConfig && !!this.storedRoutes[route.routeConfig.path];
+    const canAttach: boolean =
+      !!route.routeConfig && !!this.storedRoutes[route.routeConfig.path];
 
     // this decides whether the route already stored should be rendered in place of the requested route, and is the return value
     // at this point we already know that the paths match because the storedResults key is the route.routeConfig.path
@@ -84,9 +87,14 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
       //console.log('query param comparison');
       //console.log(this.compareObjects(route.queryParams, this.storedRoutes[route.routeConfig.path].snapshot.queryParams));
 
-      const paramsMatch: boolean = this.compareObjects(route.params, this.storedRoutes[route.routeConfig.path].snapshot.params);
-      const queryParamsMatch: boolean = this.compareObjects(route.queryParams, this.storedRoutes[route.routeConfig.path]
-        .snapshot.queryParams);
+      const paramsMatch: boolean = this.compareObjects(
+        route.params,
+        this.storedRoutes[route.routeConfig.path].snapshot.params
+      );
+      const queryParamsMatch: boolean = this.compareObjects(
+        route.queryParams,
+        this.storedRoutes[route.routeConfig.path].snapshot.queryParams
+      );
 
       //console.log('deciding to attach...', route, 'does it match?', this.storedRoutes[route
       //    .routeConfig.path].snapshot, 'return: ', paramsMatch && queryParamsMatch);
@@ -103,7 +111,6 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
    * @returns DetachedRouteHandle object which can be used to render the component
    */
   retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle {
-
     // return null if the path does not have a routerConfig OR if there is no stored route for that routerConfig
     if (!route.routeConfig || !this.storedRoutes[route.routeConfig.path]) {
       return null;
@@ -121,7 +128,10 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
    * @param curr The route the user is currently on
    * @returns boolean basically indicating true if the user intends to leave the current route
    */
-  shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean {
+  shouldReuseRoute(
+    future: ActivatedRouteSnapshot,
+    curr: ActivatedRouteSnapshot
+  ): boolean {
     //console.log('deciding to reuse', 'future', future.routeConfig, 'current', curr.routeConfig,
     //   'return: ', future.routeConfig === curr.routeConfig);
     return future.routeConfig === curr.routeConfig;
@@ -138,25 +148,28 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
    * @returns boolean indicating whether or not the objects have all the same properties and those properties are ==
    */
   private compareObjects(base: any, compare: any): boolean {
-
     // loop through all properties in base object
     for (const baseProperty in base) {
-
       // determine if comparrison object has that property, if not: return false
       if (compare.hasOwnProperty(baseProperty)) {
         switch (typeof base[baseProperty]) {
           // if one is object and other is not: return false
           // if they are both objects, recursively call this comparison function
           case 'object':
-            if (typeof compare[baseProperty] !== 'object' || !this.compareObjects(base[baseProperty], compare[baseProperty])) {
+            if (
+              typeof compare[baseProperty] !== 'object' ||
+              !this.compareObjects(base[baseProperty], compare[baseProperty])
+            ) {
               return false;
             }
             break;
           // if one is function and other is not: return false
           // if both are functions, compare function.toString() results
           case 'function':
-            if (typeof compare[baseProperty] !== 'function' ||
-              base[baseProperty].toString() !== compare[baseProperty].toString()) {
+            if (
+              typeof compare[baseProperty] !== 'function' ||
+              base[baseProperty].toString() !== compare[baseProperty].toString()
+            ) {
               return false;
             }
             break;

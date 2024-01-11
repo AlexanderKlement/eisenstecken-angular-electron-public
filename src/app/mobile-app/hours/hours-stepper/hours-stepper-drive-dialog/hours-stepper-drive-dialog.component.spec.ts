@@ -8,9 +8,8 @@ describe('HoursStepperDriveDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HoursStepperDriveDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [HoursStepperDriveDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

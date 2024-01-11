@@ -1,19 +1,21 @@
-import {Component, OnInit} from '@angular/core';
-import {AuthService} from '../shared/services/auth.service';
-import {InfoDialogComponent} from './info-dialog/info-dialog.component';
-import {MatDialog} from '@angular/material/dialog';
-import {ConfirmDialogComponent} from '../shared/components/confirm-dialog/confirm-dialog.component';
-import {DefaultService} from 'eisenstecken-openapi-angular-library';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../shared/services/auth.service';
+import { InfoDialogComponent } from './info-dialog/info-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../shared/components/confirm-dialog/confirm-dialog.component';
+import { DefaultService } from 'eisenstecken-openapi-angular-library';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-
-  constructor(private authService: AuthService, private dialog: MatDialog, private api: DefaultService) {
-  }
+  constructor(
+    private authService: AuthService,
+    private dialog: MatDialog,
+    private api: DefaultService
+  ) {}
 
   ngOnInit(): void {
     this.api.readUsersMeUsersMeGet().subscribe(user => {
@@ -21,11 +23,10 @@ export class HomeComponent implements OnInit {
     });
   }
 
-
   showInfoClicked(): void {
     this.dialog.open(InfoDialogComponent, {
       width: (window.innerWidth - 100).toString() + 'px',
-      data: {}
+      data: {},
     });
   }
 
@@ -34,8 +35,8 @@ export class HomeComponent implements OnInit {
       width: '400px',
       data: {
         title: 'Abmelden?',
-        text: 'Soll der Benutzer abgemeldet werden?'
-      }
+        text: 'Soll der Benutzer abgemeldet werden?',
+      },
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -44,4 +45,3 @@ export class HomeComponent implements OnInit {
     });
   }
 }
-

@@ -1,22 +1,32 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import * as moment from 'moment';
-import {CompanyEvent, CompanyEventEnum, DefaultService} from 'eisenstecken-openapi-angular-library';
-import {MatDialog} from '@angular/material/dialog';
+import {
+  CompanyEvent,
+  CompanyEventEnum,
+  DefaultService,
+} from 'eisenstecken-openapi-angular-library';
+import { MatDialog } from '@angular/material/dialog';
 import {
   EventCalendarDialogComponent,
-  getEventTranslation
+  getEventTranslation,
 } from '../event-calendar-dialog/event-calendar-dialog.component';
-import {first} from 'rxjs/operators';
-import {Subject, Subscription} from 'rxjs';
-import {AuthService} from '../../../shared/services/auth.service';
+import { first } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
+import { AuthService } from '../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-event-calendar-day',
   templateUrl: './event-calendar-day.component.html',
-  styleUrls: ['./event-calendar-day.component.scss']
+  styleUrls: ['./event-calendar-day.component.scss'],
 })
 export class EventCalendarDayComponent implements OnInit, OnChanges, OnDestroy {
-
   @Input() week: number;
   @Input() day: number;
   @Input() year: number;
@@ -32,21 +42,21 @@ export class EventCalendarDayComponent implements OnInit, OnChanges, OnDestroy {
 
   companyClosed = false;
 
-
-  constructor(private api: DefaultService, public dialog: MatDialog, private authService: AuthService) {
-  }
+  constructor(
+    private api: DefaultService,
+    public dialog: MatDialog,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.isoDateString = this.date.format('YYYY-MM-DD');
     this.updateDate();
 
     this.updateEvents();
-    this.subscription = this.updateSubject.subscribe(
-      () => {
-        this.updateEvents();
-      });
+    this.subscription = this.updateSubject.subscribe(() => {
+      this.updateEvents();
+    });
   }
-
 
   ngOnChanges(changes: SimpleChanges): void {
     this.updateDate();
@@ -64,56 +74,67 @@ export class EventCalendarDayComponent implements OnInit, OnChanges, OnDestroy {
         date: this.isoDateString,
       },
     });
-    dialogRef.afterClosed().pipe(first()).subscribe(_ => {
-      this.updateEvents();
-    });
-
+    dialogRef
+      .afterClosed()
+      .pipe(first())
+      .subscribe(_ => {
+        this.updateEvents();
+      });
   }
 
   updateEvents() {
-    this.api.readCompanyEventByDateCompanyEventGet(this.isoDateString).subscribe(events => {
-      this.events = [];
-      this.companyClosed = false;
-      for (const event of events) {
-        if (event.event_type === CompanyEventEnum.Vacation) {
-          this.companyClosed = true;
-          continue;
+    this.api
+      .readCompanyEventByDateCompanyEventGet(this.isoDateString)
+      .subscribe(events => {
+        this.events = [];
+        this.companyClosed = false;
+        for (const event of events) {
+          if (event.event_type === CompanyEventEnum.Vacation) {
+            this.companyClosed = true;
+            continue;
+          }
+          this.events.push(event);
         }
-        this.events.push(event);
-      }
-    });
+      });
   }
-
 
   editEvent(eventId: number) {
     const dialogRef = this.dialog.open(EventCalendarDialogComponent, {
       width: '400px',
       data: {
         id: eventId,
-        date: this.isoDateString
+        date: this.isoDateString,
       },
     });
-    dialogRef.afterClosed().pipe(first()).subscribe(_ => {
-      this.updateEvents();
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(first())
+      .subscribe(_ => {
+        this.updateEvents();
+      });
   }
 
   eventDayClicked() {
-    this.api.readCompanyEventByDateCompanyEventGet(this.isoDateString).subscribe(events => {
-      this.authService.getCurrentUser().subscribe(user => {
-        for (const event of events) {
-          if (event.user.id === user.id) {
-            this.editEvent(event.id);
-            return;
+    this.api
+      .readCompanyEventByDateCompanyEventGet(this.isoDateString)
+      .subscribe(events => {
+        this.authService.getCurrentUser().subscribe(user => {
+          for (const event of events) {
+            if (event.user.id === user.id) {
+              this.editEvent(event.id);
+              return;
+            }
           }
-        }
-        this.addEvent();
+          this.addEvent();
+        });
       });
-    });
   }
 
   private updateDate(): void {
-    this.date = moment().year(this.year).isoWeek(this.week).isoWeekday(this.day + 1);
+    this.date = moment()
+      .year(this.year)
+      .isoWeek(this.week)
+      .isoWeekday(this.day + 1);
     this.dateFormatted = this.date.format('DD.MM');
   }
 }

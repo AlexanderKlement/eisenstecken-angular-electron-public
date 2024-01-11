@@ -1,7 +1,10 @@
-<div *ngIf="loading" class="loading w-full h-full min-w-full min-h-full box-border">
+<div
+  *ngIf="loading"
+  class="loading w-full h-full min-w-full min-h-full box-border">
   <mat-spinner class="spinner"></mat-spinner>
 </div>
-<div [class.hidden]="loading" class="loading w-full h-full min-w-full min-h-full box-border">
+<div
+  [class.hidden]="loading"
+  class="loading w-full h-full min-w-full min-h-full box-border">
   <ng-content></ng-content>
 </div>
-

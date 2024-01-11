@@ -8,9 +8,8 @@ describe('OutgoingInvoiceNumberDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ OutgoingInvoiceNumberDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [OutgoingInvoiceNumberDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

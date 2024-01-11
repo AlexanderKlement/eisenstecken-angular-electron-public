@@ -1,23 +1,35 @@
 <app-toolbar title="Stundenzettel" [buttonList]="buttons"></app-toolbar>
 <div class="window-container">
-    <mat-tab-group>
-        <mat-tab label="Benutzer">
-            <app-table-builder [$refresh]="$refresh" [dataSource]="userDataSource"></app-table-builder>
-        </mat-tab>
-        <mat-tab label="Spesen">
-            <app-table-builder [$refresh]="$refresh" [dataSource]="feeDataSource"></app-table-builder>
-        </mat-tab>
-        <mat-tab label="Fahrten">
-            <app-table-builder [$refresh]="$refresh" [dataSource]="journeyDataSource"></app-table-builder>
-        </mat-tab>
-        <mat-tab label="Essen">
-            <app-table-builder [$refresh]="$refresh" [dataSource]="mealDataSource"></app-table-builder>
-        </mat-tab>
-        <mat-tab label="Instandhaltung">
-            <app-table-builder [$refresh]="$refresh" [dataSource]="maintenanceDataSource"></app-table-builder>
-        </mat-tab>
-        <mat-tab label="Zusätzliche Arbeiten">
-            <app-table-builder [$refresh]="$refresh" [dataSource]="additionalWorkloadDataSource"></app-table-builder>
-        </mat-tab>
-    </mat-tab-group>
+  <mat-tab-group>
+    <mat-tab label="Benutzer">
+      <app-table-builder
+        [$refresh]="$refresh"
+        [dataSource]="userDataSource"></app-table-builder>
+    </mat-tab>
+    <mat-tab label="Spesen">
+      <app-table-builder
+        [$refresh]="$refresh"
+        [dataSource]="feeDataSource"></app-table-builder>
+    </mat-tab>
+    <mat-tab label="Fahrten">
+      <app-table-builder
+        [$refresh]="$refresh"
+        [dataSource]="journeyDataSource"></app-table-builder>
+    </mat-tab>
+    <mat-tab label="Essen">
+      <app-table-builder
+        [$refresh]="$refresh"
+        [dataSource]="mealDataSource"></app-table-builder>
+    </mat-tab>
+    <mat-tab label="Instandhaltung">
+      <app-table-builder
+        [$refresh]="$refresh"
+        [dataSource]="maintenanceDataSource"></app-table-builder>
+    </mat-tab>
+    <mat-tab label="Zusätzliche Arbeiten">
+      <app-table-builder
+        [$refresh]="$refresh"
+        [dataSource]="additionalWorkloadDataSource"></app-table-builder>
+    </mat-tab>
+  </mat-tab-group>
 </div>

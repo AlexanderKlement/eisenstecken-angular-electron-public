@@ -1,13 +1,11 @@
-import {Injectable} from '@angular/core';
-import {ElectronService} from '../../core/services';
+import { Injectable } from '@angular/core';
+import { ElectronService } from '../../core/services';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FileService {
-
-  constructor(private electronService: ElectronService) {
-  }
+  constructor(private electronService: ElectronService) {}
 
   open(path: string): Promise<string> {
     if (!this.electronService.isElectron) {
@@ -61,7 +59,6 @@ export class FileService {
     });
   }
 
-
   selectFolder(): Promise<string> {
     if (!this.electronService.isElectron) {
       console.error('Selecting Folders is only possible in electron!');
@@ -71,13 +68,16 @@ export class FileService {
     }
     return new Promise<string>((resolve, reject) => {
       try {
-        this.electronService.ipcRenderer.on('select-folder-reply', (_, data) => {
-          if (data) {
-            resolve(data);
-          } else {
-            reject();
+        this.electronService.ipcRenderer.on(
+          'select-folder-reply',
+          (_, data) => {
+            if (data) {
+              resolve(data);
+            } else {
+              reject();
+            }
           }
-        });
+        );
         this.electronService.ipcRenderer.send('select-folder-request');
       } catch (e) {
         console.error(e);
@@ -87,7 +87,11 @@ export class FileService {
     });
   }
 
-  selectFiles(multi: boolean, filterName: string, filters: string[]): Promise<string[]> {
+  selectFiles(
+    multi: boolean,
+    filterName: string,
+    filters: string[]
+  ): Promise<string[]> {
     if (!this.electronService.isElectron) {
       console.error('Selecting Files is only possible in electron!');
       return new Promise((resolve, reject) => {

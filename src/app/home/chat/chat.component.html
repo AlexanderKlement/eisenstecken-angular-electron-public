@@ -1,27 +1,52 @@
-<div class="chat flex flex-col justify-between items-stretch flex-row w-full h-full min-w-full min-h-full box-border">
-  <div class="chat-message-box flex-[0_undefined_undefined] box-border" #chatMsgBox="" [class.whatsapp]="whatsapp">
-    <app-chat-message *ngFor="let message of messages; let last = last" [message]="message" [whatsapp]="whatsapp">
-      {{last ? scrollToBottom() : ''}}
+<div
+  class="chat flex flex-col justify-between items-stretch flex-row w-full h-full min-w-full min-h-full box-border">
+  <div
+    class="chat-message-box flex-[0_undefined_undefined] box-border"
+    #chatMsgBox=""
+    [class.whatsapp]="whatsapp">
+    <app-chat-message
+      *ngFor="let message of messages; let last = last"
+      [message]="message"
+      [whatsapp]="whatsapp">
+      {{ last ? scrollToBottom() : '' }}
     </app-chat-message>
   </div>
-  <div class="input-box flex-[20_undefined_undefined] box-border w-full h-full min-w-full min-h-full">
-    <form [formGroup]="chatGroup" (ngSubmit)="send()" *ngIf="recipients$ | async as recipients" class="flex flex-col  items-stretch flex-row w-full h-full min-w-full min-h-full box-border">
+  <div
+    class="input-box flex-[20_undefined_undefined] box-border w-full h-full min-w-full min-h-full">
+    <form
+      [formGroup]="chatGroup"
+      (ngSubmit)="send()"
+      *ngIf="recipients$ | async as recipients"
+      class="flex flex-col items-stretch flex-row w-full h-full min-w-full min-h-full box-border">
       <mat-form-field class="flex-[70_undefined_undefined] box-border">
         <mat-label>Nachricht</mat-label>
-        <textarea id="message-input" rows="3" class="form-control" formControlName="messageInput" matInput=""></textarea>
+        <textarea
+          id="message-input"
+          rows="3"
+          class="form-control"
+          formControlName="messageInput"
+          matInput=""></textarea>
       </mat-form-field>
-      <div class="flex flex-row justify-evenly flex-[40_undefined_undefined] box-border">
+      <div
+        class="flex flex-row justify-evenly flex-[40_undefined_undefined] box-border">
         <mat-form-field class="flex-[30_undefined_undefined] box-border">
           <mat-label>Empfänger</mat-label>
           <mat-select formControlName="recipientSelect">
-            <mat-option *ngFor="let recipient of recipients" [value]="recipient.id">
-              {{recipient.firstname}}
+            <mat-option
+              *ngFor="let recipient of recipients"
+              [value]="recipient.id">
+              {{ recipient.firstname }}
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <button [disabled]="buttonLocked" type="submit" mat-raised-button="" class="flex-[30_undefined_undefined] box-border">Senden</button>
+        <button
+          [disabled]="buttonLocked"
+          type="submit"
+          mat-raised-button=""
+          class="flex-[30_undefined_undefined] box-border">
+          Senden
+        </button>
       </div>
     </form>
   </div>
 </div>
-

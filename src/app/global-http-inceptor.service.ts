@@ -1,33 +1,36 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
-  HttpRequest
+  HttpRequest,
 } from '@angular/common/http';
-import {Observable, throwError} from 'rxjs';
-import {catchError,} from 'rxjs/operators';
-import {Router} from '@angular/router';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {AuthService} from './shared/services/auth.service';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from './shared/services/auth.service';
 
 @Injectable()
 export class GlobalHttpInterceptorService implements HttpInterceptor {
+  constructor(
+    public router: Router,
+    private snackBar: MatSnackBar,
+    private authService: AuthService
+  ) {}
 
-  constructor(public router: Router, private snackBar: MatSnackBar, private authService: AuthService) {
-  }
-
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
-      catchError((error) => {
+      catchError(error => {
         console.error('Intercepting error');
         console.error(error);
         if (error.status === 404) {
           console.warn('Not sending error message');
           return;
         }
-
 
         if (error.status === 401) {
           console.warn('Not authorized for ' + error.url);
@@ -38,7 +41,7 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
 
         if ('error' in error && 'body' in error.error) {
           this.snackBar.open(error.error.body, 'Ok', {
-            duration: 10000
+            duration: 10000,
           });
         }
         return throwError(error.message);

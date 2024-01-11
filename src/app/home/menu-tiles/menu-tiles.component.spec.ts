@@ -8,7 +8,7 @@ describe('MenuTilesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MenuTilesComponent ]
+      declarations: [MenuTilesComponent],
     }).compileComponents();
   });
 

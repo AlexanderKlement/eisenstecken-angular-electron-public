@@ -8,9 +8,8 @@ describe('SingleMenuTileComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SingleMenuTileComponent ]
-    })
-      .compileComponents();
+      declarations: [SingleMenuTileComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

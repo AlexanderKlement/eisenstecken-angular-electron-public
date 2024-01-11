@@ -1,16 +1,15 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {Calendar, DefaultService} from 'eisenstecken-openapi-angular-library';
-import {Observable} from 'rxjs';
-import {first, tap} from 'rxjs/operators';
-import {ChatService} from '../chat/chat.service';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Calendar, DefaultService } from 'eisenstecken-openapi-angular-library';
+import { Observable } from 'rxjs';
+import { first, tap } from 'rxjs/operators';
+import { ChatService } from '../chat/chat.service';
 
 @Component({
   selector: 'app-calendars-frame',
   templateUrl: './calendars-chat-frame.component.html',
-  styleUrls: ['./calendars-chat-frame.component.scss']
+  styleUrls: ['./calendars-chat-frame.component.scss'],
 })
 export class CalendarsChatFrameComponent implements OnInit, OnDestroy {
-
   @ViewChild('chatTab') chatTab;
 
   calendars$: Observable<Calendar[]>;
@@ -21,13 +20,18 @@ export class CalendarsChatFrameComponent implements OnInit, OnDestroy {
   secondsCheckIfUnreadMessages = 10;
   eventTabName = ' Betriebskalender';
 
-  constructor(private api: DefaultService, private chatService: ChatService) {
-  }
+  constructor(
+    private api: DefaultService,
+    private chatService: ChatService
+  ) {}
 
   ngOnInit(): void {
-    this.calendars$ = this.api.readCalendarsCalendarGet().pipe(first(), tap(() => {
-      this.loading = false;
-    }));
+    this.calendars$ = this.api.readCalendarsCalendarGet().pipe(
+      first(),
+      tap(() => {
+        this.loading = false;
+      })
+    );
     /*
     this.checkIfUnreadMessagesInterval = setInterval(() => {
       this.resetUnreadChatMessageCountIfActive();
@@ -45,6 +49,4 @@ export class CalendarsChatFrameComponent implements OnInit, OnDestroy {
       this.chatService.resetUnreadMessageCount();
     }
   }
-
-
 }

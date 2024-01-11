@@ -1,83 +1,98 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {DefaultService, JobStatus, JobStatusType} from 'eisenstecken-openapi-angular-library';
-import {Observable, ReplaySubject, Subject} from 'rxjs';
-import {first, map} from 'rxjs/operators';
-import {cli} from 'webdriver-manager/built/lib/cli_instance';
-import {ConfirmDialogComponent} from '../../../shared/components/confirm-dialog/confirm-dialog.component';
-import {MatDialog} from '@angular/material/dialog';
+import { Component, Input, OnInit } from '@angular/core';
+import {
+  DefaultService,
+  JobStatus,
+  JobStatusType,
+} from 'eisenstecken-openapi-angular-library';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { first, map } from 'rxjs/operators';
+import { cli } from 'webdriver-manager/built/lib/cli_instance';
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-job-status-bar',
   templateUrl: './job-status-bar.component.html',
-  styleUrls: ['./job-status-bar.component.scss']
+  styleUrls: ['./job-status-bar.component.scss'],
 })
 export class JobStatusBarComponent implements OnInit {
-
   @Input() jobId: number;
   public jobStatusList: ReplaySubject<JobStatus[]>;
   public toolBarColor = 'created';
   public selectedStatus: JobStatus;
   public loading = true;
 
-
   private colorMap = [
     [JobStatusType.Created, 'created'],
     [JobStatusType.Accepted, 'accepted'],
     [JobStatusType.Completed, 'completed'],
-    [JobStatusType.Declined, 'declined']
+    [JobStatusType.Declined, 'declined'],
   ];
 
-  constructor(private api: DefaultService, private dialog: MatDialog) {
-  }
-
+  constructor(
+    private api: DefaultService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.jobStatusList = new ReplaySubject<JobStatus[]>(1);
-    this.api.getStatusOptionsJobStatusOptionsGet().pipe(first()).subscribe((jobStatusList) => {
-      this.jobStatusList.next(jobStatusList);
-    });
-    this.api.readJobStatusJobStatusJobIdGet(this.jobId).pipe(first()).subscribe(jobStatus => {
-      this.selectedStatus = jobStatus;
-      this.refresh();
-      this.loading = false;
-    });
+    this.api
+      .getStatusOptionsJobStatusOptionsGet()
+      .pipe(first())
+      .subscribe(jobStatusList => {
+        this.jobStatusList.next(jobStatusList);
+      });
+    this.api
+      .readJobStatusJobStatusJobIdGet(this.jobId)
+      .pipe(first())
+      .subscribe(jobStatus => {
+        this.selectedStatus = jobStatus;
+        this.refresh();
+        this.loading = false;
+      });
   }
 
   public onStatusClicked(clickedJobStatus: JobStatus): void {
-    this.api.updateJobStatusJobStatusJobIdPost(this.jobId, clickedJobStatus.status).pipe(first()).subscribe(jobStatusUpdateResponse => {
-      if (jobStatusUpdateResponse.success) {
-        this.getStatus(jobStatusUpdateResponse.status).pipe(first()).subscribe(newJobStatus => {
-          this.selectedStatus = newJobStatus;
-          this.refresh();
-        });
-      } else {
-        let errorText = '';
-        for (const singleError of jobStatusUpdateResponse.errors) {
-          errorText += singleError + '\n';
-        }
-        this.dialog.open(ConfirmDialogComponent, {
-          width: '400px',
-
-          data: {
-            title: 'Status konnte nicht geändert werden',
-            text: errorText,
+    this.api
+      .updateJobStatusJobStatusJobIdPost(this.jobId, clickedJobStatus.status)
+      .pipe(first())
+      .subscribe(jobStatusUpdateResponse => {
+        if (jobStatusUpdateResponse.success) {
+          this.getStatus(jobStatusUpdateResponse.status)
+            .pipe(first())
+            .subscribe(newJobStatus => {
+              this.selectedStatus = newJobStatus;
+              this.refresh();
+            });
+        } else {
+          let errorText = '';
+          for (const singleError of jobStatusUpdateResponse.errors) {
+            errorText += singleError + '\n';
           }
-        });
-      }
-    });
+          this.dialog.open(ConfirmDialogComponent, {
+            width: '400px',
+
+            data: {
+              title: 'Status konnte nicht geändert werden',
+              text: errorText,
+            },
+          });
+        }
+      });
   }
 
-
   private getStatus(statusName: string): Observable<JobStatus> {
-    return this.jobStatusList.pipe(map((jobStatusList) => {
-      for (const jobStatus of jobStatusList) {
-        if (jobStatus.status === statusName) {
-          return jobStatus;
+    return this.jobStatusList.pipe(
+      map(jobStatusList => {
+        for (const jobStatus of jobStatusList) {
+          if (jobStatus.status === statusName) {
+            return jobStatus;
+          }
         }
-      }
-      console.error('JobStatusBar: Did not find status of job');
-      return null;
-    }));
+        console.error('JobStatusBar: Did not find status of job');
+        return null;
+      })
+    );
   }
 
   private refresh(): void {
@@ -91,5 +106,4 @@ export class JobStatusBarComponent implements OnInit {
       }
     }
   }
-
 }

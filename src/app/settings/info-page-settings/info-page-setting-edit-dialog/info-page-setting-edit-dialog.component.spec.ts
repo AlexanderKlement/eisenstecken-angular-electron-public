@@ -8,9 +8,8 @@ describe('InfoPageSettingEditDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InfoPageSettingEditDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [InfoPageSettingEditDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -1,20 +1,21 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {CompanyEvent, CompanyEventEnum} from 'eisenstecken-openapi-angular-library';
-import {getEventTranslation} from '../event-calendar-dialog/event-calendar-dialog.component';
+import { Component, Input, OnInit } from '@angular/core';
+import {
+  CompanyEvent,
+  CompanyEventEnum,
+} from 'eisenstecken-openapi-angular-library';
+import { getEventTranslation } from '../event-calendar-dialog/event-calendar-dialog.component';
 
 @Component({
   selector: 'app-event-calendar-event',
   templateUrl: './event-calendar-event.component.html',
-  styleUrls: ['./event-calendar-event.component.scss']
+  styleUrls: ['./event-calendar-event.component.scss'],
 })
 export class EventCalendarEventComponent implements OnInit {
-
   @Input() event: CompanyEvent;
 
   class: string;
 
-  constructor() {
-  }
+  constructor() {}
 
   getEventText(event: CompanyEvent): string {
     switch (event.event_type) {
@@ -44,5 +45,4 @@ export class EventCalendarEventComponent implements OnInit {
         return 'illness';
     }
   }
-
 }

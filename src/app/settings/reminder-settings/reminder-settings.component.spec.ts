@@ -8,9 +8,8 @@ describe('ReminderSettingsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ReminderSettingsComponent ]
-    })
-    .compileComponents();
+      declarations: [ReminderSettingsComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

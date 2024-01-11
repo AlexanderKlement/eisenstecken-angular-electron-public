@@ -1,6 +1,6 @@
-import {Observable} from 'rxjs';
-import {DataSourceClass, RecursiveKeyOf} from '../../types';
-import {Lock} from 'eisenstecken-openapi-angular-library';
+import { Observable } from 'rxjs';
+import { DataSourceClass, RecursiveKeyOf } from '../../types';
+import { Lock } from 'eisenstecken-openapi-angular-library';
 
 export interface Mapping<T> {
   property: string;
@@ -8,7 +8,6 @@ export interface Mapping<T> {
 }
 
 export class InfoDataSource<T extends DataSourceClass> {
-
   public data$: Observable<T>;
   public mapping: Mapping<T>[];
   public navigationTarget: string;
@@ -16,11 +15,14 @@ export class InfoDataSource<T extends DataSourceClass> {
   public lock$: Observable<Lock>;
   public unlockObservable: Observable<boolean>;
 
-  constructor(data: Observable<T>,
-              mapping: Mapping<T>[],
-              navigationTarget: string, lock$: Observable<Lock>,
-              lockObservable: Observable<boolean>,
-              unlockObservable: Observable<boolean>) {
+  constructor(
+    data: Observable<T>,
+    mapping: Mapping<T>[],
+    navigationTarget: string,
+    lock$: Observable<Lock>,
+    lockObservable: Observable<boolean>,
+    unlockObservable: Observable<boolean>
+  ) {
     this.data$ = data;
     this.mapping = mapping;
     this.navigationTarget = navigationTarget;

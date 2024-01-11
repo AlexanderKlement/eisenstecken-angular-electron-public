@@ -1,16 +1,18 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {CompanyEventEnum} from '../../../../../eisenstecken-openapi-angular-library';
-import {AuthService} from '../../../shared/services/auth.service';
-import {CompanyEventCreate, CompanyEventUpdate, DefaultService} from 'eisenstecken-openapi-angular-library';
-import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
-
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { CompanyEventEnum } from '../../../../../eisenstecken-openapi-angular-library';
+import { AuthService } from '../../../shared/services/auth.service';
+import {
+  CompanyEventCreate,
+  CompanyEventUpdate,
+  DefaultService,
+} from 'eisenstecken-openapi-angular-library';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
 export interface EventCalendarDialogData {
   id?: number;
   date: string;
 }
-
 
 export function getEventTranslation(companyEvent: CompanyEventEnum): string {
   switch (companyEvent) {
@@ -28,26 +30,22 @@ export function getEventTranslation(companyEvent: CompanyEventEnum): string {
 @Component({
   selector: 'app-event-calendar-dialog',
   templateUrl: './event-calendar-dialog.component.html',
-  styleUrls: ['./event-calendar-dialog.component.scss']
+  styleUrls: ['./event-calendar-dialog.component.scss'],
 })
-
-
 export class EventCalendarDialogComponent implements OnInit {
   title = 'Eintrag erstellen';
 
-  availableEventTypes = [
-    CompanyEventEnum.Holiday,
-    CompanyEventEnum.Illness,
-  ];
+  availableEventTypes = [CompanyEventEnum.Holiday, CompanyEventEnum.Illness];
 
   dialogFormGroup: UntypedFormGroup;
   showDescription = false;
 
-  constructor(public dialogRef: MatDialogRef<EventCalendarDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: EventCalendarDialogData,
-              private api: DefaultService, private authService: AuthService) {
-  }
-
+  constructor(
+    public dialogRef: MatDialogRef<EventCalendarDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: EventCalendarDialogData,
+    private api: DefaultService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     if (this.data.id) {
@@ -56,26 +54,30 @@ export class EventCalendarDialogComponent implements OnInit {
 
     this.dialogFormGroup = new UntypedFormGroup({
       title: new UntypedFormControl(''),
-      eventType: new UntypedFormControl([])
+      eventType: new UntypedFormControl([]),
     });
 
     this.authService.getCurrentUser().subscribe(user => {
-
       if (user.id <= 5) {
         this.availableEventTypes.push(CompanyEventEnum.Vacation);
         this.availableEventTypes.push(CompanyEventEnum.Event);
       }
 
       if (this.data.id) {
-        this.api.readCompanyEventCompanyEventCompanyEventIdGet(this.data.id).subscribe(event => {
-          this.dialogFormGroup.get('title').setValue(event.title);
-          this.dialogFormGroup.get('eventType').setValue([event.event_type]);
-        });
+        this.api
+          .readCompanyEventCompanyEventCompanyEventIdGet(this.data.id)
+          .subscribe(event => {
+            this.dialogFormGroup.get('title').setValue(event.title);
+            this.dialogFormGroup.get('eventType').setValue([event.event_type]);
+          });
       }
 
-      this.dialogFormGroup.get('eventType').valueChanges.subscribe((selectedEventType: string | string[]) => {
-        this.showDescription = selectedEventType[0] === CompanyEventEnum.Event;
-      });
+      this.dialogFormGroup
+        .get('eventType')
+        .valueChanges.subscribe((selectedEventType: string | string[]) => {
+          this.showDescription =
+            selectedEventType[0] === CompanyEventEnum.Event;
+        });
     });
   }
 
@@ -91,9 +93,14 @@ export class EventCalendarDialogComponent implements OnInit {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         event_type: this.dialogFormGroup.get('eventType').value[0],
       };
-      this.api.updateCompanyEventCompanyEventCompanyEventIdPut(this.data.id, companyUpdate).subscribe(() => {
-        this.dialogRef.close(true);
-      });
+      this.api
+        .updateCompanyEventCompanyEventCompanyEventIdPut(
+          this.data.id,
+          companyUpdate
+        )
+        .subscribe(() => {
+          this.dialogRef.close(true);
+        });
     } else {
       const companyCreate: CompanyEventCreate = {
         title: this.dialogFormGroup.get('title').value,
@@ -101,17 +108,21 @@ export class EventCalendarDialogComponent implements OnInit {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         event_type: this.dialogFormGroup.get('eventType').value[0],
       };
-      this.api.createCompanyEventCompanyEventPost(companyCreate).subscribe(() => {
-        console.log('created');
-        this.dialogRef.close(true);
-      });
+      this.api
+        .createCompanyEventCompanyEventPost(companyCreate)
+        .subscribe(() => {
+          console.log('created');
+          this.dialogRef.close(true);
+        });
     }
   }
 
   onDeleteClick(): void {
-    this.api.deleteCompanyEventCompanyEventCompanyEventIdDelete(this.data.id).subscribe(() => {
-      this.dialogRef.close(true);
-    });
+    this.api
+      .deleteCompanyEventCompanyEventCompanyEventIdDelete(this.data.id)
+      .subscribe(() => {
+        this.dialogRef.close(true);
+      });
   }
 
   translate(event: CompanyEventEnum): string {

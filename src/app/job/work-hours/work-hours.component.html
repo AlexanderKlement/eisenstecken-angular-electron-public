@@ -1,4 +1,6 @@
 <app-toolbar title="Arbeitsstunden" [buttonList]="buttons"></app-toolbar>
 <div class="window-container">
-    <app-table-builder [$refresh]="$refresh" [dataSource]="workloadDataSource"></app-table-builder>
+  <app-table-builder
+    [$refresh]="$refresh"
+    [dataSource]="workloadDataSource"></app-table-builder>
 </div>

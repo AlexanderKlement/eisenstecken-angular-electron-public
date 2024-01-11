@@ -8,9 +8,8 @@ describe('RecalculationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RecalculationComponent ]
-    })
-    .compileComponents();
+      declarations: [RecalculationComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -1,24 +1,23 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {InfoDataSource} from './info-builder.datasource';
-import {DataSourceClass} from '../../types';
-import {DefaultService} from 'eisenstecken-openapi-angular-library';
-import {LockService} from '../../services/lock.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { InfoDataSource } from './info-builder.datasource';
+import { DataSourceClass } from '../../types';
+import { DefaultService } from 'eisenstecken-openapi-angular-library';
+import { LockService } from '../../services/lock.service';
 
 @Component({
   selector: 'app-info-builder',
   templateUrl: './info-builder.component.html',
-  styleUrls: ['./info-builder.component.scss']
+  styleUrls: ['./info-builder.component.scss'],
 })
-
 export class InfoBuilderComponent<T extends DataSourceClass> implements OnInit {
-
   @Input() dataSource: InfoDataSource<T>;
 
-  constructor(private api: DefaultService, private locker: LockService) {
-  }
+  constructor(
+    private api: DefaultService,
+    private locker: LockService
+  ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   getPropertyOfObject(data: T, property: string): string {
     const propertyArray = property.split('.');
@@ -26,7 +25,11 @@ export class InfoBuilderComponent<T extends DataSourceClass> implements OnInit {
       if (singleProperty.includes('[')) {
         const index = parseInt(singleProperty.split('[')[1].split(']')[0], 10);
         const arrayProperty = singleProperty.split('[')[0];
-        if (arrayProperty in data && Array.isArray(data[arrayProperty]) && data[arrayProperty].length > index) {
+        if (
+          arrayProperty in data &&
+          Array.isArray(data[arrayProperty]) &&
+          data[arrayProperty].length > index
+        ) {
           data = data[arrayProperty][index];
         } else {
           return '';
@@ -46,5 +49,4 @@ export class InfoBuilderComponent<T extends DataSourceClass> implements OnInit {
       this.dataSource.navigationTarget
     );
   }
-
 }

@@ -8,9 +8,8 @@ describe('JobStatusBarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ JobStatusBarComponent ]
-    })
-    .compileComponents();
+      declarations: [JobStatusBarComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
