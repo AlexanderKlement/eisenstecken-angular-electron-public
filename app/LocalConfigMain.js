@@ -24,6 +24,7 @@ var LocalConfigMain = /** @class */ (function () {
     LocalConfigMain.prototype.init = function () {
         this.loadedConfig = this.defaultConfig;
         var appdataPath = electron_1.app.getPath('userData');
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         var path = require('path');
         var configFileFolderPath = path.join(appdataPath, this.configFileFolder);
         this.configFilePath = path.join(configFileFolderPath, this.configFileName);

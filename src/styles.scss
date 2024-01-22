@@ -1,5 +1,10 @@
 @use 'sass:map';
 @import "theme";
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
 /* angular-cli file: src/styles.css */
 
 body, html {

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 
 import { HomeRoutingModule } from './home-routing.module';
 
@@ -67,6 +67,7 @@ import { MatTableModule } from '@angular/material/table';
     MatToolbarModule,
     MatListModule,
     MatTableModule,
+    NgOptimizedImage,
   ],
 })
 export class HomeModule {}

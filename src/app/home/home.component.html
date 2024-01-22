@@ -1,34 +1,22 @@
-<div class="root flex flex-col justify-between items-stretch flex-row">
-  <div class="top-bar flex-[10_undefined_undefined] box-border">
-    <div
-      class="flex-[40_undefined_undefined] box-border w-full h-full min-w-full min-h-full"></div>
-    <div
-      class="hidden justify-center items-center flex flex-row flex-[30_undefined_undefined] box-border w-full h-full min-w-full min-h-full">
-      <img
-        alt="Eisenstecken-logo"
-        class="logo"
-        src="assets/logos/ESS-Logo-RGB-Pos-Small.jpg" />
-    </div>
-    <div
-      class="flex-[25_undefined_undefined] box-border w-full h-full min-w-full min-h-full"></div>
+<div class="root flex flex-col">
+  <div class="flex flex-row top-bar box-border">
+    <button
+      (click)="showInfoClicked()"
+      class="info"
+      mat-icon-button=""
+      title="Info">
+      <mat-icon>info</mat-icon>
+    </button>
   </div>
   <div
-    class="window-container flex flex-row justify-between items-center flex-[90_undefined_undefined] box-border">
+    class="window-container flex flex-row justify-between items-center box-border">
     <app-calendars-frame
-      class="flex-[40_undefined_undefined] box-border w-full h-full min-w-full min-h-full"></app-calendars-frame>
-    <app-note
-      class="flex-[30_undefined_undefined] box-border w-full h-full min-w-full min-h-full"></app-note>
+      class="box-border w-full h-full min-w-full min-h-full"></app-calendars-frame>
+    <app-note class="box-border w-full h-full min-w-full min-h-full"></app-note>
     <app-menu-tiles
-      class="flex-[25_undefined_undefined] box-border w-full h-full min-w-full min-h-full"></app-menu-tiles>
+      class="box-border w-full h-full min-w-full min-h-full"></app-menu-tiles>
   </div>
 </div>
-<button
-  (click)="showInfoClicked()"
-  class="info"
-  mat-icon-button=""
-  title="Info">
-  <mat-icon>info</mat-icon>
-</button>
 
 <!--- bitte amol do lossn :) resolution 2560x1440
 # resolution screen screenresolution screen-resolution
