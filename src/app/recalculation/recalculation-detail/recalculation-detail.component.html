@@ -1,31 +1,59 @@
-<app-toolbar title="Nackkalkulation: Details" [buttonList]="buttons"></app-toolbar>
+<app-toolbar
+  title="Nackkalkulation: Details"
+  [buttonList]="buttons"></app-toolbar>
 <div class="window-container">
-    <div *ngIf="!loading">
-        <div class="flex flex-col justify-around items-center flex-row">
-            <h3>{{jobName$ | async}}</h3>
-            <mat-form-field appearance="fill">
-                <mat-label>Gesamtpreis</mat-label>
-                <input class="form-control" readonly="" [value]="recalculation.total_sum | currency:'EUR'" matInput="">
-            </input></mat-form-field>
-        </div>
-        <app-table-builder [$refresh]="$refresh" [dataSource]="woodListDataSource" title="Preise Holzlisten"></app-table-builder>
-        <app-table-builder [$refresh]="$refresh" [dataSource]="paintDataSource" title="Oberflächen"></app-table-builder>
-        <app-table-builder [$refresh]="$refresh" [dataSource]="expenseDataSource" title="Ausgaben"></app-table-builder>
-        <app-table-builder [$refresh]="$refresh" [dataSource]="orderDataSource" title="Bestellungen"></app-table-builder>
-        <app-table-builder [$refresh]="$refresh" [dataSource]="workloadDataSource" title="Arbeitszeit"></app-table-builder>
-        <div class="flex flex-col justify-around items-center flex-row">
-            <h3>Fahrten</h3>
-            <div class="flex flex-row justify-around items-center">
-                <mat-form-field appearance="fill">
-                    <mat-label>Kilometer</mat-label>
-                    <input class="form-control" readonly="" [value]="recalculation.km | number: '0.2-2'" matInput="">
-                </input></mat-form-field>
-                <mat-form-field appearance="fill">
-                    <mat-label>Kosten / Kilometer</mat-label>
-                    <input class="form-control" readonly="" [value]="recalculation.cost | currency:'EUR'" matInput="">
-                </input></mat-form-field>
-            </div>
-        </div>
+  <div *ngIf="!loading">
+    <div class="flex flex-col justify-around items-center flex-row">
+      <h3>{{ jobName$ | async }}</h3>
+      <mat-form-field appearance="fill">
+        <mat-label>Gesamtpreis</mat-label>
+        <input
+          class="form-control"
+          readonly=""
+          [value]="recalculation.total_sum | currency: 'EUR'"
+          matInput="" />
+      </mat-form-field>
     </div>
+    <app-table-builder
+      [$refresh]="$refresh"
+      [dataSource]="woodListDataSource"
+      title="Preise Holzlisten"></app-table-builder>
+    <app-table-builder
+      [$refresh]="$refresh"
+      [dataSource]="paintDataSource"
+      title="Oberflächen"></app-table-builder>
+    <app-table-builder
+      [$refresh]="$refresh"
+      [dataSource]="expenseDataSource"
+      title="Ausgaben"></app-table-builder>
+    <app-table-builder
+      [$refresh]="$refresh"
+      [dataSource]="orderDataSource"
+      title="Bestellungen"></app-table-builder>
+    <app-table-builder
+      [$refresh]="$refresh"
+      [dataSource]="workloadDataSource"
+      title="Arbeitszeit"></app-table-builder>
+    <div class="flex flex-col justify-around items-center flex-row">
+      <h3>Fahrten</h3>
+      <div class="flex flex-row justify-around items-center">
+        <mat-form-field appearance="fill">
+          <mat-label>Kilometer</mat-label>
+          <input
+            class="form-control"
+            readonly=""
+            [value]="recalculation.km | number: '0.2-2'"
+            matInput="" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Kosten / Kilometer</mat-label>
+          <input
+            class="form-control"
+            readonly=""
+            [value]="recalculation.cost | currency: 'EUR'"
+            matInput="" />
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
 </div>
-

@@ -1,35 +1,50 @@
 <app-toolbar [title]="title"></app-toolbar>
 <div class="window-container">
-    <form (ngSubmit)="onSubmit()" [formGroup]="jobGroup">
-        <div class="flex flex-col justify-around items-center flex-row">
-            <mat-checkbox *ngIf="!subMode" class="form-control" [disabled]="!createMode" formControlName="minijob">
-                Kleinstauftrag
-            </mat-checkbox>
-            <br>
-            <br>
-            <mat-form-field appearance="fill">
-                <mat-label>Name</mat-label>
-                <input class="form-control" formControlName="name" matInput="">
-            </input></mat-form-field>
-            <mat-form-field *ngIf="!subMode" appearance="fill">
-                <mat-label>Zuständig</mat-label>
-                <mat-select formControlName="responsible_id">
-                    <mat-option *ngFor="let user of users$ | async" [value]="user.id">
-                        {{user.fullname}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field *ngIf="!subMode" appearance="fill">
-                <mat-label>Jahr</mat-label>
-                <input class="form-control" [readonly]="!createMode" formControlName="year" type="number" matInput="">
-            </input></mat-form-field>
-            <mat-form-field *ngIf="!subMode" appearance="fill">
-                <mat-label>Fertigstellung</mat-label>
-                <input class="form-control" formControlName="completion" matInput="">
-            </input></mat-form-field>
+  <form (ngSubmit)="onSubmit()" [formGroup]="jobGroup">
+    <div class="flex flex-col justify-around items-center flex-row">
+      <mat-checkbox
+        *ngIf="!subMode"
+        class="form-control"
+        [disabled]="!createMode"
+        formControlName="minijob">
+        Kleinstauftrag
+      </mat-checkbox>
+      <br />
+      <br />
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input class="form-control" formControlName="name" matInput="" />
+      </mat-form-field>
+      <mat-form-field *ngIf="!subMode" appearance="fill">
+        <mat-label>Zuständig</mat-label>
+        <mat-select formControlName="responsible_id">
+          <mat-option *ngFor="let user of users$ | async" [value]="user.id">
+            {{ user.fullname }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field *ngIf="!subMode" appearance="fill">
+        <mat-label>Jahr</mat-label>
+        <input
+          class="form-control"
+          [readonly]="!createMode"
+          formControlName="year"
+          type="number"
+          matInput="" />
+      </mat-form-field>
+      <mat-form-field *ngIf="!subMode" appearance="fill">
+        <mat-label>Fertigstellung</mat-label>
+        <input class="form-control" formControlName="completion" matInput="" />
+      </mat-form-field>
 
-            <app-address-form *ngIf="!subMode && !addressDeactivated" [address]="getAddressGroup()" class="w-full h-full min-w-full min-h-full box-border"></app-address-form>
-            <button [disabled]="submitted" mat-raised-button="" type="submit">Speichern</button>
-        </br></br></div>
-    </form>
+      <app-address-form
+        *ngIf="!subMode && !addressDeactivated"
+        [address]="getAddressGroup()"
+        class="w-full h-full min-w-full min-h-full box-border"></app-address-form>
+      <button [disabled]="submitted" mat-raised-button="" type="submit">
+        Speichern
+      </button>
+      <br />
+    </div>
+  </form>
 </div>

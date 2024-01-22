@@ -1,33 +1,44 @@
 <h1 mat-dialog-title="">Fahrtgrund auswählen</h1>
 
 <div mat-dialog-content="">
-    <div class="flex flex-col justify-around items-center flex-row">
-        <div fxLayout.gt-sm="row" class="desktop-min-width flex flex-col justify-around items-start flex-row">
-            <div *ngFor="let jobList of getAllJobs(); let j = index" class="desktop-min-width flex flex-col justify-start items-start flex-row">
-                <h4 class="desktop-min-width">{{getJobListName(j)}}</h4>
-                <div class="jobs-list list flex flex-col justify-start items-start flex-row w-full h-full min-w-full min-h-full box-border">
-                    <div *ngFor="let job of jobList.controls; let i = index" class="desktop-min-width">
-                        <div class="desktop-min-width flex flex-col justify-around items-start flex-row">
-                            <div class="desktop-min-width">
-                                <p (click)="jobClicked(i, j)" class="desktop-min-width">
-                                    <strong class="desktop-min-width">{{getNameFromJob(i, j)}}
-                                    </strong>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <div class="flex flex-col justify-around items-center flex-row">
+    <div
+      fxLayout.gt-sm="row"
+      class="desktop-min-width flex flex-col justify-around items-start flex-row">
+      <div
+        *ngFor="let jobList of getAllJobs(); let j = index"
+        class="desktop-min-width flex flex-col justify-start items-start flex-row">
+        <h4 class="desktop-min-width">{{ getJobListName(j) }}</h4>
+        <div
+          class="jobs-list list flex flex-col justify-start items-start flex-row w-full h-full min-w-full min-h-full box-border">
+          <div
+            *ngFor="let job of jobList.controls; let i = index"
+            class="desktop-min-width">
+            <div
+              class="desktop-min-width flex flex-col justify-around items-start flex-row">
+              <div class="desktop-min-width">
+                <p (click)="jobClicked(i, j)" class="desktop-min-width">
+                  <strong class="desktop-min-width"
+                    >{{ getNameFromJob(i, j) }}
+                  </strong>
+                </p>
+              </div>
             </div>
+          </div>
         </div>
-        <form [formGroup]="reasonGroup">
-            <mat-form-field appearance="fill">
-                <mat-label>Selbst eintragen</mat-label>
-                <input class="form-control" formControlName="reason" matInput="">
-            </input></mat-form-field>
-        </form>
+      </div>
     </div>
+    <form [formGroup]="reasonGroup">
+      <mat-form-field appearance="fill">
+        <mat-label>Selbst eintragen</mat-label>
+        <input class="form-control" formControlName="reason" matInput="" />
+      </mat-form-field>
+    </form>
+  </div>
 </div>
 <div mat-dialog-actions="">
-    <button mat-button="" (click)="onCancelClick()">Abbrechen</button>
-    <button [disabled]="confirmDisabled" mat-button="" (click)="onConfirmClick()">Speichern</button>
+  <button mat-button="" (click)="onCancelClick()">Abbrechen</button>
+  <button [disabled]="confirmDisabled" mat-button="" (click)="onConfirmClick()">
+    Speichern
+  </button>
 </div>

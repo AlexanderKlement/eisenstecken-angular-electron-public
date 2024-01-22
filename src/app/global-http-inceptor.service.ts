@@ -34,7 +34,7 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
 
         if (error.status === 401) {
           console.warn('Not authorized for ' + error.url);
-          if (error.endsWith('/users/me')) {
+          if (error.url.endsWith('/users/me')) {
             this.authService.doLogout();
           }
         }

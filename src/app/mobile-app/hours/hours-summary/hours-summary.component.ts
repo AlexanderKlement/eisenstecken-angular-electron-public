@@ -9,7 +9,7 @@ import {
   JobEnum,
 } from '../hours-stepper/hours-stepper.component';
 import { first, map } from 'rxjs/operators';
-import { forkJoin, Observable, Subscription } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { DefaultService } from '../../../../client/api';
 
 @Component({

@@ -1,13 +1,32 @@
-<form [formGroup]="minuteHourGroup" class="w-full h-full min-w-full min-h-full box-border">
-    <div class="flex flex-row justify-between items-center w-full h-full min-w-full min-h-full box-border">
-        <p class="flex-[20_undefined_undefined] box-border">{{title}}</p>
-        <mat-form-field appearance="fill" class="flex-[39_undefined_undefined] box-border">
-            <mat-label>Stunden</mat-label>
-            <input class="form-control" type="number" [readonly]="editDisabled" formControlName="hours" (focusout)="focusLost()" matInput="">
-        </input></mat-form-field>
-        <mat-form-field appearance="fill" class="flex-[39_undefined_undefined] box-border">
-            <mat-label>Minuten</mat-label>
-            <input class="form-control" type="number" [readonly]="editDisabled" formControlName="minutes" (focusout)="focusLost()" matInput="">
-        </input></mat-form-field>
-    </div>
+<form
+  [formGroup]="minuteHourGroup"
+  class="w-full h-full min-w-full min-h-full box-border">
+  <div
+    class="flex flex-row justify-between items-center w-full h-full min-w-full min-h-full box-border">
+    <p class="flex-[20_undefined_undefined] box-border">{{ title }}</p>
+    <mat-form-field
+      appearance="fill"
+      class="flex-[39_undefined_undefined] box-border">
+      <mat-label>Stunden</mat-label>
+      <input
+        class="form-control"
+        type="number"
+        [readonly]="editDisabled"
+        formControlName="hours"
+        (focusout)="focusLost()"
+        matInput="" />
+    </mat-form-field>
+    <mat-form-field
+      appearance="fill"
+      class="flex-[39_undefined_undefined] box-border">
+      <mat-label>Minuten</mat-label>
+      <input
+        class="form-control"
+        type="number"
+        [readonly]="editDisabled"
+        formControlName="minutes"
+        (focusout)="focusLost()"
+        matInput="" />
+    </mat-form-field>
+  </div>
 </form>

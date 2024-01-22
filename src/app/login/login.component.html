@@ -1,16 +1,29 @@
 <div class="root flex flex-col justify-evenly items-center flex-row">
-  <img class="logo" src="assets/logos/ESS-Logo-RGB-Pos.jpg" alt="Eisenstecken-logo">
+  <img
+    class="logo"
+    src="assets/logos/ESS-Logo-RGB-Pos.jpg"
+    alt="Eisenstecken-logo" />
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
     <div class="flex flex-col justify-around items-center flex-row">
       <mat-form-field class="login-input">
         <mat-label>Email</mat-label>
-        <input class="form-control" type="text" formControlName="username" matInput="">
-      </input></mat-form-field>
+        <input
+          class="form-control"
+          type="text"
+          formControlName="username"
+          matInput="" />
+      </mat-form-field>
       <mat-form-field class="login-input">
         <mat-label>Passwort</mat-label>
-        <input class="form-control" type="password" formControlName="password" matInput="">
-      </input></mat-form-field>
-      <button mat-raised-button="" type="submit" class="login-input">Anmelden</button>
+        <input
+          class="form-control"
+          type="password"
+          formControlName="password"
+          matInput="" />
+      </mat-form-field>
+      <button mat-raised-button="" type="submit" class="login-input">
+        Anmelden
+      </button>
     </div>
   </form>
-</img></div>
+</div>

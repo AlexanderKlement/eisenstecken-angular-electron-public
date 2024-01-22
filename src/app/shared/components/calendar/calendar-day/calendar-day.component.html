@@ -1,25 +1,34 @@
 <app-loading [loading]="loading">
-    <mat-card class="small-card" [ngClass]="{'weekend': weekend, 'today': today}">
-        <mat-card-content>
-            <div class="flex flex-row justify-start items-center">
-                <div class="day-title flex-[20_undefined_undefined] box-border">
-                    <strong>{{titleDayOfTheWeek}}</strong><br>
-                    <strong>{{titleDay}}</strong>
-                </br></div>
-                <table class="mat-table entries flex-[80_undefined_undefined] box-border">
-                    <tr class="mat-row" *ngFor="let calendarEntry of calendarEntries$ | async" (click)="onCalendarEntryClicked(calendarEntry.id)">
-                        <td class="mat-cell" title="Wann">{{getCalendarStartEndTime(calendarEntry)}}<br>
-                            <sub *ngIf="public">{{calendarEntry.user.firstname}}</sub>
-                        </br></td>
-                        <td class="mat-cell" title="Beschreibung">
-                            <strong>{{calendarEntry.title}}</strong><br>{{ calendarEntry.description }}
-                        </br></td>
-                    </tr>
-                    <tr class="no-entry">
-                        <td colspan="2" class="no-entry">Kein Eintrag</td>
-                    </tr>
-                </table>
-            </div>
-        </mat-card-content>
-    </mat-card>
+  <mat-card class="small-card" [ngClass]="{ weekend: weekend, today: today }">
+    <mat-card-content>
+      <div class="flex flex-row justify-start items-center">
+        <div class="day-title flex-[20_undefined_undefined] box-border">
+          <strong>{{ titleDayOfTheWeek }}</strong
+          ><br />
+          <strong>{{ titleDay }}</strong>
+          <br />
+        </div>
+        <table
+          class="mat-table entries flex-[80_undefined_undefined] box-border">
+          <tr
+            class="mat-row"
+            *ngFor="let calendarEntry of calendarEntries$ | async"
+            (click)="onCalendarEntryClicked(calendarEntry.id)">
+            <td class="mat-cell" title="Wann">
+              {{ getCalendarStartEndTime(calendarEntry) }}<br />
+              <sub *ngIf="public">{{ calendarEntry.user.firstname }}</sub>
+              <br />
+            </td>
+            <td class="mat-cell" title="Beschreibung">
+              <strong>{{ calendarEntry.title }}</strong
+              ><br />{{ calendarEntry.description }} <br />
+            </td>
+          </tr>
+          <tr class="no-entry">
+            <td colspan="2" class="no-entry">Kein Eintrag</td>
+          </tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </app-loading>

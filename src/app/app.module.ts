@@ -63,7 +63,6 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { DebugModule } from './debug/debug.module';
-import { LocalConfigRenderer } from './LocalConfigRenderer';
 import { CustomReuseStrategy } from './reuse-strategy';
 import {
   CalendarDateFormatter,
@@ -180,11 +179,6 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
     },
     {
       provide: Configuration,
-      useFactory: (authService: AuthService) =>
-        new Configuration({
-          accessToken: authService.getToken.bind(authService),
-          basePath: LocalConfigRenderer.getInstance().getApi(),
-        }),
       deps: [AuthService],
       multi: false,
     },

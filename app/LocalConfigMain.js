@@ -11,7 +11,7 @@ var LocalConfigMain = /** @class */ (function () {
         this.defaultEncoding = 'utf8';
         this.defaultConfig = {
             channel: 'latest',
-            mail_processor: 'x86'
+            mail_processor: 'x86',
         };
         this.init();
     }
@@ -45,10 +45,14 @@ var LocalConfigMain = /** @class */ (function () {
     };
     LocalConfigMain.prototype.writeConfig = function () {
         var yamlString = yaml.stringify(this.loadedConfig);
-        fs.writeFileSync(this.configFilePath, yamlString, { encoding: this.defaultEncoding });
+        fs.writeFileSync(this.configFilePath, yamlString, {
+            encoding: this.defaultEncoding,
+        });
     };
     LocalConfigMain.prototype.readConfig = function () {
-        var configData = fs.readFileSync(this.configFilePath, { encoding: this.defaultEncoding });
+        var configData = fs.readFileSync(this.configFilePath, {
+            encoding: this.defaultEncoding,
+        });
         this.loadedConfig = yaml.parse(configData);
     };
     LocalConfigMain.prototype.setMailProcessor = function (processor) {

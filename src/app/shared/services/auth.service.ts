@@ -3,7 +3,7 @@ import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, ReplaySubject } from 'rxjs';
 import { first, map } from 'rxjs/operators';
-import { DefaultService, Right, User } from '../../../client/api';
+import { DefaultService, OpenAPI, Right, User } from '../../../client/api';
 
 export function containsRight(rightString: string, rights: Right[]): boolean {
   for (const right of rights) {
@@ -32,6 +32,7 @@ export class AuthService {
 
   setToken(token: string): void {
     localStorage.setItem(AuthService.accessTokenKey, token);
+    OpenAPI.TOKEN = token;
     //this.injector.get<DefaultService>(
     //  DefaultService
     //).configuration.credentials.OAuth2PasswordBearer = token;
@@ -39,6 +40,7 @@ export class AuthService {
 
   removeToken(): void {
     localStorage.removeItem(AuthService.accessTokenKey);
+    OpenAPI.TOKEN = null;
     //this.injector.get<DefaultService>(
     //  DefaultService
     //).configuration.credentials.OAuth2PasswordBearer = null;

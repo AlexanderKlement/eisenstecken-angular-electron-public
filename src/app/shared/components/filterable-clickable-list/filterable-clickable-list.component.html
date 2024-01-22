@@ -1,16 +1,33 @@
-<h3 class="heading">{{name}}</h3>
+<h3 class="heading">{{ name }}</h3>
 <mat-form-field appearance="fill">
-    <mat-label>Suchen</mat-label>
-    <input matInput="" [formControl]="search">
-</input></mat-form-field>
-<mat-selection-list #elements="" [multiple]="false" (selectionChange)="selectionChange(elements.selectedOptions.selected[0])">
-    <div *ngFor="let listElement of search$ | async" class="flex flex-row justify-around items-center">
-        <button *ngIf="listElement.type==='supplier'" mat-button="" mat-icon-button="" (click)="toggleFavoriteSupplier(listElement)" title="Favorit">
-            <mat-icon *ngIf="isListItemFavorite(listElement.item)">star</mat-icon>
-            <mat-icon *ngIf="!isListItemFavorite(listElement.item)">star_border</mat-icon>
-        </button>
-        <mat-list-option [value]="listElement" [class.collapsed]="listElement.collapse !== false && listElement.collapse !== toListUnCollapse" [class.uncollapsed]="listElement.collapse === toListUnCollapse">
-            {{listElement.name}}
-        </mat-list-option>
-    </div>
+  <mat-label>Suchen</mat-label>
+  <input matInput="" [formControl]="search" />
+</mat-form-field>
+<mat-selection-list
+  #elements=""
+  [multiple]="false"
+  (selectionChange)="selectionChange(elements.selectedOptions.selected[0])">
+  <div
+    *ngFor="let listElement of search$ | async"
+    class="flex flex-row justify-around items-center">
+    <button
+      *ngIf="listElement.type === 'supplier'"
+      mat-button=""
+      (click)="toggleFavoriteSupplier(listElement)"
+      title="Favorit">
+      <mat-icon *ngIf="isListItemFavorite(listElement.item)">star</mat-icon>
+      <mat-icon *ngIf="!isListItemFavorite(listElement.item)"
+        >star_border</mat-icon
+      >
+    </button>
+    <mat-list-option
+      [value]="listElement"
+      [class.collapsed]="
+        listElement.collapse !== false &&
+        listElement.collapse !== toListUnCollapse
+      "
+      [class.uncollapsed]="listElement.collapse === toListUnCollapse">
+      {{ listElement.name }}
+    </mat-list-option>
+  </div>
 </mat-selection-list>

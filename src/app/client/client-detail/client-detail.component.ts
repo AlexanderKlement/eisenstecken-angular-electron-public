@@ -1,9 +1,5 @@
 import { Component, ComponentRef, OnInit, ViewChild } from '@angular/core';
-import {
-  Client,
-  DefaultService,
-  Job,
-} from 'eisenstecken-openapi-angular-library';
+import { Client, DefaultService, Job } from '../../../client/api';
 import { InfoDataSource } from '../../shared/components/info-builder/info-builder.datasource';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';

@@ -4,7 +4,7 @@ import * as moment from 'moment';
 import * as Sentry from '@sentry/angular-ivy';
 import { AppModule } from './app/app.module';
 import { APP_CONFIG } from './environments/environment';
-import { LocalConfigRenderer } from './app/LocalConfigRenderer';
+import { OpenAPI } from './client/api';
 
 Sentry.init({
   dsn: 'https://739b39d0b92749a485e48a80da87816e@sentry.kivi.bz.it/26',
@@ -26,13 +26,13 @@ Sentry.init({
   tracesSampleRate: 0.5,
 });
 
-LocalConfigRenderer.getInstance().init();
-
 moment.locale('de');
 
 if (APP_CONFIG.production) {
   enableProdMode();
 }
+
+OpenAPI.BASE = 'https://api.eisenstecken.kivi.bz.it';
 
 platformBrowserDynamic()
   .bootstrapModule(AppModule, {

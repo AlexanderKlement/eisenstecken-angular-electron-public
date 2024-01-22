@@ -24,6 +24,7 @@ const args = process.argv.slice(1),
   serve = args.some(val => val === '--serve');
 const gotTheLock = app.requestSingleInstanceLock();
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const child = require('child_process').execFile;
 const appPath = app.getAppPath();
 
@@ -123,6 +124,7 @@ function createWindow(): BrowserWindow {
   win.maximize();
   if (serve) {
     win.webContents.openDevTools();
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     require('electron-reload')(__dirname, {
       electron: require(path.join(__dirname, '/../node_modules/electron')),
     });
@@ -346,6 +348,7 @@ function initIPC() {
       if (arg[0]) {
         properties.push('multiSelections');
       }
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const { dialog } = require('electron');
       const pathPromise = dialog.showOpenDialog({
         properties: properties,

@@ -8,10 +8,7 @@ import {
 } from '@angular/core';
 import * as moment from 'moment';
 import { MatDialog } from '@angular/material/dialog';
-import {
-  EventCalendarDialogComponent,
-  getEventTranslation,
-} from '../event-calendar-dialog/event-calendar-dialog.component';
+import { EventCalendarDialogComponent } from '../event-calendar-dialog/event-calendar-dialog.component';
 import { first } from 'rxjs/operators';
 import { Subject, Subscription } from 'rxjs';
 import { AuthService } from '../../../shared/services/auth.service';

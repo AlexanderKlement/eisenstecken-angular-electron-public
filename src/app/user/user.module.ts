@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatPseudoCheckboxModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [UserComponent, UserEditComponent],
@@ -28,6 +29,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatListModule,
     MatProgressSpinnerModule,
     MatCheckboxModule,
+    MatPseudoCheckboxModule,
   ],
 })
 export class UserModule {}
