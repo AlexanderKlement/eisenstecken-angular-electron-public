@@ -17,8 +17,8 @@ import {
   JobUpdate,
   Lock,
   SubJobCreate,
+  User,
 } from '../../../client/api';
-import { User } from '@sentry/angular-ivy';
 
 @Component({
   selector: 'app-job-edit',

@@ -1,6 +1,4 @@
-@import '../../../styles.scss';
-
-$primary: map-get($theme, primaryprimary);
+@use '../../../styles' as *;
 
 
 .chat {
@@ -14,9 +12,10 @@ $primary: map-get($theme, primaryprimary);
     border-bottom: solid thin #eee;
     padding-bottom: 8px;
 
-    &.ivan{
+    &.ivan {
       background: #eee;
     }
+
     &:before {
       content: '';
       position: absolute;
@@ -24,7 +23,8 @@ $primary: map-get($theme, primaryprimary);
       opacity: 0.06;
       background-repeat: repeat;
     }
-    &.ivan:before{
+
+    &.ivan:before {
       background-image: url('~assets/images/chat-bg.png');
     }
   }

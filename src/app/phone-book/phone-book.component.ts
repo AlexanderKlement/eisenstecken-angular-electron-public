@@ -11,8 +11,8 @@ import {
 import { TableButton } from '../shared/components/table-builder/table-builder.component';
 import { PhoneService } from '../shared/services/phone.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import * as Sentry from '@sentry/angular-ivy';
 import { Contact, ContactTypeEnum, DefaultService } from '../../client/api';
+import * as Sentry from '@sentry/angular';
 
 @Component({
   selector: 'app-phone-book',

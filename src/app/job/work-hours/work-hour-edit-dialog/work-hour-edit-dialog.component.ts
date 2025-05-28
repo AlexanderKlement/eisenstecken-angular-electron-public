@@ -3,9 +3,9 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { User } from '@sentry/angular-ivy';
 import {
   DefaultService,
+  User,
   Workload,
   WorkloadCreate,
   WorkloadUpdate,

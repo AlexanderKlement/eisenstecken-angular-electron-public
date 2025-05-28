@@ -1,10 +1,10 @@
 @use "sass:map";
-@import "../../../../theme";
+@use '../../../../theme' as *;
 
 .single-note {
   border-style: solid;
   border-width: thin;
-  border-color: map.get($mat-accent, lighter);
+  border-color: var(--md-sys-color-secondary);
   overflow: visible;
   width: calc(100% - 20px); //clamp(10px, calc(100% - 20px), 290px);
   height: calc(100% - 20px); //clamp(10px, calc(100% - 20px), 290px);
@@ -15,9 +15,7 @@
     padding: 10px;
     font-family: 'Roboto', sans-serif !important;
     width: calc(100% - 20px);
-    width: -webkit-calc(100% - 20px);
     height: calc(100% - 20px);
-    height: -webkit-calc(100% - 20px);
 
     textarea.note-text {
       border: none;
@@ -70,5 +68,4 @@
     -moz-box-shadow: 2px 2px 7px rgb(0 0 0 / 30%);
   }
 }
-
 

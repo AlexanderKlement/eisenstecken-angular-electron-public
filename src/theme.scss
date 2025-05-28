@@ -1,234 +1,158 @@
-@use '@angular/material' as mat;
+/* These tokens are generated using https://themes.angular-material.dev/ */
+/* Preview: https://themes.angular-material.dev/?bold-font-weight=700&brand-font-family=Roboto&medium-font-weight=500&plain-font-family=Roboto&regular-font-weight=400&seed-error=%23ba1a1a&seed-neutral=%237e7668&seed-neutral-variant=%23817660&seed-primary=%23fdc400&seed-secondary=%23735b1e&seed-tertiary=%23536500 */
+/* Seed Colors: primary: #fdc400, secondary: #735b1e, tertiary: #536500, error: #ba1a1a, neutral: #7e7668, neutral-variant: #817660 */
+/* Seed Typography: plain-font-family: Roboto, brand-font-family: Roboto, bold-font-weight: 700, medium-font-weight: 500, regular-font-weight: 400 */
 
-// Be sure that you only ever include this mixin once!
-@include mat.core();
+/* Make sure to import fonts in `<head>` of html */
+/*
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Roboto&family=Roboto&display=swap');
+</style>
 
-$dark-text: #000000;
-$dark-primary-text: rgba($dark-text, 0.87);
-$dark-accent-text: rgba($dark-primary-text, 0.54);
-$dark-disabled-text: rgba($dark-primary-text, 0.38);
-$dark-dividers: rgba($dark-primary-text, 0.12);
-$dark-focused: rgba($dark-primary-text, 0.12);
+OR
 
-$light-text: #ffffff;
-$light-primary-text: $light-text;
-$light-accent-text: rgba($light-primary-text, 0.7);
-$light-disabled-text: rgba($light-primary-text, 0.5);
-$light-dividers: rgba($light-primary-text, 0.12);
-$light-focused: rgba($light-primary-text, 0.12);
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&family=Roboto&display=swap">
+*/
 
-// Define your theme with color palettes, typography and density
+@use "@angular/material" as mat;
 
-$mat-theme-primary-palette: map-merge(mat.$yellow-palette, (contrast: (100: #150c4a,)));
-$mat-theme-primary: mat.define-palette(
-    $mat-theme-primary-palette,
-  $default: 100,
-  $lighter: 100,
-  $darker: 700,
-  $text: 500
-);
 
-$mat-theme-accent-palette: map-merge(mat.$grey-palette, (501: #4d77b6, contrast: (501: white, A100: white, A200: white,)));
-$mat-theme-accent: mat.define-palette(
-    $mat-theme-accent-palette,
-  $default: 501,
-  $lighter: A100,
-  $darker: A200,
-  $text: 600
-);
-
-$mat-theme-warn-palette: map-merge(mat.$pink-palette, ());
-$mat-theme-warn: mat.define-palette(
-    $mat-theme-warn-palette,
-  $default: A200,
-  $lighter: 500,
-  $darker: 500,
-  $text: A700
-);
-
-$mat-dark-theme-primary-palette: map-merge(mat.$lime-palette, (contrast: (200: #030844, A100: rgba(0, 0, 0, 0.87), A700: rgba(0, 0, 0, 0.87),)));
-$mat-dark-theme-primary: mat.define-palette(
-    $mat-dark-theme-primary-palette,
-  $default: 200,
-  $lighter: A100,
-  $darker: A700,
-  $text: 700
-);
-
-$mat-dark-theme-accent-palette: map-merge(mat.$green-palette, (contrast: (A200: black, 50: black, A400: black,)));
-$mat-dark-theme-accent: mat.define-palette(
-    $mat-dark-theme-accent-palette,
-  $default: A200,
-  $lighter: 50,
-  $darker: A400,
-  $text: A100
-);
-
-$mat-dark-theme-warn-palette: map-merge(mat.$pink-palette, (contrast: (A100: black, 100: white,)));
-$mat-dark-theme-warn: mat.define-palette(
-    $mat-dark-theme-warn-palette,
-  $default: A100,
-  $lighter: 100,
-  $darker: A700,
-  $text: 100
-);
-
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap');
-
-$mat-typography: mat.define-typography-config(
-  $font-family: 'Rubik',
-  $body-2: mat.define-typography-level($font-size: 16px, $font-weight: 400, $font-family: Rubik),
-  $body-1: mat.define-typography-level($font-size: 18px, $font-weight: 400, $font-family: Rubik),
-  $caption: mat.define-typography-level($font-size: 16px, $font-weight: Medium, $font-family: Rubik),
-  $button: mat.define-typography-level($font-size: 16px, $font-weight: 500, $font-family: Rubik),
-);
-
-$mat-density: 0;
-// @include mat.elevation(
-//   $zValue: 12,
-//   $color: #000,
-//   $opacity: 0.5
-// );
-
-$mat-core-theme: mat.define-light-theme((
-  color: (
-    primary: $mat-theme-primary,
-    accent: $mat-theme-accent,
-    warn: $mat-theme-warn
-  ),
-  typography: $mat-typography,
-  density: $mat-density
-));
-
-$mat-dark-theme: mat.define-dark-theme((
-  color: (
-    primary: $mat-dark-theme-primary,
-    accent: $mat-dark-theme-accent,
-    warn: $mat-dark-theme-warn,
-  )
-));
-
-@include mat.all-component-themes($mat-core-theme);
-
-.dark-theme {
-  @include mat.all-component-colors($mat-dark-theme);
+/* Light Theme */
+:root, :host {
+  @include mat.theme-overrides((
+    primary: #765a00,
+    on-primary: #ffffff,
+    primary-container: #ffdf96,
+    on-primary-container: #251a00,
+    inverse-primary: #f6bf00,
+    primary-fixed: #ffdf96,
+    primary-fixed-dim: #f6bf00,
+    on-primary-fixed: #251a00,
+    on-primary-fixed-variant: #5a4400,
+    secondary: #735b1e,
+    on-secondary: #ffffff,
+    secondary-container: #ffdf99,
+    on-secondary-container: #251a00,
+    secondary-fixed: #ffdf99,
+    secondary-fixed-dim: #e3c37b,
+    on-secondary-fixed: #251a00,
+    on-secondary-fixed-variant: #594406,
+    tertiary: #536500,
+    on-tertiary: #ffffff,
+    tertiary-container: #d6ed80,
+    on-tertiary-container: #171e00,
+    tertiary-fixed: #d6ed80,
+    tertiary-fixed-dim: #bad067,
+    on-tertiary-fixed: #171e00,
+    on-tertiary-fixed-variant: #3e4c00,
+    background: #fdf8f6,
+    on-background: #1c1b1a,
+    surface: #fdf8f6,
+    surface-dim: #ded9d7,
+    surface-bright: #fdf8f6,
+    surface-container-lowest: #ffffff,
+    surface-container-low: #f7f3f0,
+    surface-container: #f2edea,
+    surface-container-high: #ece7e5,
+    surface-container-highest: #e6e2df,
+    on-surface: #1c1b1a,
+    shadow: #000000,
+    scrim: #000000,
+    surface-tint: #655d50,
+    inverse-surface: #32302f,
+    inverse-on-surface: #f5f0ed,
+    outline: #7c766d,
+    outline-variant: #cdc5ba,
+    neutral: #797674,
+    neutral10: #1c1b1a,
+    error: #ba1a1a,
+    error-container: #ffdad6,
+    on-error: #ffffff,
+    on-error-container: #410002,
+    surface-variant: #eae1d5,
+    on-surface-variant: #4b463d,
+    neutral-variant: #7c766c,
+    neutral-variant20: #343028,
+    inverse-secondary: #e3c37b,
+    inverse-tertiary: #bad067,
+  ));
 }
 
+/* Dark Theme */
+.dark {
+  @include mat.theme-overrides((
+    primary: #f6bf00,
+    on-primary: #3e2e00,
+    primary-container: #5a4400,
+    on-primary-container: #ffdf96,
+    inverse-primary: #765a00,
+    primary-fixed: #ffdf96,
+    primary-fixed-dim: #f6bf00,
+    on-primary-fixed: #251a00,
+    on-primary-fixed-variant: #5a4400,
+    secondary: #e3c37b,
+    on-secondary: #3f2e00,
+    secondary-container: #594406,
+    on-secondary-container: #ffdf99,
+    secondary-fixed: #ffdf99,
+    secondary-fixed-dim: #e3c37b,
+    on-secondary-fixed: #251a00,
+    on-secondary-fixed-variant: #594406,
+    tertiary: #bad067,
+    on-tertiary: #2a3400,
+    tertiary-container: #3e4c00,
+    on-tertiary-container: #d6ed80,
+    tertiary-fixed: #d6ed80,
+    tertiary-fixed-dim: #bad067,
+    on-tertiary-fixed: #171e00,
+    on-tertiary-fixed-variant: #3e4c00,
+    background: #141312,
+    on-background: #e6e2df,
+    surface: #141312,
+    surface-dim: #141312,
+    surface-bright: #3a3937,
+    surface-container-lowest: #0f0e0d,
+    surface-container-low: #1c1b1a,
+    surface-container: #211f1e,
+    surface-container-high: #2b2a28,
+    surface-container-highest: #363433,
+    on-surface: #e6e2df,
+    shadow: #000000,
+    scrim: #000000,
+    surface-tint: #cfc5b5,
+    inverse-surface: #e6e2df,
+    inverse-on-surface: #32302f,
+    outline: #969086,
+    outline-variant: #4b463d,
+    neutral: #797674,
+    neutral10: #1c1b1a,
+    error: #ffb4ab,
+    error-container: #93000a,
+    on-error: #690005,
+    on-error-container: #ffdad6,
+    surface-variant: #4b463d,
+    on-surface-variant: #cdc5ba,
+    neutral-variant: #7c766c,
+    neutral-variant20: #343028,
+    inverse-secondary: #735b1e,
+    inverse-tertiary: #536500,
+  ));
+}
 
-$mat-primary: (
-  main: #fdc400,
-  lighter: #feedb3,
-  darker: #fcaf00,
-  200: #fdc400, // For slide toggle,
-  contrast : (
-    main: $dark-primary-text,
-    lighter: $dark-primary-text,
-    darker: $dark-primary-text,
-  )
-);
+/* Typography */
+:root, :host {
+  /* core typography tokens are not generating css variables, hence below */
+  --mat-sys-brand-font-family: Roboto;
+  --mat-sys-plain-font-family: Roboto;
+  --mat-sys-bold-font-weight: 700;
+  --mat-sys-medium-font-weight: 500;
+  --mat-sys-regular-font-weight: 400;
 
-
-$mat-warn: (
-  main: #ff0000,
-  lighter: #ffb3b3,
-  darker: #ff0000,
-  200: #ff0000, // For slide toggle,
-  contrast : (
-    main: $light-primary-text,
-    lighter: $dark-primary-text,
-    darker: $light-primary-text,
-  )
-);
-
-
-$mat-accent: (
-        main: #3e3d3d,
-        lighter: #c5c5c5,
-        darker: #282727,
-        200: #3e3d3d, // For slide toggle,
-        contrast : (
-                main: $light-primary-text,
-                lighter: $dark-primary-text,
-                darker: $light-primary-text,
-        )
-);
-
-$light-background: #fafafa;
-$light-bg-darker-5: darken($light-background, 5%);
-$light-bg-darker-10: darken($light-background, 10%);
-$light-bg-darker-20: darken($light-background, 20%);
-$light-bg-darker-30: darken($light-background, 30%);
-$light-bg-lighter-5: lighten($light-background, 5%);
-$dark-bg-tooltip: lighten(#2c2c2c, 20%);
-$dark-bg-alpha-4: rgba(#2c2c2c, 0.04);
-$dark-bg-alpha-12: rgba(#2c2c2c, 0.12);
-
-$mat-light-theme-foreground: (
-  base: black,
-  divider: $dark-dividers,
-  dividers: $dark-dividers,
-  disabled: $dark-disabled-text,
-  disabled-button: rgba($dark-text, 0.26),
-  disabled-text: $dark-disabled-text,
-  elevation: black,
-  secondary-text: $dark-accent-text,
-  hint-text: $dark-disabled-text,
-  accent-text: $dark-accent-text,
-  icon: $dark-accent-text,
-  icons: $dark-accent-text,
-  text: $dark-primary-text,
-  slider-min: $dark-primary-text,
-  slider-off: rgba($dark-text, 0.26),
-  slider-off-active: $dark-disabled-text,
-);
-
-$mat-light-theme-background: (
-  background: $light-background,
-  status-bar: $light-bg-darker-20,
-  app-bar: $light-bg-darker-5,
-  hover: $dark-bg-alpha-4,
-  card: $light-bg-lighter-5,
-  dialog: $light-bg-lighter-5,
-  tooltip: $dark-bg-tooltip,
-  disabled-button: $dark-bg-alpha-12,
-  raised-button: $light-bg-lighter-5,
-  focused-button: $dark-focused,
-  selected-button: $light-bg-darker-20,
-  selected-disabled-button: $light-bg-darker-30,
-  disabled-button-toggle: $light-bg-darker-10,
-  unselected-chip: $light-bg-darker-10,
-  disabled-list-option: $light-bg-darker-10,
-);
-
-
-$mat-dark-theme-foreground: (
-  base: $light-text,
-  divider: $light-dividers,
-  dividers: $light-dividers,
-  disabled: $light-disabled-text,
-  disabled-button: rgba($light-text, 0.3),
-  disabled-text: $light-disabled-text,
-  elevation: black,
-  hint-text: $light-disabled-text,
-  secondary-text: $light-accent-text,
-  accent-text: $light-accent-text,
-  icon: $light-text,
-  icons: $light-text,
-  text: $light-text,
-  slider-min: $light-text,
-  slider-off: rgba($light-text, 0.3),
-  slider-off-active: rgba($light-text, 0.3),
-);
-
-$theme-primary: mat.define-palette($mat-primary, main, lighter, darker);
-$theme-accent: mat.define-palette($mat-accent, main, lighter, darker);
-$theme-warn: mat.define-palette($mat-warn, main, lighter, darker);
-
-$theme: (
-  primary: $theme-primary,
-  accent: $theme-accent,
-  warn: $theme-warn,
-  is-dark: false,
-  foreground: $mat-light-theme-foreground,
-  background: $mat-light-theme-background,
-);
+  @include mat.theme-overrides((
+    brand-family: Roboto,
+    plain-family: Roboto,
+    bold-weight: 700,
+    medium-weight: 500,
+    regular-weight: 400,
+  ));
+}

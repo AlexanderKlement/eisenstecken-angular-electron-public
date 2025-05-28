@@ -1,5 +1,5 @@
 @use "sass:map";
-@import "../../../theme";
+@use '../../../theme' as *;
 
 .menu-tiles-container {
   /*  box-shadow: 0 0 1.5px 0 rgb(0 0 0 / 50%);  muasi sicher irgendwonn wieder zuan tian*/
@@ -23,7 +23,7 @@
   }
 
   &::after {
-    background: map.get($mat-primary, main);
+    background: var(--md-sys-color-primary);
     mix-blend-mode: lighten;
   }
 
@@ -55,6 +55,7 @@
 
   &.joke:hover {
     animation: bump 1s infinite ease-in-out;
+
     &::after {
       transform: scale(1);
       visibility: visible;

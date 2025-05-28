@@ -1,60 +1,31 @@
-//Polyfill Node.js core modules in Webpack. This module is only needed for webpack 5+.
-var NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+const path = require('path');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
-/**
- * Custom angular webpack configuration
- */
 module.exports = (config, options) => {
-  config.target = 'electron-renderer';
+  // …your existing target + polyfill logic…
 
-  if (options.fileReplacements) {
-    for (let fileReplacement of options.fileReplacements) {
-      if (fileReplacement.replace !== 'src/environments/environment.ts') {
-        continue;
-      }
-
-      let fileReplacementParts = fileReplacement['with'].split('.');
-      if (fileReplacementParts.length > 1 && ['web'].indexOf(fileReplacementParts[1]) >= 0) {
-        config.target = 'web';
-      }
-      break;
+  // find the existing scss rule and inject postcss-loader
+  const scssRule = config.module.rules.find(r =>
+    r.test && r.test.toString().includes('scss') && Array.isArray(r.use)
+  );
+  if (scssRule) {
+    const sassIndex = scssRule.use.findIndex(u =>
+      (typeof u === 'string' && u.includes('sass-loader')) ||
+      (u.loader && u.loader.includes('sass-loader'))
+    );
+    if (sassIndex !== -1) {
+      scssRule.use.splice(sassIndex, 0, {
+        loader: 'postcss-loader',
+        options: {
+          postcssOptions: {
+            // ← POINT AT your postcss.config.js
+            config: path.resolve(__dirname, 'postcss.config.js'),
+          },
+        },
+      });
     }
   }
 
-  config.plugins = [
-    ...config.plugins,
-    new NodePolyfillPlugin({
-      excludeAliases: ['console'],
-    }),
-  ];
-
-
-  config.resolve = {
-    ...config.resolve, // keep existing resolve configurations
-    fallback: {
-      ...config.resolve?.fallback, // keep existing fallbacks
-      'path': require.resolve('path-browserify'), // add fallback for 'path'
-    },
-  };
-
-  const scssRule = {
-    test: /\.scss$/,
-    loader: 'postcss-loader',
-    options: {
-      postcssOptions: {
-        ident: 'postcss',
-        syntax: 'postcss-scss',
-        plugins: [
-          require('postcss-import'),
-          require('tailwindcss'),
-          require('autoprefixer'),
-        ],
-      },
-    },
-  };
-
-  // Add the SCSS rule to the Webpack module rules
-  config.module.rules.push(scssRule);
-
+  config.plugins.push(new NodePolyfillPlugin({ excludeAliases: ['console'] }));
   return config;
 };

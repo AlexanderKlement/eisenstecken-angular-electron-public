@@ -1,22 +1,21 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { ErrorHandler, Injectable, LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
-  HttpClientModule,
   HttpClient,
   HTTP_INTERCEPTORS,
+  HttpClientModule,
 } from '@angular/common/http';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
-import { RouteReuseStrategy } from '@angular/router';
+import { Router, RouteReuseStrategy } from '@angular/router';
 import { AppRouterOutletDirective } from './router-outlet';
 
 // NG Translate
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HomeModule } from './home/home.module';
-import { APP_CONFIG } from 'environments/environment';
+//import { APP_CONFIG } from 'environments/environment';
 
 import { AppComponent } from './app.component';
 import { AuthService } from './shared/services/auth.service';
@@ -48,7 +47,6 @@ import { OrderModule } from './order/order.module';
 import { LoginModule } from './login/login.module';
 import localeDe from '@angular/common/locales/de';
 import localeDeExtra from '@angular/common/locales/extra/de';
-import * as Sentry from '@sentry/angular-ivy';
 import { ClientModule } from './client/client.module';
 import { UserModule } from './user/user.module';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -72,15 +70,14 @@ import {
   DateFormatterParams,
 } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
-import {
-  NgxMatDatetimePickerModule,
-  NgxMatNativeDateModule,
-} from '@angular-material-components/datetime-picker';
 import { EventCalendarModule } from './calendar/event-calendar.module';
 import { MobileAppModule } from './mobile-app/mobile-app.module';
 import { ServiceModule } from './service/service.module';
 import { BackButtonDisableModule } from 'angular-disable-browser-back-button';
 import { PhoneBookModule } from './phone-book/phone-book.module';
+import * as Sentry from '@sentry/angular';
+import { ErrorHandler, Injectable, LOCALE_ID, NgModule } from '@angular/core';
+import { APP_CONFIG } from '../environments/environment';
 
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>
@@ -107,7 +104,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
 }
 
 @NgModule({
-  declarations: [AppComponent, AppRouterOutletDirective],
+  declarations: [AppComponent],
   imports: [
     CommonModule,
     BrowserModule,
@@ -117,7 +114,6 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
       useFactory: adapterFactory,
     }),
     FormsModule,
-    HttpClientModule,
     CoreModule,
     SharedModule,
     HomeModule,
@@ -133,8 +129,8 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
     InvoiceModule,
     EmployeeModule,
     EventCalendarModule,
-    NgxMatNativeDateModule,
-    NgxMatDatetimePickerModule,
+    //NgxMatNativeDateModule,
+    //NgxMatDatetimePickerModule,
     MobileAppModule,
     RecalculationModule,
     AppRoutingModule,
@@ -169,6 +165,8 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
       registrationStrategy: 'registerWhenStable:30000',
     }),
     MatIconModule,
+    HttpClientModule,
+    AppRouterOutletDirective,
   ],
   providers: [
     {
@@ -176,6 +174,10 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
       useValue: Sentry.createErrorHandler({
         showDialog: true,
       }),
+    },
+    {
+      provide: Sentry.TraceService,
+      deps: [Router],
     },
     {
       provide: Configuration,

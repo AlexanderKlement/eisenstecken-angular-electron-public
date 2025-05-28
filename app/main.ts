@@ -14,6 +14,7 @@ import * as url from 'url';
 import * as Sentry from '@sentry/electron';
 import { autoUpdater } from 'electron-updater';
 import { LocalConfigMain } from './LocalConfigMain';
+import { EventEmitter } from 'events';
 
 Sentry.init({
   dsn: 'https://60ac4754e4be476a82b10b0e597dfaa6@sentry.kivi.bz.it/25',
@@ -46,8 +47,8 @@ if (autoUpdater.channel == 'beta') {
 
 autoUpdater.allowDowngrade = false;
 
-const eisensteckenIconIco = appPath + '\\assets\\icons\\favicon.ico';
-const eisensteckenIconPng = appPath + '\\assets\\icons\\favicon.png';
+const eisensteckenIconIco = appPath + '\\src\\assets\\icons\\favicon.ico';
+const eisensteckenIconPng = appPath + '\\src\\assets\\icons\\favicon.png';
 let isQuiting;
 const forceClose = false;
 let tray = null;
@@ -106,38 +107,33 @@ try {
 
 function createWindow(): BrowserWindow {
   const size = screen.getPrimaryDisplay().workAreaSize;
-  // Create the browser window.
   win = new BrowserWindow({
     x: 0,
     y: 0,
     width: size.width,
     height: size.height,
-    icon: 'src/logo.ico',
+    icon: eisensteckenIconIco,
     title: 'Eibel',
     autoHideMenuBar: true,
     webPreferences: {
-      nodeIntegration: true,
+      nodeIntegration: false, // Sicherheit: kein Node.js im Renderer
+      contextIsolation: true, // Sicherheit: Kontexttrennung aktivieren
+      preload: path.join(__dirname, 'preload.js'), // Preload-Skript für IPC
       allowRunningInsecureContent: serve ? true : false,
-      contextIsolation: false, // false if you want to run e2e test with Spectron
     },
   });
   win.maximize();
   if (serve) {
     win.webContents.openDevTools();
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     require('electron-reload')(__dirname, {
       electron: require(path.join(__dirname, '/../node_modules/electron')),
     });
     win.loadURL('http://localhost:4200');
   } else {
-    // Path when running electron executable
-    let pathIndex = './index.html';
-
-    if (fs.existsSync(path.join(__dirname, '../dist/index.html'))) {
-      // Path when running electron in local folder
-      pathIndex = '../dist/index.html';
+    let pathIndex = '../dist/index.html';
+    if (!fs.existsSync(path.join(__dirname, pathIndex))) {
+      pathIndex = path.resolve(appPath, 'dist', 'index.html');
     }
-
     win.loadURL(
       url.format({
         pathname: path.join(__dirname, pathIndex),
@@ -164,7 +160,8 @@ function createWindow(): BrowserWindow {
     appShown();
   });
 
-  win.on('minimize', function (event) {
+  const emitter = win as unknown as EventEmitter;
+  emitter.on('minimize', (event: Event) => {
     event.preventDefault();
     win.hide();
   });

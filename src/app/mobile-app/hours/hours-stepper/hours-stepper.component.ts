@@ -38,8 +38,8 @@ import {
   JobSectionCreate,
   WorkDay,
   WorkDayCreate,
+  User,
 } from '../../../../client/api';
-import { User } from '@sentry/angular-ivy';
 
 function greaterThanValidator(value: number): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
