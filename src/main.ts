@@ -13,7 +13,7 @@ console.log(
 Sentry.init({
   dsn: 'https://739b39d0b92749a485e48a80da87816e@sentry.kivi.bz.it/26',
   integrations: [],
-  tracesSampleRate: 1.0, // adjust in prod
+  tracesSampleRate: 1.0, // adjust in production
 });
 
 moment.locale('de');

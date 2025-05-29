@@ -77,6 +77,7 @@ import { PhoneBookModule } from './phone-book/phone-book.module';
 import * as Sentry from '@sentry/angular';
 import { ErrorHandler, Injectable, LOCALE_ID, NgModule } from '@angular/core';
 import { APP_CONFIG } from '../environments/environment';
+import { AppComponent } from './app.component';
 
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>
@@ -103,7 +104,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
 }
 
 @NgModule({
-  declarations: [],
+  declarations: [AppComponent],
   imports: [
     CommonModule,
     BrowserModule,
@@ -203,6 +204,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
     },
     { provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
     { provide: CalendarDateFormatter, useClass: CustomDateFormatter },
-  ]
+  ],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}
