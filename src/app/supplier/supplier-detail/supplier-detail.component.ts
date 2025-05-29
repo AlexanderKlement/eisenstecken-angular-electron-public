@@ -2,7 +2,10 @@ import { Component, ComponentRef, OnInit, ViewChild } from '@angular/core';
 import { InfoDataSource } from '../../shared/components/info-builder/info-builder.datasource';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
-import { CustomButton } from '../../shared/components/toolbar/toolbar.component';
+import {
+  CustomButton,
+  ToolbarComponent,
+} from '../../shared/components/toolbar/toolbar.component';
 import { InfoBuilderComponent } from '../../shared/components/info-builder/info-builder.component';
 import { MatDialog } from '@angular/material/dialog';
 import {
@@ -25,11 +28,20 @@ import {
   OrderStatusType,
   Supplier,
 } from '../../../client/api';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { TableBuilderComponent } from '../../shared/components/table-builder/table-builder.component';
 
 @Component({
   selector: 'app-supplier-detail',
   templateUrl: './supplier-detail.component.html',
   styleUrls: ['./supplier-detail.component.scss'],
+  imports: [
+    ToolbarComponent,
+    InfoBuilderComponent,
+    MatTabGroup,
+    MatTab,
+    TableBuilderComponent,
+  ],
 })
 export class SupplierDetailComponent implements OnInit {
   @ViewChild(InfoBuilderComponent) child: InfoBuilderComponent<Supplier>;

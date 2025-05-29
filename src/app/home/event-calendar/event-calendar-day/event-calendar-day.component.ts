@@ -17,11 +17,15 @@ import {
   CompanyEventEnum,
   DefaultService,
 } from '../../../../client/api';
+import { NgClass, NgForOf } from '@angular/common';
+import { EventCalendarEventComponent } from '../event-calendar-event/event-calendar-event.component';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-event-calendar-day',
   templateUrl: './event-calendar-day.component.html',
   styleUrls: ['./event-calendar-day.component.scss'],
+  imports: [NgClass, MatIcon, NgForOf, EventCalendarEventComponent],
 })
 export class EventCalendarDayComponent implements OnInit, OnChanges, OnDestroy {
   @Input() week: number;

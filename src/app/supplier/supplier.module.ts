@@ -26,16 +26,6 @@ import { ArticleEditDialogComponent } from './article-supplier/article-edit-dial
 import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
-  declarations: [
-    SupplierComponent,
-    SupplierDetailComponent,
-    SupplierEditComponent,
-    OrderDialogComponent,
-    StockDetailComponent,
-    StockEditComponent,
-    ArticleSupplierComponent,
-    ArticleEditDialogComponent,
-  ],
   imports: [
     CommonModule,
     SupplierRoutingModule,
@@ -53,6 +43,14 @@ import { MatIconModule } from '@angular/material/icon';
     MatProgressSpinnerModule,
     MatDatepickerModule,
     MatIconModule,
+    SupplierComponent,
+    SupplierDetailComponent,
+    SupplierEditComponent,
+    OrderDialogComponent,
+    StockDetailComponent,
+    StockEditComponent,
+    ArticleSupplierComponent,
+    ArticleEditDialogComponent,
   ],
 })
 export class SupplierModule {}

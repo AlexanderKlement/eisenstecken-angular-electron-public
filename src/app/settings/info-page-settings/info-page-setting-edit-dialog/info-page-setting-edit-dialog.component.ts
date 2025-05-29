@@ -2,9 +2,16 @@ import { Component, Inject, OnInit } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
+  MatDialogActions,
+  MatDialogContent,
   MatDialogRef,
+  MatDialogTitle,
 } from '@angular/material/dialog';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  UntypedFormControl,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { AuthService } from '../../../shared/services/auth.service';
@@ -13,6 +20,9 @@ import {
   InfoPageCreate,
   InfoPageUpdate,
 } from '../../../../client/api';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
+import { NgIf } from '@angular/common';
 
 export interface InfoPageEditDialogData {
   id: number;
@@ -22,6 +32,18 @@ export interface InfoPageEditDialogData {
   selector: 'app-info-page-setting-edit-dialog',
   templateUrl: './info-page-setting-edit-dialog.component.html',
   styleUrls: ['./info-page-setting-edit-dialog.component.scss'],
+  imports: [
+    ReactiveFormsModule,
+    MatDialogContent,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatFormField,
+    MatDialogActions,
+    MatButton,
+    MatDialogTitle,
+    NgIf,
+  ],
 })
 export class InfoPageSettingEditDialogComponent implements OnInit {
   title: string;

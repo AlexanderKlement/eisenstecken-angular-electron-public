@@ -1,11 +1,42 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { Subject } from 'rxjs';
+import {
+  MatCell, MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
+  MatTable,
+} from '@angular/material/table';
+import { MatIcon } from '@angular/material/icon';
+import { EventCalendarDayComponent } from './event-calendar-day/event-calendar-day.component';
+import { MatIconButton } from '@angular/material/button';
+import { MatToolbar } from '@angular/material/toolbar';
+import { NgForOf, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-event-calendar',
   templateUrl: './event-calendar.component.html',
   styleUrls: ['./event-calendar.component.scss'],
+  imports: [
+    MatTable,
+    MatIcon,
+    MatCell,
+    EventCalendarDayComponent,
+    MatColumnDef,
+    MatHeaderCell,
+    MatIconButton,
+    MatToolbar,
+    MatHeaderCellDef,
+    MatHeaderRow,
+    MatRow,
+    NgForOf,
+    NgIf,
+    MatHeaderRowDef,
+    MatRowDef,
+    MatCellDef,
+  ],
 })
 export class EventCalendarComponent implements OnInit {
   selectedCalendarWeek: number;

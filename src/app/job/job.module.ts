@@ -27,20 +27,6 @@ import { ChangePathDialogComponent } from './job-detail/change-path-dialog/chang
 import { MoveJobDialogComponent } from './job-detail/move-job-dialog/move-job-dialog.component';
 
 @NgModule({
-  declarations: [
-    JobComponent,
-    JobDetailComponent,
-    JobEditComponent,
-    JobStatusBarComponent,
-    OfferEditComponent,
-    OutgoingInvoiceEditComponent,
-    WorkHoursComponent,
-    WorkHourEditDialogComponent,
-    OrderPrintDialogComponent,
-    ChangePathDialogComponent,
-    MoveJobDialogComponent,
-  ],
-  exports: [JobStatusBarComponent],
   imports: [
     CommonModule,
     JobRoutingModule,
@@ -57,6 +43,18 @@ import { MoveJobDialogComponent } from './job-detail/move-job-dialog/move-job-di
     MatDialogModule,
     MatTabsModule,
     MatListModule,
+    JobComponent,
+    JobDetailComponent,
+    JobEditComponent,
+    JobStatusBarComponent,
+    OfferEditComponent,
+    OutgoingInvoiceEditComponent,
+    WorkHoursComponent,
+    WorkHourEditDialogComponent,
+    OrderPrintDialogComponent,
+    ChangePathDialogComponent,
+    MoveJobDialogComponent,
   ],
+  exports: [JobStatusBarComponent],
 })
 export class JobModule {}

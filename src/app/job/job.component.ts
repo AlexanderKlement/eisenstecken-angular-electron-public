@@ -5,11 +5,29 @@ import { Observable, Subscriber } from 'rxjs';
 import * as moment from 'moment';
 import { FileService } from '../shared/services/file.service';
 import { DefaultService, Job, JobStatusType, Stock } from '../../client/api';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { TableBuilderComponent } from '../shared/components/table-builder/table-builder.component';
+import { AsyncPipe, NgForOf } from '@angular/common';
+import { MatFormField, MatLabel } from '@angular/material/input';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { ToolbarComponent } from '../shared/components/toolbar/toolbar.component';
 
 @Component({
   selector: 'app-job',
   templateUrl: './job.component.html',
   styleUrls: ['./job.component.scss'],
+  imports: [
+    MatTab,
+    TableBuilderComponent,
+    MatFormField,
+    MatOption,
+    NgForOf,
+    AsyncPipe,
+    MatSelect,
+    MatLabel,
+    MatTabGroup,
+    ToolbarComponent,
+  ],
 })
 export class JobComponent implements OnInit {
   createdJobDataSource: TableDataSource<Job>;

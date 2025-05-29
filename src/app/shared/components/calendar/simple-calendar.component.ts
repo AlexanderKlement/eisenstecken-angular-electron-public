@@ -9,11 +9,24 @@ import { first } from 'rxjs/operators';
 import { CalendarService } from './calendar.service';
 import * as moment from 'moment';
 import { AuthService } from '../../services/auth.service';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIcon } from '@angular/material/icon';
+import { CalendarDayComponent } from './calendar-day/calendar-day.component';
+import { MatIconButton } from '@angular/material/button';
+import { NgForOf, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './simple-calendar.component.html',
   styleUrls: ['./simple-calendar.component.scss'],
+  imports: [
+    MatToolbar,
+    MatIcon,
+    CalendarDayComponent,
+    MatIconButton,
+    NgForOf,
+    NgIf,
+  ],
 })
 export class SimpleCalendarComponent implements OnInit {
   @Input() calendarId: number;

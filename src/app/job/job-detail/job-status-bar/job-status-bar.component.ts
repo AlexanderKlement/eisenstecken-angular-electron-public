@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { first, map } from 'rxjs/operators';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -9,11 +9,15 @@ import {
   JobStatus,
   JobStatusType,
 } from '../../../../client/api';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatButton } from '@angular/material/button';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-job-status-bar',
   templateUrl: './job-status-bar.component.html',
   styleUrls: ['./job-status-bar.component.scss'],
+  imports: [MatToolbar, MatButton, NgForOf, AsyncPipe, NgIf],
 })
 export class JobStatusBarComponent implements OnInit {
   @Input() jobId: number;

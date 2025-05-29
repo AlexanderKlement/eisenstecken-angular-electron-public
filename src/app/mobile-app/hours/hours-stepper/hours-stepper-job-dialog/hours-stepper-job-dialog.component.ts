@@ -1,8 +1,21 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  ReactiveFormsModule,
+  UntypedFormArray,
+  UntypedFormGroup,
+} from '@angular/forms';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
 import { HoursStepperComponent, JobEnum } from '../hours-stepper.component';
 import { MatStepper, StepperOrientation } from '@angular/material/stepper';
+import { MatButton } from '@angular/material/button';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { NgForOf, NgIf } from '@angular/common';
 
 export enum HoursStepperVariantEnum {
   client,
@@ -23,6 +36,19 @@ export interface HoursStepperDialogData {
   selector: 'app-hours-stepper-job-dialog',
   templateUrl: './hours-stepper-job-dialog.component.html',
   styleUrls: ['./hours-stepper-job-dialog.component.scss'],
+  imports: [
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatButton,
+    MatDialogContent,
+    MatDialogTitle,
+    MatInput,
+    MatFormField,
+    MatDialogActions,
+    NgIf,
+    NgForOf,
+  ],
 })
 export class HoursStepperJobDialogComponent implements OnInit {
   showClients = false;

@@ -1,9 +1,17 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
 import { FileService } from '../../../shared/services/file.service';
 import { DefaultService } from '../../../../client/api';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 
 export interface ChangePathDialogData {
   id: number;
@@ -13,6 +21,16 @@ export interface ChangePathDialogData {
   selector: 'app-change-path-dialog',
   templateUrl: './change-path-dialog.component.html',
   styleUrls: ['./change-path-dialog.component.scss'],
+  imports: [
+    MatFormField,
+    ReactiveFormsModule,
+    MatDialogContent,
+    MatDialogTitle,
+    MatInput,
+    MatButton,
+    MatDialogActions,
+    MatLabel,
+  ],
 })
 export class ChangePathDialogComponent implements OnInit {
   title = 'Pfad ändern';

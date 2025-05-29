@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';
 import {
+  ReactiveFormsModule,
   UntypedFormArray,
   UntypedFormControl,
   UntypedFormGroup,
@@ -12,7 +13,10 @@ import {
 } from '@angular/forms';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { AuthService } from '../../shared/services/auth.service';
-import { CustomButton } from '../../shared/components/toolbar/toolbar.component';
+import {
+  CustomButton,
+  ToolbarComponent,
+} from '../../shared/components/toolbar/toolbar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { formatDateTransport } from '../../shared/date.util';
 import { FileService } from '../../shared/services/file.service';
@@ -27,6 +31,18 @@ import {
   DescriptiveArticleCreate,
   Lock,
 } from '../../../client/api';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { AsyncPipe, NgForOf } from '@angular/common';
+import {
+  MatDatepicker,
+  MatDatepickerInput,
+  MatDatepickerToggle,
+} from '@angular/material/datepicker';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatIcon } from '@angular/material/icon';
+import { MatOption, MatSelect } from '@angular/material/select';
 
 export interface JobMinimal {
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -38,6 +54,27 @@ export interface JobMinimal {
   selector: 'app-delivery-edit',
   templateUrl: './delivery-edit.component.html',
   styleUrls: ['./delivery-edit.component.scss'],
+  imports: [
+    MatIcon,
+    MatIconButton,
+    ReactiveFormsModule,
+    MatFormField,
+    MatFormField,
+    CdkTextareaAutosize,
+    MatInput,
+    MatFormField,
+    MatSelect,
+    MatOption,
+    NgForOf,
+    AsyncPipe,
+    MatDatepickerInput,
+    MatDatepicker,
+    MatCheckbox,
+    MatButton,
+    MatDatepickerToggle,
+    ToolbarComponent,
+    MatLabel,
+  ],
 })
 export class DeliveryEditComponent
   extends BaseEditComponent<DeliveryNote>

@@ -11,11 +11,13 @@ import {
 import { first, map } from 'rxjs/operators';
 import { forkJoin, Observable } from 'rxjs';
 import { DefaultService } from '../../../../client/api';
+import { NgForOf, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-hours-summary',
   templateUrl: './hours-summary.component.html',
   styleUrls: ['./hours-summary.component.scss'],
+  imports: [NgIf, NgForOf],
 })
 export class HoursSummaryComponent implements OnInit, OnDestroy {
   @Input() hourFormGroup: UntypedFormGroup;

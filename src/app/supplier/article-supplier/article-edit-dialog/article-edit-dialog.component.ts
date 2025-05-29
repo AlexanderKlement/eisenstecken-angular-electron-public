@@ -1,10 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
+  ReactiveFormsModule,
+  UntypedFormControl,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
@@ -15,6 +14,18 @@ import {
   Unit,
   Vat,
 } from '../../../../client/api';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
 
 export interface ArticleEditDialogData {
   id: number;
@@ -23,9 +34,20 @@ export interface ArticleEditDialogData {
 }
 
 @Component({
+  standalone: true,
   selector: 'app-article-edit-dialog',
   templateUrl: './article-edit-dialog.component.html',
   styleUrls: ['./article-edit-dialog.component.scss'],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatButtonModule,
+  ],
 })
 export class ArticleEditDialogComponent implements OnInit {
   title = 'Artikel bearbeiten';

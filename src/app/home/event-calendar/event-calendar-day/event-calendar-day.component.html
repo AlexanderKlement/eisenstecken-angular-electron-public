@@ -1,5 +1,8 @@
 <div
+  role="button"
+  tabindex="0"
   (click)="eventDayClicked()"
+  (keydown.enter)="eventDayClicked()"
   class="day flex flex-col justify-start items-stretch flex-row"
   [ngClass]="{ closed: companyClosed }">
   <div class="title flex flex-row justify-center items-center">

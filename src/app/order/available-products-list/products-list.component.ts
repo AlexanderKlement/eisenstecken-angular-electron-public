@@ -7,7 +7,7 @@ import {
   Output,
 } from '@angular/core';
 import { Observable, of, Subscription } from 'rxjs';
-import { UntypedFormControl } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
 import { debounceTime, first, startWith, switchMap } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import {
@@ -25,11 +25,34 @@ import {
   OrderedArticle,
   OrderedArticleCreate,
 } from '../../../client/api';
+import { MatButton } from '@angular/material/button';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { AsyncPipe, NgForOf, NgIf, SlicePipe } from '@angular/common';
+import { BoldSpanPipe } from '../../shared/pipes/boldSearchResult';
+import { MatList, MatListItem } from '@angular/material/list';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-products-list',
   templateUrl: './products-list.component.html',
   styleUrls: ['./products-list.component.scss'],
+  imports: [
+    MatIcon,
+    MatButton,
+    MatInput,
+    MatFormField,
+    SlicePipe,
+    BoldSpanPipe,
+    NgIf,
+    NgForOf,
+    MatList,
+    MatListItem,
+    AsyncPipe,
+    ReactiveFormsModule,
+    MatTooltip,
+    MatLabel,
+  ],
 })
 export class ProductsListComponent implements OnInit, OnDestroy {
   @Input() availableProducts$: Observable<Article[]>;

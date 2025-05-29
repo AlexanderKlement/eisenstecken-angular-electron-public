@@ -24,16 +24,6 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { ConvertRequestDialogComponent } from './order-detail/convert-request-dialog/convert-request-dialog.component';
 
 @NgModule({
-  declarations: [
-    OrderComponent,
-    ProductsListComponent,
-    ProductEditDialogComponent,
-    OrderDetailComponent,
-    OrderBundleDetailComponent,
-    OrderBundleEditComponent,
-    OrderedArticleMoveDialogComponent,
-    ConvertRequestDialogComponent,
-  ],
   imports: [
     CommonModule,
     MatGridListModule,
@@ -50,6 +40,14 @@ import { ConvertRequestDialogComponent } from './order-detail/convert-request-di
     MatIconModule,
     MatCheckboxModule,
     MatStepperModule,
+    OrderComponent,
+    ProductsListComponent,
+    ProductEditDialogComponent,
+    OrderDetailComponent,
+    OrderBundleDetailComponent,
+    OrderBundleEditComponent,
+    OrderedArticleMoveDialogComponent,
+    ConvertRequestDialogComponent,
   ],
 })
 export class OrderModule {}

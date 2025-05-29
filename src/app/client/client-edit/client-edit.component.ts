@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseEditComponent } from '../../shared/components/base-edit/base-edit.component';
 import {
+  ReactiveFormsModule,
   UntypedFormArray,
   UntypedFormControl,
   UntypedFormGroup,
@@ -20,11 +21,35 @@ import {
   Language,
   Lock,
 } from '../../../client/api';
+import { ToolbarComponent } from '../../shared/components/toolbar/toolbar.component';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { NgForOf } from '@angular/common';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { AddressFormComponent } from '../../shared/components/address-form/address-form.component';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-client-edit',
   templateUrl: './client-edit.component.html',
   styleUrls: ['./client-edit.component.scss'],
+  imports: [
+    ToolbarComponent,
+    ReactiveFormsModule,
+    MatCheckbox,
+    MatFormField,
+    MatLabel,
+    NgForOf,
+    MatInput,
+    MatFormField,
+    MatIconButton,
+    MatButton,
+    MatSelect,
+    AddressFormComponent,
+    MatOption,
+    MatIcon,
+  ],
 })
 export class ClientEditComponent
   extends BaseEditComponent<Client>

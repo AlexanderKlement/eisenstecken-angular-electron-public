@@ -33,21 +33,6 @@ import { EventCalendarEventComponent } from './event-calendar/event-calendar-eve
 import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
-  declarations: [
-    HomeComponent,
-    ChatComponent,
-    ChatMessageComponent,
-    NoteComponent,
-    SingleNoteComponent,
-    MenuTilesComponent,
-    SingleMenuTileComponent,
-    CalendarsChatFrameComponent,
-    InfoDialogComponent,
-    EventCalendarComponent,
-    EventCalendarDayComponent,
-    EventCalendarDialogComponent,
-    EventCalendarEventComponent,
-  ],
   exports: [ChatComponent],
   imports: [
     CommonModule,
@@ -68,6 +53,19 @@ import { MatTableModule } from '@angular/material/table';
     MatListModule,
     MatTableModule,
     NgOptimizedImage,
+    HomeComponent,
+    ChatComponent,
+    ChatMessageComponent,
+    NoteComponent,
+    SingleNoteComponent,
+    MenuTilesComponent,
+    SingleMenuTileComponent,
+    CalendarsChatFrameComponent,
+    InfoDialogComponent,
+    EventCalendarComponent,
+    EventCalendarDayComponent,
+    EventCalendarDialogComponent,
+    EventCalendarEventComponent,
   ],
 })
 export class HomeModule {}

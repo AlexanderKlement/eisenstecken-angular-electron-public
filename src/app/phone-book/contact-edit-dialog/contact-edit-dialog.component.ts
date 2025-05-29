@@ -2,17 +2,30 @@ import { Component, Inject, OnInit } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
+  MatDialogContent,
   MatDialogRef,
+  MatDialogTitle,
 } from '@angular/material/dialog';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  UntypedFormControl,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { first, map, startWith } from 'rxjs/operators';
-import { MatAutocomplete } from '@angular/material/autocomplete';
+import { MatAutocomplete, MatAutocompleteTrigger, MatOption } from '@angular/material/autocomplete';
 import { Observable } from 'rxjs';
 import {
   ContactCreate,
   ContactTypeEnum,
   DefaultService,
 } from '../../../client/api';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { MatButton } from '@angular/material/button';
+import {
+  MatButtonToggle,
+  MatButtonToggleGroup,
+} from '@angular/material/button-toggle';
 
 export interface ContactDialogData {
   id: number;
@@ -27,6 +40,26 @@ interface AutoCompleteOption {
   selector: 'app-contact-edit-dialog',
   templateUrl: './contact-edit-dialog.component.html',
   styleUrls: ['./contact-edit-dialog.component.scss'],
+  imports: [
+    MatFormField,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatDialogContent,
+    MatDialogTitle,
+    MatFormField,
+    MatInput,
+    MatFormField,
+    MatAutocomplete,
+    MatOption,
+    NgForOf,
+    AsyncPipe,
+    NgIf,
+    MatButton,
+    MatButtonToggleGroup,
+    MatButtonToggle,
+    MatAutocompleteTrigger,
+  ],
 })
 export class ContactEditDialogComponent implements OnInit {
   createMode = false;

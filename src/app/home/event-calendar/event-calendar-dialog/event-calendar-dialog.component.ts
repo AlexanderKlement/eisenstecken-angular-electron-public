@@ -1,13 +1,27 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
 import { AuthService } from '../../../shared/services/auth.service';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  UntypedFormControl,
+  UntypedFormGroup,
+} from '@angular/forms';
 import {
   CompanyEventCreate,
   CompanyEventEnum,
   CompanyEventUpdate,
   DefaultService,
 } from '../../../../client/api';
+import { MatListOption, MatSelectionList } from '@angular/material/list';
+import { JsonPipe, NgForOf } from '@angular/common';
+import { MatButton } from '@angular/material/button';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 
 export interface EventCalendarDialogData {
   id?: number;
@@ -31,6 +45,23 @@ export function getEventTranslation(companyEvent: CompanyEventEnum): string {
   selector: 'app-event-calendar-dialog',
   templateUrl: './event-calendar-dialog.component.html',
   styleUrls: ['./event-calendar-dialog.component.scss'],
+  imports: [
+    MatSelectionList,
+    MatListOption,
+    MatFormField,
+    JsonPipe,
+    MatDialogTitle,
+    MatDialogContent,
+    MatDialogActions,
+    MatButton,
+    MatFormField,
+    ReactiveFormsModule,
+    MatFormField,
+    MatInput,
+    MatFormField,
+    NgForOf,
+    MatLabel,
+  ],
 })
 export class EventCalendarDialogComponent implements OnInit {
   title = 'Eintrag erstellen';

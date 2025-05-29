@@ -20,14 +20,6 @@ import { IngoingDetailComponent } from './ingoing/ingoing-detail/ingoing-detail.
 import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
-  declarations: [
-    InvoiceComponent,
-    IngoingComponent,
-    OutgoingComponent,
-    OutgoingInvoiceNumberDialogComponent,
-    ImportXmlDialogComponent,
-    IngoingDetailComponent,
-  ],
   imports: [
     CommonModule,
     InvoiceRoutingModule,
@@ -41,6 +33,12 @@ import { MatSelectModule } from '@angular/material/select';
     MatListModule,
     MatIconModule,
     MatSelectModule,
+    InvoiceComponent,
+    IngoingComponent,
+    OutgoingComponent,
+    OutgoingInvoiceNumberDialogComponent,
+    ImportXmlDialogComponent,
+    IngoingDetailComponent,
   ],
 })
 export class InvoiceModule {}

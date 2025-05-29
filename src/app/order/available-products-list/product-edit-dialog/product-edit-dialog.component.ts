@@ -1,17 +1,29 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
 import { Observable, Subscription } from 'rxjs';
 import {
+  ReactiveFormsModule,
   UntypedFormControl,
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import {
+  AsyncPipe,
   CurrencyPipe,
-  formatNumber,
   getLocaleCurrencyCode,
+  NgForOf,
+  NgIf,
 } from '@angular/common';
 import { DefaultService, Unit, Vat } from '../../../../client/api';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatOption, MatSelect } from '@angular/material/select';
 
 export interface OrderDialogData {
   title: string;
@@ -40,6 +52,22 @@ export interface OrderDialogData {
   selector: 'app-product-edit-dialog',
   templateUrl: './product-edit-dialog.component.html',
   styleUrls: ['./product-edit-dialog.component.scss'],
+  imports: [
+    MatDialogTitle,
+    MatFormField,
+    ReactiveFormsModule,
+    MatInput,
+    MatFormField,
+    MatSelect,
+    MatOption,
+    MatButton,
+    NgIf,
+    MatCheckbox,
+    NgForOf,
+    AsyncPipe,
+    MatDialogContent,
+    MatLabel,
+  ],
 })
 export class ProductEditDialogComponent implements OnInit, OnDestroy {
   vatOptions$: Observable<Vat[]>;

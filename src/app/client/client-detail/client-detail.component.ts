@@ -4,18 +4,29 @@ import { InfoDataSource } from '../../shared/components/info-builder/info-builde
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
 import { InfoBuilderComponent } from '../../shared/components/info-builder/info-builder.component';
-import { CustomButton } from '../../shared/components/toolbar/toolbar.component';
+import {
+  CustomButton,
+  ToolbarComponent,
+} from '../../shared/components/toolbar/toolbar.component';
 import { AuthService } from '../../shared/services/auth.service';
 import { first } from 'rxjs/operators';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subscriber } from 'rxjs';
+import { TableBuilderComponent } from '../../shared/components/table-builder/table-builder.component';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-client-detail',
   templateUrl: './client-detail.component.html',
   styleUrls: ['./client-detail.component.scss'],
+  imports: [
+    ToolbarComponent,
+    InfoBuilderComponent,
+    TableBuilderComponent,
+    NgIf,
+  ],
 })
 export class ClientDetailComponent implements OnInit {
   @ViewChild(InfoBuilderComponent) child: InfoBuilderComponent<Client>;

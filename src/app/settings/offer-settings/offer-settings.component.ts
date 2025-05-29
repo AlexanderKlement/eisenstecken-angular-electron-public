@@ -2,11 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { BaseSettingsComponent } from '../base-settings.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DefaultService } from '../../../client/api';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-offer-settings',
   templateUrl: './offer-settings.component.html',
   styleUrls: ['./offer-settings.component.scss'],
+  imports: [
+    MatFormField,
+    MatLabel,
+    ReactiveFormsModule,
+    MatInput,
+    MatFormField,
+    MatButton,
+  ],
 })
 export class OfferSettingsComponent
   extends BaseSettingsComponent

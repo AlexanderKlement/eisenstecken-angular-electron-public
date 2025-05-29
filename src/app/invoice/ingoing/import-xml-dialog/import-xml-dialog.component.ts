@@ -1,20 +1,42 @@
 import { Component, OnInit } from '@angular/core';
 import {
+  ReactiveFormsModule,
   UntypedFormArray,
   UntypedFormControl,
   UntypedFormGroup,
 } from '@angular/forms';
 import { FileService } from '../../../shared/services/file.service';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
 import { ElectronService } from '../../../core/services';
 import { first } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DefaultService, XmlFileStr } from '../../../../client/api';
+import { MatList, MatListItem } from '@angular/material/list';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { NgForOf } from '@angular/common';
 
 @Component({
   selector: 'app-import-xml-dialog',
   templateUrl: './import-xml-dialog.component.html',
   styleUrls: ['./import-xml-dialog.component.scss'],
+  imports: [
+    ReactiveFormsModule,
+    MatList,
+    MatListItem,
+    MatIcon,
+    MatDialogActions,
+    MatButton,
+    MatIconButton,
+    MatDialogTitle,
+    MatDialogContent,
+    NgForOf,
+  ],
 })
 export class ImportXmlDialogComponent implements OnInit {
   selectXmlFormGroup: UntypedFormGroup;

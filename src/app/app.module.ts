@@ -17,7 +17,6 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HomeModule } from './home/home.module';
 //import { APP_CONFIG } from 'environments/environment';
 
-import { AppComponent } from './app.component';
 import { AuthService } from './shared/services/auth.service';
 import { AccessGuard } from './shared/services/access-guard.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -104,7 +103,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
 }
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [],
   imports: [
     CommonModule,
     BrowserModule,
@@ -204,7 +203,6 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
     },
     { provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
     { provide: CalendarDateFormatter, useClass: CustomDateFormatter },
-  ],
-  bootstrap: [AppComponent],
+  ]
 })
 export class AppModule {}

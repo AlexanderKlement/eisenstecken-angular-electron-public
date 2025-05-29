@@ -2,11 +2,23 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BaseSettingsComponent } from '../base-settings.component';
 import { DefaultService } from '../../../client/api';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-general-settings',
   templateUrl: './general-settings.component.html',
   styleUrls: ['./general-settings.component.scss'],
+  imports: [
+    MatFormField,
+    MatLabel,
+    MatFormField,
+    ReactiveFormsModule,
+    MatInput,
+    MatFormField,
+    MatButton,
+  ],
 })
 export class GeneralSettingsComponent
   extends BaseSettingsComponent

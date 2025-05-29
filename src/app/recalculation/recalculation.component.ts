@@ -2,13 +2,15 @@ import { Component, ComponentRef, OnInit } from '@angular/core';
 import { TableDataSource } from '../shared/components/table-builder/table-builder.datasource';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscriber } from 'rxjs';
-import { CustomButton } from '../shared/components/toolbar/toolbar.component';
+import { CustomButton, ToolbarComponent } from '../shared/components/toolbar/toolbar.component';
 import { DefaultService, Job, JobStatusType } from '../../client/api';
+import { TableBuilderComponent } from '../shared/components/table-builder/table-builder.component';
 
 @Component({
   selector: 'app-recalculation',
   templateUrl: './recalculation.component.html',
   styleUrls: ['./recalculation.component.scss'],
+  imports: [ToolbarComponent, TableBuilderComponent],
 })
 export class RecalculationComponent implements OnInit {
   jobDataSource: TableDataSource<Job>;

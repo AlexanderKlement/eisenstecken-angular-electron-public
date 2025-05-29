@@ -13,7 +13,6 @@ import { LoginComponent } from './login.component';
 import { LoginRoutingModule } from './login-routing.module';
 
 @NgModule({
-  declarations: [LoginComponent],
   imports: [
     CommonModule,
     LoginRoutingModule,
@@ -26,6 +25,7 @@ import { LoginRoutingModule } from './login-routing.module';
     MatToolbarModule,
     MatDatepickerModule,
     MatCheckboxModule,
+    LoginComponent,
   ],
 })
 export class LoginModule {}

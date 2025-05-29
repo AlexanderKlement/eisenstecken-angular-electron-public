@@ -42,8 +42,14 @@
       </button>
     </div>
     <script>
-      try {
-        const { ipcRenderer } = require('electron');
+      function isElectron() {
+        return (
+          typeof window.electron !== 'undefined' && window.electron.ipcRenderer
+        );
+      }
+
+      if (isElectron()) {
+        const ipcRenderer = window.electron.ipcRenderer;
         const version = document.getElementById('version');
 
         ipcRenderer.send('app_version');
@@ -73,17 +79,19 @@
           restartButton.classList.remove('hidden');
           notification.classList.remove('hidden');
         });
-      } catch (e) {
-        console.log('Not Electron:', e);
+      } else {
+        console.log('Not Electron');
       }
 
       function closeNotification() {
+        const notification = document.getElementById('notification');
         notification.classList.add('hidden');
       }
 
       function restartApp() {
-        const { ipcRenderer } = require('electron');
-        ipcRenderer.send('restart_app');
+        if (isElectron()) {
+          window.electron.ipcRenderer.send('restart_app');
+        }
       }
     </script>
   </body>

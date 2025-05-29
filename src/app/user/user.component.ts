@@ -6,8 +6,13 @@ import { CustomButton } from '../shared/components/toolbar/toolbar.component';
 import { AuthService } from '../shared/services/auth.service';
 import { first } from 'rxjs/operators';
 import { DefaultService, User } from '../../client/api';
+import { CommonModule } from '@angular/common';
+import { TableBuilderComponent } from '../shared/components/table-builder/table-builder.component';
+import { ToolbarComponent } from '../shared/components/toolbar/toolbar.component';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, ToolbarComponent, TableBuilderComponent],
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss'],

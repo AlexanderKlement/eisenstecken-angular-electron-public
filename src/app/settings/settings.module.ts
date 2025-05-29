@@ -21,18 +21,6 @@ import { InfoPageSettingEditDialogComponent } from './info-page-settings/info-pa
 import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
-  declarations: [
-    SettingsComponent,
-    OfferSettingsComponent,
-    InvoiceSettingsComponent,
-    DeliverySettingsComponent,
-    OrderSettingsComponent,
-    ReminderSettingsComponent,
-    GeneralSettingsComponent,
-    InfoSettingsComponent,
-    InfoPageSettingsComponent,
-    InfoPageSettingEditDialogComponent,
-  ],
   imports: [
     CommonModule,
     SharedModule,
@@ -44,6 +32,16 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatListModule,
     MatIconModule,
     MatDialogModule,
+    SettingsComponent,
+    OfferSettingsComponent,
+    InvoiceSettingsComponent,
+    DeliverySettingsComponent,
+    OrderSettingsComponent,
+    ReminderSettingsComponent,
+    GeneralSettingsComponent,
+    InfoSettingsComponent,
+    InfoPageSettingsComponent,
+    InfoPageSettingEditDialogComponent,
   ],
 })
 export class SettingsModule {}

@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
 import {
   AbstractControl,
+  ReactiveFormsModule,
   UntypedFormControl,
   UntypedFormGroup,
   ValidationErrors,
@@ -9,13 +10,25 @@ import {
   Validators,
 } from '@angular/forms';
 import * as moment from 'moment';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { timepickerTheme } from '../../../themes/timepicker.theme';
 import {
   CalendarEntry,
   CalendarEntryCreate,
   DefaultService,
 } from '../../../../../client/api';
+import { CommonModule } from '@angular/common';
+import {
+  MatDialogModule,
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+} from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 export const timeValidator: ValidatorFn = (
   control: AbstractControl
@@ -45,9 +58,22 @@ export interface CalendarData {
 }
 
 @Component({
+  standalone: true,
   selector: 'app-calendar-edit',
   templateUrl: './calendar-edit.component.html',
   styleUrls: ['./calendar-edit.component.scss'],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatButtonModule,
+    MatProgressSpinnerModule,
+    NgxMaterialTimepickerModule,
+  ],
 })
 export class CalendarEditComponent implements OnInit {
   submitted = false;

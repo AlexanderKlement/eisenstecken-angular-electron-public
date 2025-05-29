@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 import {
+  ReactiveFormsModule,
   UntypedFormArray,
   UntypedFormControl,
   UntypedFormGroup,
@@ -18,11 +19,27 @@ import {
   OrderedArticlePriceUpdate,
   Lock,
 } from '../../../client/api';
+import { ToolbarComponent } from '../../shared/components/toolbar/toolbar.component';
+import { NgForOf } from '@angular/common';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-order-bundle-edit',
   templateUrl: './order-bundle-edit.component.html',
   styleUrls: ['./order-bundle-edit.component.scss'],
+  imports: [
+    ToolbarComponent,
+    ReactiveFormsModule,
+    NgForOf,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatFormField,
+    MatButton,
+    MatIcon,
+  ],
 })
 export class OrderBundleEditComponent
   extends BaseEditComponent<OrderBundle>

@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
+  ReactiveFormsModule,
   UntypedFormArray,
   UntypedFormControl,
   UntypedFormGroup,
@@ -8,13 +9,17 @@ import {
 import { BaseEditComponent } from '../../shared/components/base-edit/base-edit.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable, Subscription, take } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { first, tap } from 'rxjs/operators';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { FileService } from '../../shared/services/file.service';
 import { formatDateTransport } from '../../shared/date.util';
-import { CustomButton } from '../../shared/components/toolbar/toolbar.component';
-import { CurrencyPipe, getLocaleCurrencyCode } from '@angular/common';
+import {
+  AsyncPipe,
+  CurrencyPipe,
+  getLocaleCurrencyCode,
+  NgForOf, NgIf,
+} from '@angular/common';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { NavigationService } from '../../shared/services/navigation.service';
 import {
@@ -27,11 +32,46 @@ import {
   Vat,
   Lock,
 } from '../../../client/api';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import {
+  CustomButton,
+  ToolbarComponent,
+} from '../../shared/components/toolbar/toolbar.component';
+import {
+  MatDatepicker,
+  MatDatepickerInput,
+  MatDatepickerToggle,
+} from '@angular/material/datepicker';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-offer-edit',
   templateUrl: './offer-edit.component.html',
   styleUrls: ['./offer-edit.component.scss'],
+  imports: [
+    MatFormField,
+    MatLabel,
+    MatInput,
+    ReactiveFormsModule,
+    MatButton,
+    MatIconButton,
+    MatIcon,
+    ToolbarComponent,
+    MatFormField,
+    CdkTextareaAutosize,
+    MatDatepickerToggle,
+    MatSelect,
+    MatOption,
+    NgForOf,
+    AsyncPipe,
+    MatDatepickerInput,
+    MatCheckbox,
+    MatDatepicker,
+    NgIf,
+  ],
 })
 export class OfferEditComponent
   extends BaseEditComponent<Offer>

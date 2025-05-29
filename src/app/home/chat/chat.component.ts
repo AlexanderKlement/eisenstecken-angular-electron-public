@@ -6,7 +6,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ChatService } from './chat.service';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  UntypedFormControl,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { ElectronService } from '../../core/services';
@@ -14,11 +18,28 @@ import { Router } from '@angular/router';
 import { EmailService } from '../../shared/services/email.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { ChatMessage, ChatRecipient } from '../../../client/api';
+import { ChatMessageComponent } from './chat-message/chat-message.component';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { NgForOf } from '@angular/common';
+import { MatButton } from '@angular/material/button';
+import { MatOption, MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
+  imports: [
+    ChatMessageComponent,
+    ReactiveFormsModule,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    NgForOf,
+    MatButton,
+    MatFormField,
+  ],
 })
 export class ChatComponent implements OnInit, OnDestroy {
   @ViewChild('chatMsgBox') chatMsgBox: ElementRef;

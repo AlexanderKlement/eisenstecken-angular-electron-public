@@ -53,10 +53,9 @@
               <div
                 class="desktop-min-width flex flex-col justify-around items-start flex-row">
                 <div class="desktop-min-width">
-                  <p (click)="jobClicked(i, j)" class="desktop-min-width">
-                    <strong class="desktop-min-width"
-                      >{{ getNameFromJob(i, j) }}
-                    </strong>
+                  <p role="button" tabindex="0" (click)="jobClicked(i, j)" (keydown.enter)="jobClicked(i, j)"
+                     class="desktop-min-width">
+                    <strong class="desktop-min-width">{{ getNameFromJob(i, j) }}</strong>
                   </p>
                 </div>
               </div>

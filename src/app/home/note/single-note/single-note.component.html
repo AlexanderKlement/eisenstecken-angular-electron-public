@@ -1,8 +1,14 @@
 <div class="single-note" *ngIf="noteVisible">
-  <span (click)="deleteNoteClicked()" class="material-icons close">delete</span>
+  <button
+    type="button"
+    (click)="deleteNoteClicked()"
+    class="material-icons close"
+    aria-label="Delete note">
+    delete
+  </button>
   <div class="text">
     <textarea [formControl]="singleNoteTextArea" class="note-text">{{
-      note.text
-    }}</textarea>
+        note.text
+      }}</textarea>
   </div>
 </div>

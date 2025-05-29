@@ -1,16 +1,35 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  UntypedFormControl,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { EmailService } from '../shared/services/email.service';
 import { FileService } from '../shared/services/file.service';
 import { TrayService } from '../shared/services/tray.service';
 import { Router } from '@angular/router';
-import { ipcRenderer } from 'electron';
 import { ElectronService } from '../core/services';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
+import { ToolbarComponent } from '../shared/components/toolbar/toolbar.component';
 
 @Component({
   selector: 'app-debug',
   templateUrl: './debug.component.html',
   styleUrls: ['./debug.component.scss'],
+  imports: [
+    MatTab,
+    MatFormField,
+    ReactiveFormsModule,
+    MatInput,
+    MatButton,
+    MatFormField,
+    MatTabGroup,
+    ToolbarComponent,
+    MatTab,
+    MatLabel,
+  ],
 })
 export class DebugComponent implements OnInit {
   emailFormGroup: UntypedFormGroup;

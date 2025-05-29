@@ -1,7 +1,16 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  UntypedFormControl,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { Observable } from 'rxjs';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
 import {
   DefaultService,
@@ -9,6 +18,10 @@ import {
   TemplatePaintUpdate,
   Unit,
 } from '../../../../client/api';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { MatButton } from '@angular/material/button';
+import { MatOption, MatSelect } from '@angular/material/select';
 
 export interface PaintTemplateEditDialogData {
   id: number;
@@ -18,6 +31,22 @@ export interface PaintTemplateEditDialogData {
   selector: 'app-paint-template-edit-dialog',
   templateUrl: './paint-template-edit-dialog.component.html',
   styleUrls: ['./paint-template-edit-dialog.component.scss'],
+  imports: [
+    MatFormField,
+    MatDialogContent,
+    MatDialogTitle,
+    MatFormField,
+    MatInput,
+    MatFormField,
+    MatSelect,
+    ReactiveFormsModule,
+    MatOption,
+    NgForOf,
+    AsyncPipe,
+    MatButton,
+    NgIf,
+    MatLabel,
+  ],
 })
 export class PaintTemplateEditDialogComponent implements OnInit {
   title = 'Oberflächen-Vorlage bearbeiten';

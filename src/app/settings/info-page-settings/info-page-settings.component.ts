@@ -6,11 +6,15 @@ import { CustomButton } from '../../shared/components/toolbar/toolbar.component'
 import { MatDialog } from '@angular/material/dialog';
 import { InfoPageSettingEditDialogComponent } from './info-page-setting-edit-dialog/info-page-setting-edit-dialog.component';
 import { DefaultService, InfoPage } from '../../../client/api';
+import { MatButton } from '@angular/material/button';
+import { TableBuilderComponent } from '../../shared/components/table-builder/table-builder.component';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-info-page-settings',
   templateUrl: './info-page-settings.component.html',
   styleUrls: ['./info-page-settings.component.scss'],
+  imports: [MatButton, TableBuilderComponent, NgIf],
 })
 export class InfoPageSettingsComponent implements OnInit {
   infoPageDataSource: TableDataSource<InfoPage>;

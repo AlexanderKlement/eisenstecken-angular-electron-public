@@ -10,11 +10,23 @@ import {
 } from '../calendar-edit/calendar-edit.component';
 import { MatDialog } from '@angular/material/dialog';
 import { CalendarEntry, DefaultService } from '../../../../../client/api';
+import { LoadingComponent } from '../../loading/loading.component';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-calendar-day',
   templateUrl: './calendar-day.component.html',
   styleUrls: ['./calendar-day.component.scss'],
+  imports: [
+    LoadingComponent,
+    MatCard,
+    NgClass,
+    MatCardContent,
+    NgForOf,
+    NgIf,
+    AsyncPipe,
+  ],
 })
 export class CalendarDayComponent implements OnInit, OnDestroy {
   @Input() day: number;
@@ -50,7 +62,9 @@ export class CalendarDayComponent implements OnInit, OnDestroy {
     this.setTitle();
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    console.log('CalendarDayComponent destroyed');
+  }
 
   onCalendarEntryClicked(id: number): void {
     const data: CalendarData = {

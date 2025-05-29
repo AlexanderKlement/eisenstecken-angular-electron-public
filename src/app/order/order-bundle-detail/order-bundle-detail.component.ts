@@ -2,7 +2,7 @@ import { Component, ComponentRef, OnInit } from '@angular/core';
 import { InfoDataSource } from '../../shared/components/info-builder/info-builder.datasource';
 import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CustomButton } from '../../shared/components/toolbar/toolbar.component';
+import { CustomButton, ToolbarComponent } from '../../shared/components/toolbar/toolbar.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { first } from 'rxjs/operators';
@@ -21,11 +21,14 @@ import {
   OrderBundle,
   Supplier,
 } from '../../../client/api';
+import { InfoBuilderComponent } from '../../shared/components/info-builder/info-builder.component';
+import { TableBuilderComponent } from '../../shared/components/table-builder/table-builder.component';
 
 @Component({
   selector: 'app-order-bundle-detail',
   templateUrl: './order-bundle-detail.component.html',
   styleUrls: ['./order-bundle-detail.component.scss'],
+  imports: [ToolbarComponent, InfoBuilderComponent, TableBuilderComponent],
 })
 export class OrderBundleDetailComponent implements OnInit {
   orderDataSource: TableDataSource<Order>;

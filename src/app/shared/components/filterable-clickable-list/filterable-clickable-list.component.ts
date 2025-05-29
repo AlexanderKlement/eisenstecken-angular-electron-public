@@ -11,14 +11,33 @@ import {
   ListItem,
   SupportedListElements,
 } from './filterable-clickable-list.types';
-import { UntypedFormControl } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
 import { debounceTime, first, startWith, switchMap } from 'rxjs/operators';
 import { DefaultService } from '../../../../client/api';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { AsyncPipe, NgForOf } from '@angular/common';
 
 @Component({
   selector: 'app-filterable-clickable-list',
+  standalone: true,
   templateUrl: './filterable-clickable-list.component.html',
   styleUrls: ['./filterable-clickable-list.component.scss'],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatListModule,
+    MatIconModule,
+    MatButtonModule,
+    NgForOf,
+    AsyncPipe,
+  ],
 })
 export class FilterableClickableListComponent implements OnInit, OnDestroy {
   @Input() listElements$: Observable<ListItem[]>;

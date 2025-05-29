@@ -4,17 +4,34 @@ import { LockService } from '../../shared/services/lock.service';
 import { first } from 'rxjs/operators';
 import { AuthService } from '../../shared/services/auth.service';
 import * as moment from 'moment';
-import { TableButton } from '../../shared/components/table-builder/table-builder.component';
+import {
+  TableBuilderComponent,
+  TableButton,
+} from '../../shared/components/table-builder/table-builder.component';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { formatCurrency } from '@angular/common';
+import { AsyncPipe, formatCurrency, NgForOf } from '@angular/common';
 import { DefaultService, OutgoingInvoice } from '../../../client/api';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { MatFormField, MatLabel } from '@angular/material/input';
+import { MatOption, MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-outgoing',
   templateUrl: './outgoing.component.html',
   styleUrls: ['./outgoing.component.scss'],
+  imports: [
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatTabGroup,
+    MatTab,
+    TableBuilderComponent,
+    MatOption,
+    NgForOf,
+    AsyncPipe,
+  ],
 })
 export class OutgoingComponent implements OnInit {
   @Input() $refresh: Observable<void>;

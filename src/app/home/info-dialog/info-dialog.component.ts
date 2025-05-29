@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
-import { MatDialogRef } from '@angular/material/dialog';
+import {
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
 import { AuthService } from '../../shared/services/auth.service';
 import { first } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -12,6 +17,11 @@ import {
   User,
   Credential,
 } from '../../../client/api';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { TableBuilderComponent } from '../../shared/components/table-builder/table-builder.component';
+import { MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 
 interface Update {
   versionName: string;
@@ -22,6 +32,19 @@ interface Update {
   selector: 'app-info-dialog',
   templateUrl: './info-dialog.component.html',
   styleUrls: ['./info-dialog.component.scss'],
+  imports: [
+    MatTab,
+    TableBuilderComponent,
+    MatTabGroup,
+    MatDialogTitle,
+    MatDialogContent,
+    MatInput,
+    MatDialogActions,
+    MatButton,
+    NgForOf,
+    AsyncPipe,
+    NgIf,
+  ],
 })
 export class InfoDialogComponent implements OnInit {
   userDataSource: TableDataSource<User>;

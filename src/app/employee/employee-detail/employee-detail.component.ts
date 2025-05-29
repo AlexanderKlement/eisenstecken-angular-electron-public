@@ -2,9 +2,17 @@ import { Component, ComponentRef, OnInit } from '@angular/core';
 import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
-import { CustomButton } from '../../shared/components/toolbar/toolbar.component';
+import {
+  CustomButton,
+  ToolbarComponent,
+} from '../../shared/components/toolbar/toolbar.component';
 import { Observable, Subject, Subscriber } from 'rxjs';
-import { MatSelectChange } from '@angular/material/select';
+import {
+  MatFormField,
+  MatOption,
+  MatSelect,
+  MatSelectChange,
+} from '@angular/material/select';
 import * as moment from 'moment';
 import { ServiceDialogComponent } from '../service/service-dialog/service-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -21,11 +29,33 @@ import {
   Service,
   WorkDay,
 } from '../../../client/api';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { AsyncPipe, DatePipe, NgForOf, NgIf } from '@angular/common';
+import { HoursStepperComponent } from '../../mobile-app/hours/hours-stepper/hours-stepper.component';
+import { TableBuilderComponent } from '../../shared/components/table-builder/table-builder.component';
+import { MatButton } from '@angular/material/button';
+import { MatLabel } from '@angular/material/input';
 
 @Component({
   selector: 'app-employee-detail',
   templateUrl: './employee-detail.component.html',
   styleUrls: ['./employee-detail.component.scss'],
+  imports: [
+    ToolbarComponent,
+    MatTabGroup,
+    MatTab,
+    MatFormField,
+    MatSelect,
+    MatOption,
+    DatePipe,
+    HoursStepperComponent,
+    TableBuilderComponent,
+    MatButton,
+    NgIf,
+    NgForOf,
+    AsyncPipe,
+    MatLabel,
+  ],
 })
 export class EmployeeDetailComponent implements OnInit {
   feeDataSource: TableDataSource<Fee>;

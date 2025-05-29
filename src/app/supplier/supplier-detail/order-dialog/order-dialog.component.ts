@@ -1,10 +1,29 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatSelectionList } from '@angular/material/list';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import { MatListOption, MatSelectionList } from '@angular/material/list';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
-import { UntypedFormControl } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
 import { Order } from '../../../../client/api';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { MatButton } from '@angular/material/button';
+import {
+  MatFormField,
+  MatInput,
+  MatLabel,
+  MatSuffix,
+} from '@angular/material/input';
+import {
+  MatDatepicker,
+  MatDatepickerInput,
+  MatDatepickerToggle,
+} from '@angular/material/datepicker';
 
 export interface OrderDialogData {
   name: Observable<string>;
@@ -20,6 +39,26 @@ export interface OrderDateReturnData {
   selector: 'app-order-dialog',
   templateUrl: './order-dialog.component.html',
   styleUrls: ['./order-dialog.component.scss'],
+  imports: [
+    MatFormField,
+    MatLabel,
+    AsyncPipe,
+    MatButton,
+    MatSuffix,
+    MatInput,
+    MatFormField,
+    MatDialogContent,
+    MatDatepicker,
+    MatDialogActions,
+    MatDatepickerToggle,
+    MatListOption,
+    MatSelectionList,
+    ReactiveFormsModule,
+    MatDatepickerInput,
+    MatDialogTitle,
+    NgForOf,
+    NgIf,
+  ],
 })
 export class OrderDialogComponent implements OnInit {
   @ViewChild('orders') ordersSelected: MatSelectionList;

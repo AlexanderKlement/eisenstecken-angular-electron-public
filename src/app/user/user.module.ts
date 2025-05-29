@@ -16,7 +16,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPseudoCheckboxModule } from '@angular/material/core';
 
 @NgModule({
-  declarations: [UserComponent, UserEditComponent],
   imports: [
     CommonModule,
     UserRoutingModule,
@@ -30,6 +29,8 @@ import { MatPseudoCheckboxModule } from '@angular/material/core';
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatPseudoCheckboxModule,
+    UserComponent,
+    UserEditComponent,
   ],
 })
 export class UserModule {}

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {
+  ReactiveFormsModule,
   UntypedFormArray,
   UntypedFormControl,
   UntypedFormGroup,
@@ -7,7 +8,6 @@ import {
 
 import { first } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ThemePalette } from '@angular/material/core';
 import {
   DefaultService,
   Credential,
@@ -17,11 +17,31 @@ import {
   TechnicalData,
   TechnicalDataUpdate,
 } from '../../../client/api';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { MatButton, MatFabButton } from '@angular/material/button';
+import { NgForOf } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
+  standalone: true,
   selector: 'app-info-settings',
   templateUrl: './info-settings.component.html',
   styleUrls: ['./info-settings.component.scss'],
+  imports: [
+    MatFormField,
+    MatLabel,
+    MatFormField,
+    ReactiveFormsModule,
+    MatInput,
+    MatFormField,
+    MatTab,
+    MatFabButton,
+    MatButton,
+    NgForOf,
+    MatTabGroup,
+    MatIconModule,
+  ],
 })
 export class InfoSettingsComponent implements OnInit {
   credentialGroup: UntypedFormGroup;

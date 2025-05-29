@@ -2,19 +2,37 @@ import { Component, Input, OnInit } from '@angular/core';
 import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
 import { LockService } from '../../shared/services/lock.service';
 import * as moment from 'moment';
-import { TableButton } from '../../shared/components/table-builder/table-builder.component';
+import {
+  TableBuilderComponent,
+  TableButton,
+} from '../../shared/components/table-builder/table-builder.component';
 import { first } from 'rxjs/operators';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
-import { formatCurrency } from '@angular/common';
+import { AsyncPipe, formatCurrency, NgForOf } from '@angular/common';
 import { DefaultService, IngoingInvoice } from '../../../client/api';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { MatFormField, MatLabel } from '@angular/material/input';
+import { MatOption, MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-ingoing',
   templateUrl: './ingoing.component.html',
   styleUrls: ['./ingoing.component.scss'],
+  imports: [
+    MatFormField,
+    MatLabel,
+    MatTabGroup,
+    MatTab,
+    TableBuilderComponent,
+    MatFormField,
+    MatSelect,
+    MatOption,
+    NgForOf,
+    AsyncPipe,
+  ],
 })
 export class IngoingComponent implements OnInit {
   @Input() updateTables$: Observable<void>;

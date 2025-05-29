@@ -5,12 +5,13 @@
     </div>
     <span class="statusbar-spacer"></span>
     <div>
-      <a
+      <button
         *ngFor="let status of jobStatusList | async"
+        type="button"
         (click)="onStatusClicked(status)"
-        mat-button=""
-        >{{ status.text.translation }}</a
-      >
+        mat-button>
+        {{ status.text.translation }}
+      </button>
     </div>
   </mat-toolbar>
 </div>

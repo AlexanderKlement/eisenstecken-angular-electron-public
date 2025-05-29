@@ -66,8 +66,8 @@
     </mat-step>
     <mat-step [stepControl]="jobFormGroup">
       <ng-template matStepLabel="" class="step-header"
-        >Stunden zuteilen</ng-template
-      >
+        >Stunden zuteilen
+      </ng-template>
       <form *ngIf="jobsLoaded" [formGroup]="jobFormGroup">
         <div class="flex flex-col justify-between items-start flex-row">
           <p>
@@ -102,7 +102,11 @@
                 <div
                   *ngIf="showJob(i, j)"
                   class="flex flex-col justify-around items-start flex-row">
-                  <div (click)="openDialogClicked(0, i, j)">
+                  <div
+                    role="button"
+                    tabindex="0"
+                    (click)="openDialogClicked(0, i, j)"
+                    (keydown.enter)="openDialogClicked(0, i, j)">
                     <p>
                       <strong>{{ getNameFromJob(i, j) }}</strong>
                     </p>
@@ -115,11 +119,21 @@
               </div>
             </div>
           </div>
-          <div *ngIf="showMaintenance()" (click)="openDialogClicked(1)">
+          <div
+            *ngIf="showMaintenance()"
+            role="button"
+            tabindex="0"
+            (click)="openDialogClicked(1)"
+            (keydown.enter)="openDialogClicked(1)">
             <p><strong>Instandhaltung</strong></p>
             <p>{{ getMinutesFromMaintenance() }}</p>
           </div>
-          <div *ngIf="showAdditionalMinutes()" (click)="openDialogClicked(2)">
+          <div
+            *ngIf="showAdditionalMinutes()"
+            role="button"
+            tabindex="0"
+            (click)="openDialogClicked(2)"
+            (keydown.enter)="openDialogClicked(2)">
             <p>
               <strong>{{ getNameFromAdditionalJob() }}</strong>
             </p>

@@ -1,8 +1,16 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MatSelectionList } from '@angular/material/list';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatListOption, MatSelectionList } from '@angular/material/list';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { Order } from '../../../../client/api';
+import { MatButton } from '@angular/material/button';
+import { AsyncPipe, NgForOf } from '@angular/common';
 
 export interface OrderDialogData {
   name: Observable<string>;
@@ -17,6 +25,16 @@ export interface OrderReturnData {
   selector: 'app-order-print-dialog',
   templateUrl: './order-print-dialog.component.html',
   styleUrls: ['./order-print-dialog.component.scss'],
+  imports: [
+    MatSelectionList,
+    MatDialogTitle,
+    MatDialogContent,
+    MatListOption,
+    MatDialogActions,
+    MatButton,
+    AsyncPipe,
+    NgForOf,
+  ],
 })
 export class OrderPrintDialogComponent implements OnInit {
   @ViewChild('orders') ordersSelected: MatSelectionList;
@@ -27,7 +45,9 @@ export class OrderPrintDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: OrderDialogData
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log('Order print dialog initialized');
+  }
 
   onCancelClick(): void {
     this.dialogRef.close();

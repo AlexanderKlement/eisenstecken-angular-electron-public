@@ -6,7 +6,11 @@ import { AuthService } from '../../services/auth.service';
 import { ListenerService } from '../../services/listener.service';
 import { AbstractControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
 
 export interface CustomButton {
   name: string;
@@ -14,6 +18,14 @@ export interface CustomButton {
 }
 
 @Component({
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    RouterModule,
+  ],
   selector: 'app-toolbar',
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.scss'],

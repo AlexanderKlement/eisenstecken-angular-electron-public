@@ -1,11 +1,21 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { JobEnum } from '../hours-stepper.component';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import {
+  ReactiveFormsModule,
   UntypedFormArray,
   UntypedFormControl,
   UntypedFormGroup,
 } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { NgForOf } from '@angular/common';
 
 export interface HoursStepperDriveDialogData {
   jobEnums: JobEnum[];
@@ -18,6 +28,20 @@ export interface HoursStepperDriveDialogData {
   selector: 'app-hours-stepper-drive-dialog',
   templateUrl: './hours-stepper-drive-dialog.component.html',
   styleUrls: ['./hours-stepper-drive-dialog.component.scss'],
+  imports: [
+    MatDialogContent,
+    MatDialogTitle,
+    MatFormField,
+    MatLabel,
+    ReactiveFormsModule,
+    MatFormField,
+    MatDialogActions,
+    MatButton,
+    MatFormField,
+    MatInput,
+    MatFormField,
+    NgForOf,
+  ],
 })
 export class HoursStepperDriveDialogComponent implements OnInit {
   confirmDisabled: true;

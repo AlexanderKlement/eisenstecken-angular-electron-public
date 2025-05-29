@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { CustomButton } from '../../../shared/components/toolbar/toolbar.component';
 import {
   AbstractControl,
+  ReactiveFormsModule,
   UntypedFormArray,
   UntypedFormControl,
   UntypedFormGroup,
@@ -13,7 +14,14 @@ import { Observable, Subject, Subscriber } from 'rxjs';
 import { AuthService } from '../../../shared/services/auth.service';
 import { first } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { MatStepper, StepperOrientation } from '@angular/material/stepper';
+import {
+  MatStep,
+  MatStepLabel,
+  MatStepper,
+  MatStepperNext,
+  MatStepperPrevious,
+  StepperOrientation,
+} from '@angular/material/stepper';
 import { MatDialog } from '@angular/material/dialog';
 import {
   HoursStepperJobDialogComponent,
@@ -40,6 +48,17 @@ import {
   WorkDayCreate,
   User,
 } from '../../../../client/api';
+import { MatButton } from '@angular/material/button';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { HoursSummaryComponent } from '../hours-summary/hours-summary.component';
+import {
+  MatActionList,
+  MatListOption,
+  MatSelectionList,
+} from '@angular/material/list';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { MatIcon } from '@angular/material/icon';
 
 function greaterThanValidator(value: number): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -59,6 +78,32 @@ export enum JobEnum {
   selector: 'app-hours-stepper',
   templateUrl: './hours-stepper.component.html',
   styleUrls: ['./hours-stepper.component.scss'],
+  imports: [
+    MatFormField,
+    MatLabel,
+    ReactiveFormsModule,
+    MatButton,
+    MatStepLabel,
+    MatStepperNext,
+    MatStepper,
+    MatStep,
+    MatFormField,
+    MatFormField,
+    MatInput,
+    MatFormField,
+    NgClass,
+    MatStepperPrevious,
+    HoursSummaryComponent,
+    MatSelectionList,
+    MatListOption,
+    NgForOf,
+    AsyncPipe,
+    NgIf,
+    MatActionList,
+    MatSelect,
+    MatOption,
+    MatIcon,
+  ],
 })
 export class HoursStepperComponent implements OnInit {
   @Input() workDay$: Subject<WorkDay>;

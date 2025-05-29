@@ -5,11 +5,13 @@ import * as moment from 'moment';
 import { minutesToDisplayableString } from '../shared/date.util';
 import { Router } from '@angular/router';
 import { DefaultService, ServiceSum } from '../../client/api';
+import { TableBuilderComponent } from '../shared/components/table-builder/table-builder.component';
 
 @Component({
   selector: 'app-service',
   templateUrl: './service.component.html',
   styleUrls: ['./service.component.scss'],
+  imports: [TableBuilderComponent],
 })
 export class ServiceComponent implements OnInit {
   serviceDataSource: TableDataSource<ServiceSum>;

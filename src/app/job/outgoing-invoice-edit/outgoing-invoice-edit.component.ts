@@ -4,19 +4,29 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import {
+  ReactiveFormsModule,
   UntypedFormArray,
   UntypedFormControl,
   UntypedFormGroup,
 } from '@angular/forms';
 import { first, tap } from 'rxjs/operators';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
-import { CustomButton } from '../../shared/components/toolbar/toolbar.component';
+import {
+  CustomButton,
+  ToolbarComponent,
+} from '../../shared/components/toolbar/toolbar.component';
 import { AuthService } from '../../shared/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as moment from 'moment';
 import { formatDateTransport } from '../../shared/date.util';
 import { FileService } from '../../shared/services/file.service';
-import { CurrencyPipe, getLocaleCurrencyCode } from '@angular/common';
+import {
+  AsyncPipe,
+  CurrencyPipe,
+  getLocaleCurrencyCode,
+  NgForOf,
+  NgIf,
+} from '@angular/common';
 import { NavigationService } from '../../shared/services/navigation.service';
 import {
   Client,
@@ -29,11 +39,43 @@ import {
   Vat,
   Lock,
 } from '../../../client/api';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import {
+  MatDatepicker,
+  MatDatepickerInput,
+  MatDatepickerToggle,
+} from '@angular/material/datepicker';
+import { AddressFormComponent } from '../../shared/components/address-form/address-form.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-outgoing-invoice-edit',
   templateUrl: './outgoing-invoice-edit.component.html',
   styleUrls: ['./outgoing-invoice-edit.component.scss'],
+  imports: [
+    ToolbarComponent,
+    ReactiveFormsModule,
+    MatIcon,
+    NgForOf,
+    MatIconButton,
+    MatFormField,
+    MatInput,
+    MatFormField,
+    AsyncPipe,
+    MatDatepicker,
+    MatSelect,
+    MatOption,
+    AddressFormComponent,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatCheckbox,
+    MatButton,
+    NgIf,
+    MatLabel,
+  ],
 })
 export class OutgoingInvoiceEditComponent
   extends BaseEditComponent<OutgoingInvoice>

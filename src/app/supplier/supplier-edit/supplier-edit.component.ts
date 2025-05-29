@@ -3,6 +3,7 @@ import { BaseEditComponent } from '../../shared/components/base-edit/base-edit.c
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import {
+  ReactiveFormsModule,
   UntypedFormArray,
   UntypedFormControl,
   UntypedFormGroup,
@@ -19,11 +20,33 @@ import {
   SupplierCreate,
   Contact,
 } from '../../../client/api';
+import { ToolbarComponent } from '../../shared/components/toolbar/toolbar.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
+import { AddressFormComponent } from '../../shared/components/address-form/address-form.component';
 
 @Component({
+  standalone: true,
   selector: 'app-supplier-edit',
   templateUrl: './supplier-edit.component.html',
   styleUrls: ['./supplier-edit.component.scss'],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ToolbarComponent,
+    AddressFormComponent,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatButtonModule,
+    MatIconModule,
+  ],
 })
 export class SupplierEditComponent
   extends BaseEditComponent<Supplier>

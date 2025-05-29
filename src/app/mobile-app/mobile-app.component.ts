@@ -1,11 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { CustomButton } from '../shared/components/toolbar/toolbar.component';
+import { CustomButton, ToolbarComponent } from '../shared/components/toolbar/toolbar.component';
 import { Router } from '@angular/router';
+import { MatListItem, MatNavList } from '@angular/material/list';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-mobile-app',
   templateUrl: './mobile-app.component.html',
   styleUrls: ['./mobile-app.component.scss'],
+  imports: [
+    ToolbarComponent,
+    MatNavList,
+    MatListItem,
+    MatIcon,
+    MatIconButton,
+  ],
 })
 export class MobileAppComponent implements OnInit {
   buttons: CustomButton[] = [];

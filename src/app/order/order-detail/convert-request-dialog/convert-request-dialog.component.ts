@@ -1,9 +1,17 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatSelectionList } from '@angular/material/list';
-import { combineLatest, Observable } from 'rxjs';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import { MatListOption, MatSelectionList } from '@angular/material/list';
+import { Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';
 import { DefaultService, OrderedArticle } from '../../../../client/api';
+import { AsyncPipe, NgForOf } from '@angular/common';
+import { MatButton } from '@angular/material/button';
 
 export interface ConvertOrderedArticleReturnDialogData {
   orderId: number;
@@ -17,6 +25,16 @@ export interface OrderedArticleReturnDialogData {
   selector: 'app-convert-request-dialog',
   templateUrl: './convert-request-dialog.component.html',
   styleUrls: ['./convert-request-dialog.component.scss'],
+  imports: [
+    MatSelectionList,
+    MatListOption,
+    NgForOf,
+    MatDialogActions,
+    MatButton,
+    MatDialogTitle,
+    MatDialogContent,
+    AsyncPipe,
+  ],
 })
 export class ConvertRequestDialogComponent implements OnInit {
   @ViewChild('articles') articlesSelected: MatSelectionList;

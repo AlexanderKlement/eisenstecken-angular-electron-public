@@ -1,11 +1,16 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { DefaultService, Note, NoteCreate } from '../../../client/api';
+import { SingleNoteComponent } from './single-note/single-note.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatFabButton } from '@angular/material/button';
+import { NgForOf, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-note',
   templateUrl: './note.component.html',
   styleUrls: ['./note.component.scss'],
+  imports: [SingleNoteComponent, MatIcon, MatFabButton, NgIf, NgForOf],
 })
 export class NoteComponent implements OnInit {
   @ViewChild('noteBox') noteBox: ElementRef;

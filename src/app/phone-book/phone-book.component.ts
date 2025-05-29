@@ -8,16 +8,22 @@ import {
   ContactDialogData,
   ContactEditDialogComponent,
 } from './contact-edit-dialog/contact-edit-dialog.component';
-import { TableButton } from '../shared/components/table-builder/table-builder.component';
+import {
+  TableBuilderComponent,
+  TableButton,
+} from '../shared/components/table-builder/table-builder.component';
 import { PhoneService } from '../shared/services/phone.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Contact, ContactTypeEnum, DefaultService } from '../../client/api';
 import * as Sentry from '@sentry/angular';
+import { ToolbarComponent } from '../shared/components/toolbar/toolbar.component';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-phone-book',
   templateUrl: './phone-book.component.html',
   styleUrls: ['./phone-book.component.scss'],
+  imports: [ToolbarComponent, MatTabGroup, MatTab, TableBuilderComponent],
 })
 export class PhoneBookComponent implements OnInit {
   allContactsDataSource: TableDataSource<Contact>;

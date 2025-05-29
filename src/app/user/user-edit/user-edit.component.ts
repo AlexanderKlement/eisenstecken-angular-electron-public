@@ -20,6 +20,21 @@ import {
   UserUpdate,
   UserPassword,
 } from '../../../client/api';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatListModule } from '@angular/material/list';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { RouterModule } from '@angular/router';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatPseudoCheckboxModule } from '@angular/material/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonModule } from '@angular/material/button';
+import { ToolbarComponent } from '../../shared/components/toolbar/toolbar.component';
+import { RightFilterPipe } from '../../shared/pipes/right';
 
 const titles = {
   users: 'Benutzer',
@@ -52,6 +67,24 @@ const titles = {
 };
 
 @Component({
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatListModule,
+    MatSnackBarModule,
+    RouterModule,
+    MatTabsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatCheckboxModule,
+    MatPseudoCheckboxModule,
+    MatProgressSpinnerModule,
+    MatButtonModule,
+    ToolbarComponent,
+    RightFilterPipe
+  ],
   selector: 'app-user-edit',
   templateUrl: './user-edit.component.html',
   styleUrls: ['./user-edit.component.scss'],

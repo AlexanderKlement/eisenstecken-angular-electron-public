@@ -1,5 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  UntypedFormControl,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { BaseEditComponent } from '../../shared/components/base-edit/base-edit.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,11 +17,22 @@ import {
   StockCreate,
   StockUpdate,
 } from '../../../client/api';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
+import { ToolbarComponent } from '../../shared/components/toolbar/toolbar.component';
 
 @Component({
   selector: 'app-stock-edit',
   templateUrl: './stock-edit.component.html',
   styleUrls: ['./stock-edit.component.scss'],
+  imports: [
+    MatLabel,
+    MatFormField,
+    ReactiveFormsModule,
+    MatInput,
+    MatButton,
+    ToolbarComponent,
+  ],
 })
 export class StockEditComponent
   extends BaseEditComponent<Stock>

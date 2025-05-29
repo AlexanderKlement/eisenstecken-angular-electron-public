@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatSelectionList } from '@angular/material/list';
+import { MAT_DIALOG_DATA, MatDialogActions, MatDialogRef } from '@angular/material/dialog';
+import { MatList, MatListItem, MatListOption, MatSelectionList } from '@angular/material/list';
 import { combineLatest, Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';
 import {
@@ -10,6 +10,9 @@ import {
   OrderedArticle,
   Stock,
 } from '../../../../client/api';
+import { MatButton } from '@angular/material/button';
+import { MatStep, MatStepLabel, MatStepper, MatStepperNext, MatStepperPrevious } from '@angular/material/stepper';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 
 export interface OrderedArticleMoveDialogData {
   orderId: number;
@@ -28,6 +31,22 @@ interface SimpleOrderable {
   selector: 'app-ordered-article-move-dialog',
   templateUrl: './ordered-article-move-dialog.component.html',
   styleUrls: ['./ordered-article-move-dialog.component.scss'],
+  imports: [
+    MatDialogActions,
+    MatButton,
+    MatStepperPrevious,
+    MatList,
+    MatListItem,
+    MatStep,
+    MatSelectionList,
+    MatListOption,
+    NgForOf,
+    AsyncPipe,
+    MatStepLabel,
+    MatStepperNext,
+    NgIf,
+    MatStepper,
+  ],
 })
 export class OrderedArticleMoveDialogComponent implements OnInit {
   @ViewChild('articles') articlesSelected: MatSelectionList;

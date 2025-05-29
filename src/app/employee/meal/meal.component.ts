@@ -8,11 +8,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscriber } from 'rxjs';
 import { DefaultService, Meal } from '../../../client/api';
+import { ToolbarComponent } from '../../shared/components/toolbar/toolbar.component';
+import { TableBuilderComponent } from '../../shared/components/table-builder/table-builder.component';
 
 @Component({
   selector: 'app-meal',
   templateUrl: './meal.component.html',
   styleUrls: ['./meal.component.scss'],
+  imports: [ToolbarComponent, TableBuilderComponent],
 })
 export class MealComponent implements OnInit {
   mealDataSource: TableDataSource<Meal>;

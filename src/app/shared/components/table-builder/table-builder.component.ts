@@ -1,7 +1,6 @@
 import {
   AfterViewInit,
   Component,
-  ComponentRef,
   ElementRef,
   Input,
   OnDestroy,
@@ -15,7 +14,13 @@ import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { fromEvent, Observable, Subscription } from 'rxjs';
 import { DataSourceClass } from '../../types';
 import { ThemePalette } from '@angular/material/core';
-import { ActivatedRoute } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
 
 export interface TableButton {
   name: (values: any) => string;
@@ -26,6 +31,16 @@ export interface TableButton {
 }
 
 @Component({
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    MatTooltipModule,
+    MatButtonModule,
+  ],
   selector: 'app-table-builder',
   templateUrl: './table-builder.component.html',
   styleUrls: ['./table-builder.component.scss'],

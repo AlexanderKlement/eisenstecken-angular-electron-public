@@ -1,7 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  UntypedFormControl,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseEditComponent } from '../../shared/components/base-edit/base-edit.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -19,11 +23,34 @@ import {
   SubJobCreate,
   User,
 } from '../../../client/api';
+import { ToolbarComponent } from '../../shared/components/toolbar/toolbar.component';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { NgIf } from '@angular/common';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
+import { AddressFormComponent } from '../../shared/components/address-form/address-form.component';
+import { MatOption, MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-job-edit',
   templateUrl: './job-edit.component.html',
   styleUrls: ['./job-edit.component.scss'],
+  imports: [
+    ToolbarComponent,
+    ReactiveFormsModule,
+    MatCheckbox,
+    NgIf,
+    MatFormField,
+    MatLabel,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    MatFormField,
+    MatButton,
+    AddressFormComponent,
+    MatSelect,
+    MatOption,
+  ],
 })
 export class JobEditComponent
   extends BaseEditComponent<Job>

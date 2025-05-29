@@ -4,11 +4,21 @@ import { InfoDialogComponent } from './info-dialog/info-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../shared/components/confirm-dialog/confirm-dialog.component';
 import { DefaultService } from '../../client/api';
+import { CalendarsChatFrameComponent } from './calendars-chat-frame/calendars-chat-frame.component';
+import { NoteComponent } from './note/note.component';
+import { MenuTilesComponent } from './menu-tiles/menu-tiles.component';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
+  imports: [
+    CalendarsChatFrameComponent,
+    NoteComponent,
+    MenuTilesComponent,
+    MatIcon,
+  ],
 })
 export class HomeComponent implements OnInit {
   constructor(

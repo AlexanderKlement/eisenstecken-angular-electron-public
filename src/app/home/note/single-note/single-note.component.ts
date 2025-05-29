@@ -6,15 +6,17 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged, first } from 'rxjs/operators';
 import { DefaultService, Note, NoteCreate } from '../../../../client/api';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-single-note',
   templateUrl: './single-note.component.html',
   styleUrls: ['./single-note.component.scss'],
+  imports: [ReactiveFormsModule, NgIf],
 })
 export class SingleNoteComponent implements OnInit, OnDestroy {
   @Input() note: Note;

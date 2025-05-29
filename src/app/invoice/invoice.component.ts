@@ -1,7 +1,7 @@
 import { Component, ComponentRef, OnInit } from '@angular/core';
 import { AuthService } from '../shared/services/auth.service';
 import { first } from 'rxjs/operators';
-import { CustomButton } from '../shared/components/toolbar/toolbar.component';
+import { CustomButton, ToolbarComponent } from '../shared/components/toolbar/toolbar.component';
 import { MatDialog } from '@angular/material/dialog';
 import { OutgoingInvoiceNumberDialogComponent } from './outgoing/outgoing-invoice-number-dialog/outgoing-invoice-number-dialog.component';
 import { ImportXmlDialogComponent } from './ingoing/import-xml-dialog/import-xml-dialog.component';
@@ -10,11 +10,21 @@ import { ConfirmDialogComponent } from '../shared/components/confirm-dialog/conf
 import { FileService } from '../shared/services/file.service';
 import { ActivatedRoute } from '@angular/router';
 import { DefaultService } from '../../client/api';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { OutgoingComponent } from './outgoing/outgoing.component';
+import { IngoingComponent } from './ingoing/ingoing.component';
 
 @Component({
   selector: 'app-invoice',
   templateUrl: './invoice.component.html',
   styleUrls: ['./invoice.component.scss'],
+  imports: [
+    ToolbarComponent,
+    MatTabGroup,
+    MatTab,
+    OutgoingComponent,
+    IngoingComponent,
+  ],
 })
 export class InvoiceComponent implements OnInit {
   outgoingInvoicesAvailable = false;

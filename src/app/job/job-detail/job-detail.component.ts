@@ -10,7 +10,7 @@ import { AuthService } from '../../shared/services/auth.service';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { formatCurrency } from '@angular/common';
+import { formatCurrency, NgIf } from '@angular/common';
 import { OrderReturnData } from './order-print-dialog/order-print-dialog.component';
 import { OrderPrintDialogComponent } from './order-print-dialog/order-print-dialog.component';
 import { FileService } from '../../shared/services/file.service';
@@ -25,11 +25,21 @@ import {
   Order,
   OutgoingInvoice,
 } from '../../../client/api';
+import { ToolbarComponent } from '../../shared/components/toolbar/toolbar.component';
+import { JobStatusBarComponent } from './job-status-bar/job-status-bar.component';
+import { TableBuilderComponent } from '../../shared/components/table-builder/table-builder.component';
 
 @Component({
   selector: 'app-job-detail',
   templateUrl: './job-detail.component.html',
   styleUrls: ['./job-detail.component.scss'],
+  imports: [
+    ToolbarComponent,
+    JobStatusBarComponent,
+    InfoBuilderComponent,
+    TableBuilderComponent,
+    NgIf,
+  ],
 })
 export class JobDetailComponent implements OnInit {
   @ViewChild(InfoBuilderComponent) child: InfoBuilderComponent<Job>;

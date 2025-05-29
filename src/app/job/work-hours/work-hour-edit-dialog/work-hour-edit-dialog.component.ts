@@ -1,8 +1,17 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  UntypedFormControl,
+  UntypedFormGroup,
+} from '@angular/forms';
 import {
   DefaultService,
   User,
@@ -10,6 +19,11 @@ import {
   WorkloadCreate,
   WorkloadUpdate,
 } from '../../../../client/api';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { MatButton } from '@angular/material/button';
+import { MatFormField, MatLabel } from '@angular/material/input';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { MinuteHourComponent } from '../../../shared/components/minute-hour/minute-hour.component';
 
 export interface WorkHourEditDialogData {
   jobId: number;
@@ -20,6 +34,20 @@ export interface WorkHourEditDialogData {
   selector: 'app-work-hour-edit-dialog',
   templateUrl: './work-hour-edit-dialog.component.html',
   styleUrls: ['./work-hour-edit-dialog.component.scss'],
+  imports: [
+    MatFormField,
+    MatDialogContent,
+    MatDialogTitle,
+    MatSelect,
+    AsyncPipe,
+    MatButton,
+    MatOption,
+    MinuteHourComponent,
+    ReactiveFormsModule,
+    NgIf,
+    NgForOf,
+    MatLabel,
+  ],
 })
 export class WorkHourEditDialogComponent implements OnInit {
   create: boolean;

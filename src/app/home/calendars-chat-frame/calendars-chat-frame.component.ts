@@ -3,11 +3,27 @@ import { Observable } from 'rxjs';
 import { first, tap } from 'rxjs/operators';
 import { ChatService } from '../chat/chat.service';
 import { Calendar, DefaultService } from '../../../client/api';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { EventCalendarComponent } from '../event-calendar/event-calendar.component';
+import { ChatComponent } from '../chat/chat.component';
+import { SimpleCalendarComponent } from '../../shared/components/calendar/simple-calendar.component';
+import { LoadingComponent } from '../../shared/components/loading/loading.component';
+import { AsyncPipe, NgForOf } from '@angular/common';
 
 @Component({
   selector: 'app-calendars-frame',
   templateUrl: './calendars-chat-frame.component.html',
   styleUrls: ['./calendars-chat-frame.component.scss'],
+  imports: [
+    MatTab,
+    EventCalendarComponent,
+    ChatComponent,
+    SimpleCalendarComponent,
+    LoadingComponent,
+    MatTabGroup,
+    NgForOf,
+    AsyncPipe,
+  ],
 })
 export class CalendarsChatFrameComponent implements OnInit, OnDestroy {
   @ViewChild('chatTab') chatTab;

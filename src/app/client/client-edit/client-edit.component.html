@@ -3,8 +3,8 @@
   <form (ngSubmit)="onSubmit()" [formGroup]="clientGroup">
     <div class="flex flex-col justify-around items-center flex-row">
       <mat-checkbox [checked]="company" (change)="companyCheckBoxClicked()"
-        >Unternehmen</mat-checkbox
-      >
+        >Unternehmen
+      </mat-checkbox>
       <br />
       <br />
       <mat-form-field *ngIf="company" appearance="fill">

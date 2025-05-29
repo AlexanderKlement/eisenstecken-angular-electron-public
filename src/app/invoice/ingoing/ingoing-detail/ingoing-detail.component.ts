@@ -10,11 +10,15 @@ import {
   DescriptiveArticle,
   IngoingInvoice,
 } from '../../../../client/api';
+import { ToolbarComponent } from '../../../shared/components/toolbar/toolbar.component';
+import { InfoBuilderComponent } from '../../../shared/components/info-builder/info-builder.component';
+import { TableBuilderComponent } from '../../../shared/components/table-builder/table-builder.component';
 
 @Component({
   selector: 'app-ingoing-detail',
   templateUrl: './ingoing-detail.component.html',
   styleUrls: ['./ingoing-detail.component.scss'],
+  imports: [ToolbarComponent, InfoBuilderComponent, TableBuilderComponent],
 })
 export class IngoingDetailComponent implements OnInit {
   infoDataSource: InfoDataSource<IngoingInvoice>;

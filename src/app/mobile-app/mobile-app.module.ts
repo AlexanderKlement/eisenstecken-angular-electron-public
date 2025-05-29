@@ -22,15 +22,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { HoursStepperDriveDialogComponent } from './hours/hours-stepper/hours-stepper-drive-dialog/hours-stepper-drive-dialog.component';
 
 @NgModule({
-  declarations: [
-    MobileAppComponent,
-    HoursComponent,
-    HoursSummaryComponent,
-    HoursStepperComponent,
-    RedirectComponent,
-    HoursStepperJobDialogComponent,
-    HoursStepperDriveDialogComponent,
-  ],
   exports: [HoursStepperComponent],
   imports: [
     CommonModule,
@@ -46,6 +37,13 @@ import { HoursStepperDriveDialogComponent } from './hours/hours-stepper/hours-st
     MatSelectModule,
     MatProgressSpinnerModule,
     MatDialogModule,
+    MobileAppComponent,
+    HoursComponent,
+    HoursSummaryComponent,
+    HoursStepperComponent,
+    RedirectComponent,
+    HoursStepperJobDialogComponent,
+    HoursStepperDriveDialogComponent,
   ],
 })
 export class MobileAppModule {}

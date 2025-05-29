@@ -12,7 +12,7 @@
             (click)="orderedArticleClicked()">
             <mat-list-option
               *ngFor="let orderedArticle of orderedArticles$ | async"
-              value="{{ orderedArticle.id }}">
+              [value]="orderedArticle">
               {{ orderedArticle.article.name.translation }}
             </mat-list-option>
           </mat-selection-list>
@@ -33,7 +33,7 @@
           (click)="orderableClicked()">
           <mat-list-option
             *ngFor="let orderable of orderableTargets$ | async"
-            value="{{ orderable.id }}">
+            [value]="orderable">
             {{ orderable.name }}
           </mat-list-option>
         </mat-selection-list>
@@ -54,7 +54,7 @@
           <mat-list>
             <mat-list-item
               *ngFor="let selectedArticle of articles.selectedOptions.selected">
-              {{ selectedArticle._text.nativeElement.innerHTML }}
+              {{ selectedArticle.value.article.name.translation }}
             </mat-list-item>
           </mat-list>
           <p
@@ -62,11 +62,7 @@
               orderable.selectedOptions.selected &&
               orderable.selectedOptions.selected.length > 0
             ">
-            Ziel:
-            {{
-              orderable.selectedOptions.selected[0]._text.nativeElement
-                .innerHTML
-            }}
+            Ziel: {{ orderable.selectedOptions.selected[0].value.name }}
           </p>
         </div>
         <div class="flex flex-row justify-around items-center">

@@ -18,13 +18,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
 
 @NgModule({
-  declarations: [
-    RecalculationComponent,
-    RecalculationDetailComponent,
-    RecalculationEditComponent,
-    PaintTemplateComponent,
-    PaintTemplateEditDialogComponent,
-  ],
   imports: [
     CommonModule,
     RecalculationRoutingModule,
@@ -37,6 +30,11 @@ import { MatListModule } from '@angular/material/list';
     MatSelectModule,
     MatDialogModule,
     MatListModule,
+    RecalculationComponent,
+    RecalculationDetailComponent,
+    RecalculationEditComponent,
+    PaintTemplateComponent,
+    PaintTemplateEditDialogComponent,
   ],
 })
 export class RecalculationModule {}

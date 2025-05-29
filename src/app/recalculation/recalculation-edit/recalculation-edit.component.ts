@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
+  ReactiveFormsModule,
   UntypedFormArray,
   UntypedFormControl,
   UntypedFormGroup,
@@ -33,11 +34,37 @@ import {
   Workload,
   Lock,
 } from '../../../client/api';
+import { ToolbarComponent } from '../../shared/components/toolbar/toolbar.component';
+import { AsyncPipe, NgForOf } from '@angular/common';
+import { MatInput } from '@angular/material/input';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatActionList, MatListItem } from '@angular/material/list';
+import { TableBuilderComponent } from '../../shared/components/table-builder/table-builder.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatOption, MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-recalculation-edit',
   templateUrl: './recalculation-edit.component.html',
   styleUrls: ['./recalculation-edit.component.scss'],
+  imports: [
+    ToolbarComponent,
+    AsyncPipe,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    NgForOf,
+    MatIcon,
+    MatButton,
+    MatIconButton,
+    MatOption,
+    MatListItem,
+    MatActionList,
+    TableBuilderComponent,
+    MatSelect,
+  ],
 })
 export class RecalculationEditComponent
   extends BaseEditComponent<Recalculation>
