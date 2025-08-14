@@ -42,6 +42,14 @@
             "prefix": "app",
             "style": "kebab-case"
           }
+        ],
+        "@typescript-eslint/quotes": [
+          "warn",
+          "double",
+          {
+            "avoidEscape": true,
+            "allowTemplateLiterals": true
+          }
         ]
       }
     },
