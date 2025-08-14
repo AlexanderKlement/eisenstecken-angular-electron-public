@@ -46,10 +46,11 @@
     "lint": "ng lint",
     "package:msi": "node build_installer_msi.js",
     "generate-client": "openapi-generator-cli generate && cd eisenstecken-openapi-angular-library && npm install && npm run build && npm publish ./dist",
+    "generate": "npx openapi-generator-cli generate -i https://api.eisenstecken.kivi.bz.it/openapi.json -g typescript-angular -o ./src/api/openapi --additional-properties=enumPropertyNaming=UPPERCASE,providedIn=root --skip-validate-spec",
     "generate-init": "openapi-generator-cli generate -g typescript-angular -i https://api.eisenstecken.kivi.bz.it/openapi.json -o openapi-client --generator-key eisenstecken"
   },
   "dependencies": {
-    "@angular/animations": "14.3.0",
+    "@angular/animations": "15.3.0",
     "@angular/cdk": "14.2.7",
     "@angular/common": "14.3.0",
     "@angular/compiler": "14.3.0",
@@ -76,7 +77,8 @@
     "rxjs": "^7.4.0",
     "tslib": "^2.1.0",
     "yaml": "1.10.2",
-    "zone.js": "0.11.8"
+    "zone.js": "0.11.8",
+    "@openapitools/openapi-generator-cli": "^2.22.0"
   },
   "repository": {
     "type": "git",
