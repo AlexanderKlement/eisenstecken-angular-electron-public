@@ -1,15 +1,15 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
   HttpRequest
 } from '@angular/common/http';
-import {Observable, throwError} from 'rxjs';
-import {catchError,} from 'rxjs/operators';
-import {Router} from '@angular/router';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {AuthService} from './shared/services/auth.service';
+import { EMPTY, Observable, throwError } from 'rxjs';
+import { catchError, } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from './shared/services/auth.service';
 
 @Injectable()
 export class GlobalHttpInterceptorService implements HttpInterceptor {
@@ -25,7 +25,7 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
         console.error(error);
         if (error.status === 404) {
           console.warn('Not sending error message');
-          return;
+          return EMPTY;
         }
 
 
