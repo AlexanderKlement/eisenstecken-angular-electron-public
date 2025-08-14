@@ -87,7 +87,6 @@ import {
 } from "angular-calendar";
 import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
 import {
-  NgxMatDatetimePickerModule,
   NgxMatNativeDateModule,
 } from "@angular-material-components/datetime-picker";
 import { EventCalendarModule } from "./calendar/event-calendar.module";
@@ -144,7 +143,6 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
     EmployeeModule,
     EventCalendarModule,
     NgxMatNativeDateModule,
-    NgxMatDatetimePickerModule,
     MobileAppModule,
     RecalculationModule,
     ApiModule.forRoot(apiConfigFactory),

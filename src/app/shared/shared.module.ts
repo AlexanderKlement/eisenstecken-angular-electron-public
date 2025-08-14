@@ -43,7 +43,6 @@ import {SplitTextNewlinePipe} from './pipes/common';
 import {BoldSpanPipe} from './pipes/boldSearchResult';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {CalendarModule} from 'angular-calendar';
-import {NgxMatDatetimePickerModule} from '@angular-material-components/datetime-picker';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
@@ -95,7 +94,6 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     NgxMaterialTimepickerModule.setLocale('de-DE'),
     MatTooltipModule,
     CalendarModule,
-    NgxMatDatetimePickerModule,
     MatButtonToggleModule,
     MatSlideToggleModule
   ],
