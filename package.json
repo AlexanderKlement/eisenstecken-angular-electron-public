@@ -78,7 +78,7 @@
     "rxjs": "^7.4.0",
     "tslib": "^2.1.0",
     "yaml": "1.10.2",
-    "zone.js": "~0.11.4"
+    "zone.js": "0.11.8"
   },
   "repository": {
     "type": "git",
@@ -112,7 +112,6 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-jsdoc": "37.0.3",
     "eslint-plugin-prefer-arrow": "1.2.3",
-    "exe-icon-extractor": "1.0.8",
     "jasmine-core": "3.10.1",
     "jasmine-spec-reporter": "7.0.0",
     "karma": "6.3.9",
