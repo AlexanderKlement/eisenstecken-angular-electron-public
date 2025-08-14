@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {DefaultService} from 'eisenstecken-openapi-angular-library';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {first} from 'rxjs/operators';
@@ -16,7 +16,7 @@ export interface ChangePathDialogData {
 })
 export class ChangePathDialogComponent implements OnInit {
     title = 'Pfad ändern';
-    changePathFormGroup: FormGroup;
+    changePathFormGroup: UntypedFormGroup;
 
 
     constructor(private api: DefaultService, private file: FileService,
@@ -25,8 +25,8 @@ export class ChangePathDialogComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.changePathFormGroup = new FormGroup({
-            path: new FormControl('')
+        this.changePathFormGroup = new UntypedFormGroup({
+            path: new UntypedFormControl('')
         });
         this.api.readJobJobJobIdGet(this.data.id).pipe(first()).subscribe((job) => {
             this.title += ': ' + job.displayable_name;

@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormArray, FormGroup} from '@angular/forms';
+import {AbstractControl, UntypedFormArray, UntypedFormGroup} from '@angular/forms';
 import {HoursStepperComponent, JobEnum} from '../hours-stepper/hours-stepper.component';
 import {DefaultService} from 'eisenstecken-openapi-angular-library';
 import {first, map} from 'rxjs/operators';
@@ -12,10 +12,10 @@ import {forkJoin, Observable, Subscription} from 'rxjs';
 })
 export class HoursSummaryComponent implements OnInit, OnDestroy {
 
-    @Input() hourFormGroup: FormGroup;
-    @Input() jobFormGroup: FormGroup;
-    @Input() mealFormGroup: FormGroup;
-    @Input() expensesJourneyGroup: FormGroup;
+    @Input() hourFormGroup: UntypedFormGroup;
+    @Input() jobFormGroup: UntypedFormGroup;
+    @Input() mealFormGroup: UntypedFormGroup;
+    @Input() expensesJourneyGroup: UntypedFormGroup;
     @Input() jobsReady$: Observable<void>;
 
     eatingPlaceName = '';
@@ -76,16 +76,16 @@ export class HoursSummaryComponent implements OnInit, OnDestroy {
         return HoursStepperComponent.generateHourString(hours, minutes);
     }
 
-    getJobs(jobEnum: JobEnum): FormArray {
+    getJobs(jobEnum: JobEnum): UntypedFormArray {
         switch (jobEnum) {
             case JobEnum.accepted:
-                return this.jobFormGroup.get('jobsAccepted') as FormArray;
+                return this.jobFormGroup.get('jobsAccepted') as UntypedFormArray;
             case JobEnum.created:
-                return this.jobFormGroup.get('jobsCreated') as FormArray;
+                return this.jobFormGroup.get('jobsCreated') as UntypedFormArray;
         }
     }
 
-    getAllJobs(): FormArray[] {
+    getAllJobs(): UntypedFormArray[] {
         return [
             this.getJobs(JobEnum.accepted),
             this.getJobs(JobEnum.created)
@@ -107,12 +107,12 @@ export class HoursSummaryComponent implements OnInit, OnDestroy {
         return HoursStepperComponent.generateHourString(Math.floor(minutes / 60), minutes % 60);
     }
 
-    getExpenses(): FormArray {
-        return this.expensesJourneyGroup.get('expenses') as FormArray;
+    getExpenses(): UntypedFormArray {
+        return this.expensesJourneyGroup.get('expenses') as UntypedFormArray;
     }
 
-    getDrives(): FormArray {
-        return this.expensesJourneyGroup.get('drives') as FormArray;
+    getDrives(): UntypedFormArray {
+        return this.expensesJourneyGroup.get('drives') as UntypedFormArray;
     }
 
     private refreshEatingPlace(): void {

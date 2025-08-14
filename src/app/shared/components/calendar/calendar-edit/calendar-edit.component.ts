@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {first} from 'rxjs/operators';
 import {CalendarEntry, CalendarEntryCreate, DefaultService} from 'eisenstecken-openapi-angular-library';
-import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
+import {AbstractControl, UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 import * as moment from 'moment';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {timepickerTheme} from '../../../themes/timepicker.theme';
@@ -37,7 +37,7 @@ export class CalendarEditComponent implements OnInit {
 
     calendarId: number;
     calendarEntryId: number; //maybe these two need to be replaced by param
-    calendarGroup: FormGroup;
+    calendarGroup: UntypedFormGroup;
 
     ready = false;
 
@@ -80,15 +80,15 @@ export class CalendarEditComponent implements OnInit {
             endTime = moment(calendarEntry.end_time).format('HH:mm');
         }
 
-        this.calendarGroup = new FormGroup({
-            title: new FormControl(title, Validators.required),
-            description: new FormControl(description),
+        this.calendarGroup = new UntypedFormGroup({
+            title: new UntypedFormControl(title, Validators.required),
+            description: new UntypedFormControl(description),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            date: new FormControl(date, Validators.required),
+            date: new UntypedFormControl(date, Validators.required),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            start_time: new FormControl(startTime, Validators.pattern('^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$')),
+            start_time: new UntypedFormControl(startTime, Validators.pattern('^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$')),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            end_time: new FormControl(endTime, Validators.pattern('^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$'))
+            end_time: new UntypedFormControl(endTime, Validators.pattern('^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$'))
         }, {validators: timeValidator});
 
     }

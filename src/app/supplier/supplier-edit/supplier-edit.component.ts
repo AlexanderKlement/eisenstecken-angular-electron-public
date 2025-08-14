@@ -9,7 +9,7 @@ import {
 } from 'eisenstecken-openapi-angular-library';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-import {FormArray, FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormArray, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {NavigationService} from '../../shared/services/navigation.service';
@@ -21,7 +21,7 @@ import {NavigationService} from '../../shared/services/navigation.service';
 })
 export class SupplierEditComponent extends BaseEditComponent<Supplier> implements OnInit, OnDestroy {
 
-    supplierGroup: FormGroup;
+    supplierGroup: UntypedFormGroup;
 
     navigationTarget = 'supplier';
     languageOptions$: Observable<Language[]>;
@@ -133,8 +133,8 @@ export class SupplierEditComponent extends BaseEditComponent<Supplier> implement
 
     }
 
-    getAddressGroup(): FormGroup {
-        return this.supplierGroup.get('address') as FormGroup;
+    getAddressGroup(): UntypedFormGroup {
+        return this.supplierGroup.get('address') as UntypedFormGroup;
     }
 
     observableReady(): void {
@@ -157,34 +157,34 @@ export class SupplierEditComponent extends BaseEditComponent<Supplier> implement
         }
     }
 
-    getContacts(): FormArray {
-        return this.supplierGroup.get('contacts') as FormArray;
+    getContacts(): UntypedFormArray {
+        return this.supplierGroup.get('contacts') as UntypedFormArray;
     }
 
     addContact(contact?: Contact): void {
         this.getContacts().push(this.createContact(contact));
     }
 
-    createContact(contact?: Contact): FormGroup {
+    createContact(contact?: Contact): UntypedFormGroup {
         if (contact !== undefined) {
-            return new FormGroup({
-                id: new FormControl(contact.id),
-                name: new FormControl(contact.name),
-                name1: new FormControl(contact.name1),
-                lastname: new FormControl(contact.lastname),
-                tel: new FormControl(contact.tel),
-                mail: new FormControl(contact.mail),
-                note: new FormControl(contact.note)
+            return new UntypedFormGroup({
+                id: new UntypedFormControl(contact.id),
+                name: new UntypedFormControl(contact.name),
+                name1: new UntypedFormControl(contact.name1),
+                lastname: new UntypedFormControl(contact.lastname),
+                tel: new UntypedFormControl(contact.tel),
+                mail: new UntypedFormControl(contact.mail),
+                note: new UntypedFormControl(contact.note)
             });
         } else {
-            return new FormGroup({
-                id: new FormControl(-1),
-                name: new FormControl(''),
-                name1: new FormControl(this.supplierGroup.get('name').value),
-                lastname: new FormControl(''),
-                tel: new FormControl('+39'),
-                mail: new FormControl(''),
-                note: new FormControl('')
+            return new UntypedFormGroup({
+                id: new UntypedFormControl(-1),
+                name: new UntypedFormControl(''),
+                name1: new UntypedFormControl(this.supplierGroup.get('name').value),
+                lastname: new UntypedFormControl(''),
+                tel: new UntypedFormControl('+39'),
+                mail: new UntypedFormControl(''),
+                note: new UntypedFormControl('')
             });
         }
     }
@@ -198,24 +198,24 @@ export class SupplierEditComponent extends BaseEditComponent<Supplier> implement
     }
 
     private initSupplierGroup() {
-        this.supplierGroup = new FormGroup({
-            name: new FormControl(''),
-            mail1: new FormControl(''),
-            mail2: new FormControl(''),
-            tel1: new FormControl(''),
-            tel2: new FormControl(''),
-            language: new FormControl('DE'),
+        this.supplierGroup = new UntypedFormGroup({
+            name: new UntypedFormControl(''),
+            mail1: new UntypedFormControl(''),
+            mail2: new UntypedFormControl(''),
+            tel1: new UntypedFormControl(''),
+            tel2: new UntypedFormControl(''),
+            language: new UntypedFormControl('DE'),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            contact_person: new FormControl(''),
-            contacts: new FormArray([]),
+            contact_person: new UntypedFormControl(''),
+            contacts: new UntypedFormArray([]),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            destination_code: new FormControl(''),
-            address: new FormGroup({
+            destination_code: new UntypedFormControl(''),
+            address: new UntypedFormGroup({
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                street_number: new FormControl(''),
-                city: new FormControl(''),
-                cap: new FormControl(''),
-                country: new FormControl('IT')
+                street_number: new UntypedFormControl(''),
+                city: new UntypedFormControl(''),
+                cap: new UntypedFormControl(''),
+                country: new UntypedFormControl('IT')
             }),
         });
         this.supplierGroup.get('name').valueChanges.subscribe(() => {

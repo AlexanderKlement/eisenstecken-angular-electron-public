@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {
     DefaultService,
@@ -21,7 +21,7 @@ export interface PaintTemplateEditDialogData {
 export class PaintTemplateEditDialogComponent implements OnInit {
 
     title = 'Oberflächen-Vorlage bearbeiten';
-    templatePaintEditGroup: FormGroup;
+    templatePaintEditGroup: UntypedFormGroup;
     createMode = false;
     unitOptions$: Observable<Unit[]>;
 
@@ -79,11 +79,11 @@ export class PaintTemplateEditDialogComponent implements OnInit {
     }
 
     private initTemplatePaintEditGroup() {
-        this.templatePaintEditGroup = new FormGroup({
-            name: new FormControl(''),
+        this.templatePaintEditGroup = new UntypedFormGroup({
+            name: new UntypedFormControl(''),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            unit_id: new FormControl(4),
-            price: new FormControl(0),
+            unit_id: new UntypedFormControl(4),
+            price: new UntypedFormControl(0),
         });
     }
 

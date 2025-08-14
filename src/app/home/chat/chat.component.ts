@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ChatService} from './chat.service';
 import {ChatMessage, ChatRecipient} from 'eisenstecken-openapi-angular-library';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {Observable, Subscription} from 'rxjs';
 import {first} from 'rxjs/operators';
 import {ElectronService} from '../../core/services';
@@ -21,9 +21,9 @@ export class ChatComponent implements OnInit, OnDestroy {
     messages: ChatMessage[] = [];
     recipients$: Observable<ChatRecipient[]>; //This will fail if we have more than 1 chat component -> ReplaySubject
     whatsapp: boolean;
-    chatGroup: FormGroup = new FormGroup({
-        messageInput: new FormControl(''),
-        recipientSelect: new FormControl(0)
+    chatGroup: UntypedFormGroup = new UntypedFormGroup({
+        messageInput: new UntypedFormControl(''),
+        recipientSelect: new UntypedFormControl(0)
     });
 
     buttonLocked = false;

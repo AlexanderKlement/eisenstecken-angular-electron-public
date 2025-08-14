@@ -3,7 +3,7 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog
 import {ConfirmDialogComponent,} from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import {DefaultService, Service, ServiceUpdate} from 'eisenstecken-openapi-angular-library';
 import {first} from 'rxjs/operators';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 export interface ServiceDialogData {
@@ -20,7 +20,7 @@ export class ServiceDialogComponent implements OnInit {
     service: Service;
     minutes: number;
     loading = true;
-    serviceGroup: FormGroup;
+    serviceGroup: UntypedFormGroup;
 
     constructor(public dialogRef: MatDialogRef<ServiceDialogComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: ServiceDialogData,
@@ -31,8 +31,8 @@ export class ServiceDialogComponent implements OnInit {
     ngOnInit(): void {
         this.api.readServiceServiceServiceIdGet(this.data.id).pipe(first()).subscribe((service) => {
             this.service = service;
-            this.serviceGroup = new FormGroup({
-                minutes: new FormControl(service.minutes)
+            this.serviceGroup = new UntypedFormGroup({
+                minutes: new UntypedFormControl(service.minutes)
             });
             this.loading = false;
         });
@@ -76,7 +76,7 @@ export class ServiceDialogComponent implements OnInit {
         });
     }
 
-    getMinuteControl(): FormControl {
-        return this.serviceGroup.get('minutes') as FormControl;
+    getMinuteControl(): UntypedFormControl {
+        return this.serviceGroup.get('minutes') as UntypedFormControl;
     }
 }

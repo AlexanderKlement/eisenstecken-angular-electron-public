@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {ContactCreate, ContactTypeEnum, DefaultService} from 'eisenstecken-openapi-angular-library';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {first, map, startWith} from 'rxjs/operators';
 import {MatAutocomplete} from '@angular/material/autocomplete';
 import {Observable} from 'rxjs';
@@ -24,10 +24,10 @@ export class ContactEditDialogComponent implements OnInit {
 
     createMode = false;
     title = 'Kontakt bearbeiten';
-    contactGroup: FormGroup;
-    contactType: FormControl;
-    supplierAutoCompleteText: FormControl = new FormControl('');
-    clientAutoCompleteText: FormControl = new FormControl('');
+    contactGroup: UntypedFormGroup;
+    contactType: UntypedFormControl;
+    supplierAutoCompleteText: UntypedFormControl = new UntypedFormControl('');
+    clientAutoCompleteText: UntypedFormControl = new UntypedFormControl('');
 
     supplierSelectedId = -1;
     supplierSelectedName = '';
@@ -54,9 +54,9 @@ export class ContactEditDialogComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.contactType = new FormControl(ContactTypeEnum.Business);
-        this.clientAutoCompleteText = new FormControl(-1);
-        this.supplierAutoCompleteText = new FormControl(-1);
+        this.contactType = new UntypedFormControl(ContactTypeEnum.Business);
+        this.clientAutoCompleteText = new UntypedFormControl(-1);
+        this.supplierAutoCompleteText = new UntypedFormControl(-1);
         this.initContactGroup();
         if (this.data.id <= 0) {
             this.createMode = true;
@@ -216,13 +216,13 @@ export class ContactEditDialogComponent implements OnInit {
     }
 
     private initContactGroup() {
-        this.contactGroup = new FormGroup({
-            name: new FormControl(''),
-            name1: new FormControl(''),
-            lastname: new FormControl(''),
-            tel: new FormControl('+39'),
-            mail: new FormControl(''),
-            note: new FormControl('')
+        this.contactGroup = new UntypedFormGroup({
+            name: new UntypedFormControl(''),
+            name1: new UntypedFormControl(''),
+            lastname: new UntypedFormControl(''),
+            tel: new UntypedFormControl('+39'),
+            mail: new UntypedFormControl(''),
+            note: new UntypedFormControl('')
         });
     }
 }

@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {ArticleCreate, ArticleUpdateFull, DefaultService, Unit, Vat} from 'eisenstecken-openapi-angular-library';
 import {Observable} from 'rxjs';
@@ -20,7 +20,7 @@ export interface ArticleEditDialogData {
 export class ArticleEditDialogComponent implements OnInit {
 
     title = 'Artikel bearbeiten';
-    articleEditGroup: FormGroup;
+    articleEditGroup: UntypedFormGroup;
     createMode = false;
     vatOptions$: Observable<Vat[]>;
     unitOptions$: Observable<Unit[]>;
@@ -118,17 +118,17 @@ export class ArticleEditDialogComponent implements OnInit {
     }
 
     private initArticleEditGroup() {
-        this.articleEditGroup = new FormGroup({
-            name: new FormControl(''),
-            description: new FormControl(''),
+        this.articleEditGroup = new UntypedFormGroup({
+            name: new UntypedFormControl(''),
+            description: new UntypedFormControl(''),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            unit_id: new FormControl(3),
-            price: new FormControl(0),
+            unit_id: new UntypedFormControl(3),
+            price: new UntypedFormControl(0),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            mod_number: new FormControl(''),
+            mod_number: new UntypedFormControl(''),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            vat_id: new FormControl(3),
-            favorite: new FormControl(false),
+            vat_id: new UntypedFormControl(3),
+            favorite: new UntypedFormControl(false),
         });
     }
 

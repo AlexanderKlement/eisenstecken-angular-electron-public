@@ -11,7 +11,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
 import {first, map} from 'rxjs/operators';
-import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import {AuthService} from '../../shared/services/auth.service';
 import {CustomButton} from '../../shared/components/toolbar/toolbar.component';
@@ -33,7 +33,7 @@ export interface JobMinimal {
     styleUrls: ['./delivery-edit.component.scss']
 })
 export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> implements OnInit {
-    deliveryNoteGroup: FormGroup;
+    deliveryNoteGroup: UntypedFormGroup;
     submitted = false;
     navigationTarget = 'delivery_note';
     essentialJobList: Observable<JobMinimal[]>;
@@ -190,8 +190,8 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
         this.getDescriptiveArticles().insert(index + 1, descriptiveArticle);
     }
 
-    getDescriptiveArticles(): FormArray {
-        return this.deliveryNoteGroup.get('articles') as FormArray;
+    getDescriptiveArticles(): UntypedFormArray {
+        return this.deliveryNoteGroup.get('articles') as UntypedFormArray;
     }
 
     removeDescriptiveArticle(index: number): void {
@@ -240,16 +240,16 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
         });
     }
 
-    protected initDescriptiveArticles(descriptiveArticle?: DescriptiveArticle): FormGroup {
+    protected initDescriptiveArticles(descriptiveArticle?: DescriptiveArticle): UntypedFormGroup {
         if (descriptiveArticle === undefined) {
-            return new FormGroup({
-                description: new FormControl('', Validators.required),
-                amount: new FormControl('', Validators.required)
+            return new UntypedFormGroup({
+                description: new UntypedFormControl('', Validators.required),
+                amount: new UntypedFormControl('', Validators.required)
             });
         } else {
-            return new FormGroup({
-                description: new FormControl(descriptiveArticle.description, Validators.required),
-                amount: new FormControl(descriptiveArticle.amount, Validators.required)
+            return new UntypedFormGroup({
+                description: new UntypedFormControl(descriptiveArticle.description, Validators.required),
+                amount: new UntypedFormControl(descriptiveArticle.amount, Validators.required)
             });
         }
     }
@@ -257,26 +257,26 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
 
     private initDeliveryNoteGroup(): void {
         const now = new Date();
-        this.deliveryNoteGroup = new FormGroup({
-            date: new FormControl(now.toISOString()),
+        this.deliveryNoteGroup = new UntypedFormGroup({
+            date: new UntypedFormControl(now.toISOString()),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            delivery_note_number: new FormControl(''),
+            delivery_note_number: new UntypedFormControl(''),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            name: new FormControl(''),
+            name: new UntypedFormControl(''),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            company_address: new FormControl(''),
+            company_address: new UntypedFormControl(''),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            delivery_address: new FormControl(''),
-            variations: new FormControl(''),
-            articles: new FormArray([]),
-            weight: new FormControl(''),
-            freight: new FormControl(false),
-            free: new FormControl(false),
-            assigned: new FormControl(false),
+            delivery_address: new UntypedFormControl(''),
+            variations: new UntypedFormControl(''),
+            articles: new UntypedFormArray([]),
+            weight: new UntypedFormControl(''),
+            freight: new UntypedFormControl(false),
+            free: new UntypedFormControl(false),
+            assigned: new UntypedFormControl(false),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            job_id: new FormControl(0),
+            job_id: new UntypedFormControl(0),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            delivery_note_reason_id: new FormControl(3)
+            delivery_note_reason_id: new UntypedFormControl(3)
         });
     }
 

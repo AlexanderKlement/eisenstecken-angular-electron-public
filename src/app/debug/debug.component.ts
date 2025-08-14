@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {EmailService} from '../shared/services/email.service';
 import {FileService} from '../shared/services/file.service';
 import {TrayService} from '../shared/services/tray.service';
@@ -13,11 +13,11 @@ import {ElectronService} from '../core/services';
   styleUrls: ['./debug.component.scss']
 })
 export class DebugComponent implements OnInit {
-  emailFormGroup: FormGroup;
-  openFileFormGroup: FormGroup;
-  showFileFormGroup: FormGroup;
-  selectFolderFormGroup: FormGroup;
-  trayBalloonFormGroup: FormGroup;
+  emailFormGroup: UntypedFormGroup;
+  openFileFormGroup: UntypedFormGroup;
+  showFileFormGroup: UntypedFormGroup;
+  selectFolderFormGroup: UntypedFormGroup;
+  trayBalloonFormGroup: UntypedFormGroup;
 
   constructor(private email: EmailService, private file: FileService, private tray: TrayService, private electronService: ElectronService,
               private router: Router) {
@@ -80,37 +80,37 @@ export class DebugComponent implements OnInit {
   }
 
   private initEmailGroup() {
-    this.emailFormGroup = new FormGroup({
-      email: new FormControl(''),
-      subject: new FormControl(''),
-      body: new FormControl(''),
-      attachment: new FormControl('')
+    this.emailFormGroup = new UntypedFormGroup({
+      email: new UntypedFormControl(''),
+      subject: new UntypedFormControl(''),
+      body: new UntypedFormControl(''),
+      attachment: new UntypedFormControl('')
     });
   }
 
   private initOpenFileGroup() {
-    this.openFileFormGroup = new FormGroup({
-      path: new FormControl(''),
-      response: new FormControl('')
+    this.openFileFormGroup = new UntypedFormGroup({
+      path: new UntypedFormControl(''),
+      response: new UntypedFormControl('')
     });
   }
 
   private initShowFileGroup() {
-    this.showFileFormGroup = new FormGroup({
-      path: new FormControl('')
+    this.showFileFormGroup = new UntypedFormGroup({
+      path: new UntypedFormControl('')
     });
   }
 
   private initSelectFolderGroup() {
-    this.selectFolderFormGroup = new FormGroup({
-      path: new FormControl(''),
+    this.selectFolderFormGroup = new UntypedFormGroup({
+      path: new UntypedFormControl(''),
     });
   }
 
   private initTrayBalloonFromGroup() {
-    this.trayBalloonFormGroup = new FormGroup({
-      title: new FormControl(''),
-      content: new FormControl(''),
+    this.trayBalloonFormGroup = new UntypedFormGroup({
+      title: new UntypedFormControl(''),
+      content: new UntypedFormControl(''),
     });
   }
 

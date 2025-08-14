@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {DefaultService, InfoPageCreate, InfoPageUpdate} from 'eisenstecken-openapi-angular-library';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {first} from 'rxjs/operators';
 import {ConfirmDialogComponent} from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import {AuthService} from '../../../shared/services/auth.service';
@@ -19,7 +19,7 @@ export interface InfoPageEditDialogData {
 export class InfoPageSettingEditDialogComponent implements OnInit {
     title: string;
     createMode = true;
-    infoPageGroup: FormGroup;
+    infoPageGroup: UntypedFormGroup;
     showDeleteButton = false;
     id: number;
 
@@ -33,9 +33,9 @@ export class InfoPageSettingEditDialogComponent implements OnInit {
     ngOnInit(): void {
         this.id = this.data.id;
         this.createMode = this.id < 1;
-        this.infoPageGroup = new FormGroup({
-            name: new FormControl(''),
-            body: new FormControl(''),
+        this.infoPageGroup = new UntypedFormGroup({
+            name: new UntypedFormControl(''),
+            body: new UntypedFormControl(''),
         });
         if (!this.createMode) {
             this.api.readInfoPageInfoPageIdGet(this.id).pipe(first()).subscribe((infoPage) => {

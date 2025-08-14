@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {BaseEditComponent} from '../../shared/components/base-edit/base-edit.component';
 import {
     DefaultService,
@@ -25,7 +25,7 @@ import {NavigationService} from '../../shared/services/navigation.service';
     styleUrls: ['./recalculation-edit.component.scss']
 })
 export class RecalculationEditComponent extends BaseEditComponent<Recalculation> implements OnInit, OnDestroy {
-    recalculationGroup: FormGroup;
+    recalculationGroup: UntypedFormGroup;
     navigationTarget = 'recalculation';
     jobId: number;
     jobName$: Observable<string>;
@@ -97,16 +97,16 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
     }
 
     initRecalculationsGroup(): void {
-        this.recalculationGroup = new FormGroup({
+        this.recalculationGroup = new UntypedFormGroup({
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            expenses: new FormArray([]),
-            paints: new FormArray([]),
+            expenses: new UntypedFormArray([]),
+            paints: new UntypedFormArray([]),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            wood_lists: new FormArray([]),
+            wood_lists: new UntypedFormArray([]),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            material_charge_percent: new FormControl(30, Validators.compose([Validators.min(0), Validators.max(100)])),
-            km: new FormControl(0.0),
-            cost: new FormControl(0.0)
+            material_charge_percent: new UntypedFormControl(30, Validators.compose([Validators.min(0), Validators.max(100)])),
+            km: new UntypedFormControl(0.0),
+            cost: new UntypedFormControl(0.0)
         });
         this.api.getParameterParameterKeyGet('recalculation_percent').pipe(first()).subscribe((paramter) => {
             this.recalculationGroup.get('material_charge_percent').setValue(parseFloat(paramter));
@@ -128,8 +128,8 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
         this.recalculationGroup.get('material_charge_percent').setValue(recalculation.material_charge_percent);
     }
 
-    getExpenses(): FormArray {
-        return this.recalculationGroup.get('expenses') as FormArray;
+    getExpenses(): UntypedFormArray {
+        return this.recalculationGroup.get('expenses') as UntypedFormArray;
     }
 
     removeExpenseAt(index: number): void {
@@ -140,24 +140,24 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
         this.getExpenses().push(this.createExpense(expense));
     }
 
-    createExpense(expense?: Expense): FormGroup {
+    createExpense(expense?: Expense): UntypedFormGroup {
         if (expense !== undefined) {
-            return new FormGroup({
-                id: new FormControl(expense.id),
-                amount: new FormControl(expense.amount),
-                name: new FormControl(expense.name)
+            return new UntypedFormGroup({
+                id: new UntypedFormControl(expense.id),
+                amount: new UntypedFormControl(expense.amount),
+                name: new UntypedFormControl(expense.name)
             });
         } else {
-            return new FormGroup({
-                id: new FormControl(0),
-                amount: new FormControl(0),
-                name: new FormControl('')
+            return new UntypedFormGroup({
+                id: new UntypedFormControl(0),
+                amount: new UntypedFormControl(0),
+                name: new UntypedFormControl('')
             });
         }
     }
 
-    getWoodLists(): FormArray {
-        return this.recalculationGroup.get('wood_lists') as FormArray;
+    getWoodLists(): UntypedFormArray {
+        return this.recalculationGroup.get('wood_lists') as UntypedFormArray;
     }
 
     removeWoodListAt(index: number): void {
@@ -170,24 +170,24 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
     }
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    createWoodList(wood_list?: WoodList): FormGroup {
+    createWoodList(wood_list?: WoodList): UntypedFormGroup {
         if (wood_list !== undefined) {
-            return new FormGroup({
-                id: new FormControl(wood_list.id),
-                price: new FormControl(wood_list.price),
-                name: new FormControl(wood_list.name)
+            return new UntypedFormGroup({
+                id: new UntypedFormControl(wood_list.id),
+                price: new UntypedFormControl(wood_list.price),
+                name: new UntypedFormControl(wood_list.name)
             });
         } else {
-            return new FormGroup({
-                id: new FormControl(0),
-                price: new FormControl(0),
-                name: new FormControl('')
+            return new UntypedFormGroup({
+                id: new UntypedFormControl(0),
+                price: new UntypedFormControl(0),
+                name: new UntypedFormControl('')
             });
         }
     }
 
-    getPaints(): FormArray {
-        return this.recalculationGroup.get('paints') as FormArray;
+    getPaints(): UntypedFormArray {
+        return this.recalculationGroup.get('paints') as UntypedFormArray;
     }
 
     removePaintAt(index: number): void {
@@ -198,24 +198,24 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
         this.getPaints().push(this.createPaint(paint));
     }
 
-    createPaint(paint?: Paint): FormGroup {
+    createPaint(paint?: Paint): UntypedFormGroup {
         if (paint !== undefined) {
-            return new FormGroup({
-                id: new FormControl(paint.id),
-                amount: new FormControl(paint.amount),
-                name: new FormControl(paint.name),
-                price: new FormControl(paint.price),
+            return new UntypedFormGroup({
+                id: new UntypedFormControl(paint.id),
+                amount: new UntypedFormControl(paint.amount),
+                name: new UntypedFormControl(paint.name),
+                price: new UntypedFormControl(paint.price),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                unit_id: new FormControl(paint.unit.id)
+                unit_id: new UntypedFormControl(paint.unit.id)
             });
         } else {
-            return new FormGroup({
-                id: new FormControl(0),
-                amount: new FormControl(0),
-                name: new FormControl(''),
-                price: new FormControl(0),
+            return new UntypedFormGroup({
+                id: new UntypedFormControl(0),
+                amount: new UntypedFormControl(0),
+                name: new UntypedFormControl(''),
+                price: new UntypedFormControl(0),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                unit_id: new FormControl(4),
+                unit_id: new UntypedFormControl(4),
             });
         }
     }

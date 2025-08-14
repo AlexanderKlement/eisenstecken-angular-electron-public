@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {FormArray, FormGroup} from '@angular/forms';
+import {UntypedFormArray, UntypedFormGroup} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {HoursStepperComponent, JobEnum} from '../hours-stepper.component';
 import {MatStepper, StepperOrientation} from '@angular/material/stepper';
@@ -11,12 +11,12 @@ export enum HoursStepperVariantEnum {
 }
 
 export interface HoursStepperDialogData {
-    jobGroup: FormGroup;
-    additionalJobs: FormGroup;
+    jobGroup: UntypedFormGroup;
+    additionalJobs: UntypedFormGroup;
     variant: HoursStepperVariantEnum;
     selectedJobList: number;
     selectedJobIndex: number;
-    hourFormGroup: FormGroup;
+    hourFormGroup: UntypedFormGroup;
 }
 
 @Component({
@@ -34,8 +34,8 @@ export class HoursStepperJobDialogComponent implements OnInit {
     title = '';
     availableHoursString = '';
 
-    jobFormGroup: FormGroup;
-    hourFormGroup: FormGroup;
+    jobFormGroup: UntypedFormGroup;
+    hourFormGroup: UntypedFormGroup;
 
     selectedJobList = 0;
     selectedJobIndex = 0;
@@ -82,7 +82,7 @@ export class HoursStepperJobDialogComponent implements OnInit {
     onConfirmClick(): void {
         const data: HoursStepperDialogData = {
             jobGroup: this.jobFormGroup,
-            additionalJobs: this.jobFormGroup.get('additionalJob') as FormGroup,
+            additionalJobs: this.jobFormGroup.get('additionalJob') as UntypedFormGroup,
             hourFormGroup: this.hourFormGroup,
             variant: this.data.variant,
             selectedJobIndex: this.selectedJobIndex,
@@ -119,19 +119,19 @@ export class HoursStepperJobDialogComponent implements OnInit {
         this.refreshSpentMinutes();
     }
 
-    getAllJobs(): FormArray[] {
+    getAllJobs(): UntypedFormArray[] {
         return [
             this.getJobs(JobEnum.accepted),
             this.getJobs(JobEnum.created)
         ];
     }
 
-    getJobs(jobEnum: JobEnum): FormArray {
+    getJobs(jobEnum: JobEnum): UntypedFormArray {
         switch (jobEnum) {
             case JobEnum.accepted:
-                return this.jobFormGroup.get('jobsAccepted') as FormArray;
+                return this.jobFormGroup.get('jobsAccepted') as UntypedFormArray;
             case JobEnum.created:
-                return this.jobFormGroup.get('jobsCreated') as FormArray;
+                return this.jobFormGroup.get('jobsCreated') as UntypedFormArray;
         }
     }
 

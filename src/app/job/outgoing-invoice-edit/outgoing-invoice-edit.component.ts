@@ -14,7 +14,7 @@ import {BaseEditComponent} from '../../shared/components/base-edit/base-edit.com
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
-import {FormArray, FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormArray, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {first, tap} from 'rxjs/operators';
 import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import {CustomButton} from '../../shared/components/toolbar/toolbar.component';
@@ -33,7 +33,7 @@ import {NavigationService} from '../../shared/services/navigation.service';
 })
 export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvoice> implements OnInit, OnDestroy {
 
-  invoiceGroup: FormGroup;
+  invoiceGroup: UntypedFormGroup;
   submitted = false;
   vatOptions$: Observable<Vat[]>;
   jobId: number;
@@ -50,7 +50,7 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
     super(api, router, route, dialog);
   }
 
-  calcTotalPrice(formGroup: FormGroup): void {
+  calcTotalPrice(formGroup: UntypedFormGroup): void {
     const totalPrice = formGroup.get('single_price').value * formGroup.get('amount').value;
     formGroup.get('total_price').setValue(this.currency.transform(totalPrice, getLocaleCurrencyCode('de_DE')));
     this.recalculateInvoicePrice();
@@ -125,8 +125,8 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
     }
   }
 
-  getAddressGroup(): FormGroup {
-    return this.invoiceGroup.get('address') as FormGroup;
+  getAddressGroup(): UntypedFormGroup {
+    return this.invoiceGroup.get('address') as UntypedFormGroup;
   }
 
   companyCheckBoxClicked(): void {
@@ -144,8 +144,8 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
     this.navigation.back();
   }
 
-  getDescriptiveArticles(): FormArray {
-    return this.invoiceGroup.get('descriptive_articles') as FormArray;
+  getDescriptiveArticles(): UntypedFormArray {
+    return this.invoiceGroup.get('descriptive_articles') as UntypedFormArray;
   }
 
 
@@ -354,15 +354,15 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
 
   }
 
-  protected initDescriptiveArticles(descriptiveArticle?: DescriptiveArticle): FormGroup {
-    const descriptiveArticleFormGroup = new FormGroup({
-      description: new FormControl(''),
-      amount: new FormControl('0'),
+  protected initDescriptiveArticles(descriptiveArticle?: DescriptiveArticle): UntypedFormGroup {
+    const descriptiveArticleFormGroup = new UntypedFormGroup({
+      description: new UntypedFormControl(''),
+      amount: new UntypedFormControl('0'),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      single_price: new FormControl('0'),
-      singlePriceFormatted: new FormControl('0,00 €'),
+      single_price: new UntypedFormControl('0'),
+      singlePriceFormatted: new UntypedFormControl('0,00 €'),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      total_price: new FormControl('0')
+      total_price: new UntypedFormControl('0')
     });
 
     this.subscription.add(descriptiveArticleFormGroup.get('single_price').valueChanges.subscribe(
@@ -389,15 +389,15 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
   }
 
   private addDescriptiveArticle(name: string, amount: string, singlePrice: string, totalPrice: string): void {
-    const descriptiveArticleFormGroup = new FormGroup({
-      description: new FormControl(name),
-      amount: new FormControl(amount),
+    const descriptiveArticleFormGroup = new UntypedFormGroup({
+      description: new UntypedFormControl(name),
+      amount: new UntypedFormControl(amount),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      single_price: new FormControl(singlePrice),
-      singlePriceFormatted: new FormControl(this.currency.transform(singlePrice,
+      single_price: new UntypedFormControl(singlePrice),
+      singlePriceFormatted: new UntypedFormControl(this.currency.transform(singlePrice,
         getLocaleCurrencyCode('de_DE'))),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      total_price: new FormControl(totalPrice)
+      total_price: new UntypedFormControl(totalPrice)
     });
     this.getDescriptiveArticles().push(descriptiveArticleFormGroup);
   }
@@ -407,37 +407,37 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
     const now30gg = new Date();
     now30gg.setDate(now.getDate() + 30);
 
-    this.invoiceGroup = new FormGroup({
-      date: new FormControl(now.toISOString()),
+    this.invoiceGroup = new UntypedFormGroup({
+      date: new UntypedFormControl(now.toISOString()),
       // eslint-disable-next-line id-blacklist
-      number: new FormControl(''),
+      number: new UntypedFormControl(''),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      vat_id: new FormControl(3),
+      vat_id: new UntypedFormControl(3),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      payment_condition: new FormControl(''),
+      payment_condition: new UntypedFormControl(''),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      payment_date: new FormControl(now30gg),
+      payment_date: new UntypedFormControl(now30gg),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      descriptive_articles: new FormArray([
+      descriptive_articles: new UntypedFormArray([
         this.initDescriptiveArticles()
       ]),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      invoice_price: new FormControl(),
-      address: new FormGroup({
+      invoice_price: new UntypedFormControl(),
+      address: new UntypedFormGroup({
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        street_number: new FormControl(''),
-        city: new FormControl(''),
-        cap: new FormControl(''),
-        country: new FormControl('IT')
+        street_number: new UntypedFormControl(''),
+        city: new UntypedFormControl(''),
+        cap: new UntypedFormControl(''),
+        country: new UntypedFormControl('IT')
       }),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      vat_number: new FormControl('IT'),
+      vat_number: new UntypedFormControl('IT'),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      fiscal_code: new FormControl(''),
+      fiscal_code: new UntypedFormControl(''),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      codice_destinatario: new FormControl('0000000'),
-      pec: new FormControl(''),
-      name: new FormControl('')
+      codice_destinatario: new UntypedFormControl('0000000'),
+      pec: new UntypedFormControl(''),
+      name: new UntypedFormControl('')
     });
     this.api.getNextRgNumberOutgoingInvoiceRgNumberGet().pipe(first()).subscribe((nextRgNumber) => {
       this.invoiceGroup.get('number').setValue(nextRgNumber);

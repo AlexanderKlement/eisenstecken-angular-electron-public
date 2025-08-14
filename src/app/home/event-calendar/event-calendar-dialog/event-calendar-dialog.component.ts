@@ -3,7 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {CompanyEventEnum} from '../../../../../eisenstecken-openapi-angular-library';
 import {AuthService} from '../../../shared/services/auth.service';
 import {CompanyEventCreate, CompanyEventUpdate, DefaultService} from 'eisenstecken-openapi-angular-library';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 
 
 export interface EventCalendarDialogData {
@@ -40,7 +40,7 @@ export class EventCalendarDialogComponent implements OnInit {
     CompanyEventEnum.Illness,
   ];
 
-  dialogFormGroup: FormGroup;
+  dialogFormGroup: UntypedFormGroup;
   showDescription = false;
 
   constructor(public dialogRef: MatDialogRef<EventCalendarDialogComponent>,
@@ -54,9 +54,9 @@ export class EventCalendarDialogComponent implements OnInit {
       this.title = 'Eintrag bearbeiten';
     }
 
-    this.dialogFormGroup = new FormGroup({
-      title: new FormControl(''),
-      eventType: new FormControl([])
+    this.dialogFormGroup = new UntypedFormGroup({
+      title: new UntypedFormControl(''),
+      eventType: new UntypedFormControl([])
     });
 
     this.authService.getCurrentUser().subscribe(user => {

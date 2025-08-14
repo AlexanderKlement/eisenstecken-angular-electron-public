@@ -2,7 +2,7 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Observable, Subscription} from 'rxjs';
 import {DefaultService, Unit, Vat} from 'eisenstecken-openapi-angular-library';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {CurrencyPipe, formatNumber, getLocaleCurrencyCode} from '@angular/common';
 
 export interface OrderDialogData {
@@ -37,7 +37,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
 
   vatOptions$: Observable<Vat[]>;
   unitOptions$: Observable<Unit[]>;
-  productEditGroup: FormGroup;
+  productEditGroup: UntypedFormGroup;
   subscription: Subscription;
   priceSubscription: Subscription;
   singlePrice = true;
@@ -117,29 +117,29 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
 
   private initProductEditGroup(): void {
     console.log(this.data.unit_id);
-    this.productEditGroup = new FormGroup({
-      title: new FormControl(this.data.title),
-      name: new FormControl(this.data.name, Validators.required),
-      description: new FormControl(this.data.description),
+    this.productEditGroup = new UntypedFormGroup({
+      title: new UntypedFormControl(this.data.title),
+      name: new UntypedFormControl(this.data.name, Validators.required),
+      description: new UntypedFormControl(this.data.description),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      custom_description: new FormControl(this.data.custom_description),
-      amount: new FormControl(this.data.amount, Validators.min(0.0000001)),
-      discount: new FormControl(this.data.discount, Validators.min(0)),
+      custom_description: new UntypedFormControl(this.data.custom_description),
+      amount: new UntypedFormControl(this.data.amount, Validators.min(0.0000001)),
+      discount: new UntypedFormControl(this.data.discount, Validators.min(0)),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      unit_id: new FormControl(this.data.unit_id !== null ? this.data.unit_id : 3),
-      price: new FormControl(this.data.price, Validators.min(0)),
-      priceFormatted: new FormControl(this.currency.transform(this.data.price, getLocaleCurrencyCode('de_DE'))),
+      unit_id: new UntypedFormControl(this.data.unit_id !== null ? this.data.unit_id : 3),
+      price: new UntypedFormControl(this.data.price, Validators.min(0)),
+      priceFormatted: new UntypedFormControl(this.currency.transform(this.data.price, getLocaleCurrencyCode('de_DE'))),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      mod_number: new FormControl(this.data.mod_number),
+      mod_number: new UntypedFormControl(this.data.mod_number),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      vat_id: new FormControl(this.data.vat_id),
-      request: new FormControl(this.data.request),
+      vat_id: new UntypedFormControl(this.data.vat_id),
+      request: new UntypedFormControl(this.data.request),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      total_price: new FormControl(0),
+      total_price: new UntypedFormControl(0),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      single_price_insert: new FormControl(true),
-      comment: new FormControl(this.data.comment),
-      position: new FormControl(this.data.position)
+      single_price_insert: new UntypedFormControl(true),
+      comment: new UntypedFormControl(this.data.comment),
+      position: new UntypedFormControl(this.data.position)
     });
     this.subscription.add(this.productEditGroup.get('amount').valueChanges.subscribe(() => {
       this.recalculateTotalPrice();

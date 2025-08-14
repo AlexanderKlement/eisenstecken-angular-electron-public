@@ -8,7 +8,7 @@ import {
     SubJobCreate, User
 } from 'eisenstecken-openapi-angular-library';
 import {Observable} from 'rxjs';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BaseEditComponent} from '../../shared/components/base-edit/base-edit.component';
 import {MatDialog} from '@angular/material/dialog';
@@ -28,7 +28,7 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
     subMode = false;
     mainJobId: number;
 
-    jobGroup: FormGroup;
+    jobGroup: UntypedFormGroup;
     submitted = false;
 
     navigationTarget = 'job';
@@ -88,35 +88,35 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
 
     initJobGroup(): void {
         if (!this.subMode) {
-            this.jobGroup = new FormGroup({
-                name: new FormControl(''),
-                description: new FormControl(''),
-                minijob: new FormControl(false),
+            this.jobGroup = new UntypedFormGroup({
+                name: new UntypedFormControl(''),
+                description: new UntypedFormControl(''),
+                minijob: new UntypedFormControl(false),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                responsible_id: new FormControl(1),
-                year: new FormControl(moment().year()),
-                address: new FormGroup({
+                responsible_id: new UntypedFormControl(1),
+                year: new UntypedFormControl(moment().year()),
+                address: new UntypedFormGroup({
                     // eslint-disable-next-line @typescript-eslint/naming-convention
-                    street_number: new FormControl(''),
-                    city: new FormControl(''),
-                    cap: new FormControl(''),
-                    country: new FormControl('IT')
+                    street_number: new UntypedFormControl(''),
+                    city: new UntypedFormControl(''),
+                    cap: new UntypedFormControl(''),
+                    country: new UntypedFormControl('IT')
                 }),
-                completion: new FormControl(''),
+                completion: new UntypedFormControl(''),
             });
         } else {
-            this.jobGroup = new FormGroup({
-                name: new FormControl(''),
-                description: new FormControl(''),
-                minijob: new FormControl(false),
-                address: new FormGroup({
+            this.jobGroup = new UntypedFormGroup({
+                name: new UntypedFormControl(''),
+                description: new UntypedFormControl(''),
+                minijob: new UntypedFormControl(false),
+                address: new UntypedFormGroup({
                     // eslint-disable-next-line @typescript-eslint/naming-convention
-                    street_number: new FormControl(''),
-                    city: new FormControl(''),
-                    cap: new FormControl(''),
-                    country: new FormControl('IT')
+                    street_number: new UntypedFormControl(''),
+                    city: new UntypedFormControl(''),
+                    cap: new UntypedFormControl(''),
+                    country: new UntypedFormControl('IT')
                 }),
-                completion: new FormControl(''),
+                completion: new UntypedFormControl(''),
             });
         }
     }
@@ -166,8 +166,8 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
         }
     }
 
-    getAddressGroup(): FormGroup {
-        return this.jobGroup.get('address') as FormGroup;
+    getAddressGroup(): UntypedFormGroup {
+        return this.jobGroup.get('address') as UntypedFormGroup;
     }
 
     private onSubmitMainJobCreate(): void {

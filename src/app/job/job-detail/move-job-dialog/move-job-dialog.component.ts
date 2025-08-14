@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {DefaultService} from 'eisenstecken-openapi-angular-library';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {first} from 'rxjs/operators';
@@ -16,7 +16,7 @@ export interface ChangePathDialogData {
 })
 export class MoveJobDialogComponent implements OnInit {
     title = 'Jahr verschieben';
-    moveJobFormGroup: FormGroup;
+    moveJobFormGroup: UntypedFormGroup;
 
 
     constructor(private api: DefaultService, private file: FileService,
@@ -27,8 +27,8 @@ export class MoveJobDialogComponent implements OnInit {
     ngOnInit(): void {
       const currentYear = new Date().getFullYear();
       const nextYear = currentYear + 1;
-        this.moveJobFormGroup = new FormGroup({
-            year: new FormControl(nextYear.toString())
+        this.moveJobFormGroup = new UntypedFormGroup({
+            year: new UntypedFormControl(nextYear.toString())
         });
         this.api.readJobJobJobIdGet(this.data.id).pipe(first()).subscribe((job) => {
             this.title += ': ' + job.displayable_name;

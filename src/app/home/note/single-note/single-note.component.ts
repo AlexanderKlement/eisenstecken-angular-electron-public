@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {DefaultService, Note, NoteCreate} from 'eisenstecken-openapi-angular-library';
-import {FormControl} from '@angular/forms';
+import {UntypedFormControl} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {distinctUntilChanged, first} from 'rxjs/operators';
 
@@ -16,7 +16,7 @@ export class SingleNoteComponent implements OnInit, OnDestroy {
     noteVisible = true;
     public subscriptions = new Subscription();
 
-    singleNoteTextArea = new FormControl();
+    singleNoteTextArea = new UntypedFormControl();
 
     constructor(private api: DefaultService) {
     }
