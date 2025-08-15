@@ -1,17 +1,17 @@
-import * as yaml from 'yaml';
-import {APP_CONFIG} from '../environments/environment';
-import {ElectronService} from './core/services';
+import * as yaml from "yaml";
+import {APP_CONFIG} from "../environments/environment";
+import {ElectronService} from "./core/services";
 
 export class LocalConfigRenderer {
 
     private static instance: LocalConfigRenderer;
 
-    private configFileFolder = 'Kivi/Eisenstecken-Eibel';
-    private configFileName = 'config_renderer.yml';
+    private configFileFolder = "Kivi/Eisenstecken-Eibel";
+    private configFileName = "config_renderer.yml";
 
     private configFilePath: string;
 
-    private defaultEncoding: BufferEncoding = 'utf8';
+    private defaultEncoding: BufferEncoding = "utf8";
     private defaultConfig = {
         api: APP_CONFIG.apiBasePath
     };
@@ -34,13 +34,13 @@ export class LocalConfigRenderer {
         this.loadedConfig = this.defaultConfig;
         const electronService = new ElectronService();
         if (electronService.isElectron) {
-            const arg = electronService.ipcRenderer.sendSync('app_path_sync');
+            const arg = electronService.ipcRenderer.sendSync("app_path_sync");
             const appdataPath = arg.path;
-            const path = require('path');
+            const path = require("path");
             const configFileFolderPath = path.join(appdataPath, this.configFileFolder);
             this.configFilePath = path.join(configFileFolderPath, this.configFileName);
             electronService.fs.mkdirSync(configFileFolderPath, {recursive: true});
-            console.log('Renderer Config: ' + this.configFilePath);
+            console.log("Renderer Config: " + this.configFilePath);
             if (electronService.fs.existsSync(this.configFilePath)) {
                 this.readConfig();
             } else {

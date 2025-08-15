@@ -1,7 +1,7 @@
-import {Component} from '@angular/core';
-import {ElectronService} from './core/services';
-import {TranslateService} from '@ngx-translate/core';
-import {APP_CONFIG} from '../environments/environment';
+import {Component} from "@angular/core";
+import {ElectronService} from "./core/services";
+import {TranslateService} from "@ngx-translate/core";
+import {APP_CONFIG} from "../environments/environment";
 
 @Component({
     selector: 'app-root',
@@ -13,15 +13,20 @@ export class AppComponent {
         private electronService: ElectronService,
         private translate: TranslateService
     ) {
-        this.translate.setDefaultLang('de');
-        console.info('APP_CONFIG', APP_CONFIG);
+        this.translate.setDefaultLang("de");
+      // eslint-disable-next-line no-console
+        console.info("APP_CONFIG", APP_CONFIG);
 
         if (electronService.isElectron) {
+          // eslint-disable-next-line no-console
             console.info(process.env);
-            console.info('Run in electron');
-            console.info('NodeJS childProcess', this.electronService.childProcess);
+          // eslint-disable-next-line no-console
+            console.info("Run in electron");
+          // eslint-disable-next-line no-console
+            console.info("NodeJS childProcess", this.electronService.childProcess);
         } else {
-            console.info('Run in browser');
+          // eslint-disable-next-line no-console
+            console.info("Run in browser");
         }
     }
 }

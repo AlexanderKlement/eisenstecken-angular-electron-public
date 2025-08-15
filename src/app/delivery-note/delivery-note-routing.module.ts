@@ -1,11 +1,11 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {DeliveryNoteComponent} from './delivery-note.component';
-import {DeliveryEditComponent} from './delivery-edit/delivery-edit.component';
+import {NgModule} from "@angular/core";
+import {RouterModule, Routes} from "@angular/router";
+import {DeliveryNoteComponent} from "./delivery-note.component";
+import {DeliveryEditComponent} from "./delivery-edit/delivery-edit.component";
 
 const routes: Routes = [
     {
-        path: 'delivery_note',
+        path: "delivery_note",
         component: DeliveryNoteComponent,
         data: {
             requiresLogin: true,
@@ -13,7 +13,7 @@ const routes: Routes = [
         }
     },
     {
-        path: 'delivery_note/:id',
+        path: "delivery_note/:id",
         component: DeliveryEditComponent,
         data: {requiresLogin: true}
     }

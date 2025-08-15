@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {CustomButton} from '../shared/components/toolbar/toolbar.component';
-import {Router} from '@angular/router';
+import {Component, OnInit} from "@angular/core";
+import {CustomButton} from "../shared/components/toolbar/toolbar.component";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-mobile-app',
@@ -17,6 +17,6 @@ export class MobileAppComponent implements OnInit {
     }
 
     hourButtonClicked() {
-        this.router.navigateByUrl('mobile/hours');
+        this.router.navigateByUrl("mobile/hours");
     }
 }

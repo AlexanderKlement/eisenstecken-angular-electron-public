@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {AuthService} from '../shared/services/auth.service';
-import {InfoDialogComponent} from './info-dialog/info-dialog.component';
-import {MatDialog} from '@angular/material/dialog';
-import {ConfirmDialogComponent} from '../shared/components/confirm-dialog/confirm-dialog.component';
-import {DefaultService} from 'eisenstecken-openapi-angular-library';
+import {Component, OnInit} from "@angular/core";
+import {AuthService} from "../shared/services/auth.service";
+import {InfoDialogComponent} from "./info-dialog/info-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
+import {ConfirmDialogComponent} from "../shared/components/confirm-dialog/confirm-dialog.component";
+import {DefaultService} from "../../api/openapi";
 
 @Component({
   selector: 'app-home',
@@ -24,17 +24,17 @@ export class HomeComponent implements OnInit {
 
   showInfoClicked(): void {
     this.dialog.open(InfoDialogComponent, {
-      width: (window.innerWidth - 100).toString() + 'px',
+      width: (window.innerWidth - 100).toString() + "px",
       data: {}
     });
   }
 
   logoutClicked(): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
+      width: "400px",
       data: {
-        title: 'Abmelden?',
-        text: 'Soll der Benutzer abgemeldet werden?'
+        title: "Abmelden?",
+        text: "Soll der Benutzer abgemeldet werden?"
       }
     });
     dialogRef.afterClosed().subscribe(result => {

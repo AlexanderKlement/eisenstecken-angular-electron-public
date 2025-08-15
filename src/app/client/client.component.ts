@@ -1,12 +1,11 @@
-import {Component, ComponentRef, OnInit} from '@angular/core';
-import {TableDataSource} from '../shared/components/table-builder/table-builder.datasource';
-import {DefaultService, Client} from 'eisenstecken-openapi-angular-library';
-import {ActivatedRoute, Router} from '@angular/router';
-import {CustomButton} from '../shared/components/toolbar/toolbar.component';
-import {AuthService} from '../shared/services/auth.service';
-import {first} from 'rxjs/operators';
-import {Observable, Subscriber} from 'rxjs';
-
+import {Component, ComponentRef, OnInit} from "@angular/core";
+import {TableDataSource} from "../shared/components/table-builder/table-builder.datasource";
+import {ActivatedRoute, Router} from "@angular/router";
+import {CustomButton} from "../shared/components/toolbar/toolbar.component";
+import {AuthService} from "../shared/services/auth.service";
+import {first} from "rxjs/operators";
+import {Observable, Subscriber} from "rxjs";
+import {DefaultService, Client} from "../../api/openapi";
 @Component({
     selector: 'app-client',
     templateUrl: './client.component.html',
@@ -28,12 +27,12 @@ export class ClientComponent implements OnInit {
     ngOnInit(): void {
         this.initPrivateClients();
         this.initBusinessClients();
-        this.authService.currentUserHasRight('clients:create').pipe(first()).subscribe(allowed => {
+        this.authService.currentUserHasRight("clients:create").pipe(first()).subscribe(allowed => {
             if (allowed) {
                 this.buttons.push({
-                    name: 'Neuer Kunde',
+                    name: "Neuer Kunde",
                     navigate: (): void => {
-                        this.router.navigateByUrl('/client/edit/new');
+                        this.router.navigateByUrl("/client/edit/new");
                     }
                 });
             }
@@ -65,15 +64,15 @@ export class ClientComponent implements OnInit {
                                 name: dataSource.fullname,
                             },
                             route: () => {
-                                this.router.navigateByUrl('/client/' + dataSource.id.toString());
+                                this.router.navigateByUrl("/client/" + dataSource.id.toString());
                             }
                         });
                 });
                 return rows;
             },
             [
-                {name: 'id', headerName: 'ID'},
-                {name: 'name', headerName: 'Name'}
+                {name: "id", headerName: "ID"},
+                {name: "name", headerName: "Name"}
             ],
             (api) => api.readClientCountClientCountGet()
         );
@@ -94,15 +93,15 @@ export class ClientComponent implements OnInit {
                                 name: dataSource.fullname,
                             },
                             route: () => {
-                                this.router.navigateByUrl('/client/' + dataSource.id.toString());
+                                this.router.navigateByUrl("/client/" + dataSource.id.toString());
                             }
                         });
                 });
                 return rows;
             },
             [
-                {name: 'id', headerName: 'ID'},
-                {name: 'name', headerName: 'Name'}
+                {name: "id", headerName: "ID"},
+                {name: "name", headerName: "Name"}
             ],
             (api) => api.readClientCountClientCountGet()
         );

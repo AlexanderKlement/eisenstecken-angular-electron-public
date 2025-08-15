@@ -1,11 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {DayManager} from './day.manager';
-import {MatDialog} from '@angular/material/dialog';
-import {CalendarData, CalendarEditComponent} from './calendar-edit/calendar-edit.component';
-import {first} from 'rxjs/operators';
-import {CalendarService} from './calendar.service';
-import * as moment from 'moment';
-import {AuthService} from '../../services/auth.service';
+import {Component, Input, OnInit} from "@angular/core";
+import {DayManager} from "./day.manager";
+import {MatDialog} from "@angular/material/dialog";
+import {CalendarData, CalendarEditComponent} from "./calendar-edit/calendar-edit.component";
+import {first} from "rxjs/operators";
+import {CalendarService} from "./calendar.service";
+import * as moment from "moment";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
     selector: 'app-calendar',
@@ -30,7 +30,7 @@ export class SimpleCalendarComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.authService.currentUserHasRight('calendars:create').pipe(first()).subscribe(allowed => {
+        this.authService.currentUserHasRight("calendars:create").pipe(first()).subscribe(allowed => {
             this.createAllowed = allowed;
         });
     }
@@ -56,7 +56,7 @@ export class SimpleCalendarComponent implements OnInit {
             calendarId: this.calendarId
         };
         const dialogRef = this.dialog.open(CalendarEditComponent, {
-            width: '700px',
+            width: "700px",
             data,
         });
 
@@ -64,7 +64,7 @@ export class SimpleCalendarComponent implements OnInit {
             if (result !== undefined) {
                 const date = moment(result.start_time);
                 const now = moment();
-                this.calendar.refreshCalendar(parseInt(result.calendar.id, 10), date.diff(now, 'days'));
+                this.calendar.refreshCalendar(parseInt(result.calendar.id, 10), date.diff(now, "days"));
             }
         });
     }

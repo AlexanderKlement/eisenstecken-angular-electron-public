@@ -1,10 +1,10 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {ConfirmDialogComponent,} from '../../../shared/components/confirm-dialog/confirm-dialog.component';
-import {DefaultService, Service, ServiceUpdate} from 'eisenstecken-openapi-angular-library';
-import {first} from 'rxjs/operators';
-import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {Component, Inject, OnInit} from "@angular/core";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {ConfirmDialogComponent,} from "../../../shared/components/confirm-dialog/confirm-dialog.component";
+import {first} from "rxjs/operators";
+import {UntypedFormControl, UntypedFormGroup} from "@angular/forms";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {DefaultService, Service, ServiceUpdate} from "../../../../api/openapi";
 
 export interface ServiceDialogData {
     id: number;
@@ -54,10 +54,10 @@ export class ServiceDialogComponent implements OnInit {
 
     onDeleteClick() {
         const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-            width: '400px',
+            width: "400px",
             data: {
-                title: 'Service löschen?',
-                text: 'Service löschen? Diese Aktion kann nicht rückgängig gemacht werden!'
+                title: "Service löschen?",
+                text: "Service löschen? Diese Aktion kann nicht rückgängig gemacht werden!"
             }
         });
         dialogRef.afterClosed().subscribe(result => {
@@ -66,7 +66,7 @@ export class ServiceDialogComponent implements OnInit {
                     if (success) {
                         this.dialogRef.close(true);
                     } else {
-                        this.snackBar.open('Service konnte nicht gelöscht werden', 'Ok', {
+                        this.snackBar.open("Service konnte nicht gelöscht werden", "Ok", {
                             duration: 10000
                         });
                     }
@@ -77,6 +77,6 @@ export class ServiceDialogComponent implements OnInit {
     }
 
     getMinuteControl(): UntypedFormControl {
-        return this.serviceGroup.get('minutes') as UntypedFormControl;
+        return this.serviceGroup.get("minutes") as UntypedFormControl;
     }
 }

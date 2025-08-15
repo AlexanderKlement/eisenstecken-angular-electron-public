@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {UntypedFormControl} from '@angular/forms';
+import { Component, OnInit } from "@angular/core";
+import {ActivatedRoute, Router} from "@angular/router";
+import {UntypedFormControl} from "@angular/forms";
 
 @Component({
   selector: 'app-work-day-new',
@@ -25,8 +25,8 @@ export class WorkDayNewComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.userId = parseInt(params.id, 10);
       if (isNaN(this.userId)) {
-        console.error('RecalculationDetail: Cannot parse jobId');
-        this.router.navigateByUrl('employee');
+        console.error("RecalculationDetail: Cannot parse jobId");
+        this.router.navigateByUrl("employee");
         return;
       }
       this.loading = false;

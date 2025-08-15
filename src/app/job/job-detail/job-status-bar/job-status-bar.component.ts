@@ -1,30 +1,30 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {DefaultService, JobStatus, JobStatusType} from 'eisenstecken-openapi-angular-library';
-import {Observable, ReplaySubject, Subject} from 'rxjs';
-import {first, map} from 'rxjs/operators';
-import {cli} from 'webdriver-manager/built/lib/cli_instance';
-import {ConfirmDialogComponent} from '../../../shared/components/confirm-dialog/confirm-dialog.component';
-import {MatDialog} from '@angular/material/dialog';
+import { Component, Input, OnInit } from "@angular/core";
+import { Observable, ReplaySubject, Subject } from "rxjs";
+import { first, map } from "rxjs/operators";
+import { cli } from "webdriver-manager/built/lib/cli_instance";
+import { ConfirmDialogComponent } from "../../../shared/components/confirm-dialog/confirm-dialog.component";
+import { MatDialog } from "@angular/material/dialog";
+import { JobStatus, DefaultService } from "../../../../api/openapi";
 
 @Component({
   selector: 'app-job-status-bar',
   templateUrl: './job-status-bar.component.html',
-  styleUrls: ['./job-status-bar.component.scss']
+  styleUrls: ['./job-status-bar.component.scss'],
 })
 export class JobStatusBarComponent implements OnInit {
 
   @Input() jobId: number;
   public jobStatusList: ReplaySubject<JobStatus[]>;
-  public toolBarColor = 'created';
+  public toolBarColor = "created";
   public selectedStatus: JobStatus;
   public loading = true;
 
 
   private colorMap = [
-    [JobStatusType.Created, 'created'],
-    [JobStatusType.Accepted, 'accepted'],
-    [JobStatusType.Completed, 'completed'],
-    [JobStatusType.Declined, 'declined']
+    [JobStatusType.Created, "created"],
+    [JobStatusType.Accepted, "accepted"],
+    [JobStatusType.Completed, "completed"],
+    [JobStatusType.Declined, "declined"],
   ];
 
   constructor(private api: DefaultService, private dialog: MatDialog) {
@@ -51,17 +51,17 @@ export class JobStatusBarComponent implements OnInit {
           this.refresh();
         });
       } else {
-        let errorText = '';
+        let errorText = "";
         for (const singleError of jobStatusUpdateResponse.errors) {
-          errorText += singleError + '\n';
+          errorText += singleError + "\n";
         }
         this.dialog.open(ConfirmDialogComponent, {
-          width: '400px',
+          width: "400px",
 
           data: {
-            title: 'Status konnte nicht geändert werden',
+            title: "Status konnte nicht geändert werden",
             text: errorText,
-          }
+          },
         });
       }
     });
@@ -75,7 +75,7 @@ export class JobStatusBarComponent implements OnInit {
           return jobStatus;
         }
       }
-      console.error('JobStatusBar: Did not find status of job');
+      console.error("JobStatusBar: Did not find status of job");
       return null;
     }));
   }

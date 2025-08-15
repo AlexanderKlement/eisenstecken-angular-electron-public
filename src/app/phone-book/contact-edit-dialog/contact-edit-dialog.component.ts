@@ -4,14 +4,10 @@ import {
   MatDialog,
   MatDialogRef,
 } from "@angular/material/dialog";
-import {
-  ContactCreate,
-  ContactTypeEnum,
-  DefaultService,
-} from "eisenstecken-openapi-angular-library";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { first, map, startWith } from "rxjs/operators";
 import { Observable } from "rxjs";
+import { DefaultService, ContactTypeEnum, ContactCreate } from "../../../api/openapi";
 
 export interface ContactDialogData {
   id: number;

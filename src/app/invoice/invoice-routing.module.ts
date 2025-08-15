@@ -1,12 +1,12 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {InvoiceComponent} from './invoice.component';
-import {AccessGuard} from '../shared/services/access-guard.service';
-import {IngoingDetailComponent} from './ingoing/ingoing-detail/ingoing-detail.component';
+import {NgModule} from "@angular/core";
+import {RouterModule, Routes} from "@angular/router";
+import {InvoiceComponent} from "./invoice.component";
+import {AccessGuard} from "../shared/services/access-guard.service";
+import {IngoingDetailComponent} from "./ingoing/ingoing-detail/ingoing-detail.component";
 
 const routes: Routes = [
     {
-        path: 'invoice',
+        path: "invoice",
         component: InvoiceComponent,
         data: {
             requiresLogin: true,
@@ -14,7 +14,7 @@ const routes: Routes = [
         }
     },
     {
-        path: 'invoice/ingoing/:id',
+        path: "invoice/ingoing/:id",
         component: IngoingDetailComponent,
         data: {
             requiresLogin: true,

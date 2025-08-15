@@ -8,14 +8,14 @@ import {
   OnInit,
   SimpleChanges,
   ViewChild
-} from '@angular/core';
-import {TableDataSource} from './table-builder.datasource';
-import {MatPaginator} from '@angular/material/paginator';
-import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
-import {fromEvent, Observable, Subscription} from 'rxjs';
-import {DataSourceClass} from '../../types';
-import {ThemePalette} from '@angular/material/core';
-import {ActivatedRoute} from '@angular/router';
+} from "@angular/core";
+import {TableDataSource} from "./table-builder.datasource";
+import {MatPaginator} from "@angular/material/paginator";
+import {debounceTime, distinctUntilChanged, tap} from "rxjs/operators";
+import {fromEvent, Observable, Subscription} from "rxjs";
+import {DataSourceClass} from "../../types";
+import {ThemePalette} from "@angular/material/core";
+import {ActivatedRoute} from "@angular/router";
 
 export interface TableButton {
     name: (values: any) => string;
@@ -67,16 +67,16 @@ export class TableBuilderComponent<T extends DataSourceClass> implements OnInit,
 
     addButtons(): void {
       if (this.buttons.length > 0) {
-            this.dataSource.columnIdentifiers.push('actions');
+            this.dataSource.columnIdentifiers.push("actions");
             this.dataSource.columns.push({
-                name: 'actions',
-                headerName: 'Aktionen',
+                name: "actions",
+                headerName: "Aktionen",
             });
         }
     }
 
     ngAfterViewInit(): void {
-        this.subscription.add(fromEvent(this.input.nativeElement, 'keyup').pipe(debounceTime(150), distinctUntilChanged(), tap(() => {
+        this.subscription.add(fromEvent(this.input.nativeElement, "keyup").pipe(debounceTime(150), distinctUntilChanged(), tap(() => {
             this.paginator.pageIndex = 0;
             this.loadDataPage();
         })).subscribe());
@@ -94,6 +94,6 @@ export class TableBuilderComponent<T extends DataSourceClass> implements OnInit,
     }
 
     private loadDataPage(enableLoading: boolean = true) {
-        this.dataSource.loadData(this.input.nativeElement.value, '', this.paginator.pageIndex, this.paginator.pageSize, enableLoading);
+        this.dataSource.loadData(this.input.nativeElement.value, "", this.paginator.pageIndex, this.paginator.pageSize, enableLoading);
     }
 }

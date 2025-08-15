@@ -1,11 +1,11 @@
-import {NgModule} from '@angular/core';
-import { RouterModule, Routes} from '@angular/router';
-import {PhoneBookComponent} from './phone-book.component';
+import {NgModule} from "@angular/core";
+import { RouterModule, Routes} from "@angular/router";
+import {PhoneBookComponent} from "./phone-book.component";
 
 
 const routes: Routes = [
     {
-        path: 'phone_book',
+        path: "phone_book",
         component: PhoneBookComponent,
         data: {
             requiresLogin: true,

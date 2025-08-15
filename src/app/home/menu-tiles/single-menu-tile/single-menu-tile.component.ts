@@ -1,6 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {MenuTileDetail} from '../menu-tile.settings';
-import {Router} from '@angular/router';
+import {Component, Input, OnInit} from "@angular/core";
+import {MenuTileDetail} from "../menu-tile.settings";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-single-menu-tile',

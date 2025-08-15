@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {ChatMessage} from 'eisenstecken-openapi-angular-library';
+import {Component, Input, OnInit} from "@angular/core";
+import {ChatMessage} from "../../../../api/openapi";
 
 @Component({
   selector: 'app-chat-message',

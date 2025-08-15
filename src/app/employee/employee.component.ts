@@ -1,29 +1,21 @@
-import { Component, ComponentRef, OnInit } from '@angular/core';
-import { TableDataSource } from '../shared/components/table-builder/table-builder.datasource';
-import {
-  AdditionalWorkload,
-  DefaultService,
-  Fee,
-  Journey,
-  Maintenance,
-  MealSum,
-  User
-} from 'eisenstecken-openapi-angular-library';
-import { CustomButton } from '../shared/components/toolbar/toolbar.component';
-import { LockService } from '../shared/services/lock.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import * as moment from 'moment';
-import { ConfirmDialogComponent } from '../shared/components/confirm-dialog/confirm-dialog.component';
-import { first } from 'rxjs/operators';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { minutesToDisplayableString } from '../shared/date.util';
-import { Observable, Subscriber } from 'rxjs';
+import { Component, ComponentRef, OnInit } from "@angular/core";
+import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
+import { CustomButton } from "../shared/components/toolbar/toolbar.component";
+import { LockService } from "../shared/services/lock.service";
+import { ActivatedRoute, Router } from "@angular/router";
+import * as moment from "moment";
+import { ConfirmDialogComponent } from "../shared/components/confirm-dialog/confirm-dialog.component";
+import { first } from "rxjs/operators";
+import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { minutesToDisplayableString } from "../shared/date.util";
+import { Observable, Subscriber } from "rxjs";
+import { User, Fee, Journey, MealSum, Maintenance, AdditionalWorkload, DefaultService } from "../../api/openapi";
 
 @Component({
   selector: 'app-employee',
   templateUrl: './employee.component.html',
-  styleUrls: ['./employee.component.scss']
+  styleUrls: ['./employee.component.scss'],
 })
 export class EmployeeComponent implements OnInit {
 
@@ -35,17 +27,17 @@ export class EmployeeComponent implements OnInit {
   additionalWorkloadDataSource: TableDataSource<AdditionalWorkload>;
   public buttons: CustomButton[] = [
     {
-      name: 'Neuer Benutzer',
+      name: "Neuer Benutzer",
       navigate: (): void => {
-        this.router.navigateByUrl('/user/edit/new');
-      }
-    }
+        this.router.navigateByUrl("/user/edit/new");
+      },
+    },
   ];
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
 
   constructor(private api: DefaultService, private locker: LockService, private router: Router,
-    private dialog: MatDialog, private snackBar: MatSnackBar) {
+              private dialog: MatDialog, private snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
@@ -83,14 +75,14 @@ export class EmployeeComponent implements OnInit {
                 fullname: dataSource.fullname,
               },
               route: () => {
-                this.router.navigateByUrl('/employee/' + dataSource.id.toString());
-              }
+                this.router.navigateByUrl("/employee/" + dataSource.id.toString());
+              },
             });
         });
         return rows;
       },
       [
-        { name: 'fullname', headerName: 'Name' },
+        { name: "fullname", headerName: "Name" },
       ],
       (api) => api.readUserCountUsersCountGet(true),
     );
@@ -108,25 +100,25 @@ export class EmployeeComponent implements OnInit {
           rows.push(
             {
               values: {
-                'user.fullname': dataSource.user.fullname,
+                "user.fullname": dataSource.user.fullname,
                 amount: dataSource.amount,
                 reason: dataSource.reason,
-                date: moment(dataSource.date).format('L')
+                date: moment(dataSource.date).format("L"),
               },
               route: () => {
                 this.feeClicked(dataSource.id);
-              }
+              },
             });
         });
         return rows;
       },
       [
-        { name: 'user.fullname', headerName: 'Benutzer' },
-        { name: 'date', headerName: 'Datum' },
-        { name: 'reason', headerName: 'Grund' },
-        { name: 'amount', headerName: 'Menge [€]' },
+        { name: "user.fullname", headerName: "Benutzer" },
+        { name: "date", headerName: "Datum" },
+        { name: "reason", headerName: "Grund" },
+        { name: "amount", headerName: "Menge [€]" },
       ],
-      (api) => api.readFeeCountFeeCountGet()
+      (api) => api.readFeeCountFeeCountGet(),
     );
     this.feeDataSource.loadData();
   }
@@ -142,26 +134,26 @@ export class EmployeeComponent implements OnInit {
           rows.push(
             {
               values: {
-                'user.fullname': dataSource.user.fullname,
-                'car.name': dataSource.car.name,
-                date: moment(dataSource.date).format('L'),
+                "user.fullname": dataSource.user.fullname,
+                "car.name": dataSource.car.name,
+                date: moment(dataSource.date).format("L"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 distance_km: dataSource.distance_km,
               },
               route: () => {
                 this.journeyClicked(dataSource.id);
-              }
+              },
             });
         });
         return rows;
       },
       [
-        { name: 'user.fullname', headerName: 'Benutzer' },
-        { name: 'date', headerName: 'Datum' },
-        { name: 'car.name', headerName: 'Auto' },
-        { name: 'distance_km', headerName: 'Distanz [km]' },
+        { name: "user.fullname", headerName: "Benutzer" },
+        { name: "date", headerName: "Datum" },
+        { name: "car.name", headerName: "Auto" },
+        { name: "distance_km", headerName: "Distanz [km]" },
       ],
-      (api) => api.readJourneyCountJourneyCountGet()
+      (api) => api.readJourneyCountJourneyCountGet(),
     );
     this.journeyDataSource.loadData();
   }
@@ -177,35 +169,35 @@ export class EmployeeComponent implements OnInit {
           rows.push(
             {
               values: {
-                date: moment(dataSource.date).format('MMMM YYYY'),
+                date: moment(dataSource.date).format("MMMM YYYY"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                'eating_place.name': dataSource.eating_place.name,
-                sum: dataSource.sum
+                "eating_place.name": dataSource.eating_place.name,
+                sum: dataSource.sum,
               },
               route: () => {
-                this.router.navigateByUrl('meal/' + dataSource.eating_place.id.toString());
-              }
+                this.router.navigateByUrl("meal/" + dataSource.eating_place.id.toString());
+              },
             });
         });
         return rows;
       },
       [
-        { name: 'eating_place.name', headerName: 'Restaurant' },
-        { name: 'date', headerName: 'Datum' },
-        { name: 'sum', headerName: 'Anzahl' }
+        { name: "eating_place.name", headerName: "Restaurant" },
+        { name: "date", headerName: "Datum" },
+        { name: "sum", headerName: "Anzahl" },
       ],
-      (api) => api.readMealSumsMealSumCountGet()
+      (api) => api.readMealSumsMealSumCountGet(),
     );
     this.mealDataSource.loadData();
   }
 
   private feeClicked(id: number) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
+      width: "400px",
       data: {
-        title: 'Spese löschen?',
-        text: 'Spese löschen? Diese Aktion kann nicht rückgängig gemacht werden!'
-      }
+        title: "Spese löschen?",
+        text: "Spese löschen? Diese Aktion kann nicht rückgängig gemacht werden!",
+      },
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -213,8 +205,8 @@ export class EmployeeComponent implements OnInit {
           if (success) {
             this.feeDataSource.loadData();
           } else {
-            this.snackBar.open('Spese konnte nicht gelöscht werden', 'Ok', {
-              duration: 10000
+            this.snackBar.open("Spese konnte nicht gelöscht werden", "Ok", {
+              duration: 10000,
             });
           }
         });
@@ -224,11 +216,11 @@ export class EmployeeComponent implements OnInit {
 
   private journeyClicked(id: number) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
+      width: "400px",
       data: {
-        title: 'Fahrt löschen?',
-        text: 'Fahrt löschen? Diese Aktion kann nicht rückgängig gemacht werden!'
-      }
+        title: "Fahrt löschen?",
+        text: "Fahrt löschen? Diese Aktion kann nicht rückgängig gemacht werden!",
+      },
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -236,8 +228,8 @@ export class EmployeeComponent implements OnInit {
           if (success) {
             this.journeyDataSource.loadData();
           } else {
-            this.snackBar.open('Fahrt konnte nicht gelöscht werden', 'Ok', {
-              duration: 10000
+            this.snackBar.open("Fahrt konnte nicht gelöscht werden", "Ok", {
+              duration: 10000,
             });
           }
         });
@@ -257,28 +249,27 @@ export class EmployeeComponent implements OnInit {
           rows.push(
             {
               values: {
-                month: moment(dataSource.month).format('MMMM YYYY'),
+                month: moment(dataSource.month).format("MMMM YYYY"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                'user.fullname': dataSource.user.fullname,
+                "user.fullname": dataSource.user.fullname,
                 minutes: minutesToDisplayableString(dataSource.minutes),
               },
               route: () => {
                 this.maintenanceClicked();
-              }
+              },
             });
         });
         return rows;
       },
       [
-        { name: 'month', headerName: 'Zeitraum' },
-        { name: 'user.fullname', headerName: 'Name' },
-        { name: 'minutes', headerName: 'Minutes' }
+        { name: "month", headerName: "Zeitraum" },
+        { name: "user.fullname", headerName: "Name" },
+        { name: "minutes", headerName: "Minutes" },
       ],
-      (api) => api.readMaintenanceCountMaintenanceCountGet()
+      (api) => api.readMaintenanceCountMaintenanceCountGet(),
     );
     this.maintenanceDataSource.loadData();
   }
-
 
 
   private maintenanceClicked(): void {
@@ -296,37 +287,37 @@ export class EmployeeComponent implements OnInit {
           rows.push(
             {
               values: {
-                date: moment(dataSource.date).format('dddd, DD.MM.YYYY'),
+                date: moment(dataSource.date).format("dddd, DD.MM.YYYY"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                'user.fullname': dataSource.user.fullname,
+                "user.fullname": dataSource.user.fullname,
                 minutes: minutesToDisplayableString(dataSource.minutes),
                 description: dataSource.description,
               },
               route: () => {
                 this.additionalWorkloadClicked(dataSource.id);
-              }
+              },
             });
         });
         return rows;
       },
       [
-        { name: 'date', headerName: 'Datum' },
-        { name: 'user.fullname', headerName: 'Name' },
-        { name: 'description', headerName: 'Beschreibung' },
-        { name: 'minutes', headerName: 'Zeit' }
+        { name: "date", headerName: "Datum" },
+        { name: "user.fullname", headerName: "Name" },
+        { name: "description", headerName: "Beschreibung" },
+        { name: "minutes", headerName: "Zeit" },
       ],
-      (api) => api.readAdditionalWorkloadCountAdditionalWorkloadCountGet()
+      (api) => api.readAdditionalWorkloadCountAdditionalWorkloadCountGet(),
     );
     this.additionalWorkloadDataSource.loadData();
   }
 
   private additionalWorkloadClicked(id: number) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
+      width: "400px",
       data: {
-        title: 'Zusätzliche Arbeiten löschen?',
-        text: 'Zusätzliche Arbeiten löschen? Diese Aktion kann nicht rückgängig gemacht werden!'
-      }
+        title: "Zusätzliche Arbeiten löschen?",
+        text: "Zusätzliche Arbeiten löschen? Diese Aktion kann nicht rückgängig gemacht werden!",
+      },
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -334,8 +325,8 @@ export class EmployeeComponent implements OnInit {
           if (success) {
             this.additionalWorkloadDataSource.loadData();
           } else {
-            this.snackBar.open('Zusätzliche Arbeiten konnten nicht gelöscht werden', 'Ok', {
-              duration: 10000
+            this.snackBar.open("Zusätzliche Arbeiten konnten nicht gelöscht werden", "Ok", {
+              duration: 10000,
             });
           }
         });

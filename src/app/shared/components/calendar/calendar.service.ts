@@ -1,8 +1,8 @@
-import {Injectable, OnDestroy} from '@angular/core';
-import {CalendarEntry, DefaultService} from 'eisenstecken-openapi-angular-library';
-import {Observable, Subscriber} from 'rxjs';
-import {first} from 'rxjs/operators';
-import {TrayService} from '../../services/tray.service';
+import {Injectable, OnDestroy} from "@angular/core";
+import {Observable, Subscriber} from "rxjs";
+import {first} from "rxjs/operators";
+import {TrayService} from "../../services/tray.service";
+import { CalendarEntry, DefaultService } from "../../../../api/openapi";
 
 export interface CalendarDayListElement {
     day: number;
@@ -61,13 +61,13 @@ export class CalendarService implements OnDestroy {
     public refreshCalendar(calendarId: number, day: number): void {
         const calendarDayListElement = this.findCalendarAndDay(calendarId, day);
         if (calendarDayListElement === undefined || calendarDayListElement.subscriber === undefined) {
-            console.warn('Unable to refresh calendar day');
+            console.warn("Unable to refresh calendar day");
             console.warn(calendarDayListElement);
             return;
         }
         const subscriber = calendarDayListElement.subscriber;
         if (subscriber === undefined) {
-            throw new Error('Subscriber is not defined yet');
+            throw new Error("Subscriber is not defined yet");
         }
         this.api.readCalendarEntriesByDayCalendarCalendarsCalendarIdGet(calendarId, day)
             .pipe(first()).subscribe(calendarEntries => {
@@ -91,7 +91,7 @@ export class CalendarService implements OnDestroy {
         }
         for (const calendarDayListElementIterator of calendarListElement.days) {
             if (calendarDayListElementIterator.day === day) {
-                throw new Error('Could not add Observable, already present');
+                throw new Error("Could not add Observable, already present");
             }
         }
         const calendarDayListElement: CalendarDayListElement = {

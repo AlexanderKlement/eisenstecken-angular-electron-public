@@ -1,6 +1,6 @@
 
-  import { Pipe, PipeTransform, SecurityContext } from '@angular/core';
-import {DomSanitizer} from '@angular/platform-browser';
+  import { Pipe, PipeTransform, SecurityContext } from "@angular/core";
+import {DomSanitizer} from "@angular/platform-browser";
 
   @Pipe({
   name: 'boldSpan'
@@ -17,7 +17,7 @@ export class BoldSpanPipe implements PipeTransform {
   }
 
   replace(str, regex) {
-    return str.replace(new RegExp(`(${regex})`, 'gi'), '<b>$1</b>');
+    return str.replace(new RegExp(`(${regex})`, "gi"), "<b>$1</b>");
   }
 
   sanitize(str) {

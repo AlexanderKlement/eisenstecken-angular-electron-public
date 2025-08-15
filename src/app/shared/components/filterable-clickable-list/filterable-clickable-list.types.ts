@@ -1,4 +1,5 @@
-import {Job, Stock, Supplier, OrderableType} from 'eisenstecken-openapi-angular-library';
+import { Job, OrderableType, Stock, Supplier } from "../../../../api/openapi";
+
 
 export type SupportedListElements = Job | Stock | Supplier;
 
@@ -11,5 +12,5 @@ export interface ListItem {
 
 
 export function isJob(elem: SupportedListElements): elem is Job{
-  return elem.type === 'job';
+  return elem.type === "job";
 }

@@ -1,9 +1,9 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { AuthService } from './auth.service';
-import {DefaultService} from 'eisenstecken-openapi-angular-library';
+import { AuthService } from "./auth.service";
+import { DefaultService } from "../../../api/openapi";
 
-describe('AuthService', () => {
+describe("AuthService", () => {
   let service: AuthService;
 
   beforeEach(() => {
@@ -12,7 +12,7 @@ describe('AuthService', () => {
     service = TestBed.inject(AuthService);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

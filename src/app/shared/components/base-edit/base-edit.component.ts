@@ -1,11 +1,11 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable, ReplaySubject, Subscription} from 'rxjs';
-import {ActivatedRoute, Params, Router} from '@angular/router';
-import {DefaultService, Lock, User} from 'eisenstecken-openapi-angular-library';
-import {DataSourceClass} from '../../types';
-import {MatDialog} from '@angular/material/dialog';
-import {WarningDialogComponent} from './warning-dialog/warning-dialog.component';
-import {first} from 'rxjs/operators';
+import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Observable, ReplaySubject, Subscription} from "rxjs";
+import {ActivatedRoute, Params, Router} from "@angular/router";
+import {DataSourceClass} from "../../types";
+import {MatDialog} from "@angular/material/dialog";
+import {WarningDialogComponent} from "./warning-dialog/warning-dialog.component";
+import {first} from "rxjs/operators";
+import { DefaultService, User, Lock } from "../../../../api/openapi";
 
 @Component({
     selector: 'app-base-edit',
@@ -39,24 +39,24 @@ export class BaseEditComponent<T extends DataSourceClass> implements OnInit, OnD
     ngOnInit(): void {
         this.me$ = this.api.readUsersMeUsersMeGet();
         this.routeParams.pipe(first()).subscribe((params) => {
-            if (params.id === 'new') {
+            if (params.id === "new") {
                 this.createMode = true;
                 return;
             }
             this.id = parseInt(params.id, 10);
             if (isNaN(this.id)) {
-                console.error('BaseEditComponent: Cannot parse given id');
+                console.error("BaseEditComponent: Cannot parse given id");
                 this.goBack();
             }
             if (!this.createMode) {
                 this.lockFunction(this.api, this.id).pipe(first()).subscribe(lock => {
                     if (!lock.locked) {//has to be locked, otherwise component is accessed directly {
-                        console.error('BaseEditComponent: The lock is not locked. This should not happen on accessing a ressource');
+                        console.error("BaseEditComponent: The lock is not locked. This should not happen on accessing a ressource");
                         this.goBack();
                     }
                     this.me$.pipe(first()).subscribe((user) => {
                         if (user.id !== lock.user.id) {//if locked by other user go back
-                            console.error('BaseEditComponent: The accessed ressource is locked by another user');
+                            console.error("BaseEditComponent: The accessed ressource is locked by another user");
                             this.goBack();
                         } else {   //now we talking
                             this.data$ = this.dataFunction(this.api, this.id);
@@ -87,9 +87,10 @@ export class BaseEditComponent<T extends DataSourceClass> implements OnInit, OnD
         if (!this.createMode) {
             this.unlockFunction(this.api, this.id).pipe(first()).subscribe((success) => {
                 if (success) {
-                    console.info('BaseEdit: SUCCESS: unlocked object with id: ' + this.id);
+                  // eslint-disable-next-line no-console
+                    console.info("BaseEdit: SUCCESS: unlocked object with id: " + this.id);
                 } else {
-                    console.warn('BaseEdit: FAIL: to unlock object with id: ' + this.id);
+                    console.warn("BaseEdit: FAIL: to unlock object with id: " + this.id);
                 }
             });
         }
@@ -113,15 +114,15 @@ export class BaseEditComponent<T extends DataSourceClass> implements OnInit, OnD
 
     protected observableReady(): void {
         // eslint-disable-next-line no-console
-        console.info('BaseEditComponent: The data observable is ready');
+        console.info("BaseEditComponent: The data observable is ready");
     }
 
     private startListeningForUnload(): void {
-        window.addEventListener('beforeunload', this.ngOnDestroy.bind(this));
+        window.addEventListener("beforeunload", this.ngOnDestroy.bind(this));
     }
 
     private stopListeningForUnload(): void {
-        window.removeEventListener('beforeunload', this.ngOnDestroy.bind(this));
+        window.removeEventListener("beforeunload", this.ngOnDestroy.bind(this));
     }
 
     private showWarningDialog(totBlockTime: number, remBlockTime: number): void {

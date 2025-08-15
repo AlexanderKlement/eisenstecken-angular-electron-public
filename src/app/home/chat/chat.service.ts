@@ -1,9 +1,9 @@
-import {Injectable, OnDestroy} from '@angular/core';
-import {DefaultService, ChatMessageCreate, ChatMessage, ChatRecipient} from 'eisenstecken-openapi-angular-library';
-import {Observable, Subscriber} from 'rxjs';
-import {first, tap} from 'rxjs/operators';
-import {ElectronService} from '../../core/services';
-import {TrayService} from '../../shared/services/tray.service';
+import {Injectable, OnDestroy} from "@angular/core";
+import {Observable, Subscriber} from "rxjs";
+import {first, tap} from "rxjs/operators";
+import {ElectronService} from "../../core/services";
+import {TrayService} from "../../shared/services/tray.service";
+import { ChatMessage, ChatMessageCreate, ChatRecipient, DefaultService } from '../../../api/openapi';
 
 @Injectable({
     providedIn: 'root'
@@ -40,7 +40,7 @@ export class ChatService implements OnDestroy {
             this.amountOfUnreadMessagesSubscriber = amountOfUnreadMessagesSubscriber;
         });
         if (this.electron.isElectron) {
-            this.electron.ipcRenderer.on('app-hidden', () => {
+            this.electron.ipcRenderer.on("app-hidden", () => {
                 this.unsubscribe();
             });
         }
@@ -98,14 +98,14 @@ export class ChatService implements OnDestroy {
                     }
                     this.messageSubscriber.next(message);
                     if (!this.chatComponentRegistered) {
-                        this.tray.showBalloon('Neue Nachricht von ' + message.sender.fullname, message.text);
+                        this.tray.showBalloon("Neue Nachricht von " + message.sender.fullname, message.text);
                     }
                     this.checkIfUnreadMessageCountNeedsIncrement(message);
                 });
             },
             error: msg => {
-                console.error('ChatService: Could not check for new Messages. ' +
-                    'Retrying in ' + this.secondsBetweenNewMessageCheck.toString() + ' seconds.');
+                console.error("ChatService: Could not check for new Messages. " +
+                    "Retrying in " + this.secondsBetweenNewMessageCheck.toString() + " seconds.");
                 console.error(msg);
             }
         });
@@ -115,7 +115,7 @@ export class ChatService implements OnDestroy {
         if (this.amountOfUnreadMessagesSubscriber !== undefined) {
             this.amountOfUnreadMessagesSubscriber.next(this.amountOfUnreadMessages);
         } else {
-            console.warn('ChatService: Skipped refreshing unread chat messages, because the Subscriber was not ready yet');
+            console.warn("ChatService: Skipped refreshing unread chat messages, because the Subscriber was not ready yet");
         }
     }
 
@@ -135,7 +135,7 @@ export class ChatService implements OnDestroy {
 
 
     private initLastMessage(): void {
-        const lastLocalStorageId = localStorage.getItem('chat-last-id');
+        const lastLocalStorageId = localStorage.getItem("chat-last-id");
         if (lastLocalStorageId == null || lastLocalStorageId.length === 0) {
             return;
         }
@@ -143,6 +143,6 @@ export class ChatService implements OnDestroy {
     }
 
     private updateLastMessageId(): void {
-        localStorage.setItem('chat-last-id', this.lastReadId.toString());
+        localStorage.setItem("chat-last-id", this.lastReadId.toString());
     }
 }

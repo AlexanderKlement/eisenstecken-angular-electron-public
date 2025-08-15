@@ -1,13 +1,13 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {Calendar, DefaultService} from 'eisenstecken-openapi-angular-library';
-import {Observable} from 'rxjs';
-import {first, tap} from 'rxjs/operators';
-import {ChatService} from '../chat/chat.service';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Observable } from 'rxjs';
+import { first, tap } from 'rxjs/operators';
+import { ChatService } from '../chat/chat.service';
+import { DefaultService, Calendar } from '../../../api/openapi';
 
 @Component({
   selector: 'app-calendars-frame',
   templateUrl: './calendars-chat-frame.component.html',
-  styleUrls: ['./calendars-chat-frame.component.scss']
+  styleUrls: ['./calendars-chat-frame.component.scss'],
 })
 export class CalendarsChatFrameComponent implements OnInit, OnDestroy {
 

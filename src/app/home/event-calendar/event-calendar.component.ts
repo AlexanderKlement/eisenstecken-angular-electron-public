@@ -1,6 +1,6 @@
-import {Component, NgZone, OnInit} from '@angular/core';
-import * as moment from 'moment';
-import {Subject} from 'rxjs';
+import {Component, NgZone, OnInit} from "@angular/core";
+import * as moment from "moment";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-event-calendar',
@@ -26,17 +26,17 @@ export class EventCalendarComponent implements OnInit {
   }
 
   weekTitle(weekIdx: string): string {
-    const week = parseInt(weekIdx.replace('week', ''), 10);
+    const week = parseInt(weekIdx.replace("week", ""), 10);
     if (week === -1) {
-      return '';
+      return "";
     }
     const date = moment().year(this.selectedYear).isoWeek(week);
-    return 'KW ' + date.isoWeek() + ' ' + date.year();
+    return "KW " + date.isoWeek() + " " + date.year();
   }
 
   dayTitle(day: number): string {
     const date = moment().isoWeekday(day + 1);
-    return date.format('dddd');
+    return date.format("dddd");
   }
 
   ngOnInit(): void {
@@ -54,12 +54,12 @@ export class EventCalendarComponent implements OnInit {
 
   changeWeek(weeksToAddSubtract: number): void {
     this.offset += weeksToAddSubtract;
-    const date = moment().add(this.offset, 'weeks');
+    const date = moment().add(this.offset, "weeks");
     this.selectedCalendarWeek = date.isoWeek();
     this.selectedYear = date.year();
-    this.displayedColumns = ['week-1'].concat(this.weeks.map((week) => `week${this.selectedCalendarWeek + week + this.offset}`));
+    this.displayedColumns = ["week-1"].concat(this.weeks.map((week) => `week${this.selectedCalendarWeek + week + this.offset}`));
     this.dataSource = this.days.map(day => {
-      const row: Record<string, any> = {'week-1': this.dayTitle(day)};
+      const row: Record<string, any> = {"week-1": this.dayTitle(day)};
       this.weeks.forEach((i) => {
         const week = this.selectedCalendarWeek + i + this.offset;
         row[`week${week}`] = {week, day};

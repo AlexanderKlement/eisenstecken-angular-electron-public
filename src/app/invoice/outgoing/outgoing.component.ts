@@ -1,15 +1,14 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {TableDataSource} from '../../shared/components/table-builder/table-builder.datasource';
-import {DefaultService, OutgoingInvoice} from 'eisenstecken-openapi-angular-library';
-import {LockService} from '../../shared/services/lock.service';
-import {first} from 'rxjs/operators';
-import {AuthService} from '../../shared/services/auth.service';
-import * as moment from 'moment';
-import {TableButton} from '../../shared/components/table-builder/table-builder.component';
-import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/confirm-dialog.component';
-import {MatDialog} from '@angular/material/dialog';
-import {Observable} from 'rxjs';
-import {formatCurrency} from '@angular/common';
+import {Component, Input, OnInit} from "@angular/core";
+import {TableDataSource} from "../../shared/components/table-builder/table-builder.datasource";
+import {LockService} from "../../shared/services/lock.service";
+import {first} from "rxjs/operators";
+import {AuthService} from "../../shared/services/auth.service";
+import * as moment from "moment";
+import {TableButton} from "../../shared/components/table-builder/table-builder.component";
+import {ConfirmDialogComponent} from "../../shared/components/confirm-dialog/confirm-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
+import {Observable} from "rxjs";
+import {formatCurrency} from "@angular/common";
 
 @Component({
     selector: 'app-outgoing',
@@ -29,13 +28,13 @@ export class OutgoingComponent implements OnInit {
 
     buttons: TableButton[] = [
         {
-            name: (condition: any) => (condition) ? 'Zahlung entfernen' : ' Zahlung hinzufügen',
-            class: (condition: any) => (condition) ? 'paid' : ' unpaid',
+            name: (condition: any) => (condition) ? "Zahlung entfernen" : " Zahlung hinzufügen",
+            class: (condition: any) => (condition) ? "paid" : " unpaid",
             navigate: ($event: any, id: number) => {
                 this.paidClicked($event, id);
             },
-            color: (_) => 'primary',
-            selectedField: 'id',
+            color: (_) => "primary",
+            selectedField: "id",
         },
     ];
 
@@ -62,15 +61,15 @@ export class OutgoingComponent implements OnInit {
     paidClicked(event: any, id: number) {
         event.stopPropagation();
         this.api.readOutgoingInvoiceOutgoingInvoiceOutgoingInvoiceIdGet(id).pipe(first()).subscribe(outgoingInvoice => {
-            let text = `Die Rechnung ${outgoingInvoice.number} vom ${moment(outgoingInvoice.date, 'YYYY-MM-DD')
-                .format('L')} an ${outgoingInvoice.client_name} `;
-            let title = 'Zahlung ';
+            let text = `Die Rechnung ${outgoingInvoice.number} vom ${moment(outgoingInvoice.date, "YYYY-MM-DD")
+                .format("L")} an ${outgoingInvoice.client_name} `;
+            let title = "Zahlung ";
             let returnFunction = (result) => {
                 console.info(result);
             };
             if (!outgoingInvoice.paid) {
-                text += 'als bezahlt markieren?';
-                title += ' hinzufügen';
+                text += "als bezahlt markieren?";
+                title += " hinzufügen";
                 returnFunction = (result) => {
                     if (result) {
                         this.api.payOutgoingInvoicePaymentOutgoingInvoiceIdPayPost(id).pipe(first()).subscribe(() => {
@@ -80,8 +79,8 @@ export class OutgoingComponent implements OnInit {
                 };
 
             } else {
-                text += 'als NICHT bezahlt markieren?';
-                title += ' entfernen';
+                text += "als NICHT bezahlt markieren?";
+                title += " entfernen";
                 returnFunction = (result) => {
                     if (result) {
                         this.api.unpayOutgoingInvoicePaymentOutgoingInvoiceIdUnpayPost(id).pipe(first()).subscribe(() => {
@@ -92,7 +91,7 @@ export class OutgoingComponent implements OnInit {
             }
 
             const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-                width: '400px',
+                width: "400px",
                 data: {
                     title,
                     text
@@ -123,22 +122,22 @@ export class OutgoingComponent implements OnInit {
                             values: {
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
                                 client_name: dataSource.client_name,
-                                date: moment(dataSource.date, 'YYYY-MM-DD').format('L'),
+                                date: moment(dataSource.date, "YYYY-MM-DD").format("L"),
                                 rgNum: dataSource.number,
                                 id: dataSource.id,
-                                total: formatCurrency(dataSource.full_price_with_vat, 'de-DE', 'EUR'),
+                                total: formatCurrency(dataSource.full_price_with_vat, "de-DE", "EUR"),
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                                payment_date: moment(dataSource.payment_date, 'YYYY-MM-DD').format('L'),
+                                payment_date: moment(dataSource.payment_date, "YYYY-MM-DD").format("L"),
                                 condition: dataSource.paid
                             },
                             route: () => {
-                                this.authService.currentUserHasRight('outgoing_invoices:modify').pipe(first()).subscribe(allowed => {
+                                this.authService.currentUserHasRight("outgoing_invoices:modify").pipe(first()).subscribe(allowed => {
                                     if (allowed) {
                                         this.locker.getLockAndTryNavigate(
                                             this.api.islockedOutgoingInvoiceOutgoingInvoiceIslockedOutgoingInvoiceIdGet(dataSource.id),
                                             this.api.lockOutgoingInvoiceOutgoingInvoiceLockOutgoingInvoiceIdPost(dataSource.id),
                                             this.api.unlockOutgoingInvoiceOutgoingInvoiceUnlockOutgoingInvoiceIdPost(dataSource.id),
-                                            'outgoing_invoice/edit/' + dataSource.id.toString()
+                                            "outgoing_invoice/edit/" + dataSource.id.toString()
                                         );
                                     }
                                 });
@@ -148,11 +147,11 @@ export class OutgoingComponent implements OnInit {
                 return rows;
             },
             [
-                {name: 'client_name', headerName: 'Kunde'},
-                {name: 'rgNum', headerName: 'Nummer'},
-                {name: 'date', headerName: 'Ausstellungsdatum'},
-                {name: 'payment_date', headerName: 'Fälligkeitsdatum'},
-                {name: 'total', headerName: 'Preis [mit MwSt.]'},
+                {name: "client_name", headerName: "Kunde"},
+                {name: "rgNum", headerName: "Nummer"},
+                {name: "date", headerName: "Ausstellungsdatum"},
+                {name: "payment_date", headerName: "Fälligkeitsdatum"},
+                {name: "total", headerName: "Preis [mit MwSt.]"},
             ],
             (api) => api.countOutgoingInvoicesOutgoingInvoiceCountGet(undefined, this.selectedYear)
         );
@@ -172,22 +171,22 @@ export class OutgoingComponent implements OnInit {
                             values: {
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
                                 client_name: dataSource.client_name,
-                                date: moment(dataSource.date, 'YYYY-MM-DD').format('L'),
+                                date: moment(dataSource.date, "YYYY-MM-DD").format("L"),
                                 rgNum: dataSource.number,
                                 id: dataSource.id,
-                                total: formatCurrency(dataSource.full_price_with_vat, 'de-DE', 'EUR'),
+                                total: formatCurrency(dataSource.full_price_with_vat, "de-DE", "EUR"),
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                                payment_date: moment(dataSource.payment_date, 'YYYY-MM-DD').format('L'),
+                                payment_date: moment(dataSource.payment_date, "YYYY-MM-DD").format("L"),
                                 condition: dataSource.paid
                             },
                             route: () => {
-                                this.authService.currentUserHasRight('outgoing_invoices:modify').pipe(first()).subscribe(allowed => {
+                                this.authService.currentUserHasRight("outgoing_invoices:modify").pipe(first()).subscribe(allowed => {
                                     if (allowed) {
                                         this.locker.getLockAndTryNavigate(
                                             this.api.islockedOutgoingInvoiceOutgoingInvoiceIslockedOutgoingInvoiceIdGet(dataSource.id),
                                             this.api.lockOutgoingInvoiceOutgoingInvoiceLockOutgoingInvoiceIdPost(dataSource.id),
                                             this.api.unlockOutgoingInvoiceOutgoingInvoiceUnlockOutgoingInvoiceIdPost(dataSource.id),
-                                            'outgoing_invoice/edit/' + dataSource.id.toString()
+                                            "outgoing_invoice/edit/" + dataSource.id.toString()
                                         );
                                     }
                                 });
@@ -197,11 +196,11 @@ export class OutgoingComponent implements OnInit {
                 return rows;
             },
             [
-                {name: 'client_name', headerName: 'Kunde'},
-                {name: 'rgNum', headerName: 'Nummer'},
-                {name: 'date', headerName: 'Ausstellungsdatum'},
-                {name: 'payment_date', headerName: 'Fälligkeitsdatum'},
-                {name: 'total', headerName: 'Preis [mit MwSt.]'},
+                {name: "client_name", headerName: "Kunde"},
+                {name: "rgNum", headerName: "Nummer"},
+                {name: "date", headerName: "Ausstellungsdatum"},
+                {name: "payment_date", headerName: "Fälligkeitsdatum"},
+                {name: "total", headerName: "Preis [mit MwSt.]"},
             ],
             (api) => api.countOutgoingInvoicesOutgoingInvoiceCountGet(true, this.selectedYear)
         );
@@ -221,22 +220,22 @@ export class OutgoingComponent implements OnInit {
                             values: {
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
                                 client_name: dataSource.client_name,
-                                date: moment(dataSource.date, 'YYYY-MM-DD').format('L'),
+                                date: moment(dataSource.date, "YYYY-MM-DD").format("L"),
                                 rgNum: dataSource.number,
                                 id: dataSource.id,
-                                total: formatCurrency(dataSource.full_price_with_vat, 'de-DE', 'EUR'),
+                                total: formatCurrency(dataSource.full_price_with_vat, "de-DE", "EUR"),
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                                payment_date: moment(dataSource.payment_date, 'YYYY-MM-DD').format('L'),
+                                payment_date: moment(dataSource.payment_date, "YYYY-MM-DD").format("L"),
                                 condition: dataSource.paid
                             },
                             route: () => {
-                                this.authService.currentUserHasRight('outgoing_invoices:modify').pipe(first()).subscribe(allowed => {
+                                this.authService.currentUserHasRight("outgoing_invoices:modify").pipe(first()).subscribe(allowed => {
                                     if (allowed) {
                                         this.locker.getLockAndTryNavigate(
                                             this.api.islockedOutgoingInvoiceOutgoingInvoiceIslockedOutgoingInvoiceIdGet(dataSource.id),
                                             this.api.lockOutgoingInvoiceOutgoingInvoiceLockOutgoingInvoiceIdPost(dataSource.id),
                                             this.api.unlockOutgoingInvoiceOutgoingInvoiceUnlockOutgoingInvoiceIdPost(dataSource.id),
-                                            'outgoing_invoice/edit/' + dataSource.id.toString()
+                                            "outgoing_invoice/edit/" + dataSource.id.toString()
                                         );
                                     }
                                 });
@@ -246,11 +245,11 @@ export class OutgoingComponent implements OnInit {
                 return rows;
             },
             [
-                {name: 'client_name', headerName: 'Kunde'},
-                {name: 'rgNum', headerName: 'Nummer'},
-                {name: 'date', headerName: 'Ausstellungsdatum'},
-                {name: 'payment_date', headerName: 'Fälligkeitsdatum'},
-                {name: 'total', headerName: 'Preis [mit MwSt.]'},
+                {name: "client_name", headerName: "Kunde"},
+                {name: "rgNum", headerName: "Nummer"},
+                {name: "date", headerName: "Ausstellungsdatum"},
+                {name: "payment_date", headerName: "Fälligkeitsdatum"},
+                {name: "total", headerName: "Preis [mit MwSt.]"},
             ],
             (api) => api.countOutgoingInvoicesOutgoingInvoiceCountGet(false, this.selectedYear)
         );

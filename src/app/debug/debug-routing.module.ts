@@ -1,9 +1,9 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {DebugComponent} from './debug.component';
+import {NgModule} from "@angular/core";
+import {RouterModule, Routes} from "@angular/router";
+import {DebugComponent} from "./debug.component";
 
 const routes: Routes = [{
-    path: 'debug',
+    path: "debug",
     component: DebugComponent,
     data: {requiresLogin: true}
 }];

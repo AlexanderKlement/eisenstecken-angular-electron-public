@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {ElectronService} from '../../core/services';
+import {Injectable} from "@angular/core";
+import {ElectronService} from "../../core/services";
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class FileService {
 
   open(path: string): Promise<string> {
     if (!this.electronService.isElectron) {
-      console.warn('Opening Files is only possible in electron!');
+      console.warn("Opening Files is only possible in electron!");
       console.warn(path);
       return new Promise((resolve, reject) => {
         reject();
@@ -19,17 +19,17 @@ export class FileService {
     }
     return new Promise<string>((resolve, reject) => {
       try {
-        this.electronService.ipcRenderer.on('shell-item-reply', (_, data) => {
+        this.electronService.ipcRenderer.on("shell-item-reply", (_, data) => {
           if (data) {
             resolve(data);
           } else {
             reject();
           }
         });
-        this.electronService.ipcRenderer.send('shell-item-request', path);
+        this.electronService.ipcRenderer.send("shell-item-request", path);
       } catch (e) {
         console.error(e);
-        console.error('Cannot send request to api');
+        console.error("Cannot send request to api");
         reject();
       }
     });
@@ -37,7 +37,7 @@ export class FileService {
 
   show(path: string): Promise<void> {
     if (!this.electronService.isElectron) {
-      console.error('Showing files is only possible in electron!');
+      console.error("Showing files is only possible in electron!");
       console.error(path);
       return new Promise((resolve, reject) => {
         reject();
@@ -45,17 +45,17 @@ export class FileService {
     }
     return new Promise<void>((resolve, reject) => {
       try {
-        this.electronService.ipcRenderer.on('shell-file-reply', (_, data) => {
+        this.electronService.ipcRenderer.on("shell-file-reply", (_, data) => {
           if (data) {
             resolve();
           } else {
             reject();
           }
         });
-        this.electronService.ipcRenderer.send('shell-file-request', path);
+        this.electronService.ipcRenderer.send("shell-file-request", path);
       } catch (e) {
         console.error(e);
-        console.error('Cannot send request to api');
+        console.error("Cannot send request to api");
         reject();
       }
     });
@@ -64,24 +64,24 @@ export class FileService {
 
   selectFolder(): Promise<string> {
     if (!this.electronService.isElectron) {
-      console.error('Selecting Folders is only possible in electron!');
+      console.error("Selecting Folders is only possible in electron!");
       return new Promise((resolve, reject) => {
         reject();
       });
     }
     return new Promise<string>((resolve, reject) => {
       try {
-        this.electronService.ipcRenderer.on('select-folder-reply', (_, data) => {
+        this.electronService.ipcRenderer.on("select-folder-reply", (_, data) => {
           if (data) {
             resolve(data);
           } else {
             reject();
           }
         });
-        this.electronService.ipcRenderer.send('select-folder-request');
+        this.electronService.ipcRenderer.send("select-folder-request");
       } catch (e) {
         console.error(e);
-        console.error('Cannot send request to api');
+        console.error("Cannot send request to api");
         reject();
       }
     });
@@ -89,7 +89,7 @@ export class FileService {
 
   selectFiles(multi: boolean, filterName: string, filters: string[]): Promise<string[]> {
     if (!this.electronService.isElectron) {
-      console.error('Selecting Files is only possible in electron!');
+      console.error("Selecting Files is only possible in electron!");
       return new Promise((resolve, reject) => {
         reject();
       });
@@ -97,20 +97,20 @@ export class FileService {
     const settings = [];
     settings.push(multi);
     settings.push(filterName);
-    settings.push(filters.join(';'));
+    settings.push(filters.join(";"));
     return new Promise<string[]>((resolve, reject) => {
       try {
-        this.electronService.ipcRenderer.on('select-files-reply', (_, data) => {
+        this.electronService.ipcRenderer.on("select-files-reply", (_, data) => {
           if (data) {
             resolve(data);
           } else {
             reject();
           }
         });
-        this.electronService.ipcRenderer.send('select-files-request', settings);
+        this.electronService.ipcRenderer.send("select-files-request", settings);
       } catch (e) {
         console.error(e);
-        console.error('Cannot send request to api');
+        console.error("Cannot send request to api");
         reject();
       }
     });

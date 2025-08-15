@@ -1,16 +1,9 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {MatSelectionList} from '@angular/material/list';
-import {combineLatest, Observable} from 'rxjs';
-import {
-    DefaultService,
-    Job,
-    Orderable,
-    OrderableType,
-    OrderedArticle,
-    Stock
-} from 'eisenstecken-openapi-angular-library';
-import {first, map} from 'rxjs/operators';
+import {Component, Inject, OnInit, ViewChild} from "@angular/core";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {MatSelectionList} from "@angular/material/list";
+import {combineLatest, Observable} from "rxjs";
+import {first, map} from "rxjs/operators";
+import {DefaultService, Job, Stock, OrderedArticle, OrderableType}   from "../../../../api/openapi";
 
 export interface OrderedArticleMoveDialogData {
     orderId: number;
@@ -61,7 +54,7 @@ export class OrderedArticleMoveDialogComponent implements OnInit {
 
     ngOnInit(): void {
         this.orderedArticles$ = this.api.readOrderOrderOrderIdGet(this.data.orderId).pipe(map(order => order.articles));
-        const jobs$ = this.api.readJobsJobGet(0, 1000, '', undefined, 'JOBSTATUS_ACCEPTED');
+        const jobs$ = this.api.readJobsJobGet(0, 1000, "", undefined, "JOBSTATUS_ACCEPTED");
         const stocks$ = this.api.readStocksStockGet();
         const order$ = this.api.readOrderOrderOrderIdGet(this.data.orderId);
         combineLatest([stocks$, jobs$, order$]).pipe(first()).subscribe(([stocks, jobs, order]) => {
@@ -96,7 +89,7 @@ export class OrderedArticleMoveDialogComponent implements OnInit {
         if (this.articlesSelected !== undefined) {
             return this.articlesSelected.selectedOptions.selected.map((obj) => parseInt(obj.value, 10));
         } else {
-            console.warn('OrderDialogComponent: Cannot get selected Options');
+            console.warn("OrderDialogComponent: Cannot get selected Options");
             return [];
         }
     }
@@ -105,7 +98,7 @@ export class OrderedArticleMoveDialogComponent implements OnInit {
         if (this.orderableSelected !== undefined) {
             return this.orderableSelected.selectedOptions.selected.map((obj) => parseInt(obj.value, 10))[0];
         } else {
-            console.warn('OrderDialogComponent: Cannot get selected Options');
+            console.warn("OrderDialogComponent: Cannot get selected Options");
             return -1;
         }
     }

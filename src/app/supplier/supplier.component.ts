@@ -3,8 +3,7 @@ import { TableDataSource } from "../shared/components/table-builder/table-builde
 import {
   DefaultService,
   Stock,
-  Supplier,
-} from "eisenstecken-openapi-angular-library";
+  Supplier} from "../../api/openapi";
 import { LockService } from "../shared/services/lock.service";
 import { CustomButton } from "../shared/components/toolbar/toolbar.component";
 import { ActivatedRoute, Router } from "@angular/router";

@@ -1,18 +1,18 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import {UserComponent} from './user.component';
-import {AccessGuard} from '../shared/services/access-guard.service';
-import {UserEditComponent} from './user-edit/user-edit.component';
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+import {UserComponent} from "./user.component";
+import {AccessGuard} from "../shared/services/access-guard.service";
+import {UserEditComponent} from "./user-edit/user-edit.component";
 
 const routes: Routes = [
   {
-    path: 'user',
+    path: "user",
     component: UserComponent,
     data:{requiresLogin: true},
     canActivate: [ AccessGuard ]
   },
   {
-    path: 'user/edit/:id',
+    path: "user/edit/:id",
     component: UserEditComponent,
     data:{requiresLogin: true},
     canActivate: [ AccessGuard ]

@@ -1,5 +1,5 @@
-import {Pipe, PipeTransform} from '@angular/core';
-import {Right} from 'eisenstecken-openapi-angular-library';
+import {Pipe, PipeTransform} from "@angular/core";
+import { Right } from "../../../api/openapi";
 
 @Pipe({
   name: 'RightFilter',

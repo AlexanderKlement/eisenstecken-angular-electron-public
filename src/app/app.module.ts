@@ -21,11 +21,6 @@ import { AppRouterOutletDirective } from "./router-outlet";
 // NG Translate
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
-import {
-  ApiModule,
-  Configuration,
-  ConfigurationParameters,
-} from "eisenstecken-openapi-angular-library";
 import { HomeModule } from "./home/home.module";
 import { APP_CONFIG } from "environments/environment";
 
@@ -86,14 +81,12 @@ import {
   DateFormatterParams,
 } from "angular-calendar";
 import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
-import {
-  NgxMatNativeDateModule,
-} from "@angular-material-components/datetime-picker";
 import { EventCalendarModule } from "./calendar/event-calendar.module";
 import { MobileAppModule } from "./mobile-app/mobile-app.module";
 import { ServiceModule } from "./service/service.module";
 import { BackButtonDisableModule } from "angular-disable-browser-back-button";
 import { PhoneBookModule } from "./phone-book/phone-book.module";
+import { ApiModule, Configuration, ConfigurationParameters } from '../api/openapi';
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>
   new TranslateHttpLoader(http, "./assets/i18n/", ".json");
@@ -142,7 +135,6 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
     InvoiceModule,
     EmployeeModule,
     EventCalendarModule,
-    NgxMatNativeDateModule,
     MobileAppModule,
     RecalculationModule,
     ApiModule.forRoot(apiConfigFactory),

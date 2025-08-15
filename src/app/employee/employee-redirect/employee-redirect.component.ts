@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Component, OnInit} from "@angular/core";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
     selector: 'app-employee-redirect',
@@ -15,10 +15,10 @@ export class EmployeeRedirectComponent implements OnInit {
         this.route.params.subscribe(params => {
             const userId = parseInt(params.id, 10);
             if (isNaN(userId)) {
-                console.error('EmployeeDetailComponent: Could not parse userId');
-                this.router.navigateByUrl('employee');
+                console.error("EmployeeDetailComponent: Could not parse userId");
+                this.router.navigateByUrl("employee");
             } else {
-                this.router.navigateByUrl('employee/' + userId.toString());
+                this.router.navigateByUrl("employee/" + userId.toString());
             }
         });
     }

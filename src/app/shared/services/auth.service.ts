@@ -1,8 +1,8 @@
-import {Injectable, Injector} from '@angular/core';
-import {DefaultService, Right, User} from 'eisenstecken-openapi-angular-library';
-import {Router} from '@angular/router';
-import {Observable, ReplaySubject} from 'rxjs';
-import {first, map} from 'rxjs/operators';
+import {Injectable, Injector} from "@angular/core";
+import {Router} from "@angular/router";
+import {Observable, ReplaySubject} from "rxjs";
+import {first, map} from "rxjs/operators";
+import { DefaultService, Right, User } from '../../../api/openapi';
 
 
 export function containsRight(rightString: string, rights: Right[]): boolean {
@@ -19,7 +19,7 @@ export function containsRight(rightString: string, rights: Right[]): boolean {
 })
 export class AuthService {
 
-  static accessTokenKey = 'access_token';
+  static accessTokenKey = "access_token";
   private user: ReplaySubject<User>;
 
   constructor(private injector: Injector, private router: Router) {
@@ -47,13 +47,13 @@ export class AuthService {
   doLogout(): void {
     this.removeToken();
     this.user = undefined;
-    this.router.navigateByUrl('login');
+    this.router.navigateByUrl("login");
   }
 
   async getScopeString(): Promise<string> {
     const rights = await this.getRights();
     const rightArray: string[] = rights.map((elem) => elem.key);
-    return rightArray.join(' ');
+    return rightArray.join(" ");
   }
 
   async getRights(): Promise<Right[]> {
@@ -71,11 +71,11 @@ export class AuthService {
         }
         resolve(true);
       }, (error) => {
-        console.error('Unable to login');
+        console.error("Unable to login");
         console.error(error);
         resolve(false);
       }, () => {
-        reject('TIMEOUT: No Internet');
+        reject("TIMEOUT: No Internet");
       });
     });
   }

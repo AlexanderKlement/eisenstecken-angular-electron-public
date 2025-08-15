@@ -1,12 +1,12 @@
 /* eslint-disable no-bitwise */
-import {Injectable} from '@angular/core';
-import {AuthService} from './auth.service';
-import {first} from 'rxjs/operators';
+import {Injectable} from "@angular/core";
+import {AuthService} from "./auth.service";
+import {first} from "rxjs/operators";
 
-const eisenDomain = 'eisenstecken.konvoicepro.eu';
+const eisenDomain = "eisenstecken.konvoicepro.eu";
 const baseUrl = `ws://127.0.0.1:10008/appproxy/ext/${eisenDomain}/PBX0`;
-const app = 'phone';
-const userAgent = 'myApps (Chrome)';
+const app = "phone";
+const userAgent = "myApps (Chrome)";
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class PhoneService {
   private log: string[] = [];
   private ws1: WebSocket;
   private ws2: WebSocket;
-  private build = '132772';
+  private build = "132772";
   private activeCall: {
     mt: string;
     api: string;
@@ -43,7 +43,7 @@ export class PhoneService {
     let callTimeout;
     return new Promise((resolve, reject) => {
       callTimeout = setTimeout(() => {
-        reject('Bitte Innovaphone (myApps) öffnen');
+        reject("Bitte Innovaphone (myApps) öffnen");
       }, 30000);
       this.authService.getCurrentUser().pipe(first()).subscribe((user) => {
         this.init(user.innovaphone_user, user.innovaphone_pass).then(() => {
@@ -65,99 +65,99 @@ export class PhoneService {
 
   init(username: string, password: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.ws1 = new WebSocket(baseUrl + '/APPCLIENT/132772/websocket');
+      this.ws1 = new WebSocket(baseUrl + "/APPCLIENT/132772/websocket");
 
 
 //   const username = "u1074_hannes"; // Username of the to the desk phone registered device
 //    let password = "36x!v8BHZ:_7";
 
 
-      let domain = '';
-      let challenge = '';
-      let nonce = '';
-      let dn = '';
-      let phone = '';
-      let guid = '';
-      let digest = '';
-      let loginError = '';
-      let dev = '';
+      let domain = "";
+      let challenge = "";
+      let nonce = "";
+      let dn = "";
+      let phone = "";
+      let guid = "";
+      let digest = "";
+      let loginError = "";
+      let dev = "";
       let activeCallSetup = null;
-      let sessionUsername = '';
-      let sessionPassword = '';
+      let sessionUsername = "";
+      let sessionPassword = "";
 
 
       const onws2Message = (payload: MessageEvent) => {
         const obj = JSON.parse(payload.data);
         if (obj) {
-          if (obj.mt === 'AppChallengeResult') {
+          if (obj.mt === "AppChallengeResult") {
             this.ws1.send(JSON.stringify({
-              mt: 'AppGetLogin',
+              mt: "AppGetLogin",
               app: dev,
               challenge: obj.challenge,
-              src: '1'
+              src: "1"
             }));
-          } else if (obj.mt === 'AppLoginResult' && obj.ok) {
+          } else if (obj.mt === "AppLoginResult" && obj.ok) {
             this.ws2.send(JSON.stringify({
-              mt: 'CheckBuild',
-              url: baseUrl + '/APPS/phone/' + this.build + '/phone.htm'
+              mt: "CheckBuild",
+              url: baseUrl + "/APPS/phone/" + this.build + "/phone.htm"
             }));
-          } else if (obj.mt === 'AppLoginResult' && !obj.ok) {
-            reject('Innovaphone Benutzername oder Password Falsch');
-          } else if (obj.mt === 'CheckBuildResult') {
+          } else if (obj.mt === "AppLoginResult" && !obj.ok) {
+            reject("Innovaphone Benutzername oder Password Falsch");
+          } else if (obj.mt === "CheckBuildResult") {
             if (obj.build !== this.build) {
-              this.addLog('Innovaphone wurde geupdated, bitte Kalle kontaktieren');
+              this.addLog("Innovaphone wurde geupdated, bitte Kalle kontaktieren");
             }
             //reject('Innovaphone wurde geupdated, bitte Kalle kontaktieren');
             this.ws2.send(JSON.stringify({
-              mt: 'Attach',
-              api: 'EpSignal',
-              hw: dev.split(':')[1],
+              mt: "Attach",
+              api: "EpSignal",
+              hw: dev.split(":")[1],
               disc: true
             }));
-          } else if (obj.mt === 'AttachResult') {
+          } else if (obj.mt === "AttachResult") {
             phone = obj;
             this.ws2.send(JSON.stringify({
-              api: 'PbxApi',
-              mt: 'SubscribeProfile'
+              api: "PbxApi",
+              mt: "SubscribeProfile"
             }));
-          } else if (obj.mt === 'SubscribeProfileResult') {
+          } else if (obj.mt === "SubscribeProfileResult") {
             window.setInterval(() => {
               this.ws2.send(JSON.stringify({
-                mt: 'KeepAlive'
+                mt: "KeepAlive"
               }));
             }, 60000);
-            this.addLog('Logged in to Phone App, all set up, you can Call!');
+            this.addLog("Logged in to Phone App, all set up, you can Call!");
             this.initialized = true;
             resolve();
-          } else if (obj.mt === 'Signaling' && !!this.activeCall && obj.sig && obj.call) {
-            if (obj.sig.type === 'setup') {
+          } else if (obj.mt === "Signaling" && !!this.activeCall && obj.sig && obj.call) {
+            if (obj.sig.type === "setup") {
               obj.fromPBX = !!obj.to;
               obj.fromEP = !obj.to;
               activeCallSetup = obj;
               this.ws2.send(JSON.stringify({
-                mt: 'Signaling',
-                api: 'EpSignal',
+                mt: "Signaling",
+                api: "EpSignal",
                 to: true,
                 call: obj.call,
                 sig: {
-                  type: 'setup_ack'
+                  type: "setup_ack"
                 }
               }));
               this.ws2.send(JSON.stringify(obj));
-            } else if (obj.sig.type === 'rel' && obj.call !== this.activeCall.call) {
+            } else if (obj.sig.type === "rel" && obj.call !== this.activeCall.call) {
               this.ws2.send(JSON.stringify(Object.assign(obj, {fromEP: true})));
-            } else if (obj.sig.type === 'conn' && this.activeCall.call === obj.call) {
-              if (obj.sig.channels_cmd === 'PROPOSAL') {
+            } else if (obj.sig.type === "conn" && this.activeCall.call === obj.call) {
+              if (obj.sig.channels_cmd === "PROPOSAL") {
                 this.ws2.send(JSON.stringify({
-                  mt: 'Signaling',
-                  api: 'EpSignal',
+                  mt: "Signaling",
+                  api: "EpSignal",
                   to: true,
                   call: this.activeCall.call,
                   sig: {
-                    type: 'facility',
+                    type: "facility",
                     fty: [
                       {
-                        type: 'ct_initiate',
+                        type: "ct_initiate",
                         dst: {
                           flags: this.activeCall.sig.cg.flags,
                           num: this.activeCall.sig.cg.num
@@ -167,9 +167,9 @@ export class PhoneService {
                   }
                 }));
               }
-            } else if (obj.sig.type === 'facility') {
+            } else if (obj.sig.type === "facility") {
               this.ws2.send(JSON.stringify(Object.assign(obj, {fromPBX: true})));
-            } else if (obj.sig.type === 'call_proc') {
+            } else if (obj.sig.type === "call_proc") {
               this.ws2.send(JSON.stringify(Object.assign(obj, {
                 fromPBX: true,
                 fromEP: false
@@ -183,32 +183,32 @@ export class PhoneService {
       this.ws1.onmessage = (payload) => {
         const obj = JSON.parse(payload.data);
         if (obj) {
-          if (obj.mt === 'Authenticate') {
-            this.addLog('Authenticate with ' + username + ' : ' + password);
+          if (obj.mt === "Authenticate") {
+            this.addLog("Authenticate with " + username + " : " + password);
             domain = obj.domain;
             challenge = obj.challenge;
-            nonce = ('0000000' + (Math.ceil(Math.random() * 0xffffffff)).toString(16)).substr(-8) +
-              ('0000000' + (Math.ceil(Math.random() * 0xffffffff)).toString(16)).substr(-8);
-            if (obj.method === 'digest') {
+            nonce = ("0000000" + (Math.ceil(Math.random() * 0xffffffff)).toString(16)).substr(-8) +
+              ("0000000" + (Math.ceil(Math.random() * 0xffffffff)).toString(16)).substr(-8);
+            if (obj.method === "digest") {
               this.ws1.send(JSON.stringify({
-                mt: 'Login',
+                mt: "Login",
                 type: obj.type,
                 method: obj.method,
                 username,
                 nonce,
                 response: sha256(
-                  'innovaphoneAppClient:' +
-                  obj.type + ':' +
-                  domain + ':' +
-                  username + ':' +
-                  password + ':' +
-                  nonce + ':' +
+                  "innovaphoneAppClient:" +
+                  obj.type + ":" +
+                  domain + ":" +
+                  username + ":" +
+                  password + ":" +
+                  nonce + ":" +
                   challenge),
                 userAgent
               }));
-            } else if (obj.method === 'ntlm') {
+            } else if (obj.method === "ntlm") {
               this.ws1.send(JSON.stringify({
-                mt: 'Login',
+                mt: "Login",
                 type: obj.type,
                 method: obj.method,
                 username,
@@ -218,66 +218,66 @@ export class PhoneService {
               }));
               password = ntlmSessionKey(password);
             }
-          } else if (obj.mt === 'CheckBuildResult') {
-            this.ws1.send(JSON.stringify({mt: 'SubscribeRegister'}));
-          } else if (obj.mt === 'UpdateRegister') {
+          } else if (obj.mt === "CheckBuildResult") {
+            this.ws1.send(JSON.stringify({mt: "SubscribeRegister"}));
+          } else if (obj.mt === "UpdateRegister") {
             this.ws1.send(JSON.stringify({
-              mt: 'Login',
-              type: 'user',
+              mt: "Login",
+              type: "user",
               userAgent
             }));
-          } else if (obj.mt === 'LoginResult') {
+          } else if (obj.mt === "LoginResult") {
             if (obj.error) {
               loginError = obj.error;
-              this.addLog('Authentication failed ' + loginError);
-              reject('Innovaphone Benutzername oder Password Falsch');
+              this.addLog("Authentication failed " + loginError);
+              reject("Innovaphone Benutzername oder Password Falsch");
             } else {
               digest = sha256(
-                'innovaphoneAppClient:loginresult:' +
-                domain + ':' +
-                username + ':' +
-                password + ':' +
-                nonce + ':' +
-                challenge + ':' +
+                "innovaphoneAppClient:loginresult:" +
+                domain + ":" +
+                username + ":" +
+                password + ":" +
+                nonce + ":" +
+                challenge + ":" +
                 JSON.stringify(obj.info));
               if (digest === obj.digest) {
                 guid = obj.info.user.guid;
                 if (obj.info && obj.info.session && obj.info.session.usr && obj.info.session.pwd) {
-                  sessionUsername = decrypt('innovaphoneAppClient:usr:' + nonce + ':' + password, obj.info.session.usr);
-                  sessionPassword = decrypt('innovaphoneAppClient:pwd:' + nonce + ':' + password, obj.info.session.pwd);
+                  sessionUsername = decrypt("innovaphoneAppClient:usr:" + nonce + ":" + password, obj.info.session.usr);
+                  sessionPassword = decrypt("innovaphoneAppClient:pwd:" + nonce + ":" + password, obj.info.session.pwd);
                 } else {
                   sessionUsername = username;
                   sessionPassword = password;
                 }
 
               }
-              this.addLog('Authenticated, get phone APP');
+              this.addLog("Authenticated, get phone APP");
 
-              this.ws1.send(JSON.stringify({mt: 'SubscribeApps'}));
+              this.ws1.send(JSON.stringify({mt: "SubscribeApps"}));
             }
-          } else if (obj.mt === 'UpdateAppsInfo' && obj.app.title === 'Phone') {
+          } else if (obj.mt === "UpdateAppsInfo" && obj.app.title === "Phone") {
             dev = obj.app.name;
-            this.addLog('Phone App found: ' + dev);
-            this.ws2 = new WebSocket(baseUrl + '/APPS/phone/132772/websocket');
+            this.addLog("Phone App found: " + dev);
+            this.ws2 = new WebSocket(baseUrl + "/APPS/phone/132772/websocket");
             this.ws2.onmessage = onws2Message;
             this.ws2.onopen = () => {
-              this.addLog('Connected to Phone App');
+              this.addLog("Connected to Phone App");
               this.ws2.send(JSON.stringify({
-                mt: 'AppChallenge',
+                mt: "AppChallenge",
               }));
             };
 
             this.ws2.onclose = () => {
-              this.addLog('Phone App disconnected!');
+              this.addLog("Phone App disconnected!");
 
             };
-          } else if (obj.mt === 'AppGetLoginResult') {
+          } else if (obj.mt === "AppGetLoginResult") {
             digest = obj.digest;
             guid = obj.guid;
             dn = obj.dn;
-            this.addLog('Login to Phone App');
+            this.addLog("Login to Phone App");
             this.ws2.send(JSON.stringify({
-              mt: 'AppLogin',
+              mt: "AppLogin",
               app,
               domain: eisenDomain,
               sip: username,
@@ -288,21 +288,21 @@ export class PhoneService {
               pbxObj: dev
             }));
           } else {
-            this.addLog('Unhandled Socket Message: ' + JSON.stringify(payload.data));
+            this.addLog("Unhandled Socket Message: " + JSON.stringify(payload.data));
           }
         }
       };
 
       this.ws1.onopen = () => {
-        this.addLog('Connected to myApps');
+        this.addLog("Connected to myApps");
         this.ws1.send(JSON.stringify({
-          mt: 'CheckBuild',
-          url: baseUrl + '/APPCLIENT/132772/appclient.htm'
+          mt: "CheckBuild",
+          url: baseUrl + "/APPCLIENT/132772/appclient.htm"
         }));
       };
       this.ws1.onclose = () => {
-        this.addLog('myApps disconnected!');
-        reject('Bitte Innovaphone (myApps) öffnen');
+        this.addLog("myApps disconnected!");
+        reject("Bitte Innovaphone (myApps) öffnen");
       };
     });
   }
@@ -314,29 +314,29 @@ export class PhoneService {
       if (this.initialized) {
         num = normalizeE164(num);
         let flags = null;
-        if (num[0] === '+' || num[0] === 'I') {
+        if (num[0] === "+" || num[0] === "I") {
           num = num.substring(1);
-          flags = 'I';
+          flags = "I";
         }
-        this.addLog('Call ' + num);
+        this.addLog("Call " + num);
         this.activeCall = {
-          mt: 'Signaling',
-          api: 'EpSignal',
+          mt: "Signaling",
+          api: "EpSignal",
           to: true,
           call: this.callid,
           sig: {
-            type: 'setup',
+            type: "setup",
             cg: {flags, num},
             complete: true,
             channel: -1,
-            fty: [{type: 'innovaphone_remote_control', control: 'CONNECT'}],
-            channels: {source: 'REMOTE'}
+            fty: [{type: "innovaphone_remote_control", control: "CONNECT"}],
+            channels: {source: "REMOTE"}
           }
         };
         this.callid++;
         this.ws2.send(JSON.stringify(this.activeCall));
       } else {
-        reject('Innovaphone wurde nicht initialisiert, bitte Kalle kontaktieren');
+        reject("Innovaphone wurde nicht initialisiert, bitte Kalle kontaktieren");
       }
     });
   }
@@ -371,13 +371,13 @@ function str2hex(input: string): string {
   function d2h(d: number): string {
     let r = d.toString(16);
     if (r.length < 2) {
-      r = '0' + r;
+      r = "0" + r;
     }
     return r;
   }
 
   const tmp = input;
-  let str = '';
+  let str = "";
   for (let i = 0; i < tmp.length; i++) {
     const c = tmp.charCodeAt(i);
     str += d2h(c);
@@ -387,7 +387,7 @@ function str2hex(input: string): string {
 
 function hex2str(input: string): string {
   const hex = input.toString();
-  let str = '';
+  let str = "";
   for (let i = 0; i < hex.length; i += 2) {
     str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
   }
@@ -583,13 +583,13 @@ function sha256(input: string): string {
   }
 
   function utf8Encode(str: string) {
-    str = str.replace(/\r\n/g, '\n');
+    str = str.replace(/\r\n/g, "\n");
     return unescape(encodeURIComponent(str));
   }
 
   function binb2hex(binarray) {
-    const hexTab = hexcase ? '0123456789ABCDEF' : '0123456789abcdef';
-    let str = '';
+    const hexTab = hexcase ? "0123456789ABCDEF" : "0123456789abcdef";
+    let str = "";
     for (let i = 0; i < binarray.length * 4; i++) {
       str += hexTab.charAt((binarray[i >> 2] >> ((3 - i % 4) * 8 + 4)) & 0xF) +
         hexTab.charAt((binarray[i >> 2] >> ((3 - i % 4) * 8)) & 0xF);
@@ -1162,7 +1162,7 @@ function des(key, message, encrypt: boolean, mode?: 1, iv?: string, padding?: nu
     looping = encrypt ? [0, 32, 2, 62, 30, -2, 64, 96, 2] : [94, 62, -2, 32, 64, 2, 30, -2, -2];
   }
   if (padding === 2) {
-    message += '        ';
+    message += "        ";
   } else if (padding === 1) {
     temp = 8 - (len % 8);
     message += String.fromCharCode(temp, temp, temp, temp, temp, temp, temp, temp);
@@ -1170,10 +1170,10 @@ function des(key, message, encrypt: boolean, mode?: 1, iv?: string, padding?: nu
       len += 8;
     }
   } else if (!padding) {
-    message += '\0\0\0\0\0\0\0\0';
+    message += "\0\0\0\0\0\0\0\0";
   }
-  let result = '';
-  let tempresult = '';
+  let result = "";
+  let tempresult = "";
   if (mode === 1) {
     cbcleft = (iv.charCodeAt(m++) << 24) | (iv.charCodeAt(m++) << 16) | (iv.charCodeAt(m++) << 8) | iv.charCodeAt(m++);
     cbcright = (iv.charCodeAt(m++) << 24) | (iv.charCodeAt(m++) << 16) | (iv.charCodeAt(m++) << 8) | iv.charCodeAt(m++);
@@ -1264,12 +1264,12 @@ function des(key, message, encrypt: boolean, mode?: 1, iv?: string, padding?: nu
     chunk += 8;
     if (chunk === 512) {
       result += tempresult;
-      tempresult = '';
+      tempresult = "";
       chunk = 0;
     }
   }
   result += tempresult;
-  result = result.replace(/\0*$/g, '');
+  result = result.replace(/\0*$/g, "");
   return result;
 }
 
@@ -1677,7 +1677,7 @@ function str2binl2(str: string, clen: number): number[] {
 }
 
 function binl2str(bin: number[]): string {
-  let str = '';
+  let str = "";
   const mask = (1 << chrsz) - 1;
   for (let i = 0; i < bin.length * 32; i += chrsz) {
     str += String.fromCharCode((bin[i >> 5] >>> (i % 32)) & mask);
@@ -1686,8 +1686,8 @@ function binl2str(bin: number[]): string {
 }
 
 function binl2hex(binarray: number[]): string {
-  const hexTab = '0123456789abcdef';
-  let str = '';
+  const hexTab = "0123456789abcdef";
+  let str = "";
   for (let i = 0; i < binarray.length * 4; i++) {
     str += hexTab.charAt((binarray[i >> 2] >> ((i % 4) * 8 + 4)) & 0xF) +
       hexTab.charAt((binarray[i >> 2] >> ((i % 4) * 8)) & 0xF);
@@ -1722,7 +1722,7 @@ function ntlmResponse(password, challenge) {
   const ntKey = strMd4Ucs2(password);
   const key1 = makeKey(ntKey.substr(0, 7));
   const key2 = makeKey(ntKey.substr(7, 7));
-  const key3 = makeKey(ntKey.substr(14, 2) + '\0\0\0\0\0');
+  const key3 = makeKey(ntKey.substr(14, 2) + "\0\0\0\0\0");
   return str2hex(des(key1, challenge, true) + des(key2, challenge, true) + des(key3, challenge, true));
 }
 
@@ -1734,7 +1734,7 @@ function rc4Bytes(keyBytes, strBytes) {
   const s = [];
   let j = 0;
   let x;
-  let res = '';
+  let res = "";
   for (let i = 0; i < 256; i++) {
     s[i] = i;
   }
@@ -1780,7 +1780,7 @@ function textEncode(str) {
 
 function byteArrayToString(arr) {
   // input: utf-8-encoded byte array
-  let str = '';
+  let str = "";
   for (let i = 0; i < arr.length; i++) {
     const c = arr.charCodeAt(i);
     if ((c & 0x80) === 0x00) {
@@ -2126,11 +2126,11 @@ for (let i = 0; i < countryCodes.length; i++) {
   }
 }
 
-Object.defineProperty(Array.prototype, 'remove', {enumerable: false}); // Hide method from for-in loops
+Object.defineProperty(Array.prototype, "remove", {enumerable: false}); // Hide method from for-in loops
 
 const checkCountryCode = function(num) {
   // returns length of country code or zero if no country code matches
-  if (num.charAt(0) === '+' || num.charAt(0) === 'I') {
+  if (num.charAt(0) === "+" || num.charAt(0) === "I") {
     num = num.substr(1);
   }
   const firstDigit = Number(num.charAt(0));
@@ -7365,13 +7365,13 @@ const DE = {
     // Allen deutschen Netzvorwahlen für Mobilfunk ist gemeinsam, dass sie sich aus der nationalen Verkehrsausscheidungsziffer 0,
     // der Netzkennung 15/16/17 sowie der ein- bis zweistelligen Blockkennung zusammensetzen.
     // (Bei der Netzkennung 15 ist die Blockkennung zweistellig, ansonsten einstellig.)
-    if (num.startsWith('15')) {
+    if (num.startsWith("15")) {
       return 4;
     }
-    if (num.startsWith('16')) {
+    if (num.startsWith("16")) {
       return 3;
     }
-    if (num.startsWith('17')) {
+    if (num.startsWith("17")) {
       return 3;
     }
     for (const sonderdienst of DE.specialServices) {
@@ -7398,18 +7398,18 @@ DE.init();
 
 function normalizeE164(num: string) {
   const ar = num.split(/[ \(\)\-\/.:;\r\n\u2000-\u206F]/);
-  const idx = ar.indexOf('');
+  const idx = ar.indexOf("");
   while (idx >= 0) {
     ar.splice(idx, 1);
-    ar.indexOf('');
+    ar.indexOf("");
   } // remove zero-length parts
-  num = ar.join(''); // rebuilt number string without decoration characters
+  num = ar.join(""); // rebuilt number string without decoration characters
   // find and remove "Deppen-Null"
-  if (num.charAt(0) === '+') {
+  if (num.charAt(0) === "+") {
     const info = parseE164(num);
-    if (info.cc && info.cc !== '39' && info.cc !== '242') {
+    if (info.cc && info.cc !== "39" && info.cc !== "242") {
       const offset = info.cc.length + 1;
-      if (num.charAt(offset) === '0') {
+      if (num.charAt(offset) === "0") {
         num = num.slice(0, offset) + num.slice(offset + 1, num.length);
       }
     }
@@ -7419,12 +7419,12 @@ function normalizeE164(num: string) {
 
 function parseE164(num) {
   const info = {cc: null, ac: null, num: null};
-  if (num && (num.charAt(0) === '+' || num.charAt(0) === 'I')) {
+  if (num && (num.charAt(0) === "+" || num.charAt(0) === "I")) {
     const ccLen = checkCountryCode(num.substr(1));
     if (ccLen) {
       info.cc = num.substr(1, ccLen);
       info.num = num.substr(1 + ccLen);
-      if (info.cc === '49') {
+      if (info.cc === "49") {
         const acLen = DE.check(num.substr(3));
         if (acLen) {
           info.ac = num.substr(3, acLen);

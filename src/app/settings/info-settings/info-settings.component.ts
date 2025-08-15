@@ -1,16 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {UntypedFormArray, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
-import {
-    Contact,
-    ContactUpdate,
-    Credential,
-    CredentialUpdate,
-    DefaultService, Price, PriceUpdate,
-    TechnicalData, TechnicalDataUpdate
-} from 'eisenstecken-openapi-angular-library';
-import {first} from 'rxjs/operators';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {ThemePalette} from '@angular/material/core';
+import {Component, OnInit} from "@angular/core";
+import {UntypedFormArray, UntypedFormControl, UntypedFormGroup} from "@angular/forms";
+import {first} from "rxjs/operators";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {ThemePalette} from "@angular/material/core";
+import {DefaultService, TechnicalData, TechnicalDataUpdate, PriceUpdate, Price, CredentialUpdate, Credential} from "../../../api/openapi";
 
 @Component({
     selector: 'app-info-settings',
@@ -61,10 +54,10 @@ export class InfoSettingsComponent implements OnInit {
     createCredential(credential?: Credential): UntypedFormGroup {
         if (credential === undefined) {
             return new UntypedFormGroup({
-                name: new UntypedFormControl(''),
-                url: new UntypedFormControl(''),
-                username: new UntypedFormControl(''),
-                password: new UntypedFormControl(''),
+                name: new UntypedFormControl(""),
+                url: new UntypedFormControl(""),
+                username: new UntypedFormControl(""),
+                password: new UntypedFormControl(""),
             });
         } else {
             return new UntypedFormGroup({
@@ -77,7 +70,7 @@ export class InfoSettingsComponent implements OnInit {
     }
 
     getCredentialFormArray(): UntypedFormArray {
-        return this.credentialGroup.get('credentials') as UntypedFormArray;
+        return this.credentialGroup.get("credentials") as UntypedFormArray;
     }
 
     updateCredentialsSuccess(credentials: Credential[]): void {
@@ -101,10 +94,10 @@ export class InfoSettingsComponent implements OnInit {
         const credentialUpdates: CredentialUpdate[] = [];
         this.getCredentialFormArray().controls.forEach((credential) => {
             credentialUpdates.push({
-                name: credential.get('name').value,
-                url: credential.get('url').value,
-                username: credential.get('username').value,
-                password: credential.get('password').value,
+                name: credential.get("name").value,
+                url: credential.get("url").value,
+                username: credential.get("username").value,
+                password: credential.get("password").value,
             });
         });
         this.api.bulkUpdateCredentialsCredentialBulkPut(credentialUpdates).pipe(first()).subscribe({
@@ -132,9 +125,9 @@ export class InfoSettingsComponent implements OnInit {
     createPrice(price?: Price): UntypedFormGroup {
         if (price === undefined) {
             return new UntypedFormGroup({
-                name: new UntypedFormControl(''),
-                price: new UntypedFormControl(''),
-                comment: new UntypedFormControl(''),
+                name: new UntypedFormControl(""),
+                price: new UntypedFormControl(""),
+                comment: new UntypedFormControl(""),
             });
         } else {
             return new UntypedFormGroup({
@@ -146,7 +139,7 @@ export class InfoSettingsComponent implements OnInit {
     }
 
     getPriceFormArray(): UntypedFormArray {
-        return this.priceGroup.get('prices') as UntypedFormArray;
+        return this.priceGroup.get("prices") as UntypedFormArray;
     }
 
     updatePricesSuccess(prices: Price[]): void {
@@ -170,9 +163,9 @@ export class InfoSettingsComponent implements OnInit {
         const priceUpdates: PriceUpdate[] = [];
         this.getPriceFormArray().controls.forEach((price) => {
             priceUpdates.push({
-                name: price.get('name').value,
-                price: price.get('price').value,
-                comment: price.get('comment').value,
+                name: price.get("name").value,
+                price: price.get("price").value,
+                comment: price.get("comment").value,
             });
         });
         this.api.bulkUpdatePricesPriceBulkPut(priceUpdates).pipe(first()).subscribe({
@@ -200,10 +193,10 @@ export class InfoSettingsComponent implements OnInit {
     createTechnicalData(technicalData?: TechnicalData): UntypedFormGroup {
         if (technicalData === undefined) {
             return new UntypedFormGroup({
-                name: new UntypedFormControl(''),
-                height: new UntypedFormControl(''),
-                width: new UntypedFormControl(''),
-                length: new UntypedFormControl(''),
+                name: new UntypedFormControl(""),
+                height: new UntypedFormControl(""),
+                width: new UntypedFormControl(""),
+                length: new UntypedFormControl(""),
             });
         } else {
             return new UntypedFormGroup({
@@ -216,7 +209,7 @@ export class InfoSettingsComponent implements OnInit {
     }
 
     getTechnicalDataFormArray(): UntypedFormArray {
-        return this.technicalDataGroup.get('technicalData') as UntypedFormArray;
+        return this.technicalDataGroup.get("technicalData") as UntypedFormArray;
     }
 
     updateTechnicalDataSuccess(technicalData: TechnicalData[]): void {
@@ -240,10 +233,10 @@ export class InfoSettingsComponent implements OnInit {
         const technicalDataUpdates: TechnicalDataUpdate[] = [];
         this.getTechnicalDataFormArray().controls.forEach((technicalData) => {
             technicalDataUpdates.push({
-                name: technicalData.get('name').value,
-                height: technicalData.get('height').value,
-                width: technicalData.get('width').value,
-                length: technicalData.get('length').value,
+                name: technicalData.get("name").value,
+                height: technicalData.get("height").value,
+                width: technicalData.get("width").value,
+                length: technicalData.get("length").value,
             });
         });
         this.api.bulkUpdateTechnicalDataTechnicalDataBulkPut(technicalDataUpdates).pipe(first()).subscribe({
@@ -290,7 +283,7 @@ export class InfoSettingsComponent implements OnInit {
     }
 
     private updateError(error: any): void {
-        console.error('InfoSettingsComponent: Could not update');
+        console.error("InfoSettingsComponent: Could not update");
         console.error(error);
         this.submitted = false;
     }
@@ -300,7 +293,7 @@ export class InfoSettingsComponent implements OnInit {
     }
 
     private showSuccess(): void {
-        this.snackBar.open('Speichern erfolgreich!', 'OK', {
+        this.snackBar.open("Speichern erfolgreich!", "OK", {
             duration: 5000
         });
     }

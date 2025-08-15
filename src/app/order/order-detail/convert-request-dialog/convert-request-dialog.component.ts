@@ -1,16 +1,9 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {MatSelectionList} from '@angular/material/list';
-import {combineLatest, Observable} from 'rxjs';
-import {
-  DefaultService,
-  Job,
-  Orderable,
-  OrderableType,
-  OrderedArticle,
-  Stock
-} from 'eisenstecken-openapi-angular-library';
-import {first, map} from 'rxjs/operators';
+import { Component, Inject, OnInit, ViewChild } from "@angular/core";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { MatSelectionList } from "@angular/material/list";
+import { combineLatest, Observable } from "rxjs";
+import { first, map } from "rxjs/operators";
+import { DefaultService, OrderedArticle } from "../../../../api/openapi";
 
 export interface ConvertOrderedArticleReturnDialogData {
   orderId: number;
@@ -25,7 +18,7 @@ export interface OrderedArticleReturnDialogData {
 @Component({
   selector: 'app-convert-request-dialog',
   templateUrl: './convert-request-dialog.component.html',
-  styleUrls: ['./convert-request-dialog.component.scss']
+  styleUrls: ['./convert-request-dialog.component.scss'],
 })
 export class ConvertRequestDialogComponent implements OnInit {
 
@@ -64,7 +57,7 @@ export class ConvertRequestDialogComponent implements OnInit {
     if (this.articlesSelected !== undefined) {
       return this.articlesSelected.selectedOptions.selected.map((obj) => parseInt(obj.value, 10));
     } else {
-      console.warn('OrderDialogComponent: Cannot get selected Options');
+      console.warn("OrderDialogComponent: Cannot get selected Options");
       return [];
     }
   }

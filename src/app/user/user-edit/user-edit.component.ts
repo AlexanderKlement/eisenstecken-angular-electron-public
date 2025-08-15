@@ -11,7 +11,7 @@ import { CustomButton } from "../../shared/components/toolbar/toolbar.component"
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { AuthService } from "../../shared/services/auth.service";
 import { NavigationService } from "../../shared/services/navigation.service";
-import { Right, DefaultService, UserCreate, UserUpdate, UserPassword, User } from "../../../../eisenstecken-openapi-angular-library";
+import { UserPassword, UserUpdate, UserCreate, User, Right, DefaultService, Lock } from "../../../api/openapi";
 
 const titles = {
   users: "Benutzer",
@@ -46,7 +46,7 @@ const titles = {
 @Component({
   selector: 'app-user-edit',
   templateUrl: './user-edit.component.html',
-  styleUrls: ['./user-edit.component.scss']
+  styleUrls: ['./user-edit.component.scss'],
 })
 export class UserEditComponent extends BaseEditComponent<User> implements OnInit, OnDestroy {
 
@@ -66,7 +66,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
   title = "Benutzer: Bearbeiten";
 
   constructor(private snackBar: MatSnackBar, private authService: AuthService, api: DefaultService, private navigation: NavigationService,
-    router: Router, route: ActivatedRoute, dialog: MatDialog) {
+              router: Router, route: ActivatedRoute, dialog: MatDialog) {
     super(api, router, route, dialog);
   }
 
@@ -133,10 +133,10 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
       innovaphone_user: new UntypedFormControl(""),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       innovaphone_pass: new UntypedFormControl(""),
-      notifications: new UntypedFormControl(true)
+      notifications: new UntypedFormControl(true),
     });
     this.passwordGroup = new UntypedFormGroup({
-      password: new UntypedFormControl("")
+      password: new UntypedFormControl(""),
     });
     if (!this.createMode) {
       this.api.getRightsRightsGet().pipe(first()).subscribe((rights) => {
@@ -163,7 +163,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
           name: "Benutzer löschen",
           navigate: (): void => {
             this.userDeleteClicked();
-          }
+          },
         });
       }
     });
@@ -180,16 +180,16 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
       if (user.id === this.id) {
         this.snackBar.open("Der derzeit angemeldete Benutzer kann nicht gelöscht werden!"
           , "Ok", {
-          duration: 10000
-        });
+            duration: 10000,
+          });
         return;
       }
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         width: "400px",
         data: {
           title: "Benutzer löschen?",
-          text: "Hinweis: Dieser Schritt KANN rückgängig gemacht werden."
-        }
+          text: "Hinweis: Dieser Schritt KANN rückgängig gemacht werden.",
+        },
       });
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
@@ -246,7 +246,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
     this.navigation.removeLastUrl();
     this.router.navigateByUrl(this.navigationTarget, { replaceUrl: true });
     this.snackBar.open("Speichern erfolgreich!", "Ok", {
-      duration: 3000
+      duration: 3000,
     });
   }
 
@@ -275,7 +275,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
         innovaphone_user: this.userGroup.get("innovaphone_user").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         innovaphone_pass: this.userGroup.get("innovaphone_pass").value,
-        notifications: this.userGroup.get("notifications").value
+        notifications: this.userGroup.get("notifications").value,
       };
       this.api.createUserUsersPost(userCreate).pipe(first()).subscribe((user) => {
         this.createUpdateSuccess(user);
@@ -302,7 +302,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
         innovaphone_user: this.userGroup.get("innovaphone_user").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         innovaphone_pass: this.userGroup.get("innovaphone_pass").value,
-        notifications: this.userGroup.get("notifications").value
+        notifications: this.userGroup.get("notifications").value,
       };
       this.api.updateUserUsersUserIdPut(this.id, userUpdate).pipe(first()).subscribe((user) => {
         this.createUpdateSuccess(user);
@@ -327,7 +327,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
 
   onSubmitPassword(): void {
     const userPassword: UserPassword = {
-      password: this.passwordGroup.get("password").value
+      password: this.passwordGroup.get("password").value,
     };
     this.api.updateUserPasswordUsersPasswordUserIdPut(this.id, userPassword).pipe(first()).subscribe((user) => {
       this.createUpdateSuccess(user);

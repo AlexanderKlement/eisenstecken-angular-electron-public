@@ -1,14 +1,14 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {ClientComponent} from './client.component';
-import {CommonModule} from '@angular/common';
-import {ClientDetailComponent} from './client-detail/client-detail.component';
-import {ClientEditComponent} from './client-edit/client-edit.component';
-import {AccessGuard} from '../shared/services/access-guard.service';
+import {NgModule} from "@angular/core";
+import {RouterModule, Routes} from "@angular/router";
+import {ClientComponent} from "./client.component";
+import {CommonModule} from "@angular/common";
+import {ClientDetailComponent} from "./client-detail/client-detail.component";
+import {ClientEditComponent} from "./client-edit/client-edit.component";
+import {AccessGuard} from "../shared/services/access-guard.service";
 
 const routes: Routes = [
     {
-        path: 'client',
+        path: "client",
         component: ClientComponent,
         data: {
             requiresLogin: true,
@@ -17,7 +17,7 @@ const routes: Routes = [
         canActivate: [AccessGuard]
     },
     {
-        path: 'client/:id',
+        path: "client/:id",
         component: ClientDetailComponent,
         data: {
             requiresLogin: true,
@@ -26,7 +26,7 @@ const routes: Routes = [
         canActivate: [AccessGuard]
     },
     {
-        path: 'client/edit/:id',
+        path: "client/edit/:id",
         component: ClientEditComponent,
         data: {requiresLogin: true},
         canActivate: [AccessGuard]

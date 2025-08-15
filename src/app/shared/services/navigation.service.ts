@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {NavigationEnd, Router} from '@angular/router';
+import {Injectable} from "@angular/core";
+import {NavigationEnd, Router} from "@angular/router";
 
 @Injectable({providedIn: 'root'})
 export class NavigationService {
@@ -15,18 +15,18 @@ export class NavigationService {
             if (event instanceof NavigationEnd) {
                 history.pushState(null, null, null);
                 if (!this.nextUrlIgnored && this.history[this.history.length - 1] !== event.urlAfterRedirects) {
-                    console.log('NavigationEnd, Add Url: ' + event.urlAfterRedirects);
+                    console.log("NavigationEnd, Add Url: " + event.urlAfterRedirects);
                     this.history.push(event.urlAfterRedirects);
                 } else {
-                    console.log('NavigationEnd, Ignore Url: ' + event.urlAfterRedirects);
+                    console.log("NavigationEnd, Ignore Url: " + event.urlAfterRedirects);
                 }
-                console.log('New history: ', this.history);
+                console.log("New history: ", this.history);
             }
         });
     }
 
     public removeLastUrl(): void {
-        console.log('Removing last url');
+        console.log("Removing last url");
         this.history.pop();
         console.log(this.history);
     }
@@ -41,7 +41,7 @@ export class NavigationService {
     }
 
     home(): void {
-        this.router.navigateByUrl('/');
+        this.router.navigateByUrl("/");
     }
 
     back(): void {
@@ -55,13 +55,13 @@ export class NavigationService {
                 });
             }, 1);
         } else {
-            console.log('this.history.length == 0', this.history);
+            console.log("this.history.length == 0", this.history);
             this.home();
         }
     }
 
     setBlockBackEvent(value: boolean): void {
-        console.log('Block Back Event', value);
+        console.log("Block Back Event", value);
         this.blockBackEvent = value;
     }
 

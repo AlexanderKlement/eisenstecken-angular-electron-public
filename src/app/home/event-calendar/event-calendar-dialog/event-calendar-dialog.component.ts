@@ -1,10 +1,8 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {CompanyEventEnum} from '../../../../../eisenstecken-openapi-angular-library';
-import {AuthService} from '../../../shared/services/auth.service';
-import {CompanyEventCreate, CompanyEventUpdate, DefaultService} from 'eisenstecken-openapi-angular-library';
-import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
-
+import {Component, Inject, OnInit} from "@angular/core";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {AuthService} from "../../../shared/services/auth.service";
+import {UntypedFormControl, UntypedFormGroup} from "@angular/forms";
+import {CompanyEventEnum, CompanyEventUpdate, DefaultService} from "../../../../api/openapi";
 
 export interface EventCalendarDialogData {
   id?: number;
@@ -15,13 +13,13 @@ export interface EventCalendarDialogData {
 export function getEventTranslation(companyEvent: CompanyEventEnum): string {
   switch (companyEvent) {
     case CompanyEventEnum.Holiday:
-      return 'Urlaub';
+      return "Urlaub";
     case CompanyEventEnum.Illness:
-      return 'Krankheit';
+      return "Krankheit";
     case CompanyEventEnum.Vacation:
-      return 'Betriebsferien';
+      return "Betriebsferien";
     case CompanyEventEnum.Event:
-      return 'Ereignis';
+      return "Ereignis";
   }
 }
 
@@ -33,7 +31,7 @@ export function getEventTranslation(companyEvent: CompanyEventEnum): string {
 
 
 export class EventCalendarDialogComponent implements OnInit {
-  title = 'Eintrag erstellen';
+  title = "Eintrag erstellen";
 
   availableEventTypes = [
     CompanyEventEnum.Holiday,
@@ -51,11 +49,11 @@ export class EventCalendarDialogComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data.id) {
-      this.title = 'Eintrag bearbeiten';
+      this.title = "Eintrag bearbeiten";
     }
 
     this.dialogFormGroup = new UntypedFormGroup({
-      title: new UntypedFormControl(''),
+      title: new UntypedFormControl(""),
       eventType: new UntypedFormControl([])
     });
 
@@ -68,12 +66,12 @@ export class EventCalendarDialogComponent implements OnInit {
 
       if (this.data.id) {
         this.api.readCompanyEventCompanyEventCompanyEventIdGet(this.data.id).subscribe(event => {
-          this.dialogFormGroup.get('title').setValue(event.title);
-          this.dialogFormGroup.get('eventType').setValue([event.event_type]);
+          this.dialogFormGroup.get("title").setValue(event.title);
+          this.dialogFormGroup.get("eventType").setValue([event.event_type]);
         });
       }
 
-      this.dialogFormGroup.get('eventType').valueChanges.subscribe((selectedEventType: string | string[]) => {
+      this.dialogFormGroup.get("eventType").valueChanges.subscribe((selectedEventType: string | string[]) => {
         this.showDescription = selectedEventType[0] === CompanyEventEnum.Event;
       });
     });
@@ -86,23 +84,23 @@ export class EventCalendarDialogComponent implements OnInit {
   onSaveClick(): void {
     if (this.data.id) {
       const companyUpdate: CompanyEventUpdate = {
-        title: this.dialogFormGroup.get('title').value,
+        title: this.dialogFormGroup.get("title").value,
         date: this.data.date,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        event_type: this.dialogFormGroup.get('eventType').value[0],
+        event_type: this.dialogFormGroup.get("eventType").value[0],
       };
       this.api.updateCompanyEventCompanyEventCompanyEventIdPut(this.data.id, companyUpdate).subscribe(() => {
         this.dialogRef.close(true);
       });
     } else {
       const companyCreate: CompanyEventCreate = {
-        title: this.dialogFormGroup.get('title').value,
+        title: this.dialogFormGroup.get("title").value,
         date: this.data.date,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        event_type: this.dialogFormGroup.get('eventType').value[0],
+        event_type: this.dialogFormGroup.get("eventType").value[0],
       };
       this.api.createCompanyEventCompanyEventPost(companyCreate).subscribe(() => {
-        console.log('created');
+        console.log("created");
         this.dialogRef.close(true);
       });
     }

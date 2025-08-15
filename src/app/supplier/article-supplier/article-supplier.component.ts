@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {CustomButton} from '../../shared/components/toolbar/toolbar.component';
-import {Column, TableDataSource} from '../../shared/components/table-builder/table-builder.datasource';
-import {Article, DefaultService, Vat, Unit} from 'eisenstecken-openapi-angular-library';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Observable} from 'rxjs';
-import {ArticleEditDialogComponent, ArticleEditDialogData} from './article-edit-dialog/article-edit-dialog.component';
-import {MatDialog} from '@angular/material/dialog';
-import {first} from 'rxjs/operators';
+import {Component, OnInit} from "@angular/core";
+import {CustomButton} from "../../shared/components/toolbar/toolbar.component";
+import {Column, TableDataSource} from "../../shared/components/table-builder/table-builder.datasource";
+import {ActivatedRoute, Router} from "@angular/router";
+import {Observable} from "rxjs";
+import {ArticleEditDialogComponent, ArticleEditDialogData} from "./article-edit-dialog/article-edit-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
+import {first} from "rxjs/operators";
+import {DefaultService, Article} from "../../../api/openapi";
 
 @Component({
     selector: 'app-article-supplier',
@@ -17,17 +17,17 @@ export class ArticleSupplierComponent implements OnInit {
     buttons: CustomButton[] = [];
     articleTableSource: TableDataSource<Article>;
     supplierId: number;
-    title = 'Artikel';
+    title = "Artikel";
     type: string;
 
     columns: Column<Article>[] = [
-        {name: 'name', headerName: 'Name'},
-        {name: 'description', headerName: 'Beschreibung'},
-        {name: 'unit', headerName: 'Einheit'},
-        {name: 'price', headerName: 'Preis'},
-        {name: 'vat', headerName: 'MwSt.'},
-        {name: 'mod_number', headerName: 'Mod Nummer'},
-        {name: 'favorite', headerName: 'Favorit'},
+        {name: "name", headerName: "Name"},
+        {name: "description", headerName: "Beschreibung"},
+        {name: "unit", headerName: "Einheit"},
+        {name: "price", headerName: "Preis"},
+        {name: "vat", headerName: "MwSt."},
+        {name: "mod_number", headerName: "Mod Nummer"},
+        {name: "favorite", headerName: "Favorit"},
     ];
 
     constructor(private dialog: MatDialog, private api: DefaultService, private route: ActivatedRoute, private router: Router) {
@@ -42,11 +42,11 @@ export class ArticleSupplierComponent implements OnInit {
                         name: dataSource.name.translation,
                         description: dataSource.description.translation,
                         unit: dataSource.unit.name.translation,
-                        price: dataSource.price.toFixed(2).replace('.', ',') + ' €',
+                        price: dataSource.price.toFixed(2).replace(".", ",") + " €",
                         vat: dataSource.vat.name,
                         // eslint-disable-next-line @typescript-eslint/naming-convention
                         mod_number: dataSource.mod_number,
-                        favorite: (dataSource.favorite ? 'Ja' : 'Nein'),
+                        favorite: (dataSource.favorite ? "Ja" : "Nein"),
                     },
                     route: () => {
                         this.articleClicked(dataSource.id);
@@ -61,27 +61,27 @@ export class ArticleSupplierComponent implements OnInit {
             this.supplierId = parseInt(params.supplier_id, 10);
             console.log(this.supplierId);
             if (isNaN(this.supplierId)) {
-                console.error('RecalculationDetail: Cannot parse jobId');
-                this.router.navigateByUrl('supplier');
+                console.error("RecalculationDetail: Cannot parse jobId");
+                this.router.navigateByUrl("supplier");
                 return;
             }
             this.route.data.subscribe((data) => {
                 this.type = data.type;
-                if (data.type === 'supplier') {
+                if (data.type === "supplier") {
                     this.initArticleSupplierTable();
                     this.api.readSupplierSupplierSupplierIdGet(this.supplierId).pipe(first()).subscribe((supplier) => {
-                        this.title += ': ' + supplier.name;
+                        this.title += ": " + supplier.name;
                     });
                 } else {
                     this.initArticleStockTable();
                     this.api.readStockStockStockIdGet(this.supplierId).pipe(first()).subscribe((stock) => {
-                        this.title += ': ' + stock.name;
+                        this.title += ": " + stock.name;
                     });
                 }
             });
         });
         this.buttons.push({
-            name: 'Neuer Artikel',
+            name: "Neuer Artikel",
             navigate: () => {
                 this.openArticleDialog(-1, this.supplierId, this.type);
             }
@@ -123,7 +123,7 @@ export class ArticleSupplierComponent implements OnInit {
             supplierId, //this is not really important, since i can get it from the article her
         };
         const dialogRef = this.dialog.open(ArticleEditDialogComponent, {
-            width: '500px',
+            width: "500px",
             data: dialogData
         });
         dialogRef.afterClosed().pipe(first()).subscribe(result => {

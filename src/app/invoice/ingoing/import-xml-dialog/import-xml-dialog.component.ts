@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {UntypedFormArray, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
-import {DefaultService, XmlFileStr} from 'eisenstecken-openapi-angular-library';
 import {FileService} from '../../../shared/services/file.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ElectronService} from '../../../core/services';

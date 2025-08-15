@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {NavigationService} from '../../../shared/services/navigation.service';
+import {Component, OnInit} from "@angular/core";
+import {Router} from "@angular/router";
+import {NavigationService} from "../../../shared/services/navigation.service";
 
 @Component({
     selector: 'app-redirect',
@@ -14,7 +14,7 @@ export class RedirectComponent implements OnInit {
 
     ngOnInit(): void {
         this.navigation.removeLastUrl();
-        this.router.navigateByUrl('/mobile/hours', {replaceUrl: true});
+        this.router.navigateByUrl("/mobile/hours", {replaceUrl: true});
     }
 
 }

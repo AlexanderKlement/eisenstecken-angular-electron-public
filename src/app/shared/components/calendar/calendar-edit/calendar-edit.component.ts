@@ -1,20 +1,20 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {first} from 'rxjs/operators';
-import {CalendarEntry, CalendarEntryCreate, DefaultService} from 'eisenstecken-openapi-angular-library';
-import {AbstractControl, UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
-import * as moment from 'moment';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {timepickerTheme} from '../../../themes/timepicker.theme';
+import {Component, Inject, OnInit} from "@angular/core";
+import {first} from "rxjs/operators";
+import {AbstractControl, UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators} from "@angular/forms";
+import * as moment from "moment";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {timepickerTheme} from "../../../themes/timepicker.theme";
+import {DefaultService, CalendarEntry, CalendarEntryCreate} from "../../../../../api/openapi";
 
 export const timeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
-    const exampleDate = '07.07.1993';
-    const startTime = control.get('start_time').value;
-    const endTime = control.get('end_time').value;
+    const exampleDate = "07.07.1993";
+    const startTime = control.get("start_time").value;
+    const endTime = control.get("end_time").value;
     if (startTime.length < 5 || endTime.length < 5) {
         return {timeValid: false};
     }
-    const startTimeMoment = moment(exampleDate + ' ' + startTime, 'DD.MM.YYYY HH:mm');
-    const endTimeMoment = moment(exampleDate + ' ' + endTime, 'DD.MM.YYYY HH:mm');
+    const startTimeMoment = moment(exampleDate + " " + startTime, "DD.MM.YYYY HH:mm");
+    const endTimeMoment = moment(exampleDate + " " + endTime, "DD.MM.YYYY HH:mm");
     if (!startTimeMoment.isValid() || !endTimeMoment.isValid()) {
         return {timeValid: false};
     }
@@ -52,7 +52,7 @@ export class CalendarEditComponent implements OnInit {
             this.createMode = true;
             this.calendarId = this.data.calendarId;
             if (isNaN(this.calendarId)) {
-                console.error('CalendarEditComponent: Cannot parse CalendarId');
+                console.error("CalendarEditComponent: Cannot parse CalendarId");
             }
             this.createCalendarGroup();
             this.ready = true;
@@ -67,17 +67,17 @@ export class CalendarEditComponent implements OnInit {
     }
 
     createCalendarGroup(calendarEntry?: CalendarEntry): void {
-        let title = '';
+        let title = "";
         let date = new Date();
-        let description = '';
-        let startTime = '';
-        let endTime = '';
+        let description = "";
+        let startTime = "";
+        let endTime = "";
         if (calendarEntry !== undefined) {
             title = calendarEntry.title;
             description = calendarEntry.description;
             date = moment(calendarEntry.start_time).toDate();
-            startTime = moment(calendarEntry.start_time).format('HH:mm');
-            endTime = moment(calendarEntry.end_time).format('HH:mm');
+            startTime = moment(calendarEntry.start_time).format("HH:mm");
+            endTime = moment(calendarEntry.end_time).format("HH:mm");
         }
 
         this.calendarGroup = new UntypedFormGroup({
@@ -86,9 +86,9 @@ export class CalendarEditComponent implements OnInit {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             date: new UntypedFormControl(date, Validators.required),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            start_time: new UntypedFormControl(startTime, Validators.pattern('^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$')),
+            start_time: new UntypedFormControl(startTime, Validators.pattern("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$")),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            end_time: new UntypedFormControl(endTime, Validators.pattern('^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$'))
+            end_time: new UntypedFormControl(endTime, Validators.pattern("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$"))
         }, {validators: timeValidator});
 
     }
@@ -96,14 +96,14 @@ export class CalendarEditComponent implements OnInit {
 
     onSubmit(): void {
         this.submitted = true;
-        const date = moment(this.calendarGroup.get('date').value);
-        const startDateString = date.format('DD.MM.YYYY') + ' ' + this.calendarGroup.get('start_time').value;
-        const endDateString = date.format('DD.MM.YYYY') + ' ' + this.calendarGroup.get('end_time').value;
-        const startDate = moment(startDateString, 'DD.MM.YYYY HH:mm');
-        const endDate = moment(endDateString, 'DD.MM.YYYY HH:mm');
+        const date = moment(this.calendarGroup.get("date").value);
+        const startDateString = date.format("DD.MM.YYYY") + " " + this.calendarGroup.get("start_time").value;
+        const endDateString = date.format("DD.MM.YYYY") + " " + this.calendarGroup.get("end_time").value;
+        const startDate = moment(startDateString, "DD.MM.YYYY HH:mm");
+        const endDate = moment(endDateString, "DD.MM.YYYY HH:mm");
         const calendarEntryCreate: CalendarEntryCreate = {
-            title: this.calendarGroup.get('title').value,
-            description: this.calendarGroup.get('description').value,
+            title: this.calendarGroup.get("title").value,
+            description: this.calendarGroup.get("description").value,
             // eslint-disable-next-line @typescript-eslint/naming-convention
             start_time: startDate.format(),
             // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -139,7 +139,7 @@ export class CalendarEditComponent implements OnInit {
 
 
     createUpdateError(error: any): void {
-        console.error('CalendarEditComponent: Could not complete ' + (this.createMode ? 'creation' : 'update'));
+        console.error("CalendarEditComponent: Could not complete " + (this.createMode ? "creation" : "update"));
         console.error(error);
         this.submitted = false;
     }

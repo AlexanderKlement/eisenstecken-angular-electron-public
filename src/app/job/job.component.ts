@@ -1,10 +1,10 @@
-import {Component, ComponentRef, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {TableDataSource} from '../shared/components/table-builder/table-builder.datasource';
-import {DefaultService, Job, Stock} from 'eisenstecken-openapi-angular-library';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Observable, Subscriber} from 'rxjs';
-import * as moment from 'moment';
-import {FileService} from '../shared/services/file.service';
+import {Component, ComponentRef, ElementRef, OnInit, ViewChild} from "@angular/core";
+import {TableDataSource} from "../shared/components/table-builder/table-builder.datasource";
+import {ActivatedRoute, Router} from "@angular/router";
+import {Observable, Subscriber} from "rxjs";
+import * as moment from "moment";
+import {FileService} from "../shared/services/file.service";
+import { DefaultService, Job, Stock } from "../../api/openapi";
 
 @Component({
   selector: 'app-job',
@@ -26,7 +26,7 @@ export class JobComponent implements OnInit {
 
   buttons = [
     {
-      name: 'Angenommen Aufträge - PDF generieren',
+      name: "Angenommen Aufträge - PDF generieren",
       navigate: (): void => {
         this.api.generateJobPdfJobPdfPost().subscribe((pdf) => {
           this.file.open(pdf);
@@ -74,7 +74,7 @@ export class JobComponent implements OnInit {
     this.createdJobDataSource = new TableDataSource(
       this.api,
       (api, filter, sortDirection, skip, limit) =>
-        api.readJobsJobGet(skip, limit, filter, undefined, 'JOBSTATUS_CREATED', true, this.selectedYear)
+        api.readJobsJobGet(skip, limit, filter, undefined, "JOBSTATUS_CREATED", true, this.selectedYear)
       ,
       (dataSourceClasses) => {
         const rows = [];
@@ -84,25 +84,25 @@ export class JobComponent implements OnInit {
               values: {
                 name: dataSource.name,
                 code: dataSource.code,
-                'client.name': dataSource.client.fullname,
-                'responsible.fullname': dataSource.responsible.fullname,
+                "client.name": dataSource.client.fullname,
+                "responsible.fullname": dataSource.responsible.fullname,
                 completion: dataSource.completion
               },
               route: () => {
-                this.router.navigateByUrl('/job/' + dataSource.id.toString());
+                this.router.navigateByUrl("/job/" + dataSource.id.toString());
               }
             });
         });
         return rows;
       },
       [
-        {name: 'code', headerName: 'Kommissionsnummer'},
-        {name: 'name', headerName: 'Kommission'},
-        {name: 'client.name', headerName: 'Kunde'},
-        {name: 'responsible.fullname', headerName: 'Zuständig'},
-        {name: 'completion', headerName: 'Fertigstellung'}
+        {name: "code", headerName: "Kommissionsnummer"},
+        {name: "name", headerName: "Kommission"},
+        {name: "client.name", headerName: "Kunde"},
+        {name: "responsible.fullname", headerName: "Zuständig"},
+        {name: "completion", headerName: "Fertigstellung"}
       ],
-      (api) => api.readJobCountJobCountGet('JOBSTATUS_CREATED', true, undefined, this.selectedYear)
+      (api) => api.readJobCountJobCountGet("JOBSTATUS_CREATED", true, undefined, this.selectedYear)
     );
     this.createdJobDataSource.loadData();
   }
@@ -111,7 +111,7 @@ export class JobComponent implements OnInit {
     this.acceptedJobDataSource = new TableDataSource(
       this.api,
       (api, filter, sortDirection, skip, limit) =>
-        api.readJobsJobGet(skip, limit, filter, undefined, 'JOBSTATUS_ACCEPTED', true, this.selectedYear)
+        api.readJobsJobGet(skip, limit, filter, undefined, "JOBSTATUS_ACCEPTED", true, this.selectedYear)
       ,
       (dataSourceClasses) => {
         const rows = [];
@@ -121,25 +121,25 @@ export class JobComponent implements OnInit {
               values: {
                 name: dataSource.name,
                 code: dataSource.code,
-                'client.name': dataSource.client.fullname,
-                'responsible.fullname': dataSource.responsible.fullname,
+                "client.name": dataSource.client.fullname,
+                "responsible.fullname": dataSource.responsible.fullname,
                 completion: dataSource.completion
               },
               route: () => {
-                this.router.navigateByUrl('/job/' + dataSource.id.toString());
+                this.router.navigateByUrl("/job/" + dataSource.id.toString());
               }
             });
         });
         return rows;
       },
       [
-        {name: 'code', headerName: 'Kommissionsnummer'},
-        {name: 'name', headerName: 'Kommission'},
-        {name: 'client.name', headerName: 'Kunde'},
-        {name: 'responsible.fullname', headerName: 'Zuständig'},
-        {name: 'completion', headerName: 'Fertigstellung'}
+        {name: "code", headerName: "Kommissionsnummer"},
+        {name: "name", headerName: "Kommission"},
+        {name: "client.name", headerName: "Kunde"},
+        {name: "responsible.fullname", headerName: "Zuständig"},
+        {name: "completion", headerName: "Fertigstellung"}
       ],
-      (api) => api.readJobCountJobCountGet('JOBSTATUS_ACCEPTED', true, undefined, this.selectedYear)
+      (api) => api.readJobCountJobCountGet("JOBSTATUS_ACCEPTED", true, undefined, this.selectedYear)
     );
     this.acceptedJobDataSource.loadData();
   }
@@ -148,7 +148,7 @@ export class JobComponent implements OnInit {
     this.finishedJobDataSource = new TableDataSource(
       this.api,
       (api, filter, sortDirection, skip, limit) =>
-        api.readJobsJobGet(skip, limit, filter, undefined, 'JOBSTATUS_COMPLETED', true, this.selectedYear)
+        api.readJobsJobGet(skip, limit, filter, undefined, "JOBSTATUS_COMPLETED", true, this.selectedYear)
       ,
       (dataSourceClasses) => {
         const rows = [];
@@ -158,25 +158,25 @@ export class JobComponent implements OnInit {
               values: {
                 name: dataSource.name,
                 code: dataSource.code,
-                'client.name': dataSource.client.fullname,
-                'responsible.fullname': dataSource.responsible.fullname,
+                "client.name": dataSource.client.fullname,
+                "responsible.fullname": dataSource.responsible.fullname,
                 completion: dataSource.completion
               },
               route: () => {
-                this.router.navigateByUrl('/job/' + dataSource.id.toString());
+                this.router.navigateByUrl("/job/" + dataSource.id.toString());
               }
             });
         });
         return rows;
       },
       [
-        {name: 'code', headerName: 'Kommissionsnummer'},
-        {name: 'name', headerName: 'Kommission'},
-        {name: 'client.name', headerName: 'Kunde'},
-        {name: 'responsible.fullname', headerName: 'Zuständig'},
-        {name: 'completion', headerName: 'Fertigstellung'}
+        {name: "code", headerName: "Kommissionsnummer"},
+        {name: "name", headerName: "Kommission"},
+        {name: "client.name", headerName: "Kunde"},
+        {name: "responsible.fullname", headerName: "Zuständig"},
+        {name: "completion", headerName: "Fertigstellung"}
       ],
-      (api) => api.readJobCountJobCountGet('JOBSTATUS_COMPLETED', true, undefined, this.selectedYear)
+      (api) => api.readJobCountJobCountGet("JOBSTATUS_COMPLETED", true, undefined, this.selectedYear)
     );
     this.finishedJobDataSource.loadData();
   }
@@ -185,7 +185,7 @@ export class JobComponent implements OnInit {
     this.declinedJobDataSource = new TableDataSource(
       this.api,
       (api, filter, sortDirection, skip, limit) =>
-        api.readJobsJobGet(skip, limit, filter, undefined, 'JOBSTATUS_DECLINED', true, this.selectedYear)
+        api.readJobsJobGet(skip, limit, filter, undefined, "JOBSTATUS_DECLINED", true, this.selectedYear)
       ,
       (dataSourceClasses) => {
         const rows = [];
@@ -195,25 +195,25 @@ export class JobComponent implements OnInit {
               values: {
                 name: dataSource.name,
                 code: dataSource.code,
-                'client.name': dataSource.client.fullname,
-                'responsible.fullname': dataSource.responsible.fullname,
+                "client.name": dataSource.client.fullname,
+                "responsible.fullname": dataSource.responsible.fullname,
                 completion: dataSource.completion
               },
               route: () => {
-                this.router.navigateByUrl('/job/' + dataSource.id.toString());
+                this.router.navigateByUrl("/job/" + dataSource.id.toString());
               }
             });
         });
         return rows;
       },
       [
-        {name: 'code', headerName: 'Kommissionsnummer'},
-        {name: 'name', headerName: 'Kommission'},
-        {name: 'client.name', headerName: 'Kunde'},
-        {name: 'responsible.fullname', headerName: 'Zuständig'},
-        {name: 'completion', headerName: 'Fertigstellung'}
+        {name: "code", headerName: "Kommissionsnummer"},
+        {name: "name", headerName: "Kommission"},
+        {name: "client.name", headerName: "Kunde"},
+        {name: "responsible.fullname", headerName: "Zuständig"},
+        {name: "completion", headerName: "Fertigstellung"}
       ],
-      (api) => api.readJobCountJobCountGet('JOBSTATUS_DECLINED', true, undefined, this.selectedYear)
+      (api) => api.readJobCountJobCountGet("JOBSTATUS_DECLINED", true, undefined, this.selectedYear)
     );
     this.declinedJobDataSource.loadData();
   }
@@ -233,14 +233,14 @@ export class JobComponent implements OnInit {
                 name: dataSource.name
               },
               route: () => {
-                this.router.navigateByUrl('stock/' + dataSource.id.toString());
+                this.router.navigateByUrl("stock/" + dataSource.id.toString());
               }
             });
         });
         return rows;
       },
       [
-        {name: 'name', headerName: 'Name'}
+        {name: "name", headerName: "Name"}
       ],
       (api) => api.readStockCountStockCountGet()
     );

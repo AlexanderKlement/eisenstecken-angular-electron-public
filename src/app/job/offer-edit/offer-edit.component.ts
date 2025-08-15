@@ -1,40 +1,33 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
-import {BaseEditComponent} from '../../shared/components/base-edit/base-edit.component';
-import {
-  DefaultService,
-  OfferCreate,
-  OfferUpdate,
-  Lock,
-  Offer,
-  DescriptiveArticleCreate, Vat, DescriptiveArticle
-} from 'eisenstecken-openapi-angular-library';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatDialog} from '@angular/material/dialog';
-import {Observable, Subscription, take} from 'rxjs';
-import {first, tap} from 'rxjs/operators';
-import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/confirm-dialog.component';
-import {FileService} from '../../shared/services/file.service';
-import {formatDateTransport} from '../../shared/date.util';
-import {CustomButton} from '../../shared/components/toolbar/toolbar.component';
-import {CurrencyPipe, getLocaleCurrencyCode} from '@angular/common';
-import {CdkTextareaAutosize} from '@angular/cdk/text-field';
-import {NavigationService} from '../../shared/services/navigation.service';
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
+import { ActivatedRoute, Router } from "@angular/router";
+import { MatDialog } from "@angular/material/dialog";
+import { Observable, Subscription, take } from "rxjs";
+import { first, tap } from "rxjs/operators";
+import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
+import { FileService } from "../../shared/services/file.service";
+import { formatDateTransport } from "../../shared/date.util";
+import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
+import { CurrencyPipe, getLocaleCurrencyCode } from "@angular/common";
+import { NavigationService } from "../../shared/services/navigation.service";
+import { DescriptiveArticleCreate, OfferCreate, OfferUpdate, Offer, Vat,
+  DefaultService, DescriptiveArticle, Lock } from "../../../api/openapi";
 
 @Component({
   selector: 'app-offer-edit',
   templateUrl: './offer-edit.component.html',
-  styleUrls: ['./offer-edit.component.scss']
+  styleUrls: ['./offer-edit.component.scss'],
 })
 export class OfferEditComponent extends BaseEditComponent<Offer> implements OnInit, OnDestroy {
 
-  navigationTarget = 'job';
+  navigationTarget = "job";
   jobId: number;
   offerGroup: UntypedFormGroup;
   submitted: boolean;
   vatOptions$: Observable<Vat[]>;
   hiddenDescriptives: number[];
-  title = 'Angebot: Bearbeiten';
+  title = "Angebot: Bearbeiten";
   buttons: CustomButton[] = [];
   subscription: Subscription;
 
@@ -44,7 +37,7 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
   }
 
   get discountAmount(): UntypedFormControl {
-    return this.offerGroup.get('discount_amount') as UntypedFormControl;
+    return this.offerGroup.get("discount_amount") as UntypedFormControl;
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> => api.islockedOfferOfferIslockedOfferIdGet(id);
@@ -63,24 +56,24 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
       this.routeParams.subscribe((params) => {
         this.jobId = parseInt(params.job_id, 10);
         if (isNaN(this.jobId)) {
-          console.error('OfferEdit: Cannot determine job id');
+          console.error("OfferEdit: Cannot determine job id");
           this.router.navigateByUrl(this.navigationTarget);
         }
-        this.navigationTarget = 'job/' + this.jobId.toString();
+        this.navigationTarget = "job/" + this.jobId.toString();
         this.api.readJobJobJobIdGet(this.jobId).pipe(first()).subscribe((job) => {
           this.fillRightSidebar(job.client.language.code);
         });
       });
     }
     if (this.createMode) {
-      this.title = 'Angebot: Erstellen';
+      this.title = "Angebot: Erstellen";
     }
 
     this.buttons.push({
-      name: 'Angebot löschen',
+      name: "Angebot löschen",
       navigate: (): void => {
         this.onOfferDeleteClicked();
-      }
+      },
     });
   }
 
@@ -96,22 +89,22 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
       const subDescriptiveArticleArray: DescriptiveArticleCreate[] = [];
       this.getSubDescriptiveArticles(descriptiveArticleControl).controls.forEach((subDescriptiveArticleControl) => {
         const subDescriptiveArticle: DescriptiveArticleCreate = {
-          name: '',
-          amount: subDescriptiveArticleControl.get('amount').value,
-          description: subDescriptiveArticleControl.get('description').value,
+          name: "",
+          amount: subDescriptiveArticleControl.get("amount").value,
+          description: subDescriptiveArticleControl.get("description").value,
           // eslint-disable-next-line @typescript-eslint/naming-convention
-          single_price: subDescriptiveArticleControl.get('single_price').value,
+          single_price: subDescriptiveArticleControl.get("single_price").value,
           discount: 0,
-          alternative: subDescriptiveArticleControl.get('alternative').value,
+          alternative: subDescriptiveArticleControl.get("alternative").value,
           // eslint-disable-next-line @typescript-eslint/naming-convention
           vat_id: 1,
         };
         subDescriptiveArticleArray.push(subDescriptiveArticle);
       });
       const descriptiveArticle: DescriptiveArticleCreate = {
-        name: '',
+        name: "",
         amount: 0,
-        description: descriptiveArticleControl.get('description').value,
+        description: descriptiveArticleControl.get("description").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         single_price: 0,
         discount: 0,
@@ -127,26 +120,26 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
 
     if (this.createMode) {
       const offerCreate: OfferCreate = {
-        date: formatDateTransport(this.offerGroup.get('date').value),
+        date: formatDateTransport(this.offerGroup.get("date").value),
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        in_price_included: this.offerGroup.get('in_price_included').value,
-        validity: this.offerGroup.get('validity').value,
-        payment: this.offerGroup.get('payment').value,
-        delivery: this.offerGroup.get('delivery').value,
+        in_price_included: this.offerGroup.get("in_price_included").value,
+        validity: this.offerGroup.get("validity").value,
+        payment: this.offerGroup.get("payment").value,
+        delivery: this.offerGroup.get("delivery").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         job_id: this.jobId,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        vat_id: this.offerGroup.get('vat_id').value,
+        vat_id: this.offerGroup.get("vat_id").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         descriptive_articles: descriptiveArticles,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        discount_amount: this.offerGroup.get('discount_amount').value,
+        discount_amount: this.offerGroup.get("discount_amount").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        discount_percentage: this.offerGroup.get('discount_percentage').value,
+        discount_percentage: this.offerGroup.get("discount_percentage").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        material_description: this.offerGroup.get('material_description').value,
+        material_description: this.offerGroup.get("material_description").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        material_description_title: this.offerGroup.get('material_description_title').value
+        material_description_title: this.offerGroup.get("material_description_title").value,
       };
       this.api.createOfferOfferPost(offerCreate).pipe(first()).subscribe((offer) => {
         this.createUpdateSuccess(offer);
@@ -157,24 +150,24 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
       });
     } else {
       const offerUpdate: OfferUpdate = {
-        date: formatDateTransport(this.offerGroup.get('date').value),
+        date: formatDateTransport(this.offerGroup.get("date").value),
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        in_price_included: this.offerGroup.get('in_price_included').value,
-        validity: this.offerGroup.get('validity').value,
-        payment: this.offerGroup.get('payment').value,
-        delivery: this.offerGroup.get('delivery').value,
+        in_price_included: this.offerGroup.get("in_price_included").value,
+        validity: this.offerGroup.get("validity").value,
+        payment: this.offerGroup.get("payment").value,
+        delivery: this.offerGroup.get("delivery").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         descriptive_articles: descriptiveArticles,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        vat_id: this.offerGroup.get('vat_id').value,
+        vat_id: this.offerGroup.get("vat_id").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        discount_amount: this.offerGroup.get('discount_amount').value,
+        discount_amount: this.offerGroup.get("discount_amount").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        discount_percentage: this.offerGroup.get('discount_percentage').value,
+        discount_percentage: this.offerGroup.get("discount_percentage").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        material_description: this.offerGroup.get('material_description').value,
+        material_description: this.offerGroup.get("material_description").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        material_description_title: this.offerGroup.get('material_description_title').value
+        material_description_title: this.offerGroup.get("material_description_title").value,
       };
       this.api.updateOfferOfferOfferIdPut(this.id, offerUpdate).subscribe((offer) => {
         this.createUpdateSuccess(offer);
@@ -190,7 +183,7 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
     this.id = offer.id;
     this.file.open(offer.pdf);
     this.navigation.removeLastUrl();
-    this.router.navigateByUrl('job/' + this.jobId.toString(), {replaceUrl: true});
+    this.router.navigateByUrl("job/" + this.jobId.toString(), { replaceUrl: true });
   }
 
   observableReady(): void {
@@ -217,7 +210,7 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
           // eslint-disable-next-line @typescript-eslint/naming-convention
           material_description: offer.material_description,
           // eslint-disable-next-line @typescript-eslint/naming-convention
-          material_description_title: offer.material_description_title
+          material_description_title: offer.material_description_title,
         });
         this.jobId = offer.job_id;
         this.recalculateOfferPrice();
@@ -227,11 +220,11 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
   }
 
   getDescriptiveArticles(): UntypedFormArray {
-    return this.offerGroup.get('descriptive_articles') as UntypedFormArray;
+    return this.offerGroup.get("descriptive_articles") as UntypedFormArray;
   }
 
   getSubDescriptiveArticles(formGroup: AbstractControl): UntypedFormArray {
-    return formGroup.get('sub_descriptive_articles') as UntypedFormArray;
+    return formGroup.get("sub_descriptive_articles") as UntypedFormArray;
   }
 
   toggleCollapseDescriptiveArticle(index: number | undefined): void {
@@ -264,11 +257,11 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
 
   removeDescriptiveArticle(index: number): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
+      width: "400px",
       data: {
-        title: 'Position löschen?',
-        text: 'Dieser Schritt kann nicht rückgängig gemacht werden.'
-      }
+        title: "Position löschen?",
+        text: "Dieser Schritt kann nicht rückgängig gemacht werden.",
+      },
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -295,11 +288,11 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
 
   removeDescriptiveSubArticle(descriptiveArticleControl: AbstractControl, j: number): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
+      width: "400px",
       data: {
-        title: 'Position löschen?',
-        text: 'Dieser Schritt kann nicht rückgängig gemacht werden.'
-      }
+        title: "Position löschen?",
+        text: "Dieser Schritt kann nicht rückgängig gemacht werden.",
+      },
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -318,21 +311,21 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
 
   transformAmount(i: number, j: number) {
     const subDescriptiveArticle = this.getSubDescriptiveArticles(this.getDescriptiveArticles().at(i)).at(j);
-    const singlePrice = parseFloat(subDescriptiveArticle.get('singlePriceFormatted').value
-      .replace('€', '').replace('.', '').replace(',', '.'));
-    const formattedAmount = this.currency.transform(singlePrice, getLocaleCurrencyCode('de_DE'));
-    subDescriptiveArticle.get('single_price').setValue(singlePrice);
-    subDescriptiveArticle.get('singlePriceFormatted').setValue(formattedAmount);
+    const singlePrice = parseFloat(subDescriptiveArticle.get("singlePriceFormatted").value
+      .replace("€", "").replace(".", "").replace(",", "."));
+    const formattedAmount = this.currency.transform(singlePrice, getLocaleCurrencyCode("de_DE"));
+    subDescriptiveArticle.get("single_price").setValue(singlePrice);
+    subDescriptiveArticle.get("singlePriceFormatted").setValue(formattedAmount);
   }
 
   private initDescriptiveArticles(descriptiveArticle?: DescriptiveArticle): UntypedFormGroup {
     if (descriptiveArticle === undefined) {
       return new UntypedFormGroup({
-        description: new UntypedFormControl(''),
+        description: new UntypedFormControl(""),
         // eslint-disable-next-line @typescript-eslint/naming-convention
         sub_descriptive_articles: new UntypedFormArray([
-          this.initSubDescriptiveArticles()
-        ])
+          this.initSubDescriptiveArticles(),
+        ]),
       });
     } else {
       const subDescriptiveArticles: UntypedFormGroup[] = [];
@@ -342,7 +335,7 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
       return new UntypedFormGroup({
         description: new UntypedFormControl(descriptiveArticle.description),
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        sub_descriptive_articles: new UntypedFormArray(subDescriptiveArticles)
+        sub_descriptive_articles: new UntypedFormArray(subDescriptiveArticles),
       });
     }
   }
@@ -351,12 +344,12 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
     let subDescriptiveArticleGroup;
     if (subDescriptiveArticle === undefined) {
       subDescriptiveArticleGroup = new UntypedFormGroup({
-        description: new UntypedFormControl(''),
+        description: new UntypedFormControl(""),
         amount: new UntypedFormControl(1),
         // eslint-disable-next-line @typescript-eslint/naming-convention
         single_price: new UntypedFormControl(0.0),
-        singlePriceFormatted: new UntypedFormControl('0,00 €'),
-        alternative: new UntypedFormControl(false)
+        singlePriceFormatted: new UntypedFormControl("0,00 €"),
+        alternative: new UntypedFormControl(false),
       });
     } else {
       subDescriptiveArticleGroup = new UntypedFormGroup({
@@ -365,20 +358,20 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
         // eslint-disable-next-line @typescript-eslint/naming-convention
         single_price: new UntypedFormControl(subDescriptiveArticle.single_price),
         singlePriceFormatted: new UntypedFormControl(this.currency.transform(subDescriptiveArticle.single_price,
-          getLocaleCurrencyCode('de_DE'))),
-        alternative: new UntypedFormControl(subDescriptiveArticle.alternative)
+          getLocaleCurrencyCode("de_DE"))),
+        alternative: new UntypedFormControl(subDescriptiveArticle.alternative),
       });
     }
 
-    this.subscription.add(subDescriptiveArticleGroup.get('single_price').valueChanges.subscribe(
+    this.subscription.add(subDescriptiveArticleGroup.get("single_price").valueChanges.subscribe(
       () => {
         this.recalculateOfferPrice();
       }));
-    this.subscription.add(subDescriptiveArticleGroup.get('amount').valueChanges.subscribe(
+    this.subscription.add(subDescriptiveArticleGroup.get("amount").valueChanges.subscribe(
       () => {
         this.recalculateOfferPrice();
       }));
-    this.subscription.add(subDescriptiveArticleGroup.get('alternative').valueChanges.subscribe(
+    this.subscription.add(subDescriptiveArticleGroup.get("alternative").valueChanges.subscribe(
       () => {
         this.recalculateOfferPrice();
       }));
@@ -388,22 +381,22 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
 
   private onOfferDeleteClicked() {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
+      width: "400px",
       data: {
-        title: 'Angebot löschen?',
-        text: 'Dieser Schritt kann nicht rückgängig gemacht werden.'
-      }
+        title: "Angebot löschen?",
+        text: "Dieser Schritt kann nicht rückgängig gemacht werden.",
+      },
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         if (!this.createMode) {
           this.api.deleteOfferOfferOfferIdDelete(this.id).pipe(first()).subscribe(success => {
             if (success) {
-              this.router.navigateByUrl('job/' + this.jobId.toString());
+              this.router.navigateByUrl("job/" + this.jobId.toString());
             }
           });
         } else {
-          this.router.navigateByUrl('job/' + this.jobId.toString());
+          this.router.navigateByUrl("job/" + this.jobId.toString());
         }
       }
     });
@@ -411,10 +404,10 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
 
   private fillRightSidebar(langCode: string): void {
     const langCodeLower = langCode.toLowerCase();
-    this.getAndFillParameters('in_price_included', 'offer_in_price_included_' + langCodeLower);
-    this.getAndFillParameters('validity', 'offer_validity_' + langCodeLower);
-    this.getAndFillParameters('delivery', 'offer_delivery_' + langCodeLower);
-    this.getAndFillParameters('payment', 'offer_payment_' + langCodeLower);
+    this.getAndFillParameters("in_price_included", "offer_in_price_included_" + langCodeLower);
+    this.getAndFillParameters("validity", "offer_validity_" + langCodeLower);
+    this.getAndFillParameters("delivery", "offer_delivery_" + langCodeLower);
+    this.getAndFillParameters("payment", "offer_payment_" + langCodeLower);
   }
 
   private getAndFillParameters(formControlName: string, key: string) {
@@ -428,10 +421,10 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
   private initOfferGroup() {
     this.offerGroup = new UntypedFormGroup({
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      in_price_included: new UntypedFormControl(''),
-      validity: new UntypedFormControl(''),
-      payment: new UntypedFormControl(''),
-      delivery: new UntypedFormControl(''),
+      in_price_included: new UntypedFormControl(""),
+      validity: new UntypedFormControl(""),
+      payment: new UntypedFormControl(""),
+      delivery: new UntypedFormControl(""),
       date: new UntypedFormControl((new Date()).toISOString()),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       vat_id: new UntypedFormControl(3),
@@ -440,38 +433,38 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
       // eslint-disable-next-line @typescript-eslint/naming-convention
       discount_percentage: new UntypedFormControl(0.0),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      material_description: new UntypedFormControl(''),
+      material_description: new UntypedFormControl(""),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      material_description_title: new UntypedFormControl('Allgemeine Materialbeschreibung'),
+      material_description_title: new UntypedFormControl("Allgemeine Materialbeschreibung"),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       descriptive_articles: new UntypedFormArray([
-        this.initDescriptiveArticles()
+        this.initDescriptiveArticles(),
       ]),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      offer_price: new UntypedFormControl('')
+      offer_price: new UntypedFormControl(""),
     });
   }
 
   private recalculateOfferPrice(): void {
-    if (this.offerGroup.get('discount_amount').value == null) {
-      this.offerGroup.get('discount_amount').setValue(0);
+    if (this.offerGroup.get("discount_amount").value == null) {
+      this.offerGroup.get("discount_amount").setValue(0);
     }
-    if (this.offerGroup.get('discount_percentage').value == null) {
-      this.offerGroup.get('discount_percentage').setValue(0);
+    if (this.offerGroup.get("discount_percentage").value == null) {
+      this.offerGroup.get("discount_percentage").setValue(0);
     }
     let offerPrice = 0.0;
     this.getDescriptiveArticles().controls.forEach((descriptiveArticleControl) => {
-      (descriptiveArticleControl.get('sub_descriptive_articles') as UntypedFormArray).controls.forEach((subDescriptiveArticleControl) => {
-        if (subDescriptiveArticleControl.get('alternative').value) {
+      (descriptiveArticleControl.get("sub_descriptive_articles") as UntypedFormArray).controls.forEach((subDescriptiveArticleControl) => {
+        if (subDescriptiveArticleControl.get("alternative").value) {
           return;
         }
-        offerPrice += parseFloat(subDescriptiveArticleControl.get('single_price').value) *
-          parseFloat(subDescriptiveArticleControl.get('amount').value);
+        offerPrice += parseFloat(subDescriptiveArticleControl.get("single_price").value) *
+          parseFloat(subDescriptiveArticleControl.get("amount").value);
       });
     });
-    offerPrice -= this.offerGroup.get('discount_amount').value;
-    offerPrice *= 1 - this.offerGroup.get('discount_percentage').value / 100;
-    this.offerGroup.get('offer_price').setValue(this.currency.transform(offerPrice, getLocaleCurrencyCode('de_DE')));
+    offerPrice -= this.offerGroup.get("discount_amount").value;
+    offerPrice *= 1 - this.offerGroup.get("discount_percentage").value / 100;
+    this.offerGroup.get("offer_price").setValue(this.currency.transform(offerPrice, getLocaleCurrencyCode("de_DE")));
   }
 
 

@@ -1,14 +1,14 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
-import * as moment from 'moment';
-import {CompanyEvent, CompanyEventEnum, DefaultService} from 'eisenstecken-openapi-angular-library';
-import {MatDialog} from '@angular/material/dialog';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from "@angular/core";
+import * as moment from "moment";
+import {MatDialog} from "@angular/material/dialog";
 import {
   EventCalendarDialogComponent,
   getEventTranslation
-} from '../event-calendar-dialog/event-calendar-dialog.component';
-import {first} from 'rxjs/operators';
-import {Subject, Subscription} from 'rxjs';
-import {AuthService} from '../../../shared/services/auth.service';
+} from "../event-calendar-dialog/event-calendar-dialog.component";
+import {first} from "rxjs/operators";
+import {Subject, Subscription} from "rxjs";
+import {AuthService} from "../../../shared/services/auth.service";
+import {DefaultService, CompanyEvent, CompanyEventEnum} from "../../../../api/openapi";
 
 @Component({
   selector: 'app-event-calendar-day',
@@ -37,7 +37,7 @@ export class EventCalendarDayComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.isoDateString = this.date.format('YYYY-MM-DD');
+    this.isoDateString = this.date.format("YYYY-MM-DD");
     this.updateDate();
 
     this.updateEvents();
@@ -59,7 +59,7 @@ export class EventCalendarDayComponent implements OnInit, OnChanges, OnDestroy {
 
   addEvent() {
     const dialogRef = this.dialog.open(EventCalendarDialogComponent, {
-      width: '400px',
+      width: "400px",
       data: {
         date: this.isoDateString,
       },
@@ -87,7 +87,7 @@ export class EventCalendarDayComponent implements OnInit, OnChanges, OnDestroy {
 
   editEvent(eventId: number) {
     const dialogRef = this.dialog.open(EventCalendarDialogComponent, {
-      width: '400px',
+      width: "400px",
       data: {
         id: eventId,
         date: this.isoDateString
@@ -114,6 +114,6 @@ export class EventCalendarDayComponent implements OnInit, OnChanges, OnDestroy {
 
   private updateDate(): void {
     this.date = moment().year(this.year).isoWeek(this.week).isoWeekday(this.day + 1);
-    this.dateFormatted = this.date.format('DD.MM');
+    this.dateFormatted = this.date.format("DD.MM");
   }
 }

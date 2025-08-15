@@ -1,13 +1,35 @@
 import {
+  Stock,
+  Client,
+  User,
+  Calendar,
+  Job,
+  Offer,
   Article,
-  Calendar, TemplatePaint,
-  Client, Contact, Credential, Fee,
-  IngoingInvoice, Expense,
-  Job, Journey, Meal, MealSum,
-  Offer, Order, OrderBundle, OrderedArticle,
-  OutgoingInvoice, Price, Recalculation, Stock, Supplier, TechnicalData,
-  User, Workload, Service, Maintenance, ServiceSum, InfoPage, WoodList
-} from 'eisenstecken-openapi-angular-library';
+  OrderBundle,
+  Order,
+  OrderedArticle,
+  OutgoingInvoice,
+  IngoingInvoice,
+  Supplier,
+  Contact,
+  Price,
+  TechnicalData,
+  Credential,
+  Recalculation,
+  Fee,
+  Meal,
+  MealSum,
+  Expense,
+  Workload,
+  Service,
+  ServiceSum,
+  Maintenance,
+  InfoPage,
+  WoodList,
+  TemplatePaint,
+  Journey,
+} from '../../api/openapi';
 
 
 export type DataSourceClass =

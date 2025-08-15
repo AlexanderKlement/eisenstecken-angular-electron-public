@@ -1,13 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {TableDataSource} from '../../shared/components/table-builder/table-builder.datasource';
-import {DefaultService, InfoPage} from 'eisenstecken-openapi-angular-library';
-import {first} from 'rxjs/operators';
-import {AuthService} from '../../shared/services/auth.service';
-import {CustomButton} from '../../shared/components/toolbar/toolbar.component';
-import {MatDialog} from '@angular/material/dialog';
+import {Component, OnInit} from "@angular/core";
+import {TableDataSource} from "../../shared/components/table-builder/table-builder.datasource";
+import {first} from "rxjs/operators";
+import {AuthService} from "../../shared/services/auth.service";
+import {CustomButton} from "../../shared/components/toolbar/toolbar.component";
+import {MatDialog} from "@angular/material/dialog";
 import {
     InfoPageSettingEditDialogComponent
-} from './info-page-setting-edit-dialog/info-page-setting-edit-dialog.component';
+} from "./info-page-setting-edit-dialog/info-page-setting-edit-dialog.component";
+import {DefaultService, InfoPage} from "../../../api/openapi";
 
 @Component({
     selector: 'app-info-page-settings',
@@ -37,7 +37,7 @@ export class InfoPageSettingsComponent implements OnInit {
                                 body: dataSource.body.substring(0, 40)
                             },
                             route: () => {
-                                this.authService.currentUserHasRight('info_pages:create').pipe(first()).subscribe((allowed) => {
+                                this.authService.currentUserHasRight("info_pages:create").pipe(first()).subscribe((allowed) => {
                                     if (allowed) {
                                         this.openDialog(dataSource.id);
                                     }
@@ -48,14 +48,14 @@ export class InfoPageSettingsComponent implements OnInit {
                 return rows;
             },
             [
-                {name: 'name', headerName: 'Name'},
-                {name: 'body', headerName: 'Inhalt'},
+                {name: "name", headerName: "Name"},
+                {name: "body", headerName: "Inhalt"},
             ],
             (api) => api.readClientCountClientCountGet()
         );
         this.infoPageDataSource.loadData();
 
-        this.authService.currentUserHasRight('info_pages:create').pipe(first()).subscribe(allowed => {
+        this.authService.currentUserHasRight("info_pages:create").pipe(first()).subscribe(allowed => {
             if (allowed) {
                 this.showNewButton = true;
             }
@@ -65,7 +65,7 @@ export class InfoPageSettingsComponent implements OnInit {
 
     openDialog(id: number): void {
         const dialogRef = this.dialog.open(InfoPageSettingEditDialogComponent, {
-            width: '1000px',
+            width: "1000px",
             data: {id},
         });
         dialogRef.afterClosed().subscribe(() => {

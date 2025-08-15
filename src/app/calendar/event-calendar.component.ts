@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {CustomButton} from '../shared/components/toolbar/toolbar.component';
+import {Component, OnInit} from "@angular/core";
+import {CustomButton} from "../shared/components/toolbar/toolbar.component";
 
 @Component({
     selector: 'app-calendar',

@@ -1,6 +1,6 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {DefaultService, Note, NoteCreate} from 'eisenstecken-openapi-angular-library';
-import {first} from 'rxjs/operators';
+import {Component, ElementRef, OnInit, ViewChild} from "@angular/core";
+import {first} from "rxjs/operators";
+import {DefaultService, Note, NoteCreate} from "../../api";
 
 @Component({
     selector: 'app-note',
@@ -9,7 +9,7 @@ import {first} from 'rxjs/operators';
 })
 export class NoteComponent implements OnInit {
 
-    @ViewChild('noteBox') noteBox: ElementRef;
+    @ViewChild("noteBox") noteBox: ElementRef;
 
     notes: Note[] = [];
     maxNotes = 2;
@@ -28,7 +28,7 @@ export class NoteComponent implements OnInit {
     }
 
     public newNoteClicked(): void {
-        const noteCreate: NoteCreate = {text: ''};
+        const noteCreate: NoteCreate = {text: ""};
         const newNoteObservable = this.api.createNoteEntryNotePost(noteCreate);
         newNoteObservable.pipe(first()).subscribe((note) => {
             this.notes.push(note);

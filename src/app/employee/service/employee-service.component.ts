@@ -1,16 +1,16 @@
-import {Component, ComponentRef, OnInit} from '@angular/core';
-import {TableDataSource} from '../../shared/components/table-builder/table-builder.datasource';
-import {DefaultService, Service} from 'eisenstecken-openapi-angular-library';
-import {MatDialog} from '@angular/material/dialog';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import * as moment from 'moment';
-import {ActivatedRoute} from '@angular/router';
-import {ServiceDialogComponent} from './service-dialog/service-dialog.component';
-import {CustomButton} from '../../shared/components/toolbar/toolbar.component';
-import {ServiceCreateDialogComponent} from './service-create-dialog/service-create-dialog.component';
-import {first} from 'rxjs/operators';
-import {minutesToDisplayableString} from '../../shared/date.util';
-import {Observable, Subscriber} from 'rxjs';
+import {Component, ComponentRef, OnInit} from "@angular/core";
+import {TableDataSource} from "../../shared/components/table-builder/table-builder.datasource";
+import {MatDialog} from "@angular/material/dialog";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import * as moment from "moment";
+import {ActivatedRoute} from "@angular/router";
+import {ServiceDialogComponent} from "./service-dialog/service-dialog.component";
+import {CustomButton} from "../../shared/components/toolbar/toolbar.component";
+import {ServiceCreateDialogComponent} from "./service-create-dialog/service-create-dialog.component";
+import {first} from "rxjs/operators";
+import {minutesToDisplayableString} from "../../shared/date.util";
+import {Observable, Subscriber} from "rxjs";
+import {DefaultService, Service} from "../../../api/openapi";
 
 @Component({
     selector: 'app-service',
@@ -22,13 +22,13 @@ export class EmployeeServiceComponent implements OnInit {
     userId: number;
     buttons: CustomButton[] = [
         {
-            name: 'Wartung erstellen',
+            name: "Wartung erstellen",
             navigate: () => {
                 this.serviceCreateClicked();
             }
         }
     ];
-    title = '';
+    title = "";
     public $refresh: Observable<void>;
     private $refreshSubscriber: Subscriber<void>;
 
@@ -39,10 +39,10 @@ export class EmployeeServiceComponent implements OnInit {
         this.route.params.subscribe(params => {
             this.userId = parseInt(params.id, 10);
             if (isNaN(this.userId)) {
-                console.error('ServiceComponent: Could not parse userId');
+                console.error("ServiceComponent: Could not parse userId");
             }
             this.api.readUserUsersUserIdGet(this.userId).pipe(first()).subscribe(user => {
-                this.title = 'Service: ' + user.fullname;
+                this.title = "Service: " + user.fullname;
             });
             this.initServiceDataSource();
         });
@@ -70,9 +70,9 @@ export class EmployeeServiceComponent implements OnInit {
                     rows.push(
                         {
                             values: {
-                                date: moment(dataSource.date).format('dddd, DD.MM.YYYY'),
+                                date: moment(dataSource.date).format("dddd, DD.MM.YYYY"),
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                                'user.fullname': dataSource.user.fullname,
+                                "user.fullname": dataSource.user.fullname,
                                 minutes: minutesToDisplayableString(dataSource.minutes),
                             },
                             route: () => {
@@ -83,9 +83,9 @@ export class EmployeeServiceComponent implements OnInit {
                 return rows;
             },
             [
-                {name: 'date', headerName: 'Datum'},
-                {name: 'user.fullname', headerName: 'Angestellter'},
-                {name: 'minutes', headerName: 'Zeit'},
+                {name: "date", headerName: "Datum"},
+                {name: "user.fullname", headerName: "Angestellter"},
+                {name: "minutes", headerName: "Zeit"},
             ],
             (api) => api.readServiceCountServiceCountGet(this.userId)
         );
@@ -94,7 +94,7 @@ export class EmployeeServiceComponent implements OnInit {
 
     private serviceClicked(id: number) {
         const dialogRef = this.dialog.open(ServiceDialogComponent, {
-            width: '900px',
+            width: "900px",
             data: {id}
         });
         dialogRef.afterClosed().subscribe(result => {
@@ -106,7 +106,7 @@ export class EmployeeServiceComponent implements OnInit {
 
     private serviceCreateClicked() {
         const dialogRef = this.dialog.open(ServiceCreateDialogComponent, {
-            width: '900px',
+            width: "900px",
             data: {userId: this.userId}
         });
         dialogRef.afterClosed().subscribe(result => {

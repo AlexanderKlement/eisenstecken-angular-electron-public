@@ -5,10 +5,8 @@ import { LockService } from "../shared/services/lock.service";
 import { CustomButton } from "../shared/components/toolbar/toolbar.component";
 import { AuthService } from "../shared/services/auth.service";
 import { first } from "rxjs/operators";
-import {
-  DefaultService,
-  User,
-} from "../../../eisenstecken-openapi-angular-library";
+import { DefaultService, User } from "../../api/openapi";
+
 
 @Component({
   selector: "app-user",

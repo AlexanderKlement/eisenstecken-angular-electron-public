@@ -1,15 +1,15 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {SupplierComponent} from './supplier.component';
-import {SupplierDetailComponent} from './supplier-detail/supplier-detail.component';
-import {SupplierEditComponent} from './supplier-edit/supplier-edit.component';
-import {StockDetailComponent} from './stock-detail/stock-detail.component';
-import {StockEditComponent} from './stock-edit/stock-edit.component';
-import {ArticleSupplierComponent} from './article-supplier/article-supplier.component';
+import {NgModule} from "@angular/core";
+import {RouterModule, Routes} from "@angular/router";
+import {SupplierComponent} from "./supplier.component";
+import {SupplierDetailComponent} from "./supplier-detail/supplier-detail.component";
+import {SupplierEditComponent} from "./supplier-edit/supplier-edit.component";
+import {StockDetailComponent} from "./stock-detail/stock-detail.component";
+import {StockEditComponent} from "./stock-edit/stock-edit.component";
+import {ArticleSupplierComponent} from "./article-supplier/article-supplier.component";
 
 const routes: Routes = [
     {
-        path: 'supplier',
+        path: "supplier",
         component: SupplierComponent,
         data: {
             requiresLogin: true,
@@ -17,7 +17,7 @@ const routes: Routes = [
         }
     },
     {
-        path: 'supplier/:id',
+        path: "supplier/:id",
         component: SupplierDetailComponent,
         data: {
             requiresLogin: true,
@@ -25,12 +25,12 @@ const routes: Routes = [
         }
     },
     {
-        path: 'supplier/edit/:id',
+        path: "supplier/edit/:id",
         component: SupplierEditComponent,
         data: {requiresLogin: true}
     },
     {
-        path: 'stock/:id',
+        path: "stock/:id",
         component: StockDetailComponent,
         data: {
             requiresLogin: true,
@@ -38,24 +38,24 @@ const routes: Routes = [
         }
     },
     {
-        path: 'stock/edit/:id',
+        path: "stock/edit/:id",
         component: StockEditComponent,
         data: {requiresLogin: true}
     },
     {
-        path: 'supplier/articles/:supplier_id',
+        path: "supplier/articles/:supplier_id",
         component: ArticleSupplierComponent,
         data: {
             requiresLogin: true,
-            type: 'supplier'
+            type: "supplier"
         }
     },
     {
-        path: 'stock/articles/:supplier_id',
+        path: "stock/articles/:supplier_id",
         component: ArticleSupplierComponent,
         data: {
             requiresLogin: true,
-            type: 'stock'
+            type: "stock"
         }
     }
 ];

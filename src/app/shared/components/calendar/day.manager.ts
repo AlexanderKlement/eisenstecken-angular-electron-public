@@ -1,4 +1,4 @@
-import * as  moment from 'moment';
+import * as  moment from "moment";
 
 interface Days {
     value: string;
@@ -23,11 +23,11 @@ export class DayManager {
     }
 
     getStartDate(): string {
-        return moment().add(this.startDay, 'days').format('DoMM');
+        return moment().add(this.startDay, "days").format("DoMM");
     }
 
     getEndDate(): string {
-        return moment().add(this.startDay + this.amountOfDays, 'days').format('DoMM');
+        return moment().add(this.startDay + this.amountOfDays, "days").format("DoMM");
     }
 
     getShownDayArray(): number[] {

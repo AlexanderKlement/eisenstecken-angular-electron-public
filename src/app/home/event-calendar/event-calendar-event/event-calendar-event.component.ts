@@ -1,6 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {CompanyEvent, CompanyEventEnum} from 'eisenstecken-openapi-angular-library';
-import {getEventTranslation} from '../event-calendar-dialog/event-calendar-dialog.component';
+import {Component, Input, OnInit} from "@angular/core";
+import {getEventTranslation} from "../event-calendar-dialog/event-calendar-dialog.component";
 
 @Component({
   selector: 'app-event-calendar-event',
@@ -35,13 +34,13 @@ export class EventCalendarEventComponent implements OnInit {
   private getClassName(): string {
     switch (this.event.event_type) {
       case CompanyEventEnum.Event:
-        return 'event';
+        return "event";
       case CompanyEventEnum.Holiday:
-        return 'holiday';
+        return "holiday";
       case CompanyEventEnum.Vacation:
-        return 'vacation';
+        return "vacation";
       case CompanyEventEnum.Illness:
-        return 'illness';
+        return "illness";
     }
   }
 

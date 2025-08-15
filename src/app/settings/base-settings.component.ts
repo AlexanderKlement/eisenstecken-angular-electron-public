@@ -1,8 +1,9 @@
-import {DefaultService, ParameterCreate} from 'eisenstecken-openapi-angular-library';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
-import {first} from 'rxjs/operators';
-import {Component} from '@angular/core';
+
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {UntypedFormControl, UntypedFormGroup} from "@angular/forms";
+import {first} from "rxjs/operators";
+import {Component} from "@angular/core";
+import { DefaultService, ParameterCreate } from '../../api/openapi';
 
 @Component({
     template: ''
@@ -26,7 +27,7 @@ export abstract class BaseSettingsComponent {
     ngOnInit(): void {
         this.formGroup = new UntypedFormGroup({});
         this.keyList.forEach((key) => {
-            this.formGroup.addControl(key, new UntypedFormControl(''));
+            this.formGroup.addControl(key, new UntypedFormControl(""));
         });
         this.getAndPushParametersOntoFormGroup();
     }
@@ -51,11 +52,11 @@ export abstract class BaseSettingsComponent {
         });
         this.api.setBulkParameterByKeyParameterBulkSetPost(parameters).pipe(first()).subscribe((success) => {
             if (success) {
-                this.snackBar.open('Speichern erfolgreich!', 'Ok', {
+                this.snackBar.open("Speichern erfolgreich!", "Ok", {
                     duration: 3000
                 });
             } else {
-                console.error('Save did not work'); //This should not be possible atm
+                console.error("Save did not work"); //This should not be possible atm
             }
         }, (error) => {
             console.error(error);

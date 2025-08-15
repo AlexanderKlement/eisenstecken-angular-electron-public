@@ -1,31 +1,31 @@
-import {Component, ComponentRef, OnInit, ViewChild} from '@angular/core';
-import {InfoDataSource} from '../../shared/components/info-builder/info-builder.datasource';
-import {Job, DefaultService, Offer, OutgoingInvoice, Order} from 'eisenstecken-openapi-angular-library';
-import {ActivatedRoute, Router} from '@angular/router';
-import {InfoBuilderComponent} from '../../shared/components/info-builder/info-builder.component';
-import {first, map} from 'rxjs/operators';
-import {TableDataSource} from '../../shared/components/table-builder/table-builder.datasource';
-import {LockService} from '../../shared/services/lock.service';
-import * as moment from 'moment';
-import {AuthService} from '../../shared/services/auth.service';
-import {ConfirmDialogComponent} from '../../shared/components/confirm-dialog/confirm-dialog.component';
-import {MatDialog} from '@angular/material/dialog';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {formatCurrency} from '@angular/common';
+import { Component, ComponentRef, OnInit, ViewChild } from "@angular/core";
+import { InfoDataSource } from "../../shared/components/info-builder/info-builder.datasource";
+import { ActivatedRoute, Router } from "@angular/router";
+import { InfoBuilderComponent } from "../../shared/components/info-builder/info-builder.component";
+import { first, map } from "rxjs/operators";
+import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
+import { LockService } from "../../shared/services/lock.service";
+import * as moment from "moment";
+import { AuthService } from "../../shared/services/auth.service";
+import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
+import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { formatCurrency } from "@angular/common";
 import {
-  OrderReturnData
-} from './order-print-dialog/order-print-dialog.component';
-import {OrderPrintDialogComponent} from './order-print-dialog/order-print-dialog.component';
-import {FileService} from '../../shared/services/file.service';
-import {ChangePathDialogComponent} from './change-path-dialog/change-path-dialog.component';
-import {OrderDetailComponent} from '../../order/order-detail/order-detail.component';
-import {Observable, Subscriber} from 'rxjs';
-import {MoveJobDialogComponent} from './move-job-dialog/move-job-dialog.component';
+  OrderReturnData,
+} from "./order-print-dialog/order-print-dialog.component";
+import { OrderPrintDialogComponent } from "./order-print-dialog/order-print-dialog.component";
+import { FileService } from "../../shared/services/file.service";
+import { ChangePathDialogComponent } from "./change-path-dialog/change-path-dialog.component";
+import { OrderDetailComponent } from "../../order/order-detail/order-detail.component";
+import { Observable, Subscriber } from "rxjs";
+import { MoveJobDialogComponent } from "./move-job-dialog/move-job-dialog.component";
+import { OutgoingInvoice, DefaultService, Job } from "../../../api/openapi";
 
 @Component({
   selector: 'app-job-detail',
   templateUrl: './job-detail.component.html',
-  styleUrls: ['./job-detail.component.scss']
+  styleUrls: ['./job-detail.component.scss'],
 })
 export class JobDetailComponent implements OnInit {
 
@@ -48,7 +48,7 @@ export class JobDetailComponent implements OnInit {
   ordersAllowed = false;
   outgoingInvoicesAllowed = false;
   offersAllowed = false;
-  title = '';
+  title = "";
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
 
@@ -63,8 +63,8 @@ export class JobDetailComponent implements OnInit {
       try {
         id = parseInt(params.id, 10);
       } catch {
-        console.error('Cannot parse given id');
-        this.router.navigate(['Job']);
+        console.error("Cannot parse given id");
+        this.router.navigate(["Job"]);
         return;
       }
       this.jobId = id;
@@ -73,8 +73,6 @@ export class JobDetailComponent implements OnInit {
     this.initAccessRights();
     this.initRefreshObservables();
   }
-
-
 
 
   initRefreshObservables(): void {
@@ -98,19 +96,19 @@ export class JobDetailComponent implements OnInit {
           rows.push(
             {
               values: {
-                name: dataSource.code + ' - ' + dataSource.name,
+                name: dataSource.code + " - " + dataSource.name,
               },
               route: () => {
-                this.router.navigateByUrl('/job/' + dataSource.id.toString());
-              }
+                this.router.navigateByUrl("/job/" + dataSource.id.toString());
+              },
             });
         });
         return rows;
       },
       [
-        {name: 'name', headerName: 'Name'}
+        { name: "name", headerName: "Name" },
       ],
-      (api) => api.readSubjobCountByJobJobSubjobCountByJobJobIdGet(this.jobId)
+      (api) => api.readSubjobCountByJobJobSubjobCountByJobJobIdGet(this.jobId),
     );
     this.subJobDataSource.loadData();
   }
@@ -126,32 +124,32 @@ export class JobDetailComponent implements OnInit {
             {
               values: {
                 id: dataSource.id,
-                date: moment(dataSource.date).format('L'),
+                date: moment(dataSource.date).format("L"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                full_price_without_vat: formatCurrency(dataSource.full_price_without_vat, 'de-DE', 'EUR')
+                full_price_without_vat: formatCurrency(dataSource.full_price_without_vat, "de-DE", "EUR"),
               },
               route: () => {
-                this.authService.currentUserHasRight('offers:modify').pipe(first()).subscribe(allowed => {
+                this.authService.currentUserHasRight("offers:modify").pipe(first()).subscribe(allowed => {
                   if (allowed) {
                     this.locker.getLockAndTryNavigate(
                       this.api.islockedOfferOfferIslockedOfferIdGet(dataSource.id),
                       this.api.lockOfferOfferLockOfferIdPost(dataSource.id),
                       this.api.lockOfferOfferUnlockOfferIdPost(dataSource.id),
-                      'offer/edit/' + dataSource.id.toString()
+                      "offer/edit/" + dataSource.id.toString(),
                     );
                   }
                 });
-              }
+              },
             });
         });
         return rows;
       },
       [
-        {name: 'id', headerName: 'ID'},
-        {name: 'date', headerName: 'Datum'},
-        {name: 'full_price_without_vat', headerName: 'Preis'}
+        { name: "id", headerName: "ID" },
+        { name: "date", headerName: "Datum" },
+        { name: "full_price_without_vat", headerName: "Preis" },
       ],
-      (api) => api.countOffersByJobOfferJobCountJobIdGet(this.jobId)
+      (api) => api.countOffersByJobOfferJobCountJobIdGet(this.jobId),
     );
     this.offerDataSource.loadData();
   }
@@ -169,32 +167,32 @@ export class JobDetailComponent implements OnInit {
               values: {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 client_name: dataSource.client_name,
-                date: moment(dataSource.date, 'YYYY-MM-DD').format('L'),
-                id: dataSource.number
+                date: moment(dataSource.date, "YYYY-MM-DD").format("L"),
+                id: dataSource.number,
               },
               route: () => {
-                this.authService.currentUserHasRight('outgoing_invoices:modify').pipe(first()).subscribe(allowed => {
+                this.authService.currentUserHasRight("outgoing_invoices:modify").pipe(first()).subscribe(allowed => {
                   if (allowed) {
                     this.locker.getLockAndTryNavigate(
                       this.api.islockedOutgoingInvoiceOutgoingInvoiceIslockedOutgoingInvoiceIdGet(dataSource.id),
                       this.api.lockOutgoingInvoiceOutgoingInvoiceLockOutgoingInvoiceIdPost(dataSource.id),
                       this.api.unlockOutgoingInvoiceOutgoingInvoiceUnlockOutgoingInvoiceIdPost(dataSource.id),
-                      'outgoing_invoice/edit/' + dataSource.id.toString()
+                      "outgoing_invoice/edit/" + dataSource.id.toString(),
                     );
                   }
                 });
 
-              }
+              },
             });
         });
         return rows;
       },
       [
-        {name: 'client_name', headerName: 'Kunde'},
-        {name: 'id', headerName: 'Nummer'},
-        {name: 'date', headerName: 'Datum'}
+        { name: "client_name", headerName: "Kunde" },
+        { name: "id", headerName: "Nummer" },
+        { name: "date", headerName: "Datum" },
       ],
-      (api) => api.countOutgoingInvoicesByJobOutgoingInvoiceJobCountJobIdGet(this.jobId)
+      (api) => api.countOutgoingInvoicesByJobOutgoingInvoiceJobCountJobIdGet(this.jobId),
     );
     this.outgoingInvoiceDataSource.loadData();
   }
@@ -204,26 +202,26 @@ export class JobDetailComponent implements OnInit {
       this.api.readJobJobJobIdGet(id),
       [
         {
-          property: 'name',
-          name: 'Name'
+          property: "name",
+          name: "Name",
         },
         {
-          property: 'code',
-          name: 'Kodex'
+          property: "code",
+          name: "Kodex",
         },
         {
-          property: 'client.fullname',
-          name: 'Kunde'
+          property: "client.fullname",
+          name: "Kunde",
         },
         {
-          property: 'responsible.fullname',
-          name: 'Zuständig'
-        }
+          property: "responsible.fullname",
+          name: "Zuständig",
+        },
       ],
-      '/job/edit/' + this.jobId.toString(),
+      "/job/edit/" + this.jobId.toString(),
       this.api.islockedJobJobIslockedJobIdGet(this.jobId),
       this.api.lockJobJobLockJobIdPost(this.jobId),
-      this.api.unlockJobJobUnlockJobIdPost(this.jobId)
+      this.api.unlockJobJobUnlockJobIdPost(this.jobId),
     );
   }
 
@@ -240,32 +238,32 @@ export class JobDetailComponent implements OnInit {
             {
               values: {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                'order_to.displayable_name': dataSource.order_to.displayable_name,
+                "order_to.displayable_name": dataSource.order_to.displayable_name,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                'order_from.displayable_name': dataSource.order_from.displayable_name,
+                "order_from.displayable_name": dataSource.order_from.displayable_name,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                create_date: moment(dataSource.create_date).format('L'),
+                create_date: moment(dataSource.create_date).format("L"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                delivery_date: dataSource.delivery_date === null ? '' : moment(dataSource.delivery_date).format('L'),
+                delivery_date: dataSource.delivery_date === null ? "" : moment(dataSource.delivery_date).format("L"),
                 status: dataSource.status_translation,
               },
               route: () => {
-                this.router.navigateByUrl('/order/' + dataSource.id.toString());
+                this.router.navigateByUrl("/order/" + dataSource.id.toString());
               },
-              toolTip: OrderDetailComponent.extractOrderToolTips(dataSource)
+              toolTip: OrderDetailComponent.extractOrderToolTips(dataSource),
             });
         });
         return rows;
       },
       [
-        {name: 'order_to.displayable_name', headerName: 'Ziel'},
-        {name: 'order_from.displayable_name', headerName: 'Herkunft'},
-        {name: 'create_date', headerName: 'Erstelldatum'},
-        {name: 'delivery_date', headerName: 'Lieferdatum'},
-        {name: 'status', headerName: 'Status'},
+        { name: "order_to.displayable_name", headerName: "Ziel" },
+        { name: "order_from.displayable_name", headerName: "Herkunft" },
+        { name: "create_date", headerName: "Erstelldatum" },
+        { name: "delivery_date", headerName: "Lieferdatum" },
+        { name: "status", headerName: "Status" },
       ],
       (api) => api.readOrdersToCountOrderToOrderableToIdCountGet(this.jobId),
-      []
+      [],
     );
     this.orderDataSource.loadData();
   }
@@ -273,143 +271,143 @@ export class JobDetailComponent implements OnInit {
 
   private initAccessRights() {
     this.buttonsMain.push({
-      name: 'Zum Kunden',
+      name: "Zum Kunden",
       navigate: (): void => {
-        this.router.navigateByUrl('/client/' + this.clientId);
-      }
+        this.router.navigateByUrl("/client/" + this.clientId);
+      },
     });
     this.buttonsSub.push({
-      name: 'Zum Kunden',
+      name: "Zum Kunden",
       navigate: (): void => {
-        this.router.navigateByUrl('/client/' + this.clientId);
-      }
+        this.router.navigateByUrl("/client/" + this.clientId);
+      },
     });
-    this.authService.currentUserHasRight('orders:all').pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasRight("orders:all").pipe(first()).subscribe(allowed => {
       this.ordersAllowed = allowed;
     });
-    this.authService.currentUserHasRight('offers:all').pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasRight("offers:all").pipe(first()).subscribe(allowed => {
       this.offersAllowed = allowed;
     });
-    this.authService.currentUserHasRight('outgoing_invoices:all').pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasRight("outgoing_invoices:all").pipe(first()).subscribe(allowed => {
       this.outgoingInvoicesAllowed = allowed;
     });
 
-    this.authService.currentUserHasRight('jobs:modify').pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasRight("jobs:modify").pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttonsMain.push({
-          name: 'Bearbeiten',
+          name: "Bearbeiten",
           navigate: (): void => {
             this.child.editButtonClicked();
-          }
+          },
         });
         this.buttonsMain.push({
-          name: 'Pfad anpassen',
+          name: "Pfad anpassen",
           navigate: (): void => {
             this.changePathClicked();
-          }
+          },
         });
         this.buttonsSub.push({
-          name: 'Bearbeiten',
+          name: "Bearbeiten",
           navigate: (): void => {
             this.child.editButtonClicked();
-          }
+          },
         });
         this.buttonsMain.push({
-          name: 'Verschieben',
+          name: "Verschieben",
           navigate: (): void => {
             this.moveButtonClicked();
-          }
+          },
         });
       }
     });
 
-    this.authService.currentUserHasRight('offers:create').pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasRight("offers:create").pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttonsMain.push({
-          name: 'Neues Angebot',
+          name: "Neues Angebot",
           navigate: (): void => {
-            this.router.navigateByUrl('/offer/edit/new/' + this.jobId.toString());
-          }
+            this.router.navigateByUrl("/offer/edit/new/" + this.jobId.toString());
+          },
         });
       }
     });
 
-    this.authService.currentUserHasRight('outgoing_invoices:create').pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasRight("outgoing_invoices:create").pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttonsMain.push({
-          name: 'Neue Rechnung',
+          name: "Neue Rechnung",
           navigate: (): void => {
             this.newInvoiceClicked();
-          }
+          },
         });
       }
     });
 
-    this.authService.currentUserHasRight('work_hours:all').pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasRight("work_hours:all").pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttonsMain.push({
-          name: 'Stunden',
+          name: "Stunden",
           navigate: (): void => {
-            this.router.navigateByUrl('/work_hours/' + this.jobId.toString());
-          }
+            this.router.navigateByUrl("/work_hours/" + this.jobId.toString());
+          },
         });
       }
     });
 
 
-    this.authService.currentUserHasRight('work_hours:all').pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasRight("work_hours:all").pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttonsMain.push({
-          name: 'Neuer Unterauftrag',
+          name: "Neuer Unterauftrag",
           navigate: (): void => {
-            this.router.navigateByUrl('/job/edit/new/' + this.jobId.toString() + '/sub');
-          }
+            this.router.navigateByUrl("/job/edit/new/" + this.jobId.toString() + "/sub");
+          },
         });
       }
     });
 
-    this.authService.currentUserHasRight('jobs:delete').pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasRight("jobs:delete").pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttonsMain.push({
-          name: 'Auftrag löschen',
+          name: "Auftrag löschen",
           navigate: (): void => {
             this.jobDeleteClicked();
-          }
+          },
         });
         this.buttonsSub.push({
-          name: 'Unterauftrag löschen',
+          name: "Unterauftrag löschen",
           navigate: (): void => {
             this.jobDeleteClicked();
-          }
+          },
         });
       }
     });
 
-    this.authService.currentUserHasRight('orders:all').pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasRight("orders:all").pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttonsMain.push({
-          name: 'Bestellen',
+          name: "Bestellen",
           navigate: (): void => {
-            this.router.navigateByUrl('order');
-          }
+            this.router.navigateByUrl("order");
+          },
         });
         this.buttonsSub.push({
-          name: 'Bestellen',
+          name: "Bestellen",
           navigate: (): void => {
-            this.router.navigateByUrl('order');
-          }
+            this.router.navigateByUrl("order");
+          },
         });
         this.buttonsMain.push({
-          name: 'Artikelliste drucken',
+          name: "Artikelliste drucken",
           navigate: (): void => {
             this.printOrdersClicked();
-          }
+          },
         });
         this.buttonsSub.push({
-          name: 'Artikelliste drucken',
+          name: "Artikelliste drucken",
           navigate: (): void => {
             this.printOrdersClicked();
-          }
+          },
         });
       }
     });
@@ -417,21 +415,21 @@ export class JobDetailComponent implements OnInit {
 
   private jobDeleteClicked(): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
+      width: "400px",
       data: {
-        title: 'Auftrag löschen?',
-        text: 'Auftrag wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden!'
-      }
+        title: "Auftrag löschen?",
+        text: "Auftrag wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden!",
+      },
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.api.deleteJobJobJobIdDelete(this.jobId).pipe(first()).subscribe(success => {
           if (success) {
-            this.router.navigateByUrl('job');
+            this.router.navigateByUrl("job");
           } else {
-            this.snackBar.open('Der Auftrag konnte leider nicht gelöscht werden.'
-              , 'Ok', {
-                duration: 10000
+            this.snackBar.open("Der Auftrag konnte leider nicht gelöscht werden."
+              , "Ok", {
+                duration: 10000,
               });
           }
         });
@@ -442,7 +440,7 @@ export class JobDetailComponent implements OnInit {
   private initData() {
     this.api.readJobJobJobIdGet(this.jobId).pipe(first()).subscribe((job) => {
       this.isMainJob = job.is_main;
-      this.title = 'Auftrag: ' + job.displayable_name;
+      this.title = "Auftrag: " + job.displayable_name;
       this.clientId = job.client.id;
     });
     this.initOfferTable();
@@ -455,18 +453,18 @@ export class JobDetailComponent implements OnInit {
   private newInvoiceClicked() {
     this.api.getClientValidationClientValidationClientIdGet(this.clientId).pipe(first()).subscribe((clientValidation) => {
       if (clientValidation.success) {
-        this.router.navigateByUrl('/outgoing_invoice/edit/new/' + this.jobId.toString());
+        this.router.navigateByUrl("/outgoing_invoice/edit/new/" + this.jobId.toString());
       } else {
-        let text = 'Achtung: Die Kundendaten sind unvollständig: \n';
+        let text = "Achtung: Die Kundendaten sind unvollständig: \n";
         for (const error of clientValidation.errors) {
-          text += error + '\n';
+          text += error + "\n";
         }
         const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-          width: '500px',
+          width: "500px",
           data: {
-            title: 'Validierung fehlgeschlagen',
+            title: "Validierung fehlgeschlagen",
             text,
-          }
+          },
         });
         dialogRef.afterClosed().subscribe(result => {
           if (result) {
@@ -474,7 +472,7 @@ export class JobDetailComponent implements OnInit {
               this.api.islockedClientClientIslockedClientIdGet(this.clientId),
               this.api.lockClientClientLockClientIdPost(this.clientId),
               this.api.unlockClientClientUnlockClientIdPost(this.clientId),
-              '/client/edit/' + this.clientId.toString()
+              "/client/edit/" + this.clientId.toString(),
             );
           }
         });
@@ -485,12 +483,12 @@ export class JobDetailComponent implements OnInit {
 
   private printOrdersClicked() {
     const dialogRef = this.dialog.open(OrderPrintDialogComponent, {
-      width: '400px',
+      width: "400px",
       data: {
         name: this.api.readJobJobJobIdGet(this.jobId).pipe(
           map((job) => job.displayable_name)),
-        orders: this.api.readOrdersToOrderToOrderableToIdGet(this.jobId, 0, 1000)
-      }
+        orders: this.api.readOrdersToOrderToOrderableToIdGet(this.jobId, 0, 1000),
+      },
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -507,16 +505,16 @@ export class JobDetailComponent implements OnInit {
 
   private changePathClicked() {
     const dialogRef = this.dialog.open(ChangePathDialogComponent, {
-      width: '600px',
+      width: "600px",
       data: {
         id: this.jobId,
-      }
+      },
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.snackBar.open('Pfad erfolgreich geändert!'
-          , 'Ok', {
-            duration: 5000
+        this.snackBar.open("Pfad erfolgreich geändert!"
+          , "Ok", {
+            duration: 5000,
           });
       }
     });
@@ -525,16 +523,16 @@ export class JobDetailComponent implements OnInit {
 
   private moveButtonClicked() {
     const dialogRef = this.dialog.open(MoveJobDialogComponent, {
-      width: '600px',
+      width: "600px",
       data: {
         id: this.jobId,
-      }
+      },
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.snackBar.open('Jahr erfolgreich geändert'
-          , 'Ok', {
-            duration: 5000
+        this.snackBar.open("Jahr erfolgreich geändert"
+          , "Ok", {
+            duration: 5000,
           });
         this.initData();
       }
