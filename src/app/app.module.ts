@@ -28,20 +28,19 @@ import { AppComponent } from "./app.component";
 import { AuthService } from "./shared/services/auth.service";
 import { AccessGuard } from "./shared/services/access-guard.service";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { MatCheckboxModule } from "@angular/material/checkbox";
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { MatLegacyCheckboxModule as MatCheckboxModule } from "@angular/material/legacy-checkbox";
 import { ChatService } from "./home/chat/chat.service";
-import { MatInputModule } from "@angular/material/input";
-import { MatTableModule } from "@angular/material/table";
+import { MatLegacyInputModule as MatInputModule } from "@angular/material/legacy-input";
+import { MatLegacyTableModule as MatTableModule } from "@angular/material/legacy-table";
 import {
-  MatPaginatorIntl,
-  MatPaginatorModule,
-} from "@angular/material/paginator";
+  MatLegacyPaginatorIntl as MatPaginatorIntl,
+  MatLegacyPaginatorModule as MatPaginatorModule,
+} from "@angular/material/legacy-paginator";
 import { MatSortModule } from "@angular/material/sort";
-import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from "@angular/material/legacy-progress-spinner";
 import { JobModule } from "./job/job.module";
-import { MatSelectModule } from "@angular/material/select";
-import { MatButtonModule } from "@angular/material/button";
+import { MatLegacySelectModule as MatSelectModule } from "@angular/material/legacy-select";
+import { MatLegacyButtonModule as MatButtonModule } from "@angular/material/legacy-button";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MAT_DATE_LOCALE, MatNativeDateModule } from "@angular/material/core";
 import {
@@ -59,7 +58,7 @@ import localeDeExtra from "@angular/common/locales/extra/de";
 import * as Sentry from "@sentry/angular";
 import { ClientModule } from "./client/client.module";
 import { UserModule } from "./user/user.module";
-import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatLegacySnackBarModule as MatSnackBarModule } from "@angular/material/legacy-snack-bar";
 import { InvoiceModule } from "./invoice/invoice.module";
 import { SupplierModule } from "./supplier/supplier.module";
 import { getGermanPaginatorIntl } from "./shared/components/table-builder/table-builder.datasource";
@@ -87,6 +86,7 @@ import { ServiceModule } from "./service/service.module";
 import { BackButtonDisableModule } from "angular-disable-browser-back-button";
 import { PhoneBookModule } from "./phone-book/phone-book.module";
 import { ApiModule, Configuration, ConfigurationParameters } from '../api/openapi';
+import { FlexLayoutModule } from "ng-flex-layout";
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>
   new TranslateHttpLoader(http, "./assets/i18n/", ".json");

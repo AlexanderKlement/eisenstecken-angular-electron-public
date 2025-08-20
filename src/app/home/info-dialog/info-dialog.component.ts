@@ -1,6 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {TableDataSource} from "../../shared/components/table-builder/table-builder.datasource";
-import {MatDialogRef} from "@angular/material/dialog";
+import {MatLegacyDialogRef as MatDialogRef} from "@angular/material/legacy-dialog";
 import {AuthService} from "../../shared/services/auth.service";
 import {first} from "rxjs/operators";
 import {Observable} from "rxjs";

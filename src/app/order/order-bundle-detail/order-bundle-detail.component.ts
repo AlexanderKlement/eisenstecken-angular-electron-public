@@ -3,11 +3,11 @@ import { InfoDataSource } from "../../shared/components/info-builder/info-builde
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { ActivatedRoute, Router } from "@angular/router";
 import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
-import { MatDialog } from "@angular/material/dialog";
+import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { first } from "rxjs/operators";
 import { LockService } from "../../shared/services/lock.service";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
 import { FileService } from "../../shared/services/file.service";
 import { EmailService } from "../../shared/services/email.service";
 import { SupplierDetailComponent } from "../../supplier/supplier-detail/supplier-detail.component";

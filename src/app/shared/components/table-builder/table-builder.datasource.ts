@@ -2,7 +2,7 @@ import {CollectionViewer, DataSource} from "@angular/cdk/collections";
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {catchError, finalize, map} from "rxjs/operators";
 import {DataSourceClass} from "../../types";
-import {MatPaginatorIntl} from "@angular/material/paginator";
+import {MatLegacyPaginatorIntl as MatPaginatorIntl} from "@angular/material/legacy-paginator";
 import { DefaultService } from '../../../../api/openapi';
 
 export interface Column<T> {

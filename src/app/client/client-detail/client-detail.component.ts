@@ -7,8 +7,8 @@ import {CustomButton} from "../../shared/components/toolbar/toolbar.component";
 import {AuthService} from "../../shared/services/auth.service";
 import {first} from "rxjs/operators";
 import {ConfirmDialogComponent} from "../../shared/components/confirm-dialog/confirm-dialog.component";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {MatDialog} from "@angular/material/dialog";
+import {MatLegacySnackBar as MatSnackBar} from "@angular/material/legacy-snack-bar";
+import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
 import {Observable, Subscriber} from "rxjs";
 import { Client, DefaultService, Job } from "../../../api/openapi";
 

@@ -3,7 +3,7 @@ import { Observable } from "rxjs";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
-import { MatDialog } from "@angular/material/dialog";
+import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
 import { first, map, tap } from "rxjs/operators";
 import { AuthService } from "../../shared/services/auth.service";
 import { NavigationService } from "../../shared/services/navigation.service";

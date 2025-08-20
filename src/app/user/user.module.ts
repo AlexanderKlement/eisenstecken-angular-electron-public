@@ -5,15 +5,15 @@ import { UserRoutingModule } from "./user-routing.module";
 import { UserComponent } from "./user.component";
 import {SharedModule} from "../shared/shared.module";
 import { UserEditComponent } from "./user-edit/user-edit.component";
-import {MatTabsModule} from "@angular/material/tabs";
-import {FlexModule} from "@angular/flex-layout";
+import {MatLegacyTabsModule as MatTabsModule} from "@angular/material/legacy-tabs";
 import {ReactiveFormsModule} from "@angular/forms";
-import {MatButtonModule} from "@angular/material/button";
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatInputModule} from "@angular/material/input";
-import {MatListModule} from "@angular/material/list";
-import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
-import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatLegacyButtonModule as MatButtonModule} from "@angular/material/legacy-button";
+import {MatLegacyFormFieldModule as MatFormFieldModule} from "@angular/material/legacy-form-field";
+import {MatLegacyInputModule as MatInputModule} from "@angular/material/legacy-input";
+import {MatLegacyListModule as MatListModule} from "@angular/material/legacy-list";
+import {MatLegacyProgressSpinnerModule as MatProgressSpinnerModule} from "@angular/material/legacy-progress-spinner";
+import {MatLegacyCheckboxModule as MatCheckboxModule} from "@angular/material/legacy-checkbox";
+import { FlexModule } from "ng-flex-layout";
 
 
 @NgModule({

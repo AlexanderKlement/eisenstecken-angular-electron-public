@@ -7,7 +7,7 @@ import {
   PaintTemplateEditDialogComponent,
   PaintTemplateEditDialogData,
 } from "./paint-template-edit-dialog/paint-template-edit-dialog.component";
-import { MatDialog } from "@angular/material/dialog";
+import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
 import { DefaultService, TemplatePaint } from "../../../api/openapi";
 
 @Component({

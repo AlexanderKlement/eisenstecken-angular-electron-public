@@ -2,9 +2,9 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angu
 import { Observable, of, Subscription } from "rxjs";
 import { UntypedFormControl } from "@angular/forms";
 import { debounceTime, first, startWith, switchMap } from "rxjs/operators";
-import { MatDialog } from "@angular/material/dialog";
+import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
 import { OrderDialogData, ProductEditDialogComponent } from "./product-edit-dialog/product-edit-dialog.component";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import {
   DefaultService,

@@ -1,10 +1,10 @@
 import {Component, OnInit} from "@angular/core";
 import {UntypedFormArray, UntypedFormControl, UntypedFormGroup} from "@angular/forms";
 import {FileService} from "../../../shared/services/file.service";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from "@angular/material/legacy-dialog";
 import {ElectronService} from "../../../core/services";
 import {first} from "rxjs/operators";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatLegacySnackBar as MatSnackBar} from "@angular/material/legacy-snack-bar";
 import { DefaultService, XmlFileStr } from "../../../../api/openapi";
 
 @Component({

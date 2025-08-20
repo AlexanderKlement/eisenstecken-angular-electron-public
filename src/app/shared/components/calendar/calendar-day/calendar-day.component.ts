@@ -5,7 +5,7 @@ import { Router } from "@angular/router";
 import * as moment from "moment";
 import { CalendarService } from "../calendar.service";
 import { CalendarData, CalendarEditComponent } from "../calendar-edit/calendar-edit.component";
-import { MatDialog } from "@angular/material/dialog";
+import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
 import { DefaultService, CalendarEntry } from "../../../../../api/openapi";
 
 @Component({

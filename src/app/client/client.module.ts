@@ -6,14 +6,14 @@ import { ClientComponent } from "./client.component";
 import {SharedModule} from "../shared/shared.module";
 import {ClientEditComponent} from "./client-edit/client-edit.component";
 import {ClientDetailComponent} from "./client-detail/client-detail.component";
-import {MatCheckboxModule} from "@angular/material/checkbox";
-import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatLegacyCheckboxModule as MatCheckboxModule} from "@angular/material/legacy-checkbox";
+import {MatLegacyFormFieldModule as MatFormFieldModule} from "@angular/material/legacy-form-field";
 import {ReactiveFormsModule} from "@angular/forms";
-import {MatSelectModule} from "@angular/material/select";
-import {MatInputModule} from "@angular/material/input";
-import {FlexModule} from "@angular/flex-layout";
-import {MatButtonModule} from "@angular/material/button";
-import {MatTabsModule} from "@angular/material/tabs";
+import {MatLegacySelectModule as MatSelectModule} from "@angular/material/legacy-select";
+import {MatLegacyInputModule as MatInputModule} from "@angular/material/legacy-input";
+import {FlexModule} from "ng-flex-layout";
+import {MatLegacyButtonModule as MatButtonModule} from "@angular/material/legacy-button";
+import {MatLegacyTabsModule as MatTabsModule} from "@angular/material/legacy-tabs";
 import {MatIconModule} from "@angular/material/icon";
 
 

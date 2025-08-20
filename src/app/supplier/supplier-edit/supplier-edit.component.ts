@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {BaseEditComponent} from "../../shared/components/base-edit/base-edit.component";
 import {ActivatedRoute, Router} from "@angular/router";
-import {MatDialog} from "@angular/material/dialog";
+import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
 import {UntypedFormArray, UntypedFormControl, UntypedFormGroup} from "@angular/forms";
 import {Observable} from "rxjs";
 import {tap} from "rxjs/operators";

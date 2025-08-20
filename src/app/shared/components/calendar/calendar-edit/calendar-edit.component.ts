@@ -2,7 +2,7 @@ import {Component, Inject, OnInit} from "@angular/core";
 import {first} from "rxjs/operators";
 import {AbstractControl, UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators} from "@angular/forms";
 import * as moment from "moment";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from "@angular/material/legacy-dialog";
 import {timepickerTheme} from "../../../themes/timepicker.theme";
 import {DefaultService, CalendarEntry, CalendarEntryCreate} from "../../../../../api/openapi";
 

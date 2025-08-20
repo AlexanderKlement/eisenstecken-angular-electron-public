@@ -7,8 +7,8 @@ import { ProductsListComponent } from "../available-products-list/products-list.
 import {
   ProductEditDialogComponent,
 } from "../available-products-list/product-edit-dialog/product-edit-dialog.component";
-import { MatDialog } from "@angular/material/dialog";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
+import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
 import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { OrderedArticleMoveDialogComponent } from "./ordered-article-move-dialog/ordered-article-move-dialog.component";

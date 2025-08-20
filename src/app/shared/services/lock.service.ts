@@ -3,7 +3,7 @@ import {Router} from "@angular/router";
 import {Observable} from "rxjs";
 import {first} from "rxjs/operators";
 import {LockDialogComponent} from "../components/info-builder/lock-dialog/lock-dialog.component";
-import {MatDialog} from "@angular/material/dialog";
+import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
 import { DefaultService, Lock } from "../../../api/openapi";
 
 @Injectable({

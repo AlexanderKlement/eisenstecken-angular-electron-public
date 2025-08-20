@@ -8,8 +8,8 @@ import { LockService } from "../../shared/services/lock.service";
 import * as moment from "moment";
 import { AuthService } from "../../shared/services/auth.service";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
-import { MatDialog } from "@angular/material/dialog";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
+import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
 import { formatCurrency } from "@angular/common";
 import {
   OrderReturnData,

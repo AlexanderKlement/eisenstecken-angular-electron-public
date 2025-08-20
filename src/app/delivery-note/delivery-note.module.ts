@@ -6,15 +6,15 @@ import { DeliveryNoteComponent } from "./delivery-note.component";
 import {SharedModule} from "../shared/shared.module";
 import { DeliveryEditComponent } from "./delivery-edit/delivery-edit.component";
 import {ReactiveFormsModule} from "@angular/forms";
-import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatLegacyFormFieldModule as MatFormFieldModule} from "@angular/material/legacy-form-field";
 import {MatIconModule} from "@angular/material/icon";
-import {FlexModule} from "@angular/flex-layout";
+import {FlexModule} from "ng-flex-layout";
 import {MatDatepickerModule} from "@angular/material/datepicker";
-import {MatOptionModule} from "@angular/material/core";
-import {MatButtonModule} from "@angular/material/button";
-import {MatInputModule} from "@angular/material/input";
-import {MatSelectModule} from "@angular/material/select";
-import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatLegacyOptionModule as MatOptionModule} from "@angular/material/legacy-core";
+import {MatLegacyButtonModule as MatButtonModule} from "@angular/material/legacy-button";
+import {MatLegacyInputModule as MatInputModule} from "@angular/material/legacy-input";
+import {MatLegacySelectModule as MatSelectModule} from "@angular/material/legacy-select";
+import {MatLegacyCheckboxModule as MatCheckboxModule} from "@angular/material/legacy-checkbox";
 
 
 @NgModule({

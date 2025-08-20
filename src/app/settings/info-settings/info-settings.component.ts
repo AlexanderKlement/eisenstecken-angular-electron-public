@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {UntypedFormArray, UntypedFormControl, UntypedFormGroup} from "@angular/forms";
 import {first} from "rxjs/operators";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatLegacySnackBar as MatSnackBar} from "@angular/material/legacy-snack-bar";
 import {ThemePalette} from "@angular/material/core";
 import {DefaultService, TechnicalData, TechnicalDataUpdate, PriceUpdate, Price, CredentialUpdate, Credential} from "../../../api/openapi";
 

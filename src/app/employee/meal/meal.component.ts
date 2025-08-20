@@ -1,10 +1,10 @@
 import { Component, ComponentRef, OnInit } from "@angular/core";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import * as moment from "moment";
-import { MatDialog } from "@angular/material/dialog";
+import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { first } from "rxjs/operators";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
 import { ActivatedRoute } from "@angular/router";
 import { Observable, Subscriber } from "rxjs";
 import { DefaultService, Meal } from "../../../api/openapi";

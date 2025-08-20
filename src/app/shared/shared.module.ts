@@ -5,23 +5,22 @@ import {PageNotFoundComponent} from "./components/";
 import {WebviewDirective} from "./directives/";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TestComponent} from "./components/test/test.component";
-import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatLegacyCheckboxModule as MatCheckboxModule} from "@angular/material/legacy-checkbox";
 import {TableBuilderComponent} from "./components/table-builder/table-builder.component";
-import {MatTableModule} from "@angular/material/table";
-import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
-import {MatPaginatorModule} from "@angular/material/paginator";
-import {MatInputModule} from "@angular/material/input";
+import {MatLegacyTableModule as MatTableModule} from "@angular/material/legacy-table";
+import {MatLegacyProgressSpinnerModule as MatProgressSpinnerModule} from "@angular/material/legacy-progress-spinner";
+import {MatLegacyPaginatorModule as MatPaginatorModule} from "@angular/material/legacy-paginator";
+import {MatLegacyInputModule as MatInputModule} from "@angular/material/legacy-input";
 import {InfoBuilderComponent} from "./components/info-builder/info-builder.component";
 import {MatGridListModule} from "@angular/material/grid-list";
-import {MatListModule} from "@angular/material/list";
-import {MatButtonModule} from "@angular/material/button";
+import {MatLegacyListModule as MatListModule} from "@angular/material/legacy-list";
+import {MatLegacyButtonModule as MatButtonModule} from "@angular/material/legacy-button";
 import {LockDialogComponent} from "./components/info-builder/lock-dialog/lock-dialog.component";
-import {MatDialogModule} from "@angular/material/dialog";
+import {MatLegacyDialogModule as MatDialogModule} from "@angular/material/legacy-dialog";
 import {BaseEditComponent} from "./components/base-edit/base-edit.component";
 import {WarningDialogComponent} from "./components/base-edit/warning-dialog/warning-dialog.component";
 import {AddressFormComponent} from "./components/address-form/address-form.component";
-import {FlexLayoutModule, FlexModule} from "@angular/flex-layout";
-import {MatSelectModule} from "@angular/material/select";
+import {MatLegacySelectModule as MatSelectModule} from "@angular/material/legacy-select";
 import {ToolbarComponent} from "./components/toolbar/toolbar.component";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {SimpleCalendarComponent} from "./components/calendar/simple-calendar.component";
@@ -29,22 +28,23 @@ import {CalendarEditComponent} from "./components/calendar/calendar-edit/calenda
 import {MatIconModule} from "@angular/material/icon";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {CalendarDayComponent} from "./components/calendar/calendar-day/calendar-day.component";
-import {MatTabsModule} from "@angular/material/tabs";
+import {MatLegacyTabsModule as MatTabsModule} from "@angular/material/legacy-tabs";
 import {
   FilterableClickableListComponent
 } from "./components/filterable-clickable-list/filterable-clickable-list.component";
 import {LoadingComponent} from "./components/loading/loading.component";
-import {MatCardModule} from "@angular/material/card";
+import {MatLegacyCardModule as MatCardModule} from "@angular/material/legacy-card";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import {RightFilterPipe} from "./pipes/right";
 import {ConfirmDialogComponent} from "./components/confirm-dialog/confirm-dialog.component";
 import {MinuteHourComponent} from "./components/minute-hour/minute-hour.component";
 import {SplitTextNewlinePipe} from "./pipes/common";
 import {BoldSpanPipe} from "./pipes/boldSearchResult";
-import {MatTooltipModule} from "@angular/material/tooltip";
+import {MatLegacyTooltipModule as MatTooltipModule} from "@angular/material/legacy-tooltip";
 import {CalendarModule} from "angular-calendar";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
-import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {MatLegacySlideToggleModule as MatSlideToggleModule} from "@angular/material/legacy-slide-toggle";
+import { FlexLayoutModule, FlexModule } from "ng-flex-layout";
 
 @NgModule({
   declarations: [

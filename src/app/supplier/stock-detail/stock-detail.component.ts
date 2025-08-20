@@ -5,12 +5,12 @@ import { InfoDataSource } from "../../shared/components/info-builder/info-builde
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
 import { ActivatedRoute, Router } from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
+import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
 import * as moment from "moment";
 import { AuthService } from "../../shared/services/auth.service";
 import { first, map } from "rxjs/operators";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
 import { OrderDateReturnData, OrderDialogComponent } from "../supplier-detail/order-dialog/order-dialog.component";
 import { FileService } from "../../shared/services/file.service";
 import { Observable, Subscriber } from "rxjs";
