@@ -33,7 +33,7 @@ export function getEventTranslation(companyEvent: CompanyEventEnum): string {
 export class EventCalendarDialogComponent implements OnInit {
   title = "Eintrag erstellen";
 
-  availableEventTypes = [
+  availableEventTypes: CompanyEventEnum[] = [
     CompanyEventEnum.Holiday,
     CompanyEventEnum.Illness,
   ];

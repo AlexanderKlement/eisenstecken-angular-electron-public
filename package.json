@@ -45,7 +45,7 @@
     "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
     "lint": "ng lint",
     "package:msi": "node build_installer_msi.js",
-    "generate": "openapi-generator-cli generate -g typescript-angular -i https://api.eisenstecken.kivi.bz.it/openapi.yaml -o src/api/openapi --additional-properties=supportsES6=true,withSeparateModelsAndApi=true"
+    "generate": "openapi-generator-cli generate -g typescript-angular -i https://api.eisenstecken.kivi.bz.it/openapi.yaml -o src/api/openapi --additional-properties=supportsES6=true,withSeparateModelsAndApi=true,ngVersion=14.3.0"
   },
   "dependencies": {
     "@angular/animations": "14.3.0",
