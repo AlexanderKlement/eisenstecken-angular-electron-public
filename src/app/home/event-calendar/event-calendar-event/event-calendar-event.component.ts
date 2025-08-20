@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from "@angular/core";
+import { CompanyEvent, CompanyEventEnum } from "../../../../api/openapi";
 import {getEventTranslation} from "../event-calendar-dialog/event-calendar-dialog.component";
 
 @Component({

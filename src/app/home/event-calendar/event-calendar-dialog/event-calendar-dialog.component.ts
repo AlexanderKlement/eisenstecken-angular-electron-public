@@ -2,7 +2,7 @@ import {Component, Inject, OnInit} from "@angular/core";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {AuthService} from "../../../shared/services/auth.service";
 import {UntypedFormControl, UntypedFormGroup} from "@angular/forms";
-import {CompanyEventEnum, CompanyEventUpdate, DefaultService} from "../../../../api/openapi";
+import {CompanyEventCreate, CompanyEventEnum, CompanyEventUpdate, DefaultService} from "../../../../api/openapi";
 
 export interface EventCalendarDialogData {
   id?: number;

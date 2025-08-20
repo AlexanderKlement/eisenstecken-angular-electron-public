@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, ViewChild } from "@angular/core";
 import { MatSelectionList } from "@angular/material/list";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Observable } from "rxjs";
-import { Order } from "../../../api";
+import { Order } from "../../../../api/openapi";
 
 export interface OrderDialogData {
   name: Observable<string>;

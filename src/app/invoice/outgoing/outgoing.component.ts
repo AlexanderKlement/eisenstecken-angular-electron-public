@@ -9,6 +9,7 @@ import {ConfirmDialogComponent} from "../../shared/components/confirm-dialog/con
 import {MatDialog} from "@angular/material/dialog";
 import {Observable} from "rxjs";
 import {formatCurrency} from "@angular/common";
+import { DefaultService, OutgoingInvoice } from "../../../api/openapi";
 
 @Component({
     selector: 'app-outgoing',

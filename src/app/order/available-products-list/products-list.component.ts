@@ -13,6 +13,7 @@ import {
   ArticleUpdateFull,
   ArticleCreate,
   OrderedArticleCreate,
+  OrderableType,
 } from "../../../api/openapi";
 
 @Component({

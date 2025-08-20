@@ -1,11 +1,10 @@
-import { Component, ComponentRef, OnInit } from '@angular/core';
-import { InfoDataSource } from '../../../shared/components/info-builder/info-builder.datasource';
-import { first } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
-import { TableDataSource } from '../../../shared/components/table-builder/table-builder.datasource';
-import { formatCurrency, formatNumber } from '@angular/common';
-import { Observable, Subscriber } from 'rxjs';
-import { IngoingInvoice } from '../../../../api/openapi';
+import { Component, ComponentRef, OnInit } from "@angular/core";
+import { InfoDataSource } from "../../../shared/components/info-builder/info-builder.datasource";
+import { ActivatedRoute } from "@angular/router";
+import { TableDataSource } from "../../../shared/components/table-builder/table-builder.datasource";
+import { formatCurrency, formatNumber } from "@angular/common";
+import { Observable, Subscriber } from "rxjs";
+import { DefaultService, DescriptiveArticle, IngoingInvoice } from "../../../../api/openapi";
 
 @Component({
   selector: 'app-ingoing-detail',
@@ -17,7 +16,7 @@ export class IngoingDetailComponent implements OnInit {
   infoDataSource: InfoDataSource<IngoingInvoice>;
   descriptiveArticleSource: TableDataSource<DescriptiveArticle>;
   id: number;
-  title: 'Rechnung: Details';
+  title: "Rechnung: Details";
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
 
@@ -29,7 +28,7 @@ export class IngoingDetailComponent implements OnInit {
       try {
         this.id = parseInt(params.id, 10);
       } catch {
-        console.error('Cannot parse given id');
+        console.error("Cannot parse given id");
         return;
       }
       if (isNaN(this.id)) {
@@ -48,7 +47,7 @@ export class IngoingDetailComponent implements OnInit {
   }
 
   onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
-    console.log('Getting attached');
+    console.log("Getting attached");
     this.$refreshSubscriber.next();
   }
 
@@ -57,19 +56,19 @@ export class IngoingDetailComponent implements OnInit {
       this.api.readIngoingInvoiceIngoingInvoiceIngoingInvoiceIdGet(this.id),
       [
         {
-          property: 'name',
-          name: 'Firma',
+          property: "name",
+          name: "Firma",
         },
         {
-          property: 'number',
-          name: 'Nummer',
+          property: "number",
+          name: "Nummer",
         },
         {
-          property: 'date_formatted',
-          name: 'Datum',
+          property: "date_formatted",
+          name: "Datum",
         },
       ],
-      '', undefined, undefined, undefined,
+      "", undefined, undefined, undefined,
     );
   }
 
@@ -88,19 +87,19 @@ export class IngoingDetailComponent implements OnInit {
                 name: dataSource.name,
                 description: dataSource.description,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                single_price: formatCurrency(dataSource.single_price, 'de-DE', 'EUR'),
-                amount: formatNumber(dataSource.amount, 'de-DE', '.2'),
+                single_price: formatCurrency(dataSource.single_price, "de-DE", "EUR"),
+                amount: formatNumber(dataSource.amount, "de-DE", ".2"),
                 unit: dataSource.unit.name.translation,
-                discount: formatNumber(dataSource.discount, 'de-DE', '.2') + ' %',
+                discount: formatNumber(dataSource.discount, "de-DE", ".2") + " %",
                 vat: dataSource.vat.name,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 total_with: formatCurrency(dataSource.single_price * dataSource.amount * (1 -
                   dataSource.discount / 100) * (1 + dataSource.vat.amount / 100),
-                  'de-DE', 'EUR'),
+                  "de-DE", "EUR"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 total_without: formatCurrency(dataSource.single_price * dataSource.amount * (1 -
                   dataSource.discount / 100),
-                  'de-DE', 'EUR'),
+                  "de-DE", "EUR"),
               },
               route: () => {
                 console.log(dataSource);
@@ -110,15 +109,15 @@ export class IngoingDetailComponent implements OnInit {
         return rows;
       },
       [
-        { name: 'name', headerName: 'Name' },
-        { name: 'description', headerName: 'Beschreibung' },
-        { name: 'single_price', headerName: 'Einzelpreis' },
-        { name: 'amount', headerName: 'Menge' },
-        { name: 'unit', headerName: 'Einheit' },
-        { name: 'discount', headerName: 'Rabatt' },
-        { name: 'vat', headerName: 'MwSt.' },
-        { name: 'total_without', headerName: 'Gesamt [ohne MwSt.]' },
-        { name: 'total_with', headerName: 'Gesamt [mit MwSt.]' },
+        { name: "name", headerName: "Name" },
+        { name: "description", headerName: "Beschreibung" },
+        { name: "single_price", headerName: "Einzelpreis" },
+        { name: "amount", headerName: "Menge" },
+        { name: "unit", headerName: "Einheit" },
+        { name: "discount", headerName: "Rabatt" },
+        { name: "vat", headerName: "MwSt." },
+        { name: "total_without", headerName: "Gesamt [ohne MwSt.]" },
+        { name: "total_with", headerName: "Gesamt [mit MwSt.]" },
       ],
       (api) => api.readIngoingInvoicesIngoingInvoiceArticlesCountIngoingInvoiceIdGet(this.id),
     );

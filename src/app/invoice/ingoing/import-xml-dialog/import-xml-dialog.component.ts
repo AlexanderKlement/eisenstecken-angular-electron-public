@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {UntypedFormArray, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
-import {FileService} from '../../../shared/services/file.service';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {ElectronService} from '../../../core/services';
-import {first} from 'rxjs/operators';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {Component, OnInit} from "@angular/core";
+import {UntypedFormArray, UntypedFormControl, UntypedFormGroup} from "@angular/forms";
+import {FileService} from "../../../shared/services/file.service";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {ElectronService} from "../../../core/services";
+import {first} from "rxjs/operators";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import { DefaultService, XmlFileStr } from "../../../../api/openapi";
 
 @Component({
     selector: 'app-import-xml-dialog',
@@ -13,7 +14,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 })
 export class ImportXmlDialogComponent implements OnInit {
     selectXmlFormGroup: UntypedFormGroup;
-    title: 'Digitale Rechnungen auswählen';
+    title: "Digitale Rechnungen auswählen";
     loading = false;
 
     constructor(private api: DefaultService, private file: FileService, private electron: ElectronService,
@@ -28,7 +29,7 @@ export class ImportXmlDialogComponent implements OnInit {
     }
 
     getPaths(): UntypedFormArray {
-        return this.selectXmlFormGroup.get('paths') as UntypedFormArray;
+        return this.selectXmlFormGroup.get("paths") as UntypedFormArray;
     }
 
     getPathAt(index: number): string {
@@ -38,7 +39,7 @@ export class ImportXmlDialogComponent implements OnInit {
 
     getFileNameAt(index: number): string {
         const path = this.getPathAt(index);
-        return path.split('\\').pop();
+        return path.split("\\").pop();
     }
 
     addPath(path: string): void {
@@ -58,7 +59,7 @@ export class ImportXmlDialogComponent implements OnInit {
     }
 
     selectXmlClicked() {
-        const xmlPromise = this.file.selectFiles(true, 'Digitale Rechnungen', ['xml', 'p7m']);
+        const xmlPromise = this.file.selectFiles(true, "Digitale Rechnungen", ["xml", "p7m"]);
         xmlPromise.then((fileList) => {
             for (const filePath of fileList) {
                 this.addPath(filePath);
@@ -74,9 +75,9 @@ export class ImportXmlDialogComponent implements OnInit {
         this.loading = true;
         const xmlFiles: XmlFileStr[] = [];
         for (const filePath of this.getPathsAsString()) {
-            const buffer = this.electron.fs.readFileSync(filePath, {encoding: 'base64', flag: 'r'});
+            const buffer = this.electron.fs.readFileSync(filePath, {encoding: "base64", flag: "r"});
             xmlFiles.push({
-                filename: filePath.split('\\').pop(),
+                filename: filePath.split("\\").pop(),
                 content: buffer
             });
         }
@@ -85,7 +86,7 @@ export class ImportXmlDialogComponent implements OnInit {
             .subscribe(() => {
                 this.dialogRef.close(true);
             }, () => {
-                this.snackBar.open('Importieren fehlgeschlagen. Bitte Kalle kontaktieren.', 'OK', {
+                this.snackBar.open("Importieren fehlgeschlagen. Bitte Kalle kontaktieren.", "OK", {
                     duration: 10000
                 });
                 this.loading = false;

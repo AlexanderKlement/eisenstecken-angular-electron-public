@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from "@angular/core";
 import {first} from "rxjs/operators";
-import {DefaultService, Note, NoteCreate} from "../../api";
+import { DefaultService, Note, NoteCreate } from "../../../api/openapi";
 
 @Component({
     selector: 'app-note',

@@ -1,10 +1,9 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { Observable, ReplaySubject, Subject } from "rxjs";
 import { first, map } from "rxjs/operators";
-import { cli } from "webdriver-manager/built/lib/cli_instance";
 import { ConfirmDialogComponent } from "../../../shared/components/confirm-dialog/confirm-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
-import { JobStatus, DefaultService } from "../../../../api/openapi";
+import { JobStatus, DefaultService, JobStatusType } from "../../../../api/openapi";
 
 @Component({
   selector: 'app-job-status-bar',
@@ -21,10 +20,10 @@ export class JobStatusBarComponent implements OnInit {
 
 
   private colorMap = [
-    [JobStatusType.Created, "created"],
-    [JobStatusType.Accepted, "accepted"],
-    [JobStatusType.Completed, "completed"],
-    [JobStatusType.Declined, "declined"],
+    [JobStatusType.JobstatusCreated, "created"],
+    [JobStatusType.JobstatusAccepted, "accepted"],
+    [JobStatusType.JobstatusCompleted, "completed"],
+    [JobStatusType.JobstatusDeclined, "declined"],
   ];
 
   constructor(private api: DefaultService, private dialog: MatDialog) {

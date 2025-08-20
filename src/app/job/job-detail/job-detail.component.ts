@@ -20,7 +20,7 @@ import { ChangePathDialogComponent } from "./change-path-dialog/change-path-dial
 import { OrderDetailComponent } from "../../order/order-detail/order-detail.component";
 import { Observable, Subscriber } from "rxjs";
 import { MoveJobDialogComponent } from "./move-job-dialog/move-job-dialog.component";
-import { OutgoingInvoice, DefaultService, Job } from "../../../api/openapi";
+import { OutgoingInvoice, DefaultService, Job, Offer, Order } from "../../../api/openapi";
 
 @Component({
   selector: 'app-job-detail',
