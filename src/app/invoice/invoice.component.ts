@@ -2,7 +2,7 @@ import { Component, ComponentRef, OnInit } from "@angular/core";
 import { AuthService } from "../shared/services/auth.service";
 import { first } from "rxjs/operators";
 import { CustomButton } from "../shared/components/toolbar/toolbar.component";
-import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
+import { MatDialog } from "@angular/material/dialog";
 import {
   OutgoingInvoiceNumberDialogComponent,
 } from "./outgoing/outgoing-invoice-number-dialog/outgoing-invoice-number-dialog.component";

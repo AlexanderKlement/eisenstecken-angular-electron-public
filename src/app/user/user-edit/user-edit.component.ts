@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
 import { ActivatedRoute, Router } from "@angular/router";
-import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
+import { MatDialog } from "@angular/material/dialog";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { Observable } from "rxjs";
 import { first, tap } from "rxjs/operators";
-import { MatLegacySelectionList as MatSelectionList } from "@angular/material/legacy-list";
-import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
+import { MatSelectionList } from "@angular/material/list";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { AuthService } from "../../shared/services/auth.service";

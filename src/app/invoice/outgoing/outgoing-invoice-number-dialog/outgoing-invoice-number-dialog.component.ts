@@ -1,8 +1,8 @@
 import {Component, OnInit} from "@angular/core";
 import {UntypedFormControl, UntypedFormGroup} from "@angular/forms";
 import {first} from "rxjs/operators";
-import { MatLegacyDialogRef as MatDialogRef} from "@angular/material/legacy-dialog";
-import {MatLegacySnackBar as MatSnackBar} from "@angular/material/legacy-snack-bar";
+import { MatDialogRef} from "@angular/material/dialog";
+import {MatSnackBar} from "@angular/material/snack-bar";
 import {DefaultService, ParameterCreate} from "../../../../api/openapi";
 
 @Component({

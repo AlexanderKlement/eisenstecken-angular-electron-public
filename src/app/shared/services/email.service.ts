@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {ElectronService} from "../../core/services";
-import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
+import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponent} from "../components/confirm-dialog/confirm-dialog.component";
 import {first} from "rxjs/operators";
 

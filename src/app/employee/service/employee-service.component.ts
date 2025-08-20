@@ -1,7 +1,7 @@
 import {Component, ComponentRef, OnInit} from "@angular/core";
 import {TableDataSource} from "../../shared/components/table-builder/table-builder.datasource";
-import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
-import {MatLegacySnackBar as MatSnackBar} from "@angular/material/legacy-snack-bar";
+import {MatDialog} from "@angular/material/dialog";
+import {MatSnackBar} from "@angular/material/snack-bar";
 import * as moment from "moment";
 import {ActivatedRoute} from "@angular/router";
 import {ServiceDialogComponent} from "./service-dialog/service-dialog.component";

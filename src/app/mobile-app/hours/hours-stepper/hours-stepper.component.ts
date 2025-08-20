@@ -19,7 +19,7 @@ import { AuthService } from "../../../shared/services/auth.service";
 import { first } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { MatStepper, StepperOrientation } from "@angular/material/stepper";
-import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
+import { MatDialog } from "@angular/material/dialog";
 import {
   HoursStepperJobDialogComponent,
   HoursStepperVariantEnum,

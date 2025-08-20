@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from "@angular/core";
 import {NavigationService} from "../../services/navigation.service";
 import {ConfirmDialogComponent} from "../confirm-dialog/confirm-dialog.component";
-import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
+import {MatDialog} from "@angular/material/dialog";
 import {AuthService} from "../../services/auth.service";
 import {ListenerService} from "../../services/listener.service";
 import {AbstractControl} from "@angular/forms";

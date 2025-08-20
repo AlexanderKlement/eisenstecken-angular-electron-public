@@ -18,6 +18,7 @@ app-loading {
 }
 
 .tab-left {
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
   ::ng-deep .mat-tab-label {
     padding: 0px !important; // adjust this to whatever padding you need
     justify-content: left !important;

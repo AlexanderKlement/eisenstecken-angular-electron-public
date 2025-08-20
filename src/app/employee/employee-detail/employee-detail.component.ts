@@ -4,13 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { CustomButton } from '../../shared/components/toolbar/toolbar.component';
 import { Observable, Subject, Subscriber } from 'rxjs';
-import { MatLegacySelectChange as MatSelectChange } from '@angular/material/legacy-select';
+import { MatSelectChange } from '@angular/material/select';
 import * as moment from 'moment';
 import { ServiceDialogComponent } from '../service/service-dialog/service-dialog.component';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ServiceCreateDialogComponent } from '../service/service-create-dialog/service-create-dialog.component';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { minutesToDisplayableString } from '../../shared/date.util';
 import { Journey, AdditionalWorkload, Meal, Service, Fee, DefaultService, WorkDay } from '../../../api/openapi';
 

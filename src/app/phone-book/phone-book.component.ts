@@ -2,11 +2,11 @@ import { Component, OnInit } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
 import { Router } from "@angular/router";
 import { first } from "rxjs/operators";
-import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
+import { MatDialog } from "@angular/material/dialog";
 import { ContactDialogData, ContactEditDialogComponent } from "./contact-edit-dialog/contact-edit-dialog.component";
 import { TableButton } from "../shared/components/table-builder/table-builder.component";
 import { PhoneService } from "../shared/services/phone.service";
-import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import * as Sentry from "@sentry/angular";
 import { Contact, DefaultService, ContactTypeEnum } from "../../api/openapi";
 

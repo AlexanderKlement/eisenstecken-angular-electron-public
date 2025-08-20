@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from "@angular/core";
-import { MatLegacySelectionList as MatSelectionList } from "@angular/material/legacy-list";
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from "@angular/material/legacy-dialog";
+import { MatSelectionList } from "@angular/material/list";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { Order } from "../../../../api/openapi";
 

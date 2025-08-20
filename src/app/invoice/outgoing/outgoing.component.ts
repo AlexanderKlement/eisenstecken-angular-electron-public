@@ -6,7 +6,7 @@ import {AuthService} from "../../shared/services/auth.service";
 import * as moment from "moment";
 import {TableButton} from "../../shared/components/table-builder/table-builder.component";
 import {ConfirmDialogComponent} from "../../shared/components/confirm-dialog/confirm-dialog.component";
-import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
+import {MatDialog} from "@angular/material/dialog";
 import {Observable} from "rxjs";
 import {formatCurrency} from "@angular/common";
 import { DefaultService, OutgoingInvoice } from "../../../api/openapi";

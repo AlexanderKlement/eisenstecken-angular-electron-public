@@ -10,7 +10,7 @@ import { LocalConfigRenderer } from "./app/LocalConfigRenderer";
 
 Sentry.init({
   dsn: "https://739b39d0b92749a485e48a80da87816e@sentry.kivi.bz.it/26",
-  integrations: [new Integrations.BrowserTracing()],
+  integrations: [Sentry.browserTracingIntegration()],
   tracesSampleRate: 0.5,
 });
 

@@ -7,15 +7,15 @@ import {SharedModule} from "../shared/shared.module";
 import { RecalculationDetailComponent } from "./recalculation-detail/recalculation-detail.component";
 import { RecalculationEditComponent } from "./recalculation-edit/recalculation-edit.component";
 import {ReactiveFormsModule} from "@angular/forms";
-import {MatLegacyFormFieldModule as MatFormFieldModule} from "@angular/material/legacy-form-field";
-import {MatLegacyInputModule as MatInputModule} from "@angular/material/legacy-input";
-import {MatLegacyButtonModule as MatButtonModule} from "@angular/material/legacy-button";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
-import {MatLegacySelectModule as MatSelectModule} from "@angular/material/legacy-select";
+import {MatSelectModule} from "@angular/material/select";
 import { PaintTemplateComponent } from "./paint-template/paint-template.component";
 import { PaintTemplateEditDialogComponent } from "./paint-template/paint-template-edit-dialog/paint-template-edit-dialog.component";
-import {MatLegacyDialogModule as MatDialogModule} from "@angular/material/legacy-dialog";
-import {MatLegacyListModule as MatListModule} from "@angular/material/legacy-list";
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatListModule} from "@angular/material/list";
 import { FlexModule } from "ng-flex-layout";
 
 

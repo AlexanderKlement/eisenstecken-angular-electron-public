@@ -59,7 +59,7 @@
       }
 
     }
-
+    /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
     mat-list-option {
       visibility: hidden;
       display: none;
@@ -67,7 +67,7 @@
 
     &.open {
       height: auto;
-
+      /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
       mat-list-option {
         visibility: visible;
         display: block;

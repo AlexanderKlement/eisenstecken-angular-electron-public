@@ -28,19 +28,19 @@ import { AppComponent } from "./app.component";
 import { AuthService } from "./shared/services/auth.service";
 import { AccessGuard } from "./shared/services/access-guard.service";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { MatLegacyCheckboxModule as MatCheckboxModule } from "@angular/material/legacy-checkbox";
+import { MatCheckboxModule } from "@angular/material/checkbox";
 import { ChatService } from "./home/chat/chat.service";
-import { MatLegacyInputModule as MatInputModule } from "@angular/material/legacy-input";
-import { MatLegacyTableModule as MatTableModule } from "@angular/material/legacy-table";
+import { MatInputModule } from "@angular/material/input";
+import { MatTableModule } from "@angular/material/table";
 import {
-  MatLegacyPaginatorIntl as MatPaginatorIntl,
-  MatLegacyPaginatorModule as MatPaginatorModule,
-} from "@angular/material/legacy-paginator";
+  MatPaginatorIntl,
+  MatPaginatorModule,
+} from "@angular/material/paginator";
 import { MatSortModule } from "@angular/material/sort";
-import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from "@angular/material/legacy-progress-spinner";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { JobModule } from "./job/job.module";
-import { MatLegacySelectModule as MatSelectModule } from "@angular/material/legacy-select";
-import { MatLegacyButtonModule as MatButtonModule } from "@angular/material/legacy-button";
+import { MatSelectModule } from "@angular/material/select";
+import { MatButtonModule } from "@angular/material/button";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MAT_DATE_LOCALE, MatNativeDateModule } from "@angular/material/core";
 import {
@@ -58,7 +58,7 @@ import localeDeExtra from "@angular/common/locales/extra/de";
 import * as Sentry from "@sentry/angular";
 import { ClientModule } from "./client/client.module";
 import { UserModule } from "./user/user.module";
-import { MatLegacySnackBarModule as MatSnackBarModule } from "@angular/material/legacy-snack-bar";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { InvoiceModule } from "./invoice/invoice.module";
 import { SupplierModule } from "./supplier/supplier.module";
 import { getGermanPaginatorIntl } from "./shared/components/table-builder/table-builder.datasource";

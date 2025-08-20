@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { Observable, ReplaySubject, Subject } from "rxjs";
 import { first, map } from "rxjs/operators";
 import { ConfirmDialogComponent } from "../../../shared/components/confirm-dialog/confirm-dialog.component";
-import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
+import { MatDialog } from "@angular/material/dialog";
 import { JobStatus, DefaultService, JobStatusType } from "../../../../api/openapi";
 
 @Component({

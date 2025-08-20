@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from "@angular/core";
 import {DayManager} from "./day.manager";
-import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
+import {MatDialog} from "@angular/material/dialog";
 import {CalendarData, CalendarEditComponent} from "./calendar-edit/calendar-edit.component";
 import {first} from "rxjs/operators";
 import {CalendarService} from "./calendar.service";

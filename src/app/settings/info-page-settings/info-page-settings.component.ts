@@ -3,7 +3,7 @@ import {TableDataSource} from "../../shared/components/table-builder/table-build
 import {first} from "rxjs/operators";
 import {AuthService} from "../../shared/services/auth.service";
 import {CustomButton} from "../../shared/components/toolbar/toolbar.component";
-import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
+import {MatDialog} from "@angular/material/dialog";
 import {
     InfoPageSettingEditDialogComponent
 } from "./info-page-setting-edit-dialog/info-page-setting-edit-dialog.component";

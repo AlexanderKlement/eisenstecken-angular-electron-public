@@ -1,5 +1,5 @@
 
-import {MatLegacySnackBar as MatSnackBar} from "@angular/material/legacy-snack-bar";
+import {MatSnackBar} from "@angular/material/snack-bar";
 import {UntypedFormControl, UntypedFormGroup} from "@angular/forms";
 import {first} from "rxjs/operators";
 import {Component} from "@angular/core";

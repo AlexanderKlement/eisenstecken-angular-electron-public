@@ -7,7 +7,7 @@ import { Observable, Subscriber } from "rxjs";
 import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
 import { LockService } from "../../shared/services/lock.service";
 import { AuthService } from "../../shared/services/auth.service";
-import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { minutesToDisplayableString } from "../../shared/date.util";
 import { formatCurrency } from "@angular/common";
 import { NavigationService } from "../../shared/services/navigation.service";

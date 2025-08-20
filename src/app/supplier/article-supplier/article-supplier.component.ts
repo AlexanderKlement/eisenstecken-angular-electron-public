@@ -4,7 +4,7 @@ import {Column, TableDataSource} from "../../shared/components/table-builder/tab
 import {ActivatedRoute, Router} from "@angular/router";
 import {Observable} from "rxjs";
 import {ArticleEditDialogComponent, ArticleEditDialogData} from "./article-edit-dialog/article-edit-dialog.component";
-import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
+import {MatDialog} from "@angular/material/dialog";
 import {first} from "rxjs/operators";
 import {DefaultService, Article} from "../../../api/openapi";
 
