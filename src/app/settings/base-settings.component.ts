@@ -6,7 +6,8 @@ import {Component} from "@angular/core";
 import { DefaultService, ParameterCreate } from '../../api/openapi';
 
 @Component({
-    template: ''
+    template: '',
+    standalone: false
 })
 export abstract class BaseSettingsComponent {
 

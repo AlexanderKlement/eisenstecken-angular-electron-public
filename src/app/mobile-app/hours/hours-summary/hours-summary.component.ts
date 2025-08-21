@@ -8,7 +8,8 @@ import {DefaultService} from "../../../../api/openapi";
 @Component({
     selector: 'app-hours-summary',
     templateUrl: './hours-summary.component.html',
-    styleUrls: ['./hours-summary.component.scss']
+    styleUrls: ['./hours-summary.component.scss'],
+    standalone: false
 })
 export class HoursSummaryComponent implements OnInit, OnDestroy {
 

@@ -18,9 +18,10 @@ import { ConvertRequestDialogComponent } from "./convert-request-dialog/convert-
 import { DefaultService, OrderedArticle, Order, OrderableType } from "../../../api/openapi";
 
 @Component({
-  selector: 'app-order-detail',
-  templateUrl: './order-detail.component.html',
-  styleUrls: ['./order-detail.component.scss'],
+    selector: 'app-order-detail',
+    templateUrl: './order-detail.component.html',
+    styleUrls: ['./order-detail.component.scss'],
+    standalone: false
 })
 export class OrderDetailComponent implements OnInit {
   articleDataSource: TableDataSource<OrderedArticle>;

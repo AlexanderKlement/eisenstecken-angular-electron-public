@@ -10,9 +10,10 @@ export interface ChangePathDialogData {
 }
 
 @Component({
-  selector: 'app-change-path-dialog',
-  templateUrl: './move-job-dialog.component.html',
-  styleUrls: ['./move-job-dialog.component.scss'],
+    selector: 'app-change-path-dialog',
+    templateUrl: './move-job-dialog.component.html',
+    styleUrls: ['./move-job-dialog.component.scss'],
+    standalone: false
 })
 export class MoveJobDialogComponent implements OnInit {
   title = "Jahr verschieben";

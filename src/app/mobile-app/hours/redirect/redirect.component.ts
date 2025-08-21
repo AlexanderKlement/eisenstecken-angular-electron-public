@@ -5,7 +5,8 @@ import {NavigationService} from "../../../shared/services/navigation.service";
 @Component({
     selector: 'app-redirect',
     templateUrl: './redirect.component.html',
-    styleUrls: ['./redirect.component.scss']
+    styleUrls: ['./redirect.component.scss'],
+    standalone: false
 })
 export class RedirectComponent implements OnInit {
 

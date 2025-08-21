@@ -2,8 +2,9 @@ import {Pipe, PipeTransform} from "@angular/core";
 import { Right } from "../../../api/openapi";
 
 @Pipe({
-  name: 'RightFilter',
-  pure: false
+    name: 'RightFilter',
+    pure: false,
+    standalone: false
 })
 export class RightFilterPipe implements PipeTransform {
   transform(items: Right[], filter: string): any {

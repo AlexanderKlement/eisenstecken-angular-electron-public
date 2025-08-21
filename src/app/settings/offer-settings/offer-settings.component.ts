@@ -4,9 +4,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DefaultService } from '../../../api/openapi';
 
 @Component({
-  selector: 'app-offer-settings',
-  templateUrl: './offer-settings.component.html',
-  styleUrls: ['./offer-settings.component.scss'],
+    selector: 'app-offer-settings',
+    templateUrl: './offer-settings.component.html',
+    styleUrls: ['./offer-settings.component.scss'],
+    standalone: false
 })
 export class OfferSettingsComponent extends BaseSettingsComponent implements OnInit {
 

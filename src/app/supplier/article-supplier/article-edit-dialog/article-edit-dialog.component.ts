@@ -13,9 +13,10 @@ export interface ArticleEditDialogData {
 }
 
 @Component({
-  selector: 'app-article-edit-dialog',
-  templateUrl: './article-edit-dialog.component.html',
-  styleUrls: ['./article-edit-dialog.component.scss'],
+    selector: 'app-article-edit-dialog',
+    templateUrl: './article-edit-dialog.component.html',
+    styleUrls: ['./article-edit-dialog.component.scss'],
+    standalone: false
 })
 export class ArticleEditDialogComponent implements OnInit {
 

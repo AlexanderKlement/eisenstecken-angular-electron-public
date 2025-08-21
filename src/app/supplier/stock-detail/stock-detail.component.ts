@@ -6,7 +6,7 @@ import { TableDataSource } from "../../shared/components/table-builder/table-bui
 import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
-import * as moment from "moment";
+import moment from "moment";
 import { AuthService } from "../../shared/services/auth.service";
 import { first, map } from "rxjs/operators";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
@@ -17,9 +17,10 @@ import { Observable, Subscriber } from "rxjs";
 import { DefaultService, Stock, Order, Supplier, OrderBundleCreate } from "../../../api/openapi";
 
 @Component({
-  selector: 'app-stock-detail',
-  templateUrl: './stock-detail.component.html',
-  styleUrls: ['./stock-detail.component.scss'],
+    selector: 'app-stock-detail',
+    templateUrl: './stock-detail.component.html',
+    styleUrls: ['./stock-detail.component.scss'],
+    standalone: false
 })
 export class StockDetailComponent implements OnInit {
 

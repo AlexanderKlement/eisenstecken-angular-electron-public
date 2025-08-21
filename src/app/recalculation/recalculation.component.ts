@@ -6,9 +6,10 @@ import { CustomButton } from "../shared/components/toolbar/toolbar.component";
 import { DefaultService, Job } from "../../api/openapi";
 
 @Component({
-  selector: 'app-recalculation',
-  templateUrl: './recalculation.component.html',
-  styleUrls: ['./recalculation.component.scss'],
+    selector: 'app-recalculation',
+    templateUrl: './recalculation.component.html',
+    styleUrls: ['./recalculation.component.scss'],
+    standalone: false
 })
 export class RecalculationComponent implements OnInit {
 

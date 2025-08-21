@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
 import { LockService } from '../../shared/services/lock.service';
-import * as moment from 'moment';
+import moment from "moment";
 import { TableButton } from '../../shared/components/table-builder/table-builder.component';
 import { first } from 'rxjs/operators';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
@@ -12,9 +12,10 @@ import { formatCurrency } from '@angular/common';
 import { DefaultService, IngoingInvoice } from '../../../api/openapi';
 
 @Component({
-  selector: 'app-ingoing',
-  templateUrl: './ingoing.component.html',
-  styleUrls: ['./ingoing.component.scss'],
+    selector: 'app-ingoing',
+    templateUrl: './ingoing.component.html',
+    styleUrls: ['./ingoing.component.scss'],
+    standalone: false
 })
 export class IngoingComponent implements OnInit {
 

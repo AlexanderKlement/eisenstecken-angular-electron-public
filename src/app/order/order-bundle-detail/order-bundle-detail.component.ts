@@ -17,9 +17,10 @@ import { Observable, Subscriber } from "rxjs";
 import { DefaultService, OrderBundle, Supplier, Order, OrderableType } from "../../../api/openapi";
 
 @Component({
-  selector: 'app-order-bundle-detail',
-  templateUrl: './order-bundle-detail.component.html',
-  styleUrls: ['./order-bundle-detail.component.scss'],
+    selector: 'app-order-bundle-detail',
+    templateUrl: './order-bundle-detail.component.html',
+    styleUrls: ['./order-bundle-detail.component.scss'],
+    standalone: false
 })
 export class OrderBundleDetailComponent implements OnInit {
   orderDataSource: TableDataSource<Order>;

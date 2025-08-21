@@ -5,9 +5,10 @@ import { distinctUntilChanged, first } from 'rxjs/operators';
 import { DefaultService, Note, NoteCreate } from '../../../../api/openapi';
 
 @Component({
-  selector: 'app-single-note',
-  templateUrl: './single-note.component.html',
-  styleUrls: ['./single-note.component.scss'],
+    selector: 'app-single-note',
+    templateUrl: './single-note.component.html',
+    styleUrls: ['./single-note.component.scss'],
+    standalone: false
 })
 export class SingleNoteComponent implements OnInit, OnDestroy {
 

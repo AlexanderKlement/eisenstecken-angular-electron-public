@@ -15,9 +15,10 @@ import { DescriptiveArticleCreate, OfferCreate, OfferUpdate, Offer, Vat,
   DefaultService, DescriptiveArticle, Lock } from "../../../api/openapi";
 
 @Component({
-  selector: 'app-offer-edit',
-  templateUrl: './offer-edit.component.html',
-  styleUrls: ['./offer-edit.component.scss'],
+    selector: 'app-offer-edit',
+    templateUrl: './offer-edit.component.html',
+    styleUrls: ['./offer-edit.component.scss'],
+    standalone: false
 })
 export class OfferEditComponent extends BaseEditComponent<Offer> implements OnInit, OnDestroy {
 

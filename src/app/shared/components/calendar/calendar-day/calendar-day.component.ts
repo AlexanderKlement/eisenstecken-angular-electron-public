@@ -2,16 +2,17 @@ import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 import { first, tap } from "rxjs/operators";
 import { Router } from "@angular/router";
-import * as moment from "moment";
+import moment from "moment";
 import { CalendarService } from "../calendar.service";
 import { CalendarData, CalendarEditComponent } from "../calendar-edit/calendar-edit.component";
 import { MatDialog } from "@angular/material/dialog";
 import { DefaultService, CalendarEntry } from "../../../../../api/openapi";
 
 @Component({
-  selector: 'app-calendar-day',
-  templateUrl: './calendar-day.component.html',
-  styleUrls: ['./calendar-day.component.scss'],
+    selector: 'app-calendar-day',
+    templateUrl: './calendar-day.component.html',
+    styleUrls: ['./calendar-day.component.scss'],
+    standalone: false
 })
 export class CalendarDayComponent implements OnInit, OnDestroy {
 

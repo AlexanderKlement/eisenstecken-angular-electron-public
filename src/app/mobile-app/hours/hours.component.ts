@@ -6,9 +6,10 @@ import { first } from "rxjs/operators";
 import { DefaultService, WorkDay } from "../../../api/openapi";
 
 @Component({
-  selector: 'app-hours',
-  templateUrl: './hours.component.html',
-  styleUrls: ['./hours.component.scss'],
+    selector: 'app-hours',
+    templateUrl: './hours.component.html',
+    styleUrls: ['./hours.component.scss'],
+    standalone: false
 })
 export class HoursComponent implements OnInit {
 

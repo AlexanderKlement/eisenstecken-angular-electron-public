@@ -62,9 +62,10 @@ export enum JobEnum {
 
 
 @Component({
-  selector: 'app-hours-stepper',
-  templateUrl: './hours-stepper.component.html',
-  styleUrls: ['./hours-stepper.component.scss'],
+    selector: 'app-hours-stepper',
+    templateUrl: './hours-stepper.component.html',
+    styleUrls: ['./hours-stepper.component.scss'],
+    standalone: false
 })
 export class HoursStepperComponent implements OnInit {
 

@@ -6,7 +6,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { first, map } from "rxjs/operators";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
-import * as moment from "moment";
+import moment from "moment";
 import { minutesToDisplayableString } from "../../shared/date.util";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { FileService } from "../../shared/services/file.service";
@@ -30,9 +30,10 @@ import {
 } from "../../../api/openapi";
 
 @Component({
-  selector: 'app-recalculation-edit',
-  templateUrl: './recalculation-edit.component.html',
-  styleUrls: ['./recalculation-edit.component.scss'],
+    selector: 'app-recalculation-edit',
+    templateUrl: './recalculation-edit.component.html',
+    styleUrls: ['./recalculation-edit.component.scss'],
+    standalone: false
 })
 export class RecalculationEditComponent extends BaseEditComponent<Recalculation> implements OnInit, OnDestroy {
   recalculationGroup: UntypedFormGroup;

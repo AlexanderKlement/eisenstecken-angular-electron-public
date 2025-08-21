@@ -19,9 +19,10 @@ interface AutoCompleteOption {
 }
 
 @Component({
-  selector: "app-contact-edit-dialog",
-  templateUrl: "./contact-edit-dialog.component.html",
-  styleUrls: ["./contact-edit-dialog.component.scss"],
+    selector: "app-contact-edit-dialog",
+    templateUrl: "./contact-edit-dialog.component.html",
+    styleUrls: ["./contact-edit-dialog.component.scss"],
+    standalone: false
 })
 export class ContactEditDialogComponent implements OnInit {
   createMode = false;

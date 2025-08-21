@@ -14,7 +14,8 @@ export interface HoursStepperDriveDialogData {
 @Component({
     selector: 'app-hours-stepper-drive-dialog',
     templateUrl: './hours-stepper-drive-dialog.component.html',
-    styleUrls: ['./hours-stepper-drive-dialog.component.scss']
+    styleUrls: ['./hours-stepper-drive-dialog.component.scss'],
+    standalone: false
 })
 export class HoursStepperDriveDialogComponent implements OnInit {
     confirmDisabled: true;

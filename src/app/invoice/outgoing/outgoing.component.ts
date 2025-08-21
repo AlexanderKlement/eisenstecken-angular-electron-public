@@ -3,7 +3,7 @@ import {TableDataSource} from "../../shared/components/table-builder/table-build
 import {LockService} from "../../shared/services/lock.service";
 import {first} from "rxjs/operators";
 import {AuthService} from "../../shared/services/auth.service";
-import * as moment from "moment";
+import moment from "moment";
 import {TableButton} from "../../shared/components/table-builder/table-builder.component";
 import {ConfirmDialogComponent} from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
@@ -14,7 +14,8 @@ import { DefaultService, OutgoingInvoice } from "../../../api/openapi";
 @Component({
     selector: 'app-outgoing',
     templateUrl: './outgoing.component.html',
-    styleUrls: ['./outgoing.component.scss']
+    styleUrls: ['./outgoing.component.scss'],
+    standalone: false
 })
 export class OutgoingComponent implements OnInit {
 

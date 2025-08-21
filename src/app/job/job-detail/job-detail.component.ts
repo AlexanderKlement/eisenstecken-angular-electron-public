@@ -5,7 +5,7 @@ import { InfoBuilderComponent } from "../../shared/components/info-builder/info-
 import { first, map } from "rxjs/operators";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { LockService } from "../../shared/services/lock.service";
-import * as moment from "moment";
+import moment from "moment";
 import { AuthService } from "../../shared/services/auth.service";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
@@ -23,9 +23,10 @@ import { MoveJobDialogComponent } from "./move-job-dialog/move-job-dialog.compon
 import { OutgoingInvoice, DefaultService, Job, Offer, Order } from "../../../api/openapi";
 
 @Component({
-  selector: 'app-job-detail',
-  templateUrl: './job-detail.component.html',
-  styleUrls: ['./job-detail.component.scss'],
+    selector: 'app-job-detail',
+    templateUrl: './job-detail.component.html',
+    styleUrls: ['./job-detail.component.scss'],
+    standalone: false
 })
 export class JobDetailComponent implements OnInit {
 

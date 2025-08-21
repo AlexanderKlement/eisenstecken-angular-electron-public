@@ -5,9 +5,10 @@ import { ChatService } from '../chat/chat.service';
 import { DefaultService, Calendar } from '../../../api/openapi';
 
 @Component({
-  selector: 'app-calendars-frame',
-  templateUrl: './calendars-chat-frame.component.html',
-  styleUrls: ['./calendars-chat-frame.component.scss'],
+    selector: 'app-calendars-frame',
+    templateUrl: './calendars-chat-frame.component.html',
+    styleUrls: ['./calendars-chat-frame.component.scss'],
+    standalone: false
 })
 export class CalendarsChatFrameComponent implements OnInit, OnDestroy {
 

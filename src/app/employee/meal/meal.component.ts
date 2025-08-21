@@ -1,6 +1,6 @@
 import { Component, ComponentRef, OnInit } from "@angular/core";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
-import * as moment from "moment";
+import moment from "moment";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { first } from "rxjs/operators";
@@ -10,9 +10,10 @@ import { Observable, Subscriber } from "rxjs";
 import { DefaultService, Meal } from "../../../api/openapi";
 
 @Component({
-  selector: 'app-meal',
-  templateUrl: './meal.component.html',
-  styleUrls: ['./meal.component.scss'],
+    selector: 'app-meal',
+    templateUrl: './meal.component.html',
+    styleUrls: ['./meal.component.scss'],
+    standalone: false
 })
 export class MealComponent implements OnInit {
   mealDataSource: TableDataSource<Meal>;

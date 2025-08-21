@@ -9,9 +9,10 @@ import { NavigationService } from "../../shared/services/navigation.service";
 import { Contact, Gender, Language, Client, DefaultService, Lock, ContactCreate, ClientCreate } from "../../../api/openapi";
 
 @Component({
-  selector: 'app-client-edit',
-  templateUrl: './client-edit.component.html',
-  styleUrls: ['./client-edit.component.scss'],
+    selector: 'app-client-edit',
+    templateUrl: './client-edit.component.html',
+    styleUrls: ['./client-edit.component.scss'],
+    standalone: false
 })
 export class ClientEditComponent extends BaseEditComponent<Client> implements OnInit, OnDestroy {
 

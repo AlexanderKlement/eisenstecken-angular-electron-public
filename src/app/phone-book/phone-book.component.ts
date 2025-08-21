@@ -11,9 +11,10 @@ import * as Sentry from "@sentry/angular";
 import { Contact, DefaultService, ContactTypeEnum } from "../../api/openapi";
 
 @Component({
-  selector: 'app-phone-book',
-  templateUrl: './phone-book.component.html',
-  styleUrls: ['./phone-book.component.scss'],
+    selector: 'app-phone-book',
+    templateUrl: './phone-book.component.html',
+    styleUrls: ['./phone-book.component.scss'],
+    standalone: false
 })
 export class PhoneBookComponent implements OnInit {
 

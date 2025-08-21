@@ -10,9 +10,10 @@ export interface PaintTemplateEditDialogData {
 }
 
 @Component({
-  selector: 'app-paint-template-edit-dialog',
-  templateUrl: './paint-template-edit-dialog.component.html',
-  styleUrls: ['./paint-template-edit-dialog.component.scss'],
+    selector: 'app-paint-template-edit-dialog',
+    templateUrl: './paint-template-edit-dialog.component.html',
+    styleUrls: ['./paint-template-edit-dialog.component.scss'],
+    standalone: false
 })
 export class PaintTemplateEditDialogComponent implements OnInit {
 

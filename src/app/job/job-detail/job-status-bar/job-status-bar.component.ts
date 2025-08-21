@@ -6,9 +6,10 @@ import { MatDialog } from "@angular/material/dialog";
 import { JobStatus, DefaultService, JobStatusType } from "../../../../api/openapi";
 
 @Component({
-  selector: 'app-job-status-bar',
-  templateUrl: './job-status-bar.component.html',
-  styleUrls: ['./job-status-bar.component.scss'],
+    selector: 'app-job-status-bar',
+    templateUrl: './job-status-bar.component.html',
+    styleUrls: ['./job-status-bar.component.scss'],
+    standalone: false
 })
 export class JobStatusBarComponent implements OnInit {
 

@@ -24,9 +24,10 @@ export function getEventTranslation(companyEvent: CompanyEventEnum): string {
 }
 
 @Component({
-  selector: 'app-event-calendar-dialog',
-  templateUrl: './event-calendar-dialog.component.html',
-  styleUrls: ['./event-calendar-dialog.component.scss']
+    selector: 'app-event-calendar-dialog',
+    templateUrl: './event-calendar-dialog.component.html',
+    styleUrls: ['./event-calendar-dialog.component.scss'],
+    standalone: false
 })
 
 

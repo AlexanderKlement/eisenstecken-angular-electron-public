@@ -6,9 +6,10 @@ import {ConfirmDialogComponent} from "../shared/components/confirm-dialog/confir
 import {DefaultService} from "../../api/openapi";
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    standalone: false
 })
 export class HomeComponent implements OnInit {
 

@@ -30,9 +30,10 @@ export interface JobMinimal {
 }
 
 @Component({
-  selector: 'app-delivery-edit',
-  templateUrl: './delivery-edit.component.html',
-  styleUrls: ['./delivery-edit.component.scss'],
+    selector: 'app-delivery-edit',
+    templateUrl: './delivery-edit.component.html',
+    styleUrls: ['./delivery-edit.component.scss'],
+    standalone: false
 })
 export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> implements OnInit {
   deliveryNoteGroup: UntypedFormGroup;

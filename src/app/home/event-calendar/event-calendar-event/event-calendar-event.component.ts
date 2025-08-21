@@ -3,9 +3,10 @@ import { CompanyEvent, CompanyEventEnum } from "../../../../api/openapi";
 import {getEventTranslation} from "../event-calendar-dialog/event-calendar-dialog.component";
 
 @Component({
-  selector: 'app-event-calendar-event',
-  templateUrl: './event-calendar-event.component.html',
-  styleUrls: ['./event-calendar-event.component.scss']
+    selector: 'app-event-calendar-event',
+    templateUrl: './event-calendar-event.component.html',
+    styleUrls: ['./event-calendar-event.component.scss'],
+    standalone: false
 })
 export class EventCalendarEventComponent implements OnInit {
 

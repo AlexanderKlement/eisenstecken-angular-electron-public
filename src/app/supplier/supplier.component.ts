@@ -12,9 +12,10 @@ import { AuthService } from "../shared/services/auth.service";
 import { Observable, Subscriber } from "rxjs";
 
 @Component({
-  selector: "app-supplier",
-  templateUrl: "./supplier.component.html",
-  styleUrls: ["./supplier.component.scss"],
+    selector: "app-supplier",
+    templateUrl: "./supplier.component.html",
+    styleUrls: ["./supplier.component.scss"],
+    standalone: false
 })
 export class SupplierComponent implements OnInit {
   supplierTableDataSource: TableDataSource<Supplier>;

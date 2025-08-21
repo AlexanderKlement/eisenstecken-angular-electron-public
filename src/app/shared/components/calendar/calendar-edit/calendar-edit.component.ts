@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from "@angular/core";
 import {first} from "rxjs/operators";
 import {AbstractControl, UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators} from "@angular/forms";
-import * as moment from "moment";
+import moment from "moment";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {timepickerTheme} from "../../../themes/timepicker.theme";
 import {DefaultService, CalendarEntry, CalendarEntryCreate} from "../../../../../api/openapi";
@@ -29,7 +29,8 @@ export interface CalendarData {
 @Component({
     selector: 'app-calendar-edit',
     templateUrl: './calendar-edit.component.html',
-    styleUrls: ['./calendar-edit.component.scss']
+    styleUrls: ['./calendar-edit.component.scss'],
+    standalone: false
 })
 export class CalendarEditComponent implements OnInit {
     submitted = false;

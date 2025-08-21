@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from "@angular/core";
-import * as moment from "moment";
+import moment from "moment";
 import {MatDialog} from "@angular/material/dialog";
 import {
   EventCalendarDialogComponent,
@@ -11,9 +11,10 @@ import {AuthService} from "../../../shared/services/auth.service";
 import {DefaultService, CompanyEvent, CompanyEventEnum} from "../../../../api/openapi";
 
 @Component({
-  selector: 'app-event-calendar-day',
-  templateUrl: './event-calendar-day.component.html',
-  styleUrls: ['./event-calendar-day.component.scss']
+    selector: 'app-event-calendar-day',
+    templateUrl: './event-calendar-day.component.html',
+    styleUrls: ['./event-calendar-day.component.scss'],
+    standalone: false
 })
 export class EventCalendarDayComponent implements OnInit, OnChanges, OnDestroy {
 

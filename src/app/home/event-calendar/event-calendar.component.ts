@@ -1,11 +1,12 @@
 import {Component, NgZone, OnInit} from "@angular/core";
-import * as moment from "moment";
+import moment from "moment";
 import {Subject} from "rxjs";
 
 @Component({
-  selector: 'app-event-calendar',
-  templateUrl: './event-calendar.component.html',
-  styleUrls: ['./event-calendar.component.scss']
+    selector: 'app-event-calendar',
+    templateUrl: './event-calendar.component.html',
+    styleUrls: ['./event-calendar.component.scss'],
+    standalone: false
 })
 
 

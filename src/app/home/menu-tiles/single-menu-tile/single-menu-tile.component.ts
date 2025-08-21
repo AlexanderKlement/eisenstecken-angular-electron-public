@@ -3,9 +3,10 @@ import {MenuTileDetail} from "../menu-tile.settings";
 import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-single-menu-tile',
-  templateUrl: './single-menu-tile.component.html',
-  styleUrls: ['./single-menu-tile.component.scss']
+    selector: 'app-single-menu-tile',
+    templateUrl: './single-menu-tile.component.html',
+    styleUrls: ['./single-menu-tile.component.scss'],
+    standalone: false
 })
 export class SingleMenuTileComponent implements OnInit {
 

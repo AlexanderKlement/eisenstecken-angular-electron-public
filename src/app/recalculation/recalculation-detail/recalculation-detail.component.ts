@@ -1,7 +1,7 @@
 import { Component, ComponentRef, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
-import * as moment from "moment";
+import moment from "moment";
 import { first, map } from "rxjs/operators";
 import { Observable, Subscriber } from "rxjs";
 import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
@@ -14,9 +14,10 @@ import { NavigationService } from "../../shared/services/navigation.service";
 import { Recalculation, Paint, Workload, Expense, DefaultService, WoodList, Order } from "../../../api/openapi";
 
 @Component({
-  selector: 'app-recalculation-detail',
-  templateUrl: './recalculation-detail.component.html',
-  styleUrls: ['./recalculation-detail.component.scss'],
+    selector: 'app-recalculation-detail',
+    templateUrl: './recalculation-detail.component.html',
+    styleUrls: ['./recalculation-detail.component.scss'],
+    standalone: false
 })
 export class RecalculationDetailComponent implements OnInit {
 

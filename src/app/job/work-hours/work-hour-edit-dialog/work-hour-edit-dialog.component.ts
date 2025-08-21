@@ -11,9 +11,10 @@ export interface WorkHourEditDialogData {
 }
 
 @Component({
-  selector: 'app-work-hour-edit-dialog',
-  templateUrl: './work-hour-edit-dialog.component.html',
-  styleUrls: ['./work-hour-edit-dialog.component.scss'],
+    selector: 'app-work-hour-edit-dialog',
+    templateUrl: './work-hour-edit-dialog.component.html',
+    styleUrls: ['./work-hour-edit-dialog.component.scss'],
+    standalone: false
 })
 export class WorkHourEditDialogComponent implements OnInit {
 

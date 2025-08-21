@@ -22,7 +22,8 @@ interface SimpleOrderable {
 @Component({
     selector: 'app-ordered-article-move-dialog',
     templateUrl: './ordered-article-move-dialog.component.html',
-    styleUrls: ['./ordered-article-move-dialog.component.scss']
+    styleUrls: ['./ordered-article-move-dialog.component.scss'],
+    standalone: false
 })
 export class OrderedArticleMoveDialogComponent implements OnInit {
 

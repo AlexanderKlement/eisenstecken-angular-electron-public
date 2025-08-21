@@ -3,7 +3,8 @@
 import {DomSanitizer} from "@angular/platform-browser";
 
   @Pipe({
-  name: 'boldSpan'
+    name: 'boldSpan',
+    standalone: false
 })
 export class BoldSpanPipe implements PipeTransform {
 

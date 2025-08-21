@@ -9,7 +9,8 @@ import {DefaultService, Client} from "../../api/openapi";
 @Component({
     selector: 'app-client',
     templateUrl: './client.component.html',
-    styleUrls: ['./client.component.scss']
+    styleUrls: ['./client.component.scss'],
+    standalone: false
 })
 
 export class ClientComponent implements OnInit {

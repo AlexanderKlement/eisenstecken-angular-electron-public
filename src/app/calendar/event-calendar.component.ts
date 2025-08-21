@@ -4,7 +4,8 @@ import {CustomButton} from "../shared/components/toolbar/toolbar.component";
 @Component({
     selector: 'app-calendar',
     templateUrl: './event-calendar.component.html',
-    styleUrls: ['./event-calendar.component.scss']
+    styleUrls: ['./event-calendar.component.scss'],
+    standalone: false
 })
 export class EventCalendarComponent implements OnInit {
     buttons: CustomButton[] = [];

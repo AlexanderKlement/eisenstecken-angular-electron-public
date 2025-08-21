@@ -4,9 +4,10 @@ import {BaseSettingsComponent} from "../base-settings.component";
 import {DefaultService} from "../../../api/openapi";
 
 @Component({
-  selector: 'app-general-settings',
-  templateUrl: './general-settings.component.html',
-  styleUrls: ['./general-settings.component.scss']
+    selector: 'app-general-settings',
+    templateUrl: './general-settings.component.html',
+    styleUrls: ['./general-settings.component.scss'],
+    standalone: false
 })
 export class GeneralSettingsComponent extends BaseSettingsComponent  implements OnInit{
 

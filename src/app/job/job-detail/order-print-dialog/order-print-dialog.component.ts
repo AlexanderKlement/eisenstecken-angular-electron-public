@@ -15,9 +15,10 @@ export interface OrderReturnData {
 
 
 @Component({
-  selector: 'app-order-print-dialog',
-  templateUrl: './order-print-dialog.component.html',
-  styleUrls: ['./order-print-dialog.component.scss'],
+    selector: 'app-order-print-dialog',
+    templateUrl: './order-print-dialog.component.html',
+    styleUrls: ['./order-print-dialog.component.scss'],
+    standalone: false
 })
 export class OrderPrintDialogComponent implements OnInit {
 

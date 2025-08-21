@@ -6,9 +6,10 @@ import { debounceTime, first, startWith, switchMap } from 'rxjs/operators';
 import { DefaultService } from '../../../../api/openapi';
 
 @Component({
-  selector: 'app-filterable-clickable-list',
-  templateUrl: './filterable-clickable-list.component.html',
-  styleUrls: ['./filterable-clickable-list.component.scss'],
+    selector: 'app-filterable-clickable-list',
+    templateUrl: './filterable-clickable-list.component.html',
+    styleUrls: ['./filterable-clickable-list.component.scss'],
+    standalone: false
 })
 export class FilterableClickableListComponent implements OnInit, OnDestroy {
 

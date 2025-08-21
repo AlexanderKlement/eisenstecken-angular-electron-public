@@ -4,13 +4,14 @@ import {MatDialog} from "@angular/material/dialog";
 import {CalendarData, CalendarEditComponent} from "./calendar-edit/calendar-edit.component";
 import {first} from "rxjs/operators";
 import {CalendarService} from "./calendar.service";
-import * as moment from "moment";
+import moment from "moment";
 import {AuthService} from "../../services/auth.service";
 
 @Component({
     selector: 'app-calendar',
     templateUrl: './simple-calendar.component.html',
-    styleUrls: ['./simple-calendar.component.scss']
+    styleUrls: ['./simple-calendar.component.scss'],
+    standalone: false
 })
 export class SimpleCalendarComponent implements OnInit {
 

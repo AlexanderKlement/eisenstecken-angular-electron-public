@@ -7,9 +7,10 @@ import { Observable, Subscriber } from "rxjs";
 import { DefaultService, DescriptiveArticle, IngoingInvoice } from "../../../../api/openapi";
 
 @Component({
-  selector: 'app-ingoing-detail',
-  templateUrl: './ingoing-detail.component.html',
-  styleUrls: ['./ingoing-detail.component.scss'],
+    selector: 'app-ingoing-detail',
+    templateUrl: './ingoing-detail.component.html',
+    styleUrls: ['./ingoing-detail.component.scss'],
+    standalone: false
 })
 export class IngoingDetailComponent implements OnInit {
 

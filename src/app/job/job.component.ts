@@ -2,14 +2,15 @@ import {Component, ComponentRef, ElementRef, OnInit, ViewChild} from "@angular/c
 import {TableDataSource} from "../shared/components/table-builder/table-builder.datasource";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Observable, Subscriber} from "rxjs";
-import * as moment from "moment";
+import moment from "moment";
 import {FileService} from "../shared/services/file.service";
 import { DefaultService, Job, Stock } from "../../api/openapi";
 
 @Component({
-  selector: 'app-job',
-  templateUrl: './job.component.html',
-  styleUrls: ['./job.component.scss']
+    selector: 'app-job',
+    templateUrl: './job.component.html',
+    styleUrls: ['./job.component.scss'],
+    standalone: false
 })
 export class JobComponent implements OnInit {
 

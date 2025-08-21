@@ -1,9 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 
 @Component({
-  selector: 'app-reminder-settings',
-  templateUrl: './reminder-settings.component.html',
-  styleUrls: ['./reminder-settings.component.scss']
+    selector: 'app-reminder-settings',
+    templateUrl: './reminder-settings.component.html',
+    styleUrls: ['./reminder-settings.component.scss'],
+    standalone: false
 })
 export class ReminderSettingsComponent implements OnInit {
 

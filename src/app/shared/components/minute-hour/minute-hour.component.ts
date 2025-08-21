@@ -5,7 +5,8 @@ import {Subscription} from "rxjs";
 @Component({
     selector: 'app-minute-hour',
     templateUrl: './minute-hour.component.html',
-    styleUrls: ['./minute-hour.component.scss']
+    styleUrls: ['./minute-hour.component.scss'],
+    standalone: false
 })
 export class MinuteHourComponent implements OnInit, OnDestroy {
     @Input() minuteControl: UntypedFormControl;

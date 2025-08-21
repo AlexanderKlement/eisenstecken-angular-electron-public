@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, ViewChild } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { MatSelectionList } from "@angular/material/list";
 import { Observable } from "rxjs";
-import * as moment from "moment";
+import moment from "moment";
 import { UntypedFormControl } from "@angular/forms";
 import { Order } from "../../../../api/openapi";
 
@@ -17,9 +17,10 @@ export interface OrderDateReturnData {
 }
 
 @Component({
-  selector: 'app-order-dialog',
-  templateUrl: './order-dialog.component.html',
-  styleUrls: ['./order-dialog.component.scss'],
+    selector: 'app-order-dialog',
+    templateUrl: './order-dialog.component.html',
+    styleUrls: ['./order-dialog.component.scss'],
+    standalone: false
 })
 export class OrderDialogComponent implements OnInit {
 

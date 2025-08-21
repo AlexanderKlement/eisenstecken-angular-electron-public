@@ -1,11 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
-import {
-  APP_INITIALIZER,
-  ErrorHandler,
-  Injectable,
-  LOCALE_ID,
-  NgModule,
-} from "@angular/core";
+import { ErrorHandler, Injectable, LOCALE_ID, NgModule, inject, provideAppInitializer } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClient, HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { CoreModule } from "./core/core.module";
@@ -178,12 +172,10 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
             provide: Sentry.TraceService,
             deps: [Router],
         },
-        {
-            provide: APP_INITIALIZER,
-            useFactory: () => () => { },
-            deps: [Sentry.TraceService],
-            multi: true,
-        },
+        provideAppInitializer(() => {
+        const initializerFn = (() => () => { })();
+        return initializerFn();
+      }),
         {
             provide: Configuration,
             useFactory: (authService: AuthService) => new Configuration({

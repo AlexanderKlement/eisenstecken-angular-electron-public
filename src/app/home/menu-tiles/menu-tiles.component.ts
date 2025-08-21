@@ -5,9 +5,10 @@ import { matchRightsToMenuTiles, MenuTileDetail } from './menu-tile.settings';
 import { DefaultService } from '../../../api/openapi';
 
 @Component({
-  selector: 'app-menu-tiles',
-  templateUrl: './menu-tiles.component.html',
-  styleUrls: ['./menu-tiles.component.scss'],
+    selector: 'app-menu-tiles',
+    templateUrl: './menu-tiles.component.html',
+    styleUrls: ['./menu-tiles.component.scss'],
+    standalone: false
 })
 export class MenuTilesComponent implements OnInit {
 

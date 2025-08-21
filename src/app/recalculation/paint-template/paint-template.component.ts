@@ -11,9 +11,10 @@ import { MatDialog } from "@angular/material/dialog";
 import { DefaultService, TemplatePaint } from "../../../api/openapi";
 
 @Component({
-  selector: 'app-paint-template',
-  templateUrl: './paint-template.component.html',
-  styleUrls: ['./paint-template.component.scss'],
+    selector: 'app-paint-template',
+    templateUrl: './paint-template.component.html',
+    styleUrls: ['./paint-template.component.scss'],
+    standalone: false
 })
 export class PaintTemplateComponent implements OnInit {
 

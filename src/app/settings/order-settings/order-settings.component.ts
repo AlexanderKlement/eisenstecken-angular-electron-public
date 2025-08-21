@@ -4,9 +4,10 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { DefaultService } from "../../../api/openapi";
 
 @Component({
-  selector: 'app-order-settings',
-  templateUrl: './order-settings.component.html',
-  styleUrls: ['./order-settings.component.scss'],
+    selector: 'app-order-settings',
+    templateUrl: './order-settings.component.html',
+    styleUrls: ['./order-settings.component.scss'],
+    standalone: false
 })
 export class OrderSettingsComponent extends BaseSettingsComponent implements OnInit {
 

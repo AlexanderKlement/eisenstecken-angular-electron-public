@@ -3,7 +3,7 @@ import { TableDataSource } from "../shared/components/table-builder/table-builde
 import { CustomButton } from "../shared/components/toolbar/toolbar.component";
 import { LockService } from "../shared/services/lock.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import * as moment from "moment";
+import moment from "moment";
 import { ConfirmDialogComponent } from "../shared/components/confirm-dialog/confirm-dialog.component";
 import { first } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
@@ -13,9 +13,10 @@ import { Observable, Subscriber } from "rxjs";
 import { User, Fee, Journey, MealSum, Maintenance, AdditionalWorkload, DefaultService } from "../../api/openapi";
 
 @Component({
-  selector: 'app-employee',
-  templateUrl: './employee.component.html',
-  styleUrls: ['./employee.component.scss'],
+    selector: 'app-employee',
+    templateUrl: './employee.component.html',
+    styleUrls: ['./employee.component.scss'],
+    standalone: false
 })
 export class EmployeeComponent implements OnInit {
 

@@ -12,7 +12,8 @@ import {DefaultService, InfoPage} from "../../../api/openapi";
 @Component({
     selector: 'app-info-page-settings',
     templateUrl: './info-page-settings.component.html',
-    styleUrls: ['./info-page-settings.component.scss']
+    styleUrls: ['./info-page-settings.component.scss'],
+    standalone: false
 })
 export class InfoPageSettingsComponent implements OnInit {
     infoPageDataSource: TableDataSource<InfoPage>;

@@ -4,9 +4,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DefaultService } from '../../../api/openapi';
 
 @Component({
-  selector: 'app-invoice-settings',
-  templateUrl: './invoice-settings.component.html',
-  styleUrls: ['./invoice-settings.component.scss'],
+    selector: 'app-invoice-settings',
+    templateUrl: './invoice-settings.component.html',
+    styleUrls: ['./invoice-settings.component.scss'],
+    standalone: false
 })
 export class InvoiceSettingsComponent extends BaseSettingsComponent implements OnInit {
 

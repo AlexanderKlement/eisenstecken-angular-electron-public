@@ -8,7 +8,8 @@ import {DefaultService, TechnicalData, TechnicalDataUpdate, PriceUpdate, Price, 
 @Component({
     selector: 'app-info-settings',
     templateUrl: './info-settings.component.html',
-    styleUrls: ['./info-settings.component.scss']
+    styleUrls: ['./info-settings.component.scss'],
+    standalone: false
 })
 export class InfoSettingsComponent implements OnInit {
 

@@ -14,9 +14,10 @@ import { ActivatedRoute } from "@angular/router";
 import { DefaultService } from "../../api/openapi";
 
 @Component({
-  selector: 'app-invoice',
-  templateUrl: './invoice.component.html',
-  styleUrls: ['./invoice.component.scss'],
+    selector: 'app-invoice',
+    templateUrl: './invoice.component.html',
+    styleUrls: ['./invoice.component.scss'],
+    standalone: false
 })
 export class InvoiceComponent implements OnInit {
   outgoingInvoicesAvailable = false;

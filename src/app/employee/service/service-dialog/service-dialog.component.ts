@@ -13,7 +13,8 @@ export interface ServiceDialogData {
 @Component({
     selector: 'app-service-dialog',
     templateUrl: './service-dialog.component.html',
-    styleUrls: ['./service-dialog.component.scss']
+    styleUrls: ['./service-dialog.component.scss'],
+    standalone: false
 })
 export class ServiceDialogComponent implements OnInit {
 

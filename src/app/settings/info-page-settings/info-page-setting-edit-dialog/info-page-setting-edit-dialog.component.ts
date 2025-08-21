@@ -12,9 +12,10 @@ export interface InfoPageEditDialogData {
 
 
 @Component({
-  selector: 'app-info-page-setting-edit-dialog',
-  templateUrl: './info-page-setting-edit-dialog.component.html',
-  styleUrls: ['./info-page-setting-edit-dialog.component.scss'],
+    selector: 'app-info-page-setting-edit-dialog',
+    templateUrl: './info-page-setting-edit-dialog.component.html',
+    styleUrls: ['./info-page-setting-edit-dialog.component.scss'],
+    standalone: false
 })
 export class InfoPageSettingEditDialogComponent implements OnInit {
   title: string;

@@ -12,7 +12,8 @@ export interface LockDialogData {
 @Component({
     selector: 'app-lock-dialog',
     templateUrl: './lock-dialog.component.html',
-    styleUrls: ['./lock-dialog.component.scss']
+    styleUrls: ['./lock-dialog.component.scss'],
+    standalone: false
 })
 
 export class LockDialogComponent implements OnInit {

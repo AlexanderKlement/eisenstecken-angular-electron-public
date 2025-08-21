@@ -5,7 +5,8 @@ import {Router} from "@angular/router";
 @Component({
     selector: 'app-mobile-app',
     templateUrl: './mobile-app.component.html',
-    styleUrls: ['./mobile-app.component.scss']
+    styleUrls: ['./mobile-app.component.scss'],
+    standalone: false
 })
 export class MobileAppComponent implements OnInit {
     buttons: CustomButton[] = [];

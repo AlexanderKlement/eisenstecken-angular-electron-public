@@ -29,9 +29,10 @@ export interface OrderDialogData {
 }
 
 @Component({
-  selector: 'app-product-edit-dialog',
-  templateUrl: './product-edit-dialog.component.html',
-  styleUrls: ['./product-edit-dialog.component.scss'],
+    selector: 'app-product-edit-dialog',
+    templateUrl: './product-edit-dialog.component.html',
+    styleUrls: ['./product-edit-dialog.component.scss'],
+    standalone: false
 })
 export class ProductEditDialogComponent implements OnInit, OnDestroy {
 

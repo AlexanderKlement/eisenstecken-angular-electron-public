@@ -2,7 +2,7 @@ import {Component, ComponentRef, OnInit} from "@angular/core";
 import {TableDataSource} from "../../shared/components/table-builder/table-builder.datasource";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import * as moment from "moment";
+import moment from "moment";
 import {ActivatedRoute} from "@angular/router";
 import {ServiceDialogComponent} from "./service-dialog/service-dialog.component";
 import {CustomButton} from "../../shared/components/toolbar/toolbar.component";
@@ -15,7 +15,8 @@ import {DefaultService, Service} from "../../../api/openapi";
 @Component({
     selector: 'app-service',
     templateUrl: './employee-service.component.html',
-    styleUrls: ['./employee-service.component.scss']
+    styleUrls: ['./employee-service.component.scss'],
+    standalone: false
 })
 export class EmployeeServiceComponent implements OnInit {
     serviceDataSource: TableDataSource<Service>;

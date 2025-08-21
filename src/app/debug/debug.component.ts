@@ -8,9 +8,10 @@ import {ipcRenderer} from "electron";
 import {ElectronService} from "../core/services";
 
 @Component({
-  selector: 'app-debug',
-  templateUrl: './debug.component.html',
-  styleUrls: ['./debug.component.scss']
+    selector: 'app-debug',
+    templateUrl: './debug.component.html',
+    styleUrls: ['./debug.component.scss'],
+    standalone: false
 })
 export class DebugComponent implements OnInit {
   emailFormGroup: UntypedFormGroup;

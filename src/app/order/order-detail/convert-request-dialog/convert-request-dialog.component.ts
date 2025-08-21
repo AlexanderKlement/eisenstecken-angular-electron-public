@@ -16,9 +16,10 @@ export interface OrderedArticleReturnDialogData {
 
 
 @Component({
-  selector: 'app-convert-request-dialog',
-  templateUrl: './convert-request-dialog.component.html',
-  styleUrls: ['./convert-request-dialog.component.scss'],
+    selector: 'app-convert-request-dialog',
+    templateUrl: './convert-request-dialog.component.html',
+    styleUrls: ['./convert-request-dialog.component.scss'],
+    standalone: false
 })
 export class ConvertRequestDialogComponent implements OnInit {
 

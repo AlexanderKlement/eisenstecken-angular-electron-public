@@ -10,9 +10,10 @@ export interface ServiceCreateDialogData {
 }
 
 @Component({
-  selector: 'app-service-create-dialog',
-  templateUrl: './service-create-dialog.component.html',
-  styleUrls: ['./service-create-dialog.component.scss'],
+    selector: 'app-service-create-dialog',
+    templateUrl: './service-create-dialog.component.html',
+    styleUrls: ['./service-create-dialog.component.scss'],
+    standalone: false
 })
 export class ServiceCreateDialogComponent implements OnInit {
 

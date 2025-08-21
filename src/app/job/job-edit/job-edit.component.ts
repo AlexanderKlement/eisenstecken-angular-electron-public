@@ -7,13 +7,14 @@ import { MatDialog } from "@angular/material/dialog";
 import { first, map, tap } from "rxjs/operators";
 import { AuthService } from "../../shared/services/auth.service";
 import { NavigationService } from "../../shared/services/navigation.service";
-import * as moment from "moment";
+import moment from "moment";
 import { User, Lock, Job, JobUpdate, SubJobCreate, DefaultService, JobCreate } from "../../../api/openapi";
 
 @Component({
-  selector: 'app-job-edit',
-  templateUrl: './job-edit.component.html',
-  styleUrls: ['./job-edit.component.scss'],
+    selector: 'app-job-edit',
+    templateUrl: './job-edit.component.html',
+    styleUrls: ['./job-edit.component.scss'],
+    standalone: false
 })
 export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, OnDestroy {
 

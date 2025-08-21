@@ -10,7 +10,8 @@ import { DefaultService, User, Lock } from "../../../../api/openapi";
 @Component({
     selector: 'app-base-edit',
     template: ``,
-    styleUrls: ['./base-edit.component.scss']
+    styleUrls: ['./base-edit.component.scss'],
+    standalone: false
 })
 export class BaseEditComponent<T extends DataSourceClass> implements OnInit, OnDestroy {
 

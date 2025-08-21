@@ -5,7 +5,7 @@ import { first } from 'rxjs/operators';
 import { CustomButton } from '../../shared/components/toolbar/toolbar.component';
 import { Observable, Subject, Subscriber } from 'rxjs';
 import { MatSelectChange } from '@angular/material/select';
-import * as moment from 'moment';
+import moment from "moment";
 import { ServiceDialogComponent } from '../service/service-dialog/service-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ServiceCreateDialogComponent } from '../service/service-create-dialog/service-create-dialog.component';
@@ -15,9 +15,10 @@ import { minutesToDisplayableString } from '../../shared/date.util';
 import { Journey, AdditionalWorkload, Meal, Service, Fee, DefaultService, WorkDay } from '../../../api/openapi';
 
 @Component({
-  selector: 'app-employee-detail',
-  templateUrl: './employee-detail.component.html',
-  styleUrls: ['./employee-detail.component.scss'],
+    selector: 'app-employee-detail',
+    templateUrl: './employee-detail.component.html',
+    styleUrls: ['./employee-detail.component.scss'],
+    standalone: false
 })
 export class EmployeeDetailComponent implements OnInit {
   feeDataSource: TableDataSource<Fee>;

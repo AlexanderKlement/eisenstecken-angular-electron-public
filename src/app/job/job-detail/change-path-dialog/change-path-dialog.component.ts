@@ -10,9 +10,10 @@ export interface ChangePathDialogData {
 }
 
 @Component({
-  selector: 'app-change-path-dialog',
-  templateUrl: './change-path-dialog.component.html',
-  styleUrls: ['./change-path-dialog.component.scss'],
+    selector: 'app-change-path-dialog',
+    templateUrl: './change-path-dialog.component.html',
+    styleUrls: ['./change-path-dialog.component.scss'],
+    standalone: false
 })
 export class ChangePathDialogComponent implements OnInit {
   title = 'Pfad ändern';

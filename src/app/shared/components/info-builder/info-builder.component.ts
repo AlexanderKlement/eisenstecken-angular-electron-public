@@ -5,9 +5,10 @@ import {LockService} from "../../services/lock.service";
 import { DefaultService } from "../../../../api/openapi";
 
 @Component({
-  selector: 'app-info-builder',
-  templateUrl: './info-builder.component.html',
-  styleUrls: ['./info-builder.component.scss']
+    selector: 'app-info-builder',
+    templateUrl: './info-builder.component.html',
+    styleUrls: ['./info-builder.component.scss'],
+    standalone: false
 })
 
 export class InfoBuilderComponent<T extends DataSourceClass> implements OnInit {

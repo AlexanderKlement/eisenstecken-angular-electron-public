@@ -3,6 +3,7 @@ import {ActivatedRoute, RouterOutlet} from "@angular/router";
 
 @Directive({
     selector: 'app-router-outlet',
+    standalone: false
 })
 export class AppRouterOutletDirective extends RouterOutlet {
 

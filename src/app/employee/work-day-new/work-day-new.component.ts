@@ -3,9 +3,10 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {UntypedFormControl} from "@angular/forms";
 
 @Component({
-  selector: 'app-work-day-new',
-  templateUrl: './work-day-new.component.html',
-  styleUrls: ['./work-day-new.component.scss']
+    selector: 'app-work-day-new',
+    templateUrl: './work-day-new.component.html',
+    styleUrls: ['./work-day-new.component.scss'],
+    standalone: false
 })
 export class WorkDayNewComponent implements OnInit {
   newWorkday: any;

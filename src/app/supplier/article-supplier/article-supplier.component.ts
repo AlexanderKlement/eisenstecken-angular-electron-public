@@ -11,7 +11,8 @@ import {DefaultService, Article} from "../../../api/openapi";
 @Component({
     selector: 'app-article-supplier',
     templateUrl: './article-supplier.component.html',
-    styleUrls: ['./article-supplier.component.scss']
+    styleUrls: ['./article-supplier.component.scss'],
+    standalone: false
 })
 export class ArticleSupplierComponent implements OnInit {
     buttons: CustomButton[] = [];

@@ -9,9 +9,10 @@ import { NavigationService } from '../../shared/services/navigation.service';
 import { DefaultService, Lock, Stock, StockCreate, StockUpdate } from '../../../api/openapi';
 
 @Component({
-  selector: 'app-stock-edit',
-  templateUrl: './stock-edit.component.html',
-  styleUrls: ['./stock-edit.component.scss'],
+    selector: 'app-stock-edit',
+    templateUrl: './stock-edit.component.html',
+    styleUrls: ['./stock-edit.component.scss'],
+    standalone: false
 })
 export class StockEditComponent extends BaseEditComponent<Stock> implements OnInit, OnDestroy {
   stockGroup: UntypedFormGroup;

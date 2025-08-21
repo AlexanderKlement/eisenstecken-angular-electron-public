@@ -10,9 +10,10 @@ import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/c
 import { OrderBundle, DefaultService, Order, Lock, OrderedArticlePriceUpdate} from "../../../api/openapi";
 
 @Component({
-  selector: 'app-order-bundle-edit',
-  templateUrl: './order-bundle-edit.component.html',
-  styleUrls: ['./order-bundle-edit.component.scss'],
+    selector: 'app-order-bundle-edit',
+    templateUrl: './order-bundle-edit.component.html',
+    styleUrls: ['./order-bundle-edit.component.scss'],
+    standalone: false
 })
 export class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> implements OnInit {
 

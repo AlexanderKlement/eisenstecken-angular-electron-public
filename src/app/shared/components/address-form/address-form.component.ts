@@ -4,9 +4,10 @@ import { Observable } from 'rxjs';
 import { Country, DefaultService } from '../../../../api/openapi';
 
 @Component({
-  selector: 'app-address-form',
-  templateUrl: './address-form.component.html',
-  styleUrls: ['./address-form.component.scss'],
+    selector: 'app-address-form',
+    templateUrl: './address-form.component.html',
+    styleUrls: ['./address-form.component.scss'],
+    standalone: false
 })
 export class AddressFormComponent implements OnInit {
 

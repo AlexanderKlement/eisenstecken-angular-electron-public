@@ -22,7 +22,8 @@ export interface HoursStepperDialogData {
 @Component({
     selector: 'app-hours-stepper-job-dialog',
     templateUrl: './hours-stepper-job-dialog.component.html',
-    styleUrls: ['./hours-stepper-job-dialog.component.scss']
+    styleUrls: ['./hours-stepper-job-dialog.component.scss'],
+    standalone: false
 })
 export class HoursStepperJobDialogComponent implements OnInit {
 

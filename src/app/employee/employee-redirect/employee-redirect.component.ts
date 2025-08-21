@@ -4,7 +4,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 @Component({
     selector: 'app-employee-redirect',
     templateUrl: './employee-redirect.component.html',
-    styleUrls: ['./employee-redirect.component.scss']
+    styleUrls: ['./employee-redirect.component.scss'],
+    standalone: false
 })
 export class EmployeeRedirectComponent implements OnInit {
 

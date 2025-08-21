@@ -4,9 +4,10 @@ import { Router } from "@angular/router";
 import { DefaultService, ServiceSum } from "../../api/openapi";
 
 @Component({
-  selector: 'app-service',
-  templateUrl: './service.component.html',
-  styleUrls: ['./service.component.scss'],
+    selector: 'app-service',
+    templateUrl: './service.component.html',
+    styleUrls: ['./service.component.scss'],
+    standalone: false
 })
 export class ServiceComponent implements OnInit {
 

@@ -1,6 +1,6 @@
 import { Component, ComponentRef, OnInit } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
-import * as moment from "moment";
+import moment from "moment";
 import { ActivatedRoute, Router } from "@angular/router";
 import { LockService } from "../shared/services/lock.service";
 import { CustomButton } from "../shared/components/toolbar/toolbar.component";
@@ -10,9 +10,10 @@ import { Observable, Subscriber } from "rxjs";
 import { DeliveryNote, DefaultService } from "../../api/openapi";
 
 @Component({
-  selector: 'app-delivery-note',
-  templateUrl: './delivery-note.component.html',
-  styleUrls: ['./delivery-note.component.scss'],
+    selector: 'app-delivery-note',
+    templateUrl: './delivery-note.component.html',
+    styleUrls: ['./delivery-note.component.scss'],
+    standalone: false
 })
 export class DeliveryNoteComponent implements OnInit {
   buttons: CustomButton[] = [];

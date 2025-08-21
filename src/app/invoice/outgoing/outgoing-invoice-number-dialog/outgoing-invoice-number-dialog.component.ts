@@ -8,7 +8,8 @@ import {DefaultService, ParameterCreate} from "../../../../api/openapi";
 @Component({
     selector: 'app-outgoing-invoice-number-dialog',
     templateUrl: './outgoing-invoice-number-dialog.component.html',
-    styleUrls: ['./outgoing-invoice-number-dialog.component.scss']
+    styleUrls: ['./outgoing-invoice-number-dialog.component.scss'],
+    standalone: false
 })
 export class OutgoingInvoiceNumberDialogComponent implements OnInit {
 

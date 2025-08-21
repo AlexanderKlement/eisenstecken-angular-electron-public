@@ -11,9 +11,10 @@ import { Observable, Subscriber } from "rxjs";
 import { Workload, DefaultService } from "../../../api/openapi";
 
 @Component({
-  selector: 'app-work-hours',
-  templateUrl: './work-hours.component.html',
-  styleUrls: ['./work-hours.component.scss'],
+    selector: 'app-work-hours',
+    templateUrl: './work-hours.component.html',
+    styleUrls: ['./work-hours.component.scss'],
+    standalone: false
 })
 export class WorkHoursComponent implements OnInit {
   buttons: CustomButton[] = [];

@@ -29,7 +29,8 @@ export interface TableButton {
 @Component({
     selector: 'app-table-builder',
     templateUrl: './table-builder.component.html',
-    styleUrls: ['./table-builder.component.scss']
+    styleUrls: ['./table-builder.component.scss'],
+    standalone: false
 })
 export class TableBuilderComponent<T extends DataSourceClass> implements OnInit, AfterViewInit, OnDestroy {
 

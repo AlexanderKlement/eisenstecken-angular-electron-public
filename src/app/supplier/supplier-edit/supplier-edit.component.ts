@@ -19,7 +19,8 @@ import {
 @Component({
     selector: 'app-supplier-edit',
     templateUrl: './supplier-edit.component.html',
-    styleUrls: ['./supplier-edit.component.scss']
+    styleUrls: ['./supplier-edit.component.scss'],
+    standalone: false
 })
 export class SupplierEditComponent extends BaseEditComponent<Supplier> implements OnInit, OnDestroy {
 

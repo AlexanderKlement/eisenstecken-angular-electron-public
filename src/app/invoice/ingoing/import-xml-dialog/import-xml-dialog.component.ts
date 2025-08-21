@@ -10,7 +10,8 @@ import { DefaultService, XmlFileStr } from "../../../../api/openapi";
 @Component({
     selector: 'app-import-xml-dialog',
     templateUrl: './import-xml-dialog.component.html',
-    styleUrls: ['./import-xml-dialog.component.scss']
+    styleUrls: ['./import-xml-dialog.component.scss'],
+    standalone: false
 })
 export class ImportXmlDialogComponent implements OnInit {
     selectXmlFormGroup: UntypedFormGroup;

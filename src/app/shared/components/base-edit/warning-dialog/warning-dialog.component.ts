@@ -7,9 +7,10 @@ export interface WarningDialogData {
 }
 
 @Component({
-  selector: 'app-warning-dialog',
-  templateUrl: './warning-dialog.component.html',
-  styleUrls: ['./warning-dialog.component.scss']
+    selector: 'app-warning-dialog',
+    templateUrl: './warning-dialog.component.html',
+    styleUrls: ['./warning-dialog.component.scss'],
+    standalone: false
 })
 export class WarningDialogComponent implements OnInit {
 
