@@ -2,17 +2,21 @@
 <div mat-dialog-content>
   <form [formGroup]="dialogFormGroup">
     <pre class="hidden">
-     {{ dialogFormGroup.get('eventType').value | json }}
-   </pre>
+      {{ dialogFormGroup.get('eventType').value | json }}
+    </pre>
     <mat-selection-list formControlName="eventType" [multiple]="false">
-      <mat-list-option *ngFor="let companyEvent of availableEventTypes" [value]="companyEvent">
-        {{ translate(companyEvent) }}
-      </mat-list-option>
+      @for (companyEvent of availableEventTypes; track companyEvent) {
+        <mat-list-option [value]="companyEvent">
+          {{ translate(companyEvent) }}
+        </mat-list-option>
+      }
     </mat-selection-list>
-    <mat-form-field appearance="fill" *ngIf="showDescription">
-      <mat-label>Beschreibung</mat-label>
-      <input class="form-control" formControlName="title" matInput>
-    </mat-form-field>
+    @if (showDescription) {
+      <mat-form-field appearance="fill">
+        <mat-label>Beschreibung</mat-label>
+        <input class="form-control" formControlName="title" matInput>
+      </mat-form-field>
+    }
   </form>
 </div>
 <div mat-dialog-actions>

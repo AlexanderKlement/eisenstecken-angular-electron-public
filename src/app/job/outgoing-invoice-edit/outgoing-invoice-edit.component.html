@@ -3,50 +3,52 @@
   <form (ngSubmit)="onSubmit()" [formGroup]="invoiceGroup">
     <div fxLayout="row" fxLayoutAlign="space-around start">
       <div fxFlex="70" formArrayName="descriptive_articles" fxLayout="column" fxLayoutAlign="space-around center">
-        <div *ngFor="let descriptiveArticle of getDescriptiveArticles().controls; let i = index"
-             class="descriptive-article" fxFlexFill>
-          <button type="button" mat-icon-button mat-raised-button (click)="addDescriptiveArticleAt(i)"
-                  class="position-control new-position-btn" title="Neue Position">
-            <mat-icon>add</mat-icon>
-          </button>
-          <button type="button" mat-icon-button mat-raised-button (click)="moveDescriptiveArticleUp(i)"
-                  [disabled]="i === 0"
-                  class="position-control position-up" title="Nach oben schieben">
-            <mat-icon>arrow_upward</mat-icon>
-          </button>
-          <button type="button" mat-icon-button mat-raised-button (click)="moveDescriptiveArticleDown(i)"
-                  [disabled]="i === getDescriptiveArticles().controls.length - 1"
-                  class="position-control position-down" title="Nach unten schieben">
-            <mat-icon>arrow_downward</mat-icon>
-          </button>
-          <div fxLayout="row" fxLayoutAlign="space-between center" [formGroupName]="i">
-            <mat-form-field appearance="fill" fxFlex="80">
-              <mat-label>Position</mat-label>
-              <textarea rows="3" class="form-control" formControlName="description" maxlength="10000"
-                        matInput></textarea>
-            </mat-form-field>
-            <mat-form-field appearance="fill" fxFlex="4">
-              <mat-label>Menge</mat-label>
-              <input class="form-control" type=number formControlName="amount" matInput>
-            </mat-form-field>
-            <mat-form-field appearance="fill" fxFlex="4">
-              <mat-label>Einzelpreis</mat-label>
-              <input class="form-control" type=text formControlName="singlePriceFormatted" (blur)="transformAmount(i)"
-                     matInput>
-            </mat-form-field>
-            <mat-form-field appearance="fill" fxFlex="8">
-              <mat-label>Gesamtpreis</mat-label>
-              <input readonly class="form-control" formControlName="total_price" matInput>
-            </mat-form-field>
-            <div fxFlex="8" fxLayout="row" fxLayoutAlign="space-around center">
-              <button type="button" mat-icon-button mat-raised-button
-                      (click)="removeDescriptiveArticle(i)"
-                      [disabled]="i === 0" class="position-delete">
-                <mat-icon>delete</mat-icon>
-              </button>
+        @for (descriptiveArticle of getDescriptiveArticles().controls; track descriptiveArticle; let i = $index) {
+          <div
+            class="descriptive-article" fxFlexFill>
+            <button type="button" mat-icon-button mat-raised-button (click)="addDescriptiveArticleAt(i)"
+              class="position-control new-position-btn" title="Neue Position">
+              <mat-icon>add</mat-icon>
+            </button>
+            <button type="button" mat-icon-button mat-raised-button (click)="moveDescriptiveArticleUp(i)"
+              [disabled]="i === 0"
+              class="position-control position-up" title="Nach oben schieben">
+              <mat-icon>arrow_upward</mat-icon>
+            </button>
+            <button type="button" mat-icon-button mat-raised-button (click)="moveDescriptiveArticleDown(i)"
+              [disabled]="i === getDescriptiveArticles().controls.length - 1"
+              class="position-control position-down" title="Nach unten schieben">
+              <mat-icon>arrow_downward</mat-icon>
+            </button>
+            <div fxLayout="row" fxLayoutAlign="space-between center" [formGroupName]="i">
+              <mat-form-field appearance="fill" fxFlex="80">
+                <mat-label>Position</mat-label>
+                <textarea rows="3" class="form-control" formControlName="description" maxlength="10000"
+                matInput></textarea>
+              </mat-form-field>
+              <mat-form-field appearance="fill" fxFlex="4">
+                <mat-label>Menge</mat-label>
+                <input class="form-control" type=number formControlName="amount" matInput>
+              </mat-form-field>
+              <mat-form-field appearance="fill" fxFlex="4">
+                <mat-label>Einzelpreis</mat-label>
+                <input class="form-control" type=text formControlName="singlePriceFormatted" (blur)="transformAmount(i)"
+                  matInput>
+              </mat-form-field>
+              <mat-form-field appearance="fill" fxFlex="8">
+                <mat-label>Gesamtpreis</mat-label>
+                <input readonly class="form-control" formControlName="total_price" matInput>
+              </mat-form-field>
+              <div fxFlex="8" fxLayout="row" fxLayoutAlign="space-around center">
+                <button type="button" mat-icon-button mat-raised-button
+                  (click)="removeDescriptiveArticle(i)"
+                  [disabled]="i === 0" class="position-delete">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        }
       </div>
       <div fxFlex="30" fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill>
         <mat-form-field appearance="fill">
@@ -62,36 +64,48 @@
         <mat-form-field appearance="fill">
           <mat-label>Mehrwertsteuer:</mat-label>
           <mat-select formControlName="vat_id">
-            <mat-option *ngFor="let vat of vatOptions$ | async" [value]="vat.id">
-              {{vat.name}}
-            </mat-option>
+            @for (vat of vatOptions$ | async; track vat) {
+              <mat-option [value]="vat.id">
+                {{vat.name}}
+              </mat-option>
+            }
           </mat-select>
         </mat-form-field>
         <mat-checkbox [checked]="company" (change)="companyCheckBoxClicked()">Unternehmen</mat-checkbox>
-        <mat-form-field *ngIf="company" appearance="fill">
-          <mat-label>Firmenbezeichnung</mat-label>
-          <input class="form-control" formControlName="name" matInput>
-        </mat-form-field>
-        <mat-form-field *ngIf="!company" appearance="fill">
-          <mat-label>Name</mat-label>
-          <input class="form-control" formControlName="name" matInput>
-        </mat-form-field>
-        <mat-form-field *ngIf="company" appearance="fill">
-          <mat-label>P. IVA</mat-label>
-          <input class="form-control" formControlName="vat_number" matInput>
-        </mat-form-field>
+        @if (company) {
+          <mat-form-field appearance="fill">
+            <mat-label>Firmenbezeichnung</mat-label>
+            <input class="form-control" formControlName="name" matInput>
+          </mat-form-field>
+        }
+        @if (!company) {
+          <mat-form-field appearance="fill">
+            <mat-label>Name</mat-label>
+            <input class="form-control" formControlName="name" matInput>
+          </mat-form-field>
+        }
+        @if (company) {
+          <mat-form-field appearance="fill">
+            <mat-label>P. IVA</mat-label>
+            <input class="form-control" formControlName="vat_number" matInput>
+          </mat-form-field>
+        }
         <mat-form-field appearance="fill">
           <mat-label>Steuernummer</mat-label>
           <input class="form-control" formControlName="fiscal_code" matInput>
         </mat-form-field>
-        <mat-form-field *ngIf="company" appearance="fill">
-          <mat-label>PEC</mat-label>
-          <input class="form-control" formControlName="pec" matInput>
-        </mat-form-field>
-        <mat-form-field *ngIf="company" appearance="fill">
-          <mat-label>Empfängerkodex</mat-label>
-          <input class="form-control" formControlName="codice_destinatario" matInput>
-        </mat-form-field>
+        @if (company) {
+          <mat-form-field appearance="fill">
+            <mat-label>PEC</mat-label>
+            <input class="form-control" formControlName="pec" matInput>
+          </mat-form-field>
+        }
+        @if (company) {
+          <mat-form-field appearance="fill">
+            <mat-label>Empfängerkodex</mat-label>
+            <input class="form-control" formControlName="codice_destinatario" matInput>
+          </mat-form-field>
+        }
         <app-address-form [address]="getAddressGroup()" fxFlexFill></app-address-form>
         <mat-form-field appearance="fill">
           <mat-label>Zahlungsbedingung:</mat-label>

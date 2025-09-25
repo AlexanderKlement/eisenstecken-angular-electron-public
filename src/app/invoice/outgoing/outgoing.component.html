@@ -1,22 +1,24 @@
 <div fxLayout="row" fxLayoutAlign="end center">
-    <mat-form-field appearance="fill">
-        <mat-label>Jahr</mat-label>
-        <mat-select [(value)]="selectedYear" (valueChange)="this.yearChanged()">
-            <mat-option *ngFor="let year of $year | async" [value]="year">
-                {{year}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Jahr</mat-label>
+    <mat-select [(value)]="selectedYear" (valueChange)="this.yearChanged()">
+      @for (year of $year | async; track year) {
+        <mat-option [value]="year">
+          {{year}}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
 </div>
 <mat-tab-group selectedIndex="1">
-    <mat-tab label="Alle">
-        <app-table-builder [$refresh]="$refresh" [buttons]="buttons" [dataSource]="allOutgoingInvoiceDataSource"></app-table-builder>
-    </mat-tab>
-    <mat-tab label="Unbezahlt">
-        <app-table-builder [$refresh]="$refresh" [buttons]="buttons" [dataSource]="unPaidOutgoingInvoiceDataSource"></app-table-builder>
-    </mat-tab>
-    <mat-tab label="Bezahlt">
-        <app-table-builder [$refresh]="$refresh" [buttons]="buttons" [dataSource]="paidOutgoingInvoiceDataSource"></app-table-builder>
-    </mat-tab>
+  <mat-tab label="Alle">
+    <app-table-builder [$refresh]="$refresh" [buttons]="buttons" [dataSource]="allOutgoingInvoiceDataSource"></app-table-builder>
+  </mat-tab>
+  <mat-tab label="Unbezahlt">
+    <app-table-builder [$refresh]="$refresh" [buttons]="buttons" [dataSource]="unPaidOutgoingInvoiceDataSource"></app-table-builder>
+  </mat-tab>
+  <mat-tab label="Bezahlt">
+    <app-table-builder [$refresh]="$refresh" [buttons]="buttons" [dataSource]="paidOutgoingInvoiceDataSource"></app-table-builder>
+  </mat-tab>
 </mat-tab-group>
 

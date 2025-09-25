@@ -1,27 +1,41 @@
 <div fxLayout="column" fxLayoutAlign="space-around center">
-    <p>Arbeitszeit: {{getWorkedHoursString()}}</p>
-    <p>{{maintenanceString}}</p>
-    <p *ngIf="additionalWorkloadString.length > 0">{{additionalWorkloadString}}</p>
-    <div *ngIf="showJobs">
-        <div *ngFor="let jobList of this.getAllJobs(); let i = index">
-            <div *ngFor="let job of getJobs(i).controls">
-                <div fxLayout="column" fxLayoutAlign="space-around center" *ngIf="showJob(job)">
-                    <h4><strong>{{job.get('name').value}}</strong></h4>
-                    <p>Normal: {{getMinutesStringByJob(job, false)}}</p>
-                    <p>Regie: {{getMinutesStringByJob(job, true)}}</p>
+  <p>Arbeitszeit: {{getWorkedHoursString()}}</p>
+  <p>{{maintenanceString}}</p>
+  @if (additionalWorkloadString.length > 0) {
+    <p>{{additionalWorkloadString}}</p>
+  }
+  @if (showJobs) {
+    <div>
+      @for (jobList of this.getAllJobs(); track jobList; let i = $index) {
+        <div>
+          @for (job of getJobs(i).controls; track job) {
+            <div>
+              @if (showJob(job)) {
+                <div fxLayout="column" fxLayoutAlign="space-around center">
+                  <h4><strong>{{job.get('name').value}}</strong></h4>
+                  <p>Normal: {{getMinutesStringByJob(job, false)}}</p>
+                  <p>Regie: {{getMinutesStringByJob(job, true)}}</p>
                 </div>
+              }
             </div>
+          }
         </div>
+      }
     </div>
-    <p><strong>Essen: {{eatingPlaceName}}</strong></p>
-    <div fxLayout="column" fxLayoutAlign="space-around center">
-        <p><strong>Ausgaben:</strong></p>
-        <p *ngFor="let expense of getExpenses().controls">
-            {{expense.get('name').value}}: {{expense.get('amount').value}} €
-        </p>
-    </div>
-    <div fxLayout="column" fxLayoutAlign="space-around center">
-        <p><strong>Fahrten:</strong></p>
-        <p *ngFor="let driveString of driveStrings">{{driveString}}</p>
-    </div>
+  }
+  <p><strong>Essen: {{eatingPlaceName}}</strong></p>
+  <div fxLayout="column" fxLayoutAlign="space-around center">
+    <p><strong>Ausgaben:</strong></p>
+    @for (expense of getExpenses().controls; track expense) {
+      <p>
+        {{expense.get('name').value}}: {{expense.get('amount').value}} €
+      </p>
+    }
+  </div>
+  <div fxLayout="column" fxLayoutAlign="space-around center">
+    <p><strong>Fahrten:</strong></p>
+    @for (driveString of driveStrings; track driveString) {
+      <p>{{driveString}}</p>
+    }
+  </div>
 </div>

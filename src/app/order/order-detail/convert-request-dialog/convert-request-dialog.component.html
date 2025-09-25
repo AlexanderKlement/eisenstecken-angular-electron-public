@@ -1,13 +1,15 @@
 <h1 mat-dialog-title>Anfragen bestellen</h1>
 <div mat-dialog-content>
   <div fxLayout="column" fxLayoutAlign="space-around center">
-      <mat-selection-list #articles multiple="multiple" (click)="orderedArticleClicked()">
-        <mat-list-option *ngFor="let orderedArticle of orderedArticles$ | async"
-                         value="{{orderedArticle.id}}">
+    <mat-selection-list #articles multiple="multiple" (click)="orderedArticleClicked()">
+      @for (orderedArticle of orderedArticles$ | async; track orderedArticle) {
+        <mat-list-option
+          value="{{orderedArticle.id}}">
           {{orderedArticle.article.name.translation}}
         </mat-list-option>
-      </mat-selection-list>
-    </div>
+      }
+    </mat-selection-list>
+  </div>
 </div>
 <mat-dialog-actions>
   <button mat-button (click)="onCancelClick()">Abbrechen</button>

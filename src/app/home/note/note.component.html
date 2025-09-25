@@ -1,14 +1,18 @@
 <div class="note" fxFlexFill fxLayout="column" fxLayoutAlign="start stretch">
 
   <div fxLayout="column" fxLayoutAlign="space-between center" class="note-list" fxFlex="80">
-    <div class="single-note-container" *ngFor="let note of notes; let last = last" fxFlex="47">
-      <app-single-note (noteDeleted)="deleteNote(note)" [note]="note" fxFlexFill></app-single-note>
-    </div>
+    @for (note of notes; track note; let last = $last) {
+      <div class="single-note-container" fxFlex="47">
+        <app-single-note (noteDeleted)="deleteNote(note)" [note]="note" fxFlexFill></app-single-note>
+      </div>
+    }
   </div>
   <div fxLayout="row" fxLayoutAlign="center center" fxFlex="20">
-    <button *ngIf="addNoteAvailable()" mat-fab (click)="newNoteClicked()" class="new-note-btn" title="Neue Notiz">
-      <mat-icon>add</mat-icon>
-    </button>
+    @if (addNoteAvailable()) {
+      <button mat-fab (click)="newNoteClicked()" class="new-note-btn" title="Neue Notiz">
+        <mat-icon>add</mat-icon>
+      </button>
+    }
   </div>
 </div>
 

@@ -2,12 +2,14 @@
   <mat-tab-group fxFlexFill dynamicHeight="false" class="tab-group tab-left" mat-align-tabs="start">
     <mat-tab label="  Terminkalender" fxFlexFill>
       <div fxLayout="row" fxLayoutAlign="center start" fxFlexFill class="container">
-        <div fxLayout="column" fxLayoutAlign=" stretch" class="calenderside"
-             *ngFor="let calendar of calendars$ | async">
-          <p fxFlexFill>{{calendar.name}}</p>
-          <app-calendar [public]="calendar.open" [calendarId]="calendar.id" fxFlexFill>
-          </app-calendar>
-        </div>
+        @for (calendar of calendars$ | async; track calendar) {
+          <div fxLayout="column" fxLayoutAlign=" stretch" class="calenderside"
+            >
+            <p fxFlexFill>{{calendar.name}}</p>
+            <app-calendar [public]="calendar.open" [calendarId]="calendar.id" fxFlexFill>
+            </app-calendar>
+          </div>
+        }
       </div>
     </mat-tab>
     <mat-tab label="{{eventTabName}}" fxFlexFill>

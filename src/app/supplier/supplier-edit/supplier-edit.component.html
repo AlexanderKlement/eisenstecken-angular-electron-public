@@ -1,61 +1,67 @@
 <app-toolbar [title]="title"></app-toolbar>
 <div class="window-container">
-    <form (ngSubmit)="onSubmit()" [formGroup]="supplierGroup">
-        <div fxLayout="column" fxLayoutAlign="space-around center">
+  <form (ngSubmit)="onSubmit()" [formGroup]="supplierGroup">
+    <div fxLayout="column" fxLayoutAlign="space-around center">
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input class="form-control" formControlName="name" matInput>
+      </mat-form-field>
+      <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="contacts">
+        <h3>Kontakte</h3>
+        @for (contact of getContacts().controls; track contact; let i = $index) {
+          <div [formGroupName]="i" fxLayout="row"
+            fxLayoutAlign="space-around center">
             <mat-form-field appearance="fill">
-                <mat-label>Name</mat-label>
-                <input class="form-control" formControlName="name" matInput>
+              <mat-label>Name</mat-label>
+              <input class="form-control" formControlName="name" matInput>
             </mat-form-field>
-            <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="contacts">
-                <h3>Kontakte</h3>
-                <div *ngFor="let contact of getContacts().controls; let i = index" [formGroupName]="i" fxLayout="row"
-                     fxLayoutAlign="space-around center">
-                    <mat-form-field appearance="fill">
-                        <mat-label>Name</mat-label>
-                        <input class="form-control" formControlName="name" matInput>
-                    </mat-form-field>
-                    <mat-form-field appearance="fill">
-                        <mat-label>Nachname</mat-label>
-                        <input class="form-control" formControlName="lastname" matInput>
-                    </mat-form-field>
-                    <mat-form-field appearance="fill">
-                        <mat-label>Telefon</mat-label>
-                        <input (keypress)="numberOnly($event)" class="form-control" formControlName="tel" matInput>
-                    </mat-form-field>
-                    <mat-form-field appearance="fill">
-                        <mat-label>Mail</mat-label>
-                        <input class="form-control" formControlName="mail" matInput>
-                    </mat-form-field>
-                    <mat-form-field appearance="fill">
-                        <mat-label>Notiz</mat-label>
-                        <input class="form-control" formControlName="note" matInput>
-                    </mat-form-field>
-                    <button type="button" mat-icon-button mat-raised-button (click)="removeContactAt(i)"
-                            class="position-delete">
-                        <mat-icon>delete</mat-icon>
-                    </button>
-                </div>
-                <button type="button" mat-button
-                        (click)="addContact()">
-                    <mat-icon>add</mat-icon>
-                </button>
-            </div>
             <mat-form-field appearance="fill">
-                <mat-label>Ansprechpartner</mat-label>
-                <input class="form-control" formControlName="contact_person" matInput>
+              <mat-label>Nachname</mat-label>
+              <input class="form-control" formControlName="lastname" matInput>
             </mat-form-field>
-            <mat-form-field *ngIf="languageOptions$ | async as languageOptions" appearance="fill">
-                <mat-label>Sprache</mat-label>
-                <mat-select formControlName="language">
-                    <mat-option *ngFor="let language of languageOptions" [value]="language.code">
-                        {{language.name.translation_de}}
-                    </mat-option>
-                </mat-select>
+            <mat-form-field appearance="fill">
+              <mat-label>Telefon</mat-label>
+              <input (keypress)="numberOnly($event)" class="form-control" formControlName="tel" matInput>
             </mat-form-field>
-            <mat-checkbox [checked]="showInOrders" (change)="showInOrdersCheckBoxClicked()">In Bestell-Liste anzeigen
-            </mat-checkbox>
-            <app-address-form [address]="getAddressGroup()" fxFlexFill></app-address-form>
-            <button [disabled]="submitted" mat-raised-button type="submit">Speichern</button>
-        </div>
-    </form>
+            <mat-form-field appearance="fill">
+              <mat-label>Mail</mat-label>
+              <input class="form-control" formControlName="mail" matInput>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Notiz</mat-label>
+              <input class="form-control" formControlName="note" matInput>
+            </mat-form-field>
+            <button type="button" mat-icon-button mat-raised-button (click)="removeContactAt(i)"
+              class="position-delete">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        }
+        <button type="button" mat-button
+          (click)="addContact()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+      <mat-form-field appearance="fill">
+        <mat-label>Ansprechpartner</mat-label>
+        <input class="form-control" formControlName="contact_person" matInput>
+      </mat-form-field>
+      @if (languageOptions$ | async; as languageOptions) {
+        <mat-form-field appearance="fill">
+          <mat-label>Sprache</mat-label>
+          <mat-select formControlName="language">
+            @for (language of languageOptions; track language) {
+              <mat-option [value]="language.code">
+                {{language.name.translation_de}}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
+      <mat-checkbox [checked]="showInOrders" (change)="showInOrdersCheckBoxClicked()">In Bestell-Liste anzeigen
+      </mat-checkbox>
+      <app-address-form [address]="getAddressGroup()" fxFlexFill></app-address-form>
+      <button [disabled]="submitted" mat-raised-button type="submit">Speichern</button>
+    </div>
+  </form>
 </div>

@@ -1,14 +1,18 @@
 <div class="window-container">
-  <mat-toolbar class="{{toolBarColor}}" *ngIf="!loading">
-    <div>
-      <h3>
-        Status: {{this.selectedStatus.text.translation_de}}
-      </h3>
-    </div>
-    <span class="statusbar-spacer"></span>
-    <div>
-      <a *ngFor="let status of jobStatusList | async" (click)="onStatusClicked(status)"
-         mat-button>{{status.text.translation}}</a>
-    </div>
-  </mat-toolbar>
+  @if (!loading) {
+    <mat-toolbar class="{{toolBarColor}}">
+      <div>
+        <h3>
+          Status: {{this.selectedStatus.text.translation_de}}
+        </h3>
+      </div>
+      <span class="statusbar-spacer"></span>
+      <div>
+        @for (status of jobStatusList | async; track status) {
+          <a (click)="onStatusClicked(status)"
+          mat-button>{{status.text.translation}}</a>
+        }
+      </div>
+    </mat-toolbar>
+  }
 </div>

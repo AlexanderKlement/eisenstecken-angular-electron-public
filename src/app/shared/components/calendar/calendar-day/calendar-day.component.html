@@ -1,27 +1,31 @@
 <app-loading [loading]="loading">
-    <mat-card appearance="outlined" class="small-card" [ngClass]="{'weekend': weekend, 'today': today}">
-        <mat-card-content>
-            <div fxLayout="row" fxLayoutAlign="start center">
-                <div fxFlex="20" class="day-title">
-                    <strong>{{titleDayOfTheWeek}}</strong><br>
-                    <strong>{{titleDay}}</strong>
-                </div>
-                <table class="mat-table entries" fxFlex="80">
-                    <tr class="mat-row" *ngFor="let calendarEntry of calendarEntries$ | async"
-                        (click)="onCalendarEntryClicked(calendarEntry.id)">
-                        <td class="mat-cell"
-                            title="Wann">{{getCalendarStartEndTime(calendarEntry)}}<br>
-                            <sub *ngIf="public">{{calendarEntry.user.firstname}}</sub>
-                        </td>
-                        <td class="mat-cell" title="Beschreibung">
-                            <strong>{{calendarEntry.title}}</strong><br>{{ calendarEntry.description }}
-                        </td>
-                    </tr>
-                    <tr class="no-entry">
-                        <td colspan="2" class="no-entry">Kein Eintrag</td>
-                    </tr>
-                </table>
-            </div>
-        </mat-card-content>
-    </mat-card>
+  <mat-card appearance="outlined" class="small-card" [ngClass]="{'weekend': weekend, 'today': today}">
+    <mat-card-content>
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <div fxFlex="20" class="day-title">
+          <strong>{{titleDayOfTheWeek}}</strong><br>
+          <strong>{{titleDay}}</strong>
+        </div>
+        <table class="mat-table entries" fxFlex="80">
+          @for (calendarEntry of calendarEntries$ | async; track calendarEntry) {
+            <tr class="mat-row"
+              (click)="onCalendarEntryClicked(calendarEntry.id)">
+              <td class="mat-cell"
+                title="Wann">{{getCalendarStartEndTime(calendarEntry)}}<br>
+                @if (public) {
+                  <sub>{{calendarEntry.user.firstname}}</sub>
+                }
+              </td>
+              <td class="mat-cell" title="Beschreibung">
+                <strong>{{calendarEntry.title}}</strong><br>{{ calendarEntry.description }}
+              </td>
+            </tr>
+          }
+          <tr class="no-entry">
+            <td colspan="2" class="no-entry">Kein Eintrag</td>
+          </tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </app-loading>

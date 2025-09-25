@@ -22,7 +22,6 @@ export class HomeComponent implements OnInit {
     });
   }
 
-
   showInfoClicked(): void {
     this.dialog.open(InfoDialogComponent, {
       width: (window.innerWidth - 100).toString() + "px",

@@ -1,35 +1,43 @@
 <h1 mat-dialog-title>Allgemeine Informationen</h1>
 <div mat-dialog-content>
-    <mat-tab-group>
-        <mat-tab label="Kontakte">
-            <app-table-builder title="Intern" [dataSource]="userDataSource"></app-table-builder>
-        </mat-tab>
-        <mat-tab label="Preise" *ngIf="userCanViewPrice">
-            <app-table-builder title="Preise" [dataSource]="priceDataSource"></app-table-builder>
-        </mat-tab>
-        <mat-tab label="Technische Daten">
-            <app-table-builder title="Technische Daten" [dataSource]="technicalDataDataSource"></app-table-builder>
-        </mat-tab>
-        <mat-tab label="Zugangsdaten">
-            <app-table-builder title="Zugangsdaten" [dataSource]="credentialDataSource"></app-table-builder>
-        </mat-tab>
-        <mat-tab *ngFor="let infoPage of infoPages$|async" [label]="infoPage.name">
-            <textarea rows="40" readonly class="form-control" matInput>{{infoPage.body}}</textarea>
-        </mat-tab>
-        <mat-tab label="Änderungsprotokoll">
-            <div *ngFor="let singleUpdate of updateList">
-                <h4>
-                    {{singleUpdate.versionName}}
-                </h4>
-                <ul>
-                    <li *ngFor="let change of singleUpdate.changes">
-                        {{change}}
-                    </li>
-                </ul>
-            </div>
-        </mat-tab>
-    </mat-tab-group>
+  <mat-tab-group>
+    <mat-tab label="Kontakte">
+      <app-table-builder title="Intern" [dataSource]="userDataSource"></app-table-builder>
+    </mat-tab>
+    @if (userCanViewPrice) {
+      <mat-tab label="Preise">
+        <app-table-builder title="Preise" [dataSource]="priceDataSource"></app-table-builder>
+      </mat-tab>
+    }
+    <mat-tab label="Technische Daten">
+      <app-table-builder title="Technische Daten" [dataSource]="technicalDataDataSource"></app-table-builder>
+    </mat-tab>
+    <mat-tab label="Zugangsdaten">
+      <app-table-builder title="Zugangsdaten" [dataSource]="credentialDataSource"></app-table-builder>
+    </mat-tab>
+    @for (infoPage of infoPages$|async; track infoPage) {
+      <mat-tab [label]="infoPage.name">
+        <textarea rows="40" readonly class="form-control" matInput>{{infoPage.body}}</textarea>
+      </mat-tab>
+    }
+    <mat-tab label="Änderungsprotokoll">
+      @for (singleUpdate of updateList; track singleUpdate) {
+        <div>
+          <h4>
+            {{singleUpdate.versionName}}
+          </h4>
+          <ul>
+            @for (change of singleUpdate.changes; track change) {
+              <li>
+                {{change}}
+              </li>
+            }
+          </ul>
+        </div>
+      }
+    </mat-tab>
+  </mat-tab-group>
 </div>
 <div mat-dialog-actions>
-    <button mat-raised-button (click)="onCloseClick()">Schließen</button>
+  <button mat-raised-button (click)="onCloseClick()">Schließen</button>
 </div>

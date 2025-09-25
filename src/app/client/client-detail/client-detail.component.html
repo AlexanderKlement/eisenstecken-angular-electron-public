@@ -1,5 +1,9 @@
 <app-toolbar title="Kunde: Details" [buttonList]="buttons"></app-toolbar>
 <div class="window-container">
-  <app-info-builder *ngIf="infoDataSource" [dataSource]="infoDataSource"></app-info-builder>
-  <app-table-builder *ngIf="jobsAvailable" [$refresh]="$refresh" [dataSource]="tableDataSource"></app-table-builder>
+  @if (infoDataSource) {
+    <app-info-builder [dataSource]="infoDataSource"></app-info-builder>
+  }
+  @if (jobsAvailable) {
+    <app-table-builder [$refresh]="$refresh" [dataSource]="tableDataSource"></app-table-builder>
+  }
 </div>

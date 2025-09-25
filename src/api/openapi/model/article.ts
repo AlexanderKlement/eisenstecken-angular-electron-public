@@ -20,6 +20,7 @@ export interface Article {
     description: Text;
     favorite: boolean;
     id: number;
+    last_order_date?: string | null;
     lock: Lock;
     mod_number: string;
     name: Text;

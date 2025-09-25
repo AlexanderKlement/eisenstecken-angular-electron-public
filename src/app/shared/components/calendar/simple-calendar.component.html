@@ -26,14 +26,18 @@
         </mat-form-field>
       </div>
       -->
-      <button *ngIf="createAllowed" mat-icon-button (click)="newMeetingClicked()" class="add-button" title="Neuer Termin">
-        <mat-icon>add</mat-icon>
-      </button>
+      @if (createAllowed) {
+        <button mat-icon-button (click)="newMeetingClicked()" class="add-button" title="Neuer Termin">
+          <mat-icon>add</mat-icon>
+        </button>
+      }
     </div>
   </mat-toolbar>
   <div fxFlex="90" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="5px" class="calendar-days">
-    <app-calendar-day [day]="day" [calendarId]="calendarId" [public]="public"
-                      *ngFor="let day of dayManager.getShownDayArray()">
-    </app-calendar-day>
+    @for (day of dayManager.getShownDayArray(); track day) {
+      <app-calendar-day [day]="day" [calendarId]="calendarId" [public]="public"
+        >
+      </app-calendar-day>
+    }
   </div>
 </div>

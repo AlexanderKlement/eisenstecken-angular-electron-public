@@ -1,140 +1,143 @@
 <mat-tab-group>
-    <mat-tab label="Preise">
-        <form (ngSubmit)="onSubmitPrices()" [formGroup]="priceGroup" class="settings-container">
-            <div fxLayout="column" fxLayoutAlign="space-around center">
-                <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="prices">
-                    <div fxLayout="row" fxLayoutAlign="space-around start"
-                         *ngFor="let price of getPriceFormArray().controls; let i = index"
-                         [formGroupName]="i">
-                        <mat-form-field appearance="fill">
-                            <mat-label>Name</mat-label>
-                            <input class="form-control" formControlName="name" matInput>
-                        </mat-form-field>
-                        <mat-form-field appearance="fill">
-                            <mat-label>Preis</mat-label>
-                            <input class="form-control" formControlName="price" matInput>
-                        </mat-form-field>
-                        <mat-form-field appearance="fill">
-                            <mat-label>Kommentar</mat-label>
-                            <input class="form-control" formControlName="comment" matInput>
-                        </mat-form-field>
-                        <button type="button" mat-fab color="primary" (click)="movePriceUpClicked(i)"
-                                [disabled]="i === 0"
-                                class="position-control position-up up-down-arrow" title="Nach oben schieben">
-                            <mat-icon>arrow_upward</mat-icon>
-                        </button>
-                        <button type="button" mat-fab color="primary" (click)="movePriceDownClicked(i)"
-                                [disabled]="i === getPriceFormArray().controls.length - 1"
-                                class="position-control position-down up-down-arrow" title="Nach unten schieben">
-                            <mat-icon>arrow_downward</mat-icon>
-                        </button>
-                        <button type="button" mat-fab (click)="removePriceAt(i)">
-                            <mat-icon>
-                                delete
-                            </mat-icon>
-                        </button>
-                    </div>
-                </div>
-                <div fxLayout="row" fxLayoutAlign="space-evenly center">
-                    <button type="button" mat-raised-button (click)="addNewPrice()">Neue Zeile</button>
-                    <button [disabled]="submitted" mat-raised-button type="submit">Speichern</button>
-                </div>
+  <mat-tab label="Preise">
+    <form (ngSubmit)="onSubmitPrices()" [formGroup]="priceGroup" class="settings-container">
+      <div fxLayout="column" fxLayoutAlign="space-around center">
+        <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="prices">
+          @for (price of getPriceFormArray().controls; track price; let i = $index) {
+            <div fxLayout="row" fxLayoutAlign="space-around start"
+              [formGroupName]="i">
+              <mat-form-field appearance="fill">
+                <mat-label>Name</mat-label>
+                <input class="form-control" formControlName="name" matInput>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Preis</mat-label>
+                <input class="form-control" formControlName="price" matInput>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Kommentar</mat-label>
+                <input class="form-control" formControlName="comment" matInput>
+              </mat-form-field>
+              <button type="button" mat-fab color="primary" (click)="movePriceUpClicked(i)"
+                [disabled]="i === 0"
+                class="position-control position-up up-down-arrow" title="Nach oben schieben">
+                <mat-icon>arrow_upward</mat-icon>
+              </button>
+              <button type="button" mat-fab color="primary" (click)="movePriceDownClicked(i)"
+                [disabled]="i === getPriceFormArray().controls.length - 1"
+                class="position-control position-down up-down-arrow" title="Nach unten schieben">
+                <mat-icon>arrow_downward</mat-icon>
+              </button>
+              <button type="button" mat-fab (click)="removePriceAt(i)">
+                <mat-icon>
+                  delete
+                </mat-icon>
+              </button>
             </div>
-        </form>
-    </mat-tab>
-    <mat-tab label="Zugangsdaten">
-        <form (ngSubmit)="onSubmitCredentials()" [formGroup]="credentialGroup" class="settings-container">
-            <div fxLayout="column" fxLayoutAlign="space-around center">
-                <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="credentials">
-                    <div fxLayout="row" fxLayoutAlign="space-around start"
-                         *ngFor="let credential of getCredentialFormArray().controls; let i = index"
-                         [formGroupName]="i">
-                        <mat-form-field appearance="fill">
-                            <mat-label>Name</mat-label>
-                            <input class="form-control" formControlName="name" matInput>
-                        </mat-form-field>
-                        <mat-form-field appearance="fill">
-                            <mat-label>Benutzername</mat-label>
-                            <input class="form-control" formControlName="username" matInput>
-                        </mat-form-field>
-                        <mat-form-field appearance="fill">
-                            <mat-label>Password</mat-label>
-                            <input class="form-control" formControlName="password" matInput>
-                        </mat-form-field>
-                        <mat-form-field appearance="fill">
-                            <mat-label>Link/Kommentar</mat-label>
-                            <input class="form-control" formControlName="url" matInput>
-                        </mat-form-field>
-                        <button type="button" mat-fab color="primary" (click)="moveCredentialUpClicked(i)"
-                                [disabled]="i === 0"
-                                class="position-control position-up up-down-arrow" title="Nach oben schieben">
-                            <mat-icon>arrow_upward</mat-icon>
-                        </button>
-                        <button type="button" mat-fab color="primary" (click)="moveCredentialDownClicked(i)"
-                                [disabled]="i === getCredentialFormArray().controls.length - 1"
-                                class="position-control position-down up-down-arrow" title="Nach unten schieben">
-                            <mat-icon>arrow_downward</mat-icon>
-                        </button>
-                        <button type="button" mat-fab (click)="removeCredentialAt(i)">
-                            <mat-icon>
-                                delete
-                            </mat-icon>
-                        </button>
-                    </div>
-                </div>
-                <div fxLayout="row" fxLayoutAlign="space-evenly center">
-                    <button type="button" mat-raised-button (click)="addNewCredential()">Neue Zeile</button>
-                    <button [disabled]="submitted" mat-raised-button type="submit">Speichern</button>
-                </div>
+          }
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-evenly center">
+          <button type="button" mat-raised-button (click)="addNewPrice()">Neue Zeile</button>
+          <button [disabled]="submitted" mat-raised-button type="submit">Speichern</button>
+        </div>
+      </div>
+    </form>
+  </mat-tab>
+  <mat-tab label="Zugangsdaten">
+    <form (ngSubmit)="onSubmitCredentials()" [formGroup]="credentialGroup" class="settings-container">
+      <div fxLayout="column" fxLayoutAlign="space-around center">
+        <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="credentials">
+          @for (credential of getCredentialFormArray().controls; track credential; let i = $index) {
+            <div fxLayout="row" fxLayoutAlign="space-around start"
+              [formGroupName]="i">
+              <mat-form-field appearance="fill">
+                <mat-label>Name</mat-label>
+                <input class="form-control" formControlName="name" matInput>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Benutzername</mat-label>
+                <input class="form-control" formControlName="username" matInput>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Password</mat-label>
+                <input class="form-control" formControlName="password" matInput>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Link/Kommentar</mat-label>
+                <input class="form-control" formControlName="url" matInput>
+              </mat-form-field>
+              <button type="button" mat-fab color="primary" (click)="moveCredentialUpClicked(i)"
+                [disabled]="i === 0"
+                class="position-control position-up up-down-arrow" title="Nach oben schieben">
+                <mat-icon>arrow_upward</mat-icon>
+              </button>
+              <button type="button" mat-fab color="primary" (click)="moveCredentialDownClicked(i)"
+                [disabled]="i === getCredentialFormArray().controls.length - 1"
+                class="position-control position-down up-down-arrow" title="Nach unten schieben">
+                <mat-icon>arrow_downward</mat-icon>
+              </button>
+              <button type="button" mat-fab (click)="removeCredentialAt(i)">
+                <mat-icon>
+                  delete
+                </mat-icon>
+              </button>
             </div>
-        </form>
-    </mat-tab>
-    <mat-tab label="Technische Daten">
-        <form (ngSubmit)="onSubmitTechnicalData()" [formGroup]="technicalDataGroup" class="settings-container">
-            <div fxLayout="column" fxLayoutAlign="space-around center">
-                <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="technicalData">
-                    <div fxLayout="row" fxLayoutAlign="space-around start"
-                         *ngFor="let technicalData of getTechnicalDataFormArray().controls; let i = index"
-                         [formGroupName]="i">
-                        <mat-form-field appearance="fill">
-                            <mat-label>Name</mat-label>
-                            <input class="form-control" formControlName="name" matInput>
-                        </mat-form-field>
-                        <mat-form-field appearance="fill">
-                            <mat-label>Höhe</mat-label>
-                            <input class="form-control" formControlName="height" matInput>
-                        </mat-form-field>
-                        <mat-form-field appearance="fill">
-                            <mat-label>Breite</mat-label>
-                            <input class="form-control" formControlName="width" matInput>
-                        </mat-form-field>
-                        <mat-form-field appearance="fill">
-                            <mat-label>Länge</mat-label>
-                            <input class="form-control" formControlName="length" matInput>
-                        </mat-form-field>
-                        <button type="button" mat-fab color="primary" (click)="moveTechnicalDataUpClicked(i)"
-                                [disabled]="i === 0"
-                                class="position-control position-up up-down-arrow" title="Nach oben schieben">
-                            <mat-icon>arrow_upward</mat-icon>
-                        </button>
-                        <button type="button" mat-fab color="primary"
-                                (click)="moveTechnicalDataDownClicked(i)"
-                                [disabled]="i === getCredentialFormArray().controls.length - 1"
-                                class="position-control position-down up-down-arrow" title="Nach unten schieben">
-                            <mat-icon>arrow_downward</mat-icon>
-                        </button>
-                        <button type="button" mat-fab (click)="removeTechnicalDataAt(i)">
-                            <mat-icon>
-                                delete
-                            </mat-icon>
-                        </button>
-                    </div>
-                </div>
-                <div fxLayout="row" fxLayoutAlign="space-evenly center">
-                    <button type="button" mat-raised-button (click)="addNewTechnicalData()">Neue Zeile</button>
-                    <button [disabled]="submitted" mat-raised-button type="submit">Speichern</button>
-                </div>
+          }
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-evenly center">
+          <button type="button" mat-raised-button (click)="addNewCredential()">Neue Zeile</button>
+          <button [disabled]="submitted" mat-raised-button type="submit">Speichern</button>
+        </div>
+      </div>
+    </form>
+  </mat-tab>
+  <mat-tab label="Technische Daten">
+    <form (ngSubmit)="onSubmitTechnicalData()" [formGroup]="technicalDataGroup" class="settings-container">
+      <div fxLayout="column" fxLayoutAlign="space-around center">
+        <div fxLayout="column" fxLayoutAlign="space-around center" formArrayName="technicalData">
+          @for (technicalData of getTechnicalDataFormArray().controls; track technicalData; let i = $index) {
+            <div fxLayout="row" fxLayoutAlign="space-around start"
+              [formGroupName]="i">
+              <mat-form-field appearance="fill">
+                <mat-label>Name</mat-label>
+                <input class="form-control" formControlName="name" matInput>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Höhe</mat-label>
+                <input class="form-control" formControlName="height" matInput>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Breite</mat-label>
+                <input class="form-control" formControlName="width" matInput>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Länge</mat-label>
+                <input class="form-control" formControlName="length" matInput>
+              </mat-form-field>
+              <button type="button" mat-fab color="primary" (click)="moveTechnicalDataUpClicked(i)"
+                [disabled]="i === 0"
+                class="position-control position-up up-down-arrow" title="Nach oben schieben">
+                <mat-icon>arrow_upward</mat-icon>
+              </button>
+              <button type="button" mat-fab color="primary"
+                (click)="moveTechnicalDataDownClicked(i)"
+                [disabled]="i === getCredentialFormArray().controls.length - 1"
+                class="position-control position-down up-down-arrow" title="Nach unten schieben">
+                <mat-icon>arrow_downward</mat-icon>
+              </button>
+              <button type="button" mat-fab (click)="removeTechnicalDataAt(i)">
+                <mat-icon>
+                  delete
+                </mat-icon>
+              </button>
             </div>
-        </form>
-    </mat-tab>
+          }
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-evenly center">
+          <button type="button" mat-raised-button (click)="addNewTechnicalData()">Neue Zeile</button>
+          <button [disabled]="submitted" mat-raised-button type="submit">Speichern</button>
+        </div>
+      </div>
+    </form>
+  </mat-tab>
 </mat-tab-group>

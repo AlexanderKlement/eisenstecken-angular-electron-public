@@ -1,20 +1,24 @@
 <div class="chat-message-container" [ngClass]="message.own ? 'sent' : 'received'">
-    <mat-card appearance="outlined" class="chat-message" [class.ivan]="whatsapp">
-        <mat-card-header>
-            <mat-icon *ngIf="message.recipient !== null" title="{{message.recipient.firstname}}"
-                      class="private-message">
-                lock
-            </mat-icon>
-            <mat-card-title class="chat-title">
-                {{ message.sender.firstname }}
-                <small>{{ message.timestamp | date:'short'}}</small>
-                <!--<small>{{ message.timestamp | date:'short' : 'UTC+4'}}</small>-->
-            </mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-            <p class="message" *ngFor="let text of message.text | splitTextNewline">
-                {{ text }}
-            </p>
-        </mat-card-content>
-    </mat-card>
+  <mat-card appearance="outlined" class="chat-message" [class.ivan]="whatsapp">
+    <mat-card-header>
+      @if (message.recipient !== null) {
+        <mat-icon title="{{message.recipient.firstname}}"
+          class="private-message">
+          lock
+        </mat-icon>
+      }
+      <mat-card-title class="chat-title">
+        {{ message.sender.firstname }}
+        <small>{{ message.timestamp | date:'short'}}</small>
+        <!--<small>{{ message.timestamp | date:'short' : 'UTC+4'}}</small>-->
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      @for (text of message.text | splitTextNewline; track text) {
+        <p class="message">
+          {{ text }}
+        </p>
+      }
+    </mat-card-content>
+  </mat-card>
 </div>

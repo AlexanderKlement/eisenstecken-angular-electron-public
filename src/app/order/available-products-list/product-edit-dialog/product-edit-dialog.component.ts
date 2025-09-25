@@ -1,9 +1,13 @@
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Observable, Subscription } from "rxjs";
-import { UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
-import { CurrencyPipe, formatNumber, getLocaleCurrencyCode } from "@angular/common";
-import { DefaultService, Unit, Vat,  } from "../../../../api/openapi";
+import {
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators,
+} from "@angular/forms";
+import { CurrencyPipe, getLocaleCurrencyCode } from "@angular/common";
+import { DefaultService, Unit, Vat } from "../../../../api/openapi";
 
 export interface OrderDialogData {
   title: string;
@@ -29,36 +33,34 @@ export interface OrderDialogData {
 }
 
 @Component({
-    selector: 'app-product-edit-dialog',
-    templateUrl: './product-edit-dialog.component.html',
-    styleUrls: ['./product-edit-dialog.component.scss'],
-    standalone: false
+  selector: "app-product-edit-dialog",
+  templateUrl: "./product-edit-dialog.component.html",
+  styleUrls: ["./product-edit-dialog.component.scss"],
+  standalone: false,
 })
 export class ProductEditDialogComponent implements OnInit, OnDestroy {
-
   vatOptions$: Observable<Vat[]>;
   unitOptions$: Observable<Unit[]>;
   productEditGroup: UntypedFormGroup;
   subscription: Subscription;
-  priceSubscription: Subscription;
-  singlePrice = true;
   createMode: boolean;
   blockRequestChange = false;
 
-  constructor(public dialogRef: MatDialogRef<ProductEditDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: OrderDialogData, private api: DefaultService,
-              private currency: CurrencyPipe) {
-  }
+  constructor(
+    public dialogRef: MatDialogRef<ProductEditDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: OrderDialogData,
+    private api: DefaultService,
+    private currency: CurrencyPipe,
+  ) {}
 
   public static roundTo2Decimals(input: number): number {
-    //TODO: move bitch get out the way
+    // TODO: move bitch get out the way
     // -> i guess i was trying to say: move this to a utils class
     return Math.round(input * 100) / 100;
   }
 
   ngOnInit(): void {
     this.subscription = new Subscription();
-    this.priceSubscription = new Subscription();
     this.vatOptions$ = this.api.readVatsVatGet();
     this.unitOptions$ = this.api.readUnitsUnitGet();
     this.blockRequestChange = this.data.blockRequestChange;
@@ -68,7 +70,6 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-    this.priceSubscription.unsubscribe();
   }
 
   onNoClick(): void {
@@ -84,9 +85,17 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
   }
 
   transformAmount(): void {
-    const price = parseFloat(this.productEditGroup.get("priceFormatted").value
-      .replace("€", "").replace(".", "").replace(",", "."));
-    const formattedAmount = this.currency.transform(price, getLocaleCurrencyCode("de_DE"));
+    const price = parseFloat(
+      this.productEditGroup
+        .get("priceFormatted")
+        .value.replace("€", "")
+        .replace(".", "")
+        .replace(",", "."),
+    );
+    const formattedAmount = this.currency.transform(
+      price,
+      getLocaleCurrencyCode("de_DE"),
+    );
     this.productEditGroup.get("price").setValue(price);
     this.productEditGroup.get("priceFormatted").setValue(formattedAmount);
   }
@@ -102,7 +111,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
       discount: this.productEditGroup.get("discount").value,
       // eslint-disable-next-line @typescript-eslint/naming-convention
       unit_id: this.productEditGroup.get("unit_id").value,
-      price: this.singlePrice ? this.productEditGroup.get("price").value : this.calcSinglePrice(),
+      price: this.productEditGroup.get("price").value,
       // eslint-disable-next-line @typescript-eslint/naming-convention
       mod_number: this.productEditGroup.get("mod_number").value,
       // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -124,12 +133,22 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
       description: new UntypedFormControl(this.data.description),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       custom_description: new UntypedFormControl(this.data.custom_description),
-      amount: new UntypedFormControl(this.data.amount, Validators.min(0.0000001)),
+      amount: new UntypedFormControl(
+        this.data.amount,
+        Validators.min(0.0000001),
+      ),
       discount: new UntypedFormControl(this.data.discount, Validators.min(0)),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      unit_id: new UntypedFormControl(this.data.unit_id !== null ? this.data.unit_id : 3),
+      unit_id: new UntypedFormControl(
+        this.data.unit_id !== null ? this.data.unit_id : 3,
+      ),
       price: new UntypedFormControl(this.data.price, Validators.min(0)),
-      priceFormatted: new UntypedFormControl(this.currency.transform(this.data.price, getLocaleCurrencyCode("de_DE"))),
+      priceFormatted: new UntypedFormControl(
+        this.currency.transform(
+          this.data.price,
+          getLocaleCurrencyCode("de_DE"),
+        ),
+      ),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       mod_number: new UntypedFormControl(this.data.mod_number),
       // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -142,51 +161,61 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
       comment: new UntypedFormControl(this.data.comment),
       position: new UntypedFormControl(this.data.position),
     });
-    this.subscription.add(this.productEditGroup.get("amount").valueChanges.subscribe(() => {
-      this.recalculateTotalPrice();
-    }));
-    this.subscription.add(this.productEditGroup.get("discount").valueChanges.subscribe(() => {
-      this.recalculateTotalPrice();
-    }));
-    this.priceSubscription.add(this.productEditGroup.get("price").valueChanges.subscribe(() => {
-      this.recalculateTotalPrice();
-    }));
-    this.subscription.add(this.productEditGroup.get("single_price_insert").valueChanges.subscribe(() => {
-      this.singlePriceInsertChanged();
-    }));
-    this.recalculateTotalPrice();
-  }
-
-  private calcSinglePrice(): number {
-    const price = this.productEditGroup.get("total_price").value / (1 - (this.productEditGroup.get("discount").value / 100));
-    return price / this.productEditGroup.get("amount").value;
+    this.subscription.add(
+      this.productEditGroup.get("price").valueChanges.subscribe(() => {
+        this.updateTotalFromPrice();
+      }),
+    );
+    this.subscription.add(
+      this.productEditGroup.get("amount").valueChanges.subscribe(() => {
+        this.updateTotalFromPrice();
+      }),
+    );
+    this.subscription.add(
+      this.productEditGroup.get("discount").valueChanges.subscribe(() => {
+        this.updateTotalFromPrice();
+      }),
+    );
+    this.subscription.add(
+      this.productEditGroup.get("total_price").valueChanges.subscribe(() => {
+        this.updatePriceFromTotal();
+      }),
+    );
+    this.updateTotalFromPrice();
   }
 
   private calcTotalPrice(): number {
-    const price = this.productEditGroup.get("price").value * this.productEditGroup.get("amount").value;
-    return price * (1 - (this.productEditGroup.get("discount").value / 100));
+    const price =
+      this.productEditGroup.get("price").value *
+      this.productEditGroup.get("amount").value;
+    return price * (1 - this.productEditGroup.get("discount").value / 100);
   }
 
-  private recalculateTotalPrice(): void {
-    if (this.singlePrice) {
-      this.productEditGroup.get("total_price").setValue(ProductEditDialogComponent.roundTo2Decimals(this.calcTotalPrice()));
-    } else {
-      this.productEditGroup.get("price").setValue(ProductEditDialogComponent.roundTo2Decimals(this.calcSinglePrice()));
-    }
+  private updateTotalFromPrice(): void {
+    const total = ProductEditDialogComponent.roundTo2Decimals(
+      this.calcTotalPrice(),
+    );
+    this.productEditGroup
+      .get("total_price")
+      .setValue(total, { emitEvent: false });
   }
 
-  private singlePriceInsertChanged(): void {
-    this.priceSubscription.unsubscribe();
-    if (this.productEditGroup.get("single_price_insert").value) {
-      this.singlePrice = true;
-      this.priceSubscription.add(this.productEditGroup.get("price").valueChanges.subscribe(() => {
-        this.recalculateTotalPrice();
-      }));
-    } else {
-      this.singlePrice = false;
-      this.priceSubscription.add(this.productEditGroup.get("total_price").valueChanges.subscribe(() => {
-        this.recalculateTotalPrice();
-      }));
-    }
+  private updatePriceFromTotal(): void {
+    const amount = this.productEditGroup.get("amount").value || 1;
+    const total = this.productEditGroup.get("total_price").value || 0;
+
+    const price = amount
+      ? ProductEditDialogComponent.roundTo2Decimals(total / amount)
+      : 0;
+
+    this.productEditGroup.get("price").setValue(price, { emitEvent: false });
+
+    const formatted = this.currency.transform(
+      price,
+      getLocaleCurrencyCode("de-DE"),
+    );
+    this.productEditGroup
+      .get("priceFormatted")
+      .setValue(formatted, { emitEvent: false });
   }
 }

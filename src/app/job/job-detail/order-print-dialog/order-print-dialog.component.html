@@ -1,16 +1,18 @@
 <h1 mat-dialog-title>{{data.name | async}} versenden</h1>
 <div mat-dialog-content>
-    <div fxLayout="column" fxLayoutAlign="space-around center">
-        <p>Welche Bestellungen sollen gedruckt werden?</p>
-        <mat-selection-list #orders>
-            <mat-list-option *ngFor="let order of data.orders | async" value="{{order.id}}">
-                {{order.order_from.displayable_name}}
-            </mat-list-option>
-        </mat-selection-list>
-        <br>
+  <div fxLayout="column" fxLayoutAlign="space-around center">
+    <p>Welche Bestellungen sollen gedruckt werden?</p>
+    <mat-selection-list #orders>
+      @for (order of data.orders | async; track order) {
+        <mat-list-option value="{{order.id}}">
+          {{order.order_from.displayable_name}}
+        </mat-list-option>
+      }
+    </mat-selection-list>
+    <br>
     </div>
-</div>
-<mat-dialog-actions>
+  </div>
+  <mat-dialog-actions>
     <button mat-button (click)="onCancelClick()">Abbrechen</button>
     <button mat-button (click)="onSubmitClick()">Ok</button>
-</mat-dialog-actions>
+  </mat-dialog-actions>

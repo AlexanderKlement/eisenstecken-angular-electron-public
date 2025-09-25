@@ -1,40 +1,44 @@
 <app-toolbar [title]="title" [buttonList]="buttons"></app-toolbar>
 <div class="window-container">
-    <mat-tab-group (selectedIndexChange)="selectedTabChanged($event)">
-        <mat-tab label="Arbeitstag">
-            <div fxLayout="column" fxLayoutAlign="space-around center">
-                <mat-form-field appearance="fill">
-                    <mat-label>Arbeitstag</mat-label>
-                    <mat-select (selectionChange)="workDayChanged($event)">
-                        <mat-option *ngFor="let workDay of workDays$ | async" [value]="workDay.id">
-                            {{workDay.date | date}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <app-hours-stepper
-                        [date]="selectedDate" [userId]="userId"
-                                   [showOnlySummary]="showSummaryOnly"
-                                   [workDay$]="workDay$">
-                </app-hours-stepper>
-                <button *ngIf="showSummaryOnly && showWorkDay" mat-raised-button (click)="editWorkDayButtonClicked()">
-                    Bearbeiten
-                </button>
-            </div>
-        </mat-tab>
-        <mat-tab label="Spesen">
-            <app-table-builder [$refresh]="$refresh" [dataSource]="feeDataSource"></app-table-builder>
-        </mat-tab>
-        <mat-tab label="Fahrten">
-            <app-table-builder [$refresh]="$refresh" [dataSource]="journeyDataSource"></app-table-builder>
-        </mat-tab>
-        <mat-tab label="Essen">
-            <app-table-builder [$refresh]="$refresh" [dataSource]="mealDataSource"></app-table-builder>
-        </mat-tab>
-        <mat-tab label="Wartung">
-            <app-table-builder [$refresh]="$refresh" [dataSource]="serviceDataSource"></app-table-builder>
-        </mat-tab>
-        <mat-tab label="Zusätzliche Arbeiten">
-            <app-table-builder [$refresh]="$refresh" [dataSource]="additionalWorkloadDataSource"></app-table-builder>
-        </mat-tab>
-    </mat-tab-group>
+  <mat-tab-group (selectedIndexChange)="selectedTabChanged($event)">
+    <mat-tab label="Arbeitstag">
+      <div fxLayout="column" fxLayoutAlign="space-around center">
+        <mat-form-field appearance="fill">
+          <mat-label>Arbeitstag</mat-label>
+          <mat-select (selectionChange)="workDayChanged($event)">
+            @for (workDay of workDays$ | async; track workDay) {
+              <mat-option [value]="workDay.id">
+                {{workDay.date | date}}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <app-hours-stepper
+          [date]="selectedDate" [userId]="userId"
+          [showOnlySummary]="showSummaryOnly"
+          [workDay$]="workDay$">
+        </app-hours-stepper>
+        @if (showSummaryOnly && showWorkDay) {
+          <button mat-raised-button (click)="editWorkDayButtonClicked()">
+            Bearbeiten
+          </button>
+        }
+      </div>
+    </mat-tab>
+    <mat-tab label="Spesen">
+      <app-table-builder [$refresh]="$refresh" [dataSource]="feeDataSource"></app-table-builder>
+    </mat-tab>
+    <mat-tab label="Fahrten">
+      <app-table-builder [$refresh]="$refresh" [dataSource]="journeyDataSource"></app-table-builder>
+    </mat-tab>
+    <mat-tab label="Essen">
+      <app-table-builder [$refresh]="$refresh" [dataSource]="mealDataSource"></app-table-builder>
+    </mat-tab>
+    <mat-tab label="Wartung">
+      <app-table-builder [$refresh]="$refresh" [dataSource]="serviceDataSource"></app-table-builder>
+    </mat-tab>
+    <mat-tab label="Zusätzliche Arbeiten">
+      <app-table-builder [$refresh]="$refresh" [dataSource]="additionalWorkloadDataSource"></app-table-builder>
+    </mat-tab>
+  </mat-tab-group>
 </div>

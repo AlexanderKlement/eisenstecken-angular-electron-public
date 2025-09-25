@@ -1,12 +1,22 @@
 <app-toolbar [title]="title" [buttonList]="isMainJob ? buttonsMain : buttonsSub"></app-toolbar>
-<app-job-status-bar *ngIf="isMainJob" [jobId]="jobId"></app-job-status-bar>
+@if (isMainJob) {
+  <app-job-status-bar [jobId]="jobId"></app-job-status-bar>
+}
 <div class="window-container">
-    <app-info-builder [dataSource]="infoDataSource"></app-info-builder>
-    <app-table-builder [$refresh]="$refresh" *ngIf="isMainJob" [dataSource]="subJobDataSource" title="Unteraufträge"></app-table-builder>
-    <app-table-builder [$refresh]="$refresh" *ngIf="isMainJob && offersAllowed" [dataSource]="offerDataSource"
-                       title="Angebote"></app-table-builder>
-    <app-table-builder [$refresh]="$refresh" *ngIf="isMainJob && outgoingInvoicesAllowed" [dataSource]="outgoingInvoiceDataSource"
-                       title="Rechnungen"></app-table-builder>
-    <app-table-builder [$refresh]="$refresh" *ngIf="ordersAllowed" [dataSource]="orderDataSource" title="Bestellungen"></app-table-builder>
+  <app-info-builder [dataSource]="infoDataSource"></app-info-builder>
+  @if (isMainJob) {
+    <app-table-builder [$refresh]="$refresh" [dataSource]="subJobDataSource" title="Unteraufträge"></app-table-builder>
+  }
+  @if (isMainJob && offersAllowed) {
+    <app-table-builder [$refresh]="$refresh" [dataSource]="offerDataSource"
+    title="Angebote"></app-table-builder>
+  }
+  @if (isMainJob && outgoingInvoicesAllowed) {
+    <app-table-builder [$refresh]="$refresh" [dataSource]="outgoingInvoiceDataSource"
+    title="Rechnungen"></app-table-builder>
+  }
+  @if (ordersAllowed) {
+    <app-table-builder [$refresh]="$refresh" [dataSource]="orderDataSource" title="Bestellungen"></app-table-builder>
+  }
 </div>
 
