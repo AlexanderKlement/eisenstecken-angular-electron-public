@@ -17,7 +17,6 @@ import { Lock } from './lock';
 export interface Article { 
     categories: Array<Category>;
     deleted: boolean;
-    description: Text;
     favorite: boolean;
     id: number;
     last_order_date?: string | null;

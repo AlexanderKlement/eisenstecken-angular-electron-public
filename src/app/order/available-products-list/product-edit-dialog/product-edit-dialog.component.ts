@@ -12,9 +12,7 @@ import { DefaultService, Unit, Vat } from "../../../../api/openapi";
 export interface OrderDialogData {
   title: string;
   name: string;
-  description: string;
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  custom_description: string;
   amount: number;
   discount: number;
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -104,9 +102,6 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
     return {
       title: this.productEditGroup.get("title").value,
       name: this.productEditGroup.get("name").value,
-      description: this.productEditGroup.get("description").value,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      custom_description: this.productEditGroup.get("custom_description").value,
       amount: this.productEditGroup.get("amount").value,
       discount: this.productEditGroup.get("discount").value,
       // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -130,9 +125,6 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
     this.productEditGroup = new UntypedFormGroup({
       title: new UntypedFormControl(this.data.title),
       name: new UntypedFormControl(this.data.name, Validators.required),
-      description: new UntypedFormControl(this.data.description),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      custom_description: new UntypedFormControl(this.data.custom_description),
       amount: new UntypedFormControl(
         this.data.amount,
         Validators.min(0.0000001),

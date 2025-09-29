@@ -13,7 +13,6 @@ export interface OrderedArticleCreate {
     amount: number;
     article_id: number;
     comment: string;
-    custom_description: string;
     discount: number;
     ordered_unit_id: number;
     position: string;

@@ -14759,13 +14759,21 @@ export class DefaultService extends BaseService {
 
     /**
      * Read Supplier Count
+     * @param showOnlyOrders 
+     * @param countDisabled 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readSupplierCountSupplierCountGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<number>;
-    public readSupplierCountSupplierCountGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<number>>;
-    public readSupplierCountSupplierCountGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<number>>;
-    public readSupplierCountSupplierCountGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public readSupplierCountSupplierCountGet(showOnlyOrders?: boolean, countDisabled?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<number>;
+    public readSupplierCountSupplierCountGet(showOnlyOrders?: boolean, countDisabled?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<number>>;
+    public readSupplierCountSupplierCountGet(showOnlyOrders?: boolean, countDisabled?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<number>>;
+    public readSupplierCountSupplierCountGet(showOnlyOrders?: boolean, countDisabled?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>showOnlyOrders, 'show_only_orders');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>countDisabled, 'count_disabled');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -14798,6 +14806,7 @@ export class DefaultService extends BaseService {
         return this.httpClient.request<number>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

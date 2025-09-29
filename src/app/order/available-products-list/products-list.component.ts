@@ -50,7 +50,6 @@ export class ProductsListComponent implements OnInit, OnDestroy {
         const dialogData = ProductsListComponent.createEmptyDialogData(title, orderedArticle.article);
         dialogData.amount = orderedArticle.amount;
         dialogData.discount = orderedArticle.discount;
-        dialogData.custom_description = orderedArticle.custom_description;
         dialogData.price = orderedArticle.price;
         dialogData.unit_id = orderedArticle.ordered_unit.id;
         dialogData.vat_id = vat.id;
@@ -80,10 +79,6 @@ export class ProductsListComponent implements OnInit, OnDestroy {
       // eslint-disable-next-line @typescript-eslint/naming-convention
       name_it: dialogData.name,
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      description_de: dialogData.custom_description,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      description_it: dialogData.custom_description,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       vat_id: dialogData.vat_id,
       // eslint-disable-next-line @typescript-eslint/naming-convention
       category_ids: [],
@@ -96,8 +91,6 @@ export class ProductsListComponent implements OnInit, OnDestroy {
       discount: dialogData.discount,
       // eslint-disable-next-line @typescript-eslint/naming-convention
       vat_id: dialogData.vat_id,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      custom_description: dialogData.custom_description,
       // eslint-disable-next-line @typescript-eslint/naming-convention
       article_id: articleId,
       // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -121,10 +114,6 @@ export class ProductsListComponent implements OnInit, OnDestroy {
       // eslint-disable-next-line @typescript-eslint/naming-convention
       name_it: dialogData.name,
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      description_de: dialogData.custom_description,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      description_it: dialogData.custom_description,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       vat_id: dialogData.vat_id,
       // eslint-disable-next-line @typescript-eslint/naming-convention
       category_ids: [],
@@ -139,10 +128,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
         title,
         amount: 0,
         discount: 0,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        custom_description: "",
         name: "",
-        description: "",
         price: 0.0,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         mod_number: "",
@@ -162,10 +148,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
       title,
       amount: 0,
       discount: 0,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      custom_description: article.description.translation,
       name: article.name.translation,
-      description: article.description.translation,
       price: article.price,
       // eslint-disable-next-line @typescript-eslint/naming-convention
       mod_number: article.mod_number,

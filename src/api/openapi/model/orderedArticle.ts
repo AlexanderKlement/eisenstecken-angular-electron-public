@@ -15,7 +15,6 @@ export interface OrderedArticle {
     amount: number;
     article: Article;
     comment: string;
-    custom_description: string;
     discount: number;
     id: number;
     ordered_unit: Unit;

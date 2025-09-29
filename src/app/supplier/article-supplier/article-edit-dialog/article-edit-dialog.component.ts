@@ -56,10 +56,6 @@ export class ArticleEditDialogComponent implements OnInit {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         name_it: this.articleEditGroup.get("name").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        description_de: this.articleEditGroup.get("description").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        description_it: this.articleEditGroup.get("description").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         vat_id: this.articleEditGroup.get("vat_id").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         category_ids: [],
@@ -81,10 +77,6 @@ export class ArticleEditDialogComponent implements OnInit {
         name_de: this.articleEditGroup.get("name").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         name_it: this.articleEditGroup.get("name").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        description_de: this.articleEditGroup.get("description").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        description_it: this.articleEditGroup.get("description").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         vat_id: this.articleEditGroup.get("vat_id").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -121,7 +113,6 @@ export class ArticleEditDialogComponent implements OnInit {
   private initArticleEditGroup() {
     this.articleEditGroup = new UntypedFormGroup({
       name: new UntypedFormControl(""),
-      description: new UntypedFormControl(""),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       unit_id: new UntypedFormControl(3),
       price: new UntypedFormControl(0),
@@ -136,7 +127,6 @@ export class ArticleEditDialogComponent implements OnInit {
   private fillArticleEditGroup() {
     this.api.readArticleArticleArticleIdGet(this.data.id).pipe(first()).subscribe((article => {
       this.articleEditGroup.get("name").setValue(article.name.translation);
-      this.articleEditGroup.get("description").setValue(article.description.translation);
       this.articleEditGroup.get("unit_id").setValue(article.unit.id);
       this.articleEditGroup.get("price").setValue(article.price.toFixed(2));
       this.articleEditGroup.get("mod_number").setValue(article.mod_number);

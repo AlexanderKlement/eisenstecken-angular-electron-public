@@ -129,8 +129,6 @@ export class OrderDetailComponent implements OnInit {
               values: {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 "article.name.translation_de": dataSource.article.name.translation_de,
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                custom_description: dataSource.custom_description,
                 position: dataSource.position,
                 amount: dataSource.amount,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -148,7 +146,6 @@ export class OrderDetailComponent implements OnInit {
       },
       [
         { name: "article.name.translation_de", headerName: "Name" },
-        { name: "custom_description", headerName: "Beschreibung" },
         { name: "position", headerName: "Position" },
         { name: "amount", headerName: "Menge" },
         { name: "ordered_unit.name.translation_de", headerName: "Einheit" },

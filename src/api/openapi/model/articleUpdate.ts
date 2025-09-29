@@ -10,8 +10,6 @@
 
 
 export interface ArticleUpdate { 
-    description_de: string;
-    description_it: string;
     favorite?: boolean | null;
     mod_number: string;
     name_de: string;

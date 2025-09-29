@@ -29,7 +29,6 @@ export class ArticleSupplierComponent implements OnInit {
 
   columns: Column<Article>[] = [
     { name: "name", headerName: "Name" },
-    { name: "description", headerName: "Beschreibung" },
     { name: "unit", headerName: "Einheit" },
     { name: "price", headerName: "Preis" },
     // {name: "vat", headerName: "MwSt."},
@@ -51,7 +50,6 @@ export class ArticleSupplierComponent implements OnInit {
       rows.push({
         values: {
           name: dataSource.name.translation,
-          description: dataSource.description.translation,
           unit: dataSource.unit.name.translation,
           price: dataSource.price.toFixed(2).replace(".", ",") + " €",
           // vat: dataSource.vat.name,
