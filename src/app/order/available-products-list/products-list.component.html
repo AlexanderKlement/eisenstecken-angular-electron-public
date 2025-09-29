@@ -25,7 +25,7 @@
               <mat-icon>star_border</mat-icon>
             </button>
           }
-          <p matTooltip="{{article.description.translation}}"
+          <p matTooltip="{{article.name.translation}}"
             class="article-name"
           [innerHTML]="search.value.length ? (article.name.translation|slice:0:105|boldSpan:search.value) : (article.name.translation|slice:0:105)"></p>
           <button mat-button mat-icon-button (click)="copyButtonClicked(article)" title="Kopieren und hinzufügen">

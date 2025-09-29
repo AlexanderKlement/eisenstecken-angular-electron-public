@@ -17,6 +17,9 @@ mat-form-field {
     width: 100%;
     text-align: left;
     cursor: pointer;
+    text-wrap: wrap;
+    line-clamp: 2;
+    text-overflow: ellipsis;
   }
 
   &:hover {
@@ -46,10 +49,8 @@ mat-form-field {
 }
 
 .description {
-
   textarea {
     font-size: 12px;
     resize: none;
   }
-
 }
