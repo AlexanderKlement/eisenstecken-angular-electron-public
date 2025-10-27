@@ -8,7 +8,6 @@
  * Do not edit the class manually.
  */
 import { Category } from './category';
-import { Vat } from './vat';
 import { Text } from './text';
 import { Unit } from './unit';
 import { Lock } from './lock';
@@ -25,6 +24,5 @@ export interface Article {
     name: Text;
     price: number;
     unit: Unit;
-    vat: Vat;
 }
 

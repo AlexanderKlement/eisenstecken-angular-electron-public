@@ -15,12 +15,10 @@ export interface OrderedArticle {
     amount: number;
     article: Article;
     comment: string;
-    discount: number;
     id: number;
     ordered_unit: Unit;
     position: string;
     price: number;
     request: boolean;
-    vat: number;
 }
 

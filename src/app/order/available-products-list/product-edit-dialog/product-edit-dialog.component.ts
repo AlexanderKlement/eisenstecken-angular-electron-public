@@ -7,21 +7,18 @@ import {
   Validators,
 } from "@angular/forms";
 import { CurrencyPipe, getLocaleCurrencyCode } from "@angular/common";
-import { DefaultService, Unit, Vat } from "../../../../api/openapi";
+import { DefaultService, Unit } from "../../../../api/openapi";
 
 export interface OrderDialogData {
   title: string;
   name: string;
   // eslint-disable-next-line @typescript-eslint/naming-convention
   amount: number;
-  discount: number;
   // eslint-disable-next-line @typescript-eslint/naming-convention
   unit_id?: number;
   price: number;
   // eslint-disable-next-line @typescript-eslint/naming-convention
   mod_number: string;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  vat_id: number;
   request: boolean;
   comment: string;
   position: string;
@@ -37,7 +34,6 @@ export interface OrderDialogData {
   standalone: false,
 })
 export class ProductEditDialogComponent implements OnInit, OnDestroy {
-  vatOptions$: Observable<Vat[]>;
   unitOptions$: Observable<Unit[]>;
   productEditGroup: UntypedFormGroup;
   subscription: Subscription;
@@ -59,7 +55,6 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscription = new Subscription();
-    this.vatOptions$ = this.api.readVatsVatGet();
     this.unitOptions$ = this.api.readUnitsUnitGet();
     this.blockRequestChange = this.data.blockRequestChange;
     this.initProductEditGroup();
@@ -103,14 +98,11 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
       title: this.productEditGroup.get("title").value,
       name: this.productEditGroup.get("name").value,
       amount: this.productEditGroup.get("amount").value,
-      discount: this.productEditGroup.get("discount").value,
       // eslint-disable-next-line @typescript-eslint/naming-convention
       unit_id: this.productEditGroup.get("unit_id").value,
       price: this.productEditGroup.get("price").value,
       // eslint-disable-next-line @typescript-eslint/naming-convention
       mod_number: this.productEditGroup.get("mod_number").value,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      vat_id: this.productEditGroup.get("vat_id").value,
       request: this.productEditGroup.get("request").value,
       comment: this.productEditGroup.get("comment").value,
       position: this.productEditGroup.get("position").value,
@@ -129,7 +121,6 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
         this.data.amount,
         Validators.min(0.0000001),
       ),
-      discount: new UntypedFormControl(this.data.discount, Validators.min(0)),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       unit_id: new UntypedFormControl(
         this.data.unit_id !== null ? this.data.unit_id : 3,
@@ -143,8 +134,6 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
       ),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       mod_number: new UntypedFormControl(this.data.mod_number),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      vat_id: new UntypedFormControl(this.data.vat_id),
       request: new UntypedFormControl(this.data.request),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       total_price: new UntypedFormControl(0),
@@ -164,11 +153,6 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
       }),
     );
     this.subscription.add(
-      this.productEditGroup.get("discount").valueChanges.subscribe(() => {
-        this.updateTotalFromPrice();
-      }),
-    );
-    this.subscription.add(
       this.productEditGroup.get("total_price").valueChanges.subscribe(() => {
         this.updatePriceFromTotal();
       }),
@@ -180,7 +164,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
     const price =
       this.productEditGroup.get("price").value *
       this.productEditGroup.get("amount").value;
-    return price * (1 - this.productEditGroup.get("discount").value / 100);
+    return price;
   }
 
   private updateTotalFromPrice(): void {

@@ -28,6 +28,7 @@ export interface Supplier {
     mail2: string;
     name: string;
     send_mail: boolean;
+    send_order_to: string | null;
     show_in_orders: boolean;
     tel1: string;
     tel2: string;

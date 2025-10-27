@@ -13,11 +13,9 @@ export interface OrderedArticleCreate {
     amount: number;
     article_id: number;
     comment: string;
-    discount: number;
     ordered_unit_id: number;
     position: string;
     price: number;
     request: boolean;
-    vat_id: number;
 }
 

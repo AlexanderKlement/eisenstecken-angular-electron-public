@@ -20,6 +20,7 @@ export interface SupplierCreate {
     mail1: string;
     mail2: string;
     name: string;
+    send_order_to: string | null;
     show_in_orders: boolean;
     tel1: string;
     tel2: string;

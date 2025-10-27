@@ -24,29 +24,17 @@
       </mat-form-field>
 
     </div>
-    <div fxLayout="row" fxLayoutAlign="space-between start">
-      <mat-form-field appearance="fill">
-        <mat-label>Anfrage</mat-label>
-        <mat-select formControlName="request" [disabled]="blockRequestChange">
-          <mat-option [value]="true">
-            Ja
-          </mat-option>
-          <mat-option [value]="false">
-            Nein
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Mehrwertsteuer</mat-label>
-        <mat-select formControlName="vat_id">
-          @for (vat of vatOptions$ | async; track vat) {
-          <mat-option [value]="vat.id">
-            {{vat.name}}
-          </mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-    </div>
+    <mat-form-field appearance="fill">
+      <mat-label>Anfrage</mat-label>
+      <mat-select formControlName="request" [disabled]="blockRequestChange">
+        <mat-option [value]="true">
+          Ja
+        </mat-option>
+        <mat-option [value]="false">
+          Nein
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
     <div fxLayout="row" fxLayoutAlign="space-between start">
       <mat-form-field appearance="fill">
         <mat-label>Menge</mat-label>
@@ -63,16 +51,10 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <div fxLayout="row" fxLayoutAlign="space-between start">
-      <mat-form-field appearance="fill">
-        <mat-label>Preis</mat-label>
-        <input matInput type=text formControlName="priceFormatted" (blur)="transformAmount()">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Rabatt</mat-label>
-        <input matInput type=number formControlName="discount">
-      </mat-form-field>
-    </div>
+    <mat-form-field appearance="fill">
+      <mat-label>Preis</mat-label>
+      <input matInput type=text formControlName="priceFormatted" (blur)="transformAmount()">
+    </mat-form-field>
     <div fxLayout="row" fxLayoutAlign="space-between start">
       <div fxFlex="70">
         <mat-form-field appearance="fill">

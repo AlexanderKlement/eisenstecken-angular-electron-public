@@ -18,6 +18,5 @@ export interface ArticleCreate {
     price: number;
     supplier_id?: number | null;
     unit_id: number;
-    vat_id: number;
 }
 

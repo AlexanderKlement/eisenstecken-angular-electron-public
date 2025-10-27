@@ -17,6 +17,5 @@ export interface ArticleUpdateFull {
     name_it: string;
     price: number;
     unit_id: number;
-    vat_id: number;
 }
 

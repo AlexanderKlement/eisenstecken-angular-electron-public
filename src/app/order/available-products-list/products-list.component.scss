@@ -17,9 +17,9 @@ mat-form-field {
     width: 100%;
     text-align: left;
     cursor: pointer;
-    text-wrap: wrap;
     line-clamp: 2;
-    text-overflow: ellipsis;
+    line-height: 1.2rem;
+    text-wrap: wrap;
   }
 
   &:hover {
