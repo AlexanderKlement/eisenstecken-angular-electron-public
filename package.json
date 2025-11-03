@@ -48,6 +48,7 @@
     "generate": "openapi-generator-cli generate -g typescript-angular -i https://api.eisenstecken.kivi.bz.it/openapi.yaml -o src/api/openapi --additional-properties=supportsES6=true,withSeparateModelsAndApi=true,ngVersion=14.3.0"
   },
   "dependencies": {
+    "@angular-eslint/schematics": "20.5.1",
     "@angular/animations": "20.2.0",
     "@angular/cdk": "20.2.0",
     "@angular/common": "20.2.0",
