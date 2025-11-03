@@ -14,8 +14,7 @@ export class RedirectComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.navigation.removeLastUrl();
-        this.router.navigateByUrl("/mobile/hours", {replaceUrl: true});
+      this.navigation.replaceCurrentWith("/mobile/hours");
     }
 
 }

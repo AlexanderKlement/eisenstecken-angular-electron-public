@@ -53,8 +53,7 @@ export class RecalculationDetailComponent implements OnInit {
         if (recalculation === undefined || recalculation === null) {
           this.authService.currentUserHasRight("recalculations:create").pipe(first()).subscribe(allowed => {
             if (allowed) {
-              this.navigation.removeLastUrl();
-              this.router.navigateByUrl("recalculation/edit/new/" + this.jobId.toString(), { replaceUrl: true });
+              this.navigation.replaceCurrentWith("recalculation/edit/new/" + this.jobId.toString());
             } else {
               this.snackBar.open("Sie sind nicht berechtigt Nachkalkulationen zu erstellen!"
                 , "Ok", {

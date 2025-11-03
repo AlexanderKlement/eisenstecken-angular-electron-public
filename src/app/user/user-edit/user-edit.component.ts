@@ -244,8 +244,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
     this.id = user.id;
     this.navigationTarget = "user/edit/" + user.id.toString();
     this.userRights = user.rights;
-    this.navigation.removeLastUrl();
-    this.router.navigateByUrl(this.navigationTarget, { replaceUrl: true });
+    this.navigation.replaceCurrentWith(this.navigationTarget);
     this.snackBar.open("Speichern erfolgreich!", "Ok", {
       duration: 3000,
     });

@@ -158,13 +158,9 @@ export class SupplierEditComponent
   createUpdateSuccess(supplier: Supplier): void {
     this.id = supplier.id;
     if (this.createMode) {
-      this.navigation.removeLastUrl();
-      this.router.navigateByUrl("supplier", { replaceUrl: true });
+      this.navigation.replaceCurrentWith("supplier");
     } else {
-      this.navigation.removeLastUrl();
-      this.router.navigateByUrl("supplier/" + supplier.id.toString(), {
-        replaceUrl: true,
-      });
+      this.navigation.replaceCurrentWith("supplier/" + supplier.id.toString());
     }
   }
 

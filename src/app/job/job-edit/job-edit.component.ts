@@ -137,8 +137,7 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
     if (redirectMain) {
       job.id = this.mainJobId;
     }
-    this.navigation.removeLastUrl();
-    this.router.navigateByUrl("job/" + job.id.toString(), { replaceUrl: true });
+    this.navigation.replaceCurrentWith("job/" + job.id.toString());
   }
 
   observableReady(): void {

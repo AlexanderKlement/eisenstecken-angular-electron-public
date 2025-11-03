@@ -271,8 +271,7 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
       };
       this.api.createRecalculationRecalculationJobIdPost(this.jobId, recalculationCreate).pipe(first()).subscribe(recalculation => {
         this.file.open(recalculation.pdf);
-        this.navigation.removeLastUrl();
-        this.router.navigateByUrl("recalculation/" + this.jobId, { replaceUrl: true });
+        this.navigation.replaceCurrentWith("recalculation/" + this.jobId);
       });
     } else {
       const recalculationUpdate: RecalculationUpdate = {
@@ -287,8 +286,7 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
       };
       this.api.updateRecalculationRecalculationJobIdPut(this.jobId, recalculationUpdate).pipe(first()).subscribe(recalculation => {
         this.file.open(recalculation.pdf);
-        this.navigation.removeLastUrl();
-        this.router.navigateByUrl("recalculation/" + this.jobId, { replaceUrl: true });
+        this.navigation.replaceCurrentWith("recalculation/" + this.jobId);
       });
     }
   }

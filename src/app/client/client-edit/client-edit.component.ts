@@ -175,8 +175,7 @@ export class ClientEditComponent extends BaseEditComponent<Client> implements On
 
   createUpdateSuccess(client: Client): void {
     this.id = client.id;
-    this.navigation.removeLastUrl();
-    this.router.navigateByUrl("client/" + this.id.toString(), { replaceUrl: true });
+    this.navigation.replaceCurrentWith("client/" + this.id.toString());
   }
 
   companyCheckBoxClicked(): void {

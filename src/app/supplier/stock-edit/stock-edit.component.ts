@@ -78,11 +78,9 @@ export class StockEditComponent extends BaseEditComponent<Stock> implements OnIn
   createUpdateSuccess(stock: Stock): void {
     this.id = stock.id;
     if (this.createMode) {
-      this.navigation.removeLastUrl();
-      this.router.navigateByUrl('supplier', { replaceUrl: true });
+      this.navigation.replaceCurrentWith(`supplier`);
     } else {
-      this.navigation.removeLastUrl();
-      this.router.navigateByUrl('stock/' + stock.id.toString(), { replaceUrl: true });
+      this.navigation.replaceCurrentWith('stock/' + stock.id.toString());
     }
   }
 

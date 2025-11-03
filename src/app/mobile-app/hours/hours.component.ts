@@ -1,15 +1,15 @@
-import { Component, HostListener, OnInit } from "@angular/core";
-import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
-import { Observable, Subject, Subscriber } from "rxjs";
-import { NavigationService } from "../../shared/services/navigation.service";
-import { first } from "rxjs/operators";
-import { DefaultService, WorkDay } from "../../../api/openapi";
+import { Component, HostListener, OnInit } from '@angular/core';
+import { CustomButton } from '../../shared/components/toolbar/toolbar.component';
+import { Observable, Subject, Subscriber } from 'rxjs';
+import { NavigationService } from '../../shared/services/navigation.service';
+import { first } from 'rxjs/operators';
+import { DefaultService, WorkDay } from '../../../api/openapi';
 
 @Component({
-    selector: 'app-hours',
-    templateUrl: './hours.component.html',
-    styleUrls: ['./hours.component.scss'],
-    standalone: false
+  selector: 'app-hours',
+  templateUrl: './hours.component.html',
+  styleUrls: ['./hours.component.scss'],
+  standalone: false,
 })
 export class HoursComponent implements OnInit {
 
@@ -22,15 +22,6 @@ export class HoursComponent implements OnInit {
   constructor(private navigation: NavigationService, private api: DefaultService) {
   }
 
-  /*
-  @HostListener('window:popstate', ['$event'])
-  onPopState(event) {
-      console.log('CustomBackEvent');
-      event.preventDefault();
-      this.stepBackSubject$.next();
-  }
-
-   */
 
   ngOnInit(): void {
     this.workDay$ = new Subject<WorkDay>();
@@ -38,7 +29,7 @@ export class HoursComponent implements OnInit {
       if (workDay) {
         this.todaysWorkDayFinished = true;
       }
-      console.log("HoursComponent: Downloading Subject", workDay);
+      console.log('HoursComponent: Downloading Subject', workDay);
       this.workDay$.next(workDay);
       this.loading = false;
     });

@@ -136,8 +136,7 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
       this.api.createDeliveryNoteDeliveryNotePost(deliveryNoteCreate).pipe(first()).subscribe(deliveryNote => {
         this.submitted = false;
         this.file.open(deliveryNote.pdf);
-        this.navigation.removeLastUrl();
-        this.router.navigateByUrl("delivery_note", { replaceUrl: true });
+        this.navigation.replaceCurrentWith("delivery_note");
       }, (err) => {
         this.createUpdateError(err);
       }, () => {
@@ -167,8 +166,7 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
       this.api.updateDeliveryNoteDeliveryNoteDeliveryNoteIdPut(this.id, deliveryNoteUpdate).pipe(first()).subscribe(deliveryNote => {
         this.submitted = false;
         this.file.open(deliveryNote.pdf);
-        this.navigation.removeLastUrl();
-        this.router.navigateByUrl("delivery_note", { replaceUrl: true });
+        this.navigation.replaceCurrentWith("delivery_note");
       }, (err) => {
         this.createUpdateError(err);
       }, () => {

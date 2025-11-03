@@ -328,13 +328,11 @@ export class HoursStepperComponent implements OnInit {
     if (this.date !== undefined && this.userId !== undefined) {
       this.api.createWorkDayWorkDayUserIdPost(this.userId, formatDateTransport(this.date.toDateString()), workDayCreate)
         .pipe(first()).subscribe(() => {
-        this.navigation.removeLastUrl();
-        this.router.navigateByUrl("/employee/redirect/" + this.userId.toString(), { replaceUrl: true });
+        this.navigation.replaceCurrentWith("/employee/redirect/" + this.userId.toString());
       });
     } else {
       this.api.createWorkDayOwnWorkDayOwnPost(workDayCreate).pipe(first()).subscribe(() => {
-        this.navigation.removeLastUrl();
-        this.router.navigateByUrl("/mobile/hours/redirect", { replaceUrl: true });
+        this.navigation.replaceCurrentWith("/mobile/hours/redirect");
       });
     }
   }
