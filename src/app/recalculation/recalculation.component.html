@@ -1,2 +1,14 @@
 <app-toolbar [buttonList]="buttons" title="Nachkalkulationen"></app-toolbar>
+<div fxLayout="row" fxLayoutAlign="end center">
+  <mat-form-field appearance="fill">
+    <mat-label>Jahr</mat-label>
+    <mat-select [(value)]="selectedYear" (valueChange)="this.yearChanged()">
+      @for (year of $year | async; track year) {
+        <mat-option [value]="year">
+          {{year}}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</div>
 <app-table-builder [$refresh]="$refresh" title="Aufträge: Angenommen und Fertig" [dataSource]="jobDataSource"></app-table-builder>

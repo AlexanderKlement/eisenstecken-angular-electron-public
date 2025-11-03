@@ -1,18 +1,18 @@
 import { Component, ComponentRef, OnInit } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
 import { ActivatedRoute, Router } from "@angular/router";
-import { concat, merge, Observable, Subscriber } from "rxjs";
+import { Observable, Subscriber } from "rxjs";
 import { CustomButton } from "../shared/components/toolbar/toolbar.component";
 import { DefaultService, Job } from "../../api/openapi";
+import moment from "moment";
 
 @Component({
-    selector: 'app-recalculation',
-    templateUrl: './recalculation.component.html',
-    styleUrls: ['./recalculation.component.scss'],
-    standalone: false
+  selector: "app-recalculation",
+  templateUrl: "./recalculation.component.html",
+  styleUrls: ["./recalculation.component.scss"],
+  standalone: false,
 })
 export class RecalculationComponent implements OnInit {
-
   jobDataSource: TableDataSource<Job>;
   buttons: CustomButton[] = [
     {
@@ -24,21 +24,25 @@ export class RecalculationComponent implements OnInit {
   ];
 
   public $refresh: Observable<void>;
+  public $year: Observable<number[]>;
   private $refreshSubscriber: Subscriber<void>;
+  public selectedYear = moment().year();
 
-
-  constructor(private api: DefaultService, private router: Router) {
-  }
+  constructor(
+    private api: DefaultService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.initJobDataSource();
     this.initRefreshObservables();
+    this.$year = this.api.readAvailableYearsJobYearGet();
   }
 
   initRefreshObservables(): void {
-    this.$refresh = new Observable<void>((subscriber => {
+    this.$refresh = new Observable<void>((subscriber) => {
       this.$refreshSubscriber = subscriber;
-    }));
+    });
   }
 
   onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
@@ -49,22 +53,31 @@ export class RecalculationComponent implements OnInit {
     this.jobDataSource = new TableDataSource(
       this.api,
       (api, filter, sortDirection, skip, limit) =>
-        api.readJobsJobGet(skip, limit, filter, undefined, "JOBSTATUS_ACCEPTED, JOBSTATUS_COMPLETED", true),
+        api.readJobsJobGet(
+          skip,
+          limit,
+          filter,
+          undefined,
+          "JOBSTATUS_ACCEPTED, JOBSTATUS_COMPLETED",
+          true,
+          this.selectedYear,
+        ),
       (dataSourceClasses) => {
         const rows = [];
         dataSourceClasses.forEach((dataSource) => {
-          rows.push(
-            {
-              values: {
-                name: dataSource.name,
-                code: dataSource.code,
-                "client.name": dataSource.client.fullname,
-                "responsible.fullname": dataSource.responsible.fullname,
-              },
-              route: () => {
-                this.router.navigateByUrl("/recalculation/" + dataSource.id.toString());
-              },
-            });
+          rows.push({
+            values: {
+              name: dataSource.name,
+              code: dataSource.code,
+              "client.name": dataSource.client.fullname,
+              "responsible.fullname": dataSource.responsible.fullname,
+            },
+            route: () => {
+              this.router.navigateByUrl(
+                "/recalculation/" + dataSource.id.toString(),
+              );
+            },
+          });
         });
         return rows;
       },
@@ -79,4 +92,7 @@ export class RecalculationComponent implements OnInit {
     this.jobDataSource.loadData();
   }
 
+  yearChanged() {
+    this.initJobDataSource();
+  }
 }
