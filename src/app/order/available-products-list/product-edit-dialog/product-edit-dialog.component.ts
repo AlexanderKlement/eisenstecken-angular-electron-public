@@ -8,6 +8,7 @@ import {
 } from "@angular/forms";
 import { CurrencyPipe, getLocaleCurrencyCode } from "@angular/common";
 import { DefaultService, Unit } from "../../../../api/openapi";
+import { BaseDialogComponent } from "../../../shared/components/base-dialog/base-dialog.component";
 
 export interface OrderDialogData {
   title: string;
@@ -33,7 +34,10 @@ export interface OrderDialogData {
   styleUrls: ["./product-edit-dialog.component.scss"],
   standalone: false,
 })
-export class ProductEditDialogComponent implements OnInit, OnDestroy {
+export class ProductEditDialogComponent
+  extends BaseDialogComponent
+  implements OnInit, OnDestroy
+{
   unitOptions$: Observable<Unit[]>;
   productEditGroup: UntypedFormGroup;
   subscription: Subscription;
@@ -45,7 +49,9 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: OrderDialogData,
     private api: DefaultService,
     private currency: CurrencyPipe,
-  ) {}
+  ) {
+    super();
+  }
 
   public static roundTo2Decimals(input: number): number {
     // TODO: move bitch get out the way
