@@ -67,7 +67,5 @@ export class EventCalendarComponent implements OnInit {
       });
       return row;
     });
-    console.log(this.displayedColumns);
-    console.log(this.dataSource);
   }
 }

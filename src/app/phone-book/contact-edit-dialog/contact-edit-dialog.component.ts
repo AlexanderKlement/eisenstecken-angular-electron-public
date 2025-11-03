@@ -202,11 +202,9 @@ export class ContactEditDialogComponent implements OnInit {
     };
     let parentId: number;
     if (this.contactType.value === ContactTypeEnum.Supplier) {
-      console.log(this.supplierAutoCompleteText.value);
       parentId = this.supplierSelectedId;
     }
     if (this.contactType.value === ContactTypeEnum.Client) {
-      console.log(this.clientAutoCompleteText.value);
       parentId = this.clientSelectedId;
     }
     if (this.createMode) {

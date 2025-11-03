@@ -251,8 +251,6 @@ export class HoursStepperComponent implements OnInit {
       let reason = "";
       // eslint-disable-next-line @typescript-eslint/naming-convention
       let job_id = -1;
-      console.log("Initdrive: ");
-      console.log(drive);
       if (drive.reason !== undefined) {
         reason = drive.reason;
       }
@@ -324,7 +322,6 @@ export class HoursStepperComponent implements OnInit {
 
   submitClicked() {
     const workDayCreate = this.createWorkDayCreate();
-    console.log(this.date, this.userId);
     if (this.date !== undefined && this.userId !== undefined) {
       this.api.createWorkDayWorkDayUserIdPost(this.userId, formatDateTransport(this.date.toDateString()), workDayCreate)
         .pipe(first()).subscribe(() => {
@@ -634,11 +631,8 @@ export class HoursStepperComponent implements OnInit {
   }
 
   private subscribeToWorkday() {
-    console.log("Workday subject", this.workDay$);
     if (this.workDay$ !== undefined) {
-      console.log("Subscribing to workday subject");
       this.workDay$.subscribe((workDay) => {
-        console.log("Got new workday", workDay);
         this.workDay = workDay;
         this.fillData();
         this.fillDataJobs();

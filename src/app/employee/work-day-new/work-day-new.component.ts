@@ -21,7 +21,6 @@ export class WorkDayNewComponent implements OnInit {
     this.dateFormControl = new UntypedFormControl(new Date());
     this.dateFormControl.valueChanges.subscribe(() =>  {
         this.selectedDate = new Date(this.dateFormControl.value);
-        console.log(this.selectedDate);
     });
     this.route.params.subscribe(params => {
       this.userId = parseInt(params.id, 10);
