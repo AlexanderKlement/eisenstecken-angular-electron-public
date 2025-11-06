@@ -15,7 +15,11 @@ export class BackStackService {
     this.renderer = rendererFactory.createRenderer(null, null);
 
     // Browser/Android back
-    window.addEventListener('popstate', () => this.dispatchBack());
+    window.addEventListener('popstate', () => {
+      console.log('Popstate event');
+      this.dispatchBack();
+      console.log('Dispatch back finished');
+    });
 
     // ESC as back
     this.renderer.listen('window', 'keyup', (e: KeyboardEvent) => {
