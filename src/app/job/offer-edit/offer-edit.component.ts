@@ -10,12 +10,10 @@ import { FileService } from "../../shared/services/file.service";
 import { formatDateTransport } from "../../shared/date.util";
 import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
 import { CurrencyPipe, getLocaleCurrencyCode } from "@angular/common";
-import { NavigationService } from "../../shared/services/navigation.service";
 import {
   DescriptiveArticleCreate, OfferCreate, OfferUpdate, Offer, Vat,
   DefaultService, DescriptiveArticle, Lock,
 } from "../../../api/openapi";
-import { BackStackService } from "../../src/app/shared/services/back-stack.service";
 
 @Component({
   selector: 'app-offer-edit',
@@ -36,9 +34,8 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
   buttons: CustomButton[] = [];
   subscription: Subscription;
 
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, navigation: NavigationService, backStack: BackStackService,
-              private file: FileService, private currency: CurrencyPipe) {
-    super(api, router, route, dialog, backStack, navigation);
+  constructor(api: DefaultService, router: Router, route: ActivatedRoute, private file: FileService, private currency: CurrencyPipe, private dialog: MatDialog) {
+    super(api, router, route);
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> => api.islockedOfferOfferIslockedOfferIdGet(id);
@@ -184,7 +181,7 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
     this.id = offer.id;
     this.file.open(offer.pdf);
     this.resetDirtyState();
-    this.navigation.replaceCurrentWith("job/" + this.jobId.toString());
+    this.router.navigateByUrl("job/" + this.jobId.toString(), { replaceUrl: true });
   }
 
   observableReady(): void {
@@ -399,11 +396,11 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
         if (!this.createMode) {
           this.api.deleteOfferOfferOfferIdDelete(this.id).pipe(first()).subscribe(success => {
             if (success) {
-              this.navigation.replaceCurrentWith("job/" + this.jobId.toString());
+              this.router.navigateByUrl("job/" + this.jobId.toString(), { replaceUrl: true });
             }
           });
         } else {
-          this.navigation.replaceCurrentWith("job/" + this.jobId.toString());
+          this.router.navigateByUrl("job/" + this.jobId.toString(), { replaceUrl: true });
         }
       }
     });

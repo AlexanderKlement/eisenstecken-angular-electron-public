@@ -1,20 +1,20 @@
-import {Component, OnInit} from "@angular/core";
-import {NavigationService} from "../../services/navigation.service";
+import { Component } from "@angular/core";
+import { Router } from "@angular/router";
 
 @Component({
-    selector: 'app-page-not-found',
-    templateUrl: './page-not-found.component.html',
-    styleUrls: ['./page-not-found.component.scss'],
-    standalone: false
+  selector: 'app-page-not-found',
+  templateUrl: './page-not-found.component.html',
+  styleUrls: ['./page-not-found.component.scss'],
+  standalone: false,
 })
-export class PageNotFoundComponent implements OnInit {
-    constructor(private navigation: NavigationService) {
-    }
+class PageNotFoundComponent {
+  constructor(private router: Router) {
+  }
 
-    ngOnInit(): void {
-    }
 
-    homeClicked() {
-        this.navigation.home();
-    }
+  homeClicked() {
+    this.router.navigateByUrl("/", { replaceUrl: true });
+  }
 }
+
+export default PageNotFoundComponent;

@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Location } from "@angular/common";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
@@ -13,7 +14,6 @@ import moment from "moment";
 import { formatDateTransport } from "../../shared/date.util";
 import { FileService } from "../../shared/services/file.service";
 import { CurrencyPipe, getLocaleCurrencyCode } from "@angular/common";
-import { NavigationService } from "../../shared/services/navigation.service";
 import {
   DefaultService,
   OutgoingInvoice,
@@ -23,15 +23,14 @@ import {
   OutgoingInvoiceUpdate,
   OutgoingInvoiceCreate,
   DescriptiveArticleCreate,
-  Lock
+  Lock,
 } from "../../../api/openapi";
-import { BackStackService } from '../../src/app/shared/services/back-stack.service';
 
 @Component({
-    selector: 'app-outgoing-invoice-edit',
-    templateUrl: './outgoing-invoice-edit.component.html',
-    styleUrls: ['./outgoing-invoice-edit.component.scss'],
-    standalone: false
+  selector: 'app-outgoing-invoice-edit',
+  templateUrl: './outgoing-invoice-edit.component.html',
+  styleUrls: ['./outgoing-invoice-edit.component.scss'],
+  standalone: false,
 })
 export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvoice> implements OnInit, OnDestroy {
 
@@ -46,10 +45,9 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
 
   company = false;
 
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private currency: CurrencyPipe,
-              private authService: AuthService, private snackBar: MatSnackBar, private file: FileService,
-              navigation: NavigationService, backStack: BackStackService) {
-    super(api, router, route, dialog, backStack, navigation);
+  constructor(api: DefaultService, router: Router, route: ActivatedRoute, private currency: CurrencyPipe, private location: Location,
+              private authService: AuthService, private snackBar: MatSnackBar, private file: FileService, private dialog: MatDialog) {
+    super(api, router, route);
   }
 
   calcTotalPrice(formGroup: UntypedFormGroup): void {
@@ -106,7 +104,7 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
                   this.api.deleteOutgoingInvoiceOutgoingInvoiceOutgoingInvoiceIdDelete(this.id)
                     .pipe(first()).subscribe((success) => {
                       if (success) {
-                        this.navigation.back();
+                        this.location.back();
                         //this.router.navigateByUrl(this.navigationTarget);
                       } else {
                         this.invoiceDeleteFailed();
@@ -143,7 +141,7 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
       , "Ok", {
         duration: 10000,
       });
-    this.navigation.back();
+    this.location.back();
   }
 
   getDescriptiveArticles(): UntypedFormArray {
@@ -329,7 +327,7 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
   createUpdateSuccess(invoice: OutgoingInvoice): void {
     this.id = invoice.id;
     this.file.open(invoice.pdf);
-    this.navigation.back();
+    this.location.back();
   }
 
   observableReady(): void {

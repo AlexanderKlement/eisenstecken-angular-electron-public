@@ -1,16 +1,10 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { firstValueFrom, Observable, ReplaySubject, Subscription } from "rxjs";
+import { Observable, ReplaySubject, Subscription } from "rxjs";
 import { ActivatedRoute, Params, Router } from "@angular/router";
-import { DataSourceClass } from "../../types";
-import { MatDialog } from "@angular/material/dialog";
 import { first } from "rxjs/operators";
 import { DefaultService, User, Lock } from "../../../../api/openapi";
 import { AbstractControl } from "@angular/forms";
-import { BackStackService } from "../../../src/app/shared/services/back-stack.service";
-import { NavigationService } from "../../services/navigation.service";
-import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 import { ReusableRoute } from "../../reusable-route";
-
 
 @Component({
   selector: 'app-base-edit',
@@ -18,133 +12,140 @@ import { ReusableRoute } from "../../reusable-route";
   styleUrls: ['./base-edit.component.scss'],
   standalone: false,
 })
-export class BaseEditComponent<T extends DataSourceClass> implements OnInit, OnDestroy, ReusableRoute {
+export class BaseEditComponent<T> implements OnInit, OnDestroy, ReusableRoute {
 
-  //This has to be defined by Derived class:
+  // to be provided by derived class:
   navigationTarget: string;
-  lockFunction: (api: DefaultService, id: number) => Observable<Lock>;
-  unlockFunction: (api: DefaultService, id: number) => Observable<boolean>;
-  dataFunction: (api: DefaultService, id: number) => Observable<T>;
+  lockFunction!: (api: DefaultService, id: number) => Observable<Lock>;
+  unlockFunction!: (api: DefaultService, id: number) => Observable<boolean>;
+  dataFunction!: (api: DefaultService, id: number) => Observable<T>;
 
-  //this not:
-  me$: Observable<User>;
-  data$: Observable<T>;
+  // shared:
+  me$!: Observable<User>;
+  data$!: Observable<T>;
   createMode = false;
-  id: number;
+  id!: number;
   submitted = false;
   routeParams: ReplaySubject<Params> = new ReplaySubject<Params>(1);
-  subscription: Subscription;
+  subscription = new Subscription();
 
-  private controlsBeforeBack: AbstractControl[] = [];
+  // dirty tracking (for CanDeactivate)
+  protected controlsBeforeBack: AbstractControl[] = [];
   private controlsSub?: Subscription;
-  private atLeastOneFormModified = false;
-  private disposeBackHandler?: () => void;
 
-  constructor(protected api: DefaultService,
-              protected router: Router,
-              protected route: ActivatedRoute,
-              public dialog: MatDialog,
-              protected backStack: BackStackService,
-              protected navigation: NavigationService) {
-    this.subscription = new Subscription();
-    this.subscription.add(this.route.params.subscribe((params) => this.routeParams.next(params)));
+  constructor(
+    protected api: DefaultService,
+    protected router: Router,
+    protected route: ActivatedRoute,
+  ) {
+    this.subscription.add(this.route.params.subscribe((p) => this.routeParams.next(p)));
   }
 
+  // === Route reuse hooks ===
   public onAttach(): void {
-    if ((this as any).controlsBeforeBack?.length) {
-      this["registerDirtyControls"](this["controlsBeforeBack"]);
+    // re-arm listeners when the cached view becomes active again
+    if (this.controlsBeforeBack.length) {
+      this.registerDirtyControls(this.controlsBeforeBack);
     }
   }
 
   public onDetach(): void {
-    if ((this as any).disposeBackHandler) {
-      this["disposeBackHandler"]();
-      this["disposeBackHandler"] = undefined;
-    }
+    // drop subscriptions while cached
+    this.controlsSub?.unsubscribe();
+    this.controlsSub = undefined;
   }
 
   ngOnInit(): void {
     this.me$ = this.api.readUsersMeUsersMeGet();
+
     this.routeParams.pipe(first()).subscribe((params) => {
       if (params.id === "new") {
         this.createMode = true;
         return;
       }
+
       this.id = parseInt(params.id, 10);
       if (isNaN(this.id)) {
         console.error("BaseEditComponent: Cannot parse given id");
         this.goBack();
+        return;
       }
+
       if (!this.createMode) {
-        this.lockFunction(this.api, this.id).pipe(first()).subscribe(lock => {
-          if (!lock.locked) {//has to be locked, otherwise component is accessed directly {
-            console.error("BaseEditComponent: The lock is not locked. This should not happen on accessing a ressource");
+        this.lockFunction(this.api, this.id).pipe(first()).subscribe((lock) => {
+          if (!lock.locked) {
+            console.error("BaseEditComponent: Expected resource to be locked.");
             this.goBack();
+            return;
           }
           this.me$.pipe(first()).subscribe((user) => {
-            if (user.id !== lock.user.id) {//if locked by other user go back
-              console.error("BaseEditComponent: The accessed ressource is locked by another user");
+            if (user.id !== lock.user.id) {
+              console.error("BaseEditComponent: Resource is locked by another user.");
               this.goBack();
-            } else {   //now we talking
-              this.data$ = this.dataFunction(this.api, this.id);
-              this.observableReady();
+              return;
             }
+            this.data$ = this.dataFunction(this.api, this.id);
+            this.observableReady();
           });
         });
+      } else {
+        this.observableReady();
       }
     });
-    this.startListeningForUnload();
+
+    // optional: warn on tab close/refresh if dirty
+    window.addEventListener("beforeunload", this.beforeUnloadHandler);
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
     this.controlsSub?.unsubscribe();
-    this.disposeBackHandler?.(); // remove back handler if set
 
     if (!this.createMode) {
       this.unlockFunction(this.api, this.id).pipe(first()).subscribe((success) => {
         if (success) {
-          console.info("BaseEdit: SUCCESS: unlocked object with id: " + this.id);
+          console.info("BaseEdit: SUCCESS: unlocked object with id:", this.id);
         } else {
-          console.warn("BaseEdit: FAIL: to unlock object with id: " + this.id);
+          console.warn("BaseEdit: FAIL: to unlock object with id:", this.id);
         }
       });
     }
-    this.stopListeningForUnload();
+
+    window.removeEventListener("beforeunload", this.beforeUnloadHandler);
   }
 
+  /**
+   * Derived components should call this once the main form(s) are built & initial patches are done.
+   */
   protected registerDirtyControls(controls: AbstractControl[]): void {
-    this.controlsBeforeBack = controls.filter(Boolean) as AbstractControl[];
+    this.controlsBeforeBack = (controls || []).filter(Boolean) as AbstractControl[];
     this.controlsSub?.unsubscribe();
-
     if (!this.controlsBeforeBack.length) return;
 
-    // Subscribe to value changes and flip into "dirty" mode as soon as any control is dirty.
     this.controlsSub = new Subscription();
+    // We don’t need to flip any flags here—CanDeactivate will just call isDirty()
+    // But we subscribe so derived classes can optionally hook side-effects later if desired.
     for (const ctrl of this.controlsBeforeBack) {
-      this.controlsSub.add(
-        ctrl.valueChanges.subscribe(() => {
-          // as soon as any control becomes dirty, enable the back handler once
-          if (!this.atLeastOneFormModified && this.controlsBeforeBack.some(c => c.dirty)) {
-            this.formBecameDirty();
-          }
-        }),
-      );
+      this.controlsSub.add(ctrl.valueChanges.subscribe(() => { /* no-op */ }));
     }
   }
 
-  protected resetDirtyState(): void {
-    this.atLeastOneFormModified = false;
-    this.disposeBackHandler?.();
-    this.disposeBackHandler = undefined;
+  /**
+   * Used by the CanDeactivate guard.
+   */
+  public isDirty(): boolean {
+    return this.controlsBeforeBack.some(c => c.dirty);
+  }
 
-    // reset Angular's dirty flags (derived class typically calls form.markAsPristine())
+  /**
+   * Helper for derived classes after a successful save or load.
+   */
+  protected resetDirtyState(): void {
     for (const c of this.controlsBeforeBack) {
       c.markAsPristine();
       c.updateValueAndValidity({ onlySelf: true, emitEvent: false });
     }
   }
-
 
   createUpdateError(error: any): void {
     this.submitted = false;
@@ -160,61 +161,29 @@ export class BaseEditComponent<T extends DataSourceClass> implements OnInit, OnD
   }
 
   protected observableReady(): void {
-    console.info("BaseEditComponent: The data observable is ready");
-  }
-
-  private startListeningForUnload(): void {
-    window.addEventListener("beforeunload", this.ngOnDestroy.bind(this));
-  }
-
-  private stopListeningForUnload(): void {
-    window.removeEventListener("beforeunload", this.ngOnDestroy.bind(this));
-  }
-
-  private beforeUnloadHandler = (e: BeforeUnloadEvent) => {
-    if (this.atLeastOneFormModified) {
-      e.preventDefault();
-      e.returnValue = "";
-    }
-  };
-
-  private formBecameDirty(): void {
-    this.atLeastOneFormModified = true;
-
-    if (!this.disposeBackHandler) {
-      // Register top-of-stack handler: open confirm dialog and consume back
-      this.disposeBackHandler = this.backStack.push(() => {
-        this.openDiscardDialog().then((confirmed) => {
-          if (confirmed) {
-            // If the back was initiated by browser or ESC, this will go one step back.
-            // If initiated by your own UI, it behaves the same.
-            this.navigation.back();
-          }
-        });
-        return true; // consume back/ESC
-      });
-    }
-  }
-
-  private async openDiscardDialog(): Promise<boolean> {
-    const ref = this.dialog.open(ConfirmDialogComponent, {
-      width: "400px",
-      data: { title: "Änderungen verwerfen?", text: "Mindestens ein Eingabefeld wurde bearbeitet." },
-    });
-    const result = await firstValueFrom(ref.afterClosed().pipe(first()));
-    return !!result;
+    // Hook for derived classes
+    console.info("BaseEditComponent: data observable ready");
   }
 
   protected markTreePristine(c: AbstractControl): void {
     c.markAsPristine();
-    // @ts-expect-error instance checks at runtime are fine
-    if (c.controls) {
-      const controls = (c as any).controls;
-      if (Array.isArray(controls)) {
-        controls.forEach(ctrl => this.markTreePristine(ctrl));
-      } else {
-        Object.values(controls).forEach((ctrl: AbstractControl) => this.markTreePristine(ctrl));
-      }
+    // recurse into groups/arrays
+    const anyC: any = c as any;
+    const kids = anyC?.controls;
+    if (!kids) return;
+
+    if (Array.isArray(kids)) {
+      kids.forEach((ctrl: AbstractControl) => this.markTreePristine(ctrl));
+    } else {
+      Object.values(kids).forEach((ctrl: AbstractControl) => this.markTreePristine(ctrl as AbstractControl));
     }
   }
+
+  // ---- Tab close / refresh prompt (optional) ----
+  private beforeUnloadHandler = (e: BeforeUnloadEvent) => {
+    if (this.isDirty()) {
+      e.preventDefault();
+      e.returnValue = "";
+    }
+  };
 }

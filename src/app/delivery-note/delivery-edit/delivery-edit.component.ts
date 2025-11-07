@@ -11,7 +11,6 @@ import { CustomButton } from "../../shared/components/toolbar/toolbar.component"
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { formatDateTransport } from "../../shared/date.util";
 import { FileService } from "../../shared/services/file.service";
-import { NavigationService } from "../../shared/services/navigation.service";
 import {
   DeliveryNoteCreate,
   DeliveryNote,
@@ -22,7 +21,6 @@ import {
   DescriptiveArticle,
   DescriptiveArticleCreate
 } from "../../../api/openapi";
-import { BackStackService } from '../../src/app/shared/services/back-stack.service';
 
 export interface JobMinimal {
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -45,9 +43,9 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
   buttons: CustomButton[] = [];
   title = "Lieferschein: Bearbeiten";
 
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, backStack: BackStackService,  navigation: NavigationService,
-              private authService: AuthService, private snackBar: MatSnackBar, private file: FileService) {
-    super(api, router, route, dialog, backStack, navigation);
+  constructor(api: DefaultService, router: Router, route: ActivatedRoute,
+              private authService: AuthService, private snackBar: MatSnackBar, private file: FileService, private dialog: MatDialog) {
+    super(api, router, route);
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> =>
@@ -137,7 +135,7 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
       this.api.createDeliveryNoteDeliveryNotePost(deliveryNoteCreate).pipe(first()).subscribe(deliveryNote => {
         this.submitted = false;
         this.file.open(deliveryNote.pdf);
-        this.navigation.replaceCurrentWith("delivery_note");
+        this.router.navigateByUrl("delivery_note", { replaceUrl: true });
       }, (err) => {
         this.createUpdateError(err);
       }, () => {
@@ -167,7 +165,7 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
       this.api.updateDeliveryNoteDeliveryNoteDeliveryNoteIdPut(this.id, deliveryNoteUpdate).pipe(first()).subscribe(deliveryNote => {
         this.submitted = false;
         this.file.open(deliveryNote.pdf);
-        this.navigation.replaceCurrentWith("delivery_note");
+        this.router.navigateByUrl("delivery_note", { replaceUrl: true });
       }, (err) => {
         this.createUpdateError(err);
       }, () => {

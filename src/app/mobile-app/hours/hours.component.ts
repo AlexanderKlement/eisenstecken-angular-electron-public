@@ -1,9 +1,8 @@
-import { Component, HostListener, OnInit } from '@angular/core';
-import { CustomButton } from '../../shared/components/toolbar/toolbar.component';
-import { Observable, Subject, Subscriber } from 'rxjs';
-import { NavigationService } from '../../shared/services/navigation.service';
-import { first } from 'rxjs/operators';
-import { DefaultService, WorkDay } from '../../../api/openapi';
+import { Component, OnInit } from "@angular/core";
+import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
+import { Subject } from "rxjs";
+import { first } from "rxjs/operators";
+import { DefaultService, WorkDay } from "../../../api/openapi";
 
 @Component({
   selector: 'app-hours',
@@ -19,7 +18,7 @@ export class HoursComponent implements OnInit {
   todaysWorkDayFinished = false;
   workDay$: Subject<WorkDay>;
 
-  constructor(private navigation: NavigationService, private api: DefaultService) {
+  constructor(private api: DefaultService) {
   }
 
 
@@ -29,7 +28,7 @@ export class HoursComponent implements OnInit {
       if (workDay) {
         this.todaysWorkDayFinished = true;
       }
-      console.log('HoursComponent: Downloading Subject', workDay);
+      console.log("HoursComponent: Downloading Subject", workDay);
       this.workDay$.next(workDay);
       this.loading = false;
     });

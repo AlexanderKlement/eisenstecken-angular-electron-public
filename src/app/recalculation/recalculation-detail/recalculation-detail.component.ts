@@ -1,4 +1,4 @@
-import { Component, ComponentRef, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import moment from "moment";
@@ -10,14 +10,13 @@ import { AuthService } from "../../shared/services/auth.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { minutesToDisplayableString } from "../../shared/date.util";
 import { formatCurrency } from "@angular/common";
-import { NavigationService } from "../../shared/services/navigation.service";
 import { Recalculation, Paint, Workload, Expense, DefaultService, WoodList, Order } from "../../../api/openapi";
 
 @Component({
-    selector: 'app-recalculation-detail',
-    templateUrl: './recalculation-detail.component.html',
-    styleUrls: ['./recalculation-detail.component.scss'],
-    standalone: false
+  selector: 'app-recalculation-detail',
+  templateUrl: './recalculation-detail.component.html',
+  styleUrls: ['./recalculation-detail.component.scss'],
+  standalone: false,
 })
 export class RecalculationDetailComponent implements OnInit {
 
@@ -37,7 +36,7 @@ export class RecalculationDetailComponent implements OnInit {
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
 
-  constructor(private api: DefaultService, private router: Router, private route: ActivatedRoute, private navigation: NavigationService,
+  constructor(private api: DefaultService, private router: Router, private route: ActivatedRoute,
               private locker: LockService, private authService: AuthService, private snackBar: MatSnackBar) {
   }
 
@@ -53,7 +52,7 @@ export class RecalculationDetailComponent implements OnInit {
         if (recalculation === undefined || recalculation === null) {
           this.authService.currentUserHasRight("recalculations:create").pipe(first()).subscribe(allowed => {
             if (allowed) {
-              this.navigation.replaceCurrentWith("recalculation/edit/new/" + this.jobId.toString());
+              this.router.navigateByUrl("recalculation/edit/new/" + this.jobId.toString() + this.jobId.toString(), { replaceUrl: true });
             } else {
               this.snackBar.open("Sie sind nicht berechtigt Nachkalkulationen zu erstellen!"
                 , "Ok", {
@@ -89,8 +88,6 @@ export class RecalculationDetailComponent implements OnInit {
     }));
   }
 
-  onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
-  }
 
   initRecalculation(): void {
     this.initOrderTable();

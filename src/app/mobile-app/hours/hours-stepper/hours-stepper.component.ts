@@ -29,7 +29,6 @@ import {
   HoursStepperDriveDialogComponent,
   HoursStepperDriveDialogData,
 } from "./hours-stepper-drive-dialog/hours-stepper-drive-dialog.component";
-import { NavigationService } from "../../../shared/services/navigation.service";
 import {
   DefaultService,
   Expense,
@@ -43,7 +42,7 @@ import {
   DriveCreate,
   AdditionalWorkloadCreate,
   JobSectionCreate,
-  WorkDayCreate
+  WorkDayCreate,
 } from "../../../../api/openapi";
 
 function greaterThanValidator(value: number): ValidatorFn {
@@ -62,10 +61,10 @@ export enum JobEnum {
 
 
 @Component({
-    selector: 'app-hours-stepper',
-    templateUrl: './hours-stepper.component.html',
-    styleUrls: ['./hours-stepper.component.scss'],
-    standalone: false
+  selector: 'app-hours-stepper',
+  templateUrl: './hours-stepper.component.html',
+  styleUrls: ['./hours-stepper.component.scss'],
+  standalone: false,
 })
 export class HoursStepperComponent implements OnInit {
 
@@ -93,11 +92,11 @@ export class HoursStepperComponent implements OnInit {
   // eslint-disable-next-line @typescript-eslint/member-ordering
   @ViewChild('stepper') private stepper: MatStepper;
 
-  constructor(private api: DefaultService, private dialog: MatDialog, private navigation: NavigationService,
+  constructor(private api: DefaultService, private dialog: MatDialog,
               private authService: AuthService, private router: Router) {
   }
 
-  static generateHourString(hours: number, minutes: number, mobile: boolean = false): string {
+  static generateHourString(hours: number, minutes: number, mobile = false): string {
     let workedHoursString = (mobile ? "<br />" : "") + hours.toString();
     workedHoursString += " ";
     workedHoursString += (hours === 1) ? "Stunde" : "Stunden";
@@ -325,11 +324,11 @@ export class HoursStepperComponent implements OnInit {
     if (this.date !== undefined && this.userId !== undefined) {
       this.api.createWorkDayWorkDayUserIdPost(this.userId, formatDateTransport(this.date.toDateString()), workDayCreate)
         .pipe(first()).subscribe(() => {
-        this.navigation.replaceCurrentWith("/employee/redirect/" + this.userId.toString());
+        this.router.navigateByUrl("/employee/redirect/" + this.userId.toString(), { replaceUrl: true });
       });
     } else {
       this.api.createWorkDayOwnWorkDayOwnPost(workDayCreate).pipe(first()).subscribe(() => {
-        this.navigation.replaceCurrentWith("/mobile/hours/redirect");
+        this.router.navigateByUrl("/mobile/hours/redirect", { replaceUrl: true });
       });
     }
   }

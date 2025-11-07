@@ -8,7 +8,6 @@ import {
 } from "@angular/forms";
 import { CurrencyPipe, getLocaleCurrencyCode } from "@angular/common";
 import { DefaultService, Unit } from "../../../../api/openapi";
-import { BackStackService } from "../../../src/app/shared/services/back-stack.service";
 
 export interface OrderDialogData {
   title: string;
@@ -43,7 +42,6 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
 
   constructor(
     public dialogRef: MatDialogRef<ProductEditDialogComponent>,
-    private backStack: BackStackService,
     @Inject(MAT_DIALOG_DATA) public data: OrderDialogData,
     private api: DefaultService,
     private currency: CurrencyPipe,
