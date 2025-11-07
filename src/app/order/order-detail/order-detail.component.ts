@@ -7,7 +7,7 @@ import { ProductsListComponent } from "../available-products-list/products-list.
 import { ProductEditDialogComponent } from "../available-products-list/product-edit-dialog/product-edit-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { OrderedArticleMoveDialogComponent } from "./ordered-article-move-dialog/ordered-article-move-dialog.component";
 import { formatCurrency } from "@angular/common";
@@ -19,12 +19,18 @@ import {
   Order,
   OrderableType,
 } from "../../../api/openapi";
+import { InfoBuilderComponent } from "../../shared/components/info-builder/info-builder.component";
+import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
 @Component({
-  selector: "app-order-detail",
-  templateUrl: "./order-detail.component.html",
-  styleUrls: ["./order-detail.component.scss"],
-  standalone: false,
+    selector: "app-order-detail",
+    templateUrl: "./order-detail.component.html",
+    styleUrls: ["./order-detail.component.scss"],
+    imports: [
+        ToolbarComponent,
+        InfoBuilderComponent,
+        TableBuilderComponent,
+    ],
 })
 export class OrderDetailComponent implements OnInit {
   articleDataSource: TableDataSource<OrderedArticle>;

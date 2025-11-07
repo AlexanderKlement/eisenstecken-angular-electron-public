@@ -7,12 +7,17 @@ import { CalendarService } from "../calendar.service";
 import { CalendarData, CalendarEditComponent } from "../calendar-edit/calendar-edit.component";
 import { MatDialog } from "@angular/material/dialog";
 import { DefaultService, CalendarEntry } from "../../../../../api/openapi";
+import { LoadingComponent } from "../../loading/loading.component";
+import { MatCard, MatCardContent } from "@angular/material/card";
+import { NgClass, AsyncPipe } from "@angular/common";
+import { DefaultClassDirective } from "ng-flex-layout/extended";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective } from "ng-flex-layout";
 
 @Component({
     selector: 'app-calendar-day',
     templateUrl: './calendar-day.component.html',
     styleUrls: ['./calendar-day.component.scss'],
-    standalone: false
+    imports: [LoadingComponent, MatCard, NgClass, DefaultClassDirective, MatCardContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective, AsyncPipe]
 })
 export class CalendarDayComponent implements OnInit, OnDestroy {
 

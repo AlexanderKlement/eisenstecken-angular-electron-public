@@ -1,8 +1,13 @@
 import {Component, Inject, OnInit} from "@angular/core";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
 import {AuthService} from "../../../shared/services/auth.service";
-import {UntypedFormControl, UntypedFormGroup} from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {CompanyEventCreate, CompanyEventEnum, CompanyEventUpdate, DefaultService} from "../../../../api/openapi";
+import { CdkScrollable } from "@angular/cdk/scrolling";
+import { MatSelectionList, MatListOption } from "@angular/material/list";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { MatButton } from "@angular/material/button";
+import { JsonPipe } from "@angular/common";
 
 export interface EventCalendarDialogData {
   id?: number;
@@ -27,7 +32,7 @@ export function getEventTranslation(companyEvent: CompanyEventEnum): string {
     selector: 'app-event-calendar-dialog',
     templateUrl: './event-calendar-dialog.component.html',
     styleUrls: ['./event-calendar-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, FormsModule, ReactiveFormsModule, MatSelectionList, MatListOption, MatFormField, MatLabel, MatInput, MatDialogActions, MatButton, JsonPipe]
 })
 
 

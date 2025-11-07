@@ -8,8 +8,8 @@ describe('FilterableClickableListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FilterableClickableListComponent ]
-    })
+    imports: [FilterableClickableListComponent]
+})
       .compileComponents();
   });
 

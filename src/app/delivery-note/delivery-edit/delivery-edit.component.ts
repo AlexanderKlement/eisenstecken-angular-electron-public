@@ -4,10 +4,10 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { first, map } from "rxjs/operators";
-import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { AuthService } from "../../shared/services/auth.service";
-import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { formatDateTransport } from "../../shared/date.util";
 import { FileService } from "../../shared/services/file.service";
@@ -21,6 +21,15 @@ import {
   DescriptiveArticle,
   DescriptiveArticleCreate
 } from "../../../api/openapi";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective, FlexModule } from "ng-flex-layout";
+import { MatIconButton, MatButton } from "@angular/material/button";
+import { MatIcon } from "@angular/material/icon";
+import { MatFormField, MatLabel, MatInput, MatSuffix } from "@angular/material/input";
+import { CdkTextareaAutosize } from "@angular/cdk/text-field";
+import { MatSelect, MatOption } from "@angular/material/select";
+import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from "@angular/material/datepicker";
+import { MatCheckbox } from "@angular/material/checkbox";
+import { AsyncPipe } from "@angular/common";
 
 export interface JobMinimal {
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -32,7 +41,7 @@ export interface JobMinimal {
     selector: 'app-delivery-edit',
     templateUrl: './delivery-edit.component.html',
     styleUrls: ['./delivery-edit.component.scss'],
-    standalone: false
+    imports: [ToolbarComponent, FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective, FlexModule, MatIconButton, MatButton, MatIcon, MatFormField, MatLabel, CdkTextareaAutosize, MatInput, MatSelect, MatOption, MatDatepickerInput, MatDatepickerToggle, MatSuffix, MatDatepicker, MatCheckbox, AsyncPipe]
 })
 export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> implements OnInit {
   deliveryNoteGroup: UntypedFormGroup;

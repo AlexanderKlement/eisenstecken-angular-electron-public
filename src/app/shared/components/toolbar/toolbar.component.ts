@@ -4,6 +4,9 @@ import { Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { AuthService } from "../../services/auth.service";
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
+import { MatToolbar } from "@angular/material/toolbar";
+import { MatButton, MatIconButton } from "@angular/material/button";
+import { MatIcon } from "@angular/material/icon";
 
 export interface CustomButton {
   name: string;
@@ -11,10 +14,15 @@ export interface CustomButton {
 }
 
 @Component({
-  selector: 'app-toolbar',
-  templateUrl: './toolbar.component.html',
-  styleUrls: ['./toolbar.component.scss'],
-  standalone: false,
+    selector: 'app-toolbar',
+    templateUrl: './toolbar.component.html',
+    styleUrls: ['./toolbar.component.scss'],
+    imports: [
+        MatToolbar,
+        MatButton,
+        MatIconButton,
+        MatIcon,
+    ],
 })
 export class ToolbarComponent {
 

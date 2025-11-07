@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ChatService } from "./chat.service";
-import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { Observable, Subscription } from "rxjs";
 import { first } from "rxjs/operators";
 import { ElectronService } from "../../core/services";
@@ -8,12 +8,18 @@ import { Router } from "@angular/router";
 import { EmailService } from "../../shared/services/email.service";
 import { AuthService } from "../../shared/services/auth.service";
 import { ChatMessage, ChatRecipient } from "../../../api/openapi";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexDirective } from "ng-flex-layout";
+import { ChatMessageComponent } from "./chat-message/chat-message.component";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { MatSelect, MatOption } from "@angular/material/select";
+import { MatButton } from "@angular/material/button";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
     selector: 'app-chat',
     templateUrl: './chat.component.html',
     styleUrls: ['./chat.component.scss'],
-    standalone: false
+    imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexDirective, ChatMessageComponent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatSelect, MatOption, MatButton, AsyncPipe]
 })
 export class ChatComponent implements OnInit, OnDestroy {
 

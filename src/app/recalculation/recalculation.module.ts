@@ -20,13 +20,6 @@ import { FlexModule } from "ng-flex-layout";
 
 
 @NgModule({
-  declarations: [
-    RecalculationComponent,
-    RecalculationDetailComponent,
-    RecalculationEditComponent,
-    PaintTemplateComponent,
-    PaintTemplateEditDialogComponent
-  ],
     imports: [
         CommonModule,
         RecalculationRoutingModule,
@@ -39,7 +32,12 @@ import { FlexModule } from "ng-flex-layout";
         MatIconModule,
         MatSelectModule,
         MatDialogModule,
-        MatListModule
+        MatListModule,
+        RecalculationComponent,
+        RecalculationDetailComponent,
+        RecalculationEditComponent,
+        PaintTemplateComponent,
+        PaintTemplateEditDialogComponent
     ]
 })
 export class RecalculationModule { }

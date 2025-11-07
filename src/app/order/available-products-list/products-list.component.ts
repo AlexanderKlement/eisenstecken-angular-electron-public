@@ -7,7 +7,7 @@ import {
   Output,
 } from "@angular/core";
 import { Observable, of, Subscription } from "rxjs";
-import { UntypedFormControl } from "@angular/forms";
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { debounceTime, first, startWith, switchMap } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
 import {
@@ -25,12 +25,38 @@ import {
   OrderedArticleCreate,
   OrderableType,
 } from "../../../api/openapi";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule } from "ng-flex-layout";
+import { MatButton, MatIconButton } from "@angular/material/button";
+import { MatList, MatListItem } from "@angular/material/list";
+import { MatIcon } from "@angular/material/icon";
+import { MatTooltip } from "@angular/material/tooltip";
+import { AsyncPipe, SlicePipe } from "@angular/common";
+import { BoldSpanPipe } from "../../shared/pipes/boldSearchResult";
 
 @Component({
-  selector: "app-products-list",
-  templateUrl: "./products-list.component.html",
-  styleUrls: ["./products-list.component.scss"],
-  standalone: false,
+    selector: "app-products-list",
+    templateUrl: "./products-list.component.html",
+    styleUrls: ["./products-list.component.scss"],
+    imports: [
+        MatFormField,
+        MatLabel,
+        MatInput,
+        FormsModule,
+        ReactiveFormsModule,
+        DefaultLayoutDirective,
+        DefaultLayoutAlignDirective,
+        MatButton,
+        MatList,
+        MatListItem,
+        FlexModule,
+        MatIconButton,
+        MatIcon,
+        MatTooltip,
+        AsyncPipe,
+        SlicePipe,
+        BoldSpanPipe,
+    ],
 })
 export class ProductsListComponent implements OnInit, OnDestroy {
   @Input() availableProducts$: Observable<Article[]>;

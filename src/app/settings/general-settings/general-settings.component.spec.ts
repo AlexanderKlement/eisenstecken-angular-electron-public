@@ -8,8 +8,8 @@ describe('GeneralSettingsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GeneralSettingsComponent ]
-    })
+    imports: [GeneralSettingsComponent]
+})
     .compileComponents();
   });
 

@@ -1,17 +1,22 @@
 import {Component, OnInit} from "@angular/core";
-import {UntypedFormArray, UntypedFormControl, UntypedFormGroup} from "@angular/forms";
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {FileService} from "../../../shared/services/file.service";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
 import {ElectronService} from "../../../core/services";
 import {first} from "rxjs/operators";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import { DefaultService, XmlFileStr } from "../../../../api/openapi";
+import { CdkScrollable } from "@angular/cdk/scrolling";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { MatButton, MatIconButton } from "@angular/material/button";
+import { MatList, MatListItem } from "@angular/material/list";
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
     selector: 'app-import-xml-dialog',
     templateUrl: './import-xml-dialog.component.html',
     styleUrls: ['./import-xml-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatButton, MatList, MatListItem, MatIconButton, MatIcon, MatDialogActions]
 })
 export class ImportXmlDialogComponent implements OnInit {
     selectXmlFormGroup: UntypedFormGroup;

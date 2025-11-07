@@ -25,12 +25,20 @@ import {
   Offer,
   Order,
 } from "../../../api/openapi";
+import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
+import { JobStatusBarComponent } from "./job-status-bar/job-status-bar.component";
+import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
 @Component({
-  selector: "app-job-detail",
-  templateUrl: "./job-detail.component.html",
-  styleUrls: ["./job-detail.component.scss"],
-  standalone: false,
+    selector: "app-job-detail",
+    templateUrl: "./job-detail.component.html",
+    styleUrls: ["./job-detail.component.scss"],
+    imports: [
+        ToolbarComponent,
+        JobStatusBarComponent,
+        InfoBuilderComponent,
+        TableBuilderComponent,
+    ],
 })
 export class JobDetailComponent implements OnInit {
   @ViewChild(InfoBuilderComponent) child: InfoBuilderComponent<Job>;

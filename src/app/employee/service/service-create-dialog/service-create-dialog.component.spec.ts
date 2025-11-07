@@ -8,8 +8,8 @@ describe('ServiceCreateDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ServiceCreateDialogComponent ]
-    })
+    imports: [ServiceCreateDialogComponent]
+})
     .compileComponents();
   });
 

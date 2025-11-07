@@ -1,14 +1,23 @@
 import { Component, OnInit } from "@angular/core";
-import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { Subject } from "rxjs";
 import { first } from "rxjs/operators";
 import { DefaultService, WorkDay } from "../../../api/openapi";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { HoursStepperComponent } from "./hours-stepper/hours-stepper.component";
+import { MatButton } from "@angular/material/button";
 
 @Component({
-  selector: 'app-hours',
-  templateUrl: './hours.component.html',
-  styleUrls: ['./hours.component.scss'],
-  standalone: false,
+    selector: 'app-hours',
+    templateUrl: './hours.component.html',
+    styleUrls: ['./hours.component.scss'],
+    imports: [
+        ToolbarComponent,
+        DefaultLayoutDirective,
+        DefaultLayoutAlignDirective,
+        HoursStepperComponent,
+        MatButton,
+    ],
 })
 export class HoursComponent implements OnInit {
 

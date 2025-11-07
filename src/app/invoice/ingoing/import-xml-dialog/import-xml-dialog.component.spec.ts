@@ -8,8 +8,8 @@ describe('ImportXmlDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ImportXmlDialogComponent ]
-    })
+    imports: [ImportXmlDialogComponent]
+})
     .compileComponents();
   });
 

@@ -8,8 +8,8 @@ describe("MealComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MealComponent ]
-    })
+    imports: [MealComponent]
+})
     .compileComponents();
   });
 

@@ -2,12 +2,13 @@ import { Component, OnInit } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
 import { Router } from "@angular/router";
 import { DefaultService, ServiceSum } from "../../api/openapi";
+import { TableBuilderComponent } from "../shared/components/table-builder/table-builder.component";
 
 @Component({
     selector: 'app-service',
     templateUrl: './service.component.html',
     styleUrls: ['./service.component.scss'],
-    standalone: false
+    imports: [TableBuilderComponent]
 })
 export class ServiceComponent implements OnInit {
 

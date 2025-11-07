@@ -8,8 +8,8 @@ describe('MinuteHourComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MinuteHourComponent ]
-    })
+    imports: [MinuteHourComponent]
+})
     .compileComponents();
   });
 

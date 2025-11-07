@@ -4,18 +4,22 @@ import {LockService} from "../../shared/services/lock.service";
 import {first} from "rxjs/operators";
 import {AuthService} from "../../shared/services/auth.service";
 import moment from "moment";
-import {TableButton} from "../../shared/components/table-builder/table-builder.component";
+import { TableButton, TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 import {ConfirmDialogComponent} from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {Observable} from "rxjs";
-import {formatCurrency} from "@angular/common";
+import { formatCurrency, AsyncPipe } from "@angular/common";
 import { DefaultService, OutgoingInvoice } from "../../../api/openapi";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { MatFormField, MatLabel } from "@angular/material/input";
+import { MatSelect, MatOption } from "@angular/material/select";
+import { MatTabGroup, MatTab } from "@angular/material/tabs";
 
 @Component({
     selector: 'app-outgoing',
     templateUrl: './outgoing.component.html',
     styleUrls: ['./outgoing.component.scss'],
-    standalone: false
+    imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatSelect, MatOption, MatTabGroup, MatTab, TableBuilderComponent, AsyncPipe]
 })
 export class OutgoingComponent implements OnInit {
 

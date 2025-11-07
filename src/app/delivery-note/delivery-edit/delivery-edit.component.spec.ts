@@ -8,8 +8,8 @@ describe('DeliveryEditComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DeliveryEditComponent ]
-    })
+    imports: [DeliveryEditComponent]
+})
     .compileComponents();
   });
 

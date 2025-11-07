@@ -1,10 +1,17 @@
 import {Component, Inject, OnInit} from "@angular/core";
 import {first} from "rxjs/operators";
-import {AbstractControl, UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators} from "@angular/forms";
+import { AbstractControl, UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import moment from "moment";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent } from "@angular/material/dialog";
 import {timepickerTheme} from "../../../themes/timepicker.theme";
 import {DefaultService, CalendarEntry, CalendarEntryCreate} from "../../../../../api/openapi";
+import { CdkScrollable } from "@angular/cdk/scrolling";
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { MatFormField, MatLabel, MatInput, MatSuffix } from "@angular/material/input";
+import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from "@angular/material/datepicker";
+import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
+import { MatButton } from "@angular/material/button";
 
 export const timeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
     const exampleDate = "07.07.1993";
@@ -30,7 +37,7 @@ export interface CalendarData {
     selector: 'app-calendar-edit',
     templateUrl: './calendar-edit.component.html',
     styleUrls: ['./calendar-edit.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatProgressSpinner, FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatDatepickerInput, MatDatepickerToggle, MatSuffix, MatDatepicker, NgxMaterialTimepickerModule, MatButton]
 })
 export class CalendarEditComponent implements OnInit {
     submitted = false;

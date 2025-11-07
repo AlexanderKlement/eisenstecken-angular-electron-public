@@ -1,22 +1,35 @@
-import {
-  Component,
-  ComponentRef,
-  ElementRef,
-  OnInit,
-  ViewChild,
-} from "@angular/core";
+import { Component, ComponentRef, OnInit} from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Observable, Subscriber } from "rxjs";
 import moment from "moment";
 import { FileService } from "../shared/services/file.service";
 import { DefaultService, Job, Stock } from "../../api/openapi";
+import { ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { MatFormField, MatLabel } from "@angular/material/input";
+import { MatSelect, MatOption } from "@angular/material/select";
+import { MatTabGroup, MatTab } from "@angular/material/tabs";
+import { TableBuilderComponent } from "../shared/components/table-builder/table-builder.component";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
-  selector: "app-job",
-  templateUrl: "./job.component.html",
-  styleUrls: ["./job.component.scss"],
-  standalone: false,
+    selector: "app-job",
+    templateUrl: "./job.component.html",
+    styleUrls: ["./job.component.scss"],
+    imports: [
+        ToolbarComponent,
+        DefaultLayoutDirective,
+        DefaultLayoutAlignDirective,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        MatOption,
+        MatTabGroup,
+        MatTab,
+        TableBuilderComponent,
+        AsyncPipe,
+    ],
 })
 export class JobComponent implements OnInit {
   createdJobDataSource: TableDataSource<Job>;

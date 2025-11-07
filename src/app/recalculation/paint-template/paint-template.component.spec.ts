@@ -8,8 +8,8 @@ describe('PaintTemplateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PaintTemplateComponent ]
-    })
+    imports: [PaintTemplateComponent]
+})
     .compileComponents();
   });
 

@@ -6,16 +6,19 @@ import {
   SupportedListElements,
 } from "../shared/components/filterable-clickable-list/filterable-clickable-list.types";
 import { first } from "rxjs/operators";
-import { CustomButton } from "../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
 import { Router } from "@angular/router";
 import { OrderableType, OrderedArticle, Article, DefaultService } from "../../api/openapi";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexDirective } from "ng-flex-layout";
+import { FilterableClickableListComponent } from "../shared/components/filterable-clickable-list/filterable-clickable-list.component";
+import { ProductsListComponent } from "./available-products-list/products-list.component";
 
 
 @Component({
     selector: 'app-order',
     templateUrl: './order.component.html',
     styleUrls: ['./order.component.scss'],
-    standalone: false
+    imports: [ToolbarComponent, DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexDirective, FilterableClickableListComponent, ProductsListComponent]
 })
 export class OrderComponent implements OnInit {
 

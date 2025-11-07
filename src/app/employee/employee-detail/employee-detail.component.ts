@@ -2,9 +2,9 @@ import { Component, ComponentRef, OnInit } from '@angular/core';
 import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
-import { CustomButton } from '../../shared/components/toolbar/toolbar.component';
+import { CustomButton, ToolbarComponent } from '../../shared/components/toolbar/toolbar.component';
 import { Observable, Subject, Subscriber } from 'rxjs';
-import { MatSelectChange } from '@angular/material/select';
+import { MatSelectChange, MatSelect, MatOption } from '@angular/material/select';
 import moment from "moment";
 import { ServiceDialogComponent } from '../service/service-dialog/service-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,12 +13,19 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { minutesToDisplayableString } from '../../shared/date.util';
 import { Journey, AdditionalWorkload, Meal, Service, Fee, DefaultService, WorkDay } from '../../../api/openapi';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from 'ng-flex-layout';
+import { MatFormField, MatLabel } from '@angular/material/input';
+import { HoursStepperComponent } from '../../mobile-app/hours/hours-stepper/hours-stepper.component';
+import { MatButton } from '@angular/material/button';
+import { TableBuilderComponent } from '../../shared/components/table-builder/table-builder.component';
+import { AsyncPipe, DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-employee-detail',
     templateUrl: './employee-detail.component.html',
     styleUrls: ['./employee-detail.component.scss'],
-    standalone: false
+    imports: [ToolbarComponent, MatTabGroup, MatTab, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatSelect, MatOption, HoursStepperComponent, MatButton, TableBuilderComponent, AsyncPipe, DatePipe]
 })
 export class EmployeeDetailComponent implements OnInit {
   feeDataSource: TableDataSource<Fee>;

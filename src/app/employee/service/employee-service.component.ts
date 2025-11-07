@@ -5,18 +5,19 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import moment from "moment";
 import {ActivatedRoute} from "@angular/router";
 import {ServiceDialogComponent} from "./service-dialog/service-dialog.component";
-import {CustomButton} from "../../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import {ServiceCreateDialogComponent} from "./service-create-dialog/service-create-dialog.component";
 import {first} from "rxjs/operators";
 import {minutesToDisplayableString} from "../../shared/date.util";
 import {Observable, Subscriber} from "rxjs";
 import {DefaultService, Service} from "../../../api/openapi";
+import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
 @Component({
     selector: 'app-service',
     templateUrl: './employee-service.component.html',
     styleUrls: ['./employee-service.component.scss'],
-    standalone: false
+    imports: [ToolbarComponent, TableBuilderComponent]
 })
 export class EmployeeServiceComponent implements OnInit {
     serviceDataSource: TableDataSource<Service>;

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
@@ -8,18 +8,49 @@ import { first, tap } from "rxjs/operators";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { FileService } from "../../shared/services/file.service";
 import { formatDateTransport } from "../../shared/date.util";
-import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
-import { CurrencyPipe, getLocaleCurrencyCode } from "@angular/common";
+import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
+import { CurrencyPipe, getLocaleCurrencyCode, AsyncPipe } from "@angular/common";
 import {
   DescriptiveArticleCreate, OfferCreate, OfferUpdate, Offer, Vat,
   DefaultService, DescriptiveArticle, Lock,
 } from "../../../api/openapi";
+import { MatIconButton, MatButton } from "@angular/material/button";
+import { MatIcon } from "@angular/material/icon";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective, FlexModule } from "ng-flex-layout";
+import { MatFormField, MatLabel, MatInput, MatSuffix } from "@angular/material/input";
+import { CdkTextareaAutosize } from "@angular/cdk/text-field";
+import { MatCheckbox } from "@angular/material/checkbox";
+import { MatSelect, MatOption } from "@angular/material/select";
+import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from "@angular/material/datepicker";
 
 @Component({
-  selector: 'app-offer-edit',
-  templateUrl: './offer-edit.component.html',
-  styleUrls: ['./offer-edit.component.scss'],
-  standalone: false,
+    selector: 'app-offer-edit',
+    templateUrl: './offer-edit.component.html',
+    styleUrls: ['./offer-edit.component.scss'],
+    imports: [
+        ToolbarComponent,
+        MatIconButton,
+        MatButton,
+        MatIcon,
+        FormsModule,
+        ReactiveFormsModule,
+        DefaultLayoutDirective,
+        DefaultLayoutAlignDirective,
+        DefaultFlexDirective,
+        FlexModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        CdkTextareaAutosize,
+        MatCheckbox,
+        MatSelect,
+        MatOption,
+        MatDatepickerInput,
+        MatDatepickerToggle,
+        MatSuffix,
+        MatDatepicker,
+        AsyncPipe,
+    ],
 })
 export class OfferEditComponent extends BaseEditComponent<Offer> implements OnInit, OnDestroy {
 

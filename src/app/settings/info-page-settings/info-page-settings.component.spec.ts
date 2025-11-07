@@ -8,8 +8,8 @@ describe('InfoPageSettingsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InfoPageSettingsComponent ]
-    })
+    imports: [InfoPageSettingsComponent]
+})
     .compileComponents();
   });
 

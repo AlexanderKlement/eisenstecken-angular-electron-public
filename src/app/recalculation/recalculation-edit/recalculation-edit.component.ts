@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
@@ -27,12 +27,39 @@ import {
   Order,
   Lock,
 } from "../../../api/openapi";
+import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { MatIconButton, MatButton } from "@angular/material/button";
+import { MatIcon } from "@angular/material/icon";
+import { MatSelect, MatOption } from "@angular/material/select";
+import { MatActionList, MatListItem } from "@angular/material/list";
+import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
-  selector: 'app-recalculation-edit',
-  templateUrl: './recalculation-edit.component.html',
-  styleUrls: ['./recalculation-edit.component.scss'],
-  standalone: false,
+    selector: 'app-recalculation-edit',
+    templateUrl: './recalculation-edit.component.html',
+    styleUrls: ['./recalculation-edit.component.scss'],
+    imports: [
+        ToolbarComponent,
+        DefaultLayoutDirective,
+        DefaultLayoutAlignDirective,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatIconButton,
+        MatButton,
+        MatIcon,
+        MatSelect,
+        MatOption,
+        MatActionList,
+        MatListItem,
+        TableBuilderComponent,
+        AsyncPipe,
+    ],
 })
 export class RecalculationEditComponent extends BaseEditComponent<Recalculation> implements OnInit, OnDestroy {
   recalculationGroup: UntypedFormGroup;

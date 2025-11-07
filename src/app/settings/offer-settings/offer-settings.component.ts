@@ -2,12 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { BaseSettingsComponent } from '../base-settings.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DefaultService } from '../../../api/openapi';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from 'ng-flex-layout';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 
 @Component({
     selector: 'app-offer-settings',
     templateUrl: './offer-settings.component.html',
     styleUrls: ['./offer-settings.component.scss'],
-    standalone: false
+    imports: [FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatButton]
 })
 export class OfferSettingsComponent extends BaseSettingsComponent implements OnInit {
 

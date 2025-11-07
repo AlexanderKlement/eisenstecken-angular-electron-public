@@ -1,10 +1,6 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from "@angular/material/dialog";
+import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogContent } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { first } from "rxjs/operators";
 import { ConfirmDialogComponent } from "../../../shared/components/confirm-dialog/confirm-dialog.component";
@@ -15,6 +11,12 @@ import {
   Unit,
   Vat,
 } from "../../../../api/openapi";
+import { CdkScrollable } from "@angular/cdk/scrolling";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule } from "ng-flex-layout";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { MatSelect, MatOption } from "@angular/material/select";
+import { MatButton } from "@angular/material/button";
+import { AsyncPipe } from "@angular/common";
 
 export interface ArticleEditDialogData {
   id: number;
@@ -23,10 +25,26 @@ export interface ArticleEditDialogData {
 }
 
 @Component({
-  selector: "app-article-edit-dialog",
-  templateUrl: "./article-edit-dialog.component.html",
-  styleUrls: ["./article-edit-dialog.component.scss"],
-  standalone: false,
+    selector: "app-article-edit-dialog",
+    templateUrl: "./article-edit-dialog.component.html",
+    styleUrls: ["./article-edit-dialog.component.scss"],
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        DefaultLayoutDirective,
+        DefaultLayoutAlignDirective,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        FlexModule,
+        MatSelect,
+        MatOption,
+        MatButton,
+        AsyncPipe,
+    ],
 })
 export class ArticleEditDialogComponent implements OnInit {
   title = "Artikel bearbeiten";

@@ -3,18 +3,19 @@ import { TableDataSource } from "../../shared/components/table-builder/table-bui
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { WorkHourEditDialogComponent } from "./work-hour-edit-dialog/work-hour-edit-dialog.component";
-import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { AuthService } from "../../shared/services/auth.service";
 import { first } from "rxjs/operators";
 import { minutesToDisplayableString } from "../../shared/date.util";
 import { Observable, Subscriber } from "rxjs";
 import { Workload, DefaultService } from "../../../api/openapi";
+import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
 @Component({
     selector: 'app-work-hours',
     templateUrl: './work-hours.component.html',
     styleUrls: ['./work-hours.component.scss'],
-    standalone: false
+    imports: [ToolbarComponent, TableBuilderComponent]
 })
 export class WorkHoursComponent implements OnInit {
   buttons: CustomButton[] = [];

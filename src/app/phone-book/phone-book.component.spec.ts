@@ -8,8 +8,8 @@ describe('PhoneBookComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PhoneBookComponent ]
-    })
+    imports: [PhoneBookComponent]
+})
     .compileComponents();
   });
 

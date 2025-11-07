@@ -2,17 +2,18 @@ import { Component, OnInit } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
 import { Router } from "@angular/router";
 import { LockService } from "../shared/services/lock.service";
-import { CustomButton } from "../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
 import { AuthService } from "../shared/services/auth.service";
 import { first } from "rxjs/operators";
 import { DefaultService, User } from "../../api/openapi";
+import { TableBuilderComponent } from "../shared/components/table-builder/table-builder.component";
 
 
 @Component({
     selector: "app-user",
     templateUrl: "./user.component.html",
     styleUrls: ["./user.component.scss"],
-    standalone: false
+    imports: [ToolbarComponent, TableBuilderComponent]
 })
 export class UserComponent implements OnInit {
   userDataSource: TableDataSource<User>;

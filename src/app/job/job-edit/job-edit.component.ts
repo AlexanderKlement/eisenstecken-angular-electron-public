@@ -1,18 +1,42 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
-import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
 import { first, map, tap } from "rxjs/operators";
 import { AuthService } from "../../shared/services/auth.service";
 import moment from "moment";
 import { User, Lock, Job, JobUpdate, SubJobCreate, DefaultService, JobCreate } from "../../../api/openapi";
+import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule } from "ng-flex-layout";
+import { MatCheckbox } from "@angular/material/checkbox";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { MatSelect, MatOption } from "@angular/material/select";
+import { AddressFormComponent } from "../../shared/components/address-form/address-form.component";
+import { MatButton } from "@angular/material/button";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
-  selector: 'app-job-edit',
-  templateUrl: './job-edit.component.html',
-  styleUrls: ['./job-edit.component.scss'],
-  standalone: false,
+    selector: 'app-job-edit',
+    templateUrl: './job-edit.component.html',
+    styleUrls: ['./job-edit.component.scss'],
+    imports: [
+        ToolbarComponent,
+        FormsModule,
+        ReactiveFormsModule,
+        DefaultLayoutDirective,
+        DefaultLayoutAlignDirective,
+        MatCheckbox,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatSelect,
+        MatOption,
+        AddressFormComponent,
+        FlexModule,
+        MatButton,
+        AsyncPipe,
+    ],
 })
 export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, OnDestroy {
 

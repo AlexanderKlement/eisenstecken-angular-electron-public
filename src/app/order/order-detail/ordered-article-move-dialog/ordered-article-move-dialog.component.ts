@@ -1,9 +1,14 @@
 import {Component, Inject, OnInit, ViewChild} from "@angular/core";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {MatSelectionList} from "@angular/material/list";
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
+import { MatSelectionList, MatListOption, MatList, MatListItem } from "@angular/material/list";
 import {combineLatest, Observable} from "rxjs";
 import {first, map} from "rxjs/operators";
 import {DefaultService, Job, Stock, OrderedArticle, OrderableType}   from "../../../../api/openapi";
+import { CdkScrollable } from "@angular/cdk/scrolling";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { MatStepper, MatStep, MatStepLabel, MatStepperNext, MatStepperPrevious } from "@angular/material/stepper";
+import { MatButton } from "@angular/material/button";
+import { AsyncPipe } from "@angular/common";
 
 export interface OrderedArticleMoveDialogData {
     orderId: number;
@@ -23,7 +28,7 @@ interface SimpleOrderable {
     selector: 'app-ordered-article-move-dialog',
     templateUrl: './ordered-article-move-dialog.component.html',
     styleUrls: ['./ordered-article-move-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatStepper, MatStep, MatStepLabel, MatSelectionList, MatListOption, MatButton, MatStepperNext, MatStepperPrevious, MatList, MatListItem, MatDialogActions, AsyncPipe]
 })
 export class OrderedArticleMoveDialogComponent implements OnInit {
 

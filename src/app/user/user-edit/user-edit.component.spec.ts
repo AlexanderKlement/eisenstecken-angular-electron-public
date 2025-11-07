@@ -8,8 +8,8 @@ describe('UserEditComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UserEditComponent ]
-    })
+    imports: [UserEditComponent]
+})
     .compileComponents();
   });
 

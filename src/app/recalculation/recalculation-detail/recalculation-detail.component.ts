@@ -4,19 +4,33 @@ import { TableDataSource } from "../../shared/components/table-builder/table-bui
 import moment from "moment";
 import { first, map } from "rxjs/operators";
 import { Observable, Subscriber } from "rxjs";
-import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { LockService } from "../../shared/services/lock.service";
 import { AuthService } from "../../shared/services/auth.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { minutesToDisplayableString } from "../../shared/date.util";
-import { formatCurrency } from "@angular/common";
+import { formatCurrency, AsyncPipe, DecimalPipe, CurrencyPipe } from "@angular/common";
 import { Recalculation, Paint, Workload, Expense, DefaultService, WoodList, Order } from "../../../api/openapi";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
 @Component({
-  selector: 'app-recalculation-detail',
-  templateUrl: './recalculation-detail.component.html',
-  styleUrls: ['./recalculation-detail.component.scss'],
-  standalone: false,
+    selector: 'app-recalculation-detail',
+    templateUrl: './recalculation-detail.component.html',
+    styleUrls: ['./recalculation-detail.component.scss'],
+    imports: [
+        ToolbarComponent,
+        DefaultLayoutDirective,
+        DefaultLayoutAlignDirective,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        TableBuilderComponent,
+        AsyncPipe,
+        DecimalPipe,
+        CurrencyPipe,
+    ],
 })
 export class RecalculationDetailComponent implements OnInit {
 

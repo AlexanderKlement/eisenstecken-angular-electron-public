@@ -5,17 +5,19 @@ import {
   Stock,
   Supplier} from "../../api/openapi";
 import { LockService } from "../shared/services/lock.service";
-import { CustomButton } from "../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 import { AuthService } from "../shared/services/auth.service";
 import { Observable, Subscriber } from "rxjs";
+import { MatTabGroup, MatTab } from "@angular/material/tabs";
+import { TableBuilderComponent } from "../shared/components/table-builder/table-builder.component";
 
 @Component({
     selector: "app-supplier",
     templateUrl: "./supplier.component.html",
     styleUrls: ["./supplier.component.scss"],
-    standalone: false
+    imports: [ToolbarComponent, MatTabGroup, MatTab, TableBuilderComponent]
 })
 export class SupplierComponent implements OnInit {
   supplierTableDataSource: TableDataSource<Supplier>;

@@ -8,8 +8,8 @@ describe('SingleNoteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SingleNoteComponent ]
-    })
+    imports: [SingleNoteComponent]
+})
     .compileComponents();
   });
 

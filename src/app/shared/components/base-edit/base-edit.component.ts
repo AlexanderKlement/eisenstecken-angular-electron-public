@@ -7,10 +7,9 @@ import { AbstractControl } from "@angular/forms";
 import { ReusableRoute } from "../../reusable-route";
 
 @Component({
-  selector: 'app-base-edit',
-  template: ``,
-  styleUrls: ['./base-edit.component.scss'],
-  standalone: false,
+    selector: 'app-base-edit',
+    template: ``,
+    styleUrls: ['./base-edit.component.scss'],
 })
 export class BaseEditComponent<T> implements OnInit, OnDestroy, ReusableRoute {
 

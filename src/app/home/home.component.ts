@@ -4,12 +4,18 @@ import {InfoDialogComponent} from "./info-dialog/info-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponent} from "../shared/components/confirm-dialog/confirm-dialog.component";
 import {DefaultService} from "../../api/openapi";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective, FlexModule } from "ng-flex-layout";
+import { CalendarsChatFrameComponent } from "./calendars-chat-frame/calendars-chat-frame.component";
+import { NoteComponent } from "./note/note.component";
+import { MenuTilesComponent } from "./menu-tiles/menu-tiles.component";
+import { MatIconButton, MatButton } from "@angular/material/button";
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss'],
-    standalone: false
+    imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective, FlexModule, CalendarsChatFrameComponent, NoteComponent, MenuTilesComponent, MatIconButton, MatButton, MatIcon]
 })
 export class HomeComponent implements OnInit {
 

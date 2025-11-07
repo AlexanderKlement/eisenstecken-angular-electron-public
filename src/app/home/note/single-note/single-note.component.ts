@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged, first } from 'rxjs/operators';
 import { DefaultService, Note, NoteCreate } from '../../../../api/openapi';
@@ -8,7 +8,7 @@ import { DefaultService, Note, NoteCreate } from '../../../../api/openapi';
     selector: 'app-single-note',
     templateUrl: './single-note.component.html',
     styleUrls: ['./single-note.component.scss'],
-    standalone: false
+    imports: [FormsModule, ReactiveFormsModule]
 })
 export class SingleNoteComponent implements OnInit, OnDestroy {
 

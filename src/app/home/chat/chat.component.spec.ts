@@ -9,15 +9,15 @@ describe('ChatComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ChatComponent ],
-      imports: [
+    imports: [
         ChatComponent,
-        AppComponent
-      ],
-      providers: [
+        AppComponent,
+        ChatComponent
+    ],
+    providers: [
         ChatService
-      ]
-    })
+    ]
+})
       .compileComponents();
   });
 

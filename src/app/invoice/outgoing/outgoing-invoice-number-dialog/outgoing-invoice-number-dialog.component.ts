@@ -1,15 +1,18 @@
 import {Component, OnInit} from "@angular/core";
-import {UntypedFormControl, UntypedFormGroup} from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {first} from "rxjs/operators";
-import { MatDialogRef} from "@angular/material/dialog";
+import { MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {DefaultService, ParameterCreate} from "../../../../api/openapi";
+import { CdkScrollable } from "@angular/cdk/scrolling";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { MatButton } from "@angular/material/button";
 
 @Component({
     selector: 'app-outgoing-invoice-number-dialog',
     templateUrl: './outgoing-invoice-number-dialog.component.html',
     styleUrls: ['./outgoing-invoice-number-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatDialogActions, MatButton]
 })
 export class OutgoingInvoiceNumberDialogComponent implements OnInit {
 

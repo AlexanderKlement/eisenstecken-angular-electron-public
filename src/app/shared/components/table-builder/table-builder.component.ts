@@ -14,6 +14,13 @@ import { debounceTime, distinctUntilChanged, tap } from "rxjs/operators";
 import { fromEvent, Observable, Subscription } from "rxjs";
 import { DataSourceClass } from "../../types";
 import { ThemePalette } from "@angular/material/core";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { MatFormField, MatInput } from "@angular/material/input";
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from "@angular/material/table";
+import { MatButton } from "@angular/material/button";
+import { MatTooltip } from "@angular/material/tooltip";
+import { AsyncPipe } from "@angular/common";
 
 export interface TableButton {
   name: (values: any) => string;
@@ -24,10 +31,30 @@ export interface TableButton {
 }
 
 @Component({
-  selector: "app-table-builder",
-  templateUrl: "./table-builder.component.html",
-  styleUrls: ["./table-builder.component.scss"],
-  standalone: false,
+    selector: "app-table-builder",
+    templateUrl: "./table-builder.component.html",
+    styleUrls: ["./table-builder.component.scss"],
+    imports: [
+        DefaultLayoutDirective,
+        DefaultLayoutAlignDirective,
+        MatFormField,
+        MatInput,
+        MatProgressSpinner,
+        MatTable,
+        MatColumnDef,
+        MatHeaderCellDef,
+        MatHeaderCell,
+        MatCellDef,
+        MatCell,
+        MatButton,
+        MatHeaderRowDef,
+        MatHeaderRow,
+        MatRowDef,
+        MatRow,
+        MatTooltip,
+        MatPaginator,
+        AsyncPipe,
+    ],
 })
 export class TableBuilderComponent<T extends DataSourceClass>
   implements OnInit, AfterViewInit, OnDestroy

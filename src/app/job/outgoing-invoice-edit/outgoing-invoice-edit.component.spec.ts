@@ -8,8 +8,8 @@ describe('OutgoingInvoiceEditComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ OutgoingInvoiceEditComponent ]
-    })
+    imports: [OutgoingInvoiceEditComponent]
+})
     .compileComponents();
   });
 

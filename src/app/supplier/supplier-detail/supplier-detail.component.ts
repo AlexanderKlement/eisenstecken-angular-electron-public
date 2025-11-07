@@ -2,7 +2,7 @@ import { Component, ComponentRef, OnInit, ViewChild } from "@angular/core";
 import { InfoDataSource } from "../../shared/components/info-builder/info-builder.datasource";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
-import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { InfoBuilderComponent } from "../../shared/components/info-builder/info-builder.component";
 import { MatDialog } from "@angular/material/dialog";
 import { OrderDateReturnData, OrderDialogComponent } from "./order-dialog/order-dialog.component";
@@ -15,12 +15,14 @@ import { FileService } from "../../shared/services/file.service";
 import { EmailService } from "../../shared/services/email.service";
 import { combineLatest, Observable, Subscriber } from "rxjs";
 import { OrderBundleCreate, Supplier, Order, OrderBundle, DefaultService } from "../../../api/openapi";
+import { MatTabGroup, MatTab } from "@angular/material/tabs";
+import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
 @Component({
     selector: 'app-supplier-detail',
     templateUrl: './supplier-detail.component.html',
     styleUrls: ['./supplier-detail.component.scss'],
-    standalone: false
+    imports: [ToolbarComponent, InfoBuilderComponent, MatTabGroup, MatTab, TableBuilderComponent]
 })
 export class SupplierDetailComponent implements OnInit {
 

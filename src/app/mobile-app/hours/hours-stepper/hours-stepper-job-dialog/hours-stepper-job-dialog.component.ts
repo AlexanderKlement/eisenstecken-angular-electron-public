@@ -1,8 +1,12 @@
 import {Component, Inject, OnInit, ViewChild} from "@angular/core";
-import {UntypedFormArray, UntypedFormGroup} from "@angular/forms";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import { UntypedFormArray, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
 import {HoursStepperComponent, JobEnum} from "../hours-stepper.component";
 import {MatStepper, StepperOrientation} from "@angular/material/stepper";
+import { CdkScrollable } from "@angular/cdk/scrolling";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule } from "ng-flex-layout";
+import { MatButton } from "@angular/material/button";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
 
 export enum HoursStepperVariantEnum {
     client,
@@ -23,7 +27,7 @@ export interface HoursStepperDialogData {
     selector: 'app-hours-stepper-job-dialog',
     templateUrl: './hours-stepper-job-dialog.component.html',
     styleUrls: ['./hours-stepper-job-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, MatButton, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatDialogActions]
 })
 export class HoursStepperJobDialogComponent implements OnInit {
 

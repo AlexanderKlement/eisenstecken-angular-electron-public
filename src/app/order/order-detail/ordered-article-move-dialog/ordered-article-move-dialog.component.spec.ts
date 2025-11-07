@@ -8,8 +8,8 @@ describe('OrderedArticleMoveDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ OrderedArticleMoveDialogComponent ]
-    })
+    imports: [OrderedArticleMoveDialogComponent]
+})
     .compileComponents();
   });
 

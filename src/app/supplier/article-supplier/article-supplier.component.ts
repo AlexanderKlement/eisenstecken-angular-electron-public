@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import {
   Column,
   TableDataSource,
@@ -13,12 +13,13 @@ import {
 import { MatDialog } from "@angular/material/dialog";
 import { first } from "rxjs/operators";
 import { DefaultService, Article } from "../../../api/openapi";
+import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
 @Component({
-  selector: "app-article-supplier",
-  templateUrl: "./article-supplier.component.html",
-  styleUrls: ["./article-supplier.component.scss"],
-  standalone: false,
+    selector: "app-article-supplier",
+    templateUrl: "./article-supplier.component.html",
+    styleUrls: ["./article-supplier.component.scss"],
+    imports: [ToolbarComponent, TableBuilderComponent],
 })
 export class ArticleSupplierComponent implements OnInit {
   buttons: CustomButton[] = [];

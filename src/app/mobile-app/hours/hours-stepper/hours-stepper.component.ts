@@ -5,20 +5,12 @@ import {
   ViewChild,
 } from "@angular/core";
 import { CustomButton } from "../../../shared/components/toolbar/toolbar.component";
-import {
-  AbstractControl,
-  UntypedFormArray,
-  UntypedFormControl,
-  UntypedFormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from "@angular/forms";
+import { AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { Observable, Subject, Subscriber } from "rxjs";
 import { AuthService } from "../../../shared/services/auth.service";
 import { first } from "rxjs/operators";
 import { Router } from "@angular/router";
-import { MatStepper, StepperOrientation } from "@angular/material/stepper";
+import { MatStepper, StepperOrientation, MatStep, MatStepLabel, MatStepperNext, MatStepperPrevious } from "@angular/material/stepper";
 import { MatDialog } from "@angular/material/dialog";
 import {
   HoursStepperJobDialogComponent,
@@ -44,6 +36,14 @@ import {
   JobSectionCreate,
   WorkDayCreate,
 } from "../../../../api/openapi";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexAlignDirective } from "ng-flex-layout";
+import { MatButton } from "@angular/material/button";
+import { NgClass, AsyncPipe } from "@angular/common";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { MatActionList, MatSelectionList, MatListOption } from "@angular/material/list";
+import { MatIcon } from "@angular/material/icon";
+import { MatSelect, MatOption } from "@angular/material/select";
+import { HoursSummaryComponent } from "../hours-summary/hours-summary.component";
 
 function greaterThanValidator(value: number): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -61,10 +61,35 @@ export enum JobEnum {
 
 
 @Component({
-  selector: 'app-hours-stepper',
-  templateUrl: './hours-stepper.component.html',
-  styleUrls: ['./hours-stepper.component.scss'],
-  standalone: false,
+    selector: 'app-hours-stepper',
+    templateUrl: './hours-stepper.component.html',
+    styleUrls: ['./hours-stepper.component.scss'],
+    imports: [
+        DefaultLayoutDirective,
+        DefaultLayoutAlignDirective,
+        MatStepper,
+        MatStep,
+        MatStepLabel,
+        FormsModule,
+        ReactiveFormsModule,
+        FlexModule,
+        MatButton,
+        NgClass,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatStepperNext,
+        DefaultFlexAlignDirective,
+        MatActionList,
+        MatStepperPrevious,
+        MatSelectionList,
+        MatListOption,
+        MatIcon,
+        MatSelect,
+        MatOption,
+        HoursSummaryComponent,
+        AsyncPipe,
+    ],
 })
 export class HoursStepperComponent implements OnInit {
 

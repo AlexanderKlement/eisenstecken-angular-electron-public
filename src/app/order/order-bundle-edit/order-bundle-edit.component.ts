@@ -4,16 +4,33 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { first } from "rxjs/operators";
-import { UntypedFormArray, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { OrderBundle, DefaultService, Order, Lock, OrderedArticlePriceUpdate } from "../../../api/openapi";
+import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective } from "ng-flex-layout";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { MatIcon } from "@angular/material/icon";
+import { MatButton } from "@angular/material/button";
 
 @Component({
-  selector: 'app-order-bundle-edit',
-  templateUrl: './order-bundle-edit.component.html',
-  styleUrls: ['./order-bundle-edit.component.scss'],
-  standalone: false,
+    selector: 'app-order-bundle-edit',
+    templateUrl: './order-bundle-edit.component.html',
+    styleUrls: ['./order-bundle-edit.component.scss'],
+    imports: [
+        ToolbarComponent,
+        FormsModule,
+        ReactiveFormsModule,
+        DefaultLayoutDirective,
+        DefaultLayoutAlignDirective,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatIcon,
+        DefaultFlexDirective,
+        MatButton,
+    ],
 })
 export class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> implements OnInit {
 

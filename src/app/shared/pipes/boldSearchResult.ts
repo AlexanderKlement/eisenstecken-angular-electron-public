@@ -2,10 +2,7 @@
   import { Pipe, PipeTransform, SecurityContext } from "@angular/core";
 import {DomSanitizer} from "@angular/platform-browser";
 
-  @Pipe({
-    name: 'boldSpan',
-    standalone: false
-})
+  @Pipe({ name: 'boldSpan' })
 export class BoldSpanPipe implements PipeTransform {
 
   constructor(

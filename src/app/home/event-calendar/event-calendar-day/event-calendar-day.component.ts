@@ -9,12 +9,17 @@ import {first} from "rxjs/operators";
 import {Subject, Subscription} from "rxjs";
 import {AuthService} from "../../../shared/services/auth.service";
 import {DefaultService, CompanyEvent, CompanyEventEnum} from "../../../../api/openapi";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { NgClass } from "@angular/common";
+import { DefaultClassDirective } from "ng-flex-layout/extended";
+import { MatIcon } from "@angular/material/icon";
+import { EventCalendarEventComponent } from "../event-calendar-event/event-calendar-event.component";
 
 @Component({
     selector: 'app-event-calendar-day',
     templateUrl: './event-calendar-day.component.html',
     styleUrls: ['./event-calendar-day.component.scss'],
-    standalone: false
+    imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, NgClass, DefaultClassDirective, MatIcon, EventCalendarEventComponent]
 })
 export class EventCalendarDayComponent implements OnInit, OnChanges, OnDestroy {
 

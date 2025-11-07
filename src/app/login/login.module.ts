@@ -15,22 +15,20 @@ import {LoginRoutingModule} from "./login-routing.module";
 
 
 @NgModule({
-  declarations: [
-    LoginComponent
-  ],
-  imports: [
-    CommonModule,
-    LoginRoutingModule,
-    SharedModule,
-    FlexModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatSelectModule,
-    MatToolbarModule,
-    MatDatepickerModule,
-    MatCheckboxModule
-  ]
+    imports: [
+        CommonModule,
+        LoginRoutingModule,
+        SharedModule,
+        FlexModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatSelectModule,
+        MatToolbarModule,
+        MatDatepickerModule,
+        MatCheckboxModule,
+        LoginComponent
+    ]
 })
 export class LoginModule { }

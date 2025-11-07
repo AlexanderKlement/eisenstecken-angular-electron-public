@@ -1,7 +1,9 @@
 import {Component, Inject, OnInit} from "@angular/core";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogContent } from "@angular/material/dialog";
 import {Observable} from "rxjs";
 import {first} from "rxjs/operators";
+import { CdkScrollable } from "@angular/cdk/scrolling";
+import { MatButton } from "@angular/material/button";
 
 export interface LockDialogData {
     lock: Lock;
@@ -13,7 +15,7 @@ export interface LockDialogData {
     selector: 'app-lock-dialog',
     templateUrl: './lock-dialog.component.html',
     styleUrls: ['./lock-dialog.component.scss'],
-    standalone: false
+    imports: [CdkScrollable, MatDialogContent, MatButton]
 })
 
 export class LockDialogComponent implements OnInit {

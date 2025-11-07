@@ -13,9 +13,6 @@ import {SharedModule} from "../shared/shared.module";
 
 
 @NgModule({
-  declarations: [
-    DebugComponent
-  ],
     imports: [
         CommonModule,
         DebugRoutingModule,
@@ -25,7 +22,8 @@ import {SharedModule} from "../shared/shared.module";
         MatFormFieldModule,
         MatInputModule,
         MatTabsModule,
-        SharedModule
+        SharedModule,
+        DebugComponent
     ]
 })
 export class DebugModule { }

@@ -4,12 +4,13 @@ import { ElectronService } from "./core/services";
 import { TranslateService } from "@ngx-translate/core";
 import { APP_CONFIG } from "../environments/environment";
 import { MatDialog } from "@angular/material/dialog";
+import { AppRouterOutletDirective } from "./router-outlet";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
-  standalone: false,
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    imports: [AppRouterOutletDirective],
 })
 export class AppComponent {
   constructor(

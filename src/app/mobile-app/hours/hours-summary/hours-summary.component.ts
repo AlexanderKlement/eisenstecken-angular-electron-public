@@ -4,12 +4,13 @@ import {HoursStepperComponent, JobEnum} from "../hours-stepper/hours-stepper.com
 import {first, map} from "rxjs/operators";
 import {forkJoin, Observable, Subscription} from "rxjs";
 import {DefaultService} from "../../../../api/openapi";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
 
 @Component({
     selector: 'app-hours-summary',
     templateUrl: './hours-summary.component.html',
     styleUrls: ['./hours-summary.component.scss'],
-    standalone: false
+    imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective]
 })
 export class HoursSummaryComponent implements OnInit, OnDestroy {
 

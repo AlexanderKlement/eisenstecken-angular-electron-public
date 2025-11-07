@@ -1,12 +1,16 @@
 import {Component, ElementRef, OnInit, ViewChild} from "@angular/core";
 import {first} from "rxjs/operators";
 import { DefaultService, Note, NoteCreate } from "../../../api/openapi";
+import { FlexModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective } from "ng-flex-layout";
+import { SingleNoteComponent } from "./single-note/single-note.component";
+import { MatFabButton } from "@angular/material/button";
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
     selector: 'app-note',
     templateUrl: './note.component.html',
     styleUrls: ['./note.component.scss'],
-    standalone: false
+    imports: [FlexModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective, SingleNoteComponent, MatFabButton, MatIcon]
 })
 export class NoteComponent implements OnInit {
 

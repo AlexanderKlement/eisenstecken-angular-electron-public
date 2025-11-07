@@ -1,13 +1,14 @@
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent } from "@angular/material/dialog";
 import { Observable, Subscription } from "rxjs";
-import {
-  UntypedFormControl,
-  UntypedFormGroup,
-  Validators,
-} from "@angular/forms";
-import { CurrencyPipe, getLocaleCurrencyCode } from "@angular/common";
+import { UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { CurrencyPipe, getLocaleCurrencyCode, AsyncPipe } from "@angular/common";
 import { DefaultService, Unit } from "../../../../api/openapi";
+import { CdkScrollable } from "@angular/cdk/scrolling";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexDirective } from "ng-flex-layout";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { MatSelect, MatOption } from "@angular/material/select";
+import { MatButton } from "@angular/material/button";
 
 export interface OrderDialogData {
   title: string;
@@ -28,10 +29,27 @@ export interface OrderDialogData {
 }
 
 @Component({
-  selector: 'app-product-edit-dialog',
-  templateUrl: './product-edit-dialog.component.html',
-  styleUrls: ['./product-edit-dialog.component.scss'],
-  standalone: false,
+    selector: 'app-product-edit-dialog',
+    templateUrl: './product-edit-dialog.component.html',
+    styleUrls: ['./product-edit-dialog.component.scss'],
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        DefaultLayoutDirective,
+        DefaultLayoutAlignDirective,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        FlexModule,
+        MatSelect,
+        MatOption,
+        DefaultFlexDirective,
+        MatButton,
+        AsyncPipe,
+    ],
 })
 export class ProductEditDialogComponent implements OnInit, OnDestroy {
   unitOptions$: Observable<Unit[]>;

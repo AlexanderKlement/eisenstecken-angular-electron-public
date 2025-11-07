@@ -8,8 +8,8 @@ describe('ChangePathDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ChangePathDialogComponent ]
-    })
+    imports: [ChangePathDialogComponent]
+})
     .compileComponents();
   });
 

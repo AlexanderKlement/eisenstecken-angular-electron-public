@@ -4,12 +4,15 @@ import { first, map } from "rxjs/operators";
 import { ConfirmDialogComponent } from "../../../shared/components/confirm-dialog/confirm-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { JobStatus, DefaultService, JobStatusType } from "../../../../api/openapi";
+import { MatToolbar } from "@angular/material/toolbar";
+import { MatButton } from "@angular/material/button";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
     selector: 'app-job-status-bar',
     templateUrl: './job-status-bar.component.html',
     styleUrls: ['./job-status-bar.component.scss'],
-    standalone: false
+    imports: [MatToolbar, MatButton, AsyncPipe]
 })
 export class JobStatusBarComponent implements OnInit {
 

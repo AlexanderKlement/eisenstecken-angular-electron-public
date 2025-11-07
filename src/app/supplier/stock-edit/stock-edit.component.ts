@@ -1,16 +1,30 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { first } from "rxjs/operators";
 import { DefaultService, Lock, Stock, StockCreate, StockUpdate } from "../../../api/openapi";
+import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { MatButton } from "@angular/material/button";
 
 @Component({
-  selector: 'app-stock-edit',
-  templateUrl: './stock-edit.component.html',
-  styleUrls: ['./stock-edit.component.scss'],
-  standalone: false,
+    selector: 'app-stock-edit',
+    templateUrl: './stock-edit.component.html',
+    styleUrls: ['./stock-edit.component.scss'],
+    imports: [
+        ToolbarComponent,
+        FormsModule,
+        ReactiveFormsModule,
+        DefaultLayoutDirective,
+        DefaultLayoutAlignDirective,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatButton,
+    ],
 })
 export class StockEditComponent extends BaseEditComponent<Stock> implements OnInit, OnDestroy {
   stockGroup: UntypedFormGroup;

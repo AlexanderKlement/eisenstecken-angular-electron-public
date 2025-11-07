@@ -29,19 +29,6 @@ import {MoveJobDialogComponent} from "./job-detail/move-job-dialog/move-job-dial
 
 
 @NgModule({
-    declarations: [
-        JobComponent,
-        JobDetailComponent,
-        JobEditComponent,
-        JobStatusBarComponent,
-        OfferEditComponent,
-        OutgoingInvoiceEditComponent,
-        WorkHoursComponent,
-        WorkHourEditDialogComponent,
-        OrderPrintDialogComponent,
-        ChangePathDialogComponent,
-        MoveJobDialogComponent
-    ],
     exports: [
         JobStatusBarComponent
     ],
@@ -61,7 +48,18 @@ import {MoveJobDialogComponent} from "./job-detail/move-job-dialog/move-job-dial
         MatIconModule,
         MatDialogModule,
         MatTabsModule,
-        MatListModule
+        MatListModule,
+        JobComponent,
+        JobDetailComponent,
+        JobEditComponent,
+        JobStatusBarComponent,
+        OfferEditComponent,
+        OutgoingInvoiceEditComponent,
+        WorkHoursComponent,
+        WorkHourEditDialogComponent,
+        OrderPrintDialogComponent,
+        ChangePathDialogComponent,
+        MoveJobDialogComponent
     ]
 })
 export class JobModule { }

@@ -1,11 +1,11 @@
 import {Component, OnInit} from "@angular/core";
-import {CustomButton} from "../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
 
 @Component({
     selector: 'app-calendar',
     templateUrl: './event-calendar.component.html',
     styleUrls: ['./event-calendar.component.scss'],
-    standalone: false
+    imports: [ToolbarComponent]
 })
 export class EventCalendarComponent implements OnInit {
     buttons: CustomButton[] = [];
