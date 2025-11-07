@@ -9,7 +9,7 @@ import {
   ViewChild,
 } from "@angular/core";
 import { TableDataSource } from "./table-builder.datasource";
-import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { MatPaginator } from "@angular/material/paginator";
 import { debounceTime, distinctUntilChanged, tap } from "rxjs/operators";
 import { fromEvent, Observable, Subscription } from "rxjs";
 import { DataSourceClass } from "../../types";
