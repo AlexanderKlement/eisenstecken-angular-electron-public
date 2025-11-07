@@ -2,22 +2,16 @@
   "root": true,
   "ignorePatterns": [
     "app/**/*",
-    // ignore nodeJs files
     "dist/**/*",
     "release/**/*"
   ],
   "overrides": [
     {
-      "files": [
-        "*.ts"
-      ],
+      "files": ["*.ts"],
+      "parser": "@typescript-eslint/parser",
       "parserOptions": {
-        "parserOptions": {
-          "ecmaVersion": 2017
-        },
-        "env": {
-          "es6": true
-        },
+        "ecmaVersion": 2017,
+        "sourceType": "module",
         "project": [
           "./tsconfig.serve.json",
           "./src/tsconfig.app.json",
@@ -26,25 +20,28 @@
         ],
         "createDefaultProgram": true
       },
+      "env": {
+        "es6": true,
+        "browser": true
+      },
+      "plugins": ["@typescript-eslint"],
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended"
+      ],
       "rules": {
-        "prefer-template": 0,
-        "prefer-arrow/prefer-arrow-functions": 0,
+        "prefer-template": "off",
+        "prefer-arrow/prefer-arrow-functions": "off",
         "@typescript-eslint/quotes": [
           "warn",
           "double",
-          {
-            "avoidEscape": true,
-            "allowTemplateLiterals": true
-          }
+          { "avoidEscape": true, "allowTemplateLiterals": true }
         ]
       }
     },
     {
-      "files": [
-        "*.html"
-      ],
-      "rules": {
-      }
+      "files": ["*.html"],
+      "rules": {}
     }
   ]
 }

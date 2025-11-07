@@ -7,20 +7,21 @@ import { Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { NavigationService } from '../../shared/services/navigation.service';
 import { DefaultService, Lock, Stock, StockCreate, StockUpdate } from '../../../api/openapi';
+import { BackStackService } from '../../src/app/shared/services/back-stack.service';
 
 @Component({
-    selector: 'app-stock-edit',
-    templateUrl: './stock-edit.component.html',
-    styleUrls: ['./stock-edit.component.scss'],
-    standalone: false
+  selector: 'app-stock-edit',
+  templateUrl: './stock-edit.component.html',
+  styleUrls: ['./stock-edit.component.scss'],
+  standalone: false,
 })
 export class StockEditComponent extends BaseEditComponent<Stock> implements OnInit, OnDestroy {
   stockGroup: UntypedFormGroup;
   navigationTarget = 'stock';
   title = 'Lager: Bearbeiten';
 
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private navigation: NavigationService) {
-    super(api, router, route, dialog);
+  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, backStack: BackStackService, navigation: NavigationService) {
+    super(api, router, route, dialog, backStack, navigation);
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> => api.islockedStockStockIslockedStockIdGet(id);

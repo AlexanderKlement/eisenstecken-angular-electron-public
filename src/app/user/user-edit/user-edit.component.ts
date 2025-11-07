@@ -1,53 +1,54 @@
-import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
-import { ActivatedRoute, Router } from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
-import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
-import { Observable } from "rxjs";
-import { first, tap } from "rxjs/operators";
-import { MatSelectionList } from "@angular/material/list";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
-import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
-import { AuthService } from "../../shared/services/auth.service";
-import { NavigationService } from "../../shared/services/navigation.service";
-import { UserPassword, UserUpdate, UserCreate, User, Right, DefaultService, Lock } from "../../../api/openapi";
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { BaseEditComponent } from '../../shared/components/base-edit/base-edit.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { first, tap } from 'rxjs/operators';
+import { MatSelectionList } from '@angular/material/list';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { CustomButton } from '../../shared/components/toolbar/toolbar.component';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
+import { AuthService } from '../../shared/services/auth.service';
+import { NavigationService } from '../../shared/services/navigation.service';
+import { UserPassword, UserUpdate, UserCreate, User, Right, DefaultService, Lock } from '../../../api/openapi';
+import { BackStackService } from '../../src/app/shared/services/back-stack.service';
 
 const titles = {
-  users: "Benutzer",
-  calendars: "Kalender",
-  vats: "Mehrwertssteuer Einstellungen",
-  units: "Einheiten",
-  suppliers: "Lieferanten",
-  stocks: "Lager",
-  rights: "Rechte Verwaltung",
-  orders: "Bestellungen",
-  offers: "Angebote",
-  jobs: "Aufträge",
-  parameters: "Parameter Einstellungen",
+  users: 'Benutzer',
+  calendars: 'Kalender',
+  vats: 'Mehrwertssteuer Einstellungen',
+  units: 'Einheiten',
+  suppliers: 'Lieferanten',
+  stocks: 'Lager',
+  rights: 'Rechte Verwaltung',
+  orders: 'Bestellungen',
+  offers: 'Angebote',
+  jobs: 'Aufträge',
+  parameters: 'Parameter Einstellungen',
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  ingoing_invoices: "Eingangsrechnungen",
+  ingoing_invoices: 'Eingangsrechnungen',
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  outgoing_invoices: "Ausgangsrechnungen",
-  clients: "Kundenverwaltung",
-  categories: "Produkt-Kategorien",
-  articles: "Produkte",
-  reminders: "Mahnwesen",
-  payments: "Zahlungen",
-  hours: "Stunden eintragen",
-  recalculations: "Nachkalkulation",
+  outgoing_invoices: 'Ausgangsrechnungen',
+  clients: 'Kundenverwaltung',
+  categories: 'Produkt-Kategorien',
+  articles: 'Produkte',
+  reminders: 'Mahnwesen',
+  payments: 'Zahlungen',
+  hours: 'Stunden eintragen',
+  recalculations: 'Nachkalkulation',
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  delivery_notes: "Lieferscheine",
-  prices: "Preise",
+  delivery_notes: 'Lieferscheine',
+  prices: 'Preise',
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  work_hours: "Arbeitsstunden",
+  work_hours: 'Arbeitsstunden',
 };
 
 @Component({
-    selector: 'app-user-edit',
-    templateUrl: './user-edit.component.html',
-    styleUrls: ['./user-edit.component.scss'],
-    standalone: false
+  selector: 'app-user-edit',
+  templateUrl: './user-edit.component.html',
+  styleUrls: ['./user-edit.component.scss'],
+  standalone: false,
 })
 export class UserEditComponent extends BaseEditComponent<User> implements OnInit, OnDestroy {
 
@@ -61,14 +62,14 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
   rightsLoaded = false;
 
 
-  navigationTarget = "user";
+  navigationTarget = 'user';
   buttons: CustomButton[] = [];
   grantRightsAvailable = false;
-  title = "Benutzer: Bearbeiten";
+  title = 'Benutzer: Bearbeiten';
 
-  constructor(private snackBar: MatSnackBar, private authService: AuthService, api: DefaultService, private navigation: NavigationService,
+  constructor(private snackBar: MatSnackBar, private authService: AuthService, api: DefaultService, backStack: BackStackService, navigation: NavigationService,
               router: Router, route: ActivatedRoute, dialog: MatDialog) {
-    super(api, router, route, dialog);
+    super(api, router, route, dialog, backStack, navigation);
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> => api.islockedUserUsersIslockedUserIdGet(id);
@@ -87,13 +88,13 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
     });
   }
 
-  onCategoryCheck(category: string, checkstate: "unchecked" | "checked" | "indeterminate"): void {
+  onCategoryCheck(category: string, checkstate: 'unchecked' | 'checked' | 'indeterminate'): void {
     switch (checkstate) {
-      case "checked":
+      case 'checked':
         this.userRights = this.userRights.filter((userRight) => !userRight.key.startsWith(category));
         break;
-      case "indeterminate":
-      case "unchecked":
+      case 'indeterminate':
+      case 'unchecked':
         this.availableRights.forEach((right) => {
           if (right.key.startsWith(category) && this.userRights.filter((userRight) => userRight.id === right.id).length === 0) {
             this.userRights.push(right);
@@ -117,37 +118,37 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
     this.availableRightCats = [];
     super.ngOnInit();
     this.userGroup = new UntypedFormGroup({
-      firstname: new UntypedFormControl(""),
-      secondname: new UntypedFormControl(""),
-      email: new UntypedFormControl(""),
-      tel: new UntypedFormControl(""),
-      password: new UntypedFormControl(""),
-      handy: new UntypedFormControl(""),
+      firstname: new UntypedFormControl(''),
+      secondname: new UntypedFormControl(''),
+      email: new UntypedFormControl(''),
+      tel: new UntypedFormControl(''),
+      password: new UntypedFormControl(''),
+      handy: new UntypedFormControl(''),
       office: new UntypedFormControl(false),
       employee: new UntypedFormControl(true),
-      position: new UntypedFormControl(""),
-      dial: new UntypedFormControl(""),
-      cost: new UntypedFormControl(""),
+      position: new UntypedFormControl(''),
+      dial: new UntypedFormControl(''),
+      cost: new UntypedFormControl(''),
       chat: new UntypedFormControl(false),
       hours: new UntypedFormControl(true),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      innovaphone_user: new UntypedFormControl(""),
+      innovaphone_user: new UntypedFormControl(''),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      innovaphone_pass: new UntypedFormControl(""),
+      innovaphone_pass: new UntypedFormControl(''),
       notifications: new UntypedFormControl(true),
     });
     this.passwordGroup = new UntypedFormGroup({
-      password: new UntypedFormControl(""),
+      password: new UntypedFormControl(''),
     });
     if (!this.createMode) {
       this.api.getRightsRightsGet().pipe(first()).subscribe((rights) => {
         this.availableRights = rights;
         rights.forEach(right => {
-          const rightKeyCat = right.key.split(":")[0];
+          const rightKeyCat = right.key.split(':')[0];
           if (this.availableRightCats.filter(cat => cat.key === rightKeyCat).length === 0) {
             let title = titles[rightKeyCat];
-            if (typeof title === "undefined") {
-              title = "Neue Kategorie";
+            if (typeof title === 'undefined') {
+              title = 'Neue Kategorie';
             }
             this.availableRightCats.push({ key: rightKeyCat, open: false, title });
           }
@@ -158,38 +159,38 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
         });
       });
     }
-    this.authService.currentUserHasRight("users:delete").pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasRight('users:delete').pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttons.push({
-          name: "Benutzer löschen",
+          name: 'Benutzer löschen',
           navigate: (): void => {
             this.userDeleteClicked();
           },
         });
       }
     });
-    this.authService.currentUserHasRight("rights:grant").pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasRight('rights:grant').pipe(first()).subscribe(allowed => {
       this.grantRightsAvailable = allowed;
     });
     if (this.createMode) {
-      this.title = "Benutzer: Erstellen";
+      this.title = 'Benutzer: Erstellen';
     }
   }
 
   userDeleteClicked(): void {
     this.authService.getCurrentUser().pipe(first()).subscribe(user => {
       if (user.id === this.id) {
-        this.snackBar.open("Der derzeit angemeldete Benutzer kann nicht gelöscht werden!"
-          , "Ok", {
+        this.snackBar.open('Der derzeit angemeldete Benutzer kann nicht gelöscht werden!'
+          , 'Ok', {
             duration: 10000,
           });
         return;
       }
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-        width: "400px",
+        width: '400px',
         data: {
-          title: "Benutzer löschen?",
-          text: "Hinweis: Dieser Schritt KANN rückgängig gemacht werden.",
+          title: 'Benutzer löschen?',
+          text: 'Hinweis: Dieser Schritt KANN rückgängig gemacht werden.',
         },
       });
       dialogRef.afterClosed().subscribe(result => {
@@ -212,7 +213,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
     return false;
   }
 
-  userHasRightCategory(rightCategory: string): "unchecked" | "checked" | "indeterminate" {
+  userHasRightCategory(rightCategory: string): 'unchecked' | 'checked' | 'indeterminate' {
     let hasAll = true;
     let hasOne = false;
     for (const right of this.availableRights) {
@@ -225,7 +226,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
         }
       }
     }
-    return hasAll ? "checked" : hasOne ? "indeterminate" : "unchecked";
+    return hasAll ? 'checked' : hasOne ? 'indeterminate' : 'unchecked';
   }
 
   ngOnDestroy(): void {
@@ -242,10 +243,10 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
 
   createUpdateSuccess(user: User): void {
     this.id = user.id;
-    this.navigationTarget = "user/edit/" + user.id.toString();
+    this.navigationTarget = 'user/edit/' + user.id.toString();
     this.userRights = user.rights;
     this.navigation.replaceCurrentWith(this.navigationTarget);
-    this.snackBar.open("Speichern erfolgreich!", "Ok", {
+    this.snackBar.open('Speichern erfolgreich!', 'Ok', {
       duration: 3000,
     });
   }
@@ -258,24 +259,24 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
     this.onSubmit();
     if (this.createMode) {
       const userCreate: UserCreate = {
-        email: this.userGroup.get("email").value,
-        tel: this.userGroup.get("tel").value,
-        firstname: this.userGroup.get("firstname").value,
-        secondname: this.userGroup.get("secondname").value,
-        password: this.userGroup.get("password").value,
-        handy: this.userGroup.get("handy").value,
-        dial: this.userGroup.get("dial").value,
-        position: this.userGroup.get("position").value,
-        employee: this.userGroup.get("employee").value,
-        office: this.userGroup.get("office").value,
-        cost: this.userGroup.get("cost").value,
-        chat: this.userGroup.get("chat").value,
-        hours: this.userGroup.get("hours").value,
+        email: this.userGroup.get('email').value,
+        tel: this.userGroup.get('tel').value,
+        firstname: this.userGroup.get('firstname').value,
+        secondname: this.userGroup.get('secondname').value,
+        password: this.userGroup.get('password').value,
+        handy: this.userGroup.get('handy').value,
+        dial: this.userGroup.get('dial').value,
+        position: this.userGroup.get('position').value,
+        employee: this.userGroup.get('employee').value,
+        office: this.userGroup.get('office').value,
+        cost: this.userGroup.get('cost').value,
+        chat: this.userGroup.get('chat').value,
+        hours: this.userGroup.get('hours').value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        innovaphone_user: this.userGroup.get("innovaphone_user").value,
+        innovaphone_user: this.userGroup.get('innovaphone_user').value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        innovaphone_pass: this.userGroup.get("innovaphone_pass").value,
-        notifications: this.userGroup.get("notifications").value,
+        innovaphone_pass: this.userGroup.get('innovaphone_pass').value,
+        notifications: this.userGroup.get('notifications').value,
       };
       this.api.createUserUsersPost(userCreate).pipe(first()).subscribe((user) => {
         this.createUpdateSuccess(user);
@@ -286,23 +287,23 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
       });
     } else {
       const userUpdate: UserUpdate = {
-        email: this.userGroup.get("email").value,
-        tel: this.userGroup.get("tel").value,
-        firstname: this.userGroup.get("firstname").value,
-        secondname: this.userGroup.get("secondname").value,
-        handy: this.userGroup.get("handy").value,
-        dial: this.userGroup.get("dial").value,
-        employee: this.userGroup.get("employee").value,
-        office: this.userGroup.get("office").value,
-        position: this.userGroup.get("position").value,
-        cost: this.userGroup.get("cost").value,
-        chat: this.userGroup.get("chat").value,
-        hours: this.userGroup.get("hours").value,
+        email: this.userGroup.get('email').value,
+        tel: this.userGroup.get('tel').value,
+        firstname: this.userGroup.get('firstname').value,
+        secondname: this.userGroup.get('secondname').value,
+        handy: this.userGroup.get('handy').value,
+        dial: this.userGroup.get('dial').value,
+        employee: this.userGroup.get('employee').value,
+        office: this.userGroup.get('office').value,
+        position: this.userGroup.get('position').value,
+        cost: this.userGroup.get('cost').value,
+        chat: this.userGroup.get('chat').value,
+        hours: this.userGroup.get('hours').value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        innovaphone_user: this.userGroup.get("innovaphone_user").value,
+        innovaphone_user: this.userGroup.get('innovaphone_user').value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        innovaphone_pass: this.userGroup.get("innovaphone_pass").value,
-        notifications: this.userGroup.get("notifications").value,
+        innovaphone_pass: this.userGroup.get('innovaphone_pass').value,
+        notifications: this.userGroup.get('notifications').value,
       };
       this.api.updateUserUsersUserIdPut(this.id, userUpdate).pipe(first()).subscribe((user) => {
         this.createUpdateSuccess(user);
@@ -327,7 +328,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
 
   onSubmitPassword(): void {
     const userPassword: UserPassword = {
-      password: this.passwordGroup.get("password").value,
+      password: this.passwordGroup.get('password').value,
     };
     this.api.updateUserPasswordUsersPasswordUserIdPut(this.id, userPassword).pipe(first()).subscribe((user) => {
       this.createUpdateSuccess(user);

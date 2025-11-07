@@ -1,15 +1,15 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
-import { ActivatedRoute, Router } from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { BaseEditComponent } from '../../shared/components/base-edit/base-edit.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import {
   UntypedFormArray,
   UntypedFormControl,
   UntypedFormGroup,
-} from "@angular/forms";
-import { Observable } from "rxjs";
-import { tap } from "rxjs/operators";
-import { NavigationService } from "../../shared/services/navigation.service";
+} from '@angular/forms';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { NavigationService } from '../../shared/services/navigation.service';
 import {
   Contact,
   ContactCreate,
@@ -18,33 +18,27 @@ import {
   Lock,
   Supplier,
   SupplierCreate,
-} from "../../../api/openapi";
+} from '../../../api/openapi';
+import { BackStackService } from '../../src/app/shared/services/back-stack.service';
 
 @Component({
-  selector: "app-supplier-edit",
-  templateUrl: "./supplier-edit.component.html",
-  styleUrls: ["./supplier-edit.component.scss"],
+  selector: 'app-supplier-edit',
+  templateUrl: './supplier-edit.component.html',
+  styleUrls: ['./supplier-edit.component.scss'],
   standalone: false,
 })
 export class SupplierEditComponent
   extends BaseEditComponent<Supplier>
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   supplierGroup: UntypedFormGroup;
 
-  navigationTarget = "supplier";
+  navigationTarget = 'supplier';
   languageOptions$: Observable<Language[]>;
-  title = "Lieferant: Bearbeiten";
+  title = 'Lieferant: Bearbeiten';
   showInOrders = true;
 
-  constructor(
-    api: DefaultService,
-    router: Router,
-    route: ActivatedRoute,
-    dialog: MatDialog,
-    private navigation: NavigationService,
-  ) {
-    super(api, router, route, dialog);
+  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, backStack: BackStackService, navigation: NavigationService) {
+    super(api, router, route, dialog, backStack, navigation);
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> =>
@@ -60,7 +54,7 @@ export class SupplierEditComponent
     this.languageOptions$ = this.api.readLanguagesLanguageGet();
 
     if (this.createMode) {
-      this.title = "Lieferant: Erstellen";
+      this.title = 'Lieferant: Erstellen';
     }
   }
 
@@ -75,46 +69,46 @@ export class SupplierEditComponent
 
     for (const contactGroup of this.getContacts().controls) {
       if (
-        contactGroup.get("tel").value.trim().length <= 3 &&
-        contactGroup.get("mail").value.trim().length === 0
+        contactGroup.get('tel').value.trim().length <= 3 &&
+        contactGroup.get('mail').value.trim().length === 0
       ) {
         continue;
       }
       contacts.push({
-        id: parseInt(contactGroup.get("id").value, 10),
-        name: contactGroup.get("name").value,
-        name1: contactGroup.get("name1").value,
-        lastname: contactGroup.get("lastname").value,
-        tel: contactGroup.get("tel").value,
-        mail: contactGroup.get("mail").value,
-        note: contactGroup.get("note").value,
+        id: parseInt(contactGroup.get('id').value, 10),
+        name: contactGroup.get('name').value,
+        name1: contactGroup.get('name1').value,
+        lastname: contactGroup.get('lastname').value,
+        tel: contactGroup.get('tel').value,
+        mail: contactGroup.get('mail').value,
+        note: contactGroup.get('note').value,
       });
     }
 
     const supplierCreate: SupplierCreate = {
       contacts,
-      name: this.supplierGroup.get("name").value,
-      mail1: this.supplierGroup.get("mail1").value,
-      mail2: this.supplierGroup.get("mail2").value,
-      tel1: this.supplierGroup.get("tel1").value,
-      tel2: this.supplierGroup.get("tel2").value,
+      name: this.supplierGroup.get('name').value,
+      mail1: this.supplierGroup.get('mail1').value,
+      mail2: this.supplierGroup.get('mail2').value,
+      tel1: this.supplierGroup.get('tel1').value,
+      tel2: this.supplierGroup.get('tel2').value,
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      contact_person: this.supplierGroup.get("contact_person").value,
+      contact_person: this.supplierGroup.get('contact_person').value,
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      send_order_to: this.supplierGroup.get("send_order_to").value,
+      send_order_to: this.supplierGroup.get('send_order_to').value,
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      destination_code: this.supplierGroup.get("destination_code").value,
+      destination_code: this.supplierGroup.get('destination_code').value,
       address: {
-        name: this.supplierGroup.get("name").value,
+        name: this.supplierGroup.get('name').value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        street_number: this.supplierGroup.get("address.street_number").value,
-        city: this.supplierGroup.get("address.city").value,
-        cap: this.supplierGroup.get("address.cap").value,
+        street_number: this.supplierGroup.get('address.street_number').value,
+        city: this.supplierGroup.get('address.city').value,
+        cap: this.supplierGroup.get('address.cap').value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        country_code: this.supplierGroup.get("address.country").value,
+        country_code: this.supplierGroup.get('address.country').value,
       },
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      language_code: this.supplierGroup.get("language").value,
+      language_code: this.supplierGroup.get('language').value,
       // eslint-disable-next-line @typescript-eslint/naming-convention
       show_in_orders: this.showInOrders,
     };
@@ -158,14 +152,14 @@ export class SupplierEditComponent
   createUpdateSuccess(supplier: Supplier): void {
     this.id = supplier.id;
     if (this.createMode) {
-      this.navigation.replaceCurrentWith("supplier");
+      this.navigation.replaceCurrentWith('supplier');
     } else {
-      this.navigation.replaceCurrentWith("supplier/" + supplier.id.toString());
+      this.navigation.replaceCurrentWith('supplier/' + supplier.id.toString());
     }
   }
 
   getAddressGroup(): UntypedFormGroup {
-    return this.supplierGroup.get("address") as UntypedFormGroup;
+    return this.supplierGroup.get('address') as UntypedFormGroup;
   }
 
   observableReady(): void {
@@ -190,7 +184,7 @@ export class SupplierEditComponent
   }
 
   getContacts(): UntypedFormArray {
-    return this.supplierGroup.get("contacts") as UntypedFormArray;
+    return this.supplierGroup.get('contacts') as UntypedFormArray;
   }
 
   addContact(contact?: Contact): void {
@@ -211,12 +205,12 @@ export class SupplierEditComponent
     } else {
       return new UntypedFormGroup({
         id: new UntypedFormControl(-1),
-        name: new UntypedFormControl(""),
-        name1: new UntypedFormControl(this.supplierGroup.get("name").value),
-        lastname: new UntypedFormControl(""),
-        tel: new UntypedFormControl("+39"),
-        mail: new UntypedFormControl(""),
-        note: new UntypedFormControl(""),
+        name: new UntypedFormControl(''),
+        name1: new UntypedFormControl(this.supplierGroup.get('name').value),
+        lastname: new UntypedFormControl(''),
+        tel: new UntypedFormControl('+39'),
+        mail: new UntypedFormControl(''),
+        note: new UntypedFormControl(''),
       });
     }
   }
@@ -231,30 +225,30 @@ export class SupplierEditComponent
 
   private initSupplierGroup() {
     this.supplierGroup = new UntypedFormGroup({
-      name: new UntypedFormControl(""),
-      mail1: new UntypedFormControl(""),
-      mail2: new UntypedFormControl(""),
-      tel1: new UntypedFormControl(""),
-      tel2: new UntypedFormControl(""),
-      language: new UntypedFormControl("DE"),
+      name: new UntypedFormControl(''),
+      mail1: new UntypedFormControl(''),
+      mail2: new UntypedFormControl(''),
+      tel1: new UntypedFormControl(''),
+      tel2: new UntypedFormControl(''),
+      language: new UntypedFormControl('DE'),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      contact_person: new UntypedFormControl(""),
+      contact_person: new UntypedFormControl(''),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      send_order_to: new UntypedFormControl(""),
+      send_order_to: new UntypedFormControl(''),
       contacts: new UntypedFormArray([]),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      destination_code: new UntypedFormControl(""),
+      destination_code: new UntypedFormControl(''),
       address: new UntypedFormGroup({
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        street_number: new UntypedFormControl(""),
-        city: new UntypedFormControl(""),
-        cap: new UntypedFormControl(""),
-        country: new UntypedFormControl("IT"),
+        street_number: new UntypedFormControl(''),
+        city: new UntypedFormControl(''),
+        cap: new UntypedFormControl(''),
+        country: new UntypedFormControl('IT'),
       }),
     });
-    this.supplierGroup.get("name").valueChanges.subscribe(() => {
+    this.supplierGroup.get('name').valueChanges.subscribe(() => {
       for (const contact of this.getContacts().controls) {
-        contact.get("name1").setValue(this.supplierGroup.get("name").value);
+        contact.get('name1').setValue(this.supplierGroup.get('name').value);
       }
     });
   }

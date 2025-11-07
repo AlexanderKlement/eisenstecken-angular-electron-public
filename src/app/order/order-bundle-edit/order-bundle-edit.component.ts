@@ -1,28 +1,30 @@
-import { Component, OnInit } from "@angular/core";
-import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
-import { ActivatedRoute, Router } from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
-import { Observable } from "rxjs";
-import { first } from "rxjs/operators";
-import { UntypedFormArray, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
-import { OrderBundle, DefaultService, Order, Lock, OrderedArticlePriceUpdate} from "../../../api/openapi";
+import { Component, OnInit } from '@angular/core';
+import { BaseEditComponent } from '../../shared/components/base-edit/base-edit.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
+import { first } from 'rxjs/operators';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
+import { OrderBundle, DefaultService, Order, Lock, OrderedArticlePriceUpdate } from '../../../api/openapi';
+import { NavigationService } from '../../shared/services/navigation.service';
+import { BackStackService } from '../../src/app/shared/services/back-stack.service';
 
 @Component({
-    selector: 'app-order-bundle-edit',
-    templateUrl: './order-bundle-edit.component.html',
-    styleUrls: ['./order-bundle-edit.component.scss'],
-    standalone: false
+  selector: 'app-order-bundle-edit',
+  templateUrl: './order-bundle-edit.component.html',
+  styleUrls: ['./order-bundle-edit.component.scss'],
+  standalone: false,
 })
 export class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> implements OnInit {
 
   orderBundleId: number;
-  navigationTarget = "supplier";
+  navigationTarget = 'supplier';
   orderBundleGroup: UntypedFormGroup;
 
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private snackbar: MatSnackBar) {
-    super(api, router, route, dialog);
+  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, navigation: NavigationService, backStack: BackStackService, private snackbar: MatSnackBar) {
+    super(api, router, route, dialog, backStack, navigation);
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> => api.islockedOrderBundleOrderBundleIslockedOrderBundleIdGet(id);
@@ -37,10 +39,10 @@ export class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> imp
     this.routeParams.subscribe((params) => {
       this.orderBundleId = parseInt(params.id, 10);
       if (isNaN(this.orderBundleId)) {
-        console.error("OrderBundleEdit: Cannot determine id");
+        console.error('OrderBundleEdit: Cannot determine id');
         this.router.navigateByUrl(this.navigationTarget);
       }
-      this.navigationTarget = "job/" + this.orderBundleId.toString();
+      this.navigationTarget = 'job/' + this.orderBundleId.toString();
       this.loadOrders();
     });
 
@@ -61,11 +63,11 @@ export class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> imp
   }
 
   getOrderFormArray(): UntypedFormArray {
-    return this.orderBundleGroup.get("orders") as UntypedFormArray;
+    return this.orderBundleGroup.get('orders') as UntypedFormArray;
   }
 
   getArticlesAt(index: number): UntypedFormArray {
-    return this.getOrderFormArray().at(index).get("articles") as UntypedFormArray;
+    return this.getOrderFormArray().at(index).get('articles') as UntypedFormArray;
   }
 
   initOrder(order: Order): UntypedFormGroup {
@@ -94,18 +96,18 @@ export class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> imp
   onSubmit(): void {
     const priceUpdate: OrderedArticlePriceUpdate[] = [];
     for (const order of this.getOrderFormArray().controls) {
-      for (const article of (order.get("articles") as UntypedFormArray).controls) {
+      for (const article of (order.get('articles') as UntypedFormArray).controls) {
         priceUpdate.push({
-          id: parseInt(article.get("id").value, 10),
-          price: parseFloat(article.get("price").value),
+          id: parseInt(article.get('id').value, 10),
+          price: parseFloat(article.get('price').value),
         });
       }
     } //This does not work anymore
     this.api.updateOrderedArticlePriceOrderedArticlePricePut(priceUpdate).pipe(first()).subscribe(result => {
       if (result) {
-        this.router.navigateByUrl("order_bundle/" + this.orderBundleId.toString());
+        this.router.navigateByUrl('order_bundle/' + this.orderBundleId.toString());
       } else {
-        console.error("OrderBundleEdit: Could not update all prices");
+        console.error('OrderBundleEdit: Could not update all prices');
       }
     });
   }
@@ -114,21 +116,21 @@ export class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> imp
     const articles = this.getArticlesAt(i);
     const article = articles.at(j);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: "400px",
+      width: '400px',
       data: {
-        title: "Artikel löschen?",
-        text: "Dieser Schritt kann nicht rückgängig gemacht werden.",
+        title: 'Artikel löschen?',
+        text: 'Dieser Schritt kann nicht rückgängig gemacht werden.',
       },
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.api.deleteOrderedArticleOrderedArticleOrderedArticleIdDelete(article.get("id").value).pipe(first())
+        this.api.deleteOrderedArticleOrderedArticleOrderedArticleIdDelete(article.get('id').value).pipe(first())
           .subscribe(success => {
             if (success) {
               articles.removeAt(j);
             } else {
-              this.snackbar.open("Der Artikel konnte leider nicht gelöscht werden. Bitte probieren sie es später erneut"
-                , "Ok", {
+              this.snackbar.open('Der Artikel konnte leider nicht gelöscht werden. Bitte probieren sie es später erneut'
+                , 'Ok', {
                   duration: 10000,
                 });
             }

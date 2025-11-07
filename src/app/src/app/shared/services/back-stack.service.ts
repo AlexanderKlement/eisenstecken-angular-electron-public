@@ -1,7 +1,9 @@
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
+import { Router, NavigationStart } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { NavigationService } from '../../../../shared/services/navigation.service';
 
-type BackHandler = () => boolean | void; // return true if handled
+type BackHandler = () => boolean | void;
 
 @Injectable({ providedIn: 'root' })
 export class BackStackService {
@@ -10,21 +12,32 @@ export class BackStackService {
 
   constructor(
     rendererFactory: RendererFactory2,
-    private navigation: NavigationService, // <-- use this instead of Location.back()
+    private router: Router,
+    private navigation: NavigationService,
   ) {
     this.renderer = rendererFactory.createRenderer(null, null);
 
-    // Browser/Android back
-    window.addEventListener('popstate', () => {
-      console.log('Popstate event');
-      this.dispatchBack();
-      console.log('Dispatch back finished');
-    });
-
-    // ESC as back
     this.renderer.listen('window', 'keyup', (e: KeyboardEvent) => {
       if (e.code === 'Escape') this.dispatchBack();
     });
+
+    this.router.events
+      .pipe(filter((e): e is NavigationStart => e instanceof NavigationStart))
+      .subscribe((e: NavigationStart) => {
+        if (e.navigationTrigger === 'popstate') {
+          const handler = this.stack[this.stack.length - 1];
+          if (!handler) return; // nothing to intercept, let Router proceed
+
+          const consumed = handler() === true;
+          if (consumed) {
+            // Cancel the browser back by restoring current URL
+            // Using microtask to avoid re-entrancy
+            Promise.resolve().then(() => {
+              this.navigation.replaceCurrentWith(this.router.url);
+            });
+          } // else: let Router continue the natural back
+        }
+      });
   }
 
   push(handler: BackHandler): () => void {
@@ -41,7 +54,6 @@ export class BackStackService {
       const handled = handler();
       if (handled === true) return; // consumed
     }
-    // Not handled -> use your NavigationService logic
-    this.navigation.back(); // <-- important change
+    this.navigation.back();
   }
 }

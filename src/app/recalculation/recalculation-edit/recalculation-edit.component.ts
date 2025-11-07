@@ -1,16 +1,16 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
-import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
-import { ActivatedRoute, Router } from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
-import { Observable } from "rxjs";
-import { first, map } from "rxjs/operators";
-import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
-import moment from "moment";
-import { minutesToDisplayableString } from "../../shared/date.util";
-import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
-import { FileService } from "../../shared/services/file.service";
-import { NavigationService } from "../../shared/services/navigation.service";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { BaseEditComponent } from '../../shared/components/base-edit/base-edit.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
+import { first, map } from 'rxjs/operators';
+import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
+import moment from 'moment';
+import { minutesToDisplayableString } from '../../shared/date.util';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
+import { FileService } from '../../shared/services/file.service';
+import { NavigationService } from '../../shared/services/navigation.service';
 import {
   DefaultService,
   Recalculation,
@@ -26,18 +26,19 @@ import {
   WoodList,
   Workload,
   Order,
-  Lock
-} from "../../../api/openapi";
+  Lock,
+} from '../../../api/openapi';
+import { BackStackService } from '../../src/app/shared/services/back-stack.service';
 
 @Component({
-    selector: 'app-recalculation-edit',
-    templateUrl: './recalculation-edit.component.html',
-    styleUrls: ['./recalculation-edit.component.scss'],
-    standalone: false
+  selector: 'app-recalculation-edit',
+  templateUrl: './recalculation-edit.component.html',
+  styleUrls: ['./recalculation-edit.component.scss'],
+  standalone: false,
 })
 export class RecalculationEditComponent extends BaseEditComponent<Recalculation> implements OnInit, OnDestroy {
   recalculationGroup: UntypedFormGroup;
-  navigationTarget = "recalculation";
+  navigationTarget = 'recalculation';
   jobId: number;
   jobName$: Observable<string>;
   units$: Observable<Unit[]>;
@@ -45,11 +46,11 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
 
   orderDataSource: TableDataSource<Order>;
   workloadDataSource: TableDataSource<Workload>;
-  title = "Nachkalkulation: Bearbeiten";
+  title = 'Nachkalkulation: Bearbeiten';
 
   // eslint-disable-next-line max-len
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private file: FileService, private navigation: NavigationService) {
-    super(api, router, route, dialog);
+  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private file: FileService, navigation: NavigationService, backStack: BackStackService) {
+    super(api, router, route, dialog, backStack, navigation);
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> =>
@@ -67,7 +68,7 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
     this.routeParams.subscribe((params) => {
       this.jobId = parseInt(params.job_id, 10);
       if (isNaN(this.jobId)) {
-        console.error("RecalculationEdit: Cannot parse job id");
+        console.error('RecalculationEdit: Cannot parse job id');
         this.router.navigateByUrl(this.navigationTarget);
       }
       this.initOrderTable();
@@ -82,17 +83,17 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
           this.addAtLeastOne();
         });
       } else {
-        this.api.getParameterParameterKeyGet("cost_per_km").pipe(first()).subscribe((cost) => {
-          this.recalculationGroup.get("cost").setValue(cost);
+        this.api.getParameterParameterKeyGet('cost_per_km').pipe(first()).subscribe((cost) => {
+          this.recalculationGroup.get('cost').setValue(cost);
         });
         this.api.readDriveDistanceByJobJourneyDistanceJobIdGet(this.jobId).pipe(first()).subscribe((km) => {
-          this.recalculationGroup.get("km").setValue(km);
+          this.recalculationGroup.get('km').setValue(km);
         });
         this.addAtLeastOne();
       }
     });
     if (this.createMode) {
-      this.title = "Nachkalkulation: Erstellen";
+      this.title = 'Nachkalkulation: Erstellen';
     }
   }
 
@@ -120,8 +121,8 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
       km: new UntypedFormControl(0.0),
       cost: new UntypedFormControl(0.0),
     });
-    this.api.getParameterParameterKeyGet("recalculation_percent").pipe(first()).subscribe((paramter) => {
-      this.recalculationGroup.get("material_charge_percent").setValue(parseFloat(paramter));
+    this.api.getParameterParameterKeyGet('recalculation_percent').pipe(first()).subscribe((paramter) => {
+      this.recalculationGroup.get('material_charge_percent').setValue(parseFloat(paramter));
     });
   }
 
@@ -135,13 +136,13 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
     for (const woodList of recalculation.wood_lists) {
       this.addWoodList(woodList);
     }
-    this.recalculationGroup.get("km").setValue(recalculation.km);
-    this.recalculationGroup.get("cost").setValue(recalculation.cost);
-    this.recalculationGroup.get("material_charge_percent").setValue(recalculation.material_charge_percent);
+    this.recalculationGroup.get('km').setValue(recalculation.km);
+    this.recalculationGroup.get('cost').setValue(recalculation.cost);
+    this.recalculationGroup.get('material_charge_percent').setValue(recalculation.material_charge_percent);
   }
 
   getExpenses(): UntypedFormArray {
-    return this.recalculationGroup.get("expenses") as UntypedFormArray;
+    return this.recalculationGroup.get('expenses') as UntypedFormArray;
   }
 
   removeExpenseAt(index: number): void {
@@ -163,13 +164,13 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
       return new UntypedFormGroup({
         id: new UntypedFormControl(0),
         amount: new UntypedFormControl(0),
-        name: new UntypedFormControl(""),
+        name: new UntypedFormControl(''),
       });
     }
   }
 
   getWoodLists(): UntypedFormArray {
-    return this.recalculationGroup.get("wood_lists") as UntypedFormArray;
+    return this.recalculationGroup.get('wood_lists') as UntypedFormArray;
   }
 
   removeWoodListAt(index: number): void {
@@ -193,13 +194,13 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
       return new UntypedFormGroup({
         id: new UntypedFormControl(0),
         price: new UntypedFormControl(0),
-        name: new UntypedFormControl(""),
+        name: new UntypedFormControl(''),
       });
     }
   }
 
   getPaints(): UntypedFormArray {
-    return this.recalculationGroup.get("paints") as UntypedFormArray;
+    return this.recalculationGroup.get('paints') as UntypedFormArray;
   }
 
   removePaintAt(index: number): void {
@@ -224,7 +225,7 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
       return new UntypedFormGroup({
         id: new UntypedFormControl(0),
         amount: new UntypedFormControl(0),
-        name: new UntypedFormControl(""),
+        name: new UntypedFormControl(''),
         price: new UntypedFormControl(0),
         // eslint-disable-next-line @typescript-eslint/naming-convention
         unit_id: new UntypedFormControl(4),
@@ -237,25 +238,25 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
     const expenses: ExpenseCreate[] = [];
     for (const expenseGroup of this.getExpenses().controls) {
       expenses.push({
-        name: expenseGroup.get("name").value,
-        amount: expenseGroup.get("amount").value,
+        name: expenseGroup.get('name').value,
+        amount: expenseGroup.get('amount').value,
       });
     }
     const paints: PaintCreate[] = [];
     for (const paintGroup of this.getPaints().controls) {
       paints.push({
-        name: paintGroup.get("name").value,
-        price: paintGroup.get("price").value,
-        amount: paintGroup.get("amount").value,
+        name: paintGroup.get('name').value,
+        price: paintGroup.get('price').value,
+        amount: paintGroup.get('amount').value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        unit_id: paintGroup.get("unit_id").value,
+        unit_id: paintGroup.get('unit_id').value,
       });
     }
     const woodLists: WoodListCreate[] = [];
     for (const woodListGroup of this.getWoodLists().controls) {
       woodLists.push({
-        name: woodListGroup.get("name").value,
-        price: woodListGroup.get("price").value,
+        name: woodListGroup.get('name').value,
+        price: woodListGroup.get('price').value,
       });
     }
     if (this.createMode) {
@@ -265,13 +266,13 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
         // eslint-disable-next-line @typescript-eslint/naming-convention
         wood_lists: woodLists,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        material_charge_percent: this.recalculationGroup.get("material_charge_percent").value,
-        km: this.recalculationGroup.get("km").value,
-        cost: this.recalculationGroup.get("cost").value,
+        material_charge_percent: this.recalculationGroup.get('material_charge_percent').value,
+        km: this.recalculationGroup.get('km').value,
+        cost: this.recalculationGroup.get('cost').value,
       };
       this.api.createRecalculationRecalculationJobIdPost(this.jobId, recalculationCreate).pipe(first()).subscribe(recalculation => {
         this.file.open(recalculation.pdf);
-        this.navigation.replaceCurrentWith("recalculation/" + this.jobId);
+        this.navigation.replaceCurrentWith('recalculation/' + this.jobId);
       });
     } else {
       const recalculationUpdate: RecalculationUpdate = {
@@ -280,13 +281,13 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
         // eslint-disable-next-line @typescript-eslint/naming-convention
         wood_lists: woodLists,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        material_charge_percent: this.recalculationGroup.get("material_charge_percent").value,
-        km: this.recalculationGroup.get("km").value,
-        cost: this.recalculationGroup.get("cost").value,
+        material_charge_percent: this.recalculationGroup.get('material_charge_percent').value,
+        km: this.recalculationGroup.get('km').value,
+        cost: this.recalculationGroup.get('cost').value,
       };
       this.api.updateRecalculationRecalculationJobIdPut(this.jobId, recalculationUpdate).pipe(first()).subscribe(recalculation => {
         this.file.open(recalculation.pdf);
-        this.navigation.replaceCurrentWith("recalculation/" + this.jobId);
+        this.navigation.replaceCurrentWith('recalculation/' + this.jobId);
       });
     }
   }
@@ -314,29 +315,29 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
             {
               values: {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                "order_to.displayable_name": dataSource.order_to.displayable_name,
+                'order_to.displayable_name': dataSource.order_to.displayable_name,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                "order_from.displayable_name": dataSource.order_from.displayable_name,
+                'order_from.displayable_name': dataSource.order_from.displayable_name,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                create_date: moment(dataSource.create_date).format("L"),
+                create_date: moment(dataSource.create_date).format('L'),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                delivery_date: dataSource.delivery_date === null ? "" : moment(dataSource.delivery_date).format("L"),
+                delivery_date: dataSource.delivery_date === null ? '' : moment(dataSource.delivery_date).format('L'),
                 status: dataSource.status_translation,
               },
               route: () => {
                 if (this.recalculationGroup.pristine) {
-                  this.router.navigateByUrl("/order/" + dataSource.id.toString());
+                  this.router.navigateByUrl('/order/' + dataSource.id.toString());
                 } else {
                   const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-                    width: "400px",
+                    width: '400px',
                     data: {
-                      title: "Nachkalkulation verlassen?",
-                      text: "Nicht gespeicherte Änderungen gehen eventuell verloren!",
+                      title: 'Nachkalkulation verlassen?',
+                      text: 'Nicht gespeicherte Änderungen gehen eventuell verloren!',
                     },
                   });
                   dialogRef.afterClosed().subscribe(result => {
                     if (result) {
-                      this.router.navigateByUrl("/order/" + dataSource.id.toString());
+                      this.router.navigateByUrl('/order/' + dataSource.id.toString());
                     }
                   });
                 }
@@ -346,11 +347,11 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
         return rows;
       },
       [
-        { name: "order_to.displayable_name", headerName: "Ziel" },
-        { name: "order_from.displayable_name", headerName: "Herkunft" },
-        { name: "create_date", headerName: "Erstelldatum" },
-        { name: "delivery_date", headerName: "Lieferdatum" },
-        { name: "status", headerName: "Status" },
+        { name: 'order_to.displayable_name', headerName: 'Ziel' },
+        { name: 'order_from.displayable_name', headerName: 'Herkunft' },
+        { name: 'create_date', headerName: 'Erstelldatum' },
+        { name: 'delivery_date', headerName: 'Lieferdatum' },
+        { name: 'status', headerName: 'Status' },
       ],
       (api) => api.readOrdersToCountOrderToOrderableToIdCountGet(this.jobId),
     );
@@ -368,7 +369,7 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
           rows.push(
             {
               values: {
-                "user.fullname": dataSource.user.fullname,
+                'user.fullname': dataSource.user.fullname,
                 minutes: minutesToDisplayableString(dataSource.minutes),
                 cost: dataSource.cost,
               },
@@ -380,9 +381,9 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
         return rows;
       },
       [
-        { name: "user.fullname", headerName: "Name" },
-        { name: "minutes", headerName: "Zeit" },
-        { name: "cost", headerName: "Kosten [€]" },
+        { name: 'user.fullname', headerName: 'Name' },
+        { name: 'minutes', headerName: 'Zeit' },
+        { name: 'cost', headerName: 'Kosten [€]' },
       ],
       (api) => api.readWorkloadCountWorkloadCountGet(undefined, this.jobId),
     );

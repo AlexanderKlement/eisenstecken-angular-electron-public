@@ -22,6 +22,7 @@ import {
   DescriptiveArticle,
   DescriptiveArticleCreate
 } from "../../../api/openapi";
+import { BackStackService } from '../../src/app/shared/services/back-stack.service';
 
 export interface JobMinimal {
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -44,9 +45,9 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
   buttons: CustomButton[] = [];
   title = "Lieferschein: Bearbeiten";
 
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private navigation: NavigationService,
+  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, backStack: BackStackService,  navigation: NavigationService,
               private authService: AuthService, private snackBar: MatSnackBar, private file: FileService) {
-    super(api, router, route, dialog);
+    super(api, router, route, dialog, backStack, navigation);
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> =>

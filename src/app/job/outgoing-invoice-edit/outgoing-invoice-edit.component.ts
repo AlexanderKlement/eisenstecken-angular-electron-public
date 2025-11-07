@@ -25,6 +25,7 @@ import {
   DescriptiveArticleCreate,
   Lock
 } from "../../../api/openapi";
+import { BackStackService } from '../../src/app/shared/services/back-stack.service';
 
 @Component({
     selector: 'app-outgoing-invoice-edit',
@@ -47,8 +48,8 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
 
   constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private currency: CurrencyPipe,
               private authService: AuthService, private snackBar: MatSnackBar, private file: FileService,
-              private navigation: NavigationService) {
-    super(api, router, route, dialog);
+              navigation: NavigationService, backStack: BackStackService) {
+    super(api, router, route, dialog, backStack, navigation);
   }
 
   calcTotalPrice(formGroup: UntypedFormGroup): void {
