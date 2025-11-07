@@ -1,15 +1,14 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Observable, Subscription } from 'rxjs';
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { Observable, Subscription } from "rxjs";
 import {
   UntypedFormControl,
   UntypedFormGroup,
   Validators,
-} from '@angular/forms';
-import { CurrencyPipe, getLocaleCurrencyCode } from '@angular/common';
-import { DefaultService, Unit } from '../../../../api/openapi';
-import { BaseDialogComponent } from '../../../shared/components/base-dialog/base-dialog.component';
-import { BackStackService } from '../../../src/app/shared/services/back-stack.service';
+} from "@angular/forms";
+import { CurrencyPipe, getLocaleCurrencyCode } from "@angular/common";
+import { DefaultService, Unit } from "../../../../api/openapi";
+import { BackStackService } from "../../../src/app/shared/services/back-stack.service";
 
 export interface OrderDialogData {
   title: string;
@@ -35,9 +34,7 @@ export interface OrderDialogData {
   styleUrls: ['./product-edit-dialog.component.scss'],
   standalone: false,
 })
-export class ProductEditDialogComponent
-  extends BaseDialogComponent<ProductEditDialogComponent>
-  implements OnInit, OnDestroy {
+export class ProductEditDialogComponent implements OnInit, OnDestroy {
   unitOptions$: Observable<Unit[]>;
   productEditGroup: UntypedFormGroup;
   subscription: Subscription;
@@ -51,7 +48,6 @@ export class ProductEditDialogComponent
     private api: DefaultService,
     private currency: CurrencyPipe,
   ) {
-    super(dialogRef, backStack);
   }
 
   public static roundTo2Decimals(input: number): number {
@@ -87,32 +83,32 @@ export class ProductEditDialogComponent
   transformAmount(): void {
     const price = parseFloat(
       this.productEditGroup
-        .get('priceFormatted')
-        .value.replace('€', '')
-        .replace('.', '')
-        .replace(',', '.'),
+        .get("priceFormatted")
+        .value.replace("€", "")
+        .replace(".", "")
+        .replace(",", "."),
     );
     const formattedAmount = this.currency.transform(
       price,
-      getLocaleCurrencyCode('de_DE'),
+      getLocaleCurrencyCode("de_DE"),
     );
-    this.productEditGroup.get('price').setValue(price);
-    this.productEditGroup.get('priceFormatted').setValue(formattedAmount);
+    this.productEditGroup.get("price").setValue(price);
+    this.productEditGroup.get("priceFormatted").setValue(formattedAmount);
   }
 
   private getReturnData(deleteOrder: boolean): OrderDialogData {
     return {
-      title: this.productEditGroup.get('title').value,
-      name: this.productEditGroup.get('name').value,
-      amount: this.productEditGroup.get('amount').value,
+      title: this.productEditGroup.get("title").value,
+      name: this.productEditGroup.get("name").value,
+      amount: this.productEditGroup.get("amount").value,
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      unit_id: this.productEditGroup.get('unit_id').value,
-      price: this.productEditGroup.get('price').value,
+      unit_id: this.productEditGroup.get("unit_id").value,
+      price: this.productEditGroup.get("price").value,
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      mod_number: this.productEditGroup.get('mod_number').value,
-      request: this.productEditGroup.get('request').value,
-      comment: this.productEditGroup.get('comment').value,
-      position: this.productEditGroup.get('position').value,
+      mod_number: this.productEditGroup.get("mod_number").value,
+      request: this.productEditGroup.get("request").value,
+      comment: this.productEditGroup.get("comment").value,
+      position: this.productEditGroup.get("position").value,
       delete: deleteOrder,
       create: this.data.create,
       blockRequestChange: this.blockRequestChange,
@@ -136,7 +132,7 @@ export class ProductEditDialogComponent
       priceFormatted: new UntypedFormControl(
         this.currency.transform(
           this.data.price,
-          getLocaleCurrencyCode('de_DE'),
+          getLocaleCurrencyCode("de_DE"),
         ),
       ),
       // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -150,17 +146,17 @@ export class ProductEditDialogComponent
       position: new UntypedFormControl(this.data.position),
     });
     this.subscription.add(
-      this.productEditGroup.get('price').valueChanges.subscribe(() => {
+      this.productEditGroup.get("price").valueChanges.subscribe(() => {
         this.updateTotalFromPrice();
       }),
     );
     this.subscription.add(
-      this.productEditGroup.get('amount').valueChanges.subscribe(() => {
+      this.productEditGroup.get("amount").valueChanges.subscribe(() => {
         this.updateTotalFromPrice();
       }),
     );
     this.subscription.add(
-      this.productEditGroup.get('total_price').valueChanges.subscribe(() => {
+      this.productEditGroup.get("total_price").valueChanges.subscribe(() => {
         this.updatePriceFromTotal();
       }),
     );
@@ -169,8 +165,8 @@ export class ProductEditDialogComponent
 
   private calcTotalPrice(): number {
     const price =
-      this.productEditGroup.get('price').value *
-      this.productEditGroup.get('amount').value;
+      this.productEditGroup.get("price").value *
+      this.productEditGroup.get("amount").value;
     return price;
   }
 
@@ -179,26 +175,26 @@ export class ProductEditDialogComponent
       this.calcTotalPrice(),
     );
     this.productEditGroup
-      .get('total_price')
+      .get("total_price")
       .setValue(total, { emitEvent: false });
   }
 
   private updatePriceFromTotal(): void {
-    const amount = this.productEditGroup.get('amount').value || 1;
-    const total = this.productEditGroup.get('total_price').value || 0;
+    const amount = this.productEditGroup.get("amount").value || 1;
+    const total = this.productEditGroup.get("total_price").value || 0;
 
     const price = amount
       ? ProductEditDialogComponent.roundTo2Decimals(total / amount)
       : 0;
 
-    this.productEditGroup.get('price').setValue(price, { emitEvent: false });
+    this.productEditGroup.get("price").setValue(price, { emitEvent: false });
 
     const formatted = this.currency.transform(
       price,
-      getLocaleCurrencyCode('de-DE'),
+      getLocaleCurrencyCode("de-DE"),
     );
     this.productEditGroup
-      .get('priceFormatted')
+      .get("priceFormatted")
       .setValue(formatted, { emitEvent: false });
   }
 }
