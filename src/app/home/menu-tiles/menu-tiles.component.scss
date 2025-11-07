@@ -35,32 +35,6 @@
       transform: scale(2);
     }
   }
-
-
-  &.joke::after {
-    transform: scale(1);
-    transition: unset;
-    border-radius: 0;
-    background-image: url('~assets/images/april.jpg');
-    background-size: contain;
-    z-index: -2;
-    background-color: unset;
-    visibility: hidden;
-    display: none;
-  }
-
-  &.joke::before {
-    background-color: unset;
-  }
-
-  &.joke:hover {
-    animation: bump 1s infinite ease-in-out;
-    &::after {
-      transform: scale(1);
-      visibility: visible;
-      display: block;
-    }
-  }
 }
 
 .menu-tile-grid-layout {
