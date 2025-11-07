@@ -1,15 +1,16 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { firstValueFrom, Observable, ReplaySubject, Subscription } from 'rxjs';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { DataSourceClass } from '../../types';
-import { MatDialog } from '@angular/material/dialog';
-import { first } from 'rxjs/operators';
-import { DefaultService, User, Lock } from '../../../../api/openapi';
-import { AbstractControl } from '@angular/forms';
-import { BackStackService } from '../../../src/app/shared/services/back-stack.service';
-import { NavigationService } from '../../services/navigation.service';
-import { WarningDialogComponent } from './warning-dialog/warning-dialog.component';
-import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { firstValueFrom, Observable, ReplaySubject, Subscription } from "rxjs";
+import { ActivatedRoute, Params, Router } from "@angular/router";
+import { DataSourceClass } from "../../types";
+import { MatDialog } from "@angular/material/dialog";
+import { first } from "rxjs/operators";
+import { DefaultService, User, Lock } from "../../../../api/openapi";
+import { AbstractControl } from "@angular/forms";
+import { BackStackService } from "../../../src/app/shared/services/back-stack.service";
+import { NavigationService } from "../../services/navigation.service";
+import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
+import { ReusableRoute } from "../../reusable-route";
+
 
 @Component({
   selector: 'app-base-edit',
@@ -17,7 +18,7 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
   styleUrls: ['./base-edit.component.scss'],
   standalone: false,
 })
-export class BaseEditComponent<T extends DataSourceClass> implements OnInit, OnDestroy {
+export class BaseEditComponent<T extends DataSourceClass> implements OnInit, OnDestroy, ReusableRoute {
 
   //This has to be defined by Derived class:
   navigationTarget: string;
@@ -49,27 +50,40 @@ export class BaseEditComponent<T extends DataSourceClass> implements OnInit, OnD
     this.subscription.add(this.route.params.subscribe((params) => this.routeParams.next(params)));
   }
 
+  public onAttach(): void {
+    if ((this as any).controlsBeforeBack?.length) {
+      this["registerDirtyControls"](this["controlsBeforeBack"]);
+    }
+  }
+
+  public onDetach(): void {
+    if ((this as any).disposeBackHandler) {
+      this["disposeBackHandler"]();
+      this["disposeBackHandler"] = undefined;
+    }
+  }
+
   ngOnInit(): void {
     this.me$ = this.api.readUsersMeUsersMeGet();
     this.routeParams.pipe(first()).subscribe((params) => {
-      if (params.id === 'new') {
+      if (params.id === "new") {
         this.createMode = true;
         return;
       }
       this.id = parseInt(params.id, 10);
       if (isNaN(this.id)) {
-        console.error('BaseEditComponent: Cannot parse given id');
+        console.error("BaseEditComponent: Cannot parse given id");
         this.goBack();
       }
       if (!this.createMode) {
         this.lockFunction(this.api, this.id).pipe(first()).subscribe(lock => {
           if (!lock.locked) {//has to be locked, otherwise component is accessed directly {
-            console.error('BaseEditComponent: The lock is not locked. This should not happen on accessing a ressource');
+            console.error("BaseEditComponent: The lock is not locked. This should not happen on accessing a ressource");
             this.goBack();
           }
           this.me$.pipe(first()).subscribe((user) => {
             if (user.id !== lock.user.id) {//if locked by other user go back
-              console.error('BaseEditComponent: The accessed ressource is locked by another user');
+              console.error("BaseEditComponent: The accessed ressource is locked by another user");
               this.goBack();
             } else {   //now we talking
               this.data$ = this.dataFunction(this.api, this.id);
@@ -90,9 +104,9 @@ export class BaseEditComponent<T extends DataSourceClass> implements OnInit, OnD
     if (!this.createMode) {
       this.unlockFunction(this.api, this.id).pipe(first()).subscribe((success) => {
         if (success) {
-          console.info('BaseEdit: SUCCESS: unlocked object with id: ' + this.id);
+          console.info("BaseEdit: SUCCESS: unlocked object with id: " + this.id);
         } else {
-          console.warn('BaseEdit: FAIL: to unlock object with id: ' + this.id);
+          console.warn("BaseEdit: FAIL: to unlock object with id: " + this.id);
         }
       });
     }
@@ -146,21 +160,21 @@ export class BaseEditComponent<T extends DataSourceClass> implements OnInit, OnD
   }
 
   protected observableReady(): void {
-    console.info('BaseEditComponent: The data observable is ready');
+    console.info("BaseEditComponent: The data observable is ready");
   }
 
   private startListeningForUnload(): void {
-    window.addEventListener('beforeunload', this.ngOnDestroy.bind(this));
+    window.addEventListener("beforeunload", this.ngOnDestroy.bind(this));
   }
 
   private stopListeningForUnload(): void {
-    window.removeEventListener('beforeunload', this.ngOnDestroy.bind(this));
+    window.removeEventListener("beforeunload", this.ngOnDestroy.bind(this));
   }
 
   private beforeUnloadHandler = (e: BeforeUnloadEvent) => {
     if (this.atLeastOneFormModified) {
       e.preventDefault();
-      e.returnValue = '';
+      e.returnValue = "";
     }
   };
 
@@ -184,8 +198,8 @@ export class BaseEditComponent<T extends DataSourceClass> implements OnInit, OnD
 
   private async openDiscardDialog(): Promise<boolean> {
     const ref = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
-      data: { title: 'Änderungen verwerfen?', text: 'Mindestens ein Eingabefeld wurde bearbeitet.' },
+      width: "400px",
+      data: { title: "Änderungen verwerfen?", text: "Mindestens ein Eingabefeld wurde bearbeitet." },
     });
     const result = await firstValueFrom(ref.afterClosed().pipe(first()));
     return !!result;
