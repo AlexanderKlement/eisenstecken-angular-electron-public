@@ -1,47 +1,51 @@
-import { Component, OnInit } from "@angular/core";
-import { Observable, Subscriber, combineLatest } from "rxjs";
+import { Component, OnInit } from '@angular/core';
+import { Observable, Subscriber, combineLatest } from 'rxjs';
 import {
   isJob,
   ListItem,
   SupportedListElements,
-} from "../shared/components/filterable-clickable-list/filterable-clickable-list.types";
-import { first } from "rxjs/operators";
-import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
-import { Router } from "@angular/router";
-import { OrderableType, OrderedArticle, Article, DefaultService } from "../../api/openapi";
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexDirective } from "ng-flex-layout";
-import { FilterableClickableListComponent } from "../shared/components/filterable-clickable-list/filterable-clickable-list.component";
-import { ProductsListComponent } from "./available-products-list/products-list.component";
+} from '../shared/components/filterable-clickable-list/filterable-clickable-list.types';
+import { first } from 'rxjs/operators';
+import { CustomButton, ToolbarComponent } from '../shared/components/toolbar/toolbar.component';
+import { Router } from '@angular/router';
+import { OrderableType, OrderedArticle, Article, DefaultService } from '../../api/openapi';
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexDirective } from 'ng-flex-layout';
+import {
+  FilterableClickableListComponent,
+} from '../shared/components/filterable-clickable-list/filterable-clickable-list.component';
+import { ProductsListComponent } from './available-products-list/products-list.component';
 
 
 @Component({
-    selector: 'app-order',
-    templateUrl: './order.component.html',
-    styleUrls: ['./order.component.scss'],
-    imports: [ToolbarComponent, DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexDirective, FilterableClickableListComponent, ProductsListComponent]
+  selector: 'app-order',
+  templateUrl: './order.component.html',
+  styleUrls: ['./order.component.scss'],
+  imports: [ToolbarComponent, DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexDirective, FilterableClickableListComponent, ProductsListComponent],
 })
 export class OrderComponent implements OnInit {
 
 
-  toListName = "Bestelle für Aufträge oder Lager";
+  toListName = 'Bestelle für Aufträge oder Lager';
   toList$: Observable<ListItem[]>; //Here go stocks and suppliers
   toListSubscriber: Subscriber<ListItem[]>;
   toListSelected: ListItem;
 
-  toListUncollapse = "";
+  toListUncollapse = '';
 
-  fromListName = "Bestelle von Lieferanten oder Lager";
+  fromListName = 'Bestelle von Lieferanten oder Lager';
   fromList$: Observable<ListItem[]>;
   fromListSubscriber: Subscriber<ListItem[]>;
   fromListSelected: ListItem;
 
-  availableProductListName = "Verfügbare Artikel";
+  availableProductListName = 'Verfügbare Artikel';
   availableProducts$: Observable<Article[]>;
   availableProductsSubscriber: Subscriber<Article[]>;
+  private availableArticleFilter = '';
 
-  orderedProductListName = "Ausgewählte Artikel";
+  orderedProductListName = 'Ausgewählte Artikel';
   orderedProducts$: Observable<OrderedArticle[]>;
   orderedProductsSubscriber: Subscriber<OrderedArticle[]>;
+  private orderedArticleFilter = '';
 
   step = 0;
 
@@ -94,10 +98,10 @@ export class OrderComponent implements OnInit {
   }
 
   toggleChildren(listItem: ListItem): void {
-    if (listItem.type === "job" && listItem.collapse === false) {
-      this.toListUncollapse = this.toListUncollapse === listItem.name ? "" : listItem.name;
+    if (listItem.type === 'job' && listItem.collapse === false) {
+      this.toListUncollapse = this.toListUncollapse === listItem.name ? '' : listItem.name;
     } else if (listItem.collapse !== this.toListUncollapse) {
-      this.toListUncollapse = "";
+      this.toListUncollapse = '';
     }
   }
 
@@ -155,7 +159,7 @@ export class OrderComponent implements OnInit {
       case
       OrderableType.Supplier
       : {
-        console.error("OrderComponent: an item with type SUPPLIER has been clicked in TO list");
+        console.error('OrderComponent: an item with type SUPPLIER has been clicked in TO list');
         break;
       }
     }
@@ -177,7 +181,7 @@ export class OrderComponent implements OnInit {
 
   private loadToList() {
     const stocks$ = this.api.readStocksStockGet().pipe(first());
-    const jobs$ = this.api.readJobsJobGet(0, 1000, "", undefined, "JOBSTATUS_ACCEPTED", true).pipe(first());
+    const jobs$ = this.api.readJobsJobGet(0, 1000, '', undefined, 'JOBSTATUS_ACCEPTED', true).pipe(first());
 
     combineLatest([stocks$, jobs$]).subscribe(([stocks, jobs]) => {
       const stockListItems = OrderComponent.createListItems(stocks);
@@ -189,7 +193,7 @@ export class OrderComponent implements OnInit {
 
   private loadFromList(withStocks: boolean) {
     const stocks$ = this.api.readStocksStockGet().pipe(first());
-    const suppliers$ = this.api.readSuppliersSupplierGet(0, 500, "", true).pipe(first());
+    const suppliers$ = this.api.readSuppliersSupplierGet(0, 500, '', true).pipe(first());
 
     if (withStocks) {
       combineLatest([stocks$, suppliers$]).subscribe(([stocks, jobs]) => {
@@ -209,43 +213,50 @@ export class OrderComponent implements OnInit {
   private loadAvailableArticlesAndButtons(): void {
     switch (this.fromListSelected.type) {
       case OrderableType.Stock: {
-        this.api.readArticlesByStockArticleStockStockIdGet(this.fromListSelected.item.id).pipe(first())
+        this.api.readArticlesByStockArticleStockStockIdGet(this.fromListSelected.item.id, 0, 100, this.availableArticleFilter ?? '').pipe(first())
           .subscribe((articles) => {
             this.availableProductsSubscriber.next(articles);
           });
         this.buttons = [];
         this.buttons.push(
           {
-            name: "Öffne Lager",
+            name: 'Öffne Lager',
             navigate: () => {
-              this.router.navigateByUrl("stock/" + this.fromListSelected.item.id);
+              this.router.navigateByUrl('stock/' + this.fromListSelected.item.id);
             },
           });
         break;
       }
       case
-      OrderableType.Job
-      : {
-        console.error("OrderComponent: an item with type JOB has been clicked in FROM list");
+      OrderableType.Job: {
+        console.error('OrderComponent: an item with type JOB has been clicked in FROM list');
         break;
       }
-      case
-      OrderableType.Supplier
-      : {
-        this.api.readArticlesBySupplierArticleSupplierSupplierIdGet(this.fromListSelected.item.id).pipe(first())
+      case  OrderableType.Supplier: {
+        this.api.readArticlesBySupplierArticleSupplierSupplierIdGet(this.fromListSelected.item.id, 0, 100, this.availableArticleFilter ?? '').pipe(first())
           .subscribe((articles) => {
             this.availableProductsSubscriber.next(articles);
           });
         this.buttons = [];
         this.buttons.push(
           {
-            name: "Öffne Lieferant",
+            name: 'Öffne Lieferant',
             navigate: () => {
-              this.router.navigateByUrl("supplier/" + this.fromListSelected.item.id);
+              this.router.navigateByUrl('supplier/' + this.fromListSelected.item.id);
             },
           });
         break;
       }
     }
+  }
+
+  onAvailableSearchChange(filter: string): void {
+    this.availableArticleFilter = (filter ?? '').trim().toLowerCase();
+    this.refreshAvailableProducts();
+  }
+
+  onOrderedSearchChange(filter: string): void {
+    this.orderedArticleFilter = (filter ?? '').trim().toLowerCase();
+    this.refreshOrderedProducts();
   }
 }
