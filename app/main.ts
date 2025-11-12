@@ -1,7 +1,6 @@
-import { app, BrowserWindow, dialog, Event, Menu, screen, shell, Tray } from 'electron';
+import { app, BrowserWindow, dialog,  Menu, screen, shell, Tray } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
-import * as url from 'url';
 import * as Sentry from '@sentry/electron/main';
 import { autoUpdater } from 'electron-updater';
 import { LocalConfigMain } from './LocalConfigMain';
@@ -9,12 +8,11 @@ import { LocalConfigMain } from './LocalConfigMain';
 
 Sentry.init({ dsn: 'https://60ac4754e4be476a82b10b0e597dfaa6@sentry.kivi.bz.it/25' });
 
-let win: BrowserWindow = null;
+let win: BrowserWindow | null = null;
 const args = process.argv.slice(1),
   serve = args.some(val => val === '--serve');
 const gotTheLock = app.requestSingleInstanceLock();
 
-var child = require('child_process').execFile;
 const appPath = app.getAppPath();
 
 const mail64ExecutablePath = appPath + '\\mail64\\mail.exe';
@@ -38,7 +36,6 @@ autoUpdater.allowDowngrade = false;
 const eisensteckenIconIco = appPath + '\\assets\\icons\\favicon.ico';
 const eisensteckenIconPng = appPath + '\\assets\\icons\\favicon.png';
 let isQuiting;
-let forceClose = false;
 let tray = null;
 
 initTray();
@@ -49,7 +46,7 @@ try {
   if (!gotTheLock) {
     app.quit();
   } else {
-    app.on('second-instance', (event, commandLine, workingDirectory) => {
+    app.on('second-instance', () => {
       console.warn('Second instance detected');
       // Someone tried to run a second instance, we should focus our window
       win.show();
@@ -62,8 +59,7 @@ try {
     // initialization and is ready to create browser windows.
     // Some APIs can only be used after this event occurs.
     // Added 400 ms to fix the black background issue while using transparent window. More detais at https://github.com/electron/electron/issues/15947
-    app.on('ready', createWindow);
-    //app.on('ready', () => setTimeout(createWindow, 400));
+    app.whenReady().then(createWindow);
 
     // Quit when all windows are closed.
     app.on('window-all-closed', () => {
@@ -96,52 +92,42 @@ try {
   // throw e;
 }
 
-function createWindow(): BrowserWindow {
-  const size = screen.getPrimaryDisplay().workAreaSize;
+function getDistFolder() {
+  // __dirname points to app/ in packaged builds (after tsc)
+  // Adjust the pieces if your project-name differs
+  const dist = path.join(__dirname, '..', 'dist', 'eisenstecken-eibel', 'browser');
+  // Fallback for older layouts without /browser
+  if (!fs.existsSync(dist)) {
+    const alt = path.join(__dirname, '..', 'dist', 'eisenstecken-eibel');
+    return fs.existsSync(alt) ? alt : dist;
+  }
+  return dist;
+}
+
+async function createWindow(){
   // Create the browser window.
   win = new BrowserWindow({
-    x: 0,
-    y: 0,
-    width: size.width,
-    height: size.height,
-    icon: 'src/logo.ico',
-    title: 'Eibel',
-    autoHideMenuBar: true,
+    width: 1280,
+    height: 900,
     webPreferences: {
-      nodeIntegration: true,
-      allowRunningInsecureContent: (serve),
-      contextIsolation: false,  // false if you want to run e2e test with Spectron
+      contextIsolation: true,
+      nodeIntegration: false,
+      preload: path.join(__dirname, 'preload.js'),
     },
   });
-  win.maximize();
+
   if (serve) {
+    await win.loadURL('http://localhost:4200');
     win.webContents.openDevTools();
-    require('electron-reload')(__dirname, {
-      electron: require(path.join(__dirname, '/../node_modules/electron')),
-    });
-    win.loadURL('http://localhost:4200');
   } else {
-    // Path when running electron executable
-    let pathIndex = './index.html';
-
-    if (fs.existsSync(path.join(__dirname, '../dist/index.html'))) {
-      // Path when running electron in local folder
-      pathIndex = '../dist/index.html';
+    const distFolder = getDistFolder();
+    const indexFile = path.join(distFolder, 'index.html');
+    if (!fs.existsSync(indexFile)) {
+      console.error('DIST NOT FOUND:', indexFile);
     }
-
-    win.loadURL(url.format({
-      pathname: path.join(__dirname, pathIndex),
-      protocol: 'file:',
-      slashes: true,
-    }));
+    await win.loadFile(indexFile); // or loadURL with file:// if you prefer
   }
-
-  // Emitted when the window is closed.
-
   win.on('closed', () => {
-    // Dereference the window object, usually you would store window
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
     win = null;
   });
 
@@ -154,7 +140,6 @@ function createWindow(): BrowserWindow {
   });
 
   win.on('minimize', () => {
-    // no `event` arg here
     win.hide();
   });
 
@@ -233,7 +218,7 @@ function initIPC() {
     }
     cmd += mailCommand;
 
-    require('child_process').exec(cmd, function(err, stdout: string, stderr: string): void {
+    require('child_process').exec(cmd, function(err, stdout: string, _: string): void {
       if (stdout.trim().length < 5) {
         event.reply('send-mail-reply', true);
         return;
@@ -271,7 +256,7 @@ function initIPC() {
     }
   });
 
-  ipcMain.on('select-folder-request', (event, arg) => {
+  ipcMain.on('select-folder-request', (event, _) => {
     try {
       const { dialog } = require('electron');
       const pathPromise = dialog.showOpenDialog({
