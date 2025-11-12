@@ -4,6 +4,7 @@ import {Observable} from "rxjs";
 import {first} from "rxjs/operators";
 import { CdkScrollable } from "@angular/cdk/scrolling";
 import { MatButton } from "@angular/material/button";
+import {Lock} from "../../../../../api/openapi"
 
 export interface LockDialogData {
     lock: Lock;

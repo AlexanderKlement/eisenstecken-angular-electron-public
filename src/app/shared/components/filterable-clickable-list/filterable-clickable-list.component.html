@@ -8,8 +8,7 @@
   @for (listElement of search$ | async; track listElement) {
     <div fxLayout="row" fxLayoutAlign="space-around center">
       @if (listElement.type==='supplier') {
-        <button mat-button mat-icon-button
-          (click)="toggleFavoriteSupplier(listElement)" title="Favorit">
+        <button mat-icon-button (click)="toggleFavoriteSupplier(listElement)" title="Favorit">
           @if (isListItemFavorite(listElement.item)) {
             <mat-icon>star</mat-icon>
           }
