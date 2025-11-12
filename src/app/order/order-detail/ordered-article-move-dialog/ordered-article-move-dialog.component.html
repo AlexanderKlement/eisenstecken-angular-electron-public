@@ -1,13 +1,13 @@
 <h1 mat-dialog-title>Bestellte Artikel verschieben</h1>
 <div mat-dialog-content>
   <div fxLayout="column" fxLayoutAlign="space-around center">
-    <mat-stepper [linear]="true" #stepper>
+    <mat-stepper [linear]="true" >
       <mat-step>
         <ng-template matStepLabel>Artikel auswählen</ng-template>
         <div fxLayout="column" fxLayoutAlign="space-around center">
           <p>Welche Artikel sollen verschoben werden?</p>
           <mat-selection-list #orderable [multiple]="false" (selectionChange)="orderableClicked()">
-          @for (orderedArticle of orderedArticles$ | async; track orderedArticle.id) {
+            @for (orderedArticle of orderedArticles$ | async; track orderedArticle.id) {
               <mat-list-option [value]="orderedArticle">
                 {{ orderedArticle.article.name.translation }}
               </mat-list-option>
@@ -32,7 +32,7 @@
             </mat-list-option>
           }
         </mat-selection-list>
-        <div fxLayout="row" fxLayoutAlign="space-around center" >
+        <div fxLayout="row" fxLayoutAlign="space-around center">
           <button mat-raised-button matStepperPrevious>Zurück</button>
           @if (oneOrderableSelected) {
             <button mat-raised-button matStepperNext>Weiter</button>
@@ -44,17 +44,17 @@
         <div fxLayout="column" fxLayoutAlign="space-around center">
           <p>Ausgewählte Artikel: </p>
           <mat-list>
-            @for (opt of articles.selectedOptions.selected; track $any(opt.value).id) {
+            @for (selectedArticle of articlesSelected.selectedOptions.selected; track selectedArticle) {
               <mat-list-item>
-                {{ $any(opt.value).article?.name?.translation }}
+                {{ $any(selectedArticle.value).article?.name?.translation }}
               </mat-list-item>
             }
-            @if (orderable.selectedOptions.selected?.length) {
-              <p>
-                Ziel: {{ $any(orderable.selectedOptions.selected[0].value).name }}
-              </p>
-            }
           </mat-list>
+          @if (orderable.selectedOptions.selected?.length) {
+            <p>
+              Ziel: {{ $any(orderable.selectedOptions.selected[0].value).name }}
+            </p>
+          }
         </div>
         <div fxLayout="row" fxLayoutAlign="space-around center">
           <button mat-raised-button matStepperPrevious>Zurück</button>

@@ -7,7 +7,7 @@ import { DefaultService } from '../../../../api/openapi';
 import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
 import { MatSelectionList, MatListOption } from '@angular/material/list';
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from 'ng-flex-layout';
-import { MatButton, MatIconButton } from '@angular/material/button';
+import {  MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { AsyncPipe } from '@angular/common';
 
@@ -15,7 +15,7 @@ import { AsyncPipe } from '@angular/common';
     selector: 'app-filterable-clickable-list',
     templateUrl: './filterable-clickable-list.component.html',
     styleUrls: ['./filterable-clickable-list.component.scss'],
-    imports: [MatFormField, MatLabel, MatInput, FormsModule, ReactiveFormsModule, MatSelectionList, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatButton, MatIconButton, MatIcon, MatListOption, AsyncPipe]
+    imports: [MatFormField, MatLabel, MatInput, FormsModule, ReactiveFormsModule, MatSelectionList, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatIconButton, MatIcon, MatListOption, AsyncPipe]
 })
 export class FilterableClickableListComponent implements OnInit, OnDestroy {
 
