@@ -1,7 +1,7 @@
 <app-toolbar [buttonList]="buttons" [title]="title"></app-toolbar>
 <div class="window-container">
-  <button type="button" mat-icon-button mat-raised-button (click)="toggleCollapseDescriptiveArticle(-1)"
-    class="position-fold-all" title="{{isHidden(-1) ?  'Alle aufklappen':'Alle zusammenklappen'}}">
+  <button type="button" mat-icon-button (click)="toggleCollapseDescriptiveArticle(-1)"
+    class="position-fold-all round-button" title="{{isHidden(-1) ?  'Alle aufklappen':'Alle zusammenklappen'}}">
     <mat-icon>{{isHidden(-1) ? 'unfold_more' : 'unfold_less'}}</mat-icon>
   </button>
   <form (ngSubmit)="onSubmit()" [formGroup]="offerGroup">
@@ -11,16 +11,16 @@
         @for (descriptiveArticle of getDescriptiveArticles().controls; track descriptiveArticle; let i = $index) {
           <div
             class="descriptive-article" fxLayout="column" fxLayoutAlign="start stretch" [formGroupName]="i">
-            <button type="button" mat-icon-button mat-raised-button (click)="addDescriptiveArticleAt(i)"
-              class="position-control new-position-btn" title="Neue Position">
+            <button type="button" mat-icon-button (click)="addDescriptiveArticleAt(i)"
+              class="position-control new-position-btn round-button" title="Neue Position">
               <mat-icon>add</mat-icon>
             </button>
-            <button type="button" mat-icon-button mat-raised-button (click)="moveDescriptiveArticleUp(i)"
+            <button type="button" mat-icon-button (click)="moveDescriptiveArticleUp(i)"
               [disabled]="i === 0"
               class="position-control position-up" title="Nach oben schieben">
               <mat-icon>arrow_upward</mat-icon>
             </button>
-            <button type="button" mat-icon-button mat-raised-button (click)="moveDescriptiveArticleDown(i)"
+            <button type="button" mat-icon-button (click)="moveDescriptiveArticleDown(i)"
               [disabled]="i === getDescriptiveArticles().controls.length - 1"
               class="position-control position-down" title="Nach unten schieben">
               <mat-icon>arrow_downward</mat-icon>
@@ -30,13 +30,13 @@
                 <mat-label>Name Position <strong>{{(i + 1).toString()}}</strong></mat-label>
                 <input class="form-control header" formControlName="description" maxlength="10000" matInput>
               </mat-form-field>
-              <button type="button" mat-icon-button mat-raised-button (click)="removeDescriptiveArticle(i)"
-                [disabled]="i === 0" class="position-delete">
+              <button type="button" mat-icon-button (click)="removeDescriptiveArticle(i)"
+                [disabled]="i === 0" class="position-delete round-button">
                 <mat-icon>delete</mat-icon>
               </button>
-              <button type="button" mat-icon-button mat-raised-button
+              <button type="button" mat-icon-button
                 (click)="toggleCollapseDescriptiveArticle(i)"
-                class="position-fold" title="{{isHidden(i) ? 'Aufklappen': 'Zusammenklappen' }}">
+                class="round-button" title="{{isHidden(i) ? 'Aufklappen': 'Zusammenklappen' }}">
                 <mat-icon>{{isHidden(i) ? 'unfold_more' : 'unfold_less'}}</mat-icon>
               </button>
             </div>
