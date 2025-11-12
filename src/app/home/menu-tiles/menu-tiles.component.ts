@@ -3,12 +3,16 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { matchRightsToMenuTiles, MenuTileDetail } from './menu-tile.settings';
 import { DefaultService } from '../../../api/openapi';
+import { MatGridList, MatGridTile } from '@angular/material/grid-list';
+import { SingleMenuTileComponent } from './single-menu-tile/single-menu-tile.component';
+import { FlexModule } from 'ng-flex-layout';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
     selector: 'app-menu-tiles',
     templateUrl: './menu-tiles.component.html',
     styleUrls: ['./menu-tiles.component.scss'],
-    standalone: false
+    imports: [MatGridList, MatGridTile, SingleMenuTileComponent, FlexModule, AsyncPipe]
 })
 export class MenuTilesComponent implements OnInit {
 

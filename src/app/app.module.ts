@@ -2,7 +2,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { ErrorHandler, Injectable, LOCALE_ID, NgModule, inject, provideAppInitializer } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClient, HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
-import { CoreModule } from "./core/core.module";
+
 import { SharedModule } from "./shared/shared.module";
 import { AppRoutingModule } from "./app-routing.module";
 import { RouteReuseStrategy } from "@angular/router";
@@ -98,113 +98,4 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
   }
 }
 
-@NgModule({ declarations: [AppComponent, AppRouterOutletDirective],
-    bootstrap: [AppComponent], imports: [CommonModule,
-        BrowserModule,
-        BrowserAnimationsModule,
-        CalendarModule.forRoot({
-            provide: DateAdapter,
-            useFactory: adapterFactory,
-        }),
-        FormsModule,
-        CoreModule,
-        SharedModule,
-        HomeModule,
-        JobModule,
-        BackButtonDisableModule.forRoot(),
-        ClientModule,
-        UserModule,
-        SettingsModule,
-        SupplierModule,
-        OrderModule,
-        LoginModule,
-        MatBottomSheetModule,
-        InvoiceModule,
-        EmployeeModule,
-        EventCalendarModule,
-        MobileAppModule,
-        RecalculationModule,
-        ApiModule.forRoot(apiConfigFactory),
-        AppRoutingModule,
-        FlexLayoutModule,
-        DeliveryNoteModule,
-        DebugModule,
-        ServiceModule,
-        TranslateModule.forRoot({
-            loader: {
-                provide: TranslateLoader,
-                useFactory: httpLoaderFactory,
-                deps: [HttpClient],
-            },
-        }),
-        ReactiveFormsModule,
-        BrowserAnimationsModule,
-        MatCheckboxModule,
-        MatInputModule,
-        MatTableModule,
-        MatPaginatorModule,
-        MatSortModule,
-        MatProgressSpinnerModule,
-        MatSelectModule,
-        MatButtonModule,
-        MatToolbarModule,
-        MatNativeDateModule,
-        PhoneBookModule,
-        MatSnackBarModule,
-        ...(APP_CONFIG.production
-            ? [
-                ServiceWorkerModule.register("ngsw-worker.js", {
-                    enabled: APP_CONFIG.production,
-                    // Register the ServiceWorker as soon as the app is stable
-                    // or after 30 seconds (whichever comes first).
-                    registrationStrategy: "registerWhenStable:30000",
-                }),
-            ]
-            : []),
-        MatIconModule], providers: [
-        {
-            provide: ErrorHandler,
-            useValue: Sentry.createErrorHandler({
-                showDialog: false,
-            }),
-        },
-        {
-            provide: Sentry.TraceService,
-            deps: [Router],
-        },
-        provideAppInitializer(() => {
-        const initializerFn = (() => () => { })();
-        return initializerFn();
-      }),
-        {
-            provide: Configuration,
-            useFactory: (authService: AuthService) => new Configuration({
-                accessToken: authService.getToken.bind(authService),
-                basePath: LocalConfigRenderer.getInstance().getApi(),
-            }),
-            deps: [AuthService],
-            multi: false,
-        },
-        AccessGuard,
-        ChatService,
-        CurrencyPipe,
-        DatePipe,
-        {
-            provide: MAT_DATE_LOCALE,
-            useValue: "de-DE",
-        },
-        {
-            provide: LOCALE_ID,
-            useValue: "de-DE", // 'de-DE' for Germany, 'fr-FR' for France ...
-        },
-        { provide: MatPaginatorIntl, useValue: getGermanPaginatorIntl() },
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: GlobalHttpInterceptorService,
-            multi: true,
-        },
-        { provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
-        { provide: CalendarDateFormatter, useClass: CustomDateFormatter },
-        provideHttpClient(withInterceptorsFromDi()),
-    ] })
-export class AppModule { }
+

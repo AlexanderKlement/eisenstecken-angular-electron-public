@@ -5,20 +5,12 @@ import {
   ViewChild,
 } from "@angular/core";
 import { CustomButton } from "../../../shared/components/toolbar/toolbar.component";
-import {
-  AbstractControl,
-  UntypedFormArray,
-  UntypedFormControl,
-  UntypedFormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from "@angular/forms";
+import { AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { Observable, Subject, Subscriber } from "rxjs";
 import { AuthService } from "../../../shared/services/auth.service";
 import { first } from "rxjs/operators";
 import { Router } from "@angular/router";
-import { MatStepper, StepperOrientation } from "@angular/material/stepper";
+import { MatStepper, StepperOrientation, MatStep, MatStepLabel, MatStepperNext, MatStepperPrevious } from "@angular/material/stepper";
 import { MatDialog } from "@angular/material/dialog";
 import {
   HoursStepperJobDialogComponent,
@@ -29,7 +21,6 @@ import {
   HoursStepperDriveDialogComponent,
   HoursStepperDriveDialogData,
 } from "./hours-stepper-drive-dialog/hours-stepper-drive-dialog.component";
-import { NavigationService } from "../../../shared/services/navigation.service";
 import {
   DefaultService,
   Expense,
@@ -43,8 +34,16 @@ import {
   DriveCreate,
   AdditionalWorkloadCreate,
   JobSectionCreate,
-  WorkDayCreate
+  WorkDayCreate,
 } from "../../../../api/openapi";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexAlignDirective } from "ng-flex-layout";
+import { MatButton } from "@angular/material/button";
+import { NgClass, AsyncPipe } from "@angular/common";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { MatActionList, MatSelectionList, MatListOption } from "@angular/material/list";
+import { MatIcon } from "@angular/material/icon";
+import { MatSelect, MatOption } from "@angular/material/select";
+import { HoursSummaryComponent } from "../hours-summary/hours-summary.component";
 
 function greaterThanValidator(value: number): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -65,7 +64,32 @@ export enum JobEnum {
     selector: 'app-hours-stepper',
     templateUrl: './hours-stepper.component.html',
     styleUrls: ['./hours-stepper.component.scss'],
-    standalone: false
+    imports: [
+        DefaultLayoutDirective,
+        DefaultLayoutAlignDirective,
+        MatStepper,
+        MatStep,
+        MatStepLabel,
+        FormsModule,
+        ReactiveFormsModule,
+        FlexModule,
+        MatButton,
+        NgClass,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatStepperNext,
+        DefaultFlexAlignDirective,
+        MatActionList,
+        MatStepperPrevious,
+        MatSelectionList,
+        MatListOption,
+        MatIcon,
+        MatSelect,
+        MatOption,
+        HoursSummaryComponent,
+        AsyncPipe,
+    ],
 })
 export class HoursStepperComponent implements OnInit {
 
@@ -93,11 +117,11 @@ export class HoursStepperComponent implements OnInit {
   // eslint-disable-next-line @typescript-eslint/member-ordering
   @ViewChild('stepper') private stepper: MatStepper;
 
-  constructor(private api: DefaultService, private dialog: MatDialog, private navigation: NavigationService,
+  constructor(private api: DefaultService, private dialog: MatDialog,
               private authService: AuthService, private router: Router) {
   }
 
-  static generateHourString(hours: number, minutes: number, mobile: boolean = false): string {
+  static generateHourString(hours: number, minutes: number, mobile = false): string {
     let workedHoursString = (mobile ? "<br />" : "") + hours.toString();
     workedHoursString += " ";
     workedHoursString += (hours === 1) ? "Stunde" : "Stunden";
@@ -325,11 +349,11 @@ export class HoursStepperComponent implements OnInit {
     if (this.date !== undefined && this.userId !== undefined) {
       this.api.createWorkDayWorkDayUserIdPost(this.userId, formatDateTransport(this.date.toDateString()), workDayCreate)
         .pipe(first()).subscribe(() => {
-        this.navigation.replaceCurrentWith("/employee/redirect/" + this.userId.toString());
+        this.router.navigateByUrl("/employee/redirect/" + this.userId.toString(), { replaceUrl: true });
       });
     } else {
       this.api.createWorkDayOwnWorkDayOwnPost(workDayCreate).pipe(first()).subscribe(() => {
-        this.navigation.replaceCurrentWith("/mobile/hours/redirect");
+        this.router.navigateByUrl("/mobile/hours/redirect", { replaceUrl: true });
       });
     }
   }

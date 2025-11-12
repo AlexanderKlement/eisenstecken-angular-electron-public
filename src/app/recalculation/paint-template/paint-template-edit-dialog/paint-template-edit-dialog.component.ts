@@ -1,9 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent } from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
 import { DefaultService, TemplatePaintCreate, TemplatePaintUpdate, Unit } from '../../../../api/openapi';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from 'ng-flex-layout';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatButton } from '@angular/material/button';
+import { AsyncPipe } from '@angular/common';
 
 export interface PaintTemplateEditDialogData {
   id: number;
@@ -13,7 +19,7 @@ export interface PaintTemplateEditDialogData {
     selector: 'app-paint-template-edit-dialog',
     templateUrl: './paint-template-edit-dialog.component.html',
     styleUrls: ['./paint-template-edit-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatSelect, MatOption, MatButton, AsyncPipe]
 })
 export class PaintTemplateEditDialogComponent implements OnInit {
 

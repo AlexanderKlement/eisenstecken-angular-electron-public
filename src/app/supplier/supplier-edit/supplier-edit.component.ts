@@ -2,14 +2,9 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
-import {
-  UntypedFormArray,
-  UntypedFormControl,
-  UntypedFormGroup,
-} from "@angular/forms";
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
-import { NavigationService } from "../../shared/services/navigation.service";
 import {
   Contact,
   ContactCreate,
@@ -19,17 +14,43 @@ import {
   Supplier,
   SupplierCreate,
 } from "../../../api/openapi";
+import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule } from "ng-flex-layout";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { MatIconButton, MatButton } from "@angular/material/button";
+import { MatIcon } from "@angular/material/icon";
+import { MatSelect, MatOption } from "@angular/material/select";
+import { MatCheckbox } from "@angular/material/checkbox";
+import { AddressFormComponent } from "../../shared/components/address-form/address-form.component";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
-  selector: "app-supplier-edit",
-  templateUrl: "./supplier-edit.component.html",
-  styleUrls: ["./supplier-edit.component.scss"],
-  standalone: false,
+    selector: 'app-supplier-edit',
+    templateUrl: './supplier-edit.component.html',
+    styleUrls: ['./supplier-edit.component.scss'],
+    imports: [
+        ToolbarComponent,
+        FormsModule,
+        ReactiveFormsModule,
+        DefaultLayoutDirective,
+        DefaultLayoutAlignDirective,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatIconButton,
+        MatButton,
+        MatIcon,
+        MatSelect,
+        MatOption,
+        MatCheckbox,
+        AddressFormComponent,
+        FlexModule,
+        AsyncPipe,
+    ],
 })
 export class SupplierEditComponent
   extends BaseEditComponent<Supplier>
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   supplierGroup: UntypedFormGroup;
 
   navigationTarget = "supplier";
@@ -37,14 +58,8 @@ export class SupplierEditComponent
   title = "Lieferant: Bearbeiten";
   showInOrders = true;
 
-  constructor(
-    api: DefaultService,
-    router: Router,
-    route: ActivatedRoute,
-    dialog: MatDialog,
-    private navigation: NavigationService,
-  ) {
-    super(api, router, route, dialog);
+  constructor(api: DefaultService, router: Router, route: ActivatedRoute) {
+    super(api, router, route);
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> =>
@@ -158,9 +173,9 @@ export class SupplierEditComponent
   createUpdateSuccess(supplier: Supplier): void {
     this.id = supplier.id;
     if (this.createMode) {
-      this.navigation.replaceCurrentWith("supplier");
+      this.router.navigateByUrl("supplier/", { replaceUrl: true });
     } else {
-      this.navigation.replaceCurrentWith("supplier/" + supplier.id.toString());
+      this.router.navigateByUrl("supplier/" + supplier.id.toString(), { replaceUrl: true });
     }
   }
 

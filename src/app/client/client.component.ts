@@ -1,16 +1,18 @@
 import {Component, ComponentRef, OnInit} from "@angular/core";
 import {TableDataSource} from "../shared/components/table-builder/table-builder.datasource";
 import {ActivatedRoute, Router} from "@angular/router";
-import {CustomButton} from "../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
 import {AuthService} from "../shared/services/auth.service";
 import {first} from "rxjs/operators";
 import {Observable, Subscriber} from "rxjs";
 import {DefaultService, Client} from "../../api/openapi";
+import { MatTabGroup, MatTab } from "@angular/material/tabs";
+import { TableBuilderComponent } from "../shared/components/table-builder/table-builder.component";
 @Component({
     selector: 'app-client',
     templateUrl: './client.component.html',
     styleUrls: ['./client.component.scss'],
-    standalone: false
+    imports: [ToolbarComponent, MatTabGroup, MatTab, TableBuilderComponent]
 })
 
 export class ClientComponent implements OnInit {

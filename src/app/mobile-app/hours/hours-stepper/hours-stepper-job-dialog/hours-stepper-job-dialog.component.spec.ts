@@ -8,8 +8,8 @@ describe('HoursStepperJobDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HoursStepperJobDialogComponent ]
-    })
+    imports: [HoursStepperJobDialogComponent]
+})
     .compileComponents();
   });
 

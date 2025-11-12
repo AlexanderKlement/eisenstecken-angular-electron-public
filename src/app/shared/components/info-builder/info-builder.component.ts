@@ -3,12 +3,15 @@ import {InfoDataSource} from "./info-builder.datasource";
 import {DataSourceClass} from "../../types";
 import {LockService} from "../../services/lock.service";
 import { DefaultService } from "../../../../api/openapi";
+import { DefaultLayoutDirective, DefaultFlexDirective } from "ng-flex-layout";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
     selector: 'app-info-builder',
     templateUrl: './info-builder.component.html',
     styleUrls: ['./info-builder.component.scss'],
-    standalone: false
+    imports: [DefaultLayoutDirective, DefaultFlexDirective, MatFormField, MatLabel, MatInput, AsyncPipe]
 })
 
 export class InfoBuilderComponent<T extends DataSourceClass> implements OnInit {

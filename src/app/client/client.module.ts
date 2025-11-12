@@ -18,11 +18,6 @@ import {MatIconModule} from "@angular/material/icon";
 
 
 @NgModule({
-  declarations: [
-    ClientComponent,
-    ClientEditComponent,
-    ClientDetailComponent
-  ],
     imports: [
         CommonModule,
         ClientRoutingModule,
@@ -36,6 +31,9 @@ import {MatIconModule} from "@angular/material/icon";
         MatButtonModule,
         MatTabsModule,
         MatIconModule,
+        ClientComponent,
+        ClientEditComponent,
+        ClientDetailComponent,
     ]
 })
 export class ClientModule { }

@@ -8,8 +8,8 @@ describe('OrderBundleDetailComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ OrderBundleDetailComponent ]
-    })
+    imports: [OrderBundleDetailComponent]
+})
     .compileComponents();
   });
 

@@ -8,8 +8,8 @@ describe('EventCalendarEventComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EventCalendarEventComponent ]
-    })
+    imports: [EventCalendarEventComponent]
+})
     .compileComponents();
   });
 

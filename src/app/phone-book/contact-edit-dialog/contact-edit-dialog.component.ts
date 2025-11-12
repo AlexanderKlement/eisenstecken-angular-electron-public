@@ -1,13 +1,17 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from "@angular/material/dialog";
-import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogContent } from "@angular/material/dialog";
+import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { first, map, startWith } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { DefaultService, ContactTypeEnum, ContactCreate } from "../../../api/openapi";
+import { CdkScrollable } from "@angular/cdk/scrolling";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { MatButtonToggleGroup, MatButtonToggle } from "@angular/material/button-toggle";
+import { MatAutocompleteTrigger, MatAutocomplete } from "@angular/material/autocomplete";
+import { MatOption } from "@angular/material/select";
+import { MatButton } from "@angular/material/button";
+import { AsyncPipe } from "@angular/common";
 
 export interface ContactDialogData {
   id: number;
@@ -22,7 +26,7 @@ interface AutoCompleteOption {
     selector: "app-contact-edit-dialog",
     templateUrl: "./contact-edit-dialog.component.html",
     styleUrls: ["./contact-edit-dialog.component.scss"],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatButtonToggleGroup, MatButtonToggle, MatAutocompleteTrigger, MatAutocomplete, MatOption, MatButton, AsyncPipe]
 })
 export class ContactEditDialogComponent implements OnInit {
   createMode = false;

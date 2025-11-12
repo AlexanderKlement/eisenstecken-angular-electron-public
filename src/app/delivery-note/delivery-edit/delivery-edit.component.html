@@ -1,4 +1,4 @@
-<app-toolbar [title]="title" [buttonList]="buttons" [controlsBeforeBack]="[deliveryNoteGroup]"></app-toolbar>
+<app-toolbar [title]="title" [buttonList]="buttons"></app-toolbar>
 <div class="window-container">
   <form (ngSubmit)="onSubmit()" [formGroup]="deliveryNoteGroup">
     <div fxLayout="row" fxLayoutAlign="space-around start">
@@ -6,16 +6,16 @@
         @for (descriptiveArticle of getDescriptiveArticles().controls; track descriptiveArticle; let i = $index) {
           <div
             class="descriptive-article" fxFlexFill>
-            <button type="button" mat-icon-button mat-raised-button (click)="addDescriptiveArticleAt(i)"
+            <button type="button" mat-icon-button (click)="addDescriptiveArticleAt(i)"
               class="position-control new-position-btn" title="Neue Position">
               <mat-icon>add</mat-icon>
             </button>
-            <button type="button" mat-icon-button mat-raised-button (click)="moveDescriptiveArticleUp(i)"
+            <button type="button" mat-icon-button (click)="moveDescriptiveArticleUp(i)"
               [disabled]="i === 0"
               class="position-control position-up" title="Nach oben schieben">
               <mat-icon>arrow_upward</mat-icon>
             </button>
-            <button type="button" mat-icon-button mat-raised-button (click)="moveDescriptiveArticleDown(i)"
+            <button type="button" mat-icon-button (click)="moveDescriptiveArticleDown(i)"
               [disabled]="i === getDescriptiveArticles().controls.length - 1"
               class="position-control position-down" title="Nach unten schieben">
               <mat-icon>arrow_downward</mat-icon>
@@ -33,7 +33,7 @@
                 <input class="form-control" type=number formControlName="amount" matInput>
               </mat-form-field>
               <div fxFlex="10" fxLayout="row" fxLayoutAlign="space-around center">
-                <button type="button" mat-icon-button mat-raised-button
+                <button type="button" mat-icon-button
                   (click)="removeDescriptiveArticle(i)"
                   [disabled]="i === 0" class="position-delete">
                   <mat-icon>delete</mat-icon>

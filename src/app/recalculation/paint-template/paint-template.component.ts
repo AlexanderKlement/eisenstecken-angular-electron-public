@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { formatCurrency } from "@angular/common";
 import { first } from "rxjs/operators";
@@ -9,12 +9,13 @@ import {
 } from "./paint-template-edit-dialog/paint-template-edit-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { DefaultService, TemplatePaint } from "../../../api/openapi";
+import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
 @Component({
     selector: 'app-paint-template',
     templateUrl: './paint-template.component.html',
     styleUrls: ['./paint-template.component.scss'],
-    standalone: false
+    imports: [ToolbarComponent, TableBuilderComponent]
 })
 export class PaintTemplateComponent implements OnInit {
 

@@ -1,5 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogContent } from "@angular/material/dialog";
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatButton } from '@angular/material/button';
 
 export interface WarningDialogData {
   totalBlockingTime: number;
@@ -10,7 +12,7 @@ export interface WarningDialogData {
     selector: 'app-warning-dialog',
     templateUrl: './warning-dialog.component.html',
     styleUrls: ['./warning-dialog.component.scss'],
-    standalone: false
+    imports: [CdkScrollable, MatDialogContent, MatButton]
 })
 export class WarningDialogComponent implements OnInit {
 

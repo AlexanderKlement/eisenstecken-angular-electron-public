@@ -1,14 +1,17 @@
 import {Component, OnInit} from "@angular/core";
-import {UntypedFormControl, UntypedFormGroup} from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {AuthService} from "../shared/services/auth.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { MatButton } from "@angular/material/button";
 
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],
-    standalone: false
+    imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatButton]
 })
 export class LoginComponent implements OnInit {
 

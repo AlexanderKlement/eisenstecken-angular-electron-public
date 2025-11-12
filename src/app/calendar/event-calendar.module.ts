@@ -7,16 +7,14 @@ import {SharedModule} from "../shared/shared.module";
 
 
 @NgModule({
-    declarations: [
-        EventCalendarComponent
-    ],
     exports: [
         EventCalendarComponent
     ],
     imports: [
         CommonModule,
         EventCalendarRoutingModule,
-        SharedModule
+        SharedModule,
+        EventCalendarComponent
     ]
 })
 export class EventCalendarModule {

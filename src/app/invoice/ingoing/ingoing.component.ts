@@ -2,20 +2,24 @@ import { Component, Input, OnInit } from '@angular/core';
 import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
 import { LockService } from '../../shared/services/lock.service';
 import moment from "moment";
-import { TableButton } from '../../shared/components/table-builder/table-builder.component';
+import { TableButton, TableBuilderComponent } from '../../shared/components/table-builder/table-builder.component';
 import { first } from 'rxjs/operators';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
-import { formatCurrency } from '@angular/common';
+import { formatCurrency, AsyncPipe } from '@angular/common';
 import { DefaultService, IngoingInvoice } from '../../../api/openapi';
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from 'ng-flex-layout';
+import { MatFormField, MatLabel } from '@angular/material/input';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
 
 @Component({
     selector: 'app-ingoing',
     templateUrl: './ingoing.component.html',
     styleUrls: ['./ingoing.component.scss'],
-    standalone: false
+    imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatSelect, MatOption, MatTabGroup, MatTab, TableBuilderComponent, AsyncPipe]
 })
 export class IngoingComponent implements OnInit {
 

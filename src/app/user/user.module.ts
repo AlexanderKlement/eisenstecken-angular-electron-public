@@ -16,10 +16,6 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import { FlexModule } from "ng-flex-layout";
 
 @NgModule({
-  declarations: [
-    UserComponent,
-    UserEditComponent
-  ],
     imports: [
         CommonModule,
         UserRoutingModule,
@@ -32,7 +28,9 @@ import { FlexModule } from "ng-flex-layout";
         MatInputModule,
         MatListModule,
         MatProgressSpinnerModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        UserComponent,
+        UserEditComponent
     ]
 })
 export class UserModule { }

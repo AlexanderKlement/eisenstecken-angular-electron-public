@@ -6,7 +6,10 @@ import {
   SupportedListElements,
 } from "../shared/components/filterable-clickable-list/filterable-clickable-list.types";
 import { first } from "rxjs/operators";
-import { CustomButton } from "../shared/components/toolbar/toolbar.component";
+import {
+  CustomButton,
+  ToolbarComponent,
+} from "../shared/components/toolbar/toolbar.component";
 import { Router } from "@angular/router";
 import {
   OrderableType,
@@ -14,12 +17,28 @@ import {
   Article,
   DefaultService,
 } from "../../api/openapi";
+import {
+  DefaultLayoutDirective,
+  DefaultLayoutAlignDirective,
+  FlexModule,
+  DefaultFlexDirective,
+} from "ng-flex-layout";
+import { FilterableClickableListComponent } from "../shared/components/filterable-clickable-list/filterable-clickable-list.component";
+import { ProductsListComponent } from "./available-products-list/products-list.component";
 
 @Component({
   selector: "app-order",
   templateUrl: "./order.component.html",
   styleUrls: ["./order.component.scss"],
-  standalone: false,
+  imports: [
+    ToolbarComponent,
+    DefaultLayoutDirective,
+    DefaultLayoutAlignDirective,
+    FlexModule,
+    DefaultFlexDirective,
+    FilterableClickableListComponent,
+    ProductsListComponent,
+  ],
 })
 export class OrderComponent implements OnInit {
   toListName = "Bestelle für Aufträge oder Lager";
@@ -37,10 +56,12 @@ export class OrderComponent implements OnInit {
   availableProductListName = "Verfügbare Artikel";
   availableProducts$: Observable<Article[]>;
   availableProductsSubscriber: Subscriber<Article[]>;
+  private availableArticleFilter = "";
 
   orderedProductListName = "Ausgewählte Artikel";
   orderedProducts$: Observable<OrderedArticle[]>;
   orderedProductsSubscriber: Subscriber<OrderedArticle[]>;
+  private orderedArticleFilter = "";
 
   step = 0;
 
@@ -182,7 +203,7 @@ export class OrderComponent implements OnInit {
   }
 
   private loadToList() {
-    const stocks$ = this.api.readStocksStockGet(0, 100).pipe(first());
+    const stocks$ = this.api.readStocksStockGet().pipe(first());
     const jobs$ = this.api
       .readJobsJobGet(0, 1000, "", undefined, "JOBSTATUS_ACCEPTED", true)
       .pipe(first());
@@ -221,6 +242,9 @@ export class OrderComponent implements OnInit {
         this.api
           .readArticlesByStockArticleStockStockIdGet(
             this.fromListSelected.item.id,
+            0,
+            100,
+            this.availableArticleFilter ?? "",
           )
           .pipe(first())
           .subscribe((articles) => {
@@ -245,6 +269,9 @@ export class OrderComponent implements OnInit {
         this.api
           .readArticlesBySupplierArticleSupplierSupplierIdGet(
             this.fromListSelected.item.id,
+            0,
+            100,
+            this.availableArticleFilter ?? "",
           )
           .pipe(first())
           .subscribe((articles) => {
@@ -262,5 +289,15 @@ export class OrderComponent implements OnInit {
         break;
       }
     }
+  }
+
+  onAvailableSearchChange(filter: string): void {
+    this.availableArticleFilter = (filter ?? "").trim().toLowerCase();
+    this.refreshAvailableProducts();
+  }
+
+  onOrderedSearchChange(filter: string): void {
+    this.orderedArticleFilter = (filter ?? "").trim().toLowerCase();
+    this.refreshOrderedProducts();
   }
 }

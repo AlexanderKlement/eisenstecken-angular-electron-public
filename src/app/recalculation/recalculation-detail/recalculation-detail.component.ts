@@ -1,23 +1,36 @@
-import { Component, ComponentRef, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import moment from "moment";
 import { first, map } from "rxjs/operators";
 import { Observable, Subscriber } from "rxjs";
-import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { LockService } from "../../shared/services/lock.service";
 import { AuthService } from "../../shared/services/auth.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { minutesToDisplayableString } from "../../shared/date.util";
-import { formatCurrency } from "@angular/common";
-import { NavigationService } from "../../shared/services/navigation.service";
+import { formatCurrency, AsyncPipe, DecimalPipe, CurrencyPipe } from "@angular/common";
 import { Recalculation, Paint, Workload, Expense, DefaultService, WoodList, Order } from "../../../api/openapi";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
 @Component({
     selector: 'app-recalculation-detail',
     templateUrl: './recalculation-detail.component.html',
     styleUrls: ['./recalculation-detail.component.scss'],
-    standalone: false
+    imports: [
+        ToolbarComponent,
+        DefaultLayoutDirective,
+        DefaultLayoutAlignDirective,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        TableBuilderComponent,
+        AsyncPipe,
+        DecimalPipe,
+        CurrencyPipe,
+    ],
 })
 export class RecalculationDetailComponent implements OnInit {
 
@@ -37,7 +50,7 @@ export class RecalculationDetailComponent implements OnInit {
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
 
-  constructor(private api: DefaultService, private router: Router, private route: ActivatedRoute, private navigation: NavigationService,
+  constructor(private api: DefaultService, private router: Router, private route: ActivatedRoute,
               private locker: LockService, private authService: AuthService, private snackBar: MatSnackBar) {
   }
 
@@ -53,7 +66,7 @@ export class RecalculationDetailComponent implements OnInit {
         if (recalculation === undefined || recalculation === null) {
           this.authService.currentUserHasRight("recalculations:create").pipe(first()).subscribe(allowed => {
             if (allowed) {
-              this.navigation.replaceCurrentWith("recalculation/edit/new/" + this.jobId.toString());
+              this.router.navigateByUrl("recalculation/edit/new/" + this.jobId.toString(), { replaceUrl: true });
             } else {
               this.snackBar.open("Sie sind nicht berechtigt Nachkalkulationen zu erstellen!"
                 , "Ok", {
@@ -89,8 +102,6 @@ export class RecalculationDetailComponent implements OnInit {
     }));
   }
 
-  onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
-  }
 
   initRecalculation(): void {
     this.initOrderTable();

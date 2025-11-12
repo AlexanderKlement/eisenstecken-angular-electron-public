@@ -1,138 +1,188 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
-import {Observable, ReplaySubject, Subscription} from "rxjs";
-import {ActivatedRoute, Params, Router} from "@angular/router";
-import {DataSourceClass} from "../../types";
-import {MatDialog} from "@angular/material/dialog";
-import {WarningDialogComponent} from "./warning-dialog/warning-dialog.component";
-import {first} from "rxjs/operators";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Observable, ReplaySubject, Subscription } from "rxjs";
+import { ActivatedRoute, Params, Router } from "@angular/router";
+import { first } from "rxjs/operators";
 import { DefaultService, User, Lock } from "../../../../api/openapi";
+import { AbstractControl } from "@angular/forms";
+import { ReusableRoute } from "../../reusable-route";
 
 @Component({
     selector: 'app-base-edit',
     template: ``,
     styleUrls: ['./base-edit.component.scss'],
-    standalone: false
 })
-export class BaseEditComponent<T extends DataSourceClass> implements OnInit, OnDestroy {
+export class BaseEditComponent<T> implements OnInit, OnDestroy, ReusableRoute {
 
-    //This has to be defined by Derived class:
-    navigationTarget: string;
-    lockFunction: (api: DefaultService, id: number) => Observable<Lock>;
-    unlockFunction: (api: DefaultService, id: number) => Observable<boolean>;
-    dataFunction: (api: DefaultService, id: number) => Observable<T>;
+  // to be provided by derived class:
+  navigationTarget: string;
+  lockFunction!: (api: DefaultService, id: number) => Observable<Lock>;
+  unlockFunction!: (api: DefaultService, id: number) => Observable<boolean>;
+  dataFunction!: (api: DefaultService, id: number) => Observable<T>;
 
-    //this not:
-    me$: Observable<User>;
-    data$: Observable<T>;
-    createMode = false;
-    id: number;
-    submitted = false;
-    routeParams: ReplaySubject<Params> = new ReplaySubject<Params>(1);
-    subscription: Subscription;
-    timeouts: NodeJS.Timeout[];
+  // shared:
+  me$!: Observable<User>;
+  data$!: Observable<T>;
+  createMode = false;
+  id!: number;
+  submitted = false;
+  routeParams: ReplaySubject<Params> = new ReplaySubject<Params>(1);
+  subscription = new Subscription();
 
-    constructor(protected api: DefaultService, protected router: Router, protected route: ActivatedRoute, public dialog: MatDialog) {
-        this.subscription = new Subscription();
-        this.subscription.add(this.route.params.subscribe((params) => this.routeParams.next(params)));
-        this.timeouts = [];
+  // dirty tracking (for CanDeactivate)
+  protected controlsBeforeBack: AbstractControl[] = [];
+  private controlsSub?: Subscription;
+
+  constructor(
+    protected api: DefaultService,
+    protected router: Router,
+    protected route: ActivatedRoute,
+  ) {
+    this.subscription.add(this.route.params.subscribe((p) => this.routeParams.next(p)));
+  }
+
+  // === Route reuse hooks ===
+  public onAttach(): void {
+    // re-arm listeners when the cached view becomes active again
+    if (this.controlsBeforeBack.length) {
+      this.registerDirtyControls(this.controlsBeforeBack);
     }
+  }
 
-    ngOnInit(): void {
-        this.me$ = this.api.readUsersMeUsersMeGet();
-        this.routeParams.pipe(first()).subscribe((params) => {
-            if (params.id === "new") {
-                this.createMode = true;
-                return;
-            }
-            this.id = parseInt(params.id, 10);
-            if (isNaN(this.id)) {
-                console.error("BaseEditComponent: Cannot parse given id");
-                this.goBack();
-            }
-            if (!this.createMode) {
-                this.lockFunction(this.api, this.id).pipe(first()).subscribe(lock => {
-                    if (!lock.locked) {//has to be locked, otherwise component is accessed directly {
-                        console.error("BaseEditComponent: The lock is not locked. This should not happen on accessing a ressource");
-                        this.goBack();
-                    }
-                    this.me$.pipe(first()).subscribe((user) => {
-                        if (user.id !== lock.user.id) {//if locked by other user go back
-                            console.error("BaseEditComponent: The accessed ressource is locked by another user");
-                            this.goBack();
-                        } else {   //now we talking
-                            this.data$ = this.dataFunction(this.api, this.id);
-                            this.observableReady();
-                            /*
-                            Removed this on because not needed anymore
-                            this.timeouts.push(setTimeout(() => {
-                                this.showWarningDialog(lock.max_lock_time_minutes, lock.reminder_time_minutes);
-                            }, BaseEditComponent.minutesToMilliSeconds(lock.max_lock_time_minutes - lock.reminder_time_minutes)));
-                            this.timeouts.push(setTimeout(() => {
-                                console.warn('BaseEditComponent: Going back, because maximum access time is over');
-                                this.goBack();
-                            }, BaseEditComponent.minutesToMilliSeconds(lock.max_lock_time_minutes)));
-                             */
-                        }
-                    });
-                });
-            }
-        });
-        this.startListeningForUnload();
-    }
+  public onDetach(): void {
+    // drop subscriptions while cached
+    this.controlsSub?.unsubscribe();
+    this.controlsSub = undefined;
+  }
 
-    ngOnDestroy(): void {
-        this.subscription.unsubscribe();
-        this.timeouts.forEach((timeout) => {
-            clearTimeout(timeout);
+  ngOnInit(): void {
+    this.me$ = this.api.readUsersMeUsersMeGet();
+
+    this.routeParams.pipe(first()).subscribe((params) => {
+      if (params.id === "new") {
+        this.createMode = true;
+        return;
+      }
+
+      this.id = parseInt(params.id, 10);
+      if (isNaN(this.id)) {
+        console.error("BaseEditComponent: Cannot parse given id");
+        this.goBack();
+        return;
+      }
+
+      if (!this.createMode) {
+        this.lockFunction(this.api, this.id).pipe(first()).subscribe((lock) => {
+          if (!lock.locked) {
+            console.error("BaseEditComponent: Expected resource to be locked.");
+            this.goBack();
+            return;
+          }
+          this.me$.pipe(first()).subscribe((user) => {
+            if (user.id !== lock.user.id) {
+              console.error("BaseEditComponent: Resource is locked by another user.");
+              this.goBack();
+              return;
+            }
+            this.data$ = this.dataFunction(this.api, this.id);
+            this.observableReady();
+          });
         });
-        if (!this.createMode) {
-            this.unlockFunction(this.api, this.id).pipe(first()).subscribe((success) => {
-                if (success) {
-                  // eslint-disable-next-line no-console
-                    console.info("BaseEdit: SUCCESS: unlocked object with id: " + this.id);
-                } else {
-                    console.warn("BaseEdit: FAIL: to unlock object with id: " + this.id);
-                }
-            });
+      } else {
+        this.observableReady();
+      }
+    });
+
+    // optional: warn on tab close/refresh if dirty
+    window.addEventListener("beforeunload", this.beforeUnloadHandler);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+    this.controlsSub?.unsubscribe();
+
+    if (!this.createMode) {
+      this.unlockFunction(this.api, this.id).pipe(first()).subscribe((success) => {
+        if (success) {
+          console.info("BaseEdit: SUCCESS: unlocked object with id:", this.id);
+        } else {
+          console.warn("BaseEdit: FAIL: to unlock object with id:", this.id);
         }
-        this.stopListeningForUnload();
+      });
     }
 
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    createUpdateError(error: any): void {
-        this.submitted = false;
-        console.error(error);
-        //an error handling should not be necessary, because it gets intercepted globally by a generic message
-    }
+    window.removeEventListener("beforeunload", this.beforeUnloadHandler);
+  }
 
-    createUpdateComplete(): void {
-        this.submitted = false;
-    }
+  /**
+   * Derived components should call this once the main form(s) are built & initial patches are done.
+   */
+  protected registerDirtyControls(controls: AbstractControl[]): void {
+    this.controlsBeforeBack = (controls || []).filter(Boolean) as AbstractControl[];
+    this.controlsSub?.unsubscribe();
+    if (!this.controlsBeforeBack.length) return;
 
-    protected goBack(): void {
-        this.router.navigateByUrl(this.navigationTarget);
+    this.controlsSub = new Subscription();
+    // We don’t need to flip any flags here—CanDeactivate will just call isDirty()
+    // But we subscribe so derived classes can optionally hook side-effects later if desired.
+    for (const ctrl of this.controlsBeforeBack) {
+      this.controlsSub.add(ctrl.valueChanges.subscribe(() => { /* no-op */ }));
     }
+  }
 
-    protected observableReady(): void {
-        // eslint-disable-next-line no-console
-        console.info("BaseEditComponent: The data observable is ready");
-    }
+  /**
+   * Used by the CanDeactivate guard.
+   */
+  public isDirty(): boolean {
+    return this.controlsBeforeBack.some(c => c.dirty);
+  }
 
-    private startListeningForUnload(): void {
-        window.addEventListener("beforeunload", this.ngOnDestroy.bind(this));
+  /**
+   * Helper for derived classes after a successful save or load.
+   */
+  protected resetDirtyState(): void {
+    for (const c of this.controlsBeforeBack) {
+      c.markAsPristine();
+      c.updateValueAndValidity({ onlySelf: true, emitEvent: false });
     }
+  }
 
-    private stopListeningForUnload(): void {
-        window.removeEventListener("beforeunload", this.ngOnDestroy.bind(this));
-    }
+  createUpdateError(error: any): void {
+    this.submitted = false;
+    console.error(error);
+  }
 
-    private showWarningDialog(totBlockTime: number, remBlockTime: number): void {
-        this.dialog.open(WarningDialogComponent, {
-            data: {
-                totalBlockingTime: totBlockTime,
-                remainingBlockingTime: remBlockTime
-            }
-        });
+  createUpdateComplete(): void {
+    this.submitted = false;
+  }
+
+  protected goBack(): void {
+    this.router.navigateByUrl(this.navigationTarget);
+  }
+
+  protected observableReady(): void {
+    // Hook for derived classes
+    console.info("BaseEditComponent: data observable ready");
+  }
+
+  protected markTreePristine(c: AbstractControl): void {
+    c.markAsPristine();
+    // recurse into groups/arrays
+    const anyC: any = c as any;
+    const kids = anyC?.controls;
+    if (!kids) return;
+
+    if (Array.isArray(kids)) {
+      kids.forEach((ctrl: AbstractControl) => this.markTreePristine(ctrl));
+    } else {
+      Object.values(kids).forEach((ctrl: AbstractControl) => this.markTreePristine(ctrl as AbstractControl));
     }
+  }
+
+  // ---- Tab close / refresh prompt (optional) ----
+  private beforeUnloadHandler = (e: BeforeUnloadEvent) => {
+    if (this.isDirty()) {
+      e.preventDefault();
+      e.returnValue = "";
+    }
+  };
 }
-

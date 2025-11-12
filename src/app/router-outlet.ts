@@ -1,10 +1,7 @@
 import {ComponentRef, Directive} from "@angular/core";
 import {ActivatedRoute, RouterOutlet} from "@angular/router";
 
-@Directive({
-    selector: 'app-router-outlet',
-    standalone: false
-})
+@Directive({ selector: 'app-router-outlet' })
 export class AppRouterOutletDirective extends RouterOutlet {
 
     detach(): ComponentRef<any> {

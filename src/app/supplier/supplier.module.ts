@@ -28,16 +28,6 @@ import { FlexModule } from "ng-flex-layout";
 
 
 @NgModule({
-    declarations: [
-        SupplierComponent,
-        SupplierDetailComponent,
-        SupplierEditComponent,
-        OrderDialogComponent,
-        StockDetailComponent,
-        StockEditComponent,
-        ArticleSupplierComponent,
-        ArticleEditDialogComponent
-    ],
     imports: [
         CommonModule,
         SupplierRoutingModule,
@@ -55,7 +45,15 @@ import { FlexModule } from "ng-flex-layout";
         MatListModule,
         MatProgressSpinnerModule,
         MatDatepickerModule,
-        MatIconModule
+        MatIconModule,
+        SupplierComponent,
+        SupplierDetailComponent,
+        SupplierEditComponent,
+        OrderDialogComponent,
+        StockDetailComponent,
+        StockEditComponent,
+        ArticleSupplierComponent,
+        ArticleEditDialogComponent
     ]
 })
 export class SupplierModule {

@@ -1,24 +1,27 @@
-<script src="../work-day/work-day.module.ts"></script>
 <app-toolbar title="Bestellungen: Zusammenstellen" [buttonList]="buttons"></app-toolbar>
 <div class="order-container">
   <div fxLayout="row" fxLayoutAlign="space-between start" fxFlexFill class="container-group">
     <div fxFlex="24" class="order-column" [class.active]="step >= 0" fxFlexFill>
       <app-filterable-clickable-list [listElements$]="toList$" (clickEventEmitter)="toListItemClicked($event)"
-        [name]="toListName" [toListUnCollapse]="toListUncollapse"></app-filterable-clickable-list>
+                                     [name]="toListName"
+                                     [toListUnCollapse]="toListUncollapse"></app-filterable-clickable-list>
     </div>
     <div fxFlex="24" class="order-column" fxFlexFill [class.active]="step >= 1">
       <app-filterable-clickable-list [listElements$]="fromList$" (clickEventEmitter)="fromListItemClicked($event)"
-        [name]="fromListName"></app-filterable-clickable-list>
+                                     [name]="fromListName"></app-filterable-clickable-list>
     </div>
     <div fxFlex="24" class="order-column" fxFlexFill [class.active]="step >= 2">
       <app-products-list [availableProducts$]="availableProducts$" [name]="availableProductListName"
-        [orderId]="lastOrderId" [available]="true" (refreshOrderedArticleListEmitter)="refreshOrderedProducts()"
-        (refreshAvailableArticleListEmitter)="refreshAvailableProducts()"></app-products-list>
+                         [orderId]="lastOrderId" [available]="true"
+                         (refreshOrderedArticleListEmitter)="refreshOrderedProducts()"
+                         (refreshAvailableArticleListEmitter)="refreshAvailableProducts()"
+                         (searchChange)="onAvailableSearchChange($event)"></app-products-list>
     </div>
     <div fxFlex="24" class="order-column" fxFlexFill [class.active]="step >= 2">
       <app-products-list [orderedProducts$]="orderedProducts$" [name]="orderedProductListName" [orderId]="lastOrderId"
-        [available]="false" (refreshOrderedArticleListEmitter)="refreshOrderedProducts()"
-        (refreshAvailableArticleListEmitter)="refreshAvailableProducts()"></app-products-list>
+                         [available]="false" (refreshOrderedArticleListEmitter)="refreshOrderedProducts()"
+                         (refreshAvailableArticleListEmitter)="refreshAvailableProducts()"
+                         (searchChange)="onOrderedSearchChange($event)"></app-products-list>
     </div>
   </div>
 </div>

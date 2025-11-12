@@ -18,10 +18,6 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 
 
 @NgModule({
-  declarations: [
-    DeliveryNoteComponent,
-    DeliveryEditComponent
-  ],
     imports: [
         CommonModule,
         DeliveryNoteRoutingModule,
@@ -35,7 +31,9 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
         MatButtonModule,
         MatInputModule,
         MatSelectModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        DeliveryNoteComponent,
+        DeliveryEditComponent
     ]
 })
 export class DeliveryNoteModule { }

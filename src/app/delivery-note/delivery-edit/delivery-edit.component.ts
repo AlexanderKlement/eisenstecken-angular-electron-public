@@ -4,14 +4,13 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { first, map } from "rxjs/operators";
-import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { AuthService } from "../../shared/services/auth.service";
-import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { formatDateTransport } from "../../shared/date.util";
 import { FileService } from "../../shared/services/file.service";
-import { NavigationService } from "../../shared/services/navigation.service";
 import {
   DeliveryNoteCreate,
   DeliveryNote,
@@ -22,6 +21,15 @@ import {
   DescriptiveArticle,
   DescriptiveArticleCreate
 } from "../../../api/openapi";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective, FlexModule } from "ng-flex-layout";
+import { MatIconButton, MatButton } from "@angular/material/button";
+import { MatIcon } from "@angular/material/icon";
+import { MatFormField, MatLabel, MatInput, MatSuffix } from "@angular/material/input";
+import { CdkTextareaAutosize } from "@angular/cdk/text-field";
+import { MatSelect, MatOption } from "@angular/material/select";
+import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from "@angular/material/datepicker";
+import { MatCheckbox } from "@angular/material/checkbox";
+import { AsyncPipe } from "@angular/common";
 
 export interface JobMinimal {
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -33,7 +41,7 @@ export interface JobMinimal {
     selector: 'app-delivery-edit',
     templateUrl: './delivery-edit.component.html',
     styleUrls: ['./delivery-edit.component.scss'],
-    standalone: false
+    imports: [ToolbarComponent, FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective, FlexModule, MatIconButton, MatButton, MatIcon, MatFormField, MatLabel, CdkTextareaAutosize, MatInput, MatSelect, MatOption, MatDatepickerInput, MatDatepickerToggle, MatSuffix, MatDatepicker, MatCheckbox, AsyncPipe]
 })
 export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> implements OnInit {
   deliveryNoteGroup: UntypedFormGroup;
@@ -44,9 +52,9 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
   buttons: CustomButton[] = [];
   title = "Lieferschein: Bearbeiten";
 
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private navigation: NavigationService,
-              private authService: AuthService, private snackBar: MatSnackBar, private file: FileService) {
-    super(api, router, route, dialog);
+  constructor(api: DefaultService, router: Router, route: ActivatedRoute,
+              private authService: AuthService, private snackBar: MatSnackBar, private file: FileService, private dialog: MatDialog) {
+    super(api, router, route);
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> =>
@@ -136,7 +144,7 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
       this.api.createDeliveryNoteDeliveryNotePost(deliveryNoteCreate).pipe(first()).subscribe(deliveryNote => {
         this.submitted = false;
         this.file.open(deliveryNote.pdf);
-        this.navigation.replaceCurrentWith("delivery_note");
+        this.router.navigateByUrl("delivery_note", { replaceUrl: true });
       }, (err) => {
         this.createUpdateError(err);
       }, () => {
@@ -166,7 +174,7 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
       this.api.updateDeliveryNoteDeliveryNoteDeliveryNoteIdPut(this.id, deliveryNoteUpdate).pipe(first()).subscribe(deliveryNote => {
         this.submitted = false;
         this.file.open(deliveryNote.pdf);
-        this.navigation.replaceCurrentWith("delivery_note");
+        this.router.navigateByUrl("delivery_note", { replaceUrl: true });
       }, (err) => {
         this.createUpdateError(err);
       }, () => {

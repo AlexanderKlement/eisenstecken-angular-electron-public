@@ -1,12 +1,19 @@
 import {Component, NgZone, OnInit} from "@angular/core";
 import moment from "moment";
 import {Subject} from "rxjs";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexDirective } from "ng-flex-layout";
+import { MatToolbar } from "@angular/material/toolbar";
+import { DefaultShowHideDirective } from "ng-flex-layout/extended";
+import { MatIconButton } from "@angular/material/button";
+import { MatIcon } from "@angular/material/icon";
+import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from "@angular/material/table";
+import { EventCalendarDayComponent } from "./event-calendar-day/event-calendar-day.component";
 
 @Component({
     selector: 'app-event-calendar',
     templateUrl: './event-calendar.component.html',
     styleUrls: ['./event-calendar.component.scss'],
-    standalone: false
+    imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, MatToolbar, DefaultFlexDirective, DefaultShowHideDirective, MatIconButton, MatIcon, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, EventCalendarDayComponent, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow]
 })
 
 

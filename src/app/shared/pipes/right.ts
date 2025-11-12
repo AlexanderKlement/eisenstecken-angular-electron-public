@@ -3,8 +3,7 @@ import { Right } from "../../../api/openapi";
 
 @Pipe({
     name: 'RightFilter',
-    pure: false,
-    standalone: false
+    pure: false
 })
 export class RightFilterPipe implements PipeTransform {
   transform(items: Right[], filter: string): any {

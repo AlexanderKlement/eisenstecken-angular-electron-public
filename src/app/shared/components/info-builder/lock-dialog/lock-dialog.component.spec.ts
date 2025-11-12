@@ -8,8 +8,8 @@ describe('LockDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LockDialogComponent ]
-    })
+    imports: [LockDialogComponent]
+})
       .compileComponents();
   });
 

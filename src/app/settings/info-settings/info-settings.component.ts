@@ -1,15 +1,20 @@
 import {Component, OnInit} from "@angular/core";
-import {UntypedFormArray, UntypedFormControl, UntypedFormGroup} from "@angular/forms";
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {first} from "rxjs/operators";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ThemePalette} from "@angular/material/core";
 import {DefaultService, TechnicalData, TechnicalDataUpdate, PriceUpdate, Price, CredentialUpdate, Credential} from "../../../api/openapi";
+import { MatTabGroup, MatTab } from "@angular/material/tabs";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { MatFabButton, MatButton } from "@angular/material/button";
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
     selector: 'app-info-settings',
     templateUrl: './info-settings.component.html',
     styleUrls: ['./info-settings.component.scss'],
-    standalone: false
+    imports: [MatTabGroup, MatTab, FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatFabButton, MatIcon, MatButton]
 })
 export class InfoSettingsComponent implements OnInit {
 

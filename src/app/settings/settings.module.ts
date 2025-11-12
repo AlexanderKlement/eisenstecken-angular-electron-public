@@ -25,18 +25,6 @@ import { FlexModule } from "ng-flex-layout";
 
 
 @NgModule({
-  declarations: [
-    SettingsComponent,
-    OfferSettingsComponent,
-    InvoiceSettingsComponent,
-    DeliverySettingsComponent,
-    OrderSettingsComponent,
-    ReminderSettingsComponent,
-    GeneralSettingsComponent,
-    InfoSettingsComponent,
-    InfoPageSettingsComponent,
-    InfoPageSettingEditDialogComponent,
-  ],
     imports: [
         CommonModule,
         SharedModule,
@@ -48,7 +36,17 @@ import { FlexModule } from "ng-flex-layout";
         MatButtonModule,
         MatListModule,
         MatIconModule,
-        MatDialogModule
+        MatDialogModule,
+        SettingsComponent,
+        OfferSettingsComponent,
+        InvoiceSettingsComponent,
+        DeliverySettingsComponent,
+        OrderSettingsComponent,
+        ReminderSettingsComponent,
+        GeneralSettingsComponent,
+        InfoSettingsComponent,
+        InfoPageSettingsComponent,
+        InfoPageSettingEditDialogComponent
     ]
 })
 export class SettingsModule { }

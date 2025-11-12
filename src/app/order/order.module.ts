@@ -26,16 +26,6 @@ import { ConvertRequestDialogComponent } from "./order-detail/convert-request-di
 
 
 @NgModule({
-  declarations: [
-    OrderComponent,
-    ProductsListComponent,
-    ProductEditDialogComponent,
-    OrderDetailComponent,
-    OrderBundleDetailComponent,
-    OrderBundleEditComponent,
-    OrderedArticleMoveDialogComponent,
-    ConvertRequestDialogComponent
-  ],
     imports: [
         CommonModule,
         MatGridListModule,
@@ -52,7 +42,15 @@ import { ConvertRequestDialogComponent } from "./order-detail/convert-request-di
         MatSelectModule,
         MatIconModule,
         MatCheckboxModule,
-        MatStepperModule
+        MatStepperModule,
+        OrderComponent,
+        ProductsListComponent,
+        ProductEditDialogComponent,
+        OrderDetailComponent,
+        OrderBundleDetailComponent,
+        OrderBundleEditComponent,
+        OrderedArticleMoveDialogComponent,
+        ConvertRequestDialogComponent
     ]
 })
 export class OrderModule { }

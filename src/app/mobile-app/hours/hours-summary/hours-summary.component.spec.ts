@@ -8,8 +8,8 @@ describe('HoursSummaryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HoursSummaryComponent ]
-    })
+    imports: [HoursSummaryComponent]
+})
     .compileComponents();
   });
 

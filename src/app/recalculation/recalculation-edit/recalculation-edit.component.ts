@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
@@ -10,7 +10,6 @@ import moment from "moment";
 import { minutesToDisplayableString } from "../../shared/date.util";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { FileService } from "../../shared/services/file.service";
-import { NavigationService } from "../../shared/services/navigation.service";
 import {
   DefaultService,
   Recalculation,
@@ -26,14 +25,41 @@ import {
   WoodList,
   Workload,
   Order,
-  Lock
+  Lock,
 } from "../../../api/openapi";
+import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { MatIconButton, MatButton } from "@angular/material/button";
+import { MatIcon } from "@angular/material/icon";
+import { MatSelect, MatOption } from "@angular/material/select";
+import { MatActionList, MatListItem } from "@angular/material/list";
+import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
     selector: 'app-recalculation-edit',
     templateUrl: './recalculation-edit.component.html',
     styleUrls: ['./recalculation-edit.component.scss'],
-    standalone: false
+    imports: [
+        ToolbarComponent,
+        DefaultLayoutDirective,
+        DefaultLayoutAlignDirective,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatIconButton,
+        MatButton,
+        MatIcon,
+        MatSelect,
+        MatOption,
+        MatActionList,
+        MatListItem,
+        TableBuilderComponent,
+        AsyncPipe,
+    ],
 })
 export class RecalculationEditComponent extends BaseEditComponent<Recalculation> implements OnInit, OnDestroy {
   recalculationGroup: UntypedFormGroup;
@@ -48,8 +74,8 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
   title = "Nachkalkulation: Bearbeiten";
 
   // eslint-disable-next-line max-len
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private file: FileService, private navigation: NavigationService) {
-    super(api, router, route, dialog);
+  constructor(api: DefaultService, router: Router, route: ActivatedRoute, private file: FileService, private dialog: MatDialog) {
+    super(api, router, route);
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> =>
@@ -271,7 +297,7 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
       };
       this.api.createRecalculationRecalculationJobIdPost(this.jobId, recalculationCreate).pipe(first()).subscribe(recalculation => {
         this.file.open(recalculation.pdf);
-        this.navigation.replaceCurrentWith("recalculation/" + this.jobId);
+        this.router.navigateByUrl("recalculation/" + this.jobId, { replaceUrl: true });
       });
     } else {
       const recalculationUpdate: RecalculationUpdate = {
@@ -286,7 +312,7 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
       };
       this.api.updateRecalculationRecalculationJobIdPut(this.jobId, recalculationUpdate).pipe(first()).subscribe(recalculation => {
         this.file.open(recalculation.pdf);
-        this.navigation.replaceCurrentWith("recalculation/" + this.jobId);
+        this.router.navigateByUrl("recalculation/" + this.jobId, { replaceUrl: true });
       });
     }
   }

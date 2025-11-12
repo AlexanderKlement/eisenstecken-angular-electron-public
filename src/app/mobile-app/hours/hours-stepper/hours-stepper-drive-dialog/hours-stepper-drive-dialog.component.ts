@@ -1,7 +1,11 @@
 import {Component, Inject, OnInit} from "@angular/core";
 import {JobEnum} from "../hours-stepper.component";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {UntypedFormArray, UntypedFormControl, UntypedFormGroup} from "@angular/forms";
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { CdkScrollable } from "@angular/cdk/scrolling";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule } from "ng-flex-layout";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { MatButton } from "@angular/material/button";
 
 
 export interface HoursStepperDriveDialogData {
@@ -15,7 +19,7 @@ export interface HoursStepperDriveDialogData {
     selector: 'app-hours-stepper-drive-dialog',
     templateUrl: './hours-stepper-drive-dialog.component.html',
     styleUrls: ['./hours-stepper-drive-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatDialogActions, MatButton]
 })
 export class HoursStepperDriveDialogComponent implements OnInit {
     confirmDisabled: true;

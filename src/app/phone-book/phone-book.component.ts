@@ -4,17 +4,19 @@ import { Router } from "@angular/router";
 import { first } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
 import { ContactDialogData, ContactEditDialogComponent } from "./contact-edit-dialog/contact-edit-dialog.component";
-import { TableButton } from "../shared/components/table-builder/table-builder.component";
+import { TableButton, TableBuilderComponent } from "../shared/components/table-builder/table-builder.component";
 import { PhoneService } from "../shared/services/phone.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import * as Sentry from "@sentry/angular";
 import { Contact, DefaultService, ContactTypeEnum } from "../../api/openapi";
+import { ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
+import { MatTabGroup, MatTab } from "@angular/material/tabs";
 
 @Component({
     selector: 'app-phone-book',
     templateUrl: './phone-book.component.html',
     styleUrls: ['./phone-book.component.scss'],
-    standalone: false
+    imports: [ToolbarComponent, MatTabGroup, MatTab, TableBuilderComponent]
 })
 export class PhoneBookComponent implements OnInit {
 

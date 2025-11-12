@@ -6,12 +6,18 @@ import {first} from "rxjs/operators";
 import {CalendarService} from "./calendar.service";
 import moment from "moment";
 import {AuthService} from "../../services/auth.service";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexDirective, DefaultLayoutGapDirective } from "ng-flex-layout";
+import { MatToolbar } from "@angular/material/toolbar";
+import { DefaultShowHideDirective } from "ng-flex-layout/extended";
+import { MatIconButton } from "@angular/material/button";
+import { MatIcon } from "@angular/material/icon";
+import { CalendarDayComponent } from "./calendar-day/calendar-day.component";
 
 @Component({
     selector: 'app-calendar',
     templateUrl: './simple-calendar.component.html',
     styleUrls: ['./simple-calendar.component.scss'],
-    standalone: false
+    imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, MatToolbar, DefaultFlexDirective, DefaultShowHideDirective, MatIconButton, MatIcon, DefaultLayoutGapDirective, CalendarDayComponent]
 })
 export class SimpleCalendarComponent implements OnInit {
 

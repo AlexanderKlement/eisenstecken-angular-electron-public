@@ -1,6 +1,6 @@
 import { Component, ComponentRef, OnInit } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
-import { CustomButton } from "../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
 import { LockService } from "../shared/services/lock.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import moment from "moment";
@@ -11,12 +11,14 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { minutesToDisplayableString } from "../shared/date.util";
 import { Observable, Subscriber } from "rxjs";
 import { User, Fee, Journey, MealSum, Maintenance, AdditionalWorkload, DefaultService } from "../../api/openapi";
+import { MatTabGroup, MatTab } from "@angular/material/tabs";
+import { TableBuilderComponent } from "../shared/components/table-builder/table-builder.component";
 
 @Component({
     selector: 'app-employee',
     templateUrl: './employee.component.html',
     styleUrls: ['./employee.component.scss'],
-    standalone: false
+    imports: [ToolbarComponent, MatTabGroup, MatTab, TableBuilderComponent]
 })
 export class EmployeeComponent implements OnInit {
 

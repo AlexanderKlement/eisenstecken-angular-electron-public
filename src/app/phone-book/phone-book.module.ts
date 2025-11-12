@@ -17,10 +17,6 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 
 @NgModule({
-  declarations: [
-    PhoneBookComponent,
-    ContactEditDialogComponent
-  ],
     imports: [
         CommonModule,
         PhoneBookRoutingModule,
@@ -33,7 +29,9 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
         MatDialogModule,
         MatButtonModule,
         MatButtonToggleModule,
-        MatAutocompleteModule
+        MatAutocompleteModule,
+        PhoneBookComponent,
+        ContactEditDialogComponent
     ]
 })
 export class PhoneBookModule { }

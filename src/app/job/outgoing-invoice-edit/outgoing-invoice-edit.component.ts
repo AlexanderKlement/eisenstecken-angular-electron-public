@@ -1,19 +1,19 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Location, AsyncPipe } from "@angular/common";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { Observable } from "rxjs";
-import { UntypedFormArray, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { first, tap } from "rxjs/operators";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
-import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { AuthService } from "../../shared/services/auth.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import moment from "moment";
 import { formatDateTransport } from "../../shared/date.util";
 import { FileService } from "../../shared/services/file.service";
 import { CurrencyPipe, getLocaleCurrencyCode } from "@angular/common";
-import { NavigationService } from "../../shared/services/navigation.service";
 import {
   DefaultService,
   OutgoingInvoice,
@@ -23,14 +23,45 @@ import {
   OutgoingInvoiceUpdate,
   OutgoingInvoiceCreate,
   DescriptiveArticleCreate,
-  Lock
+  Lock,
 } from "../../../api/openapi";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective, FlexModule } from "ng-flex-layout";
+import { MatIconButton, MatButton } from "@angular/material/button";
+import { MatIcon } from "@angular/material/icon";
+import { MatFormField, MatLabel, MatInput, MatSuffix } from "@angular/material/input";
+import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from "@angular/material/datepicker";
+import { MatSelect, MatOption } from "@angular/material/select";
+import { MatCheckbox } from "@angular/material/checkbox";
+import { AddressFormComponent } from "../../shared/components/address-form/address-form.component";
 
 @Component({
     selector: 'app-outgoing-invoice-edit',
     templateUrl: './outgoing-invoice-edit.component.html',
     styleUrls: ['./outgoing-invoice-edit.component.scss'],
-    standalone: false
+    imports: [
+        ToolbarComponent,
+        FormsModule,
+        ReactiveFormsModule,
+        DefaultLayoutDirective,
+        DefaultLayoutAlignDirective,
+        DefaultFlexDirective,
+        FlexModule,
+        MatIconButton,
+        MatButton,
+        MatIcon,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatDatepickerInput,
+        MatDatepickerToggle,
+        MatSuffix,
+        MatDatepicker,
+        MatSelect,
+        MatOption,
+        MatCheckbox,
+        AddressFormComponent,
+        AsyncPipe,
+    ],
 })
 export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvoice> implements OnInit, OnDestroy {
 
@@ -45,10 +76,9 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
 
   company = false;
 
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private currency: CurrencyPipe,
-              private authService: AuthService, private snackBar: MatSnackBar, private file: FileService,
-              private navigation: NavigationService) {
-    super(api, router, route, dialog);
+  constructor(api: DefaultService, router: Router, route: ActivatedRoute, private currency: CurrencyPipe, private location: Location,
+              private authService: AuthService, private snackBar: MatSnackBar, private file: FileService, private dialog: MatDialog) {
+    super(api, router, route);
   }
 
   calcTotalPrice(formGroup: UntypedFormGroup): void {
@@ -105,7 +135,7 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
                   this.api.deleteOutgoingInvoiceOutgoingInvoiceOutgoingInvoiceIdDelete(this.id)
                     .pipe(first()).subscribe((success) => {
                       if (success) {
-                        this.navigation.back();
+                        this.location.back();
                         //this.router.navigateByUrl(this.navigationTarget);
                       } else {
                         this.invoiceDeleteFailed();
@@ -142,7 +172,7 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
       , "Ok", {
         duration: 10000,
       });
-    this.navigation.back();
+    this.location.back();
   }
 
   getDescriptiveArticles(): UntypedFormArray {
@@ -328,7 +358,7 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
   createUpdateSuccess(invoice: OutgoingInvoice): void {
     this.id = invoice.id;
     this.file.open(invoice.pdf);
-    this.navigation.back();
+    this.location.back();
   }
 
   observableReady(): void {

@@ -1,52 +1,52 @@
-import {Injectable} from "@angular/core";
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from "@angular/router";
-import {Observable} from "rxjs";
-import {AuthService} from "./auth.service";
-import {ElectronService} from "../../core/services";
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { AuthService } from './auth.service';
+import { ElectronService } from '../../core/services';
+import { isPlatformBrowser } from '@angular/common';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AccessGuard implements CanActivate {
 
-    limitAccessHosts: string[] = [
-        "stunden.eisenstecken.kivi.bz.it",
-        "timedev.app.eisenstecken.it",
-        "time.app.eisenstecken.it"
-    ];
+  private readonly limitAccessHosts: string[] = [
+    'stunden.eisenstecken.kivi.bz.it',
+    'timedev.app.eisenstecken.it',
+    'time.app.eisenstecken.it',
+  ];
 
-    constructor(private authService: AuthService, private router: Router, private electron: ElectronService) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private electron: ElectronService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+  ) {
+  }
+
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    _: RouterStateSnapshot,
+  ): boolean | UrlTree {
+    // default: requires login unless explicitly set to false
+    const requiresLogin = route.data?.requiresLogin !== false;
+
+    if (requiresLogin && !this.authService.isLoggedIn()) {
+      console.warn('Not logged in!');
+      return this.router.createUrlTree(['login']);
     }
 
-    public static urlStartsWith(route: ActivatedRouteSnapshot, url: string): boolean {
-        if (route.url.length > 0) {
-            return route.url[0].path.startsWith(url);
-        }
-        return false;
-    }
+    return this.redirectWorkHours(route);
+  }
 
-    canActivate(
-        route: ActivatedRouteSnapshot,
-        state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-        const requiresLogin = route.data.requiresLogin || true;
-        if (requiresLogin) {
-            if (!this.authService.isLoggedIn()) {
-                console.warn("Not logged in!");
-                return this.router.parseUrl("login");
-            }
-        }
-        return this.redirectWorkHours(route);
-    }
+  private redirectWorkHours(route: ActivatedRouteSnapshot): boolean | UrlTree {
+    // SSR-safe window access
+    if (!isPlatformBrowser(this.platformId)) return true;
 
-    private redirectWorkHours(route: ActivatedRouteSnapshot): boolean | UrlTree {
-        if (this.limitAccessHosts.includes(window.location.hostname)) {
-            if (!AccessGuard.urlStartsWith(route, "mobile")) {
-                if (!this.electron.isElectron) {
-                    return this.router.parseUrl("mobile");
-                }
-            }
-        }
-        return true;
-    }
+    const hostname = window.location.hostname;
+    if (!this.limitAccessHosts.includes(hostname)) return true;
 
+    // allow /mobile routes, or Electron app
+    const firstSeg = route.url[0]?.path ?? '';
+    if (firstSeg.startsWith('mobile') || this.electron.isElectron) return true;
+
+    return this.router.createUrlTree(['mobile']);
+  }
 }

@@ -8,8 +8,8 @@ describe('CalendarsFrameComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CalendarsChatFrameComponent ]
-    })
+    imports: [CalendarsChatFrameComponent]
+})
       .compileComponents();
   });
 

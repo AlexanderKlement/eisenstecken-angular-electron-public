@@ -8,8 +8,8 @@ describe('WorkDayNewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WorkDayNewComponent ]
-    })
+    imports: [WorkDayNewComponent]
+})
     .compileComponents();
   });
 

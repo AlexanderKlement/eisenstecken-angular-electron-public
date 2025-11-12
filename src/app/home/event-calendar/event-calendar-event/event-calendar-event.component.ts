@@ -1,12 +1,13 @@
 import {Component, Input, OnInit} from "@angular/core";
 import { CompanyEvent, CompanyEventEnum } from "../../../../api/openapi";
 import {getEventTranslation} from "../event-calendar-dialog/event-calendar-dialog.component";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
 
 @Component({
     selector: 'app-event-calendar-event',
     templateUrl: './event-calendar-event.component.html',
     styleUrls: ['./event-calendar-event.component.scss'],
-    standalone: false
+    imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective]
 })
 export class EventCalendarEventComponent implements OnInit {
 

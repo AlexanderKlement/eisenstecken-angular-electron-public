@@ -2,7 +2,7 @@ import { CollectionViewer, DataSource } from "@angular/cdk/collections";
 import { BehaviorSubject, Observable, of } from "rxjs";
 import { catchError, finalize, map } from "rxjs/operators";
 import { DataSourceClass } from "../../types";
-import { MatPaginatorIntl, PageEvent } from "@angular/material/paginator";
+import { MatPaginatorIntl } from "@angular/material/paginator";
 import { DefaultService } from "../../../../api/openapi";
 
 export interface Column<T> {
@@ -73,9 +73,7 @@ export type ParseFunction<T extends DataSourceClass> = (
 
 export type AmountFunction = (api: DefaultService) => Observable<number>;
 
-export class TableDataSource<T extends DataSourceClass> extends DataSource<
-  Row<T>
-> {
+export class TableDataSource<T extends DataSourceClass> extends DataSource<Row<T>> {
   public columns: Column<T>[];
   public readonly columnIdentifiers: string[];
   public amount$: Observable<number>;
@@ -111,13 +109,11 @@ export class TableDataSource<T extends DataSourceClass> extends DataSource<
     this.buttonList = buttonList;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public connect(collectionViewer: CollectionViewer): Observable<Row<T>[]> {
+  public connect(_: CollectionViewer): Observable<Row<T>[]> {
     return this.dataSubject.asObservable();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public disconnect(collectionViewer: CollectionViewer): void {
+  public disconnect(_: CollectionViewer): void {
     this.dataSubject.complete();
     this.loadingSubject.complete();
   }
@@ -129,7 +125,6 @@ export class TableDataSource<T extends DataSourceClass> extends DataSource<
     pageSize?: number,
     enableLoading: boolean = true,
   ): void {
-    console.log(pageIndex);
     if (this.stopLoading) {
       return;
     }
@@ -167,8 +162,6 @@ export class TableDataSource<T extends DataSourceClass> extends DataSource<
     pageIndex: number,
     pageSize: number,
   ): Observable<T[]> {
-    const skip = pageSize * pageIndex;
-    const limit = pageSize;
-    return this.loadFunction(this.api, filter, sortDirection, skip, limit);
+    return this.loadFunction(this.api, filter, sortDirection, pageSize * pageIndex, pageSize);
   }
 }

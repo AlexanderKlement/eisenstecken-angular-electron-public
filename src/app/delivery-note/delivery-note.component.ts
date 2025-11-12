@@ -3,17 +3,22 @@ import { TableDataSource } from "../shared/components/table-builder/table-builde
 import moment from "moment";
 import { ActivatedRoute, Router } from "@angular/router";
 import { LockService } from "../shared/services/lock.service";
-import { CustomButton } from "../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
 import { AuthService } from "../shared/services/auth.service";
 import { first } from "rxjs/operators";
 import { Observable, Subscriber } from "rxjs";
 import { DeliveryNote, DefaultService } from "../../api/openapi";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { MatFormField, MatLabel } from "@angular/material/input";
+import { MatSelect, MatOption } from "@angular/material/select";
+import { TableBuilderComponent } from "../shared/components/table-builder/table-builder.component";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
     selector: 'app-delivery-note',
     templateUrl: './delivery-note.component.html',
     styleUrls: ['./delivery-note.component.scss'],
-    standalone: false
+    imports: [ToolbarComponent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatSelect, MatOption, TableBuilderComponent, AsyncPipe]
 })
 export class DeliveryNoteComponent implements OnInit {
   buttons: CustomButton[] = [];

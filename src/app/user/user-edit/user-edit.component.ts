@@ -2,16 +2,22 @@ import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
-import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { Observable } from "rxjs";
 import { first, tap } from "rxjs/operators";
-import { MatSelectionList } from "@angular/material/list";
+import { MatSelectionList, MatListOption } from "@angular/material/list";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { AuthService } from "../../shared/services/auth.service";
-import { NavigationService } from "../../shared/services/navigation.service";
 import { UserPassword, UserUpdate, UserCreate, User, Right, DefaultService, Lock } from "../../../api/openapi";
+import { MatTabGroup, MatTab } from "@angular/material/tabs";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { MatCheckbox } from "@angular/material/checkbox";
+import { MatButton } from "@angular/material/button";
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { RightFilterPipe } from "../../shared/pipes/right";
 
 const titles = {
   users: "Benutzer",
@@ -47,7 +53,24 @@ const titles = {
     selector: 'app-user-edit',
     templateUrl: './user-edit.component.html',
     styleUrls: ['./user-edit.component.scss'],
-    standalone: false
+  imports: [
+    ToolbarComponent,
+    MatTabGroup,
+    MatTab,
+    FormsModule,
+    ReactiveFormsModule,
+    DefaultLayoutDirective,
+    DefaultLayoutAlignDirective,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatCheckbox,
+    MatButton,
+    MatProgressSpinner,
+    MatSelectionList,
+    MatListOption,
+    RightFilterPipe
+  ],
 })
 export class UserEditComponent extends BaseEditComponent<User> implements OnInit, OnDestroy {
 
@@ -66,9 +89,8 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
   grantRightsAvailable = false;
   title = "Benutzer: Bearbeiten";
 
-  constructor(private snackBar: MatSnackBar, private authService: AuthService, api: DefaultService, private navigation: NavigationService,
-              router: Router, route: ActivatedRoute, dialog: MatDialog) {
-    super(api, router, route, dialog);
+  constructor(private snackBar: MatSnackBar, private authService: AuthService, api: DefaultService, router: Router, route: ActivatedRoute, private dialog: MatDialog) {
+    super(api, router, route);
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> => api.islockedUserUsersIslockedUserIdGet(id);
@@ -244,7 +266,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
     this.id = user.id;
     this.navigationTarget = "user/edit/" + user.id.toString();
     this.userRights = user.rights;
-    this.navigation.replaceCurrentWith(this.navigationTarget);
+    this.router.navigateByUrl(this.navigationTarget, { replaceUrl: true });
     this.snackBar.open("Speichern erfolgreich!", "Ok", {
       duration: 3000,
     });

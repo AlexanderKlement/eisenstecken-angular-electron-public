@@ -1,26 +1,38 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { BaseEditComponent } from '../../shared/components/base-edit/base-edit.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
-import { first } from 'rxjs/operators';
-import { NavigationService } from '../../shared/services/navigation.service';
-import { DefaultService, Lock, Stock, StockCreate, StockUpdate } from '../../../api/openapi';
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Observable } from "rxjs";
+import { first } from "rxjs/operators";
+import { DefaultService, Lock, Stock, StockCreate, StockUpdate } from "../../../api/openapi";
+import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { MatButton } from "@angular/material/button";
 
 @Component({
     selector: 'app-stock-edit',
     templateUrl: './stock-edit.component.html',
     styleUrls: ['./stock-edit.component.scss'],
-    standalone: false
+    imports: [
+        ToolbarComponent,
+        FormsModule,
+        ReactiveFormsModule,
+        DefaultLayoutDirective,
+        DefaultLayoutAlignDirective,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatButton,
+    ],
 })
 export class StockEditComponent extends BaseEditComponent<Stock> implements OnInit, OnDestroy {
   stockGroup: UntypedFormGroup;
-  navigationTarget = 'stock';
-  title = 'Lager: Bearbeiten';
+  navigationTarget = "stock";
+  title = "Lager: Bearbeiten";
 
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private navigation: NavigationService) {
-    super(api, router, route, dialog);
+  constructor(api: DefaultService, router: Router, route: ActivatedRoute) {
+    super(api, router, route);
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> => api.islockedStockStockIslockedStockIdGet(id);
@@ -32,11 +44,11 @@ export class StockEditComponent extends BaseEditComponent<Stock> implements OnIn
     this.initStockGroup();
     if (!this.createMode) {
       this.api.readStockStockStockIdGet(this.id).pipe(first()).subscribe(stock => {
-        this.stockGroup.get('name').setValue(stock.name);
+        this.stockGroup.get("name").setValue(stock.name);
       });
     }
     if (this.createMode) {
-      this.title = 'Lager: Erstellen';
+      this.title = "Lager: Erstellen";
     }
   }
 
@@ -50,7 +62,7 @@ export class StockEditComponent extends BaseEditComponent<Stock> implements OnIn
 
     if (this.createMode) {
       const stockCreate: StockCreate = {
-        name: this.stockGroup.get('name').value,
+        name: this.stockGroup.get("name").value,
       };
 
       this.api.createStockStockPost(stockCreate).subscribe((stock) => {
@@ -62,7 +74,7 @@ export class StockEditComponent extends BaseEditComponent<Stock> implements OnIn
       });
     } else {
       const stockUpdate: StockUpdate = {
-        name: this.stockGroup.get('name').value,
+        name: this.stockGroup.get("name").value,
       };
 
       this.api.updateStockStockStockIdPut(this.id, stockUpdate).subscribe((stock) => {
@@ -78,15 +90,15 @@ export class StockEditComponent extends BaseEditComponent<Stock> implements OnIn
   createUpdateSuccess(stock: Stock): void {
     this.id = stock.id;
     if (this.createMode) {
-      this.navigation.replaceCurrentWith(`supplier`);
+      this.router.navigateByUrl("supplier/", { replaceUrl: true });
     } else {
-      this.navigation.replaceCurrentWith('stock/' + stock.id.toString());
+      this.router.navigateByUrl("stock/" + stock.id.toString(), { replaceUrl: true });
     }
   }
 
   private initStockGroup(): void {
     this.stockGroup = new UntypedFormGroup({
-      name: new UntypedFormControl(''),
+      name: new UntypedFormControl(""),
     });
   }
 

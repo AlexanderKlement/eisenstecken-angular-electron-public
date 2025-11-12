@@ -1,8 +1,12 @@
 import { Component, Inject, OnInit, ViewChild } from "@angular/core";
-import { MatSelectionList } from "@angular/material/list";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { MatSelectionList, MatListOption } from "@angular/material/list";
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { Order } from "../../../../api/openapi";
+import { CdkScrollable } from "@angular/cdk/scrolling";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { MatButton } from "@angular/material/button";
+import { AsyncPipe } from "@angular/common";
 
 export interface OrderDialogData {
   name: Observable<string>;
@@ -18,7 +22,7 @@ export interface OrderReturnData {
     selector: 'app-order-print-dialog',
     templateUrl: './order-print-dialog.component.html',
     styleUrls: ['./order-print-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatSelectionList, MatListOption, MatDialogActions, MatButton, AsyncPipe]
 })
 export class OrderPrintDialogComponent implements OnInit {
 

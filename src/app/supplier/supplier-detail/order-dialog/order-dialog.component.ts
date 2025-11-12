@@ -1,10 +1,16 @@
 import { Component, Inject, OnInit, ViewChild } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { MatSelectionList } from "@angular/material/list";
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
+import { MatSelectionList, MatListOption } from "@angular/material/list";
 import { Observable } from "rxjs";
 import moment from "moment";
-import { UntypedFormControl } from "@angular/forms";
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { Order } from "../../../../api/openapi";
+import { CdkScrollable } from "@angular/cdk/scrolling";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { MatFormField, MatLabel, MatInput, MatSuffix } from "@angular/material/input";
+import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from "@angular/material/datepicker";
+import { MatButton } from "@angular/material/button";
+import { AsyncPipe } from "@angular/common";
 
 export interface OrderDialogData {
   name: Observable<string>;
@@ -20,7 +26,7 @@ export interface OrderDateReturnData {
     selector: 'app-order-dialog',
     templateUrl: './order-dialog.component.html',
     styleUrls: ['./order-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatSelectionList, MatListOption, MatFormField, MatLabel, MatInput, FormsModule, MatDatepickerInput, ReactiveFormsModule, MatDatepickerToggle, MatSuffix, MatDatepicker, MatDialogActions, MatButton, AsyncPipe]
 })
 export class OrderDialogComponent implements OnInit {
 

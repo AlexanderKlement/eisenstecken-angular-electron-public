@@ -155,4 +155,5 @@ model/workloadUpdate.ts
 model/xmlFileBytes.ts
 model/xmlFileStr.ts
 param.ts
+provide-api.ts
 variables.ts

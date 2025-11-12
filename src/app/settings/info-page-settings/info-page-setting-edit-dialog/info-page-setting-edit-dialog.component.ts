@@ -1,10 +1,14 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
+import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { first } from "rxjs/operators";
 import { ConfirmDialogComponent } from "../../../shared/components/confirm-dialog/confirm-dialog.component";
 import { AuthService } from "../../../shared/services/auth.service";
 import { DefaultService, InfoPageUpdate, InfoPageCreate} from "../../../../api/openapi";
+import { CdkScrollable } from "@angular/cdk/scrolling";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { MatButton } from "@angular/material/button";
 
 export interface InfoPageEditDialogData {
   id: number;
@@ -15,7 +19,7 @@ export interface InfoPageEditDialogData {
     selector: 'app-info-page-setting-edit-dialog',
     templateUrl: './info-page-setting-edit-dialog.component.html',
     styleUrls: ['./info-page-setting-edit-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatDialogActions, MatButton]
 })
 export class InfoPageSettingEditDialogComponent implements OnInit {
   title: string;

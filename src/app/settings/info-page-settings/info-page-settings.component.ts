@@ -8,12 +8,14 @@ import {
     InfoPageSettingEditDialogComponent
 } from "./info-page-setting-edit-dialog/info-page-setting-edit-dialog.component";
 import {DefaultService, InfoPage} from "../../../api/openapi";
+import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
+import { MatButton } from "@angular/material/button";
 
 @Component({
     selector: 'app-info-page-settings',
     templateUrl: './info-page-settings.component.html',
     styleUrls: ['./info-page-settings.component.scss'],
-    standalone: false
+    imports: [TableBuilderComponent, MatButton]
 })
 export class InfoPageSettingsComponent implements OnInit {
     infoPageDataSource: TableDataSource<InfoPage>;

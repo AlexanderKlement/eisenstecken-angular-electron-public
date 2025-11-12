@@ -8,8 +8,8 @@ describe('RecalculationEditComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RecalculationEditComponent ]
-    })
+    imports: [RecalculationEditComponent]
+})
     .compileComponents();
   });
 

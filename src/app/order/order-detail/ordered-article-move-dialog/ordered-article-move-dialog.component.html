@@ -1,16 +1,15 @@
 <h1 mat-dialog-title>Bestellte Artikel verschieben</h1>
 <div mat-dialog-content>
   <div fxLayout="column" fxLayoutAlign="space-around center">
-    <mat-stepper [linear]="true" #stepper>
+    <mat-stepper [linear]="true" >
       <mat-step>
         <ng-template matStepLabel>Artikel auswählen</ng-template>
         <div fxLayout="column" fxLayoutAlign="space-around center">
           <p>Welche Artikel sollen verschoben werden?</p>
-          <mat-selection-list #articles multiple="multiple" (click)="orderedArticleClicked()">
-            @for (orderedArticle of orderedArticles$ | async; track orderedArticle) {
-              <mat-list-option
-                value="{{orderedArticle.id}}">
-                {{orderedArticle.article.name.translation}}
+          <mat-selection-list #orderable [multiple]="false" (selectionChange)="orderableClicked()">
+            @for (orderedArticle of orderedArticles$ | async; track orderedArticle.id) {
+              <mat-list-option [value]="orderedArticle">
+                {{ orderedArticle.article.name.translation }}
               </mat-list-option>
             }
           </mat-selection-list>
@@ -26,14 +25,14 @@
         <div fxLayout="column" fxLayoutAlign="space-around center">
         </div>
         <p>Wohin sollen die Artikel verschoben werden?</p>
-        <mat-selection-list #orderable multiple="false" (click)="orderableClicked()">
-          @for (orderable of orderableTargets$ | async; track orderable) {
-            <mat-list-option value="{{orderable.id}}">
-              {{orderable.name}}
+        <mat-selection-list #orderable [multiple]="false" (selectionChange)="orderableClicked()">
+          @for (o of orderableTargets$ | async; track o.id) {
+            <mat-list-option [value]="o">
+              {{ o.name }}
             </mat-list-option>
           }
         </mat-selection-list>
-        <div fxLayout="row" fxLayoutAlign="space-around center" >
+        <div fxLayout="row" fxLayoutAlign="space-around center">
           <button mat-raised-button matStepperPrevious>Zurück</button>
           @if (oneOrderableSelected) {
             <button mat-raised-button matStepperNext>Weiter</button>
@@ -45,15 +44,15 @@
         <div fxLayout="column" fxLayoutAlign="space-around center">
           <p>Ausgewählte Artikel: </p>
           <mat-list>
-            @for (selectedArticle of articles.selectedOptions.selected; track selectedArticle) {
+            @for (selectedArticle of articlesSelected.selectedOptions.selected; track selectedArticle) {
               <mat-list-item>
-                {{selectedArticle._text.nativeElement.innerHTML}}
+                {{ $any(selectedArticle.value).article?.name?.translation }}
               </mat-list-item>
             }
           </mat-list>
-          @if (orderable.selectedOptions.selected && orderable.selectedOptions.selected.length > 0) {
+          @if (orderable.selectedOptions.selected?.length) {
             <p>
-              Ziel: {{orderable.selectedOptions.selected[0]._text.nativeElement.innerHTML}}
+              Ziel: {{ $any(orderable.selectedOptions.selected[0].value).name }}
             </p>
           }
         </div>

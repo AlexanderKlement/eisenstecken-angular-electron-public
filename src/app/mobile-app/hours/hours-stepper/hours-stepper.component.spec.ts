@@ -8,8 +8,8 @@ describe('HoursStepperComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HoursStepperComponent ]
-    })
+    imports: [HoursStepperComponent]
+})
     .compileComponents();
   });
 

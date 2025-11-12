@@ -1,9 +1,16 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { first, map } from "rxjs/operators";
-import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { DefaultService, Workload, WorkloadUpdate, WorkloadCreate, User } from "../../../../api/openapi";
+import { CdkScrollable } from "@angular/cdk/scrolling";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { MatFormField, MatLabel } from "@angular/material/input";
+import { MatSelect, MatOption } from "@angular/material/select";
+import { MinuteHourComponent } from "../../../shared/components/minute-hour/minute-hour.component";
+import { MatButton } from "@angular/material/button";
+import { AsyncPipe } from "@angular/common";
 
 export interface WorkHourEditDialogData {
   jobId: number;
@@ -14,7 +21,7 @@ export interface WorkHourEditDialogData {
     selector: 'app-work-hour-edit-dialog',
     templateUrl: './work-hour-edit-dialog.component.html',
     styleUrls: ['./work-hour-edit-dialog.component.scss'],
-    standalone: false
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatSelect, FormsModule, ReactiveFormsModule, MatOption, MinuteHourComponent, MatButton, AsyncPipe]
 })
 export class WorkHourEditDialogComponent implements OnInit {
 

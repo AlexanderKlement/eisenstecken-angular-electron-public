@@ -1,20 +1,42 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
-import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
-import { MatDialog } from "@angular/material/dialog";
 import { first, map, tap } from "rxjs/operators";
 import { AuthService } from "../../shared/services/auth.service";
-import { NavigationService } from "../../shared/services/navigation.service";
 import moment from "moment";
 import { User, Lock, Job, JobUpdate, SubJobCreate, DefaultService, JobCreate } from "../../../api/openapi";
+import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule } from "ng-flex-layout";
+import { MatCheckbox } from "@angular/material/checkbox";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { MatSelect, MatOption } from "@angular/material/select";
+import { AddressFormComponent } from "../../shared/components/address-form/address-form.component";
+import { MatButton } from "@angular/material/button";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
     selector: 'app-job-edit',
     templateUrl: './job-edit.component.html',
     styleUrls: ['./job-edit.component.scss'],
-    standalone: false
+    imports: [
+        ToolbarComponent,
+        FormsModule,
+        ReactiveFormsModule,
+        DefaultLayoutDirective,
+        DefaultLayoutAlignDirective,
+        MatCheckbox,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatSelect,
+        MatOption,
+        AddressFormComponent,
+        FlexModule,
+        MatButton,
+        AsyncPipe,
+    ],
 })
 export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, OnDestroy {
 
@@ -32,9 +54,8 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
 
   users$: Observable<User[]>;
 
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog,
-              private authService: AuthService, private navigation: NavigationService) {
-    super(api, router, route, dialog);
+  constructor(api: DefaultService, router: Router, route: ActivatedRoute, private authService: AuthService) {
+    super(api, router, route);
   }
 
 
@@ -137,7 +158,7 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
     if (redirectMain) {
       job.id = this.mainJobId;
     }
-    this.navigation.replaceCurrentWith("job/" + job.id.toString());
+    this.router.navigateByUrl("job/" + job.id.toString(), { replaceUrl: true });
   }
 
   observableReady(): void {

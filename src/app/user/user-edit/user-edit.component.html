@@ -37,19 +37,19 @@
             <input class="form-control" formControlName="cost" matInput>
           </mat-form-field>
           <mat-checkbox formControlName="employee"
-            title="Ist dieser Account auch ein Angestellter?">Angestellter
+                        title="Ist dieser Account auch ein Angestellter?">Angestellter
           </mat-checkbox>
           <mat-checkbox formControlName="notification"
-            title="Email Benachrichtigungen aktivieren?">Benachrichtigung
+                        title="Email Benachrichtigungen aktivieren?">Benachrichtigung
           </mat-checkbox>
           <mat-checkbox formControlName="office"
-            title="Arbeitet der Angestellte im Büro?">Büro
+                        title="Arbeitet der Angestellte im Büro?">Büro
           </mat-checkbox>
           <mat-checkbox formControlName="chat"
-            title="Mitarbeiter über Chat erreichbar?">Chat empfangen
+                        title="Mitarbeiter über Chat erreichbar?">Chat empfangen
           </mat-checkbox>
           <mat-checkbox formControlName="hours"
-            title="Mitarbeiter Stunden aufschreiben?">Stunden aufschreiben
+                        title="Mitarbeiter Stunden aufschreiben?">Stunden aufschreiben
           </mat-checkbox>
           @if (createMode) {
             <mat-form-field>
@@ -83,16 +83,19 @@
                 <div class="category {{cat.open ? 'open' : ''}}">
                   <div class="category-option">
                     <div class="clickable" (click)="onCategoryClick(cat.key)"></div>
-                    <mat-pseudo-checkbox [state]="userHasRightCategory(cat.key)"
+                    <mat-checkbox
                       class="category-checkbox"
-                    (click)="onCategoryCheck(cat.key,userHasRightCategory(cat.key))"></mat-pseudo-checkbox>
-                    <div class="category-title">{{cat.title}}</div>
+                      [checked]="userHasRightCategory(cat.key) === 'checked'"
+                      [indeterminate]="userHasRightCategory(cat.key) === 'indeterminate'"
+                      (change)="onCategoryCheck(cat.key, userHasRightCategory(cat.key))">
+                    </mat-checkbox>
+                    <div class="category-title">{{ cat.title }}</div>
                   </div>
                   @for (right of availableRights | RightFilter: cat.key; track right) {
                     <mat-list-option
                       [selected]="userHasRight(right.key)"
                       value="{{right.key}}" (click)="onRightCheck(right)">
-                      {{right.key}} : {{right.description}}
+                      {{ right.key }} : {{ right.description }}
                     </mat-list-option>
                   }
                 </div>
@@ -100,7 +103,7 @@
             </mat-selection-list>
           }
           <button [disabled]="submitted" mat-raised-button type="button" (click)="onSubmitRights()"
-            class="save-btn">
+                  class="save-btn">
             Speichern
           </button>
         </div>

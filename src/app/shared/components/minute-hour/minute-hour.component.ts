@@ -1,12 +1,14 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from "@angular/core";
-import {UntypedFormControl, UntypedFormGroup} from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {Subscription} from "rxjs";
+import { FlexModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective } from "ng-flex-layout";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
 
 @Component({
     selector: 'app-minute-hour',
     templateUrl: './minute-hour.component.html',
     styleUrls: ['./minute-hour.component.scss'],
-    standalone: false
+    imports: [FormsModule, FlexModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective, MatFormField, MatLabel, MatInput]
 })
 export class MinuteHourComponent implements OnInit, OnDestroy {
     @Input() minuteControl: UntypedFormControl;

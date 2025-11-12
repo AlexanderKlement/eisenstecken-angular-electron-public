@@ -25,16 +25,6 @@ import { EmployeeRedirectComponent } from './employee-redirect/employee-redirect
 
 
 @NgModule({
-  declarations: [
-    EmployeeComponent,
-    EmployeeDetailComponent,
-    WorkDayNewComponent,
-    MealComponent,
-    EmployeeServiceComponent,
-    ServiceDialogComponent,
-    ServiceCreateDialogComponent,
-    EmployeeRedirectComponent
-  ],
     imports: [
         CommonModule,
         EmployeeRoutingModule,
@@ -49,7 +39,15 @@ import { EmployeeRedirectComponent } from './employee-redirect/employee-redirect
         MatDatepickerModule,
         MatInputModule,
         ReactiveFormsModule,
-        MobileAppModule
+        MobileAppModule,
+        EmployeeComponent,
+        EmployeeDetailComponent,
+        WorkDayNewComponent,
+        MealComponent,
+        EmployeeServiceComponent,
+        ServiceDialogComponent,
+        ServiceCreateDialogComponent,
+        EmployeeRedirectComponent
     ]
 })
 export class EmployeeModule { }

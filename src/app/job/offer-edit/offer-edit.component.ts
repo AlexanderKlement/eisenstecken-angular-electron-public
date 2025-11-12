@@ -1,26 +1,59 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
-import { Observable, Subscription, take } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { first, tap } from "rxjs/operators";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { FileService } from "../../shared/services/file.service";
 import { formatDateTransport } from "../../shared/date.util";
-import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
-import { CurrencyPipe, getLocaleCurrencyCode } from "@angular/common";
-import { NavigationService } from "../../shared/services/navigation.service";
-import { DescriptiveArticleCreate, OfferCreate, OfferUpdate, Offer, Vat,
-  DefaultService, DescriptiveArticle, Lock } from "../../../api/openapi";
+import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
+import { CurrencyPipe, getLocaleCurrencyCode, AsyncPipe } from "@angular/common";
+import {
+  DescriptiveArticleCreate, OfferCreate, OfferUpdate, Offer, Vat,
+  DefaultService, DescriptiveArticle, Lock,
+} from "../../../api/openapi";
+import { MatIconButton, MatButton } from "@angular/material/button";
+import { MatIcon } from "@angular/material/icon";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective, FlexModule } from "ng-flex-layout";
+import { MatFormField, MatLabel, MatInput, MatSuffix } from "@angular/material/input";
+import { CdkTextareaAutosize } from "@angular/cdk/text-field";
+import { MatCheckbox } from "@angular/material/checkbox";
+import { MatSelect, MatOption } from "@angular/material/select";
+import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from "@angular/material/datepicker";
 
 @Component({
     selector: 'app-offer-edit',
     templateUrl: './offer-edit.component.html',
     styleUrls: ['./offer-edit.component.scss'],
-    standalone: false
+    imports: [
+        ToolbarComponent,
+        MatIconButton,
+        MatButton,
+        MatIcon,
+        FormsModule,
+        ReactiveFormsModule,
+        DefaultLayoutDirective,
+        DefaultLayoutAlignDirective,
+        DefaultFlexDirective,
+        FlexModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        CdkTextareaAutosize,
+        MatCheckbox,
+        MatSelect,
+        MatOption,
+        MatDatepickerInput,
+        MatDatepickerToggle,
+        MatSuffix,
+        MatDatepicker,
+        AsyncPipe,
+    ],
 })
 export class OfferEditComponent extends BaseEditComponent<Offer> implements OnInit, OnDestroy {
+
 
   navigationTarget = "job";
   jobId: number;
@@ -32,13 +65,8 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
   buttons: CustomButton[] = [];
   subscription: Subscription;
 
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog, private navigation: NavigationService,
-              private file: FileService, private currency: CurrencyPipe) {
-    super(api, router, route, dialog);
-  }
-
-  get discountAmount(): UntypedFormControl {
-    return this.offerGroup.get("discount_amount") as UntypedFormControl;
+  constructor(api: DefaultService, router: Router, route: ActivatedRoute, private file: FileService, private currency: CurrencyPipe, private dialog: MatDialog) {
+    super(api, router, route);
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> => api.islockedOfferOfferIslockedOfferIdGet(id);
@@ -48,11 +76,11 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
   unlockFunction = (api: DefaultService, id: number): Observable<boolean> => api.lockOfferOfferUnlockOfferIdPost(id);
 
   ngOnInit(): void {
+    this.initOfferGroup();
     super.ngOnInit();
     this.subscription = new Subscription();
     this.vatOptions$ = this.api.readVatsVatGet();
     this.hiddenDescriptives = [];
-    this.initOfferGroup();
     if (this.createMode) {
       this.routeParams.subscribe((params) => {
         this.jobId = parseInt(params.job_id, 10);
@@ -183,13 +211,14 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
   createUpdateSuccess(offer: Offer): void {
     this.id = offer.id;
     this.file.open(offer.pdf);
-    this.navigation.replaceCurrentWith("job/" + this.jobId.toString());
+    this.resetDirtyState();
+    this.router.navigateByUrl("job/" + this.jobId.toString(), { replaceUrl: true });
   }
 
   observableReady(): void {
     super.observableReady();
     if (!this.createMode) {
-      this.data$.pipe(tap(offer => this.offerGroup.patchValue(offer))).subscribe((offer) => {
+      this.data$.pipe(tap(offer => this.offerGroup.patchValue(offer, { emitEvent: false }))).subscribe((offer) => {
         this.getDescriptiveArticles().removeAt(0);
         offer.descriptive_articles.forEach((descriptiveArticle) => {
           this.getDescriptiveArticles().push(this.initDescriptiveArticles(descriptiveArticle));
@@ -211,12 +240,18 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
           material_description: offer.material_description,
           // eslint-disable-next-line @typescript-eslint/naming-convention
           material_description_title: offer.material_description_title,
-        });
+        }, { emitEvent: false });
         this.jobId = offer.job_id;
         this.recalculateOfferPrice();
+        this.markTreePristine(this.offerGroup);
+        this.registerDirtyControls([this.offerGroup]);
       });
 
+    } else {
+      this.markTreePristine(this.offerGroup);
+      this.registerDirtyControls([this.offerGroup]);
     }
+
   }
 
   getDescriptiveArticles(): UntypedFormArray {
@@ -314,8 +349,8 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
     const singlePrice = parseFloat(subDescriptiveArticle.get("singlePriceFormatted").value
       .replace("€", "").replace(".", "").replace(",", "."));
     const formattedAmount = this.currency.transform(singlePrice, getLocaleCurrencyCode("de_DE"));
-    subDescriptiveArticle.get("single_price").setValue(singlePrice);
-    subDescriptiveArticle.get("singlePriceFormatted").setValue(formattedAmount);
+    subDescriptiveArticle.get("single_price").setValue(singlePrice, { emitEvent: false });
+    subDescriptiveArticle.get("singlePriceFormatted").setValue(formattedAmount, { emitEvent: false });
   }
 
   private initDescriptiveArticles(descriptiveArticle?: DescriptiveArticle): UntypedFormGroup {
@@ -392,11 +427,11 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
         if (!this.createMode) {
           this.api.deleteOfferOfferOfferIdDelete(this.id).pipe(first()).subscribe(success => {
             if (success) {
-              this.router.navigateByUrl("job/" + this.jobId.toString());
+              this.router.navigateByUrl("job/" + this.jobId.toString(), { replaceUrl: true });
             }
           });
         } else {
-          this.router.navigateByUrl("job/" + this.jobId.toString());
+          this.router.navigateByUrl("job/" + this.jobId.toString(), { replaceUrl: true });
         }
       }
     });
@@ -414,7 +449,7 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
     this.api.getParameterParameterKeyGet(key).pipe(first()).subscribe((parameter) => {
       this.offerGroup.patchValue({
         [formControlName]: parameter,
-      });
+      }, { emitEvent: false });
     });
   }
 
@@ -464,7 +499,7 @@ export class OfferEditComponent extends BaseEditComponent<Offer> implements OnIn
     });
     offerPrice -= this.offerGroup.get("discount_amount").value;
     offerPrice *= 1 - this.offerGroup.get("discount_percentage").value / 100;
-    this.offerGroup.get("offer_price").setValue(this.currency.transform(offerPrice, getLocaleCurrencyCode("de_DE")));
+    this.offerGroup.get("offer_price").setValue(this.currency.transform(offerPrice, getLocaleCurrencyCode("de_DE")), { emitEvent: false });
   }
 
 

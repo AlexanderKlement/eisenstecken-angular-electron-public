@@ -12,29 +12,29 @@
 }
 @if (available) {
   <mat-list>
-    @for (article of searchAvailableArticles$| async; track article) {
+    @for (article of articles; track article) {
       <mat-list-item>
         <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill class="article">
           @if (article.favorite) {
-            <button mat-button mat-icon-button (click)="toggleFavorite(article)" title="Favorit">
+            <button mat-icon-button (click)="toggleFavorite(article)" title="Favorit">
               <mat-icon>star</mat-icon>
             </button>
           }
           @if (!article.favorite) {
-            <button mat-button mat-icon-button (click)="toggleFavorite(article)" title="Favorit">
+            <button mat-icon-button (click)="toggleFavorite(article)" title="Favorit">
               <mat-icon>star_border</mat-icon>
             </button>
           }
           <p matTooltip="{{article.name.translation}}"
             class="article-name"
           [innerHTML]="search.value.length ? (article.name.translation|slice:0:105|boldSpan:search.value) : (article.name.translation|slice:0:105)"></p>
-          <button mat-button mat-icon-button (click)="copyButtonClicked(article)" title="Kopieren und hinzufügen">
+          <button mat-icon-button (click)="copyButtonClicked(article)" title="Kopieren und hinzufügen">
             <mat-icon>content_copy</mat-icon>
           </button>
-          <button mat-button mat-icon-button (click)="orderButtonClicked(article)" title="Hinzufügen">
+          <button mat-icon-button (click)="orderButtonClicked(article)" title="Hinzufügen">
             <mat-icon>add</mat-icon>
           </button>
-          <button mat-button mat-icon-button (click)="removeArticleButtonClicked(article)" title="Entfernen">
+          <button mat-icon-button (click)="removeArticleButtonClicked(article)" title="Entfernen">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
@@ -44,24 +44,21 @@
 }
 @if (!available) {
   <mat-list>
-    @for (orderedArticle of searchOrderedArticles$| async; track orderedArticle) {
+    @for (orderedArticle of orderedArticles; track orderedArticle) {
       <mat-list-item fxFlexFill class="article">
         <div fxLayout="column" fxLayoutAlign="start stretch" fxFlexFill>
           <div fxLayout="row" fxLayoutAlign="space-between center">
-            <input matInput value="{{orderedArticle.article.name.translation}}" class="title" readonly>
-            <button mat-button mat-icon-button (click)="editButtonClicked(orderedArticle)" title="Bearbeiten">
+            <input matInput [value]="orderedArticle.article.name.translation" class="title" readonly>
+            <button mat-icon-button (click)="editButtonClicked(orderedArticle)" title="Bearbeiten">
               <mat-icon>edit</mat-icon>
             </button>
-          </div>
-          <div class="description">
-            <small>{{orderedArticle.custom_description}}</small>
           </div>
           <div fxLayout="row" fxLayoutAlign="space-between center">
             <mat-form-field>
               <mat-label>Menge</mat-label>
-              <input type=number matInput value="{{orderedArticle.amount}}" readonly>
+              <input type="number" matInput [value]="orderedArticle.amount" readonly>
             </mat-form-field>
-            <button mat-button mat-icon-button (click)="removeOrderedArticleButtonClicked(orderedArticle)" title="Entfernen">
+            <button mat-icon-button (click)="removeOrderedArticleButtonClicked(orderedArticle)" title="Entfernen">
               <mat-icon>delete</mat-icon>
             </button>
           </div>

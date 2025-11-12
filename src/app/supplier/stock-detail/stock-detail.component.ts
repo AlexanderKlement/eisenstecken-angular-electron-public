@@ -3,7 +3,7 @@ import { InfoBuilderComponent } from "../../shared/components/info-builder/info-
 
 import { InfoDataSource } from "../../shared/components/info-builder/info-builder.datasource";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
-import { CustomButton } from "../../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import moment from "moment";
@@ -15,12 +15,14 @@ import { OrderDateReturnData, OrderDialogComponent } from "../supplier-detail/or
 import { FileService } from "../../shared/services/file.service";
 import { Observable, Subscriber } from "rxjs";
 import { DefaultService, Stock, Order, Supplier, OrderBundleCreate } from "../../../api/openapi";
+import { MatTabGroup, MatTab } from "@angular/material/tabs";
+import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
 @Component({
     selector: 'app-stock-detail',
     templateUrl: './stock-detail.component.html',
     styleUrls: ['./stock-detail.component.scss'],
-    standalone: false
+    imports: [ToolbarComponent, InfoBuilderComponent, MatTabGroup, MatTab, TableBuilderComponent]
 })
 export class StockDetailComponent implements OnInit {
 

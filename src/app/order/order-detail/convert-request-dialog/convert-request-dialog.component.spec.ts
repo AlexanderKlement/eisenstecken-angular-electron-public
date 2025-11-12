@@ -8,8 +8,8 @@ describe('ConvertRequestDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ConvertRequestDialogComponent ]
-    })
+    imports: [ConvertRequestDialogComponent]
+})
     .compileComponents();
   });
 
