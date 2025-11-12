@@ -8,18 +8,20 @@ import {
 import { first } from "rxjs/operators";
 import { CustomButton } from "../shared/components/toolbar/toolbar.component";
 import { Router } from "@angular/router";
-import { OrderableType, OrderedArticle, Article, DefaultService } from "../../api/openapi";
-
+import {
+  OrderableType,
+  OrderedArticle,
+  Article,
+  DefaultService,
+} from "../../api/openapi";
 
 @Component({
-    selector: 'app-order',
-    templateUrl: './order.component.html',
-    styleUrls: ['./order.component.scss'],
-    standalone: false
+  selector: "app-order",
+  templateUrl: "./order.component.html",
+  styleUrls: ["./order.component.scss"],
+  standalone: false,
 })
 export class OrderComponent implements OnInit {
-
-
   toListName = "Bestelle für Aufträge oder Lager";
   toList$: Observable<ListItem[]>; //Here go stocks and suppliers
   toListSubscriber: Subscriber<ListItem[]>;
@@ -45,14 +47,20 @@ export class OrderComponent implements OnInit {
   lastOrderId: number;
   buttons: CustomButton[] = [];
 
-  constructor(private api: DefaultService, private router: Router) {
-  }
+  constructor(
+    private api: DefaultService,
+    private router: Router,
+  ) {}
 
-  private static createListItems(supportedListElements: SupportedListElements[]): ListItem[] {
+  private static createListItems(
+    supportedListElements: SupportedListElements[],
+  ): ListItem[] {
     const listItems: ListItem[] = [];
     for (const elem of supportedListElements) {
       const listItem: ListItem = {
-        name: elem.displayable_name,
+        name: isJob(elem)
+          ? `${elem.code} | ${elem.displayable_name}`
+          : elem.displayable_name,
         item: elem,
         type: elem.type,
         collapse: false,
@@ -62,14 +70,13 @@ export class OrderComponent implements OnInit {
       if (isJob(elem)) {
         elem.sub_jobs.forEach((subJob) => {
           listItems.push({
-            name: subJob.displayable_name,
+            name: `${subJob.code} | ${subJob.displayable_name}`,
             item: subJob,
             type: subJob.type,
             collapse: elem.displayable_name,
           });
         });
       }
-
     }
     return listItems;
   }
@@ -82,17 +89,22 @@ export class OrderComponent implements OnInit {
     this.fromList$ = new Observable<ListItem[]>((fromListSubscriber) => {
       this.fromListSubscriber = fromListSubscriber;
     });
-    this.availableProducts$ = new Observable<Article[]>((availableProductsSubscriber) => {
-      this.availableProductsSubscriber = availableProductsSubscriber;
-    });
-    this.orderedProducts$ = new Observable<OrderedArticle[]>((orderedProductsSubscriber) => {
-      this.orderedProductsSubscriber = orderedProductsSubscriber;
-    });
+    this.availableProducts$ = new Observable<Article[]>(
+      (availableProductsSubscriber) => {
+        this.availableProductsSubscriber = availableProductsSubscriber;
+      },
+    );
+    this.orderedProducts$ = new Observable<OrderedArticle[]>(
+      (orderedProductsSubscriber) => {
+        this.orderedProductsSubscriber = orderedProductsSubscriber;
+      },
+    );
   }
 
   toggleChildren(listItem: ListItem): void {
     if (listItem.type === "job" && listItem.collapse === false) {
-      this.toListUncollapse = this.toListUncollapse === listItem.name ? "" : listItem.name;
+      this.toListUncollapse =
+        this.toListUncollapse === listItem.name ? "" : listItem.name;
     } else if (listItem.collapse !== this.toListUncollapse) {
       this.toListUncollapse = "";
     }
@@ -125,42 +137,39 @@ export class OrderComponent implements OnInit {
   }
 
   loadOrderedArticles(): void {
-    this.api.readOrderFromToOrderFromOrderableFromIdToOrderableToIdGet(
-      this.fromListSelected.item.id, this.toListSelected.item.id).pipe(first())
+    this.api
+      .readOrderFromToOrderFromOrderableFromIdToOrderableToIdGet(
+        this.fromListSelected.item.id,
+        this.toListSelected.item.id,
+      )
+      .pipe(first())
       .subscribe((order) => {
         this.lastOrderId = order.id;
         this.orderedProductsSubscriber.next(order.articles);
       });
   }
 
-  decideWhichFromListToLoad(listItem: ListItem):
-    void {
-    switch (listItem.type
-      ) {
-      case
-      OrderableType.Stock
-      : {
+  decideWhichFromListToLoad(listItem: ListItem): void {
+    switch (listItem.type) {
+      case OrderableType.Stock: {
         this.loadFromList(false);
         break;
       }
-      case
-      OrderableType.Job
-      : {
+      case OrderableType.Job: {
         this.loadFromList(true);
         break;
       }
-      case
-      OrderableType.Supplier
-      : {
-        console.error("OrderComponent: an item with type SUPPLIER has been clicked in TO list");
+      case OrderableType.Supplier: {
+        console.error(
+          "OrderComponent: an item with type SUPPLIER has been clicked in TO list",
+        );
         break;
       }
     }
   }
 
   resetProductWindows(): void {
-    if (this.availableProductsSubscriber !== undefined
-    ) {
+    if (this.availableProductsSubscriber !== undefined) {
       this.availableProductsSubscriber.next([]);
     }
     if (this.orderedProductsSubscriber !== undefined) {
@@ -173,8 +182,10 @@ export class OrderComponent implements OnInit {
   }
 
   private loadToList() {
-    const stocks$ = this.api.readStocksStockGet().pipe(first());
-    const jobs$ = this.api.readJobsJobGet(0, 1000, "", undefined, "JOBSTATUS_ACCEPTED", true).pipe(first());
+    const stocks$ = this.api.readStocksStockGet(0, 100).pipe(first());
+    const jobs$ = this.api
+      .readJobsJobGet(0, 1000, "", undefined, "JOBSTATUS_ACCEPTED", true)
+      .pipe(first());
 
     combineLatest([stocks$, jobs$]).subscribe(([stocks, jobs]) => {
       const stockListItems = OrderComponent.createListItems(stocks);
@@ -186,7 +197,9 @@ export class OrderComponent implements OnInit {
 
   private loadFromList(withStocks: boolean) {
     const stocks$ = this.api.readStocksStockGet().pipe(first());
-    const suppliers$ = this.api.readSuppliersSupplierGet(0, 500, "", true).pipe(first());
+    const suppliers$ = this.api
+      .readSuppliersSupplierGet(0, 500, "", true)
+      .pipe(first());
 
     if (withStocks) {
       combineLatest([stocks$, suppliers$]).subscribe(([stocks, jobs]) => {
@@ -200,47 +213,52 @@ export class OrderComponent implements OnInit {
         this.fromListSubscriber.next(OrderComponent.createListItems(suppliers));
       });
     }
-
   }
 
   private loadAvailableArticlesAndButtons(): void {
     switch (this.fromListSelected.type) {
       case OrderableType.Stock: {
-        this.api.readArticlesByStockArticleStockStockIdGet(this.fromListSelected.item.id).pipe(first())
+        this.api
+          .readArticlesByStockArticleStockStockIdGet(
+            this.fromListSelected.item.id,
+          )
+          .pipe(first())
           .subscribe((articles) => {
             this.availableProductsSubscriber.next(articles);
           });
         this.buttons = [];
-        this.buttons.push(
-          {
-            name: "Öffne Lager",
-            navigate: () => {
-              this.router.navigateByUrl("stock/" + this.fromListSelected.item.id);
-            },
-          });
+        this.buttons.push({
+          name: "Öffne Lager",
+          navigate: () => {
+            this.router.navigateByUrl("stock/" + this.fromListSelected.item.id);
+          },
+        });
         break;
       }
-      case
-      OrderableType.Job
-      : {
-        console.error("OrderComponent: an item with type JOB has been clicked in FROM list");
+      case OrderableType.Job: {
+        console.error(
+          "OrderComponent: an item with type JOB has been clicked in FROM list",
+        );
         break;
       }
-      case
-      OrderableType.Supplier
-      : {
-        this.api.readArticlesBySupplierArticleSupplierSupplierIdGet(this.fromListSelected.item.id).pipe(first())
+      case OrderableType.Supplier: {
+        this.api
+          .readArticlesBySupplierArticleSupplierSupplierIdGet(
+            this.fromListSelected.item.id,
+          )
+          .pipe(first())
           .subscribe((articles) => {
             this.availableProductsSubscriber.next(articles);
           });
         this.buttons = [];
-        this.buttons.push(
-          {
-            name: "Öffne Lieferant",
-            navigate: () => {
-              this.router.navigateByUrl("supplier/" + this.fromListSelected.item.id);
-            },
-          });
+        this.buttons.push({
+          name: "Öffne Lieferant",
+          navigate: () => {
+            this.router.navigateByUrl(
+              "supplier/" + this.fromListSelected.item.id,
+            );
+          },
+        });
         break;
       }
     }
