@@ -24,8 +24,8 @@
         <mat-form-field appearance="fill">
           <mat-label>Datum</mat-label>
           <input matInput formControlName="date" [matDatepicker]="date">
-          <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
-          <mat-datepicker #date></mat-datepicker>
+          <mat-datepicker-toggle matSuffix [for]="date" />
+          <mat-datepicker #date panelClass="datepicker" />
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Start</mat-label>
