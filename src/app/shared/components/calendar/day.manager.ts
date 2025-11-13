@@ -1,9 +1,4 @@
-import moment from "moment";
-
-interface Days {
-    value: string;
-    viewValue: string;
-}
+import dayjs from "dayjs";
 
 export class DayManager {
 
@@ -23,23 +18,15 @@ export class DayManager {
     }
 
     getStartDate(): string {
-        return moment().add(this.startDay, "days").format("DoMM");
+        return dayjs().add(this.startDay, "days").format("DoMM");
     }
 
     getEndDate(): string {
-        return moment().add(this.startDay + this.amountOfDays, "days").format("DoMM");
+        return dayjs().add(this.startDay + this.amountOfDays, "days").format("DoMM");
     }
 
     getShownDayArray(): number[] {
         return this.shownDayArray;
-    }
-
-    getAmountOfDaysString(): string {
-        return this.amountOfDaysString;
-    }
-
-    getStartDay(): number {
-        return this.startDay;
     }
 
     setStartDay(startDay: number): void {
@@ -68,7 +55,7 @@ export class DayManager {
     }
 
     private getMondayDifference(): number {
-        const currentDayId = moment().day();
+        const currentDayId = dayjs().day();
         switch (currentDayId) {
             case 0:
                 return -6;

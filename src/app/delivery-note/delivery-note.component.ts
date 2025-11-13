@@ -1,7 +1,7 @@
-import { Component, ComponentRef, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
-import moment from "moment";
-import { ActivatedRoute, Router } from "@angular/router";
+import dayjs from "dayjs";
+import { Router } from "@angular/router";
 import { LockService } from "../shared/services/lock.service";
 import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
 import { AuthService } from "../shared/services/auth.service";
@@ -26,7 +26,7 @@ export class DeliveryNoteComponent implements OnInit {
 
   public $refresh: Observable<void>;
 
-  public selectedYear = moment().year();
+  public selectedYear = dayjs().year();
   public $year: Observable<number[]>;
 
   private $refreshSubscriber: Subscriber<void>;
@@ -56,7 +56,7 @@ export class DeliveryNoteComponent implements OnInit {
     }));
   }
 
-  onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+  onAttach(): void {
     this.$refreshSubscriber.next();
   }
 
@@ -76,7 +76,7 @@ export class DeliveryNoteComponent implements OnInit {
             {
               values: {
                 free: dataSource.number,
-                date: moment(dataSource.date).format("L"),
+                date: dayjs(dataSource.date).format("L"),
                 name: dataSource.name,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 delivery_address: dataSource.delivery_address,

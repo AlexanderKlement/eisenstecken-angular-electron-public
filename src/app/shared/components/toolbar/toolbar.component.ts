@@ -39,12 +39,10 @@ export class ToolbarComponent {
   ) {}
 
   backButtonClicked(): void {
-    // Triggers real navigation; your CanDeactivate guard will handle unsaved-changes
     this.location.back();
   }
 
   homeClicked(): void {
-    // Go to home explicitly (no custom stack)
     this.router.navigateByUrl("/");
   }
 

@@ -4,7 +4,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {CalendarData, CalendarEditComponent} from "./calendar-edit/calendar-edit.component";
 import {first} from "rxjs/operators";
 import {CalendarService} from "./calendar.service";
-import moment from "moment";
+import dayjs from "dayjs";
 import {AuthService} from "../../services/auth.service";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexDirective, DefaultLayoutGapDirective } from "ng-flex-layout";
 import { MatToolbar } from "@angular/material/toolbar";
@@ -69,8 +69,8 @@ export class SimpleCalendarComponent implements OnInit {
 
         dialogRef.afterClosed().pipe(first()).subscribe(result => {
             if (result !== undefined) {
-                const date = moment(result.start_time);
-                const now = moment();
+                const date = dayjs(result.start_time);
+                const now = dayjs();
                 this.calendar.refreshCalendar(parseInt(result.calendar.id, 10), date.diff(now, "days"));
             }
         });

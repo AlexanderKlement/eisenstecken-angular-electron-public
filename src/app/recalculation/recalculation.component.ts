@@ -1,10 +1,10 @@
-import { Component, ComponentRef, OnInit } from "@angular/core";
+import { Component,  OnInit } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
-import { ActivatedRoute, Router } from "@angular/router";
+import {  Router } from "@angular/router";
 import { Observable, Subscriber } from "rxjs";
 import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
 import { DefaultService, Job } from "../../api/openapi";
-import moment from "moment";
+import dayjs from "dayjs";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
 import { MatFormField, MatLabel } from "@angular/material/input";
 import { MatSelect, MatOption } from "@angular/material/select";
@@ -41,7 +41,7 @@ export class RecalculationComponent implements OnInit {
   public $refresh: Observable<void>;
   public $year: Observable<number[]>;
   private $refreshSubscriber: Subscriber<void>;
-  public selectedYear = moment().year();
+  public selectedYear = dayjs().year();
 
   constructor(
     private api: DefaultService,
@@ -60,7 +60,7 @@ export class RecalculationComponent implements OnInit {
     });
   }
 
-  onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+  onAttach(): void {
     this.$refreshSubscriber.next();
   }
 

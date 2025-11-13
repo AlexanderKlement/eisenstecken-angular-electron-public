@@ -1,5 +1,6 @@
 @use 'sass:map';
-@import '../../../../theme';
+@use '../../../../theme' as theme;
+
 
 .chat-message-container {
   width: 80%;
@@ -83,7 +84,7 @@
       right: 10px;
       top: 10px;
       font-size: 18pt;
-      color: map.get($mat-accent, main);
+      color: map.get(theme.$mat-accent, main);
     }
 
     .message {

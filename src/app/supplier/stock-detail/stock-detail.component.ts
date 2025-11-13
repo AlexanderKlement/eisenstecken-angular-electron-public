@@ -1,4 +1,4 @@
-import { Component, ComponentRef, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { InfoBuilderComponent } from "../../shared/components/info-builder/info-builder.component";
 
 import { InfoDataSource } from "../../shared/components/info-builder/info-builder.datasource";
@@ -6,13 +6,12 @@ import { TableDataSource } from "../../shared/components/table-builder/table-bui
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
-import moment from "moment";
+import dayjs from "dayjs";
 import { AuthService } from "../../shared/services/auth.service";
 import { first, map } from "rxjs/operators";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { OrderDateReturnData, OrderDialogComponent } from "../supplier-detail/order-dialog/order-dialog.component";
-import { FileService } from "../../shared/services/file.service";
 import { Observable, Subscriber } from "rxjs";
 import { DefaultService, Stock, Order, Supplier, OrderBundleCreate } from "../../../api/openapi";
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
@@ -38,7 +37,7 @@ export class StockDetailComponent implements OnInit {
 
   constructor(private api: DefaultService, private authService: AuthService,
               private router: Router, private snackBar: MatSnackBar,
-              private route: ActivatedRoute, private file: FileService,
+              private route: ActivatedRoute,
               public dialog: MatDialog) {
   }
 
@@ -103,7 +102,7 @@ export class StockDetailComponent implements OnInit {
     }));
   }
 
-  onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+  onAttach(): void {
     this.$refreshSubscriber.next();
   }
 
@@ -138,9 +137,9 @@ export class StockDetailComponent implements OnInit {
                 "order_from.displayable_name": dataSource.order_from.displayable_name,
                 articles: dataSource.articles[0].article.name.translation,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                create_date: moment(dataSource.create_date).format("L"),
+                create_date: dayjs(dataSource.create_date).format("L"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                delivery_date: dataSource.delivery_date !== null ? moment(dataSource.delivery_date).format("L") : "",
+                delivery_date: dataSource.delivery_date !== null ? dayjs(dataSource.delivery_date).format("L") : "",
                 "user.fullname": dataSource.user.fullname,
               },
               route: () => {
@@ -172,10 +171,10 @@ export class StockDetailComponent implements OnInit {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 "order_to.displayable_name": dataSource.order_to.displayable_name,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                create_date: moment(dataSource.create_date).format("LLLL"),
+                create_date: dayjs(dataSource.create_date).format("LLLL"),
                 articles: dataSource.articles[0].article.name.translation,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                delivery_date: dataSource.delivery_date !== null ? moment(dataSource.delivery_date).format("L") : "",
+                delivery_date: dataSource.delivery_date !== null ? dayjs(dataSource.delivery_date).format("L") : "",
                 "user.fullname": dataSource.user.fullname,
                 status: dataSource.status_translation,
               },
@@ -250,7 +249,7 @@ export class StockDetailComponent implements OnInit {
         order_from_id: stock.id,
         request: false,
       };
-      this.api.createOrderBundleOrderBundlePost(orderBundle).pipe(first()).subscribe((newOrderBundle) => {
+      this.api.createOrderBundleOrderBundlePost(orderBundle).pipe(first()).subscribe((_) => {
         this.ingoingDataSource.loadData();
         this.outgoingDataSource.loadData();
         this.snackBar.open("Erfolgreich bestellt!", "Ok", {

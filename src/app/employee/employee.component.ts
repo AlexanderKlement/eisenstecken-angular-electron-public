@@ -1,9 +1,9 @@
-import { Component, ComponentRef, OnInit } from "@angular/core";
+import { Component,OnInit } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
 import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
 import { LockService } from "../shared/services/lock.service";
-import { ActivatedRoute, Router } from "@angular/router";
-import moment from "moment";
+import {  Router } from "@angular/router";
+import dayjs from "dayjs";
 import { ConfirmDialogComponent } from "../shared/components/confirm-dialog/confirm-dialog.component";
 import { first } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
@@ -60,7 +60,7 @@ export class EmployeeComponent implements OnInit {
     }));
   }
 
-  onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+  onAttach(): void {
     this.$refreshSubscriber.next();
   }
 
@@ -106,7 +106,7 @@ export class EmployeeComponent implements OnInit {
                 "user.fullname": dataSource.user.fullname,
                 amount: dataSource.amount,
                 reason: dataSource.reason,
-                date: moment(dataSource.date).format("L"),
+                date: dayjs(dataSource.date).format("L"),
               },
               route: () => {
                 this.feeClicked(dataSource.id);
@@ -139,7 +139,7 @@ export class EmployeeComponent implements OnInit {
               values: {
                 "user.fullname": dataSource.user.fullname,
                 "car.name": dataSource.car.name,
-                date: moment(dataSource.date).format("L"),
+                date: dayjs(dataSource.date).format("L"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 distance_km: dataSource.distance_km,
               },
@@ -172,7 +172,7 @@ export class EmployeeComponent implements OnInit {
           rows.push(
             {
               values: {
-                date: moment(dataSource.date).format("MMMM YYYY"),
+                date: dayjs(dataSource.date).format("MMMM YYYY"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 "eating_place.name": dataSource.eating_place.name,
                 sum: dataSource.sum,
@@ -252,7 +252,7 @@ export class EmployeeComponent implements OnInit {
           rows.push(
             {
               values: {
-                month: moment(dataSource.month).format("MMMM YYYY"),
+                month: dayjs(dataSource.month).format("MMMM YYYY"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 "user.fullname": dataSource.user.fullname,
                 minutes: minutesToDisplayableString(dataSource.minutes),
@@ -290,7 +290,7 @@ export class EmployeeComponent implements OnInit {
           rows.push(
             {
               values: {
-                date: moment(dataSource.date).format("dddd, DD.MM.YYYY"),
+                date: dayjs(dataSource.date).format("dddd, DD.MM.YYYY"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 "user.fullname": dataSource.user.fullname,
                 minutes: minutesToDisplayableString(dataSource.minutes),

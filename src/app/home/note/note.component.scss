@@ -1,5 +1,5 @@
 @use "sass:map";
-@import "../../../theme";
+@use "../../../theme" as theme;
 
 .note {
   background: white;

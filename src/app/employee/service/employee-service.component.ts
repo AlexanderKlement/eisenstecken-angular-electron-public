@@ -1,8 +1,8 @@
-import {Component, ComponentRef, OnInit} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {TableDataSource} from "../../shared/components/table-builder/table-builder.datasource";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import moment from "moment";
+import dayjs from "dayjs";
 import {ActivatedRoute} from "@angular/router";
 import {ServiceDialogComponent} from "./service-dialog/service-dialog.component";
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
@@ -57,7 +57,7 @@ export class EmployeeServiceComponent implements OnInit {
         }));
     }
 
-    onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+    onAttach(): void {
         this.$refreshSubscriber.next();
     }
 
@@ -72,7 +72,7 @@ export class EmployeeServiceComponent implements OnInit {
                     rows.push(
                         {
                             values: {
-                                date: moment(dataSource.date).format("dddd, DD.MM.YYYY"),
+                                date: dayjs(dataSource.date).format("dddd, DD.MM.YYYY"),
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
                                 "user.fullname": dataSource.user.fullname,
                                 minutes: minutesToDisplayableString(dataSource.minutes),

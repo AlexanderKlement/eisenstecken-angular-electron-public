@@ -1,13 +1,13 @@
 @use 'sass:map';
 @use "../../../shared/components/base-edit/base-edit.component";
-@import "../../../../theme";
+@use "../../../../theme" as theme;
 
 .dialog-content {
   margin: 0;
   padding: 0;
 
   .add-button {
-    background-color: map.get($mat-primary, main);
+    background-color: map.get(theme.$mat-primary, main);
   }
 
 }

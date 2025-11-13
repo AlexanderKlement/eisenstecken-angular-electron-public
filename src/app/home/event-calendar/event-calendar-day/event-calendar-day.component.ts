@@ -1,9 +1,8 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from "@angular/core";
-import moment from "moment";
+import dayjs, {Dayjs} from "dayjs";
 import {MatDialog} from "@angular/material/dialog";
 import {
   EventCalendarDialogComponent,
-  getEventTranslation
 } from "../event-calendar-dialog/event-calendar-dialog.component";
 import {first} from "rxjs/operators";
 import {Subject, Subscription} from "rxjs";
@@ -28,7 +27,7 @@ export class EventCalendarDayComponent implements OnInit, OnChanges, OnDestroy {
   @Input() year: number;
   @Input() updateSubject: Subject<void>;
 
-  date: moment.Moment;
+  date: Dayjs;
   dateFormatted: string;
   isoDateString: string;
 
@@ -59,7 +58,6 @@ export class EventCalendarDayComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    // prevent memory leak when component is destroyed
     this.subscription.unsubscribe();
   }
 
@@ -119,7 +117,7 @@ export class EventCalendarDayComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private updateDate(): void {
-    this.date = moment().year(this.year).isoWeek(this.week).isoWeekday(this.day + 1);
+    this.date = dayjs().year(this.year).isoWeek(this.week).isoWeekday(this.day + 1);
     this.dateFormatted = this.date.format("DD.MM");
   }
 }

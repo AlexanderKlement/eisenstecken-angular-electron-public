@@ -32,7 +32,7 @@ export class ServiceComponent implements OnInit {
           rows.push(
             {
               values: {
-                //month: moment(dataSource.month).format('MMMM YYYY'),
+                //month: dayjs(dataSource.month).format('MMMM YYYY'),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 "user.fullname": dataSource.user.fullname,
                 //internal: minutesToDisplayableString(dataSource.internal),

@@ -1,5 +1,5 @@
 @use "sass:map";
-@import "../../../../theme";
+@use "../../../../theme" as theme;
 
 
 .menu-tile {
@@ -10,7 +10,7 @@
       height: 100%;
       text-align: center;
       vertical-align: center;
-      color: map.get($mat-accent, main);
+      color: map.get(theme.$mat-accent, main);
       font-size: 6vw;
       z-index: -2;
     }
@@ -19,7 +19,7 @@
   .title {
     z-index: -2;
     text-align: center;
-    color: map.get($mat-accent, main);
+    color: map.get(theme.$mat-accent, main);
     font-size: min(1vw, 20px);
     font-weight: 500;
   }

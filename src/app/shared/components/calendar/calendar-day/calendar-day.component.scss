@@ -1,5 +1,6 @@
 @use 'sass:map';
-@import "../../../../../theme";
+@use "../../../../../theme" as theme;
+@use "sass:color";
 
 .day-title {
 
@@ -44,7 +45,7 @@
   }
 
   tr:hover {
-    box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+    box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
   }
 
   tr.no-entry:hover {
@@ -63,7 +64,7 @@
 }
 
 .today {
-  background-color: transparentize(map.get($mat-primary, main), 0.9);
+  background-color: color.scale(map.get(theme.$mat-primary, main), $alpha: -90%);
 
   ::ng-deep {
     table {

@@ -1,11 +1,11 @@
-import { Component, ComponentRef, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { InfoDataSource } from "../../shared/components/info-builder/info-builder.datasource";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InfoBuilderComponent } from "../../shared/components/info-builder/info-builder.component";
 import { first, map } from "rxjs/operators";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { LockService } from "../../shared/services/lock.service";
-import moment from "moment";
+import dayjs from "dayjs";
 import { AuthService } from "../../shared/services/auth.service";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
@@ -98,7 +98,7 @@ export class JobDetailComponent implements OnInit {
     });
   }
 
-  onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+  onAttach(): void {
     this.$refreshSubscriber.next();
   }
 
@@ -143,7 +143,7 @@ export class JobDetailComponent implements OnInit {
           rows.push({
             values: {
               id: dataSource.id,
-              date: moment(dataSource.date).format("L"),
+              date: dayjs(dataSource.date).format("L"),
               // eslint-disable-next-line @typescript-eslint/naming-convention
               full_price_without_vat: formatCurrency(
                 dataSource.full_price_without_vat,
@@ -199,7 +199,7 @@ export class JobDetailComponent implements OnInit {
             values: {
               // eslint-disable-next-line @typescript-eslint/naming-convention
               client_name: dataSource.client_name,
-              date: moment(dataSource.date, "YYYY-MM-DD").format("L"),
+              date: dayjs(dataSource.date, "YYYY-MM-DD").format("L"),
               id: dataSource.number,
             },
             route: () => {
@@ -289,12 +289,12 @@ export class JobDetailComponent implements OnInit {
               "order_from.displayable_name":
                 dataSource.order_from.displayable_name,
               // eslint-disable-next-line @typescript-eslint/naming-convention
-              create_date: moment(dataSource.create_date).format("L"),
+              create_date: dayjs(dataSource.create_date).format("L"),
               // eslint-disable-next-line @typescript-eslint/naming-convention
               delivery_date:
                 dataSource.delivery_date === null
                   ? ""
-                  : moment(dataSource.delivery_date).format("L"),
+                  : dayjs(dataSource.delivery_date).format("L"),
               status: dataSource.status_translation,
               request: dataSource.articles.some((article) => article.request)
                 ? "Ja"

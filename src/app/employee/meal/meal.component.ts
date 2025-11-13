@@ -1,6 +1,6 @@
-import { Component, ComponentRef, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
-import moment from "moment";
+import dayjs from "dayjs";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { first } from "rxjs/operators";
@@ -48,7 +48,7 @@ export class MealComponent implements OnInit {
     }));
   }
 
-  onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+  onAttach(): void {
     this.$refreshSubscriber.next();
   }
 
@@ -63,7 +63,7 @@ export class MealComponent implements OnInit {
           rows.push(
             {
               values: {
-                date: moment(dataSource.date).format("DD.MM.YYYY"),
+                date: dayjs(dataSource.date).format("DD.MM.YYYY"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 "user.fullname": dataSource.user.fullname,
               },

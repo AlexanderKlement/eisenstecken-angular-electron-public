@@ -3,7 +3,7 @@ import {TableDataSource} from "../../shared/components/table-builder/table-build
 import {LockService} from "../../shared/services/lock.service";
 import {first} from "rxjs/operators";
 import {AuthService} from "../../shared/services/auth.service";
-import moment from "moment";
+import dayjs from "dayjs";
 import { TableButton, TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 import {ConfirmDialogComponent} from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
@@ -29,7 +29,7 @@ export class OutgoingComponent implements OnInit {
     unPaidOutgoingInvoiceDataSource: TableDataSource<OutgoingInvoice>;
     paidOutgoingInvoiceDataSource: TableDataSource<OutgoingInvoice>;
 
-    public selectedYear = moment().year();
+    public selectedYear = dayjs().year();
     public $year: Observable<number[]>;
 
     buttons: TableButton[] = [
@@ -67,7 +67,7 @@ export class OutgoingComponent implements OnInit {
     paidClicked(event: any, id: number) {
         event.stopPropagation();
         this.api.readOutgoingInvoiceOutgoingInvoiceOutgoingInvoiceIdGet(id).pipe(first()).subscribe(outgoingInvoice => {
-            let text = `Die Rechnung ${outgoingInvoice.number} vom ${moment(outgoingInvoice.date, "YYYY-MM-DD")
+            let text = `Die Rechnung ${outgoingInvoice.number} vom ${dayjs(outgoingInvoice.date, "YYYY-MM-DD")
                 .format("L")} an ${outgoingInvoice.client_name} `;
             let title = "Zahlung ";
             let returnFunction = (result) => {
@@ -128,12 +128,12 @@ export class OutgoingComponent implements OnInit {
                             values: {
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
                                 client_name: dataSource.client_name,
-                                date: moment(dataSource.date, "YYYY-MM-DD").format("L"),
+                                date: dayjs(dataSource.date, "YYYY-MM-DD").format("L"),
                                 rgNum: dataSource.number,
                                 id: dataSource.id,
                                 total: formatCurrency(dataSource.full_price_with_vat, "de-DE", "EUR"),
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                                payment_date: moment(dataSource.payment_date, "YYYY-MM-DD").format("L"),
+                                payment_date: dayjs(dataSource.payment_date, "YYYY-MM-DD").format("L"),
                                 condition: dataSource.paid
                             },
                             route: () => {
@@ -177,12 +177,12 @@ export class OutgoingComponent implements OnInit {
                             values: {
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
                                 client_name: dataSource.client_name,
-                                date: moment(dataSource.date, "YYYY-MM-DD").format("L"),
+                                date: dayjs(dataSource.date, "YYYY-MM-DD").format("L"),
                                 rgNum: dataSource.number,
                                 id: dataSource.id,
                                 total: formatCurrency(dataSource.full_price_with_vat, "de-DE", "EUR"),
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                                payment_date: moment(dataSource.payment_date, "YYYY-MM-DD").format("L"),
+                                payment_date: dayjs(dataSource.payment_date, "YYYY-MM-DD").format("L"),
                                 condition: dataSource.paid
                             },
                             route: () => {
@@ -226,12 +226,12 @@ export class OutgoingComponent implements OnInit {
                             values: {
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
                                 client_name: dataSource.client_name,
-                                date: moment(dataSource.date, "YYYY-MM-DD").format("L"),
+                                date: dayjs(dataSource.date, "YYYY-MM-DD").format("L"),
                                 rgNum: dataSource.number,
                                 id: dataSource.id,
                                 total: formatCurrency(dataSource.full_price_with_vat, "de-DE", "EUR"),
                                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                                payment_date: moment(dataSource.payment_date, "YYYY-MM-DD").format("L"),
+                                payment_date: dayjs(dataSource.payment_date, "YYYY-MM-DD").format("L"),
                                 condition: dataSource.paid
                             },
                             route: () => {

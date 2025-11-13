@@ -1,6 +1,5 @@
-@import "../../../styles.scss";
+@use "../../../styles.scss" as styles;
 
-$primary: map-get($theme, primaryprimary);
 
 .chat {
   overflow: hidden;
@@ -16,6 +15,7 @@ $primary: map-get($theme, primaryprimary);
     &.ivan {
       background-color: #eee;
     }
+
     &:before {
       content: "";
       position: absolute;
@@ -23,6 +23,7 @@ $primary: map-get($theme, primaryprimary);
       opacity: 0.06;
       background-repeat: repeat;
     }
+
     &.ivan:before {
       background-image: url("/assets/images/chat-bg.png");
     }

@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 import { first, tap } from "rxjs/operators";
 import { Router } from "@angular/router";
-import moment from "moment";
+import dayjs from "dayjs";
 import { CalendarService } from "../calendar.service";
 import { CalendarData, CalendarEditComponent } from "../calendar-edit/calendar-edit.component";
 import { MatDialog } from "@angular/material/dialog";
@@ -37,7 +37,7 @@ export class CalendarDayComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    const currentDayId = moment().add(this.day, "days").day();
+    const currentDayId = dayjs().add(this.day, "days").day();
     if (currentDayId === 6 || currentDayId === 0) {
       this.weekend = true;
     }
@@ -70,11 +70,11 @@ export class CalendarDayComponent implements OnInit, OnDestroy {
   }
 
   getCalendarStartEndTime(calendar: CalendarEntry): string {
-    return moment(calendar.start_time).format("LT") + "-" + moment(calendar.end_time).format("LT");
+    return dayjs(calendar.start_time).format("LT") + "-" + dayjs(calendar.end_time).format("LT");
   }
 
   private setTitle(): void {
-    const todaysDate = moment().add(this.day, "days");
+    const todaysDate = dayjs().add(this.day, "days");
     this.titleDayOfTheWeek = todaysDate.format("dddd");
     this.titleDay = todaysDate.format("Do MMMM");
   }

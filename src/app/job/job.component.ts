@@ -1,8 +1,8 @@
-import { Component, ComponentRef, OnInit} from "@angular/core";
+import { Component,  OnInit} from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
-import { ActivatedRoute, Router } from "@angular/router";
+import {  Router } from "@angular/router";
 import { Observable, Subscriber } from "rxjs";
-import moment from "moment";
+import dayjs from "dayjs";
 import { FileService } from "../shared/services/file.service";
 import { DefaultService, Job, Stock } from "../../api/openapi";
 import { ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
@@ -40,7 +40,7 @@ export class JobComponent implements OnInit {
 
   public $refresh: Observable<void>;
   public $year: Observable<number[]>;
-  public selectedYear = moment().year();
+  public selectedYear = dayjs().year();
 
   buttons = [
     {
@@ -81,7 +81,7 @@ export class JobComponent implements OnInit {
     });
   }
 
-  onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+  onAttach(): void {
     this.$refreshSubscriber.next();
   }
 

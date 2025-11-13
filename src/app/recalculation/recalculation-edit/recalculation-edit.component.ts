@@ -6,7 +6,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { first, map } from "rxjs/operators";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
-import moment from "moment";
+import dayjs from "dayjs";
 import { minutesToDisplayableString } from "../../shared/date.util";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { FileService } from "../../shared/services/file.service";
@@ -344,9 +344,9 @@ export class RecalculationEditComponent extends BaseEditComponent<Recalculation>
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 "order_from.displayable_name": dataSource.order_from.displayable_name,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                create_date: moment(dataSource.create_date).format("L"),
+                create_date: dayjs(dataSource.create_date).format("L"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                delivery_date: dataSource.delivery_date === null ? "" : moment(dataSource.delivery_date).format("L"),
+                delivery_date: dataSource.delivery_date === null ? "" : dayjs(dataSource.delivery_date).format("L"),
                 status: dataSource.status_translation,
               },
               route: () => {

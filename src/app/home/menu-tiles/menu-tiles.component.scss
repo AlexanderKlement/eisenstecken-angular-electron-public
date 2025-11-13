@@ -1,8 +1,7 @@
 @use "sass:map";
-@import "../../../theme";
+@use "../../../theme" as theme;
 
 .menu-tiles-container {
-  /*  box-shadow: 0 0 1.5px 0 rgb(0 0 0 / 50%);  muasi sicher irgendwonn wieder zuan tian*/
   border-radius: 2px;
   cursor: pointer;
   isolation: isolate;
@@ -23,14 +22,12 @@
   }
 
   &::after {
-    background: map.get($mat-primary, main);
+    background: map.get(theme.$mat-primary, main);
     mix-blend-mode: lighten;
   }
 
   &:hover {
-    // box-shadow: 0 0 1.5px 0 rgb(0 0 0 / 80%);
     border-radius: 0;
-    //transform: scale(1.1);
     &::before, &::after {
       transform: scale(2);
     }

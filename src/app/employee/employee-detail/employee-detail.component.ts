@@ -1,25 +1,25 @@
-import { Component, ComponentRef, OnInit } from '@angular/core';
-import { TableDataSource } from '../../shared/components/table-builder/table-builder.datasource';
-import { ActivatedRoute, Router } from '@angular/router';
-import { first } from 'rxjs/operators';
-import { CustomButton, ToolbarComponent } from '../../shared/components/toolbar/toolbar.component';
-import { Observable, Subject, Subscriber } from 'rxjs';
-import { MatSelectChange, MatSelect, MatOption } from '@angular/material/select';
-import moment from "moment";
-import { ServiceDialogComponent } from '../service/service-dialog/service-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
-import { ServiceCreateDialogComponent } from '../service/service-create-dialog/service-create-dialog.component';
-import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { minutesToDisplayableString } from '../../shared/date.util';
-import { Journey, AdditionalWorkload, Meal, Service, Fee, DefaultService, WorkDay } from '../../../api/openapi';
-import { MatTabGroup, MatTab } from '@angular/material/tabs';
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from 'ng-flex-layout';
-import { MatFormField, MatLabel } from '@angular/material/input';
-import { HoursStepperComponent } from '../../mobile-app/hours/hours-stepper/hours-stepper.component';
-import { MatButton } from '@angular/material/button';
-import { TableBuilderComponent } from '../../shared/components/table-builder/table-builder.component';
-import { AsyncPipe, DatePipe } from '@angular/common';
+import { Component, OnInit } from "@angular/core";
+import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
+import { ActivatedRoute, Router } from "@angular/router";
+import { first } from "rxjs/operators";
+import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
+import { Observable, Subject, Subscriber } from "rxjs";
+import { MatSelectChange, MatSelect, MatOption } from "@angular/material/select";
+import dayjs from "dayjs";
+import { ServiceDialogComponent } from "../service/service-dialog/service-dialog.component";
+import { MatDialog } from "@angular/material/dialog";
+import { ServiceCreateDialogComponent } from "../service/service-create-dialog/service-create-dialog.component";
+import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { minutesToDisplayableString } from "../../shared/date.util";
+import { Journey, AdditionalWorkload, Meal, Service, Fee, DefaultService, WorkDay } from "../../../api/openapi";
+import { MatTabGroup, MatTab } from "@angular/material/tabs";
+import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { MatFormField, MatLabel } from "@angular/material/input";
+import { HoursStepperComponent } from "../../mobile-app/hours/hours-stepper/hours-stepper.component";
+import { MatButton } from "@angular/material/button";
+import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
+import { AsyncPipe, DatePipe } from "@angular/common";
 
 @Component({
     selector: 'app-employee-detail',
@@ -50,13 +50,13 @@ export class EmployeeDetailComponent implements OnInit {
 
   public buttons: CustomButton[] = [
     {
-      name: 'Neuer Arbeitstag',
+      name: "Neuer Arbeitstag",
       navigate: (): void => {
-        this.router.navigateByUrl('/work_day/new/' + this.userId.toString());
+        this.router.navigateByUrl("/work_day/new/" + this.userId.toString());
       },
     },
   ];
-  title = '';
+  title = "";
 
   public $refresh: Observable<void>;
   showSummaryOnly = true;
@@ -70,10 +70,10 @@ export class EmployeeDetailComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.userId = parseInt(params.id, 10);
       if (isNaN(this.userId)) {
-        console.error('EmployeeDetailComponent: Could not parse userId');
+        console.error("EmployeeDetailComponent: Could not parse userId");
       }
       this.api.readUserUsersUserIdGet(this.userId).pipe(first()).subscribe(user => {
-        this.title = 'Stundenzettel: ' + user.fullname;
+        this.title = "Stundenzettel: " + user.fullname;
       });
       this.workDays$ = this.api.getWorkDaysByUserWorkDayUserUserIdGet(this.userId);
       this.initWorkDays();
@@ -93,7 +93,7 @@ export class EmployeeDetailComponent implements OnInit {
     }));
   }
 
-  onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+  onAttach(): void {
     this.$refreshSubscriber.next();
   }
 
@@ -106,7 +106,7 @@ export class EmployeeDetailComponent implements OnInit {
   }
 
   selectedTabChanged($event: number) {
-    const buttonName = 'Wartung erstellen';
+    const buttonName = "Wartung erstellen";
     if ($event === this.serviceTabIndex) {
       this.buttons.push({
         name: buttonName,
@@ -156,16 +156,16 @@ export class EmployeeDetailComponent implements OnInit {
                 reason: dataSource.reason,
               },
               route: () => {
-                this.router.navigateByUrl('employee');
+                this.router.navigateByUrl("employee");
               },
             });
         });
         return rows;
       },
       [
-        { name: 'date', headerName: 'Datum' },
-        { name: 'reason', headerName: 'Grund' },
-        { name: 'amount', headerName: 'Menge' },
+        { name: "date", headerName: "Datum" },
+        { name: "reason", headerName: "Grund" },
+        { name: "amount", headerName: "Menge" },
       ],
       (api) => api.readFeeCountFeeCountGet(this.userId),
     );
@@ -183,9 +183,9 @@ export class EmployeeDetailComponent implements OnInit {
           rows.push(
             {
               values: {
-                date: moment(dataSource.date).format('dddd, DD.MM.YYYY'),
+                date: dayjs(dataSource.date).format("dddd, DD.MM.YYYY"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                'user.fullname': dataSource.user.fullname,
+                "user.fullname": dataSource.user.fullname,
                 minutes: minutesToDisplayableString(dataSource.minutes),
               },
               route: () => {
@@ -196,9 +196,9 @@ export class EmployeeDetailComponent implements OnInit {
         return rows;
       },
       [
-        { name: 'date', headerName: 'Datum' },
-        { name: 'user.fullname', headerName: 'Angestellter' },
-        { name: 'minutes', headerName: 'Zeit' },
+        { name: "date", headerName: "Datum" },
+        { name: "user.fullname", headerName: "Angestellter" },
+        { name: "minutes", headerName: "Zeit" },
       ],
       (api) => api.readServiceCountServiceCountGet(this.userId),
     );
@@ -207,7 +207,7 @@ export class EmployeeDetailComponent implements OnInit {
 
   private serviceClicked(id: number) {
     const dialogRef = this.dialog.open(ServiceDialogComponent, {
-      width: '900px',
+      width: "900px",
       data: { id },
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -229,21 +229,21 @@ export class EmployeeDetailComponent implements OnInit {
             {
               values: {
                 date: dataSource.date,
-                'car.name': dataSource.car.name,
+                "car.name": dataSource.car.name,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 distance_km: dataSource.distance_km,
               },
               route: () => {
-                this.router.navigateByUrl('employee');
+                this.router.navigateByUrl("employee");
               },
             });
         });
         return rows;
       },
       [
-        { name: 'date', headerName: 'Datum' },
-        { name: 'car.name', headerName: 'Auto' },
-        { name: 'distance_km', headerName: 'Distanz [km]' },
+        { name: "date", headerName: "Datum" },
+        { name: "car.name", headerName: "Auto" },
+        { name: "distance_km", headerName: "Distanz [km]" },
       ],
       (api) => api.readJourneyCountJourneyCountGet(this.userId),
     );
@@ -262,19 +262,19 @@ export class EmployeeDetailComponent implements OnInit {
             {
               values: {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                'eating_place.name': dataSource.eating_place.name,
+                "eating_place.name": dataSource.eating_place.name,
                 date: dataSource.date,
               },
               route: () => {
-                this.router.navigateByUrl('employee');
+                this.router.navigateByUrl("employee");
               },
             });
         });
         return rows;
       },
       [
-        { name: 'eating_place.name', headerName: 'Restaurant' },
-        { name: 'date', headerName: 'Datum' },
+        { name: "eating_place.name", headerName: "Restaurant" },
+        { name: "date", headerName: "Datum" },
       ],
       (api) => api.readMealCountMealCountGet(this.userId),
     );
@@ -283,7 +283,7 @@ export class EmployeeDetailComponent implements OnInit {
 
   private serviceCreateClicked() {
     const dialogRef = this.dialog.open(ServiceCreateDialogComponent, {
-      width: '900px',
+      width: "900px",
       data: { userId: this.userId },
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -304,7 +304,7 @@ export class EmployeeDetailComponent implements OnInit {
           rows.push(
             {
               values: {
-                date: moment(dataSource.date).format('dddd, DD.MM.YYYY'),
+                date: dayjs(dataSource.date).format("dddd, DD.MM.YYYY"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 minutes: minutesToDisplayableString(dataSource.minutes),
                 description: dataSource.description,
@@ -317,9 +317,9 @@ export class EmployeeDetailComponent implements OnInit {
         return rows;
       },
       [
-        { name: 'date', headerName: 'Datum' },
-        { name: 'description', headerName: 'Beschreibung' },
-        { name: 'minutes', headerName: 'Zeit' },
+        { name: "date", headerName: "Datum" },
+        { name: "description", headerName: "Beschreibung" },
+        { name: "minutes", headerName: "Zeit" },
       ],
       (api) => api.readAdditionalWorkloadCountAdditionalWorkloadCountGet(this.userId),
     );
@@ -328,10 +328,10 @@ export class EmployeeDetailComponent implements OnInit {
 
   private additionalWorkloadClicked(id: number) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
+      width: "400px",
       data: {
-        title: 'Zusätzliche Arbeiten löschen?',
-        text: 'Zusätzliche Arbeiten löschen? Diese Aktion kann nicht rückgängig gemacht werden!',
+        title: "Zusätzliche Arbeiten löschen?",
+        text: "Zusätzliche Arbeiten löschen? Diese Aktion kann nicht rückgängig gemacht werden!",
       },
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -340,7 +340,7 @@ export class EmployeeDetailComponent implements OnInit {
           if (success) {
             this.additionalWorkloadDataSource.loadData();
           } else {
-            this.snackBar.open('Zusätzliche Arbeiten konnten nicht gelöscht werden', 'Ok', {
+            this.snackBar.open("Zusätzliche Arbeiten konnten nicht gelöscht werden", "Ok", {
               duration: 10000,
             });
           }

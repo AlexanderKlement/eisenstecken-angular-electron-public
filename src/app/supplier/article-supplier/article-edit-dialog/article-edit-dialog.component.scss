@@ -1,6 +1,6 @@
 @use 'sass:map';
 @use "../../../shared/components/base-edit/base-edit.component";
-@import "../../../../theme";
+@use "../../../../theme" as theme;
 
 
 .spacer {

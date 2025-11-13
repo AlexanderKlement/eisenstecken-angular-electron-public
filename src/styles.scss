@@ -1,6 +1,5 @@
 @use "sass:map";
-@import "theme";
-/*@import "../node_modules/angular-calendar/css/angular-calendar.css";*/
+@use 'theme' as theme;
 
 body,
 html {
@@ -9,7 +8,7 @@ html {
 }
 
 :root {
-  font-family: Roboto;
+  font-family: Roboto, serif;
 }
 
 ::-webkit-scrollbar {
@@ -17,7 +16,7 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: map.get($mat-primary, 200);
+  background: map.get(theme.$mat-primary, 200);
 }
 
 ::-webkit-scrollbar-track {
@@ -25,14 +24,13 @@ html {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: map.get($mat-primary, main);
+  background: map.get(theme.$mat-primary, main);
 }
 
 ::-webkit-scrollbar-track:hover {
   background: #ccc;
 }
 
-/*TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
 .mat-tab-body-wrapper {
   flex-grow: 1;
 }

@@ -1,4 +1,4 @@
-import { Component, ComponentRef, OnInit, ViewChild } from "@angular/core";
+import { Component,  OnInit, ViewChild } from "@angular/core";
 import { InfoDataSource } from "../../shared/components/info-builder/info-builder.datasource";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
@@ -7,7 +7,7 @@ import { InfoBuilderComponent } from "../../shared/components/info-builder/info-
 import { MatDialog } from "@angular/material/dialog";
 import { OrderDateReturnData, OrderDialogComponent } from "./order-dialog/order-dialog.component";
 import { first, map } from "rxjs/operators";
-import moment from "moment";
+import dayjs from "dayjs";
 import { AuthService } from "../../shared/services/auth.service";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -134,7 +134,7 @@ export class SupplierDetailComponent implements OnInit {
     }));
   }
 
-  onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
+  onAttach(): void {
     this.$refreshSubscriber.next();
   }
 
@@ -227,9 +227,9 @@ export class SupplierDetailComponent implements OnInit {
             {
               values: {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                create_date: moment(dataSource.create_date).format("L"),
+                create_date: dayjs(dataSource.create_date).format("L"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                delivery_date: moment(dataSource.delivery_date).format("L"),
+                delivery_date: dayjs(dataSource.delivery_date).format("L"),
                 "user.fullname": dataSource.user.fullname,
               },
               route: () => {
@@ -257,9 +257,9 @@ export class SupplierDetailComponent implements OnInit {
             {
               values: {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                create_date: moment(dataSource.create_date).format("L"),
+                create_date: dayjs(dataSource.create_date).format("L"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                delivery_date: moment(dataSource.delivery_date).format("L"),
+                delivery_date: dayjs(dataSource.delivery_date).format("L"),
                 "user.fullname": dataSource.user.fullname,
               },
               route: () => {
@@ -287,9 +287,9 @@ export class SupplierDetailComponent implements OnInit {
             {
               values: {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                create_date: moment(dataSource.create_date).format("L"),
+                create_date: dayjs(dataSource.create_date).format("L"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                delivery_date: moment(dataSource.delivery_date).format("L"),
+                delivery_date: dayjs(dataSource.delivery_date).format("L"),
                 "user.fullname": dataSource.user.fullname,
               },
               route: () => {

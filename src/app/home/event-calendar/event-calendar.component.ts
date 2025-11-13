@@ -1,5 +1,5 @@
-import {Component, NgZone, OnInit} from "@angular/core";
-import moment from "moment";
+import {Component,  OnInit} from "@angular/core";
+import dayjs from "dayjs";
 import {Subject} from "rxjs";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexDirective } from "ng-flex-layout";
 import { MatToolbar } from "@angular/material/toolbar";
@@ -38,12 +38,12 @@ export class EventCalendarComponent implements OnInit {
     if (week === -1) {
       return "";
     }
-    const date = moment().year(this.selectedYear).isoWeek(week);
+    const date = dayjs().year(this.selectedYear).isoWeek(week);
     return "KW " + date.isoWeek() + " " + date.year();
   }
 
   dayTitle(day: number): string {
-    const date = moment().isoWeekday(day + 1);
+    const date = dayjs().isoWeekday(day + 1);
     return date.format("dddd");
   }
 
@@ -62,7 +62,7 @@ export class EventCalendarComponent implements OnInit {
 
   changeWeek(weeksToAddSubtract: number): void {
     this.offset += weeksToAddSubtract;
-    const date = moment().add(this.offset, "weeks");
+    const date = dayjs().add(this.offset, "weeks");
     this.selectedCalendarWeek = date.isoWeek();
     this.selectedYear = date.year();
     this.displayedColumns = ["week-1"].concat(this.weeks.map((week) => `week${this.selectedCalendarWeek + week + this.offset}`));

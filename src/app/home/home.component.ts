@@ -8,14 +8,14 @@ import { DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirecti
 import { CalendarsChatFrameComponent } from "./calendars-chat-frame/calendars-chat-frame.component";
 import { NoteComponent } from "./note/note.component";
 import { MenuTilesComponent } from "./menu-tiles/menu-tiles.component";
-import { MatIconButton, MatButton } from "@angular/material/button";
+import { MatIconButton} from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
 
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss'],
-    imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective, FlexModule, CalendarsChatFrameComponent, NoteComponent, MenuTilesComponent, MatIconButton, MatButton, MatIcon]
+    imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective, FlexModule, CalendarsChatFrameComponent, NoteComponent, MenuTilesComponent, MatIconButton, MatIcon]
 })
 export class HomeComponent implements OnInit {
 

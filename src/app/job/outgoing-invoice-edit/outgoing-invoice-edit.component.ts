@@ -10,7 +10,7 @@ import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/c
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { AuthService } from "../../shared/services/auth.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import moment from "moment";
+import dayjs from "dayjs";
 import { formatDateTransport } from "../../shared/date.util";
 import { FileService } from "../../shared/services/file.service";
 import { CurrencyPipe, getLocaleCurrencyCode } from "@angular/common";
@@ -518,7 +518,7 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
       for (const outgoingInvoice of outgoingInvoices) {
         this.addDescriptiveArticle(
           "Abzüglich Rechnung Nr. " + outgoingInvoice.number + " vom "
-          + moment(outgoingInvoice.date, "YYYY-MM-DD").format("DD.MM.YYYY"),
+          + dayjs(outgoingInvoice.date, "YYYY-MM-DD").format("DD.MM.YYYY"),
           "1",
           (outgoingInvoice.full_price_without_vat * (-1)).toString(),
           (outgoingInvoice.full_price_without_vat * (-1)).toString(),

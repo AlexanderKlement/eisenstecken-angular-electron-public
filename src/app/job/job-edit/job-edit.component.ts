@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
 import { first, map, tap } from "rxjs/operators";
 import { AuthService } from "../../shared/services/auth.service";
-import moment from "moment";
+import dayjs from "dayjs";
 import { User, Lock, Job, JobUpdate, SubJobCreate, DefaultService, JobCreate } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule } from "ng-flex-layout";
@@ -109,7 +109,7 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
         minijob: new UntypedFormControl(false),
         // eslint-disable-next-line @typescript-eslint/naming-convention
         responsible_id: new UntypedFormControl(1),
-        year: new UntypedFormControl(moment().year()),
+        year: new UntypedFormControl(dayjs().year()),
         address: new UntypedFormGroup({
           // eslint-disable-next-line @typescript-eslint/naming-convention
           street_number: new UntypedFormControl(""),
