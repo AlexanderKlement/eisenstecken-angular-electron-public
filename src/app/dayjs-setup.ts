@@ -1,5 +1,6 @@
 // TypeScript (e.g., src/app/dayjs-setup.ts)
 import dayjs from "dayjs";
+import "dayjs/locale/de";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import localizedFormat from "dayjs/plugin/localizedFormat";
@@ -15,5 +16,7 @@ dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
 dayjs.extend(customParseFormat);
+
+dayjs.locale("de");
 
 export default dayjs;
