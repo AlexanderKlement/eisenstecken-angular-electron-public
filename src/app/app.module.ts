@@ -1,8 +1,5 @@
 import "./dayjs-setup";
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
-import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import {
   registerLocaleData,
 } from "@angular/common";
@@ -16,13 +13,6 @@ import {
 } from "angular-calendar";
 import { Configuration, ConfigurationParameters } from "../api/openapi";
 
-const httpLoaderFactory = (http: HttpClient) =>
-  new TranslateHttpLoader(http, "./assets/i18n/", ".json");
-
-// In providers/imports
-TranslateModule.forRoot({
-  loader: { provide: TranslateLoader, useFactory: httpLoaderFactory, deps: [HttpClient] },
-});
 
 registerLocaleData(localeDe, "de-DE", localeDeExtra);
 
@@ -36,7 +26,6 @@ export function apiConfigFactory(): Configuration {
 @Injectable()
 class CustomDateFormatter extends CalendarNativeDateFormatter {
   public dayViewHour({ date, locale }: DateFormatterParams): string {
-    // change this to return a different date format
     return new Intl.DateTimeFormat(locale, { hour: "numeric" }).format(date);
   }
 }
