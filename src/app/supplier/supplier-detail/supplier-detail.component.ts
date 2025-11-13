@@ -7,7 +7,7 @@ import { InfoBuilderComponent } from "../../shared/components/info-builder/info-
 import { MatDialog } from "@angular/material/dialog";
 import { OrderDateReturnData, OrderDialogComponent } from "./order-dialog/order-dialog.component";
 import { first, map } from "rxjs/operators";
-import dayjs from "dayjs";
+import dayjs from "dayjs/esm";
 import { AuthService } from "../../shared/services/auth.service";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { MatSnackBar } from "@angular/material/snack-bar";

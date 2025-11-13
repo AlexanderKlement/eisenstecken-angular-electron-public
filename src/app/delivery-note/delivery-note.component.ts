@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
-import dayjs from "dayjs";
+import dayjs from "dayjs/esm";
 import { Router } from "@angular/router";
 import { LockService } from "../shared/services/lock.service";
 import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";

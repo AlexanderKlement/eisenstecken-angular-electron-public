@@ -6,7 +6,7 @@ import { TableDataSource } from "../../shared/components/table-builder/table-bui
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
-import dayjs from "dayjs";
+import dayjs from "dayjs/esm";
 import { AuthService } from "../../shared/services/auth.service";
 import { first, map } from "rxjs/operators";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";

@@ -5,7 +5,7 @@ import { InfoBuilderComponent } from "../../shared/components/info-builder/info-
 import { first, map } from "rxjs/operators";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { LockService } from "../../shared/services/lock.service";
-import dayjs from "dayjs";
+import dayjs from "dayjs/esm";
 import { AuthService } from "../../shared/services/auth.service";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { MatDialog } from "@angular/material/dialog";

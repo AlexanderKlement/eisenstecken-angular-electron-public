@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
-import dayjs from "dayjs";
+import dayjs from "dayjs/esm";
 import { first, map } from "rxjs/operators";
 import { Observable, Subscriber } from "rxjs";
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";

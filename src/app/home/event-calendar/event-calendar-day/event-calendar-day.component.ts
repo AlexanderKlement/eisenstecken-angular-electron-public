@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from "@angular/core";
-import dayjs, {Dayjs} from "dayjs";
+import dayjs, {Dayjs} from "dayjs/esm";
 import {MatDialog} from "@angular/material/dialog";
 import {
   EventCalendarDialogComponent,

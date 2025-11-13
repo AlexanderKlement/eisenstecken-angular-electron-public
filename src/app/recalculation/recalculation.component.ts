@@ -4,7 +4,7 @@ import {  Router } from "@angular/router";
 import { Observable, Subscriber } from "rxjs";
 import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
 import { DefaultService, Job } from "../../api/openapi";
-import dayjs from "dayjs";
+import dayjs from "dayjs/esm";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
 import { MatFormField, MatLabel } from "@angular/material/input";
 import { MatSelect, MatOption } from "@angular/material/select";

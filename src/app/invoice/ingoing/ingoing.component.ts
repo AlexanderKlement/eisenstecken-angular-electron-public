@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { LockService } from "../../shared/services/lock.service";
-import dayjs from "dayjs";
+import dayjs from "dayjs/esm";
 import { TableButton, TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 import { first } from "rxjs/operators";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";

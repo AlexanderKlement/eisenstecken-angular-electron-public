@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
-import dayjs from "dayjs";
+import dayjs from "dayjs/esm";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { first } from "rxjs/operators";

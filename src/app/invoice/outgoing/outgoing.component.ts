@@ -3,7 +3,7 @@ import {TableDataSource} from "../../shared/components/table-builder/table-build
 import {LockService} from "../../shared/services/lock.service";
 import {first} from "rxjs/operators";
 import {AuthService} from "../../shared/services/auth.service";
-import dayjs from "dayjs";
+import dayjs from "dayjs/esm";
 import { TableButton, TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 import {ConfirmDialogComponent} from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import {MatDialog} from "@angular/material/dialog";

@@ -1,5 +1,5 @@
 // TypeScript (src/app/date.ts)
-import dayjs from "dayjs";
+import dayjs from "dayjs/esm";
 export const now = () => dayjs();
 export const parse = (v: string | number | Date, fmt?: string) =>
   fmt ? dayjs(v, fmt) : dayjs(v);

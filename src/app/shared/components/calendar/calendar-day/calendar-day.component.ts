@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 import { first, tap } from "rxjs/operators";
 import { Router } from "@angular/router";
-import dayjs from "dayjs";
+import dayjs from "dayjs/esm";
 import { CalendarService } from "../calendar.service";
 import { CalendarData, CalendarEditComponent } from "../calendar-edit/calendar-edit.component";
 import { MatDialog } from "@angular/material/dialog";

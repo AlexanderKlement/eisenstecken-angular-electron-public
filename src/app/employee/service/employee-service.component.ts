@@ -2,7 +2,7 @@ import {Component, OnInit} from "@angular/core";
 import {TableDataSource} from "../../shared/components/table-builder/table-builder.datasource";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import dayjs from "dayjs";
+import dayjs from "dayjs/esm";
 import {ActivatedRoute} from "@angular/router";
 import {ServiceDialogComponent} from "./service-dialog/service-dialog.component";
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";

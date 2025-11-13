@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { first } from "rxjs/operators";
-import dayjs from "dayjs";
+import dayjs from "dayjs/esm";
 import {
   AbstractControl,
   UntypedFormControl,

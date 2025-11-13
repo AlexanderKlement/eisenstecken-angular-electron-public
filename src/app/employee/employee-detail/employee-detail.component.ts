@@ -5,7 +5,7 @@ import { first } from "rxjs/operators";
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { Observable, Subject, Subscriber } from "rxjs";
 import { MatSelectChange, MatSelect, MatOption } from "@angular/material/select";
-import dayjs from "dayjs";
+import dayjs from "dayjs/esm";
 import { ServiceDialogComponent } from "../service/service-dialog/service-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { ServiceCreateDialogComponent } from "../service/service-create-dialog/service-create-dialog.component";

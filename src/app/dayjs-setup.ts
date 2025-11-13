@@ -1,13 +1,13 @@
 // TypeScript (e.g., src/app/dayjs-setup.ts)
-import dayjs from "dayjs";
-import "dayjs/locale/de";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import relativeTime from "dayjs/plugin/relativeTime";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import isoWeek from "dayjs/plugin/isoWeek";
-import duration from "dayjs/plugin/duration";
+import dayjs from "dayjs/esm";
+import "dayjs/esm/locale/de";
+import utc from "dayjs/esm/plugin/utc";
+import timezone from "dayjs/esm/plugin/timezone";
+import localizedFormat from "dayjs/esm/plugin/localizedFormat";
+import relativeTime from "dayjs/esm/plugin/relativeTime";
+import customParseFormat from "dayjs/esm/plugin/customParseFormat";
+import isoWeek from "dayjs/esm/plugin/isoWeek";
+import duration from "dayjs/esm/plugin/duration";
 
 dayjs.extend(duration);
 dayjs.extend(isoWeek);

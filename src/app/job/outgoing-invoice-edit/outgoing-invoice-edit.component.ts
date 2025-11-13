@@ -10,7 +10,7 @@ import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/c
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { AuthService } from "../../shared/services/auth.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import dayjs from "dayjs";
+import dayjs from "dayjs/esm";
 import { formatDateTransport } from "../../shared/date.util";
 import { FileService } from "../../shared/services/file.service";
 import { CurrencyPipe, getLocaleCurrencyCode } from "@angular/common";

@@ -2,7 +2,7 @@ import { Component,  OnInit} from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
 import {  Router } from "@angular/router";
 import { Observable, Subscriber } from "rxjs";
-import dayjs from "dayjs";
+import dayjs from "dayjs/esm";
 import { FileService } from "../shared/services/file.service";
 import { DefaultService, Job, Stock } from "../../api/openapi";
 import { ToolbarComponent } from "../shared/components/toolbar/toolbar.component";

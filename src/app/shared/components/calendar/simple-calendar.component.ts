@@ -4,7 +4,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {CalendarData, CalendarEditComponent} from "./calendar-edit/calendar-edit.component";
 import {first} from "rxjs/operators";
 import {CalendarService} from "./calendar.service";
-import dayjs from "dayjs";
+import dayjs from "dayjs/esm";
 import {AuthService} from "../../services/auth.service";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexDirective, DefaultLayoutGapDirective } from "ng-flex-layout";
 import { MatToolbar } from "@angular/material/toolbar";

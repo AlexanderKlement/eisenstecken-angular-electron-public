@@ -1,5 +1,5 @@
 import {Component,  OnInit} from "@angular/core";
-import dayjs from "dayjs";
+import dayjs from "dayjs/esm";
 import {Subject} from "rxjs";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexDirective } from "ng-flex-layout";
 import { MatToolbar } from "@angular/material/toolbar";

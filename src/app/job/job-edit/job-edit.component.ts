@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
 import { first, map, tap } from "rxjs/operators";
 import { AuthService } from "../../shared/services/auth.service";
-import dayjs from "dayjs";
+import dayjs from "dayjs/esm";
 import { User, Lock, Job, JobUpdate, SubJobCreate, DefaultService, JobCreate } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule } from "ng-flex-layout";

@@ -6,7 +6,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { first, map } from "rxjs/operators";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
-import dayjs from "dayjs";
+import dayjs from "dayjs/esm";
 import { minutesToDisplayableString } from "../../shared/date.util";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { FileService } from "../../shared/services/file.service";

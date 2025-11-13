@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, ViewChild } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
 import { MatSelectionList, MatListOption } from "@angular/material/list";
 import { Observable } from "rxjs";
-import dayjs from "dayjs";
+import dayjs from "dayjs/esm";
 import { UntypedFormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { Order } from "../../../../api/openapi";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
