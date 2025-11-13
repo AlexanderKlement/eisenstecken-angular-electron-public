@@ -21,13 +21,13 @@ export class DayManager {
   }
 
   getStartDate(): string {
-    return dayjs().add(this.startDay, "days").format("DD-MM");
+    return dayjs().add(this.startDay, "days").format("DD.MM");
   }
 
   getEndDate(): string {
     return dayjs()
       .add(this.startDay + this.amountOfDays, "days")
-      .format("DoMM");
+      .format("DD.MM");
   }
 
   getShownDayArray(): number[] {
