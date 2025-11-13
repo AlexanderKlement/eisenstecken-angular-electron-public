@@ -28,7 +28,6 @@ import {
 } from "ng-flex-layout";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
-import { MatIcon } from "@angular/material/icon";
 import { MatSelect, MatOption } from "@angular/material/select";
 import { AddressFormComponent } from "../../shared/components/address-form/address-form.component";
 import { AsyncPipe } from "@angular/common";
@@ -48,7 +47,6 @@ import { CircleIconButtonComponent } from "../../shared/components/circle-icon-b
     MatFormField,
     MatLabel,
     MatInput,
-    MatIcon,
     MatSelect,
     MatOption,
     AddressFormComponent,

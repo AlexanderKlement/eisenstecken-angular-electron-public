@@ -18,8 +18,6 @@ import {
 } from "ng-flex-layout";
 import { MatToolbar } from "@angular/material/toolbar";
 import { DefaultShowHideDirective } from "ng-flex-layout/extended";
-import { MatIconButton } from "@angular/material/button";
-import { MatIcon } from "@angular/material/icon";
 import { CalendarDayComponent } from "./calendar-day/calendar-day.component";
 import { CircleIconButtonComponent } from "../circle-icon-button/circle-icon-button.component";
 
@@ -34,8 +32,6 @@ import { CircleIconButtonComponent } from "../circle-icon-button/circle-icon-but
     MatToolbar,
     DefaultFlexDirective,
     DefaultShowHideDirective,
-    MatIconButton,
-    MatIcon,
     DefaultLayoutGapDirective,
     CalendarDayComponent,
     CircleIconButtonComponent,

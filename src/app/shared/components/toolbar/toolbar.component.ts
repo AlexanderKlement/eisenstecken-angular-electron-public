@@ -5,8 +5,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { AuthService } from "../../services/auth.service";
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 import { MatToolbar } from "@angular/material/toolbar";
-import { MatButton, MatIconButton } from "@angular/material/button";
-import { MatIcon } from "@angular/material/icon";
+import { MatButton } from "@angular/material/button";
 import { CircleIconButtonComponent } from "../circle-icon-button/circle-icon-button.component";
 
 export interface CustomButton {
@@ -18,13 +17,7 @@ export interface CustomButton {
   selector: "app-toolbar",
   templateUrl: "./toolbar.component.html",
   styleUrls: ["./toolbar.component.scss"],
-  imports: [
-    MatToolbar,
-    MatButton,
-    MatIconButton,
-    MatIcon,
-    CircleIconButtonComponent,
-  ],
+  imports: [MatToolbar, MatButton, CircleIconButtonComponent],
 })
 export class ToolbarComponent {
   @Input() buttonList?: CustomButton[];

@@ -22,9 +22,8 @@ import {
   DefaultLayoutDirective,
   DefaultLayoutAlignDirective,
 } from "ng-flex-layout";
-import { MatButton, MatIconButton } from "@angular/material/button";
+import { MatButton } from "@angular/material/button";
 import { MatList, MatListItem } from "@angular/material/list";
-import { MatIcon } from "@angular/material/icon";
 import { CircleIconButtonComponent } from "../../../shared/components/circle-icon-button/circle-icon-button.component";
 
 @Component({
@@ -42,8 +41,6 @@ import { CircleIconButtonComponent } from "../../../shared/components/circle-ico
     MatButton,
     MatList,
     MatListItem,
-    MatIconButton,
-    MatIcon,
     MatDialogActions,
     CircleIconButtonComponent,
   ],

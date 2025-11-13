@@ -35,9 +35,8 @@ import {
   DefaultLayoutAlignDirective,
   FlexModule,
 } from "ng-flex-layout";
-import { MatButton, MatIconButton } from "@angular/material/button";
+import { MatButton } from "@angular/material/button";
 import { MatList, MatListItem } from "@angular/material/list";
-import { MatIcon } from "@angular/material/icon";
 import { MatTooltip } from "@angular/material/tooltip";
 import { SlicePipe } from "@angular/common";
 import { BoldSpanPipe } from "../../shared/pipes/boldSearchResult";
@@ -59,8 +58,6 @@ import { CircleIconButtonComponent } from "../../shared/components/circle-icon-b
     MatList,
     MatListItem,
     FlexModule,
-    MatIconButton,
-    MatIcon,
     MatTooltip,
     SlicePipe,
     BoldSpanPipe,

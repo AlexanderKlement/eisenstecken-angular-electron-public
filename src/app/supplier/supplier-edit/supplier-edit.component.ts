@@ -26,7 +26,7 @@ import {
   FlexModule,
 } from "ng-flex-layout";
 import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
-import { MatIconButton, MatButton } from "@angular/material/button";
+import { MatButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
 import { MatSelect, MatOption } from "@angular/material/select";
 import { MatCheckbox } from "@angular/material/checkbox";
@@ -47,7 +47,6 @@ import { CircleIconButtonComponent } from "../../shared/components/circle-icon-b
     MatFormField,
     MatLabel,
     MatInput,
-    MatIconButton,
     MatButton,
     MatIcon,
     MatSelect,

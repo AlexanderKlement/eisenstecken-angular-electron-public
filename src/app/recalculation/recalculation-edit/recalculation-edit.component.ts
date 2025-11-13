@@ -40,8 +40,7 @@ import {
   DefaultLayoutAlignDirective,
 } from "ng-flex-layout";
 import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
-import { MatIconButton, MatButton } from "@angular/material/button";
-import { MatIcon } from "@angular/material/icon";
+import { MatButton } from "@angular/material/button";
 import { MatSelect, MatOption } from "@angular/material/select";
 import { MatActionList, MatListItem } from "@angular/material/list";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
@@ -61,9 +60,7 @@ import { CircleIconButtonComponent } from "../../shared/components/circle-icon-b
     MatFormField,
     MatLabel,
     MatInput,
-    MatIconButton,
     MatButton,
-    MatIcon,
     MatSelect,
     MatOption,
     MatActionList,
