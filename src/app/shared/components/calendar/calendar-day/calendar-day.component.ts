@@ -4,23 +4,39 @@ import { first, tap } from "rxjs/operators";
 import { Router } from "@angular/router";
 import dayjs from "dayjs/esm";
 import { CalendarService } from "../calendar.service";
-import { CalendarData, CalendarEditComponent } from "../calendar-edit/calendar-edit.component";
+import {
+  CalendarData,
+  CalendarEditComponent,
+} from "../calendar-edit/calendar-edit.component";
 import { MatDialog } from "@angular/material/dialog";
 import { DefaultService, CalendarEntry } from "../../../../../api/openapi";
 import { LoadingComponent } from "../../loading/loading.component";
 import { MatCard, MatCardContent } from "@angular/material/card";
 import { NgClass, AsyncPipe } from "@angular/common";
 import { DefaultClassDirective } from "ng-flex-layout/extended";
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective } from "ng-flex-layout";
+import {
+  DefaultLayoutDirective,
+  DefaultLayoutAlignDirective,
+  DefaultFlexDirective,
+} from "ng-flex-layout";
 
 @Component({
-    selector: 'app-calendar-day',
-    templateUrl: './calendar-day.component.html',
-    styleUrls: ['./calendar-day.component.scss'],
-    imports: [LoadingComponent, MatCard, NgClass, DefaultClassDirective, MatCardContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective, AsyncPipe]
+  selector: "app-calendar-day",
+  templateUrl: "./calendar-day.component.html",
+  styleUrls: ["./calendar-day.component.scss"],
+  imports: [
+    LoadingComponent,
+    MatCard,
+    NgClass,
+    DefaultClassDirective,
+    MatCardContent,
+    DefaultLayoutDirective,
+    DefaultLayoutAlignDirective,
+    DefaultFlexDirective,
+    AsyncPipe,
+  ],
 })
 export class CalendarDayComponent implements OnInit, OnDestroy {
-
   @Input() day: number;
   @Input() calendarId: number;
   @Input() public: boolean;
@@ -33,8 +49,12 @@ export class CalendarDayComponent implements OnInit, OnDestroy {
   weekend = false;
   today = false;
 
-  constructor(private api: DefaultService, private router: Router, private calendar: CalendarService, private dialog: MatDialog) {
-  }
+  constructor(
+    private api: DefaultService,
+    private router: Router,
+    private calendar: CalendarService,
+    private dialog: MatDialog,
+  ) {}
 
   ngOnInit(): void {
     const currentDayId = dayjs().add(this.day, "days").day();
@@ -44,14 +64,13 @@ export class CalendarDayComponent implements OnInit, OnDestroy {
     if (this.day === 0) {
       this.today = true;
     }
-    this.calendarEntries$ = this.calendar.getCalendarEntries(this.calendarId, this.day).pipe(
-      tap(() => this.loading = false),
-    );
+    this.calendarEntries$ = this.calendar
+      .getCalendarEntries(this.calendarId, this.day)
+      .pipe(tap(() => (this.loading = false)));
     this.setTitle();
   }
 
-  ngOnDestroy(): void {
-  }
+  ngOnDestroy(): void {}
 
   onCalendarEntryClicked(id: number): void {
     const data: CalendarData = {
@@ -62,20 +81,27 @@ export class CalendarDayComponent implements OnInit, OnDestroy {
       width: "700px",
       data,
     });
-    dialogRef.afterClosed().pipe(first()).subscribe(result => {
-      if (result !== undefined) {
-        this.calendar.refreshCalendar(this.calendarId, this.day);
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(first())
+      .subscribe((result) => {
+        if (result !== undefined) {
+          this.calendar.refreshCalendar(this.calendarId, this.day);
+        }
+      });
   }
 
   getCalendarStartEndTime(calendar: CalendarEntry): string {
-    return dayjs(calendar.start_time).format("LT") + "-" + dayjs(calendar.end_time).format("LT");
+    return (
+      dayjs(calendar.start_time).format("LT") +
+      "-" +
+      dayjs(calendar.end_time).format("LT")
+    );
   }
 
   private setTitle(): void {
     const todaysDate = dayjs().add(this.day, "days");
     this.titleDayOfTheWeek = todaysDate.format("dddd");
-    this.titleDay = todaysDate.format("Do MMMM");
+    this.titleDay = todaysDate.format("DD. MMMM");
   }
 }
