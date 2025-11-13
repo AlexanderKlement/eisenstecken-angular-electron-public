@@ -7,6 +7,7 @@ import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.compone
 import { MatToolbar } from "@angular/material/toolbar";
 import { MatButton, MatIconButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
+import { CircleIconButtonComponent } from "../circle-icon-button/circle-icon-button.component";
 
 export interface CustomButton {
   name: string;
@@ -14,18 +15,18 @@ export interface CustomButton {
 }
 
 @Component({
-    selector: 'app-toolbar',
-    templateUrl: './toolbar.component.html',
-    styleUrls: ['./toolbar.component.scss'],
-    imports: [
-        MatToolbar,
-        MatButton,
-        MatIconButton,
-        MatIcon,
-    ],
+  selector: "app-toolbar",
+  templateUrl: "./toolbar.component.html",
+  styleUrls: ["./toolbar.component.scss"],
+  imports: [
+    MatToolbar,
+    MatButton,
+    MatIconButton,
+    MatIcon,
+    CircleIconButtonComponent,
+  ],
 })
 export class ToolbarComponent {
-
   @Input() buttonList?: CustomButton[];
   @Input() title = "";
   @Input() showBackButton = true;
@@ -53,10 +54,13 @@ export class ToolbarComponent {
   logoutClicked(): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: "400px",
-      data: { title: "Abmelden?", text: "Soll der Benutzer abgemeldet werden?" },
+      data: {
+        title: "Abmelden?",
+        text: "Soll der Benutzer abgemeldet werden?",
+      },
       disableClose: true,
     });
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) this.authService.doLogout();
     });
   }

@@ -2,17 +2,11 @@
   <mat-toolbar color="accent" fxFlex="10">
     <div fxShow="true" fxLayout="row" fxLayoutAlign="space-between center">
 
-      <button mat-icon-button (click)="todayClicked()" title="Heute">
-        <mat-icon>today</mat-icon>
-      </button>
+      <app-circle-icon-button backgroundColor="transparent" (click)="todayClicked()" icon="today" />
       <div>
-        <button mat-icon-button (click)="previousWeekClicked()" title="Vorherige Woche">
-          <mat-icon>navigate_before</mat-icon>
-        </button>
+        <app-circle-icon-button backgroundColor="transparent" (click)="previousWeekClicked()" icon="navigate_before" />
         <span>{{ dayManager.getStartDate() + " - " + dayManager.getEndDate()}}</span>
-        <button mat-icon-button (click)="nextWeekClicked()" title="Nächste Woche">
-          <mat-icon>navigate_next</mat-icon>
-        </button>
+        <app-circle-icon-button backgroundColor="transparent" (click)="nextWeekClicked()" icon="navigate_next" />
       </div>
       <!--
       <div fxFlex="60" class="calendar-select">
@@ -27,9 +21,7 @@
       </div>
       -->
       @if (createAllowed) {
-        <button mat-icon-button (click)="newMeetingClicked()" class="add-button" title="Neuer Termin">
-          <mat-icon>add</mat-icon>
-        </button>
+        <app-circle-icon-button backgroundColor="transparent" (click)="newMeetingClicked()" icon="add" />
       }
     </div>
   </mat-toolbar>

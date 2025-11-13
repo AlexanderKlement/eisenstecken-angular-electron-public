@@ -5,17 +5,21 @@ import {
   OnDestroy,
   OnInit,
   Output,
-} from '@angular/core';
-import { Observable,Subscription } from 'rxjs';
-import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime, first, } from 'rxjs/operators';
-import { MatDialog } from '@angular/material/dialog';
+} from "@angular/core";
+import { Observable, Subscription } from "rxjs";
+import {
+  UntypedFormControl,
+  FormsModule,
+  ReactiveFormsModule,
+} from "@angular/forms";
+import { debounceTime, first } from "rxjs/operators";
+import { MatDialog } from "@angular/material/dialog";
 import {
   OrderDialogData,
   ProductEditDialogComponent,
-} from './product-edit-dialog/product-edit-dialog.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
+} from "./product-edit-dialog/product-edit-dialog.component";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import {
   DefaultService,
   OrderedArticle,
@@ -24,20 +28,25 @@ import {
   ArticleCreate,
   OrderedArticleCreate,
   OrderableType,
-} from '../../../api/openapi';
-import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule } from 'ng-flex-layout';
-import { MatButton, MatIconButton } from '@angular/material/button';
-import { MatList, MatListItem } from '@angular/material/list';
-import { MatIcon } from '@angular/material/icon';
-import { MatTooltip } from '@angular/material/tooltip';
-import { SlicePipe } from '@angular/common';
-import { BoldSpanPipe } from '../../shared/pipes/boldSearchResult';
+} from "../../../api/openapi";
+import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import {
+  DefaultLayoutDirective,
+  DefaultLayoutAlignDirective,
+  FlexModule,
+} from "ng-flex-layout";
+import { MatButton, MatIconButton } from "@angular/material/button";
+import { MatList, MatListItem } from "@angular/material/list";
+import { MatIcon } from "@angular/material/icon";
+import { MatTooltip } from "@angular/material/tooltip";
+import { SlicePipe } from "@angular/common";
+import { BoldSpanPipe } from "../../shared/pipes/boldSearchResult";
+import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
 
 @Component({
-  selector: 'app-products-list',
-  templateUrl: './products-list.component.html',
-  styleUrls: ['./products-list.component.scss'],
+  selector: "app-products-list",
+  templateUrl: "./products-list.component.html",
+  styleUrls: ["./products-list.component.scss"],
   imports: [
     MatFormField,
     MatLabel,
@@ -55,6 +64,7 @@ import { BoldSpanPipe } from '../../shared/pipes/boldSearchResult';
     MatTooltip,
     SlicePipe,
     BoldSpanPipe,
+    CircleIconButtonComponent,
   ],
 })
 export class ProductsListComponent implements OnInit, OnDestroy {
@@ -77,8 +87,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private api: DefaultService,
     private snackBar: MatSnackBar,
-  ) {
-  }
+  ) {}
 
   public static createEditDialogData(
     orderedArticle: OrderedArticle,
@@ -176,15 +185,15 @@ export class ProductsListComponent implements OnInit, OnDestroy {
       return {
         title,
         amount: 0,
-        name: '',
+        name: "",
         price: 0.0,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        mod_number: '',
+        mod_number: "",
         // eslint-disable-next-line @typescript-eslint/naming-convention
         unit_id: 3,
         request: false,
-        comment: '',
-        position: '',
+        comment: "",
+        position: "",
         delete: false,
         create: true,
         blockRequestChange: false,
@@ -200,8 +209,8 @@ export class ProductsListComponent implements OnInit, OnDestroy {
       // eslint-disable-next-line @typescript-eslint/naming-convention
       unit_id: 3,
       request: false,
-      comment: '',
-      position: '',
+      comment: "",
+      position: "",
       delete: false,
       create: true,
       blockRequestChange: false,
@@ -210,25 +219,24 @@ export class ProductsListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscription = new Subscription();
-    this.search = new UntypedFormControl('');
+    this.search = new UntypedFormControl("");
 
     this.subscription.add(
-      this.search.valueChanges.pipe(debounceTime(200)).subscribe(v => {
-        this.searchChange.emit((v ?? '').toString());
+      this.search.valueChanges.pipe(debounceTime(200)).subscribe((v) => {
+        this.searchChange.emit((v ?? "").toString());
       }),
     );
 
-
     if (this.available) {
       this.subscription.add(
-        this.availableProducts$.subscribe(products => {
+        this.availableProducts$.subscribe((products) => {
           console.log(products);
           this.articles = products ?? [];
         }),
       );
     } else {
       this.subscription.add(
-        this.orderedProducts$.subscribe(products => {
+        this.orderedProducts$.subscribe((products) => {
           this.orderedArticles = products ?? [];
         }),
       );
@@ -241,7 +249,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
 
   copyButtonClicked(article: Article): void {
     const dialogData = ProductsListComponent.createEmptyDialogData(
-      'Produkt kopieren und hinzufügen',
+      "Produkt kopieren und hinzufügen",
       article,
     );
     const closeFunction = (result: any) => {
@@ -277,7 +285,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
 
   orderButtonClicked(article: Article): void {
     const dialogData = ProductsListComponent.createEmptyDialogData(
-      'Produkt hinzufügen',
+      "Produkt hinzufügen",
       article,
     );
     const closeFunction = (result: any) => {
@@ -316,7 +324,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     closeFunction: (result: any) => void,
   ): void {
     const dialogRef = this.dialog.open(ProductEditDialogComponent, {
-      width: '700px',
+      width: "700px",
       data: dialogData,
     });
     dialogRef.afterClosed().pipe(first()).subscribe(closeFunction);
@@ -325,7 +333,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   editButtonClicked(orderedArticle: OrderedArticle): void {
     const dialogData$ = ProductsListComponent.createEditDialogData(
       orderedArticle,
-      'Produkt bearbeiten',
+      "Produkt bearbeiten",
       this.api,
       false,
     );
@@ -341,7 +349,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
               this.refreshOrderedArticleList();
               this.refreshAvailableOrderList();
             } else {
-              this.snackBar.open('Es ist ein Fehler aufgetreten.', 'Ok', {
+              this.snackBar.open("Es ist ein Fehler aufgetreten.", "Ok", {
                 duration: 10000,
               });
             }
@@ -391,8 +399,8 @@ export class ProductsListComponent implements OnInit, OnDestroy {
           this.refreshOrderedArticleList();
         } else {
           this.snackBar.open(
-            'Artikel konnte nicht gelöscht werden. Bitte probieren sie es später erneut',
-            'Ok',
+            "Artikel konnte nicht gelöscht werden. Bitte probieren sie es später erneut",
+            "Ok",
             {
               duration: 10000,
             },
@@ -403,10 +411,10 @@ export class ProductsListComponent implements OnInit, OnDestroy {
 
   removeArticleButtonClicked(article: Article): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
+      width: "400px",
       data: {
-        title: 'Artikel löschen?',
-        text: 'Diese Operation kann rückgängig gemacht werden.',
+        title: "Artikel löschen?",
+        text: "Diese Operation kann rückgängig gemacht werden.",
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -419,8 +427,8 @@ export class ProductsListComponent implements OnInit, OnDestroy {
               this.refreshAvailableOrderList();
             } else {
               this.snackBar.open(
-                'Artikel konnte nicht gelöscht werden. Bitte probieren sie es später erneut',
-                'Ok',
+                "Artikel konnte nicht gelöscht werden. Bitte probieren sie es später erneut",
+                "Ok",
                 {
                   duration: 10000,
                 },
@@ -433,7 +441,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
 
   addButtonClicked(): void {
     const dialogData = ProductsListComponent.createEmptyDialogData(
-      'Neuen Artikel hinzufügen',
+      "Neuen Artikel hinzufügen",
     );
     const closeFunction = (result: any) => {
       if (result === undefined) {

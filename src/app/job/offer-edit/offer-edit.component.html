@@ -11,10 +11,9 @@
         @for (descriptiveArticle of getDescriptiveArticles().controls; track descriptiveArticle; let i = $index) {
           <div
             class="descriptive-article" fxLayout="column" fxLayoutAlign="start stretch" [formGroupName]="i">
-            <button type="button" mat-icon-button (click)="addDescriptiveArticleAt(i)"
-              class="position-control new-position-btn round-button" title="Neue Position">
-              <mat-icon>add</mat-icon>
-            </button>
+            <div class="position-control new-position-btn">
+              <app-circle-icon-button (click)="addDescriptiveArticleAt(i)" icon="add" />
+            </div>
             <button type="button" mat-icon-button (click)="moveDescriptiveArticleUp(i)"
               [disabled]="i === 0"
               class="position-control position-up" title="Nach oben schieben">

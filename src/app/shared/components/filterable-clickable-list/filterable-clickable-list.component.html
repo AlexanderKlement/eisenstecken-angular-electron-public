@@ -8,14 +8,7 @@
   @for (listElement of search$ | async; track listElement) {
     <div fxLayout="row" fxLayoutAlign="space-around center">
       @if (listElement.type==='supplier') {
-        <button mat-icon-button (click)="toggleFavoriteSupplier(listElement)" title="Favorit">
-          @if (isListItemFavorite(listElement.item)) {
-            <mat-icon>star</mat-icon>
-          }
-          @if (!isListItemFavorite(listElement.item)) {
-            <mat-icon>star_border</mat-icon>
-          }
-        </button>
+        <app-circle-icon-button (click)="toggleFavoriteSupplier(listElement)" [icon]="isListItemFavorite(listElement.item) ? 'star' : 'star_border'" />
       }
       <mat-list-option [value]="listElement"
         [class.collapsed]="listElement.collapse !== false && listElement.collapse !== toListUnCollapse" [class.uncollapsed]="listElement.collapse === toListUnCollapse">

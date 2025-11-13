@@ -1,8 +1,13 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
 import { ActivatedRoute, Router } from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
-import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import {
+  UntypedFormArray,
+  UntypedFormControl,
+  UntypedFormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
 import {
@@ -15,7 +20,11 @@ import {
   SupplierCreate,
 } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule } from "ng-flex-layout";
+import {
+  DefaultLayoutDirective,
+  DefaultLayoutAlignDirective,
+  FlexModule,
+} from "ng-flex-layout";
 import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
 import { MatIconButton, MatButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
@@ -23,34 +32,37 @@ import { MatSelect, MatOption } from "@angular/material/select";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { AddressFormComponent } from "../../shared/components/address-form/address-form.component";
 import { AsyncPipe } from "@angular/common";
+import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
 
 @Component({
-    selector: 'app-supplier-edit',
-    templateUrl: './supplier-edit.component.html',
-    styleUrls: ['./supplier-edit.component.scss'],
-    imports: [
-        ToolbarComponent,
-        FormsModule,
-        ReactiveFormsModule,
-        DefaultLayoutDirective,
-        DefaultLayoutAlignDirective,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        MatIconButton,
-        MatButton,
-        MatIcon,
-        MatSelect,
-        MatOption,
-        MatCheckbox,
-        AddressFormComponent,
-        FlexModule,
-        AsyncPipe,
-    ],
+  selector: "app-supplier-edit",
+  templateUrl: "./supplier-edit.component.html",
+  styleUrls: ["./supplier-edit.component.scss"],
+  imports: [
+    ToolbarComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    DefaultLayoutDirective,
+    DefaultLayoutAlignDirective,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatIconButton,
+    MatButton,
+    MatIcon,
+    MatSelect,
+    MatOption,
+    MatCheckbox,
+    AddressFormComponent,
+    FlexModule,
+    AsyncPipe,
+    CircleIconButtonComponent,
+  ],
 })
 export class SupplierEditComponent
   extends BaseEditComponent<Supplier>
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   supplierGroup: UntypedFormGroup;
 
   navigationTarget = "supplier";
@@ -175,7 +187,9 @@ export class SupplierEditComponent
     if (this.createMode) {
       this.router.navigateByUrl("supplier/", { replaceUrl: true });
     } else {
-      this.router.navigateByUrl("supplier/" + supplier.id.toString(), { replaceUrl: true });
+      this.router.navigateByUrl("supplier/" + supplier.id.toString(), {
+        replaceUrl: true,
+      });
     }
   }
 

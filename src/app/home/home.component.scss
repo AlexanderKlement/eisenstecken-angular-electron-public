@@ -9,7 +9,6 @@
 
 }
 
-
 .top-bar {
   display: flex;
   align-items: center;
@@ -24,17 +23,10 @@ img.logo {
   object-fit: contain;
 }
 
-button.info {
-  border-radius: 99999px;
+.info-button-container {
   position: absolute;
   top: 15px;
   left: 15px;
-  width: 60px;
-  height: 60px;
-  box-shadow: 1px 2px 10px -2px black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .window-container {

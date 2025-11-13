@@ -4,10 +4,20 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { first, map } from "rxjs/operators";
-import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import {
+  UntypedFormArray,
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { AuthService } from "../../shared/services/auth.service";
-import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
+import {
+  CustomButton,
+  ToolbarComponent,
+} from "../../shared/components/toolbar/toolbar.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { formatDateTransport } from "../../shared/date.util";
 import { FileService } from "../../shared/services/file.service";
@@ -19,17 +29,32 @@ import {
   Lock,
   DefaultService,
   DescriptiveArticle,
-  DescriptiveArticleCreate
+  DescriptiveArticleCreate,
 } from "../../../api/openapi";
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective, FlexModule } from "ng-flex-layout";
+import {
+  DefaultLayoutDirective,
+  DefaultLayoutAlignDirective,
+  DefaultFlexDirective,
+  FlexModule,
+} from "ng-flex-layout";
 import { MatIconButton, MatButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
-import { MatFormField, MatLabel, MatInput, MatSuffix } from "@angular/material/input";
+import {
+  MatFormField,
+  MatLabel,
+  MatInput,
+  MatSuffix,
+} from "@angular/material/input";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { MatSelect, MatOption } from "@angular/material/select";
-import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from "@angular/material/datepicker";
+import {
+  MatDatepickerInput,
+  MatDatepickerToggle,
+  MatDatepicker,
+} from "@angular/material/datepicker";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { AsyncPipe } from "@angular/common";
+import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
 
 export interface JobMinimal {
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -38,12 +63,39 @@ export interface JobMinimal {
 }
 
 @Component({
-    selector: 'app-delivery-edit',
-    templateUrl: './delivery-edit.component.html',
-    styleUrls: ['./delivery-edit.component.scss'],
-    imports: [ToolbarComponent, FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective, FlexModule, MatIconButton, MatButton, MatIcon, MatFormField, MatLabel, CdkTextareaAutosize, MatInput, MatSelect, MatOption, MatDatepickerInput, MatDatepickerToggle, MatSuffix, MatDatepicker, MatCheckbox, AsyncPipe]
+  selector: "app-delivery-edit",
+  templateUrl: "./delivery-edit.component.html",
+  styleUrls: ["./delivery-edit.component.scss"],
+  imports: [
+    ToolbarComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    DefaultLayoutDirective,
+    DefaultLayoutAlignDirective,
+    DefaultFlexDirective,
+    FlexModule,
+    MatIconButton,
+    MatButton,
+    MatIcon,
+    MatFormField,
+    MatLabel,
+    CdkTextareaAutosize,
+    MatInput,
+    MatSelect,
+    MatOption,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+    MatCheckbox,
+    AsyncPipe,
+    CircleIconButtonComponent,
+  ],
 })
-export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> implements OnInit {
+export class DeliveryEditComponent
+  extends BaseEditComponent<DeliveryNote>
+  implements OnInit
+{
   deliveryNoteGroup: UntypedFormGroup;
   submitted = false;
   navigationTarget = "delivery_note";
@@ -52,8 +104,15 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
   buttons: CustomButton[] = [];
   title = "Lieferschein: Bearbeiten";
 
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute,
-              private authService: AuthService, private snackBar: MatSnackBar, private file: FileService, private dialog: MatDialog) {
+  constructor(
+    api: DefaultService,
+    router: Router,
+    route: ActivatedRoute,
+    private authService: AuthService,
+    private snackBar: MatSnackBar,
+    private file: FileService,
+    private dialog: MatDialog,
+  ) {
     super(api, router, route);
   }
 
@@ -66,38 +125,48 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
   unlockFunction = (api: DefaultService, id: number): Observable<boolean> =>
     api.unlockDeliveryNoteDeliveryNoteUnlockDeliveryNoteIdPost(id);
 
-
   ngOnInit(): void {
     super.ngOnInit();
     this.initDeliveryNoteGroup();
-    this.essentialJobList = this.api.readJobsJobGet(0, 100, "", undefined, "JOBSTATUS_ACCEPTED", true).pipe(map(
-      jobs => {
-        const minimalJobs: JobMinimal[] = jobs;
-        minimalJobs.splice(0, 0, {
-          // eslint-disable-next-line @typescript-eslint/naming-convention
-          displayable_name: "Selbst eintragen",
-          id: 0,
-        });
-        return minimalJobs;
-      },
-    ));
-    this.deliveryNoteReasons = this.api.readDeliveryNoteReasonsDeliveryNoteReasonsGet();
+    this.essentialJobList = this.api
+      .readJobsJobGet(0, 100, "", undefined, "JOBSTATUS_ACCEPTED", true)
+      .pipe(
+        map((jobs) => {
+          const minimalJobs: JobMinimal[] = jobs;
+          minimalJobs.splice(0, 0, {
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            displayable_name: "Selbst eintragen",
+            id: 0,
+          });
+          return minimalJobs;
+        }),
+      );
+    this.deliveryNoteReasons =
+      this.api.readDeliveryNoteReasonsDeliveryNoteReasonsGet();
     if (this.createMode) {
-      this.api.getNextDeliveryNoteNumberDeliveryNoteNumberGet().pipe(first()).subscribe(deliveryNoteNumber => {
-        this.deliveryNoteGroup.get("delivery_note_number").setValue(deliveryNoteNumber);
-      });
+      this.api
+        .getNextDeliveryNoteNumberDeliveryNoteNumberGet()
+        .pipe(first())
+        .subscribe((deliveryNoteNumber) => {
+          this.deliveryNoteGroup
+            .get("delivery_note_number")
+            .setValue(deliveryNoteNumber);
+        });
       this.addDescriptiveArticleAt(0);
     } else {
-      this.authService.currentUserHasRight("delivery_notes:delete").pipe(first()).subscribe(allowed => {
-        if (allowed) {
-          this.buttons.push({
-            name: "Lieferschein löschen",
-            navigate: () => {
-              this.deliveryNoteDeleteClicked();
-            },
-          });
-        }
-      });
+      this.authService
+        .currentUserHasRight("delivery_notes:delete")
+        .pipe(first())
+        .subscribe((allowed) => {
+          if (allowed) {
+            this.buttons.push({
+              name: "Lieferschein löschen",
+              navigate: () => {
+                this.deliveryNoteDeleteClicked();
+              },
+            });
+          }
+        });
     }
     if (this.createMode) {
       this.title = "Lieferschein: Erstellen";
@@ -139,17 +208,26 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
         job_id: this.deliveryNoteGroup.get("job_id").value,
         articles: descriptiveArticles,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        delivery_note_reason_id: this.deliveryNoteGroup.get("delivery_note_reason_id").value,
+        delivery_note_reason_id: this.deliveryNoteGroup.get(
+          "delivery_note_reason_id",
+        ).value,
       };
-      this.api.createDeliveryNoteDeliveryNotePost(deliveryNoteCreate).pipe(first()).subscribe(deliveryNote => {
-        this.submitted = false;
-        this.file.open(deliveryNote.pdf);
-        this.router.navigateByUrl("delivery_note", { replaceUrl: true });
-      }, (err) => {
-        this.createUpdateError(err);
-      }, () => {
-        this.createUpdateComplete();
-      });
+      this.api
+        .createDeliveryNoteDeliveryNotePost(deliveryNoteCreate)
+        .pipe(first())
+        .subscribe(
+          (deliveryNote) => {
+            this.submitted = false;
+            this.file.open(deliveryNote.pdf);
+            this.router.navigateByUrl("delivery_note", { replaceUrl: true });
+          },
+          (err) => {
+            this.createUpdateError(err);
+          },
+          () => {
+            this.createUpdateComplete();
+          },
+        );
     } else {
       const deliveryNoteUpdate: DeliveryNoteUpdate = {
         // eslint-disable-next-line id-blacklist
@@ -169,22 +247,37 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
         job_id: this.deliveryNoteGroup.get("job_id").value,
         articles: descriptiveArticles,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        delivery_note_reason_id: this.deliveryNoteGroup.get("delivery_note_reason_id").value,
+        delivery_note_reason_id: this.deliveryNoteGroup.get(
+          "delivery_note_reason_id",
+        ).value,
       };
-      this.api.updateDeliveryNoteDeliveryNoteDeliveryNoteIdPut(this.id, deliveryNoteUpdate).pipe(first()).subscribe(deliveryNote => {
-        this.submitted = false;
-        this.file.open(deliveryNote.pdf);
-        this.router.navigateByUrl("delivery_note", { replaceUrl: true });
-      }, (err) => {
-        this.createUpdateError(err);
-      }, () => {
-        this.createUpdateComplete();
-      });
+      this.api
+        .updateDeliveryNoteDeliveryNoteDeliveryNoteIdPut(
+          this.id,
+          deliveryNoteUpdate,
+        )
+        .pipe(first())
+        .subscribe(
+          (deliveryNote) => {
+            this.submitted = false;
+            this.file.open(deliveryNote.pdf);
+            this.router.navigateByUrl("delivery_note", { replaceUrl: true });
+          },
+          (err) => {
+            this.createUpdateError(err);
+          },
+          () => {
+            this.createUpdateComplete();
+          },
+        );
     }
   }
 
   addDescriptiveArticleAt(index: number) {
-    this.getDescriptiveArticles().insert(index + 1, this.initDescriptiveArticles());
+    this.getDescriptiveArticles().insert(
+      index + 1,
+      this.initDescriptiveArticles(),
+    );
   }
 
   moveDescriptiveArticleUp(index: number) {
@@ -204,6 +297,8 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
   }
 
   removeDescriptiveArticle(index: number): void {
+    if (index === 0) return;
+
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: "400px",
       data: {
@@ -211,7 +306,7 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
         text: "Dieser Schritt kann nicht rückgängig gemacht werden.",
       },
     });
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.getDescriptiveArticles().removeAt(index);
       }
@@ -225,31 +320,43 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
       this.deliveryNoteGroup.get("company_address").setValue("");
       this.deliveryNoteGroup.get("delivery_address").setValue("");
     } else {
-      this.api.readJobJobJobIdGet(jobId).pipe(first()).subscribe(job => {
-        this.deliveryNoteGroup.get("name").setValue(job.client.fullname);
-        const address = job.client.address.address_2 + " " + job.client.address.address_1;
-        this.deliveryNoteGroup.get("company_address").setValue(address);
-        this.deliveryNoteGroup.get("delivery_address").setValue(address);
-      });
+      this.api
+        .readJobJobJobIdGet(jobId)
+        .pipe(first())
+        .subscribe((job) => {
+          this.deliveryNoteGroup.get("name").setValue(job.client.fullname);
+          const address =
+            job.client.address.address_2 + " " + job.client.address.address_1;
+          this.deliveryNoteGroup.get("company_address").setValue(address);
+          this.deliveryNoteGroup.get("delivery_address").setValue(address);
+        });
     }
   }
 
   protected observableReady() {
     super.observableReady();
-    this.data$.pipe(first()).subscribe(deliveryNote => {
+    this.data$.pipe(first()).subscribe((deliveryNote) => {
       this.deliveryNoteGroup.patchValue(deliveryNote);
-      this.deliveryNoteGroup.get("delivery_note_number").setValue(deliveryNote.number);
+      this.deliveryNoteGroup
+        .get("delivery_note_number")
+        .setValue(deliveryNote.number);
       for (const article of deliveryNote.articles) {
-        this.getDescriptiveArticles().push(this.initDescriptiveArticles(article));
+        this.getDescriptiveArticles().push(
+          this.initDescriptiveArticles(article),
+        );
       }
       if (this.getDescriptiveArticles().controls.length === 0) {
         this.getDescriptiveArticles().push(this.initDescriptiveArticles());
       }
-      this.deliveryNoteGroup.get("delivery_note_reason_id").setValue(deliveryNote.delivery_note_reason.id);
+      this.deliveryNoteGroup
+        .get("delivery_note_reason_id")
+        .setValue(deliveryNote.delivery_note_reason.id);
     });
   }
 
-  protected initDescriptiveArticles(descriptiveArticle?: DescriptiveArticle): UntypedFormGroup {
+  protected initDescriptiveArticles(
+    descriptiveArticle?: DescriptiveArticle,
+  ): UntypedFormGroup {
     if (descriptiveArticle === undefined) {
       return new UntypedFormGroup({
         description: new UntypedFormControl("", Validators.required),
@@ -257,12 +364,17 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
       });
     } else {
       return new UntypedFormGroup({
-        description: new UntypedFormControl(descriptiveArticle.description, Validators.required),
-        amount: new UntypedFormControl(descriptiveArticle.amount, Validators.required),
+        description: new UntypedFormControl(
+          descriptiveArticle.description,
+          Validators.required,
+        ),
+        amount: new UntypedFormControl(
+          descriptiveArticle.amount,
+          Validators.required,
+        ),
       });
     }
   }
-
 
   private initDeliveryNoteGroup(): void {
     const now = new Date();
@@ -297,18 +409,24 @@ export class DeliveryEditComponent extends BaseEditComponent<DeliveryNote> imple
         text: "Den Lieferschein löschen? Diese Aktion kann NICHT rückgängig gemacht werden!",
       },
     });
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.api.deleteDeliveryNoteDeliveryNoteDeliveryNoteIdDelete(this.id).pipe(first()).subscribe(success => {
-          if (success) {
-            this.router.navigateByUrl("delivery_note");
-          } else {
-            this.snackBar.open("Lieferschein konnte nicht gelöscht werden", "Ok", {
-              duration: 10000,
-            });
-          }
-        });
-
+        this.api
+          .deleteDeliveryNoteDeliveryNoteDeliveryNoteIdDelete(this.id)
+          .pipe(first())
+          .subscribe((success) => {
+            if (success) {
+              this.router.navigateByUrl("delivery_note");
+            } else {
+              this.snackBar.open(
+                "Lieferschein konnte nicht gelöscht werden",
+                "Ok",
+                {
+                  duration: 10000,
+                },
+              );
+            }
+          });
       }
     });
   }

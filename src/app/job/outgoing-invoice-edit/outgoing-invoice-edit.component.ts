@@ -4,10 +4,19 @@ import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.c
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { Observable } from "rxjs";
-import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import {
+  UntypedFormArray,
+  UntypedFormControl,
+  UntypedFormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { first, tap } from "rxjs/operators";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
-import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
+import {
+  CustomButton,
+  ToolbarComponent,
+} from "../../shared/components/toolbar/toolbar.component";
 import { AuthService } from "../../shared/services/auth.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import dayjs from "dayjs/esm";
@@ -25,46 +34,64 @@ import {
   DescriptiveArticleCreate,
   Lock,
 } from "../../../api/openapi";
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective, FlexModule } from "ng-flex-layout";
+import {
+  DefaultLayoutDirective,
+  DefaultLayoutAlignDirective,
+  DefaultFlexDirective,
+  FlexModule,
+} from "ng-flex-layout";
 import { MatIconButton, MatButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
-import { MatFormField, MatLabel, MatInput, MatSuffix } from "@angular/material/input";
-import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from "@angular/material/datepicker";
+import {
+  MatFormField,
+  MatLabel,
+  MatInput,
+  MatSuffix,
+} from "@angular/material/input";
+import {
+  MatDatepickerInput,
+  MatDatepickerToggle,
+  MatDatepicker,
+} from "@angular/material/datepicker";
 import { MatSelect, MatOption } from "@angular/material/select";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { AddressFormComponent } from "../../shared/components/address-form/address-form.component";
+import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
 
 @Component({
-    selector: 'app-outgoing-invoice-edit',
-    templateUrl: './outgoing-invoice-edit.component.html',
-    styleUrls: ['./outgoing-invoice-edit.component.scss'],
-    imports: [
-        ToolbarComponent,
-        FormsModule,
-        ReactiveFormsModule,
-        DefaultLayoutDirective,
-        DefaultLayoutAlignDirective,
-        DefaultFlexDirective,
-        FlexModule,
-        MatIconButton,
-        MatButton,
-        MatIcon,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        MatDatepickerInput,
-        MatDatepickerToggle,
-        MatSuffix,
-        MatDatepicker,
-        MatSelect,
-        MatOption,
-        MatCheckbox,
-        AddressFormComponent,
-        AsyncPipe,
-    ],
+  selector: "app-outgoing-invoice-edit",
+  templateUrl: "./outgoing-invoice-edit.component.html",
+  styleUrls: ["./outgoing-invoice-edit.component.scss"],
+  imports: [
+    ToolbarComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    DefaultLayoutDirective,
+    DefaultLayoutAlignDirective,
+    DefaultFlexDirective,
+    FlexModule,
+    MatIconButton,
+    MatButton,
+    MatIcon,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+    MatSelect,
+    MatOption,
+    MatCheckbox,
+    AddressFormComponent,
+    AsyncPipe,
+    CircleIconButtonComponent,
+  ],
 })
-export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvoice> implements OnInit, OnDestroy {
-
+export class OutgoingInvoiceEditComponent
+  extends BaseEditComponent<OutgoingInvoice>
+  implements OnInit, OnDestroy
+{
   invoiceGroup: UntypedFormGroup;
   submitted = false;
   vatOptions$: Observable<Vat[]>;
@@ -76,21 +103,38 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
 
   company = false;
 
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute, private currency: CurrencyPipe, private location: Location,
-              private authService: AuthService, private snackBar: MatSnackBar, private file: FileService, private dialog: MatDialog) {
+  constructor(
+    api: DefaultService,
+    router: Router,
+    route: ActivatedRoute,
+    private currency: CurrencyPipe,
+    private location: Location,
+    private authService: AuthService,
+    private snackBar: MatSnackBar,
+    private file: FileService,
+    private dialog: MatDialog,
+  ) {
     super(api, router, route);
   }
 
   calcTotalPrice(formGroup: UntypedFormGroup): void {
-    const totalPrice = formGroup.get("single_price").value * formGroup.get("amount").value;
-    formGroup.get("total_price").setValue(this.currency.transform(totalPrice, getLocaleCurrencyCode("de_DE")));
+    const totalPrice =
+      formGroup.get("single_price").value * formGroup.get("amount").value;
+    formGroup
+      .get("total_price")
+      .setValue(
+        this.currency.transform(totalPrice, getLocaleCurrencyCode("de_DE")),
+      );
     this.recalculateInvoicePrice();
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> =>
     api.islockedOutgoingInvoiceOutgoingInvoiceIslockedOutgoingInvoiceIdGet(id);
 
-  dataFunction = (api: DefaultService, id: number): Observable<OutgoingInvoice> =>
+  dataFunction = (
+    api: DefaultService,
+    id: number,
+  ): Observable<OutgoingInvoice> =>
     api.readOutgoingInvoiceOutgoingInvoiceOutgoingInvoiceIdGet(id);
 
   unlockFunction = (api: DefaultService, id: number): Observable<boolean> =>
@@ -109,48 +153,60 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
           this.router.navigateByUrl(this.navigationTarget);
         }
         this.navigationTarget = "job/" + this.jobId.toString();
-        this.api.readJobJobJobIdGet(this.jobId).pipe(first()).subscribe((job) => {
-          this.fillRightSidebar(job.client);
-        });
+        this.api
+          .readJobJobJobIdGet(this.jobId)
+          .pipe(first())
+          .subscribe((job) => {
+            this.fillRightSidebar(job.client);
+          });
         this.addOtherInvoices();
       });
     }
-    this.authService.currentUserHasRight("outgoing_invoices:delete").pipe(first()).subscribe(allowed => {
-      if (allowed) {
-        this.buttons.push({
-          name: "Rechnung löschen",
-          navigate: (): void => {
-            const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-              width: "400px",
-              data: {
-                title: "Rechnung löschen?",
-                text: "Dieser Schritt kann nicht rückgängig gemacht werden.",
-              },
-            });
-            dialogRef.afterClosed().subscribe(result => {
-              if (result) {
-                if (this.createMode) {
-                  this.router.navigateByUrl(this.navigationTarget);
-                } else {
-                  this.api.deleteOutgoingInvoiceOutgoingInvoiceOutgoingInvoiceIdDelete(this.id)
-                    .pipe(first()).subscribe((success) => {
-                      if (success) {
-                        this.location.back();
-                        //this.router.navigateByUrl(this.navigationTarget);
-                      } else {
-                        this.invoiceDeleteFailed();
-                      }
-                    },
-                    error => {
-                      this.invoiceDeleteFailed(error);
-                    });
+    this.authService
+      .currentUserHasRight("outgoing_invoices:delete")
+      .pipe(first())
+      .subscribe((allowed) => {
+        if (allowed) {
+          this.buttons.push({
+            name: "Rechnung löschen",
+            navigate: (): void => {
+              const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+                width: "400px",
+                data: {
+                  title: "Rechnung löschen?",
+                  text: "Dieser Schritt kann nicht rückgängig gemacht werden.",
+                },
+              });
+              dialogRef.afterClosed().subscribe((result) => {
+                if (result) {
+                  if (this.createMode) {
+                    this.router.navigateByUrl(this.navigationTarget);
+                  } else {
+                    this.api
+                      .deleteOutgoingInvoiceOutgoingInvoiceOutgoingInvoiceIdDelete(
+                        this.id,
+                      )
+                      .pipe(first())
+                      .subscribe(
+                        (success) => {
+                          if (success) {
+                            this.location.back();
+                            //this.router.navigateByUrl(this.navigationTarget);
+                          } else {
+                            this.invoiceDeleteFailed();
+                          }
+                        },
+                        (error) => {
+                          this.invoiceDeleteFailed(error);
+                        },
+                      );
+                  }
                 }
-              }
-            });
-          },
-        });
-      }
-    });
+              });
+            },
+          });
+        }
+      });
     if (this.createMode) {
       this.title = "Ausgangsrechnung: Erstellen";
     }
@@ -168,10 +224,13 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
     if (error) {
       console.error(error);
     }
-    this.snackBar.open("Die Rechnung konnte leider nicht gelöscht werden."
-      , "Ok", {
+    this.snackBar.open(
+      "Die Rechnung konnte leider nicht gelöscht werden.",
+      "Ok",
+      {
         duration: 10000,
-      });
+      },
+    );
     this.location.back();
   }
 
@@ -179,8 +238,9 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
     return this.invoiceGroup.get("descriptive_articles") as UntypedFormArray;
   }
 
-
   removeDescriptiveArticle(index: number): void {
+    if (index === 0) return;
+
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: "400px",
       data: {
@@ -188,18 +248,19 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
         text: "Dieser Schritt kann nicht rückgängig gemacht werden.",
       },
     });
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.getDescriptiveArticles().removeAt(index);
       }
     });
-
   }
 
   addDescriptiveArticleAt(index: number): void {
-    this.getDescriptiveArticles().insert(index + 1, this.initDescriptiveArticles());
+    this.getDescriptiveArticles().insert(
+      index + 1,
+      this.initDescriptiveArticles(),
+    );
   }
-
 
   toggleCollapseDescriptiveArticle(index: number | undefined): void {
     if (index === -1) {
@@ -216,7 +277,9 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
       return;
     }
     const oldLength = this.hiddenDescriptives.length;
-    this.hiddenDescriptives = this.hiddenDescriptives.filter((idx) => idx !== index);
+    this.hiddenDescriptives = this.hiddenDescriptives.filter(
+      (idx) => idx !== index,
+    );
     if (oldLength === this.hiddenDescriptives.length) {
       this.hiddenDescriptives.push(index);
     }
@@ -224,18 +287,25 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
 
   isHidden(index: number | undefined): boolean {
     if (index === -1) {
-      return this.getDescriptiveArticles().controls.length === this.hiddenDescriptives.length;
+      return (
+        this.getDescriptiveArticles().controls.length ===
+        this.hiddenDescriptives.length
+      );
     }
-    return this.hiddenDescriptives.filter(idx => idx === index).length !== 0;
+    return this.hiddenDescriptives.filter((idx) => idx === index).length !== 0;
   }
 
   moveDescriptiveArticleUp(index: number): void {
+    if (index === 0) return;
+
     const descriptiveArticle = this.getDescriptiveArticles().at(index);
     this.getDescriptiveArticles().removeAt(index);
     this.getDescriptiveArticles().insert(index - 1, descriptiveArticle);
   }
 
   moveDescriptiveArticleDown(index: number): void {
+    if (index === this.getDescriptiveArticles().controls.length - 1) return;
+
     const descriptiveArticle = this.getDescriptiveArticles().at(index);
     this.getDescriptiveArticles().removeAt(index);
     this.getDescriptiveArticles().insert(index + 1, descriptiveArticle);
@@ -244,8 +314,17 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
   transformAmount(i: number) {
     const descriptiveArticle = this.getDescriptiveArticles().at(i);
     // eslint-disable-next-line max-len
-    const singlePrice = parseFloat(descriptiveArticle.get("singlePriceFormatted").value.replace("€", "").replace(".", "").replace(",", "."));
-    const formattedAmount = this.currency.transform(singlePrice, getLocaleCurrencyCode("de_DE"));
+    const singlePrice = parseFloat(
+      descriptiveArticle
+        .get("singlePriceFormatted")
+        .value.replace("€", "")
+        .replace(".", "")
+        .replace(",", "."),
+    );
+    const formattedAmount = this.currency.transform(
+      singlePrice,
+      getLocaleCurrencyCode("de_DE"),
+    );
     descriptiveArticle.get("single_price").setValue(singlePrice);
     descriptiveArticle.get("singlePriceFormatted").setValue(formattedAmount);
   }
@@ -253,22 +332,24 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
   onSubmit(): void {
     this.submitted = true;
     const descriptiveArticles = [];
-    this.getDescriptiveArticles().controls.forEach((descriptiveArticleControl) => {
-      const descriptiveArticle: DescriptiveArticleCreate = {
-        name: "",
-        amount: descriptiveArticleControl.get("amount").value,
-        description: descriptiveArticleControl.get("description").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        single_price: descriptiveArticleControl.get("single_price").value,
-        discount: 0,
-        alternative: false,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        descriptive_articles: [],
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        vat_id: this.invoiceGroup.get("vat_id").value,
-      };
-      descriptiveArticles.push(descriptiveArticle);
-    });
+    this.getDescriptiveArticles().controls.forEach(
+      (descriptiveArticleControl) => {
+        const descriptiveArticle: DescriptiveArticleCreate = {
+          name: "",
+          amount: descriptiveArticleControl.get("amount").value,
+          description: descriptiveArticleControl.get("description").value,
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          single_price: descriptiveArticleControl.get("single_price").value,
+          discount: 0,
+          alternative: false,
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          descriptive_articles: [],
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          vat_id: this.invoiceGroup.get("vat_id").value,
+        };
+        descriptiveArticles.push(descriptiveArticle);
+      },
+    );
 
     const fullName = this.invoiceGroup.get("name").value.toString();
 
@@ -280,7 +361,9 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
         // eslint-disable-next-line @typescript-eslint/naming-convention
         payment_condition: this.invoiceGroup.get("payment_condition").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        payment_date: formatDateTransport(this.invoiceGroup.get("payment_date").value),
+        payment_date: formatDateTransport(
+          this.invoiceGroup.get("payment_date").value,
+        ),
         // eslint-disable-next-line @typescript-eslint/naming-convention
         vat_id: this.invoiceGroup.get("vat_id").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -306,13 +389,20 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
           country_code: this.invoiceGroup.get("address.country").value,
         },
       };
-      this.api.createOutgoingInvoiceOutgoingInvoicePost(invoiceCreate).pipe(first()).subscribe((invoice) => {
-        this.createUpdateSuccess(invoice);
-      }, (error) => {
-        this.createUpdateError(error);
-      }, () => {
-        this.createUpdateComplete();
-      });
+      this.api
+        .createOutgoingInvoiceOutgoingInvoicePost(invoiceCreate)
+        .pipe(first())
+        .subscribe(
+          (invoice) => {
+            this.createUpdateSuccess(invoice);
+          },
+          (error) => {
+            this.createUpdateError(error);
+          },
+          () => {
+            this.createUpdateComplete();
+          },
+        );
     } else {
       const invoiceUpdate: OutgoingInvoiceUpdate = {
         // eslint-disable-next-line id-blacklist
@@ -321,7 +411,9 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
         // eslint-disable-next-line @typescript-eslint/naming-convention
         payment_condition: this.invoiceGroup.get("payment_condition").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        payment_date: formatDateTransport(this.invoiceGroup.get("payment_date").value),
+        payment_date: formatDateTransport(
+          this.invoiceGroup.get("payment_date").value,
+        ),
         // eslint-disable-next-line @typescript-eslint/naming-convention
         vat_id: this.invoiceGroup.get("vat_id").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -345,13 +437,23 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
           country_code: this.invoiceGroup.get("address.country").value,
         },
       };
-      this.api.updateOutgoingInvoiceOutgoingInvoiceOutgoingInvoiceIdPut(this.id, invoiceUpdate).pipe(first()).subscribe((invoice) => {
-        this.createUpdateSuccess(invoice);
-      }, (error) => {
-        this.createUpdateError(error);
-      }, () => {
-        this.createUpdateComplete();
-      });
+      this.api
+        .updateOutgoingInvoiceOutgoingInvoiceOutgoingInvoiceIdPut(
+          this.id,
+          invoiceUpdate,
+        )
+        .pipe(first())
+        .subscribe(
+          (invoice) => {
+            this.createUpdateSuccess(invoice);
+          },
+          (error) => {
+            this.createUpdateError(error);
+          },
+          () => {
+            this.createUpdateComplete();
+          },
+        );
     }
   }
 
@@ -364,29 +466,33 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
   observableReady(): void {
     super.observableReady();
     if (!this.createMode) {
-      this.data$.pipe(tap(invoice => this.invoiceGroup.patchValue(invoice))).subscribe((invoice) => {
-        this.getDescriptiveArticles().removeAt(0);
-        invoice.descriptive_articles.forEach((descriptiveArticle) => {
-          this.getDescriptiveArticles().push(this.initDescriptiveArticles(descriptiveArticle));
-        });
-        this.company = invoice.isCompany;
-        this.invoiceGroup.patchValue({
-          // eslint-disable-next-line @typescript-eslint/naming-convention
-          vat_id: invoice.vat.id,
+      this.data$
+        .pipe(tap((invoice) => this.invoiceGroup.patchValue(invoice)))
+        .subscribe((invoice) => {
+          this.getDescriptiveArticles().removeAt(0);
+          invoice.descriptive_articles.forEach((descriptiveArticle) => {
+            this.getDescriptiveArticles().push(
+              this.initDescriptiveArticles(descriptiveArticle),
+            );
+          });
+          this.company = invoice.isCompany;
+          this.invoiceGroup.patchValue({
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            vat_id: invoice.vat.id,
 
-          address: {
-            country: invoice.address.country.code,
-          },
+            address: {
+              country: invoice.address.country.code,
+            },
+          });
+          this.jobId = invoice.job_id;
+          this.recalculateInvoicePrice();
         });
-        this.jobId = invoice.job_id;
-        this.recalculateInvoicePrice();
-      });
-
     }
-
   }
 
-  protected initDescriptiveArticles(descriptiveArticle?: DescriptiveArticle): UntypedFormGroup {
+  protected initDescriptiveArticles(
+    descriptiveArticle?: DescriptiveArticle,
+  ): UntypedFormGroup {
     const descriptiveArticleFormGroup = new UntypedFormGroup({
       description: new UntypedFormControl(""),
       amount: new UntypedFormControl("0"),
@@ -397,14 +503,18 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
       total_price: new UntypedFormControl("0"),
     });
 
-    this.subscription.add(descriptiveArticleFormGroup.get("single_price").valueChanges.subscribe(
-      () => {
+    this.subscription.add(
+      descriptiveArticleFormGroup
+        .get("single_price")
+        .valueChanges.subscribe(() => {
+          this.calcTotalPrice(descriptiveArticleFormGroup);
+        }),
+    );
+    this.subscription.add(
+      descriptiveArticleFormGroup.get("amount").valueChanges.subscribe(() => {
         this.calcTotalPrice(descriptiveArticleFormGroup);
-      }));
-    this.subscription.add(descriptiveArticleFormGroup.get("amount").valueChanges.subscribe(
-      () => {
-        this.calcTotalPrice(descriptiveArticleFormGroup);
-      }));
+      }),
+    );
 
     if (descriptiveArticle !== undefined) {
       descriptiveArticleFormGroup.patchValue({
@@ -412,22 +522,30 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
         amount: descriptiveArticle.amount,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         single_price: descriptiveArticle.single_price,
-        singlePriceFormatted: this.currency.transform(descriptiveArticle.single_price,
-          getLocaleCurrencyCode("de_DE")),
+        singlePriceFormatted: this.currency.transform(
+          descriptiveArticle.single_price,
+          getLocaleCurrencyCode("de_DE"),
+        ),
       });
     }
 
     return descriptiveArticleFormGroup;
   }
 
-  private addDescriptiveArticle(name: string, amount: string, singlePrice: string, totalPrice: string): void {
+  private addDescriptiveArticle(
+    name: string,
+    amount: string,
+    singlePrice: string,
+    totalPrice: string,
+  ): void {
     const descriptiveArticleFormGroup = new UntypedFormGroup({
       description: new UntypedFormControl(name),
       amount: new UntypedFormControl(amount),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       single_price: new UntypedFormControl(singlePrice),
-      singlePriceFormatted: new UntypedFormControl(this.currency.transform(singlePrice,
-        getLocaleCurrencyCode("de_DE"))),
+      singlePriceFormatted: new UntypedFormControl(
+        this.currency.transform(singlePrice, getLocaleCurrencyCode("de_DE")),
+      ),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       total_price: new UntypedFormControl(totalPrice),
     });
@@ -471,25 +589,40 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
       pec: new UntypedFormControl(""),
       name: new UntypedFormControl(""),
     });
-    this.api.getNextRgNumberOutgoingInvoiceRgNumberGet().pipe(first()).subscribe((nextRgNumber) => {
-      this.invoiceGroup.get("number").setValue(nextRgNumber);
-    });
+    this.api
+      .getNextRgNumberOutgoingInvoiceRgNumberGet()
+      .pipe(first())
+      .subscribe((nextRgNumber) => {
+        this.invoiceGroup.get("number").setValue(nextRgNumber);
+      });
   }
 
   private recalculateInvoicePrice() {
     let invoicePrice = 0.0;
-    this.getDescriptiveArticles().controls.forEach((descriptiveArticleControl) => {
-      invoicePrice += parseFloat(descriptiveArticleControl.get("single_price").value) *
-        parseFloat(descriptiveArticleControl.get("amount").value);
-    });
-    this.invoiceGroup.get("invoice_price").setValue(this.currency.transform(invoicePrice, getLocaleCurrencyCode("de_DE")));
+    this.getDescriptiveArticles().controls.forEach(
+      (descriptiveArticleControl) => {
+        invoicePrice +=
+          parseFloat(descriptiveArticleControl.get("single_price").value) *
+          parseFloat(descriptiveArticleControl.get("amount").value);
+      },
+    );
+    this.invoiceGroup
+      .get("invoice_price")
+      .setValue(
+        this.currency.transform(invoicePrice, getLocaleCurrencyCode("de_DE")),
+      );
   }
 
   private fillRightSidebar(client: Client): void {
     const langCodeLower = client.language.code.toLowerCase();
-    this.getAndFillParameters("payment_condition", "invoice_payment_condition_" + langCodeLower);
+    this.getAndFillParameters(
+      "payment_condition",
+      "invoice_payment_condition_" + langCodeLower,
+    );
     this.company = client.isCompany;
-    this.invoiceGroup.get("name").setValue(client.fullname ? client.fullname : client.name);
+    this.invoiceGroup
+      .get("name")
+      .setValue(client.fullname ? client.fullname : client.name);
     this.invoiceGroup.get("address").patchValue({
       name: client.name,
       // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -501,30 +634,39 @@ export class OutgoingInvoiceEditComponent extends BaseEditComponent<OutgoingInvo
     this.invoiceGroup.get("vat_number").setValue(client.vat_number);
     this.invoiceGroup.get("fiscal_code").setValue(client.fiscal_code);
     this.invoiceGroup.get("pec").setValue(client.pec);
-    this.invoiceGroup.get("codice_destinatario").setValue(client.codice_destinatario);
-
+    this.invoiceGroup
+      .get("codice_destinatario")
+      .setValue(client.codice_destinatario);
   }
 
   private getAndFillParameters(formControlName: string, key: string) {
-    this.api.getParameterParameterKeyGet(key).pipe(first()).subscribe((parameter) => {
-      this.invoiceGroup.patchValue({
-        [formControlName]: parameter,
+    this.api
+      .getParameterParameterKeyGet(key)
+      .pipe(first())
+      .subscribe((parameter) => {
+        this.invoiceGroup.patchValue({
+          [formControlName]: parameter,
+        });
       });
-    });
   }
 
   private addOtherInvoices() {
-    this.api.readOutgoingInvoicesByJobOutgoingInvoiceJobJobIdGet(this.jobId).pipe(first()).subscribe((outgoingInvoices) => {
-      for (const outgoingInvoice of outgoingInvoices) {
-        this.addDescriptiveArticle(
-          "Abzüglich Rechnung Nr. " + outgoingInvoice.number + " vom "
-          + dayjs(outgoingInvoice.date, "YYYY-MM-DD").format("DD.MM.YYYY"),
-          "1",
-          (outgoingInvoice.full_price_without_vat * (-1)).toString(),
-          (outgoingInvoice.full_price_without_vat * (-1)).toString(),
-        );
-      }
-      //this.addDescriptiveArticleAt(this.getDescriptiveArticles().length - 1);
-    });
+    this.api
+      .readOutgoingInvoicesByJobOutgoingInvoiceJobJobIdGet(this.jobId)
+      .pipe(first())
+      .subscribe((outgoingInvoices) => {
+        for (const outgoingInvoice of outgoingInvoices) {
+          this.addDescriptiveArticle(
+            "Abzüglich Rechnung Nr. " +
+              outgoingInvoice.number +
+              " vom " +
+              dayjs(outgoingInvoice.date, "YYYY-MM-DD").format("DD.MM.YYYY"),
+            "1",
+            (outgoingInvoice.full_price_without_vat * -1).toString(),
+            (outgoingInvoice.full_price_without_vat * -1).toString(),
+          );
+        }
+        //this.addDescriptiveArticleAt(this.getDescriptiveArticles().length - 1);
+      });
   }
 }

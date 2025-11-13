@@ -31,10 +31,7 @@
               <mat-label>Notiz</mat-label>
               <input class="form-control" formControlName="note" matInput>
             </mat-form-field>
-            <button type="button" mat-icon-button mat-raised-button (click)="removeContactAt(i)"
-              class="position-delete">
-              <mat-icon>delete</mat-icon>
-            </button>
+              <app-circle-icon-button class="position-delete" (click)="removeContactAt(i)" icon="delete" />
           </div>
         }
         <button type="button" mat-button

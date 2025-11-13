@@ -10,14 +10,10 @@
       <a (click)="buttonClicked(button)" mat-button>{{button.name}}</a>
     }
     @if (showBackButton) {
-      <button mat-icon-button class="back-button" (click)="backButtonClicked()">
-        <mat-icon>arrow_back</mat-icon>
-      </button>
+      <app-circle-icon-button (click)="backButtonClicked()" icon="arrow_back" backgroundColor="transparent" />
     }
     @if (showLogoutButton) {
-      <button mat-icon-button (click)="logoutClicked()">
-        <mat-icon>logout</mat-icon>
-      </button>
+      <app-circle-icon-button (click)="logoutClicked()" icon="logout" backgroundColor="transparent" />
     }
   </div>
 </mat-toolbar>

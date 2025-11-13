@@ -1,0 +1,31 @@
+.circle-icon-button {
+  width: var(--circle-btn-size, 40px);
+  height: var(--circle-btn-size, 40px);
+  border-radius: 50%;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); // your shadow
+  transition: box-shadow 150ms ease, transform 150ms ease, background-color 150ms ease;
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    transform: translateY(0);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #1976d2;
+    outline-offset: 2px;
+  }
+}

@@ -1,8 +1,6 @@
 import "./dayjs-setup";
 import { Injectable } from "@angular/core";
-import {
-  registerLocaleData,
-} from "@angular/common";
+import { registerLocaleData } from "@angular/common";
 import localeDe from "@angular/common/locales/de";
 import localeDeExtra from "@angular/common/locales/extra/de";
 
@@ -12,7 +10,6 @@ import {
   DateFormatterParams,
 } from "angular-calendar";
 import { Configuration, ConfigurationParameters } from "../api/openapi";
-
 
 registerLocaleData(localeDe, "de-DE", localeDeExtra);
 
@@ -29,5 +26,3 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
     return new Intl.DateTimeFormat(locale, { hour: "numeric" }).format(date);
   }
 }
-
-

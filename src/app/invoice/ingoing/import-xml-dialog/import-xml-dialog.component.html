@@ -10,9 +10,7 @@
               <p>
                 {{getFileNameAt(i)}}
               </p>
-              <button mat-button mat-icon-button (click)="deletePath(i)" title="Entfernen">
-                <mat-icon>delete</mat-icon>
-              </button>
+              <app-circle-icon-button (click)="deletePath(i)" icon="delete" />
             </div>
           </mat-list-item>
         }

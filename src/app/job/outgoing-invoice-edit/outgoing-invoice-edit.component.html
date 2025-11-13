@@ -6,10 +6,9 @@
         @for (descriptiveArticle of getDescriptiveArticles().controls; track descriptiveArticle; let i = $index) {
           <div
             class="descriptive-article" fxFlexFill>
-            <button type="button" mat-icon-button mat-raised-button (click)="addDescriptiveArticleAt(i)"
-              class="position-control new-position-btn" title="Neue Position">
-              <mat-icon>add</mat-icon>
-            </button>
+            <div class="position-control new-position-btn">
+              <app-circle-icon-button (click)="addDescriptiveArticleAt(i)" icon="add" />
+            </div>
             <button type="button" mat-icon-button mat-raised-button (click)="moveDescriptiveArticleUp(i)"
               [disabled]="i === 0"
               class="position-control position-up" title="Nach oben schieben">
@@ -40,11 +39,9 @@
                 <input readonly class="form-control" formControlName="total_price" matInput>
               </mat-form-field>
               <div fxFlex="8" fxLayout="row" fxLayoutAlign="space-around center">
-                <button type="button" mat-icon-button mat-raised-button
-                  (click)="removeDescriptiveArticle(i)"
-                  [disabled]="i === 0" class="position-delete">
-                  <mat-icon>delete</mat-icon>
-                </button>
+                <div class="position-delete">
+                  <app-circle-icon-button (click)="removeDescriptiveArticle(i)" [disabled]="i === 0" icon="delete" />
+                </div>
               </div>
             </div>
           </div>
