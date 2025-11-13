@@ -70,6 +70,10 @@ import { ServiceWorkerModule } from "@angular/service-worker";
 import { MatIconModule } from "@angular/material/icon";
 import { AppComponent } from "./app/app.component";
 
+console.log("APP_CONFIG.production =", APP_CONFIG.production);
+console.log("APP_CONFIG.apiBasePath =", APP_CONFIG.apiBasePath);
+console.log("LocalConfigRenderer API =", LocalConfigRenderer.getInstance().getApi());
+
 @Injectable()
 class CustomDateFormatter extends CalendarNativeDateFormatter {
   public dayViewHour({ date, locale }: DateFormatterParams): string {
@@ -88,7 +92,7 @@ Sentry.init({
   tracesSampleRate: 0.5,
 });
 
-LocalConfigRenderer.getInstance().init();
+LocalConfigRenderer.getInstance();
 
 if (APP_CONFIG.production) {
   enableProdMode();
@@ -108,10 +112,7 @@ bootstrapApplication(AppComponent, {
     }), ReactiveFormsModule, MatCheckboxModule, MatInputModule, MatTableModule, MatPaginatorModule, MatSortModule, MatProgressSpinnerModule, MatSelectModule, MatButtonModule, MatToolbarModule, MatNativeDateModule, PhoneBookModule, MatSnackBarModule, ...(APP_CONFIG.production
       ? [
         ServiceWorkerModule.register("ngsw-worker.js", {
-          enabled: APP_CONFIG.production,
-          // Register the ServiceWorker as soon as the app is stable
-          // or after 30 seconds (whichever comes first).
-          registrationStrategy: "registerWhenStable:30000",
+          enabled: false,
         }),
       ]
       : []), MatIconModule),
@@ -163,4 +164,13 @@ bootstrapApplication(AppComponent, {
     provideAnimations(),
   ],
 })
-  .catch((err) => console.error(err));
+  .catch((err) => {
+    try {
+      console.error("Angular bootstrap error:", err);
+      if (err && typeof err === "object") {
+        console.error("Angular bootstrap error (stringified):", JSON.stringify(err));
+      }
+    } catch {
+      // ignore stringify errors
+    }
+  });

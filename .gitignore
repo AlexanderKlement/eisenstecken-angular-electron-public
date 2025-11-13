@@ -2,6 +2,7 @@
 
 # compiled output
 app/**/*.js
+!app/preload.js
 app/**/*.js.map
 /dist
 /tmp

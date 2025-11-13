@@ -1,6 +1,6 @@
 {
   "name": "eisenstecken-eibel",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Eisenstecken internal administration software",
   "homepage": "https://kivi.bz.it",
   "author": {
@@ -8,18 +8,6 @@
     "email": "info@kivi.bz.it"
   },
   "keywords": [
-    "angular",
-    "angular 20",
-    "electron",
-    "electron 16",
-    "nodejs",
-    "typescript",
-    "playwright",
-    "eslint",
-    "sass",
-    "windows",
-    "mac",
-    "linux"
   ],
   "main": "app/main.js",
   "private": true,
