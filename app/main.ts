@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog,  Menu, screen, shell, Tray } from 'electron';
+import { app, BrowserWindow, dialog, Menu, shell, Tray } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as Sentry from '@sentry/electron/main';
@@ -93,18 +93,11 @@ try {
 }
 
 function getDistFolder() {
-  // __dirname points to app/ in packaged builds (after tsc)
-  // Adjust the pieces if your project-name differs
-  const dist = path.join(__dirname, '..', 'dist', 'eisenstecken-eibel', 'browser');
-  // Fallback for older layouts without /browser
-  if (!fs.existsSync(dist)) {
-    const alt = path.join(__dirname, '..', 'dist', 'eisenstecken-eibel');
-    return fs.existsSync(alt) ? alt : dist;
-  }
-  return dist;
+  // With angular.json -> "outputPath": "dist"
+  return path.join(__dirname);
 }
 
-async function createWindow(){
+async function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     width: 1280,

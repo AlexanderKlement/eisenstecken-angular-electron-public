@@ -161,7 +161,6 @@ bootstrapApplication(AppComponent, {
     { provide: CalendarDateFormatter, useClass: CustomDateFormatter },
     provideHttpClient(withInterceptorsFromDi()),
     provideAnimations(),
-    provideAnimations(),
   ],
 })
   .catch((err) => console.error(err));
