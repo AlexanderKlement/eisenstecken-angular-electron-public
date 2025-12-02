@@ -1,12 +1,12 @@
 import { BrowserWindow } from 'electron';
 import * as path from 'path';
-import { getDistFolder } from './paths';
+import { getDistFolder, getPreloadPath, getRendererDistFolder } from './paths';
 import * as fs from 'node:fs';
 import { getAppState } from './singleton';
 import { checkForUpdatesWhenReady } from './update';
 
 export function appShown(win: BrowserWindow): void {
-  win.maximize(); // This should be removed if it does not improve the situation
+  //win.maximize(); // This should be removed if it does not improve the situation
   win.webContents.send('app-shown');
 }
 
@@ -23,9 +23,9 @@ export async function createWindow(serve: boolean) {
     height: 900,
     show: false,
     webPreferences: {
-      contextIsolation: true,
+      contextIsolation: false,
       nodeIntegration: true,
-      preload: path.join(getDistFolder(), 'preload.js'),
+      preload: getPreloadPath()
     },
   });
 
@@ -39,12 +39,20 @@ export async function createWindow(serve: boolean) {
     state.win.webContents.openDevTools();
   } else {
     console.log('Running in production mode');
-    const distFolder = getDistFolder();
+
+    const distFolder = getRendererDistFolder();
     const indexFile = path.join(distFolder, 'index.html');
+
+    console.log('Dist Folder:', distFolder);
+    console.log('Index File:', indexFile, 'exists:', fs.existsSync(indexFile));
+
     if (!fs.existsSync(indexFile)) {
       console.error('DIST NOT FOUND:', indexFile);
+      // Optional: Hier früh abbrechen, damit du es sofort siehst
+      // return;
     }
-    await state.win.loadFile(indexFile); // or loadURL with file:// if you prefer
+
+    await state.win.loadFile(indexFile);
   }
   state.win.on('closed', () => {
     const state = getAppState();

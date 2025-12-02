@@ -42,7 +42,6 @@
           },
           "configurations": {
             "dev": {
-              "serviceWorker": false,
               "optimization": false,
               "outputHashing": "none",
               "sourceMap": true,
@@ -59,7 +58,6 @@
               ]
             },
             "web": {
-              "serviceWorker": false,
               "optimization": false,
               "outputHashing": "none",
               "sourceMap": true,
@@ -76,7 +74,6 @@
               ]
             },
             "production": {
-              "serviceWorker": true,
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,

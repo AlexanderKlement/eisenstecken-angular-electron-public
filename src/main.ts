@@ -66,13 +66,12 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { PhoneBookModule } from "./app/phone-book/phone-book.module";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { ServiceWorkerModule } from "@angular/service-worker";
 import { MatIconModule } from "@angular/material/icon";
 import { AppComponent } from "./app/app.component";
 
 console.log("APP_CONFIG.production =", APP_CONFIG.production);
 console.log("APP_CONFIG.apiBasePath =", APP_CONFIG.apiBasePath);
-console.log("LocalConfigRenderer API =", LocalConfigRenderer.getInstance().getApi());
+console.log("LocalConfigRenderer API =", APP_CONFIG.apiBasePath);
 
 @Injectable()
 class CustomDateFormatter extends CalendarNativeDateFormatter {
@@ -88,11 +87,9 @@ const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>
 
 Sentry.init({
   dsn: "https://739b39d0b92749a485e48a80da87816e@sentry.kivi.bz.it/26",
-  integrations: [Sentry.browserTracingIntegration()],
+  integrations: [],
   tracesSampleRate: 0.5,
 });
-
-LocalConfigRenderer.getInstance();
 
 if (APP_CONFIG.production) {
   enableProdMode();
@@ -109,13 +106,7 @@ bootstrapApplication(AppComponent, {
         useFactory: httpLoaderFactory,
         deps: [HttpClient],
       },
-    }), ReactiveFormsModule, MatCheckboxModule, MatInputModule, MatTableModule, MatPaginatorModule, MatSortModule, MatProgressSpinnerModule, MatSelectModule, MatButtonModule, MatToolbarModule, MatNativeDateModule, PhoneBookModule, MatSnackBarModule, ...(APP_CONFIG.production
-      ? [
-        ServiceWorkerModule.register("ngsw-worker.js", {
-          enabled: false,
-        }),
-      ]
-      : []), MatIconModule),
+    }), ReactiveFormsModule, MatCheckboxModule, MatInputModule, MatTableModule, MatPaginatorModule, MatSortModule, MatProgressSpinnerModule, MatSelectModule, MatButtonModule, MatToolbarModule, MatNativeDateModule, PhoneBookModule, MatSnackBarModule, MatIconModule),
     {
       provide: ErrorHandler,
       useValue: Sentry.createErrorHandler({

@@ -1,6 +1,26 @@
 import * as path from 'path';
 import { getAppState } from './singleton';
 
+export function getPreloadPath(): string {
+  // preload.js liegt neben main.js (dev & prod)
+  return path.join(__dirname, 'preload.js');
+}
+
+export function getRendererDistFolder(): string {
+  const state = getAppState();
+
+  // Wenn per electron-builder gepackt:
+  if (state.app && state.app.isPackaged) {
+    // Hier musst du ggf. anpassen, je nachdem wohin du dist kopierst.
+    // Häufig: resources/app/dist
+    return path.join(process.resourcesPath, 'app');
+  }
+
+  // Dev: `ng build` im Projektordner
+  // Wenn angular.json -> "outputPath": "dist"
+  return path.join(__dirname, 'dist');
+}
+
 export function getDistFolder() {
   // With angular.json -> "outputPath": "dist"
   return path.join(__dirname);
