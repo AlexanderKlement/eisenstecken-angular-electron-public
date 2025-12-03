@@ -125,3 +125,13 @@ The build the update exe and publish the release on GitHub
 
 npx -y @openapitools/openapi-generator-cli@latest version-manager list
 npx -y @openapitools/openapi-generator-cli@latest version-manager set 7.10.0
+
+
+## Unregistered Service Worker like this:
+
+navigator.serviceWorker.getRegistrations().then(regs => {
+console.log('Registrations before unregister:', regs);
+return Promise.all(regs.map(r => r.unregister()));
+}).then(results => {
+console.log('Unregister results:', results);
+});

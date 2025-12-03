@@ -95,6 +95,26 @@ if (APP_CONFIG.production) {
   enableProdMode();
 }
 
+if (typeof window !== "undefined" &&
+  window.location.protocol === "file:" &&
+  "serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations().then(regs => {
+    if (regs.length > 0) {
+      console.log("Electron/file: context - unregistering service workers:", regs);
+      return Promise.all(regs.map(r => r.unregister()));
+    }
+    return [];
+  }).then(results => {
+    if (results.length > 0) {
+      console.log("SW unregister results:", results);
+      // Optional: you could force a reload here if needed
+      // window.location.reload();
+    }
+  }).catch(err => {
+    console.warn("Error while unregistering service workers in Electron:", err);
+  });
+}
+
 bootstrapApplication(AppComponent, {
   providers: [
     importProvidersFrom(CommonModule, BrowserModule, CalendarModule.forRoot({
