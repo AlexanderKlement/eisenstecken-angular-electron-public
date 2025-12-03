@@ -56,3 +56,5 @@ Thumbs.db
 
 
 .yarn
+dist_electron
+release-beta

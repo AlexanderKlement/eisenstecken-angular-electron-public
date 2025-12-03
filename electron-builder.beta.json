@@ -1,0 +1,39 @@
+{
+  "extends": "electron-builder.json",
+
+  "productName": "Eisenstecken - Eibel Beta",
+  "appId": "it.eisenstecken.app.beta",
+  "artifactName": "eisenstecken-eibel-beta-${version}.${ext}",
+
+  "directories": {
+    "output": "release-beta/"
+  },
+
+  "extraMetadata": {
+    "name": "eisenstecken-eibel-beta"
+  },
+  "win": {
+    "icon": "dist/assets/icons-beta",
+    "target": [
+      "nsis"
+    ]
+  },
+  "mac": {
+    "icon": "dist/assets/icons-beta",
+    "target": [
+      "dmg"
+    ]
+  },
+  "linux": {
+    "icon": "dist/assets/icons-beta",
+    "target": [
+      "AppImage"
+    ]
+  },
+  "publish": [
+    {
+      "provider": "github",
+      "channel": "beta"
+    }
+  ]
+}

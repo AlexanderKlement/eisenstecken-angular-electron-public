@@ -50,12 +50,13 @@ export function escapeShell(cmd: string): string {
 
 
 export function resolveIconIco(): string {
-  return resolveAssetPath('icons', 'favicon.ico');
+  return resolveAssetPath(getIconFolder(), 'favicon.ico');
 }
 
 export function resolveIconPng(): string {
-  return resolveAssetPath('icons', 'favicon.png');
+  return resolveAssetPath(getIconFolder(), 'favicon.png');
 }
+
 
 export function resolveMailExe(): { mail32: string; mail64: string } {
   const state = getAppState();
@@ -67,4 +68,11 @@ export function resolveMailExe(): { mail32: string; mail64: string } {
     mail32: path.join(appPath, 'mail32', 'mail.exe'),
     mail64: path.join(appPath, 'mail64', 'mail.exe'),
   };
+}
+
+function getIconFolder(): string {
+  const state = getAppState();
+  const appName = state.app?.getName?.() || '';
+  const lower = appName.toLowerCase();
+  return lower.includes('beta') ? 'icons-beta' : 'icons';
 }

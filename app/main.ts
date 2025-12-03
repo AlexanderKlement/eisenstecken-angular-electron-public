@@ -31,6 +31,13 @@ try {
         state.win.focus();
       }
     });
+    if (app.getName().toLowerCase().includes('beta')) {
+      const path = require('path');
+      const os = require('os');
+      const betaUserData = path.join(os.homedir(), '.eisenstecken-beta');
+      app.setPath('userData', betaUserData);
+    }
+
     app.whenReady().then(async () => {
       registerAllIpc();
       configureUpdateChannel();
