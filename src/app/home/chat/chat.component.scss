@@ -5,15 +5,16 @@
   overflow: hidden;
   isolation: isolate;
   height: 100%;
+  background: red;
 
   .chat-message-box {
     overflow-y: scroll;
-    background: #fff;
+    background: white;
     z-index: 1;
     border-bottom: solid thin #eee;
     padding-bottom: 8px;
     position: relative;
-    min-height: 100px;
+    min-height: 250px;
   }
 
   .input-box {
@@ -24,4 +25,9 @@
 
 textarea {
   resize: none !important;
+}
+
+.chat-message-box {
+  height: 300px;
+  background-color: red;
 }
