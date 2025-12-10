@@ -3,8 +3,7 @@
     <mat-tab label="  Terminkalender" fxFlexFill>
       <div fxLayout="row" fxLayoutAlign="center start" fxFlexFill class="container">
         @for (calendar of calendars$ | async; track calendar) {
-          <div fxLayout="column" fxLayoutAlign=" stretch" class="calenderside"
-            >
+          <div fxLayout="column" fxLayoutAlign=" stretch" class="calenderside">
             <p fxFlexFill>{{calendar.name}}</p>
             <app-calendar [public]="calendar.open" [calendarId]="calendar.id" fxFlexFill>
             </app-calendar>

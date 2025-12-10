@@ -1,10 +1,6 @@
 app-loading {
   max-height: 100%;
   min-height: 100%;
-
-  .tab-group {
-    // gfollt mo nimmer  box-shadow: 0 1px 0.5px 0px rgb(0 0 0 / 30%);
-  }
 }
 
 .app-calendar {
@@ -17,11 +13,7 @@ app-loading {
   margin-right: 10px;
 }
 
-.tab-left {
-  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
-  ::ng-deep .mat-tab-label {
-    padding: 0px !important; // adjust this to whatever padding you need
-    justify-content: left !important;
-  }
+.tab-group {
+  background-color: red;
+  height: 50vh;
 }
-

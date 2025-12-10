@@ -38,6 +38,14 @@ try {
       app.setPath('userData', betaUserData);
     }
 
+    if (app.getName().toLowerCase().includes('beta')) {
+      const path = require('path');
+      const appDataBase = app.getPath('appData'); // e.g. %APPDATA% or ~/Library/Application Support
+      const betaUserData = path.join(appDataBase, 'Eisenstecken-Eibel-Beta');
+      app.setPath('userData', betaUserData);
+      console.info('Using beta userData folder:', betaUserData);
+    }
+
     app.whenReady().then(async () => {
       registerAllIpc();
       configureUpdateChannel();

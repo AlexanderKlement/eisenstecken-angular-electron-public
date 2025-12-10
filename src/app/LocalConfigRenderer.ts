@@ -28,6 +28,29 @@ export class LocalConfigRenderer {
     return LocalConfigRenderer.instance;
   }
 
+  public setEnvironment(env: "prod" | "beta" | "dev"): void {
+    let url: string;
+
+    switch (env) {
+      case "prod":
+        url = "https://api.app.eisenstecken.it/"; // adjust if your prod URL differs
+        break;
+      case "beta":
+        url = "https://api.app.eisenstecken.it/beta/";
+        break;
+      case "dev":
+        url = "https://api.app.eisenstecken.it/dev/"; // adjust to your real dev URL
+        break;
+      default:
+        console.warn("Unknown environment:", env);
+        return;
+    }
+
+    console.info(`LocalConfigRenderer: switching environment to '${env}' with url ${url}`);
+    this.setApi(url);
+  }
+
+
   public init(): void {
     // Always start with default config
     this.loadedConfig = this.defaultConfig;
@@ -59,6 +82,28 @@ export class LocalConfigRenderer {
     } catch (err) {
       console.error("LocalConfigRenderer.init failed, using defaults:", err);
       // keep loadedConfig = defaultConfig
+    }
+  }
+
+  public setApi(newApiUrl: string): void {
+    this.loadedConfig.api = newApiUrl;
+
+    try {
+      const electronService = new ElectronService();
+
+      if (!electronService.isElectron) {
+        // In browser builds we don't persist anything, just keep it in memory
+        return;
+      }
+
+      // In case init() failed earlier and configFilePath is not set
+      if (!this.configFilePath) {
+        this.init();
+      }
+
+      this.writeConfig(electronService);
+    } catch (err) {
+      console.error("LocalConfigRenderer.setApi failed, config not persisted:", err);
     }
   }
 

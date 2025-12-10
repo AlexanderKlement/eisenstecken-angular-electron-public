@@ -88,7 +88,7 @@ const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>
 Sentry.init({
   dsn: "https://739b39d0b92749a485e48a80da87816e@sentry.kivi.bz.it/26",
   integrations: [],
-  tracesSampleRate: 0.5,
+  tracesSampleRate: 0.3,
 });
 
 if (APP_CONFIG.production) {
@@ -161,7 +161,7 @@ bootstrapApplication(AppComponent, {
     },
     {
       provide: LOCALE_ID,
-      useValue: "de-DE", // 'de-DE' for Germany, 'fr-FR' for France ...
+      useValue: "de-DE",
     },
     { provide: MatPaginatorIntl, useValue: getGermanPaginatorIntl() },
     {

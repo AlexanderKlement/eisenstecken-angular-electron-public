@@ -4,6 +4,7 @@
 .chat {
   overflow: hidden;
   isolation: isolate;
+  height: 100%;
 
   .chat-message-box {
     overflow-y: scroll;
@@ -11,22 +12,8 @@
     z-index: 1;
     border-bottom: solid thin #eee;
     padding-bottom: 8px;
-
-    &.ivan {
-      background-color: #eee;
-    }
-
-    &:before {
-      content: "";
-      position: absolute;
-      inset: 0 8px 0 0;
-      opacity: 0.06;
-      background-repeat: repeat;
-    }
-
-    &.ivan:before {
-      background-image: url("/assets/images/chat-bg.png");
-    }
+    position: relative;
+    min-height: 100px;
   }
 
   .input-box {

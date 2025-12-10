@@ -1,25 +1,12 @@
 <div fxLayout="column" fxLayoutAlign="start stretch" fxFlexFill>
   <mat-toolbar color="accent" fxFlex="10">
     <div fxShow="true" fxLayout="row" fxLayoutAlign="space-between center">
-
       <app-circle-icon-button backgroundColor="transparent" (click)="todayClicked()" icon="today" />
       <div>
         <app-circle-icon-button backgroundColor="transparent" (click)="previousWeekClicked()" icon="navigate_before" />
         <span>{{ dayManager.getStartDate() + " - " + dayManager.getEndDate()}}</span>
         <app-circle-icon-button backgroundColor="transparent" (click)="nextWeekClicked()" icon="navigate_next" />
       </div>
-      <!--
-      <div fxFlex="60" class="calendar-select">
-        <mat-form-field fxFlexFill>
-          <mat-label># Tage</mat-label>
-          <mat-select [(value)]="amountOfDays" (valueChange)="amountOfDaysChanged()">
-            <mat-option *ngFor="let day of dayManager.getSelectableDays()" [value]="day.value">
-              {{day.viewValue}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      -->
       @if (createAllowed) {
         <app-circle-icon-button backgroundColor="transparent" (click)="newMeetingClicked()" icon="add" />
       }
