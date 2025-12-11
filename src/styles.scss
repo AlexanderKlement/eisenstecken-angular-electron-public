@@ -54,3 +54,23 @@ html {
 .cdk-overlay-pane {
   background-color: white;
 }
+
+.mat-mdc-dialog-content {
+  padding: 1rem !important;
+}
+
+.mat-mdc-form-field-focus-overlay {
+  background: #eeeeee !important;
+}
+
+.mat-mdc-text-field-wrapper {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  background-color: #eeeeee !important;
+}
+
+.mat-mdc-input-element, .mat-mdc-select {
+  color: black !important;
+}
