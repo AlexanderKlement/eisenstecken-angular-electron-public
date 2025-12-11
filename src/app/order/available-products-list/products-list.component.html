@@ -20,7 +20,6 @@
             class="article-name"
           [innerHTML]="search.value.length ? (article.name.translation|slice:0:105|boldSpan:search.value) : (article.name.translation|slice:0:105)"></p>
           <app-circle-icon-button (click)="copyButtonClicked(article)" icon="content_copy" />
-          <app-circle-icon-button (click)="orderButtonClicked(article)" icon="add" />
           <app-circle-icon-button (click)="removeArticleButtonClicked(article)" icon="delete" />
         </div>
       </mat-list-item>
