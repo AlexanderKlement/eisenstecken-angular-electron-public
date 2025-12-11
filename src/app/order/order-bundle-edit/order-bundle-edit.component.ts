@@ -38,8 +38,8 @@ export class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> imp
   navigationTarget = "supplier";
   orderBundleGroup: UntypedFormGroup;
 
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute, private snackbar: MatSnackBar, private dialog: MatDialog) {
-    super(api, router, route);
+  constructor(api: DefaultService, router: Router, route: ActivatedRoute, private snackbar: MatSnackBar, dialog: MatDialog) {
+    super(api, router, route, dialog);
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> => api.islockedOrderBundleOrderBundleIslockedOrderBundleIdGet(id);

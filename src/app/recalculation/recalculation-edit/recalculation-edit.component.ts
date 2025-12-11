@@ -48,9 +48,9 @@ import { AsyncPipe } from "@angular/common";
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
 
 @Component({
-  selector: "app-recalculation-edit",
-  templateUrl: "./recalculation-edit.component.html",
-  styleUrls: ["./recalculation-edit.component.scss"],
+  selector: 'app-recalculation-edit',
+  templateUrl: './recalculation-edit.component.html',
+  styleUrls: ['./recalculation-edit.component.scss'],
   imports: [
     ToolbarComponent,
     DefaultLayoutDirective,
@@ -72,8 +72,7 @@ import { CircleIconButtonComponent } from "../../shared/components/circle-icon-b
 })
 export class RecalculationEditComponent
   extends BaseEditComponent<Recalculation>
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   recalculationGroup: UntypedFormGroup;
   navigationTarget = "recalculation";
   jobId: number;
@@ -91,9 +90,9 @@ export class RecalculationEditComponent
     router: Router,
     route: ActivatedRoute,
     private file: FileService,
-    private dialog: MatDialog,
+    dialog: MatDialog,
   ) {
-    super(api, router, route);
+    super(api, router, route, dialog);
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> =>
@@ -403,7 +402,7 @@ export class RecalculationEditComponent
               "order_to.displayable_name": dataSource.order_to.displayable_name,
               // eslint-disable-next-line @typescript-eslint/naming-convention
               "order_from.displayable_name":
-                dataSource.order_from.displayable_name,
+              dataSource.order_from.displayable_name,
               // eslint-disable-next-line @typescript-eslint/naming-convention
               create_date: dayjs(dataSource.create_date).format("L"),
               // eslint-disable-next-line @typescript-eslint/naming-convention

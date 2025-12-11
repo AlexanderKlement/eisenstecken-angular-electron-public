@@ -9,6 +9,7 @@ import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.compon
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
 import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
     selector: 'app-stock-edit',
@@ -31,8 +32,8 @@ export class StockEditComponent extends BaseEditComponent<Stock> implements OnIn
   navigationTarget = "stock";
   title = "Lager: Bearbeiten";
 
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute) {
-    super(api, router, route);
+  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog) {
+    super(api, router, route, dialog);
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> => api.islockedStockStockIslockedStockIdGet(id);

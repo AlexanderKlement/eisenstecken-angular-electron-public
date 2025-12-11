@@ -33,6 +33,7 @@ import { MatCheckbox } from "@angular/material/checkbox";
 import { AddressFormComponent } from "../../shared/components/address-form/address-form.component";
 import { AsyncPipe } from "@angular/common";
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: "app-supplier-edit",
@@ -69,8 +70,8 @@ export class SupplierEditComponent
   title = "Lieferant: Bearbeiten";
   showInOrders = true;
 
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute) {
-    super(api, router, route);
+  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog) {
+    super(api, router, route, dialog);
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> =>

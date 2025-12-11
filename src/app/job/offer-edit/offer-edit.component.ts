@@ -57,7 +57,6 @@ import {
   MatDatepicker,
 } from "@angular/material/datepicker";
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
-import { DirtyAware } from "../../shared/guards/dirty-form.guard";
 
 @Component({
   selector: 'app-offer-edit',
@@ -91,7 +90,7 @@ import { DirtyAware } from "../../shared/guards/dirty-form.guard";
 })
 export class OfferEditComponent
   extends BaseEditComponent<Offer>
-  implements OnInit, OnDestroy, DirtyAware {
+  implements OnInit, OnDestroy {
   navigationTarget = "job";
   jobId: number;
   offerGroup: UntypedFormGroup;
@@ -108,9 +107,9 @@ export class OfferEditComponent
     route: ActivatedRoute,
     private file: FileService,
     private currency: CurrencyPipe,
-    private dialog: MatDialog,
+    dialog: MatDialog,
   ) {
-    super(api, router, route);
+    super(api, router, route, dialog);
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> =>

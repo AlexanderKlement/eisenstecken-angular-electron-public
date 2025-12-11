@@ -32,6 +32,7 @@ import { MatSelect, MatOption } from "@angular/material/select";
 import { AddressFormComponent } from "../../shared/components/address-form/address-form.component";
 import { AsyncPipe } from "@angular/common";
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: "app-client-edit",
@@ -66,8 +67,8 @@ export class ClientEditComponent
   genderOptions$: Observable<Gender[]>;
   languageOptions$: Observable<Language[]>;
 
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute) {
-    super(api, router, route);
+  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog) {
+    super(api, router, route, dialog);
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> =>

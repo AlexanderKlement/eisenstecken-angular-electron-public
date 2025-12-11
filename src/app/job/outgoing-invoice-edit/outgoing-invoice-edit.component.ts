@@ -112,9 +112,9 @@ export class OutgoingInvoiceEditComponent
     private authService: AuthService,
     private snackBar: MatSnackBar,
     private file: FileService,
-    private dialog: MatDialog,
+    dialog: MatDialog,
   ) {
-    super(api, router, route);
+    super(api, router, route, dialog);
   }
 
   calcTotalPrice(formGroup: UntypedFormGroup): void {

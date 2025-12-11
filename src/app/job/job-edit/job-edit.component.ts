@@ -15,6 +15,7 @@ import { MatSelect, MatOption } from "@angular/material/select";
 import { AddressFormComponent } from "../../shared/components/address-form/address-form.component";
 import { MatButton } from "@angular/material/button";
 import { AsyncPipe } from "@angular/common";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
     selector: 'app-job-edit',
@@ -54,8 +55,8 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
 
   users$: Observable<User[]>;
 
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute, private authService: AuthService) {
-    super(api, router, route);
+  constructor(api: DefaultService, router: Router, route: ActivatedRoute, private authService: AuthService, dialog: MatDialog) {
+    super(api, router, route, dialog);
   }
 
 

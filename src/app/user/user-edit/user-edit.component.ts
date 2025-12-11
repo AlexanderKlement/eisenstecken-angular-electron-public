@@ -89,8 +89,8 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
   grantRightsAvailable = false;
   title = "Benutzer: Bearbeiten";
 
-  constructor(private snackBar: MatSnackBar, private authService: AuthService, api: DefaultService, router: Router, route: ActivatedRoute, private dialog: MatDialog) {
-    super(api, router, route);
+  constructor(private snackBar: MatSnackBar, private authService: AuthService, api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog) {
+    super(api, router, route, dialog);
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> => api.islockedUserUsersIslockedUserIdGet(id);

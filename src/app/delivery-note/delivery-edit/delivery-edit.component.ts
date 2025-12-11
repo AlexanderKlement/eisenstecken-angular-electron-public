@@ -111,9 +111,9 @@ export class DeliveryEditComponent
     private authService: AuthService,
     private snackBar: MatSnackBar,
     private file: FileService,
-    private dialog: MatDialog,
+    dialog: MatDialog,
   ) {
-    super(api, router, route);
+    super(api, router, route, dialog);
   }
 
   lockFunction = (api: DefaultService, id: number): Observable<Lock> =>

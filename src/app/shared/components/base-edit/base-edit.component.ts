@@ -5,13 +5,16 @@ import { first } from "rxjs/operators";
 import { DefaultService, User, Lock } from "../../../../api/openapi";
 import { AbstractControl } from "@angular/forms";
 import { ReusableRoute } from "../../reusable-route";
+import { DirtyAware } from "../../guards/dirty-form.guard";
+import { MatDialog } from "@angular/material/dialog";
+import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 
 @Component({
     selector: 'app-base-edit',
     template: ``,
     styleUrls: ['./base-edit.component.scss'],
 })
-export class BaseEditComponent<T> implements OnInit, OnDestroy, ReusableRoute {
+export class BaseEditComponent<T> implements OnInit, OnDestroy, ReusableRoute, DirtyAware {
 
   // to be provided by derived class:
   navigationTarget: string;
@@ -36,6 +39,7 @@ export class BaseEditComponent<T> implements OnInit, OnDestroy, ReusableRoute {
     protected api: DefaultService,
     protected router: Router,
     protected route: ActivatedRoute,
+    protected dialog: MatDialog
   ) {
     this.subscription.add(this.route.params.subscribe((p) => this.routeParams.next(p)));
   }
@@ -154,6 +158,20 @@ export class BaseEditComponent<T> implements OnInit, OnDestroy, ReusableRoute {
 
   createUpdateComplete(): void {
     this.submitted = false;
+  }
+
+  public async confirmDiscard(): Promise<boolean> {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "400px",
+      data: {
+        title: "Änderungen verwerfen?",
+        text: "Du hast ungespeicherte Änderungen. Willst du diese wirklich verwerfen?",
+        confirm: "Verwerfen",
+        cancel: "Abbrechen"
+      }
+    });
+
+    return await dialogRef.afterClosed().toPromise();
   }
 
   protected goBack(): void {
