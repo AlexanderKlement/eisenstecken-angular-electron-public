@@ -57,11 +57,12 @@ import {
   MatDatepicker,
 } from "@angular/material/datepicker";
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
+import { DirtyAware } from "../../shared/guards/dirty-form.guard";
 
 @Component({
-  selector: "app-offer-edit",
-  templateUrl: "./offer-edit.component.html",
-  styleUrls: ["./offer-edit.component.scss"],
+  selector: 'app-offer-edit',
+  templateUrl: './offer-edit.component.html',
+  styleUrls: ['./offer-edit.component.scss'],
   imports: [
     ToolbarComponent,
     MatIconButton,
@@ -90,8 +91,7 @@ import { CircleIconButtonComponent } from "../../shared/components/circle-icon-b
 })
 export class OfferEditComponent
   extends BaseEditComponent<Offer>
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy, DirtyAware {
   navigationTarget = "job";
   jobId: number;
   offerGroup: UntypedFormGroup;
@@ -176,7 +176,7 @@ export class OfferEditComponent
             description: subDescriptiveArticleControl.get("description").value,
             // eslint-disable-next-line @typescript-eslint/naming-convention
             single_price:
-              subDescriptiveArticleControl.get("single_price").value,
+            subDescriptiveArticleControl.get("single_price").value,
             discount: 0,
             alternative: subDescriptiveArticleControl.get("alternative").value,
             // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -411,6 +411,20 @@ export class OfferEditComponent
     this.getDescriptiveArticles().insert(index + 1, descriptiveArticle);
   }
 
+  async confirmDiscard(): Promise<boolean> {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "400px",
+      data: {
+        title: "Änderungen verwerfen?",
+        text: "Du hast ungespeicherte Änderungen. Willst du diese wirklich verwerfen?",
+        confirm: "Verwerfen",
+        cancel: "Abbrechen",
+      },
+    });
+
+    return await dialogRef.afterClosed().toPromise();
+  }
+
   removeDescriptiveSubArticle(
     descriptiveArticleControl: AbstractControl,
     j: number,
@@ -529,8 +543,8 @@ export class OfferEditComponent
       subDescriptiveArticleGroup
         .get("single_price")
         .valueChanges.subscribe(() => {
-          this.recalculateOfferPrice();
-        }),
+        this.recalculateOfferPrice();
+      }),
     );
     this.subscription.add(
       subDescriptiveArticleGroup.get("amount").valueChanges.subscribe(() => {
@@ -541,8 +555,8 @@ export class OfferEditComponent
       subDescriptiveArticleGroup
         .get("alternative")
         .valueChanges.subscribe(() => {
-          this.recalculateOfferPrice();
-        }),
+        this.recalculateOfferPrice();
+      }),
     );
     return subDescriptiveArticleGroup;
   }
