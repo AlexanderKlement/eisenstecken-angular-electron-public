@@ -1,93 +1,100 @@
-import {NgModule} from "@angular/core";
-import {RouterModule, Routes} from "@angular/router";
-import {JobComponent} from "./job.component";
-import {JobDetailComponent} from "./job-detail/job-detail.component";
-import {JobEditComponent} from "./job-edit/job-edit.component";
-import {OfferEditComponent} from "./offer-edit/offer-edit.component";
-import {AccessGuard} from "../shared/services/access-guard.service";
-import {OutgoingInvoiceEditComponent} from "./outgoing-invoice-edit/outgoing-invoice-edit.component";
-import {WorkHoursComponent} from "./work-hours/work-hours.component";
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+import { JobComponent } from "./job.component";
+import { JobDetailComponent } from "./job-detail/job-detail.component";
+import { JobEditComponent } from "./job-edit/job-edit.component";
+import { OfferEditComponent } from "./offer-edit/offer-edit.component";
+import { AccessGuard } from "../shared/services/access-guard.service";
+import { OutgoingInvoiceEditComponent } from "./outgoing-invoice-edit/outgoing-invoice-edit.component";
+import { WorkHoursComponent } from "./work-hours/work-hours.component";
+import { DirtyFormGuard } from "../shared/guards/dirty-form.guard";
 
 const routes: Routes = [
-    {
-        path: "job",
-        component: JobComponent,
-        data: {
-            requiresLogin: true,
-            shouldDetach: true
-        }
+  {
+    path: "job",
+    component: JobComponent,
+    data: {
+      requiresLogin: true,
+      shouldDetach: true,
     },
-    {
-        path: "job/:id",
-        component: JobDetailComponent,
-        data: {
-            requiresLogin: true,
-            shouldDetach: true
-        },
-        canActivate: [AccessGuard]
+  },
+  {
+    path: "job/:id",
+    component: JobDetailComponent,
+    data: {
+      requiresLogin: true,
+      shouldDetach: true,
     },
-    {
-        path: "job/edit/:id",
-        component: JobEditComponent,
-        data: {requiresLogin: true},
-        canActivate: [AccessGuard]
+    canActivate: [AccessGuard],
+  },
+  {
+    path: "job/edit/:id",
+    component: JobEditComponent,
+    data: { requiresLogin: true },
+    canActivate: [AccessGuard],
+    canDeactivate: [DirtyFormGuard],
+  },
+  {
+    path: "job/:id/new",
+    component: JobEditComponent,
+    data: { requiresLogin: true },
+    canActivate: [AccessGuard],
+  },
+  {
+    path: "job/edit/:id/:client_id",
+    component: JobEditComponent,
+    data: { requiresLogin: true },
+    canActivate: [AccessGuard],
+  },
+  {
+    path: "job/edit/:id/:job_id/:sub",
+    component: JobEditComponent,
+    data: { requiresLogin: true },
+    canActivate: [AccessGuard],
+    canDeactivate: [DirtyFormGuard]
+  },
+  {
+    path: "offer/edit/:id",
+    component: OfferEditComponent,
+    data: { requiresLogin: true },
+    canActivate: [AccessGuard],
+    canDeactivate: [DirtyFormGuard]
+  },
+  {
+    path: "offer/edit/:id/:job_id",
+    component: OfferEditComponent,
+    data: { requiresLogin: true },
+    canActivate: [AccessGuard],
+    canDeactivate: [DirtyFormGuard]
+  },
+  {
+    path: "outgoing_invoice/edit/:id",
+    component: OutgoingInvoiceEditComponent,
+    data: { requiresLogin: true },
+    canActivate: [AccessGuard],
+    canDeactivate: [DirtyFormGuard]
+  },
+  {
+    path: "outgoing_invoice/edit/:id/:job_id",
+    component: OutgoingInvoiceEditComponent,
+    data: { requiresLogin: true },
+    canActivate: [AccessGuard],
+    canDeactivate: [DirtyFormGuard]
+  },
+  {
+    path: "work_hours/:job_id",
+    component: WorkHoursComponent,
+    data: {
+      requiresLogin: true,
+      shouldDetach: true,
     },
-    {
-        path: "job/:id/new",
-        component: JobEditComponent,
-        data: {requiresLogin: true},
-        canActivate: [AccessGuard]
-    },
-    {
-        path: "job/edit/:id/:client_id",
-        component: JobEditComponent,
-        data: {requiresLogin: true},
-        canActivate: [AccessGuard]
-    },
-    {
-        path: "job/edit/:id/:job_id/:sub",
-        component: JobEditComponent,
-        data: {requiresLogin: true},
-        canActivate: [AccessGuard]
-    },
-    {
-        path: "offer/edit/:id",
-        component: OfferEditComponent,
-        data: {requiresLogin: true},
-        canActivate: [AccessGuard]
-    },
-    {
-        path: "offer/edit/:id/:job_id",
-        component: OfferEditComponent,
-        data: {requiresLogin: true},
-        canActivate: [AccessGuard]
-    },
-    {
-        path: "outgoing_invoice/edit/:id",
-        component: OutgoingInvoiceEditComponent,
-        data: {requiresLogin: true},
-        canActivate: [AccessGuard]
-    },
-    {
-        path: "outgoing_invoice/edit/:id/:job_id",
-        component: OutgoingInvoiceEditComponent,
-        data: {requiresLogin: true},
-        canActivate: [AccessGuard]
-    },
-    {
-        path: "work_hours/:job_id",
-        component: WorkHoursComponent,
-        data: {
-            requiresLogin: true,
-            shouldDetach: true
-        },
-        canActivate: [AccessGuard]
-    },
+    canActivate: [AccessGuard],
+  },
 ];
 
 @NgModule({
-    imports: [RouterModule.forChild(routes)],
-    exports: [RouterModule]
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
 })
 export class JobRoutingModule {
 }
