@@ -151,6 +151,8 @@ import { OrderBundleCreate } from '../model/orderBundleCreate';
 // @ts-ignore
 import { OrderCreate } from '../model/orderCreate';
 // @ts-ignore
+import { OrderSmall } from '../model/orderSmall';
+// @ts-ignore
 import { OrderStatusType } from '../model/orderStatusType';
 // @ts-ignore
 import { OrderUpdate } from '../model/orderUpdate';
@@ -13177,9 +13179,9 @@ export class DefaultService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readOrderFromToOrderFromOrderableFromIdToOrderableToIdGet(orderableFromId: number, orderableToId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Order>;
-    public readOrderFromToOrderFromOrderableFromIdToOrderableToIdGet(orderableFromId: number, orderableToId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Order>>;
-    public readOrderFromToOrderFromOrderableFromIdToOrderableToIdGet(orderableFromId: number, orderableToId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Order>>;
+    public readOrderFromToOrderFromOrderableFromIdToOrderableToIdGet(orderableFromId: number, orderableToId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OrderSmall>;
+    public readOrderFromToOrderFromOrderableFromIdToOrderableToIdGet(orderableFromId: number, orderableToId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OrderSmall>>;
+    public readOrderFromToOrderFromOrderableFromIdToOrderableToIdGet(orderableFromId: number, orderableToId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OrderSmall>>;
     public readOrderFromToOrderFromOrderableFromIdToOrderableToIdGet(orderableFromId: number, orderableToId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (orderableFromId === null || orderableFromId === undefined) {
             throw new Error('Required parameter orderableFromId was null or undefined when calling readOrderFromToOrderFromOrderableFromIdToOrderableToIdGet.');
@@ -13218,7 +13220,7 @@ export class DefaultService extends BaseService {
 
         let localVarPath = `/order/from/${this.configuration.encodeParam({name: "orderableFromId", value: orderableFromId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}/to/${this.configuration.encodeParam({name: "orderableToId", value: orderableToId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Order>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<OrderSmall>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -13799,9 +13801,9 @@ export class DefaultService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readOrdersFromOrderFromOrderableFromIdGet(orderableFromId: number, skip?: number, limit?: number, filterString?: string, status?: OrderStatusType, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<Order>>;
-    public readOrdersFromOrderFromOrderableFromIdGet(orderableFromId: number, skip?: number, limit?: number, filterString?: string, status?: OrderStatusType, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<Order>>>;
-    public readOrdersFromOrderFromOrderableFromIdGet(orderableFromId: number, skip?: number, limit?: number, filterString?: string, status?: OrderStatusType, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<Order>>>;
+    public readOrdersFromOrderFromOrderableFromIdGet(orderableFromId: number, skip?: number, limit?: number, filterString?: string, status?: OrderStatusType, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OrderSmall>>;
+    public readOrdersFromOrderFromOrderableFromIdGet(orderableFromId: number, skip?: number, limit?: number, filterString?: string, status?: OrderStatusType, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OrderSmall>>>;
+    public readOrdersFromOrderFromOrderableFromIdGet(orderableFromId: number, skip?: number, limit?: number, filterString?: string, status?: OrderStatusType, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OrderSmall>>>;
     public readOrdersFromOrderFromOrderableFromIdGet(orderableFromId: number, skip?: number, limit?: number, filterString?: string, status?: OrderStatusType, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (orderableFromId === null || orderableFromId === undefined) {
             throw new Error('Required parameter orderableFromId was null or undefined when calling readOrdersFromOrderFromOrderableFromIdGet.');
@@ -13847,7 +13849,7 @@ export class DefaultService extends BaseService {
 
         let localVarPath = `/order/from/${this.configuration.encodeParam({name: "orderableFromId", value: orderableFromId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<Order>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<OrderSmall>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -13937,9 +13939,9 @@ export class DefaultService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readOrdersSupplierOrderSupplierSupplierIdGet(supplierId: number, skip?: number, limit?: number, filterString?: string, orderStatus?: OrderStatusType, request?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<Order>>;
-    public readOrdersSupplierOrderSupplierSupplierIdGet(supplierId: number, skip?: number, limit?: number, filterString?: string, orderStatus?: OrderStatusType, request?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<Order>>>;
-    public readOrdersSupplierOrderSupplierSupplierIdGet(supplierId: number, skip?: number, limit?: number, filterString?: string, orderStatus?: OrderStatusType, request?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<Order>>>;
+    public readOrdersSupplierOrderSupplierSupplierIdGet(supplierId: number, skip?: number, limit?: number, filterString?: string, orderStatus?: OrderStatusType, request?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OrderSmall>>;
+    public readOrdersSupplierOrderSupplierSupplierIdGet(supplierId: number, skip?: number, limit?: number, filterString?: string, orderStatus?: OrderStatusType, request?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OrderSmall>>>;
+    public readOrdersSupplierOrderSupplierSupplierIdGet(supplierId: number, skip?: number, limit?: number, filterString?: string, orderStatus?: OrderStatusType, request?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OrderSmall>>>;
     public readOrdersSupplierOrderSupplierSupplierIdGet(supplierId: number, skip?: number, limit?: number, filterString?: string, orderStatus?: OrderStatusType, request?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (supplierId === null || supplierId === undefined) {
             throw new Error('Required parameter supplierId was null or undefined when calling readOrdersSupplierOrderSupplierSupplierIdGet.');
@@ -13987,7 +13989,7 @@ export class DefaultService extends BaseService {
 
         let localVarPath = `/order/supplier/${this.configuration.encodeParam({name: "supplierId", value: supplierId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<Order>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<OrderSmall>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -14074,9 +14076,9 @@ export class DefaultService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readOrdersToOrderToOrderableToIdGet(orderableToId: number, skip?: number, limit?: number, filterString?: string, status?: OrderStatusType, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<Order>>;
-    public readOrdersToOrderToOrderableToIdGet(orderableToId: number, skip?: number, limit?: number, filterString?: string, status?: OrderStatusType, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<Order>>>;
-    public readOrdersToOrderToOrderableToIdGet(orderableToId: number, skip?: number, limit?: number, filterString?: string, status?: OrderStatusType, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<Order>>>;
+    public readOrdersToOrderToOrderableToIdGet(orderableToId: number, skip?: number, limit?: number, filterString?: string, status?: OrderStatusType, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OrderSmall>>;
+    public readOrdersToOrderToOrderableToIdGet(orderableToId: number, skip?: number, limit?: number, filterString?: string, status?: OrderStatusType, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OrderSmall>>>;
+    public readOrdersToOrderToOrderableToIdGet(orderableToId: number, skip?: number, limit?: number, filterString?: string, status?: OrderStatusType, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OrderSmall>>>;
     public readOrdersToOrderToOrderableToIdGet(orderableToId: number, skip?: number, limit?: number, filterString?: string, status?: OrderStatusType, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (orderableToId === null || orderableToId === undefined) {
             throw new Error('Required parameter orderableToId was null or undefined when calling readOrdersToOrderToOrderableToIdGet.');
@@ -14122,7 +14124,7 @@ export class DefaultService extends BaseService {
 
         let localVarPath = `/order/to/${this.configuration.encodeParam({name: "orderableToId", value: orderableToId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<Order>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<OrderSmall>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,

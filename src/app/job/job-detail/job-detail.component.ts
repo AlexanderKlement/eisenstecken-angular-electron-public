@@ -23,22 +23,22 @@ import {
   DefaultService,
   Job,
   Offer,
-  Order,
+  Order, OrderSmall,
 } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { JobStatusBarComponent } from "./job-status-bar/job-status-bar.component";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
 @Component({
-    selector: "app-job-detail",
-    templateUrl: "./job-detail.component.html",
-    styleUrls: ["./job-detail.component.scss"],
-    imports: [
-        ToolbarComponent,
-        JobStatusBarComponent,
-        InfoBuilderComponent,
-        TableBuilderComponent,
-    ],
+  selector: 'app-job-detail',
+  templateUrl: './job-detail.component.html',
+  styleUrls: ['./job-detail.component.scss'],
+  imports: [
+    ToolbarComponent,
+    JobStatusBarComponent,
+    InfoBuilderComponent,
+    TableBuilderComponent,
+  ],
 })
 export class JobDetailComponent implements OnInit {
   @ViewChild(InfoBuilderComponent) child: InfoBuilderComponent<Job>;
@@ -55,7 +55,7 @@ export class JobDetailComponent implements OnInit {
   offerDataSource: TableDataSource<Offer>;
   outgoingInvoiceDataSource: TableDataSource<OutgoingInvoice>;
   subJobDataSource: TableDataSource<Job>;
-  orderDataSource: TableDataSource<Order>;
+  orderDataSource: TableDataSource<OrderSmall>;
   ordersAllowed = false;
   outgoingInvoicesAllowed = false;
   offersAllowed = false;
@@ -72,7 +72,8 @@ export class JobDetailComponent implements OnInit {
     private authService: AuthService,
     private dialog: MatDialog,
     private file: FileService,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -287,7 +288,7 @@ export class JobDetailComponent implements OnInit {
               "order_to.displayable_name": dataSource.order_to.displayable_name,
               // eslint-disable-next-line @typescript-eslint/naming-convention
               "order_from.displayable_name":
-                dataSource.order_from.displayable_name,
+              dataSource.order_from.displayable_name,
               // eslint-disable-next-line @typescript-eslint/naming-convention
               create_date: dayjs(dataSource.create_date).format("L"),
               // eslint-disable-next-line @typescript-eslint/naming-convention

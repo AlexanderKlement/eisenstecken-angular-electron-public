@@ -13,7 +13,7 @@ import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/c
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { OrderDateReturnData, OrderDialogComponent } from "../supplier-detail/order-dialog/order-dialog.component";
 import { Observable, Subscriber } from "rxjs";
-import { DefaultService, Stock, Order, Supplier, OrderBundleCreate } from "../../../api/openapi";
+import { DefaultService, Stock, Order, Supplier, OrderBundleCreate, OrderSmall } from "../../../api/openapi";
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
@@ -28,8 +28,8 @@ export class StockDetailComponent implements OnInit {
   @ViewChild(InfoBuilderComponent) child: InfoBuilderComponent<Supplier>;
   public infoDataSource: InfoDataSource<Stock>;
   public id: number;
-  ingoingDataSource: TableDataSource<Order>;
-  outgoingDataSource: TableDataSource<Order>;
+  ingoingDataSource: TableDataSource<OrderSmall>;
+  outgoingDataSource: TableDataSource<OrderSmall>;
   buttons: CustomButton[] = [];
 
   public $refresh: Observable<void>;

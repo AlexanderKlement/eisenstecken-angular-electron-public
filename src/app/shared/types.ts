@@ -28,8 +28,8 @@ import {
   InfoPage,
   WoodList,
   TemplatePaint,
-  Journey,
-} from '../../api/openapi';
+  Journey, OrderSmall, ArticleSmall, OrderedArticleSmall,
+} from "../../api/openapi";
 
 
 export type DataSourceClass =
@@ -39,6 +39,7 @@ export type DataSourceClass =
   | Job
   | Offer
   | Article
+  | ArticleSmall
   | OrderBundle
   | Order
   | OrderedArticle
@@ -47,6 +48,7 @@ export type DataSourceClass =
   | Supplier
   | Contact
   | Price
+  | OrderSmall
   | TechnicalData
   | Credential
   | Recalculation
@@ -62,6 +64,7 @@ export type DataSourceClass =
   | InfoPage
   | WoodList
   | TemplatePaint
+  | OrderedArticleSmall
   | Journey;
 
 export type RecursiveKeyOf<T, Prefix extends string = never> =

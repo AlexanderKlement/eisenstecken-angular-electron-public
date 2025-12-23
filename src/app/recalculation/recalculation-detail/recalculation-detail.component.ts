@@ -10,27 +10,36 @@ import { AuthService } from "../../shared/services/auth.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { minutesToDisplayableString } from "../../shared/date.util";
 import { formatCurrency, AsyncPipe, DecimalPipe, CurrencyPipe } from "@angular/common";
-import { Recalculation, Paint, Workload, Expense, DefaultService, WoodList, Order } from "../../../api/openapi";
+import {
+  Recalculation,
+  Paint,
+  Workload,
+  Expense,
+  DefaultService,
+  WoodList,
+  Order,
+  OrderSmall,
+} from "../../../api/openapi";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
 import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
 @Component({
-    selector: 'app-recalculation-detail',
-    templateUrl: './recalculation-detail.component.html',
-    styleUrls: ['./recalculation-detail.component.scss'],
-    imports: [
-        ToolbarComponent,
-        DefaultLayoutDirective,
-        DefaultLayoutAlignDirective,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        TableBuilderComponent,
-        AsyncPipe,
-        DecimalPipe,
-        CurrencyPipe,
-    ],
+  selector: 'app-recalculation-detail',
+  templateUrl: './recalculation-detail.component.html',
+  styleUrls: ['./recalculation-detail.component.scss'],
+  imports: [
+    ToolbarComponent,
+    DefaultLayoutDirective,
+    DefaultLayoutAlignDirective,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    TableBuilderComponent,
+    AsyncPipe,
+    DecimalPipe,
+    CurrencyPipe,
+  ],
 })
 export class RecalculationDetailComponent implements OnInit {
 
@@ -38,7 +47,7 @@ export class RecalculationDetailComponent implements OnInit {
   loading = true;
   recalculation: Recalculation;
 
-  orderDataSource: TableDataSource<Order>;
+  orderDataSource: TableDataSource<OrderSmall>;
   workloadDataSource: TableDataSource<Workload>;
   expenseDataSource: TableDataSource<Expense>;
   paintDataSource: TableDataSource<Paint>;

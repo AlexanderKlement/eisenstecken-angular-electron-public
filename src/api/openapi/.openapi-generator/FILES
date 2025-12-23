@@ -6,6 +6,7 @@ api/api.ts
 api/default.service.ts
 api/health.service.ts
 api/scheduler.service.ts
+api/viet.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
@@ -16,6 +17,7 @@ model/address.ts
 model/addressCreate.ts
 model/article.ts
 model/articleCreate.ts
+model/articleSmall.ts
 model/articleUpdate.ts
 model/articleUpdateFull.ts
 model/calendar.ts
@@ -89,6 +91,7 @@ model/order.ts
 model/orderBundle.ts
 model/orderBundleCreate.ts
 model/orderCreate.ts
+model/orderSmall.ts
 model/orderStatusType.ts
 model/orderUpdate.ts
 model/orderable.ts
@@ -96,6 +99,7 @@ model/orderableType.ts
 model/orderedArticle.ts
 model/orderedArticleCreate.ts
 model/orderedArticlePriceUpdate.ts
+model/orderedArticleSmall.ts
 model/outgoingInvoice.ts
 model/outgoingInvoiceCreate.ts
 model/outgoingInvoiceUpdate.ts
@@ -144,6 +148,8 @@ model/validationError.ts
 model/validationErrorLocInner.ts
 model/vat.ts
 model/vatCreate.ts
+model/vietJob.ts
+model/vietProgram.ts
 model/woodList.ts
 model/woodListCreate.ts
 model/workDay.ts

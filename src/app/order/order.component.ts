@@ -15,7 +15,7 @@ import {
   OrderableType,
   OrderedArticle,
   Article,
-  DefaultService,
+  DefaultService, OrderedArticleSmall,
 } from "../../api/openapi";
 import {
   DefaultLayoutDirective,
@@ -60,7 +60,7 @@ export class OrderComponent implements OnInit {
 
   orderedProductListName = "Ausgewählte Artikel";
   orderedProducts$: Observable<OrderedArticle[]>;
-  orderedProductsSubscriber: Subscriber<OrderedArticle[]>;
+  orderedProductsSubscriber: Subscriber<OrderedArticleSmall[]>;
   private orderedArticleFilter = "";
 
   step = 0;

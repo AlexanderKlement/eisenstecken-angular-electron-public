@@ -4,7 +4,9 @@ import { InfoDataSource } from "../../shared/components/info-builder/info-builde
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { first } from "rxjs/operators";
 import { ProductsListComponent } from "../available-products-list/products-list.component";
-import { ProductEditDialogComponent } from "../available-products-list/product-edit-dialog/product-edit-dialog.component";
+import {
+  ProductEditDialogComponent,
+} from "../available-products-list/product-edit-dialog/product-edit-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
@@ -17,20 +19,20 @@ import {
   DefaultService,
   OrderedArticle,
   Order,
-  OrderableType,
+  OrderableType, OrderSmall,
 } from "../../../api/openapi";
 import { InfoBuilderComponent } from "../../shared/components/info-builder/info-builder.component";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
 @Component({
-    selector: "app-order-detail",
-    templateUrl: "./order-detail.component.html",
-    styleUrls: ["./order-detail.component.scss"],
-    imports: [
-        ToolbarComponent,
-        InfoBuilderComponent,
-        TableBuilderComponent,
-    ],
+  selector: 'app-order-detail',
+  templateUrl: './order-detail.component.html',
+  styleUrls: ['./order-detail.component.scss'],
+  imports: [
+    ToolbarComponent,
+    InfoBuilderComponent,
+    TableBuilderComponent,
+  ],
 })
 export class OrderDetailComponent implements OnInit {
   articleDataSource: TableDataSource<OrderedArticle>;
@@ -62,9 +64,10 @@ export class OrderDetailComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-  ) {}
+  ) {
+  }
 
-  public static extractOrderToolTips(dataSource: Order): string {
+  public static extractOrderToolTips(dataSource: OrderSmall): string {
     let toolTipString = "";
     for (const article of dataSource.articles) {
       toolTipString += article.article.name.translation + " - ";
@@ -148,12 +151,12 @@ export class OrderDetailComponent implements OnInit {
             values: {
               // eslint-disable-next-line @typescript-eslint/naming-convention
               "article.name.translation_de":
-                dataSource.article.name.translation_de,
+              dataSource.article.name.translation_de,
               position: dataSource.position,
               amount: dataSource.amount,
               // eslint-disable-next-line @typescript-eslint/naming-convention
               "ordered_unit.name.translation_de":
-                dataSource.ordered_unit.name.translation_de,
+              dataSource.ordered_unit.name.translation_de,
               price: formatCurrency(dataSource.price, "de-DE", "EUR"),
             },
             route: () => {

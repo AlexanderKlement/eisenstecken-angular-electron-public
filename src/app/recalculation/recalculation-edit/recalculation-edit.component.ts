@@ -32,7 +32,7 @@ import {
   WoodList,
   Workload,
   Order,
-  Lock,
+  Lock, OrderSmall,
 } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import {
@@ -80,7 +80,7 @@ export class RecalculationEditComponent
   units$: Observable<Unit[]>;
   templatePaints$: Observable<TemplatePaint[]>;
 
-  orderDataSource: TableDataSource<Order>;
+  orderDataSource: TableDataSource<OrderSmall>;
   workloadDataSource: TableDataSource<Workload>;
   title = "Nachkalkulation: Bearbeiten";
 
