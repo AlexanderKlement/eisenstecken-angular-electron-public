@@ -29,8 +29,6 @@
   border-radius: 10px;
   overflow: hidden;
   background: #fff;
-
-  /* Enables horizontal scroll on smaller screens */
   overflow-x: auto;
 }
 
@@ -67,12 +65,42 @@
   color: #444;
 }
 
+.i40-log-toolbar {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.i40-log-info {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.i40-log-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.i40-log-header,
+.i40-log-row {
+  grid-template-columns:
+    60px                 /* ID (smaller) */
+    90px                 /* Job-ID (smaller) */
+    minmax(260px, 1.4fr) /* Status (more space) */
+    190px                /* Zeitpunkt */
+    80px                 /* Gut */
+    100px;               /* Ausschuss */
+}
+
 .num {
   text-align: right;
 }
 
 .mono {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+  "Courier New", monospace;
 }
 
 .truncate {
@@ -87,10 +115,20 @@
   font-style: italic;
 }
 
-/* Slightly tighter on smaller screens */
 @media (max-width: 900px) {
   .i40-row {
     grid-template-columns: 130px minmax(200px, 1.2fr) 80px 80px 80px 80px 100px 80px;
     gap: 10px;
+  }
+
+  .i40-log-header,
+  .i40-log-row {
+    grid-template-columns:
+      60px
+      90px
+      minmax(220px, 1fr)
+      180px
+      70px
+      90px;
   }
 }

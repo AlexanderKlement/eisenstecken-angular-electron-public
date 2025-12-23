@@ -101,6 +101,50 @@
           }
         </div>
       </mat-tab>
+      <mat-tab label="Log">
+        <div class="i40-log-toolbar">
+          <div class="i40-log-info">
+            Zeige {{ logOffset + 1 }} – {{ logOffset + logLimit }}
+          </div>
+
+          <div class="i40-log-actions">
+            <button mat-stroked-button type="button" (click)="prevLogPage()" [disabled]="logOffset === 0">
+              Zurück
+            </button>
+            <button mat-stroked-button type="button" (click)="nextLogPage()" [disabled]="!hasNextLogPage">
+              Weiter
+            </button>
+          </div>
+        </div>
+
+        @if (logs$ | async; as logs) {
+          <div class="i40-table">
+            <div class="i40-row i40-header i40-log-header">
+              <div>ID</div>
+              <div>Job-ID</div>
+              <div>Status</div>
+              <div>Zeitpunkt</div>
+              <div>Gut</div>
+              <div>Ausschuss</div>
+            </div>
+
+            @for (row of logs; track row.id) {
+              <div class="i40-row i40-log-row">
+                <div class="num">{{ row.id }}</div>
+                <div class="mono">{{ row.job_id }}</div>
+                <div class="truncate" title="{{ row.from_status }} → {{ row.to_status }}">
+                  {{ row.from_status }} → {{ row.to_status }}
+                </div>
+                <div>{{ row.changed_ts | date: "short" }}</div>
+                <div class="num">{{ row.pieces_good }}</div>
+                <div class="num">{{ row.pieces_scrap }}</div>
+              </div>
+            } @empty {
+              <div class="i40-empty">Keine Log-Einträge vorhanden.</div>
+            }
+          </div>
+        }
+      </mat-tab>
     </mat-tab-group>
   }
 </div>

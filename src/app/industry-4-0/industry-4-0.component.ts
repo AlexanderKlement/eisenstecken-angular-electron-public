@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
-import { VietJobList, VietService } from "../../api/openapi";
+import { VietJobList, VietLog, VietService } from "../../api/openapi";
 import { BehaviorSubject } from "rxjs";
 import { first } from "rxjs/operators";
 import { MatTab, MatTabGroup } from "@angular/material/tabs";
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe, DatePipe } from "@angular/common";
 import { MatButton } from "@angular/material/button";
 import { MatDialog } from "@angular/material/dialog";
 import { Industry40CreateDialogComponent } from "./industry-4-0-create-dialog/industry-4-0-create-dialog.component";
@@ -15,6 +15,7 @@ import { Industry40CreateDialogComponent } from "./industry-4-0-create-dialog/in
     MatTabGroup,
     AsyncPipe,
     MatButton,
+    DatePipe,
   ],
   templateUrl: './industry-4-0.component.html',
   styleUrl: './industry-4-0.component.scss',
@@ -31,8 +32,40 @@ export class Industry40Component implements OnInit {
   });
   public jobs$ = this.jobSubject.asObservable();
 
+  public readonly logLimit = 25;
+  public logOffset = 0;
+  public hasNextLogPage = false;
+
+  public logSubject = new BehaviorSubject<VietLog[]>([]);
+  public logs$ = this.logSubject.asObservable();
+
+
+
   ngOnInit(): void {
     this.refreshJobList();
+    this.refreshLogList();
+  }
+
+  private refreshLogList(): void {
+    this.viet
+      .getLogsVietLogsGet(this.logLimit, this.logOffset)
+      .pipe(first())
+      .subscribe((logs) => {
+        const safeLogs = logs ?? [];
+        this.logSubject.next(safeLogs);
+        this.hasNextLogPage = safeLogs.length === this.logLimit;
+      });
+  }
+
+  prevLogPage(): void {
+    this.logOffset = Math.max(0, this.logOffset - this.logLimit);
+    this.refreshLogList();
+  }
+
+  nextLogPage(): void {
+    if (!this.hasNextLogPage) return;
+    this.logOffset = this.logOffset + this.logLimit;
+    this.refreshLogList();
   }
 
   private refreshJobList() {
