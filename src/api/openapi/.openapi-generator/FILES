@@ -149,6 +149,8 @@ model/validationErrorLocInner.ts
 model/vat.ts
 model/vatCreate.ts
 model/vietJob.ts
+model/vietJobList.ts
+model/vietLog.ts
 model/vietProgram.ts
 model/woodList.ts
 model/woodListCreate.ts

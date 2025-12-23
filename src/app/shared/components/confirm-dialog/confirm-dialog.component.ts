@@ -1,6 +1,5 @@
 import {Component, Inject, OnInit} from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
-import { CdkScrollable } from "@angular/cdk/scrolling";
 import { MatButton } from "@angular/material/button";
 
 export interface ConfirmDialogData {
@@ -12,7 +11,7 @@ export interface ConfirmDialogData {
     selector: 'app-confirm-dialog',
     templateUrl: './confirm-dialog.component.html',
     styleUrls: ['./confirm-dialog.component.scss'],
-    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatDialogActions, MatButton]
+    imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton]
 })
 export class ConfirmDialogComponent implements OnInit {
 

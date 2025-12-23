@@ -1,1 +1,106 @@
-<p>industry-4-0 works!</p>
+<div class="i40-page">
+  <div class="i40-toolbar">
+    <div class="i40-title">
+      <div class="i40-title__main">Industrie 4.0</div>
+      <div class="i40-title__sub">Jobs verwalten (Ausstehend · Laufend · Abgeschlossen)</div>
+    </div>
+
+    <button mat-flat-button color="primary" type="button" (click)="createJobClicked()">
+      Neuen Job erstellen
+    </button>
+  </div>
+
+  @if (jobs$ | async; as jobs) {
+    <mat-tab-group>
+      <mat-tab label="Ausstehend ({{ jobs.pending.length }})">
+        <div class="i40-table">
+          <div class="i40-row i40-header">
+            <div>Job-ID</div>
+            <div>Datei</div>
+            <div>Rezept</div>
+            <div>Dicke</div>
+            <div>Geplant</div>
+            <div>Gut</div>
+            <div>Ausschuss</div>
+            <div>Total</div>
+          </div>
+
+          @for (job of jobs.pending; track job.job_id) {
+            <div class="i40-row">
+              <div class="mono">{{ job.job_id }}</div>
+              <div class="truncate" title="{{ job.filename }}">{{ job.filename }}</div>
+              <div class="num">{{ job.recipe }}</div>
+              <div class="num">{{ job.thickness }}</div>
+              <div class="num">{{ job.pieces_planned }}</div>
+              <div class="num">{{ job.pieces_good ?? "—" }}</div>
+              <div class="num">{{ job.pieces_scrap ?? "—" }}</div>
+              <div class="num">{{ job.pieces_produced_total ?? "—" }}</div>
+            </div>
+          } @empty {
+            <div class="i40-empty">Keine ausstehenden Jobs vorhanden.</div>
+          }
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Laufend ({{ jobs.running.length }})">
+        <div class="i40-table">
+          <div class="i40-row i40-header">
+            <div>Job-ID</div>
+            <div>Datei</div>
+            <div>Rezept</div>
+            <div>Dicke</div>
+            <div>Geplant</div>
+            <div>Gut</div>
+            <div>Ausschuss</div>
+            <div>Total</div>
+          </div>
+
+          @for (job of jobs.running; track job.job_id) {
+            <div class="i40-row">
+              <div class="mono">{{ job.job_id }}</div>
+              <div class="truncate" title="{{ job.filename }}">{{ job.filename }}</div>
+              <div class="num">{{ job.recipe }}</div>
+              <div class="num">{{ job.thickness }}</div>
+              <div class="num">{{ job.pieces_planned }}</div>
+              <div class="num">{{ job.pieces_good ?? "—" }}</div>
+              <div class="num">{{ job.pieces_scrap ?? "—" }}</div>
+              <div class="num">{{ job.pieces_produced_total ?? "—" }}</div>
+            </div>
+          } @empty {
+            <div class="i40-empty">Keine laufenden Jobs vorhanden.</div>
+          }
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Abgeschlossen ({{ jobs.completed.length }})">
+        <div class="i40-table">
+          <div class="i40-row i40-header">
+            <div>Job-ID</div>
+            <div>Datei</div>
+            <div>Rezept</div>
+            <div>Dicke</div>
+            <div>Geplant</div>
+            <div>Gut</div>
+            <div>Ausschuss</div>
+            <div>Total</div>
+          </div>
+
+          @for (job of jobs.completed; track job.job_id) {
+            <div class="i40-row">
+              <div class="mono">{{ job.job_id }}</div>
+              <div class="truncate" title="{{ job.filename }}">{{ job.filename }}</div>
+              <div class="num">{{ job.recipe }}</div>
+              <div class="num">{{ job.thickness }}</div>
+              <div class="num">{{ job.pieces_planned }}</div>
+              <div class="num">{{ job.pieces_good ?? "—" }}</div>
+              <div class="num">{{ job.pieces_scrap ?? "—" }}</div>
+              <div class="num">{{ job.pieces_produced_total ?? "—" }}</div>
+            </div>
+          } @empty {
+            <div class="i40-empty">Keine abgeschlossenen Jobs vorhanden.</div>
+          }
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  }
+</div>

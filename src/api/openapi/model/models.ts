@@ -135,6 +135,8 @@ export * from './validationErrorLocInner';
 export * from './vat';
 export * from './vatCreate';
 export * from './vietJob';
+export * from './vietJobList';
+export * from './vietLog';
 export * from './vietProgram';
 export * from './woodList';
 export * from './woodListCreate';

@@ -1,0 +1,47 @@
+<h1 mat-dialog-title>Industrie 4.0 Job erstellen</h1>
+<div mat-dialog-content>
+  <form [formGroup]="formGroup" class="form">
+    <mat-form-field appearance="fill">
+      <mat-label>Job-ID</mat-label>
+      <input matInput formControlName="job_id" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Dicke</mat-label>
+      <input matInput type="number" formControlName="thickness" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Rezept / Programm</mat-label>
+      <mat-select formControlName="recipe">
+        @if (programs$ | async; as programs) {
+          @for (p of programs; track trackByProgramId($index, p)) {
+            <mat-option [value]="p.program_id">
+              {{ p.name }} ({{ p.filename }})
+            </mat-option>
+          } @empty {
+            <mat-option disabled>Keine Programme verfügbar</mat-option>
+          }
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Stück</mat-label>
+      <input matInput type="number" formControlName="pieces" />
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="onCancelClick()">Abbrechen</button>
+  <button
+    mat-flat-button
+    color="primary"
+    type="button"
+    [disabled]="formGroup.invalid"
+    (click)="onConfirmClick()"
+  >
+    Erstellen
+  </button>
+</div>

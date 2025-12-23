@@ -1,0 +1,96 @@
+.i40-page {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.i40-toolbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.i40-title__main {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.i40-title__sub {
+  font-size: 12px;
+  opacity: 0.75;
+  margin-top: 2px;
+}
+
+.i40-table {
+  margin-top: 10px;
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+
+  /* Enables horizontal scroll on smaller screens */
+  overflow-x: auto;
+}
+
+.i40-row {
+  display: grid;
+  grid-template-columns: 140px minmax(220px, 1.3fr) 90px 90px 90px 90px 110px 90px;
+  gap: 12px;
+  align-items: center;
+
+  padding: 10px 12px;
+  border-top: 1px solid #f0f0f0;
+  font-size: 13px;
+
+  &:nth-child(even):not(.i40-header) {
+    background: #fafafa;
+  }
+
+  &:hover:not(.i40-header) {
+    background: #f4f6ff;
+  }
+}
+
+.i40-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+
+  background: #f7f7f7;
+  border-top: none;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #444;
+}
+
+.num {
+  text-align: right;
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.i40-empty {
+  padding: 14px 12px;
+  opacity: 0.75;
+  font-style: italic;
+}
+
+/* Slightly tighter on smaller screens */
+@media (max-width: 900px) {
+  .i40-row {
+    grid-template-columns: 130px minmax(200px, 1.2fr) 80px 80px 80px 80px 100px 80px;
+    gap: 10px;
+  }
+}
