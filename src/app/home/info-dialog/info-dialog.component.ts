@@ -5,12 +5,12 @@ import {AuthService} from "../../shared/services/auth.service";
 import {first} from "rxjs/operators";
 import {Observable} from "rxjs";
 import {DefaultService, User, Price, TechnicalData, Credential, InfoPage} from "../../../api/openapi";
-import { CdkScrollable } from "@angular/cdk/scrolling";
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 import { MatInput } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
 import { AsyncPipe } from "@angular/common";
+import { Industry40Component } from "../../industry-4-0/industry-4-0.component";
 
 interface Update {
   versionName: string;
@@ -21,7 +21,7 @@ interface Update {
     selector: 'app-info-dialog',
     templateUrl: './info-dialog.component.html',
     styleUrls: ['./info-dialog.component.scss'],
-    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatTabGroup, MatTab, TableBuilderComponent, MatInput, MatDialogActions, MatButton, AsyncPipe]
+  imports: [MatDialogTitle, MatDialogContent, MatTabGroup, MatTab, TableBuilderComponent, MatInput, MatDialogActions, MatButton, AsyncPipe, Industry40Component],
 })
 export class InfoDialogComponent implements OnInit {
   userDataSource: TableDataSource<User>;

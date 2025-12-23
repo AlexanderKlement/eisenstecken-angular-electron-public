@@ -17,19 +17,19 @@
     </mat-tab>
     @for (infoPage of infoPages$|async; track infoPage) {
       <mat-tab [label]="infoPage.name">
-        <textarea rows="40" readonly class="form-control" matInput>{{infoPage.body}}</textarea>
+        <textarea rows="40" readonly class="form-control" matInput>{{ infoPage.body }}</textarea>
       </mat-tab>
     }
     <mat-tab label="Änderungsprotokoll">
       @for (singleUpdate of updateList; track singleUpdate) {
         <div>
           <h4>
-            {{singleUpdate.versionName}}
+            {{ singleUpdate.versionName }}
           </h4>
           <ul>
             @for (change of singleUpdate.changes; track change) {
               <li>
-                {{change}}
+                {{ change }}
               </li>
             }
           </ul>
@@ -37,7 +37,7 @@
       }
     </mat-tab>
     <mat-tab label="Industrie 4.0">
-
+      <app-industry-4-0 />
     </mat-tab>
   </mat-tab-group>
 </div>
