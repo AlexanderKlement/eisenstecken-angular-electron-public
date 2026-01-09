@@ -9,14 +9,18 @@
   }
   @if (isMainJob && offersAllowed) {
     <app-table-builder [$refresh]="$refresh" [dataSource]="offerDataSource"
-    title="Angebote"></app-table-builder>
+                       title="Angebote"></app-table-builder>
   }
   @if (isMainJob && outgoingInvoicesAllowed) {
     <app-table-builder [$refresh]="$refresh" [dataSource]="outgoingInvoiceDataSource"
-    title="Rechnungen"></app-table-builder>
+                       title="Rechnungen"></app-table-builder>
   }
   @if (ordersAllowed) {
     <app-table-builder [$refresh]="$refresh" [dataSource]="orderDataSource" title="Bestellungen"></app-table-builder>
+  }
+  @if (deliveryNoteAllowed) {
+    <app-table-builder [$refresh]="$refresh" [dataSource]="deliveryNoteDataSource"
+                       title="Lieferscheine"></app-table-builder>
   }
 </div>
 

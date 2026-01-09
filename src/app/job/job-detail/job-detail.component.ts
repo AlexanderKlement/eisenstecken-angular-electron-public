@@ -23,7 +23,7 @@ import {
   DefaultService,
   Job,
   Offer,
-  Order, OrderSmall,
+  Order, OrderSmall, Recalculation, DeliveryNote,
 } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { JobStatusBarComponent } from "./job-status-bar/job-status-bar.component";
@@ -56,9 +56,11 @@ export class JobDetailComponent implements OnInit {
   outgoingInvoiceDataSource: TableDataSource<OutgoingInvoice>;
   subJobDataSource: TableDataSource<Job>;
   orderDataSource: TableDataSource<OrderSmall>;
+  deliveryNoteDataSource: TableDataSource<DeliveryNote>;
   ordersAllowed = false;
   outgoingInvoicesAllowed = false;
   offersAllowed = false;
+  deliveryNoteAllowed = true;
   title = "";
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
@@ -323,6 +325,43 @@ export class JobDetailComponent implements OnInit {
     this.orderDataSource.loadData();
   }
 
+  private initDeliveryNoteTable(): void {
+    this.deliveryNoteDataSource = new TableDataSource(
+      this.api,
+      (api, filter, sortDirection, skip, limit) =>
+        api.readDeliveryNotesDeliveryNoteGet(
+          skip,
+          limit,
+          filter,
+          this.jobId,
+        ),
+      (dataSourceClasses) => {
+        const rows = [];
+        dataSourceClasses.forEach((dataSource) => {
+          rows.push({
+            values: {
+              amount_articles: dataSource.articles.length,
+              // eslint-disable-next-line @typescript-eslint/naming-convention
+              create_date: dayjs(dataSource.timestamp).format("L"),
+              // eslint-disable-next-line @typescript-eslint/naming-convention
+            },
+            route: () => {
+              this.router.navigateByUrl("/delivery_note/" + dataSource.id.toString());
+            },
+          });
+        });
+        return rows;
+      },
+      [
+        { name: "amount_articles", headerName: "Anzahl Teile" },
+        { name: "create_date", headerName: "Datum" },
+      ],
+      (api) => api.readOrdersToCountOrderToOrderableToIdCountGet(this.jobId),
+      [],
+    );
+    this.orderDataSource.loadData();
+  }
+
   private initAccessRights() {
     this.buttonsMain.push({
       name: "Zum Kunden",
@@ -544,6 +583,7 @@ export class JobDetailComponent implements OnInit {
     this.initOutgoingInvoiceTable();
     this.initJobDetail(this.jobId);
     this.initOrderTable();
+    this.initDeliveryNoteTable();
   }
 
   private newInvoiceClicked() {

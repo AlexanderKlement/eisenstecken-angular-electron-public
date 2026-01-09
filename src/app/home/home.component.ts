@@ -14,6 +14,8 @@ import { CalendarsChatFrameComponent } from "./calendars-chat-frame/calendars-ch
 import { NoteComponent } from "./note/note.component";
 import { MenuTilesComponent } from "./menu-tiles/menu-tiles.component";
 import { CircleIconButtonComponent } from "../shared/components/circle-icon-button/circle-icon-button.component";
+import { AsyncPipe } from "@angular/common";
+import { SimpleCalendarComponent } from "../shared/components/calendar/simple-calendar.component";
 
 @Component({
   selector: "app-home",
@@ -28,6 +30,8 @@ import { CircleIconButtonComponent } from "../shared/components/circle-icon-butt
     NoteComponent,
     MenuTilesComponent,
     CircleIconButtonComponent,
+    AsyncPipe,
+    SimpleCalendarComponent,
   ],
 })
 export class HomeComponent implements OnInit {
