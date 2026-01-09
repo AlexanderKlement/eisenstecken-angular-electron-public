@@ -4,7 +4,7 @@ import { createWindow } from './window';
 import { getAppState } from './singleton';
 import { initTray } from './tray';
 import { registerAllIpc } from './ipc';
-import { configureUpdateChannel, wireUpdateEvents } from './update';
+import { checkForUpdatesWhenReady, configureUpdateChannel, wireUpdateEvents } from './update';
 
 const state = getAppState();
 state.app = app;
@@ -53,6 +53,11 @@ try {
 
       await createWindow(serve);
       await initTray();
+
+      if (!serve) {
+        console.info('[main] triggering update check');
+        void checkForUpdatesWhenReady();
+      }
     });
 
     app.on('window-all-closed', () => {

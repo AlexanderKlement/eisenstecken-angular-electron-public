@@ -99,7 +99,6 @@ export async function createWindow(serve: boolean) {
   state.win.once('ready-to-show', () => {
     console.log('Window ready to show');
     state.win.show();
-    checkForUpdatesWhenReady();
   });
 
   state.win.webContents.on('console-message', (event, level, message, line, sourceId) => {
