@@ -1,12 +1,19 @@
-.root {
-  width: 100vw;
+:host {
+  display: block;
   height: 100vh;
+  overflow: hidden;
+}
+
+.root {
+  width: 100%;
+  height: 100%;
   padding: 10px;
+  box-sizing: border-box;
+  overflow: hidden;
 
   .container {
     max-height: 85%;
   }
-
 }
 
 .top-bar {

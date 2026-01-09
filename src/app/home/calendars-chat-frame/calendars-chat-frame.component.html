@@ -1,7 +1,6 @@
 <app-loading [loading]="loading">
   <div class="outer-container">
-    <mat-tab-group fxFlexFill dynamicHeight="false" class="tab-group tab-left" mat-align-tabs="start">
-      <mat-tab class="app-calendar-tab" label="Terminkalender" fxFlexFill>
+      <div class="app-calendar-tab" fxFlexFill>
         <div fxLayout="row" fxLayoutAlign="center start" fxFlexFill class="container">
           @for (calendar of calendars$ | async; track calendar) {
             <div fxLayout="column" fxLayoutAlign=" stretch" class="calenderside">
@@ -11,14 +10,7 @@
             </div>
           }
         </div>
-      </mat-tab>
-      <mat-tab label="{{eventTabName}}" fxFlexFill>
-        <app-event-calendar></app-event-calendar>
-      </mat-tab>
-      <mat-tab #chatTab label="{{chatTabName}}" fxFlexFill>
-        <app-chat></app-chat>
-      </mat-tab>
-    </mat-tab-group>
+      </div>
   </div>
 </app-loading>
 

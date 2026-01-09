@@ -2,7 +2,6 @@ import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../shared/services/auth.service";
 import { InfoDialogComponent } from "./info-dialog/info-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
-import { ConfirmDialogComponent } from "../shared/components/confirm-dialog/confirm-dialog.component";
 import { DefaultService } from "../../api/openapi";
 import {
   DefaultLayoutDirective,
@@ -14,13 +13,11 @@ import { CalendarsChatFrameComponent } from "./calendars-chat-frame/calendars-ch
 import { NoteComponent } from "./note/note.component";
 import { MenuTilesComponent } from "./menu-tiles/menu-tiles.component";
 import { CircleIconButtonComponent } from "../shared/components/circle-icon-button/circle-icon-button.component";
-import { AsyncPipe } from "@angular/common";
-import { SimpleCalendarComponent } from "../shared/components/calendar/simple-calendar.component";
 
 @Component({
-  selector: "app-home",
-  templateUrl: "./home.component.html",
-  styleUrls: ["./home.component.scss"],
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
   imports: [
     DefaultLayoutDirective,
     DefaultLayoutAlignDirective,
@@ -30,8 +27,6 @@ import { SimpleCalendarComponent } from "../shared/components/calendar/simple-ca
     NoteComponent,
     MenuTilesComponent,
     CircleIconButtonComponent,
-    AsyncPipe,
-    SimpleCalendarComponent,
   ],
 })
 export class HomeComponent implements OnInit {
@@ -39,7 +34,8 @@ export class HomeComponent implements OnInit {
     private authService: AuthService,
     private dialog: MatDialog,
     private api: DefaultService,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.api.readUsersMeUsersMeGet().subscribe((user) => {
@@ -51,21 +47,6 @@ export class HomeComponent implements OnInit {
     this.dialog.open(InfoDialogComponent, {
       width: (window.innerWidth - 100).toString() + "px",
       data: {},
-    });
-  }
-
-  logoutClicked(): void {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: "400px",
-      data: {
-        title: "Abmelden?",
-        text: "Soll der Benutzer abgemeldet werden?",
-      },
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.authService.doLogout();
-      }
     });
   }
 }
