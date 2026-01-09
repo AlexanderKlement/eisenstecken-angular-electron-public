@@ -33,6 +33,7 @@ import { AddressFormComponent } from "../../shared/components/address-form/addre
 import { AsyncPipe } from "@angular/common";
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
 import { MatDialog } from "@angular/material/dialog";
+import { MatButton } from "@angular/material/button";
 
 @Component({
   selector: "app-client-edit",
@@ -54,6 +55,7 @@ import { MatDialog } from "@angular/material/dialog";
     FlexModule,
     AsyncPipe,
     CircleIconButtonComponent,
+    MatButton,
   ],
 })
 export class ClientEditComponent

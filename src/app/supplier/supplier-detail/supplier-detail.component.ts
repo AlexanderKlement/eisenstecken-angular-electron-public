@@ -14,7 +14,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { FileService } from "../../shared/services/file.service";
 import { EmailService } from "../../shared/services/email.service";
 import { combineLatest, Observable, Subscriber } from "rxjs";
-import { OrderBundleCreate, Supplier, Order, OrderBundle, DefaultService, OrderSmall } from "../../../api/openapi";
+import { OrderBundleCreate, Supplier, OrderBundle, DefaultService, OrderSmall } from "../../../api/openapi";
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
@@ -169,10 +169,6 @@ export class SupplierDetailComponent implements OnInit {
         {
           property: "address.city",
           name: "Gemeinde",
-        },
-        {
-          property: "contact_person",
-          name: "Ansprechpartner",
         },
       ],
       "/supplier/edit/" + this.id.toString(),
