@@ -11,6 +11,7 @@ import { MatInput } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
 import { AsyncPipe } from "@angular/common";
 import { Industry40Component } from "../../industry-4-0/industry-4-0.component";
+import { ChatComponent } from "../chat/chat.component";
 
 interface Update {
   versionName: string;
@@ -21,7 +22,7 @@ interface Update {
     selector: 'app-info-dialog',
     templateUrl: './info-dialog.component.html',
     styleUrls: ['./info-dialog.component.scss'],
-  imports: [MatDialogTitle, MatDialogContent, MatTabGroup, MatTab, TableBuilderComponent, MatInput, MatDialogActions, MatButton, AsyncPipe, Industry40Component],
+  imports: [MatDialogTitle, MatDialogContent, MatTabGroup, MatTab, TableBuilderComponent, MatInput, MatDialogActions, MatButton, AsyncPipe, Industry40Component, ChatComponent],
 })
 export class InfoDialogComponent implements OnInit {
   userDataSource: TableDataSource<User>;

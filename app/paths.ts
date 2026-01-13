@@ -61,7 +61,7 @@ export function resolveIconPng(): string {
 export function resolveMailExe(): { mail32: string; mail64: string } {
   const state = getAppState();
   const appPath = state.app.isPackaged
-    ? process.resourcesPath // e.g. .../resources
+    ? path.join(process.resourcesPath, 'app')
     : path.join(__dirname, '..'); // dev: project/app root
 
   return {

@@ -15,10 +15,12 @@
     <mat-tab label="Zugangsdaten">
       <app-table-builder title="Zugangsdaten" [dataSource]="credentialDataSource"></app-table-builder>
     </mat-tab>
-    @for (infoPage of infoPages$|async; track infoPage) {
-      <mat-tab [label]="infoPage.name">
-        <textarea rows="40" readonly class="form-control" matInput>{{ infoPage.body }}</textarea>
-      </mat-tab>
+    @if (infoPages$ | async; as infoPages) {
+      @for (infoPage of (infoPages ?? []); track infoPage) {
+        <mat-tab [label]="infoPage.name">
+          <textarea rows="40" readonly class="form-control" matInput>{{ infoPage.body }}</textarea>
+        </mat-tab>
+      }
     }
     <mat-tab label="Änderungsprotokoll">
       @for (singleUpdate of updateList; track singleUpdate) {
@@ -38,6 +40,9 @@
     </mat-tab>
     <mat-tab label="Industrie 4.0">
       <app-industry-4-0 />
+    </mat-tab>
+    <mat-tab label="Chat">
+      <app-chat />
     </mat-tab>
   </mat-tab-group>
 </div>
