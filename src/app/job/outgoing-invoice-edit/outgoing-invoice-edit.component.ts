@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, DEFAULT_CURRENCY_CODE, Inject, LOCALE_ID, OnDestroy, OnInit } from "@angular/core";
 import { Location, AsyncPipe } from "@angular/common";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -22,7 +22,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import dayjs from "dayjs/esm";
 import { formatDateTransport } from "../../shared/date.util";
 import { FileService } from "../../shared/services/file.service";
-import { CurrencyPipe, getLocaleCurrencyCode } from "@angular/common";
+import { CurrencyPipe } from "@angular/common";
 import {
   DefaultService,
   OutgoingInvoice,
@@ -59,9 +59,9 @@ import { AddressFormComponent } from "../../shared/components/address-form/addre
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
 
 @Component({
-  selector: "app-outgoing-invoice-edit",
-  templateUrl: "./outgoing-invoice-edit.component.html",
-  styleUrls: ["./outgoing-invoice-edit.component.scss"],
+  selector: 'app-outgoing-invoice-edit',
+  templateUrl: './outgoing-invoice-edit.component.html',
+  styleUrls: ['./outgoing-invoice-edit.component.scss'],
   imports: [
     ToolbarComponent,
     FormsModule,
@@ -90,8 +90,7 @@ import { CircleIconButtonComponent } from "../../shared/components/circle-icon-b
 })
 export class OutgoingInvoiceEditComponent
   extends BaseEditComponent<OutgoingInvoice>
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   invoiceGroup: UntypedFormGroup;
   submitted = false;
   vatOptions$: Observable<Vat[]>;
@@ -112,6 +111,8 @@ export class OutgoingInvoiceEditComponent
     private authService: AuthService,
     private snackBar: MatSnackBar,
     private file: FileService,
+    @Inject(DEFAULT_CURRENCY_CODE) private readonly currencyCode: string,
+    @Inject(LOCALE_ID) private readonly locale: string,
     dialog: MatDialog,
   ) {
     super(api, router, route, dialog);
@@ -123,7 +124,7 @@ export class OutgoingInvoiceEditComponent
     formGroup
       .get("total_price")
       .setValue(
-        this.currency.transform(totalPrice, getLocaleCurrencyCode("de_DE")),
+        this.currency.transform(totalPrice, this.currencyCode, "symbol", undefined, this.locale),
       );
     this.recalculateInvoicePrice();
   }
@@ -323,7 +324,10 @@ export class OutgoingInvoiceEditComponent
     );
     const formattedAmount = this.currency.transform(
       singlePrice,
-      getLocaleCurrencyCode("de_DE"),
+      this.currencyCode,
+      "symbol",
+      undefined,
+      this.locale,
     );
     descriptiveArticle.get("single_price").setValue(singlePrice);
     descriptiveArticle.get("singlePriceFormatted").setValue(formattedAmount);
@@ -507,8 +511,8 @@ export class OutgoingInvoiceEditComponent
       descriptiveArticleFormGroup
         .get("single_price")
         .valueChanges.subscribe(() => {
-          this.calcTotalPrice(descriptiveArticleFormGroup);
-        }),
+        this.calcTotalPrice(descriptiveArticleFormGroup);
+      }),
     );
     this.subscription.add(
       descriptiveArticleFormGroup.get("amount").valueChanges.subscribe(() => {
@@ -524,7 +528,7 @@ export class OutgoingInvoiceEditComponent
         single_price: descriptiveArticle.single_price,
         singlePriceFormatted: this.currency.transform(
           descriptiveArticle.single_price,
-          getLocaleCurrencyCode("de_DE"),
+          this.currencyCode, "symbol", undefined, this.locale,
         ),
       });
     }
@@ -544,7 +548,7 @@ export class OutgoingInvoiceEditComponent
       // eslint-disable-next-line @typescript-eslint/naming-convention
       single_price: new UntypedFormControl(singlePrice),
       singlePriceFormatted: new UntypedFormControl(
-        this.currency.transform(singlePrice, getLocaleCurrencyCode("de_DE")),
+        this.currency.transform(singlePrice, this.currencyCode, "symbol", undefined, this.locale),
       ),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       total_price: new UntypedFormControl(totalPrice),
@@ -609,7 +613,7 @@ export class OutgoingInvoiceEditComponent
     this.invoiceGroup
       .get("invoice_price")
       .setValue(
-        this.currency.transform(invoicePrice, getLocaleCurrencyCode("de_DE")),
+        this.currency.transform(invoicePrice, this.currencyCode, "symbol", undefined, this.locale),
       );
   }
 
@@ -658,9 +662,9 @@ export class OutgoingInvoiceEditComponent
         for (const outgoingInvoice of outgoingInvoices) {
           this.addDescriptiveArticle(
             "Abzüglich Rechnung Nr. " +
-              outgoingInvoice.number +
-              " vom " +
-              dayjs(outgoingInvoice.date, "YYYY-MM-DD").format("DD.MM.YYYY"),
+            outgoingInvoice.number +
+            " vom " +
+            dayjs(outgoingInvoice.date, "YYYY-MM-DD").format("DD.MM.YYYY"),
             "1",
             (outgoingInvoice.full_price_without_vat * -1).toString(),
             (outgoingInvoice.full_price_without_vat * -1).toString(),

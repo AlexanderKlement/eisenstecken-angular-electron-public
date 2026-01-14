@@ -6,6 +6,7 @@ import {
   LOCALE_ID,
   Injectable,
   importProvidersFrom,
+  DEFAULT_CURRENCY_CODE,
 } from "@angular/core";
 import * as Sentry from "@sentry/angular";
 import { apiConfigFactory } from "./app/app.module";
@@ -162,6 +163,10 @@ bootstrapApplication(AppComponent, {
     {
       provide: LOCALE_ID,
       useValue: "de-DE",
+    },
+    {
+      provide: DEFAULT_CURRENCY_CODE,
+      useValue: "EUR",
     },
     { provide: MatPaginatorIntl, useValue: getGermanPaginatorIntl() },
     {

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, DEFAULT_CURRENCY_CODE, Inject, LOCALE_ID, OnDestroy, OnInit } from "@angular/core";
 import {
   AbstractControl,
   UntypedFormArray,
@@ -21,7 +21,6 @@ import {
 } from "../../shared/components/toolbar/toolbar.component";
 import {
   CurrencyPipe,
-  getLocaleCurrencyCode,
   AsyncPipe,
 } from "@angular/common";
 import {
@@ -107,6 +106,8 @@ export class OfferEditComponent
     route: ActivatedRoute,
     private file: FileService,
     private currency: CurrencyPipe,
+    @Inject(DEFAULT_CURRENCY_CODE) private readonly currencyCode: string,
+    @Inject(LOCALE_ID) private readonly locale: string,
     dialog: MatDialog,
   ) {
     super(api, router, route, dialog);
@@ -122,9 +123,9 @@ export class OfferEditComponent
     api.lockOfferOfferUnlockOfferIdPost(id);
 
   ngOnInit(): void {
+    this.subscription = new Subscription();
     this.initOfferGroup();
     super.ngOnInit();
-    this.subscription = new Subscription();
     this.vatOptions$ = this.api.readVatsVatGet();
     this.hiddenDescriptives = [];
     if (this.createMode) {
@@ -132,7 +133,7 @@ export class OfferEditComponent
         this.jobId = parseInt(params.job_id, 10);
         if (isNaN(this.jobId)) {
           console.error("OfferEdit: Cannot determine job id");
-          this.router.navigateByUrl(this.navigationTarget);
+          this.router.navigateByUrl(this.navigationTarget).then(r => console.log(r));
         }
         this.navigationTarget = "job/" + this.jobId.toString();
         this.api
@@ -469,7 +470,10 @@ export class OfferEditComponent
     );
     const formattedAmount = this.currency.transform(
       singlePrice,
-      getLocaleCurrencyCode("de_DE"),
+      this.currencyCode,
+      "symbol",
+      undefined,
+      this.locale,
     );
     subDescriptiveArticle
       .get("single_price")
@@ -477,6 +481,7 @@ export class OfferEditComponent
     subDescriptiveArticle
       .get("singlePriceFormatted")
       .setValue(formattedAmount, { emitEvent: false });
+    this.recalculateOfferPrice();
   }
 
   private initDescriptiveArticles(
@@ -531,7 +536,10 @@ export class OfferEditComponent
         singlePriceFormatted: new UntypedFormControl(
           this.currency.transform(
             subDescriptiveArticle.single_price,
-            getLocaleCurrencyCode("de_DE"),
+            this.currencyCode,
+            "symbol",
+            undefined,
+            this.locale,
           ),
         ),
         alternative: new UntypedFormControl(subDescriptiveArticle.alternative),
@@ -673,7 +681,13 @@ export class OfferEditComponent
     this.offerGroup
       .get("offer_price")
       .setValue(
-        this.currency.transform(offerPrice, getLocaleCurrencyCode("de_DE")),
+        this.currency.transform(
+          offerPrice,
+          this.currencyCode,
+          "symbol",
+          undefined,
+          this.locale,
+        ),
         { emitEvent: false },
       );
   }

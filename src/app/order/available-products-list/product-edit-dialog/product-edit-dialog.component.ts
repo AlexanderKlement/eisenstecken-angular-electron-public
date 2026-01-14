@@ -1,13 +1,12 @@
-import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent } from "@angular/material/dialog";
+import { Component, DEFAULT_CURRENCY_CODE, Inject, LOCALE_ID, OnDestroy, OnInit } from "@angular/core";
+import { MAT_DIALOG_DATA, MatDialogContent, MatDialogRef, MatDialogTitle } from "@angular/material/dialog";
 import { Observable, Subscription } from "rxjs";
-import { UntypedFormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { CurrencyPipe, getLocaleCurrencyCode, AsyncPipe } from "@angular/common";
+import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
+import { AsyncPipe, CurrencyPipe } from "@angular/common";
 import { DefaultService, Unit } from "../../../../api/openapi";
-import { CdkScrollable } from "@angular/cdk/scrolling";
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexDirective } from "ng-flex-layout";
-import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
-import { MatSelect, MatOption } from "@angular/material/select";
+import { DefaultFlexDirective, DefaultLayoutAlignDirective, DefaultLayoutDirective, FlexModule } from "ng-flex-layout";
+import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
+import { MatOption, MatSelect } from "@angular/material/select";
 import { MatButton } from "@angular/material/button";
 
 export interface OrderDialogData {
@@ -29,27 +28,26 @@ export interface OrderDialogData {
 }
 
 @Component({
-    selector: 'app-product-edit-dialog',
-    templateUrl: './product-edit-dialog.component.html',
-    styleUrls: ['./product-edit-dialog.component.scss'],
-    imports: [
-        MatDialogTitle,
-        CdkScrollable,
-        MatDialogContent,
-        DefaultLayoutDirective,
-        DefaultLayoutAlignDirective,
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        FlexModule,
-        MatSelect,
-        MatOption,
-        DefaultFlexDirective,
-        MatButton,
-        AsyncPipe,
-    ],
+  selector: 'app-product-edit-dialog',
+  templateUrl: './product-edit-dialog.component.html',
+  styleUrls: ['./product-edit-dialog.component.scss'],
+  imports: [
+    MatDialogTitle,
+    MatDialogContent,
+    DefaultLayoutDirective,
+    DefaultLayoutAlignDirective,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    FlexModule,
+    MatSelect,
+    MatOption,
+    DefaultFlexDirective,
+    MatButton,
+    AsyncPipe,
+  ],
 })
 export class ProductEditDialogComponent implements OnInit, OnDestroy {
   unitOptions$: Observable<Unit[]>;
@@ -61,14 +59,14 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
   constructor(
     public dialogRef: MatDialogRef<ProductEditDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: OrderDialogData,
+    @Inject(DEFAULT_CURRENCY_CODE) private readonly currencyCode: string,
+    @Inject(LOCALE_ID) private readonly locale: string,
     private api: DefaultService,
     private currency: CurrencyPipe,
   ) {
   }
 
   public static roundTo2Decimals(input: number): number {
-    // TODO: move bitch get out the way
-    // -> i guess i was trying to say: move this to a utils class
     return Math.round(input * 100) / 100;
   }
 
@@ -106,7 +104,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
     );
     const formattedAmount = this.currency.transform(
       price,
-      getLocaleCurrencyCode("de_DE"),
+      this.currencyCode, "symbol", undefined, this.locale,
     );
     this.productEditGroup.get("price").setValue(price);
     this.productEditGroup.get("priceFormatted").setValue(formattedAmount);
@@ -148,7 +146,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
       priceFormatted: new UntypedFormControl(
         this.currency.transform(
           this.data.price,
-          getLocaleCurrencyCode("de_DE"),
+          this.currencyCode, "symbol", undefined, this.locale,
         ),
       ),
       // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -180,10 +178,8 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
   }
 
   private calcTotalPrice(): number {
-    const price =
-      this.productEditGroup.get("price").value *
+    return this.productEditGroup.get("price").value *
       this.productEditGroup.get("amount").value;
-    return price;
   }
 
   private updateTotalFromPrice(): void {
@@ -207,7 +203,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
 
     const formatted = this.currency.transform(
       price,
-      getLocaleCurrencyCode("de-DE"),
+      this.currencyCode, "symbol", undefined, this.locale,
     );
     this.productEditGroup
       .get("priceFormatted")
