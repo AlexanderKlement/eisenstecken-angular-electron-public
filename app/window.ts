@@ -3,10 +3,8 @@ import * as path from 'path';
 import { getDistFolder, getPreloadPath, getRendererDistFolder } from './paths';
 import * as fs from 'node:fs';
 import { getAppState } from './singleton';
-import { checkForUpdatesWhenReady } from './update';
 
 export function appShown(win: BrowserWindow): void {
-  //win.maximize(); // This should be removed if it does not improve the situation
   win.webContents.send('app-shown');
 }
 
@@ -29,31 +27,13 @@ export async function createWindow(serve: boolean) {
     },
   });
 
+  state.win.setMenuBarVisibility(false);
+  state.win.setAutoHideMenuBar(true);
+
   console.log('Creating window');
   console.log('Dist Folder: ' + getDistFolder());
   console.log('Preload Path: ' + path.join(getDistFolder(), 'preload.js'));
 
-  if (serve) {
-    console.log('Running in development mode');
-    await state.win.loadURL('http://localhost:4200');
-    state.win.webContents.openDevTools();
-  } else {
-    console.log('Running in production mode');
-
-    const distFolder = getRendererDistFolder();
-    const indexFile = path.join(distFolder, 'index.html');
-
-    console.log('Dist Folder:', distFolder);
-    console.log('Index File:', indexFile, 'exists:', fs.existsSync(indexFile));
-
-    if (!fs.existsSync(indexFile)) {
-      console.error('DIST NOT FOUND:', indexFile);
-      // Optional: Hier früh abbrechen, damit du es sofort siehst
-      // return;
-    }
-
-    await state.win.loadFile(indexFile);
-  }
   state.win.on('closed', () => {
     const state = getAppState();
     state.win = null;
@@ -98,6 +78,7 @@ export async function createWindow(serve: boolean) {
 
   state.win.once('ready-to-show', () => {
     console.log('Window ready to show');
+    state.win.maximize(); // this is "maximized"
     state.win.show();
   });
 
@@ -108,4 +89,26 @@ export async function createWindow(serve: boolean) {
   state.win.webContents.on('did-finish-load', () => {
     console.log('did-finish-load', state.win.webContents.getURL());
   });
+
+  if (serve) {
+    console.log('Running in development mode');
+    await state.win.loadURL('http://localhost:4200');
+    state.win.webContents.openDevTools();
+  } else {
+    console.log('Running in production mode');
+
+    const distFolder = getRendererDistFolder();
+    const indexFile = path.join(distFolder, 'index.html');
+
+    console.log('Dist Folder:', distFolder);
+    console.log('Index File:', indexFile, 'exists:', fs.existsSync(indexFile));
+
+    if (!fs.existsSync(indexFile)) {
+      console.error('DIST NOT FOUND:', indexFile);
+      // Optional: Hier früh abbrechen, damit du es sofort siehst
+      // return;
+    }
+
+    await state.win.loadFile(indexFile);
+  }
 }
