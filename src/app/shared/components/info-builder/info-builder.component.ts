@@ -2,7 +2,6 @@ import {Component, Input, OnInit} from "@angular/core";
 import {InfoDataSource} from "./info-builder.datasource";
 import {DataSourceClass} from "../../types";
 import {LockService} from "../../services/lock.service";
-import { DefaultService } from "../../../../api/openapi";
 import { DefaultLayoutDirective, DefaultFlexDirective } from "ng-flex-layout";
 import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
 import { AsyncPipe } from "@angular/common";
@@ -18,7 +17,7 @@ export class InfoBuilderComponent<T extends DataSourceClass> implements OnInit {
 
   @Input() dataSource: InfoDataSource<T>;
 
-  constructor(private api: DefaultService, private locker: LockService) {
+  constructor(private locker: LockService) {
   }
 
   ngOnInit(): void {

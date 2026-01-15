@@ -147,22 +147,6 @@ export class SupplierDetailComponent implements OnInit {
           name: "Name",
         },
         {
-          property: "mail1",
-          name: "Mail",
-        },
-        {
-          property: "mail2",
-          name: "Mail",
-        },
-        {
-          property: "tel1",
-          name: "Telefon",
-        },
-        {
-          property: "tel2",
-          name: "Telefon",
-        },
-        {
           property: "address.street_number",
           name: "Adresse",
         },
@@ -170,6 +154,10 @@ export class SupplierDetailComponent implements OnInit {
           property: "address.city",
           name: "Gemeinde",
         },
+        {
+          property: "send_order_to",
+          name: "Bestellung an",
+        }
       ],
       "/supplier/edit/" + this.id.toString(),
       this.api.islockedSupplierSupplierIslockedSupplierIdGet(this.id),
