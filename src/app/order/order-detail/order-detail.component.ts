@@ -189,7 +189,6 @@ export class OrderDetailComponent implements OnInit {
         const dialogData$ = ProductsListComponent.createEditDialogData(
           orderedArticle,
           "Produkt bearbeiten",
-          this.api,
           true,
         );
         const closeFunction = (result: any) => {

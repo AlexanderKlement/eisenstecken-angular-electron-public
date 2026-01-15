@@ -1,3 +1,5 @@
+export * from './article.service';
+import { ArticleService } from './article.service';
 export * from './default.service';
 import { DefaultService } from './default.service';
 export * from './health.service';
@@ -6,4 +8,4 @@ export * from './scheduler.service';
 import { SchedulerService } from './scheduler.service';
 export * from './viet.service';
 import { VietService } from './viet.service';
-export const APIS = [DefaultService, HealthService, SchedulerService, VietService];
+export const APIS = [ArticleService, DefaultService, HealthService, SchedulerService, VietService];

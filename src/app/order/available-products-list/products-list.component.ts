@@ -27,7 +27,7 @@ import {
   ArticleUpdateFull,
   ArticleCreate,
   OrderedArticleCreate,
-  OrderableType,
+  OrderableType, OrderArticleCreateV2, ArticleService,
 } from "../../../api/openapi";
 import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
 import {
@@ -43,9 +43,9 @@ import { BoldSpanPipe } from "../../shared/pipes/boldSearchResult";
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
 
 @Component({
-  selector: "app-products-list",
-  templateUrl: "./products-list.component.html",
-  styleUrls: ["./products-list.component.scss"],
+  selector: 'app-products-list',
+  templateUrl: './products-list.component.html',
+  styleUrls: ['./products-list.component.scss'],
   imports: [
     MatFormField,
     MatLabel,
@@ -83,13 +83,14 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   constructor(
     public dialog: MatDialog,
     private api: DefaultService,
+    private articleService: ArticleService,
     private snackBar: MatSnackBar,
-  ) {}
+  ) {
+  }
 
   public static createEditDialogData(
     orderedArticle: OrderedArticle,
     title: string,
-    api: DefaultService,
     blockRequestChange: boolean = false,
   ): Observable<OrderDialogData> {
     return new Observable<OrderDialogData>((dialogDataSubscriber) => {
@@ -133,6 +134,29 @@ export class ProductsListComponent implements OnInit, OnDestroy {
       name_it: dialogData.name,
       // eslint-disable-next-line @typescript-eslint/naming-convention
       category_ids: [],
+    };
+  }
+
+  public static mapDialogData2OrderArticleCreateV2(
+    dialogData: OrderDialogData,
+    articleId: number,
+    orderId: number,
+  ): OrderArticleCreateV2 {
+    return {
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      articleId: articleId,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      nameDe: dialogData.name,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      nameIt: dialogData.name,
+      comment: dialogData.comment,
+      position: dialogData.position,
+      modNumber: dialogData.mod_number,
+      request: dialogData.request,
+      amount: dialogData.amount,
+      unitId: dialogData.unit_id,
+      price: dialogData.price,
+      orderId: orderId,
     };
   }
 
@@ -290,27 +314,16 @@ export class ProductsListComponent implements OnInit, OnDestroy {
         return;
       }
       const orderedArticleCreate =
-        ProductsListComponent.mapDialogData2OrderedArticleCreate(
+        ProductsListComponent.mapDialogData2OrderArticleCreateV2(
           result,
           article.id,
+          this.orderId,
         );
-      const articleUpdate =
-        ProductsListComponent.mapDialogData2ArticleUpdate(result);
-      this.api
-        .updateArticleArticleArticleIdPut(article.id, articleUpdate)
+      this.articleService.orderArticle(orderedArticleCreate)
         .pipe(first())
-        .subscribe((patchArticle) => {
-          orderedArticleCreate.article_id = patchArticle.id;
-          this.api
-            .addOrderedArticleToOrderOrderOrderedArticleOrderIdPut(
-              this.orderId,
-              orderedArticleCreate,
-            )
-            .pipe(first())
-            .subscribe(() => {
-              this.refreshAvailableOrderList();
-              this.refreshOrderedArticleList();
-            });
+        .subscribe(() => {
+          this.refreshAvailableOrderList();
+          this.refreshOrderedArticleList();
         });
     };
     this.openDialog(dialogData, closeFunction);
@@ -331,7 +344,6 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     const dialogData$ = ProductsListComponent.createEditDialogData(
       orderedArticle,
       "Produkt bearbeiten",
-      this.api,
       false,
     );
     const closeFunction = (result: any) => {

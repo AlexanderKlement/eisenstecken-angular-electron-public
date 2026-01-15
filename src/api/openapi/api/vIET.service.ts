@@ -209,9 +209,9 @@ export class VietService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public uploadJobVietPost(jobId: string, thickness: number, recipe: number, pieces: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public uploadJobVietPost(jobId: string, thickness: number, recipe: number, pieces: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public uploadJobVietPost(jobId: string, thickness: number, recipe: number, pieces: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public uploadJobVietPost(jobId: string, thickness: number, recipe: number, pieces: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
+    public uploadJobVietPost(jobId: string, thickness: number, recipe: number, pieces: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
+    public uploadJobVietPost(jobId: string, thickness: number, recipe: number, pieces: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<boolean>>;
     public uploadJobVietPost(jobId: string, thickness: number, recipe: number, pieces: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling uploadJobVietPost.');
@@ -263,7 +263,7 @@ export class VietService extends BaseService {
 
         let localVarPath = `/viet/`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<boolean>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,

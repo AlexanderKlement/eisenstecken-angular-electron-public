@@ -74,6 +74,7 @@ export * from './offer';
 export * from './offerCreate';
 export * from './offerUpdate';
 export * from './order';
+export * from './orderArticleCreateV2';
 export * from './orderBundle';
 export * from './orderBundleCreate';
 export * from './orderCreate';

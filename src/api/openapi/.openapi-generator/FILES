@@ -3,6 +3,7 @@ README.md
 api.base.service.ts
 api.module.ts
 api/api.ts
+api/article.service.ts
 api/default.service.ts
 api/health.service.ts
 api/scheduler.service.ts
@@ -88,6 +89,7 @@ model/offer.ts
 model/offerCreate.ts
 model/offerUpdate.ts
 model/order.ts
+model/orderArticleCreateV2.ts
 model/orderBundle.ts
 model/orderBundleCreate.ts
 model/orderCreate.ts
