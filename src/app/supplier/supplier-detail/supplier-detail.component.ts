@@ -6,7 +6,7 @@ import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/
 import { InfoBuilderComponent } from "../../shared/components/info-builder/info-builder.component";
 import { MatDialog } from "@angular/material/dialog";
 import { OrderDateReturnData, OrderDialogComponent } from "./order-dialog/order-dialog.component";
-import { first, map } from "rxjs/operators";
+import { first, map, shareReplay } from "rxjs/operators";
 import dayjs from "dayjs/esm";
 import { AuthService } from "../../shared/services/auth.service";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
@@ -17,12 +17,20 @@ import { combineLatest, Observable, Subscriber } from "rxjs";
 import { OrderBundleCreate, Supplier, OrderBundle, DefaultService, OrderSmall } from "../../../api/openapi";
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
+import {
+  DefaultFlexDirective,
+  DefaultLayoutAlignDirective,
+  DefaultLayoutDirective,
+  DefaultLayoutGapDirective, FlexModule,
+} from "ng-flex-layout";
+import { AsyncPipe } from "@angular/common";
+import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
 
 @Component({
   selector: 'app-supplier-detail',
   templateUrl: './supplier-detail.component.html',
   styleUrls: ['./supplier-detail.component.scss'],
-  imports: [ToolbarComponent, InfoBuilderComponent, MatTabGroup, MatTab, TableBuilderComponent],
+  imports: [ToolbarComponent, InfoBuilderComponent, MatTabGroup, MatTab, TableBuilderComponent, DefaultLayoutDirective, AsyncPipe, MatFormField, MatInput, MatLabel, DefaultFlexDirective, DefaultLayoutAlignDirective, DefaultLayoutGapDirective, FlexModule],
 })
 export class SupplierDetailComponent implements OnInit {
 
@@ -35,6 +43,7 @@ export class SupplierDetailComponent implements OnInit {
   requestOrderDataSource: TableDataSource<OrderBundle>;
   buttons: CustomButton[] = [];
 
+  supplier$: Observable<Supplier>;
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
 
@@ -76,7 +85,10 @@ export class SupplierDetailComponent implements OnInit {
         this.router.navigateByUrl("supplier");
         return;
       }
-      this.initSupplierDetail(this.id);
+      this.supplier$ = this.api.readSupplierSupplierSupplierIdGet(this.id).pipe(
+        shareReplay({ bufferSize: 1, refCount: true }),
+      );
+      this.initSupplierDetail();
       this.initOrderTable(this.id);
     });
     this.authService.currentUserHasRight("suppliers:modify").pipe(first()).subscribe(allowed => {
@@ -138,9 +150,9 @@ export class SupplierDetailComponent implements OnInit {
     this.$refreshSubscriber.next();
   }
 
-  private initSupplierDetail(id: number): void {
+  private initSupplierDetail(): void {
     this.infoDataSource = new InfoDataSource<Supplier>(
-      this.api.readSupplierSupplierSupplierIdGet(id),
+      this.supplier$,
       [
         {
           property: "name",
@@ -157,7 +169,7 @@ export class SupplierDetailComponent implements OnInit {
         {
           property: "send_order_to",
           name: "Bestellung an",
-        }
+        },
       ],
       "/supplier/edit/" + this.id.toString(),
       this.api.islockedSupplierSupplierIslockedSupplierIdGet(this.id),

@@ -1,3 +1,15 @@
 @use "../../shared/components/base-edit/base-edit.component";
 
 
+.contact-row {
+  margin-top: 8px;
+}
+
+.contact-field {
+  width: 100%;
+}
+
+
+input{
+  cursor: default;
+}

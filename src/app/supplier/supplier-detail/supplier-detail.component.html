@@ -1,18 +1,60 @@
 <app-toolbar title="Lieferant: Details" [buttonList]="buttons"></app-toolbar>
 <div class="window-container">
   <app-info-builder [dataSource]="infoDataSource"></app-info-builder>
+  @if (supplier$ | async; as data) {
+    @for (contact of data.contacts; track contact) {
+      <div fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="16px" class="contact-row">
+        <div fxFlex="calc(20% - 16px)" fxFlex.xs="100" class="contact-col">
+          <mat-form-field fxFlexFill class="contact-field">
+            <mat-label>Name</mat-label>
+            <input matInput value="{{ contact.name}}" readonly>
+          </mat-form-field>
+        </div>
+        <div fxFlex="calc(20% - 16px)" fxFlex.xs="100" class="contact-col">
+          <mat-form-field fxFlexFill class="contact-field">
+            <mat-label>Nachname</mat-label>
+            <input matInput value="{{ contact.lastname}}" readonly>
+          </mat-form-field>
+        </div>
+        <div fxFlex="calc(20% - 16px)" fxFlex.xs="100" class="contact-col">
+          <mat-form-field fxFlexFill class="contact-field">
+            <mat-label>Telefon</mat-label>
+            <input matInput value="{{ contact.tel}}" readonly>
+          </mat-form-field>
+        </div>
+        <div fxFlex="calc(20% - 16px)" fxFlex.xs="100" class="contact-col">
+          <mat-form-field fxFlexFill class="contact-field">
+            <mat-label>Mail</mat-label>
+            <input matInput value="{{ contact.mail}}" readonly>
+          </mat-form-field>
+        </div>
+        <div fxFlex="calc(20% - 16px)" fxFlex.xs="100" class="contact-col">
+          <mat-form-field fxFlexFill class="contact-field">
+            <mat-label>Notiz</mat-label>
+            <input matInput value="{{ contact.note}}" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+    }
+  }
+
+
   <mat-tab-group>
     <mat-tab label="Noch zu bestellen">
-      <app-table-builder [$refresh]="$refresh" [dataSource]="createdOrderDataSource" title="Artikel"></app-table-builder>
+      <app-table-builder [$refresh]="$refresh" [dataSource]="createdOrderDataSource"
+                         title="Artikel"></app-table-builder>
     </mat-tab>
     <mat-tab label="Offene Bestellungen">
-      <app-table-builder [$refresh]="$refresh" [dataSource]="orderedOrderDataSource" title="Bestellungen"></app-table-builder>
+      <app-table-builder [$refresh]="$refresh" [dataSource]="orderedOrderDataSource"
+                         title="Bestellungen"></app-table-builder>
     </mat-tab>
     <mat-tab label="Erhaltene Bestellungen">
-      <app-table-builder [$refresh]="$refresh" [dataSource]="deliveredOrderDataSource" title="Bestellungen"></app-table-builder>
+      <app-table-builder [$refresh]="$refresh" [dataSource]="deliveredOrderDataSource"
+                         title="Bestellungen"></app-table-builder>
     </mat-tab>
     <mat-tab label="Anfragen">
-      <app-table-builder [$refresh]="$refresh" [dataSource]="requestOrderDataSource" title="Anfragen"></app-table-builder>
+      <app-table-builder [$refresh]="$refresh" [dataSource]="requestOrderDataSource"
+                         title="Anfragen"></app-table-builder>
     </mat-tab>
   </mat-tab-group>
 </div>
