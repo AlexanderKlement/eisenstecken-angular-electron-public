@@ -56,7 +56,9 @@
                 <app-circle-icon-button icon="delete" (click)="removeContactAt(i)" />
               </div>
             }
-            <app-circle-icon-button (click)="addContact()" icon="add" />
+            <div class="add-contact-wrapper">
+              <app-circle-icon-button (click)="addContact()" icon="add" />
+            </div>
           </div>
           @if (company) {
             <mat-form-field appearance="fill">
