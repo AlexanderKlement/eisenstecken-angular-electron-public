@@ -41,6 +41,7 @@ import { MatTooltip } from "@angular/material/tooltip";
 import { SlicePipe } from "@angular/common";
 import { BoldSpanPipe } from "../../shared/pipes/boldSearchResult";
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
+import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 
 @Component({
   selector: 'app-products-list',
@@ -62,6 +63,7 @@ import { CircleIconButtonComponent } from "../../shared/components/circle-icon-b
     SlicePipe,
     BoldSpanPipe,
     CircleIconButtonComponent,
+    CdkTextareaAutosize,
   ],
 })
 export class ProductsListComponent implements OnInit, OnDestroy {

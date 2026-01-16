@@ -1,4 +1,4 @@
-<h3 class="heading">{{name}}</h3>
+<h3 class="heading">{{ name }}</h3>
 <mat-form-field appearance="fill">
   <mat-label>Suchen</mat-label>
   <input matInput [formControl]="search">
@@ -15,10 +15,11 @@
     @for (article of articles; track article) {
       <mat-list-item>
         <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill class="article">
-          <app-circle-icon-button (click)="toggleFavorite(article)" [icon]="article.favorite ? 'star' : 'star_border'" />
+          <app-circle-icon-button (click)="toggleFavorite(article)"
+                                  [icon]="article.favorite ? 'star' : 'star_border'" />
           <p matTooltip="{{article.name.translation}}"
-            class="article-name"
-          [innerHTML]="search.value.length ? (article.name.translation|slice:0:105|boldSpan:search.value) : (article.name.translation|slice:0:105)"></p>
+             class="article-name"
+             [innerHTML]="search.value.length ? (article.name.translation|slice:0:105|boldSpan:search.value) : (article.name.translation|slice:0:105)"></p>
           <app-circle-icon-button (click)="orderButtonClicked(article)" icon="content_copy" />
           <app-circle-icon-button (click)="removeArticleButtonClicked(article)" icon="delete" />
         </div>
@@ -32,11 +33,20 @@
       <mat-list-item fxFlexFill class="article">
         <div fxLayout="column" fxLayoutAlign="start stretch" fxFlexFill>
           <div fxLayout="row" fxLayoutAlign="space-between center">
-            <input matInput [value]="orderedArticle.article.name.translation" class="title" readonly>
+            <mat-form-field fxFlex subscriptSizing="dynamic">
+           <textarea
+             matInput
+             class="title"
+             [value]="orderedArticle.article.name.translation"
+             cdkTextareaAutosize
+             cdkAutosizeMinRows="3"
+             cdkAutosizeMaxRows="3"
+             readonly></textarea>
+            </mat-form-field>
             <app-circle-icon-button (click)="editButtonClicked(orderedArticle)" icon="edit" />
           </div>
           <div fxLayout="row" fxLayoutAlign="space-between center">
-            <mat-form-field>
+            <mat-form-field subscriptSizing="dynamic">
               <mat-label>Menge</mat-label>
               <input type="number" matInput [value]="orderedArticle.amount" readonly>
             </mat-form-field>

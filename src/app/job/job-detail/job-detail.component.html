@@ -4,23 +4,35 @@
 }
 <div class="window-container">
   <app-info-builder [dataSource]="infoDataSource"></app-info-builder>
+
   @if (isMainJob) {
-    <app-table-builder [$refresh]="$refresh" [dataSource]="subJobDataSource" title="Unteraufträge"></app-table-builder>
+    <div class="table-section">
+      <app-table-builder [$refresh]="$refresh" [dataSource]="subJobDataSource" title="Unteraufträge"></app-table-builder>
+    </div>
   }
+
   @if (isMainJob && offersAllowed) {
-    <app-table-builder [$refresh]="$refresh" [dataSource]="offerDataSource"
-                       title="Angebote"></app-table-builder>
+    <div class="table-section">
+      <app-table-builder [$refresh]="$refresh" [dataSource]="offerDataSource" title="Angebote"></app-table-builder>
+    </div>
   }
+
   @if (isMainJob && outgoingInvoicesAllowed) {
-    <app-table-builder [$refresh]="$refresh" [dataSource]="outgoingInvoiceDataSource"
-                       title="Rechnungen"></app-table-builder>
+    <div class="table-section">
+      <app-table-builder [$refresh]="$refresh" [dataSource]="outgoingInvoiceDataSource" title="Rechnungen"></app-table-builder>
+    </div>
   }
+
   @if (ordersAllowed) {
-    <app-table-builder [$refresh]="$refresh" [dataSource]="orderDataSource" title="Bestellungen"></app-table-builder>
+    <div class="table-section">
+      <app-table-builder [$refresh]="$refresh" [dataSource]="orderDataSource" title="Bestellungen"></app-table-builder>
+    </div>
   }
+
   @if (deliveryNoteAllowed) {
-    <app-table-builder [$refresh]="$refresh" [dataSource]="deliveryNoteDataSource"
-                       title="Lieferscheine"></app-table-builder>
+    <div class="table-section">
+      <app-table-builder [$refresh]="$refresh" [dataSource]="deliveryNoteDataSource" title="Lieferscheine"></app-table-builder>
+    </div>
   }
 </div>
 

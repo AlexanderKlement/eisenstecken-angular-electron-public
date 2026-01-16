@@ -3,9 +3,12 @@
     @if (title) {
       <h3>{{title}}</h3>
     }
-    <mat-form-field>
-      <input matInput placeholder="Suchen" #input>
-    </mat-form-field>
+    <div class="search-input-wrapper">
+      <mat-form-field>
+        <input matInput placeholder="Suchen" #input>
+      </mat-form-field>
+    </div>
+
   </div>
 
   @if (dataSource.loading$ | async) {
