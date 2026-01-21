@@ -14,9 +14,7 @@
   </mat-toolbar>
   <div fxFlex="90" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="5px" class="calendar-days">
     @for (day of dayManager.getShownDayArray(); track day) {
-      <app-calendar-day [day]="day" [calendarId]="calendarId" [public]="public"
-        >
-      </app-calendar-day>
+      <app-calendar-day [day]="day" [calendarId]="calendarId" [public]="public" />
     }
   </div>
 </div>

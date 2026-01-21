@@ -55,8 +55,11 @@
 
 .small-card {
   padding: 10px;
-  margin: 5px 0;
-  min-height: 48px;
+  height: 10vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .weekend {
@@ -72,5 +75,3 @@
     }
   }
 }
-
-

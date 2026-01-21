@@ -55,4 +55,18 @@ mat-form-field {
   }
 }
 
+.articles-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 
+.list-separator {
+  height: 1px;
+  width: 100%;
+  background-color: lightgray;
+}
+
+.list-separator:last-child {
+  display: none;
+}
