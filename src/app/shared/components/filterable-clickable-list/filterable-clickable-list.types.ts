@@ -8,6 +8,8 @@ export interface ListItem {
   item: SupportedListElements;
   type: OrderableType;
   collapse: false | string;
+  indented: boolean;
+  highlighted: boolean;
 }
 
 

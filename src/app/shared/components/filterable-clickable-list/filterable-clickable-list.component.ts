@@ -72,7 +72,7 @@ export class FilterableClickableListComponent implements OnInit, OnDestroy {
     );
     this.listElementControl = new UntypedFormControl();
     this.search$ = this.search.valueChanges.pipe(
-      startWith(null), //TODO: replace this deprecated element => someday we'll have to update
+      startWith(null),
       debounceTime(200),
       switchMap((filterString: string) => {
         if (!filterString) {

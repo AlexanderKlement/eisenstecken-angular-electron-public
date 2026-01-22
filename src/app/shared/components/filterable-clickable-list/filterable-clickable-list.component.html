@@ -1,19 +1,24 @@
-<h3 class="heading">{{name}}</h3>
+<h3 class="heading">{{ name }}</h3>
 <mat-form-field appearance="fill">
   <mat-label>Suchen</mat-label>
   <input matInput [formControl]="search">
 </mat-form-field>
 <mat-selection-list #elements [multiple]="false"
-  (selectionChange)="selectionChange(elements.selectedOptions.selected[0])">
-  @for (listElement of search$ | async; track listElement) {
-    <div fxLayout="row" fxLayoutAlign="space-around center">
-      @if (listElement.type==='supplier') {
-        <app-circle-icon-button (click)="toggleFavoriteSupplier(listElement)" [icon]="isListItemFavorite(listElement.item) ? 'star' : 'star_border'" />
-      }
-      <mat-list-option [value]="listElement"
-        [class.collapsed]="listElement.collapse !== false && listElement.collapse !== toListUnCollapse" [class.uncollapsed]="listElement.collapse === toListUnCollapse">
-        {{listElement.name}}
-      </mat-list-option>
-    </div>
+                    (selectionChange)="selectionChange(elements.selectedOptions.selected[0])">
+  @if (search$ | async; as searches) {
+    @for (listElement of (searches ?? []); track listElement) {
+      <div fxLayout="row" fxLayoutAlign="space-around center" [class.highlighted]="listElement.highlighted">
+        @if (listElement.type === 'supplier') {
+          <app-circle-icon-button (click)="toggleFavoriteSupplier(listElement)"
+                                  [icon]="isListItemFavorite(listElement.item) ? 'star' : 'star_border'" />
+        }
+        <mat-list-option [value]="listElement"
+                         [class.collapsed]="listElement.collapse !== false && listElement.collapse !== toListUnCollapse"
+                         [class.uncollapsed]="listElement.collapse === toListUnCollapse">
+          <span [class.indented]="listElement.indented"
+                >{{ listElement.name }}</span>
+        </mat-list-option>
+      </div>
+    }
   }
 </mat-selection-list>

@@ -78,6 +78,7 @@ export class OrderComponent implements OnInit {
 
   private static createListItems(
     supportedListElements: SupportedListElements[],
+    highlighted: boolean,
   ): ListItem[] {
     const listItems: ListItem[] = [];
     for (const elem of supportedListElements) {
@@ -88,16 +89,20 @@ export class OrderComponent implements OnInit {
         item: elem,
         type: elem.type,
         collapse: false,
+        indented: false,
+        highlighted: highlighted,
       };
 
       listItems.push(listItem);
       if (isJob(elem)) {
         elem.sub_jobs.forEach((subJob) => {
           listItems.push({
-            name: `${subJob.code} | ${subJob.displayable_name}`,
+            name: `${subJob.code} | ${subJob.name}`,
             item: subJob,
             type: subJob.type,
             collapse: elem.displayable_name,
+            indented: true,
+            highlighted: highlighted,
           });
         });
       }
@@ -210,15 +215,18 @@ export class OrderComponent implements OnInit {
 
   private loadToList() {
     const stocks$ = this.api.readStocksStockGet().pipe(first());
-    const jobs$ = this.api
+    const acceptedJobs$ = this.api
       .readJobsJobGet(0, 1000, "", undefined, "JOBSTATUS_ACCEPTED", true)
       .pipe(first());
+    const createdJobs$ = this.api
+      .readJobsJobGet(0, 1000, "", undefined, "JOBSTATUS_CREATED", true)
+      .pipe(first());
 
-    combineLatest([stocks$, jobs$]).subscribe(([stocks, jobs]) => {
-      const stockListItems = OrderComponent.createListItems(stocks);
-      const jobListItems = OrderComponent.createListItems(jobs);
-      stockListItems.push(...jobListItems);
-      this.toListSubscriber.next(stockListItems);
+    combineLatest([stocks$, acceptedJobs$, createdJobs$]).subscribe(([stocks, acceptedJobs, createdJobs]) => {
+      const stockListItems = OrderComponent.createListItems(stocks, false);
+      const acceptedJobListItems = OrderComponent.createListItems(acceptedJobs, false);
+      const createdJobListItems = OrderComponent.createListItems(createdJobs, true);
+      this.toListSubscriber.next([...stockListItems, ...acceptedJobListItems, ...createdJobListItems]);
     });
   }
 
@@ -230,14 +238,13 @@ export class OrderComponent implements OnInit {
 
     if (withStocks) {
       combineLatest([stocks$, suppliers$]).subscribe(([stocks, jobs]) => {
-        const stockListItems = OrderComponent.createListItems(stocks);
-        const jobListItems = OrderComponent.createListItems(jobs);
-        stockListItems.push(...jobListItems);
-        this.fromListSubscriber.next(stockListItems);
+        const stockListItems = OrderComponent.createListItems(stocks, false);
+        const supplierListItems = OrderComponent.createListItems(jobs, false);
+        this.fromListSubscriber.next([...stockListItems, ...supplierListItems]);
       });
     } else {
       suppliers$.subscribe((suppliers) => {
-        this.fromListSubscriber.next(OrderComponent.createListItems(suppliers));
+        this.fromListSubscriber.next(OrderComponent.createListItems(suppliers, false));
       });
     }
   }
