@@ -310,7 +310,7 @@ export class SupplierDetailComponent implements OnInit {
 
   private sendOrderButtonClicked(request: boolean): void {
     const dialogRef = this.dialog.open(OrderDialogComponent, {
-      width: "400px",
+      width: "600px",
       data: {
         name: this.api.readSupplierSupplierSupplierIdGet(this.id).pipe(
           map((supplier) => supplier.displayable_name)),
