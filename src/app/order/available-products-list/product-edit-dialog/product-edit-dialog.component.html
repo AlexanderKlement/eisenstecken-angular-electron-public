@@ -24,21 +24,34 @@
       </mat-form-field>
 
     </div>
-    <mat-form-field appearance="fill">
-      <mat-label>Anfrage</mat-label>
-      <mat-select formControlName="request" [disabled]="blockRequestChange">
-        <mat-option [value]="true">
-          Ja
-        </mat-option>
-        <mat-option [value]="false">
-          Nein
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div fxLayout="row" fxLayoutAlign="space-between start">
+      <mat-form-field appearance="fill">
+        <mat-label>Anfrage</mat-label>
+        <mat-select formControlName="request" [disabled]="blockRequestChange">
+          <mat-option [value]="true">
+            Ja
+          </mat-option>
+          <mat-option [value]="false">
+            Nein
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Favorit</mat-label>
+        <mat-select formControlName="favorite">
+          <mat-option [value]="true">
+            Ja
+          </mat-option>
+          <mat-option [value]="false">
+            Nein
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
     <div fxLayout="row" fxLayoutAlign="space-between start">
       <mat-form-field appearance="fill">
         <mat-label>Menge</mat-label>
-        <input matInput type=number formControlName="amount">
+        <input matInput type="number" formControlName="amount">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Einheit</mat-label>

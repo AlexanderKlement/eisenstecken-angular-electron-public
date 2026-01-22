@@ -13,6 +13,7 @@ export interface OrderArticleCreateV2 {
     amount: number;
     articleId: number;
     comment: string;
+    favorite: boolean;
     modNumber: string;
     nameDe: string;
     nameIt: string;

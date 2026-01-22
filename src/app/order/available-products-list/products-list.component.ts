@@ -106,8 +106,11 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
       dialogData.request = orderedArticle.request;
       dialogData.comment = orderedArticle.comment;
       dialogData.position = orderedArticle.position;
+      dialogData.favorite = orderedArticle.article.favorite;
       dialogData.create = false;
       dialogData.blockRequestChange = blockRequestChange;
+
+      console.log(dialogData);
       dialogDataSubscriber.next(dialogData);
     });
   }
@@ -136,6 +139,7 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
       name_it: dialogData.name,
       // eslint-disable-next-line @typescript-eslint/naming-convention
       category_ids: [],
+      favorite: dialogData.favorite,
     };
   }
 
@@ -159,6 +163,7 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
       unitId: dialogData.unit_id,
       price: dialogData.price,
       orderId: orderId,
+      favorite: dialogData.favorite,
     };
   }
 
@@ -219,6 +224,7 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
         position: "",
         delete: false,
         create: true,
+        favorite: false,
         blockRequestChange: false,
       };
     }
@@ -236,6 +242,7 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
       position: "",
       delete: false,
       create: true,
+      favorite: article.favorite,
       blockRequestChange: false,
     };
   }
@@ -253,7 +260,6 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
     if (this.available) {
       this.subscription.add(
         this.availableProducts$.subscribe((products) => {
-          console.log(products);
           this.articles = products ?? [];
         }),
       );

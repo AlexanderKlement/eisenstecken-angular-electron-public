@@ -23,13 +23,15 @@ import {
   FlexModule,
   DefaultFlexDirective,
 } from "ng-flex-layout";
-import { FilterableClickableListComponent } from "../shared/components/filterable-clickable-list/filterable-clickable-list.component";
+import {
+  FilterableClickableListComponent,
+} from "../shared/components/filterable-clickable-list/filterable-clickable-list.component";
 import { ProductsListComponent } from "./available-products-list/products-list.component";
 
 @Component({
-  selector: "app-order",
-  templateUrl: "./order.component.html",
-  styleUrls: ["./order.component.scss"],
+  selector: 'app-order',
+  templateUrl: './order.component.html',
+  styleUrls: ['./order.component.scss'],
   imports: [
     ToolbarComponent,
     DefaultLayoutDirective,
@@ -44,14 +46,14 @@ export class OrderComponent implements OnInit {
   toListName = "Bestelle für Aufträge oder Lager";
   toList$: Observable<ListItem[]>; //Here go stocks and suppliers
   toListSubscriber: Subscriber<ListItem[]>;
-  toListSelected: ListItem;
+  toListSelected?: ListItem;
 
   toListUncollapse = "";
 
   fromListName = "Bestelle von Lieferanten oder Lager";
   fromList$: Observable<ListItem[]>;
   fromListSubscriber: Subscriber<ListItem[]>;
-  fromListSelected: ListItem;
+  fromListSelected?: ListItem;
 
   availableProductListName = "Verfügbare Artikel";
   availableProducts$: Observable<Article[]>;
@@ -71,7 +73,8 @@ export class OrderComponent implements OnInit {
   constructor(
     private api: DefaultService,
     private router: Router,
-  ) {}
+  ) {
+  }
 
   private static createListItems(
     supportedListElements: SupportedListElements[],
@@ -158,6 +161,9 @@ export class OrderComponent implements OnInit {
   }
 
   loadOrderedArticles(): void {
+    if (!this.fromListSelected || !this.toListSelected) {
+      return;
+    }
     this.api
       .readOrderFromToOrderFromOrderableFromIdToOrderableToIdGet(
         this.fromListSelected.item.id,
@@ -237,6 +243,12 @@ export class OrderComponent implements OnInit {
   }
 
   private loadAvailableArticlesAndButtons(): void {
+    if (!this.fromListSelected) {
+      // Nothing selected yet -> show empty state
+      this.resetProductWindows();
+      this.clearButtons();
+      return;
+    }
     switch (this.fromListSelected.type) {
       case OrderableType.Stock: {
         this.api
@@ -254,7 +266,7 @@ export class OrderComponent implements OnInit {
         this.buttons.push({
           name: "Öffne Lager",
           navigate: () => {
-            this.router.navigateByUrl("stock/" + this.fromListSelected.item.id);
+            this.router.navigateByUrl("stock/" + this.fromListSelected.item.id).then(r => console.log(r));
           },
         });
         break;

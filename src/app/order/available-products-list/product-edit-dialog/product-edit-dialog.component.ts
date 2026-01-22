@@ -24,6 +24,7 @@ export interface OrderDialogData {
   position: string;
   delete: boolean;
   create: boolean;
+  favorite: boolean;
   blockRequestChange: boolean;
 }
 
@@ -123,6 +124,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
       request: this.productEditGroup.get("request").value,
       comment: this.productEditGroup.get("comment").value,
       position: this.productEditGroup.get("position").value,
+      favorite: this.productEditGroup.get("favorite").value,
       delete: deleteOrder,
       create: this.data.create,
       blockRequestChange: this.blockRequestChange,
@@ -158,6 +160,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
       single_price_insert: new UntypedFormControl(true),
       comment: new UntypedFormControl(this.data.comment),
       position: new UntypedFormControl(this.data.position),
+      favorite: new UntypedFormControl(this.data.favorite),
     });
     this.subscription.add(
       this.productEditGroup.get("price").valueChanges.subscribe(() => {
