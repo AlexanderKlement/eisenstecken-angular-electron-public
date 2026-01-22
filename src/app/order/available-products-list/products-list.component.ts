@@ -37,7 +37,6 @@ import {
 } from "ng-flex-layout";
 import { MatButton } from "@angular/material/button";
 import { MatList, MatListItem } from "@angular/material/list";
-import { MatTooltip } from "@angular/material/tooltip";
 import { SlicePipe } from "@angular/common";
 import { BoldSpanPipe } from "../../shared/pipes/boldSearchResult";
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
@@ -59,7 +58,6 @@ import { CdkTextareaAutosize } from "@angular/cdk/text-field";
     MatList,
     MatListItem,
     FlexModule,
-    MatTooltip,
     SlicePipe,
     BoldSpanPipe,
     CircleIconButtonComponent,

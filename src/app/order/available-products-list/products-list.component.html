@@ -17,9 +17,9 @@
         <div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill class="article">
           <app-circle-icon-button (click)="toggleFavorite(article)"
                                   [icon]="article.favorite ? 'star' : 'star_border'" />
-          <p matTooltip="{{article.name.translation}}"
-             class="article-name"
-             [innerHTML]="search.value.length ? (article.name.translation|slice:0:105|boldSpan:search.value) : (article.name.translation|slice:0:105)"></p>
+          <p
+            class="article-name"
+            [innerHTML]="search.value.length ? (article.name.translation|slice:0:105|boldSpan:search.value) : (article.name.translation|slice:0:105)"></p>
           <app-circle-icon-button (click)="orderButtonClicked(article)" icon="content_copy" />
           <app-circle-icon-button (click)="removeArticleButtonClicked(article)" icon="delete" />
         </div>
