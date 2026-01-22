@@ -20,16 +20,26 @@ try {
   if (!gotTheLock) {
     app.quit();
   } else {
-    app.on('second-instance', () => {
+    app.on('second-instance', async () => {
       console.warn('Second instance detected');
       const state = getAppState();
-      state.win.show();
-      if (state.win) {
-        if (state.win.isMinimized()) {
-          state.win.restore();
-        }
-        state.win.focus();
+
+      if (!state.win) {
+        await createWindow(serve);
       }
+
+      if (!state.win) return;
+
+      if (state.win.isMinimized()) {
+        state.win.restore();
+      }
+
+      state.win.show();
+      state.win.focus();
+
+      // Windows sometimes refuses focus; this small trick helps in practice
+      state.win.setAlwaysOnTop(true);
+      state.win.setAlwaysOnTop(false);
     });
     if (app.getName().toLowerCase().includes('beta')) {
       const path = require('path');

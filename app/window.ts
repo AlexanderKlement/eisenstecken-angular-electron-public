@@ -75,20 +75,36 @@ export async function createWindow(serve: boolean) {
     console.error(details);
   });
 
+  let wasShown = false;
+  let showFallbackTimer: NodeJS.Timeout | null = null;
+
+  const showMainWindow = () => {
+    if (!state.win || wasShown) return;
+    wasShown = true;
+
+    if (showFallbackTimer) {
+      clearTimeout(showFallbackTimer);
+      showFallbackTimer = null;
+    }
+
+    // Show first, then maximize, then focus (more reliable on Windows)
+    state.win.show();
+    state.win.maximize();
+    state.win.focus();
+  };
 
   state.win.once('ready-to-show', () => {
     console.log('Window ready to show');
-    state.win.maximize(); // this is "maximized"
-    state.win.show();
-  });
-
-  state.win.webContents.on('console-message', (event, level, message, line, sourceId) => {
-    console.log('RENDERER CONSOLE:', { level, message, line, sourceId });
+    showMainWindow();
   });
 
   state.win.webContents.on('did-finish-load', () => {
-    console.log('did-finish-load', state.win.webContents.getURL());
+    console.log('did-finish-load', state.win?.webContents.getURL());
+    // Fallback in case ready-to-show didn't fire for some reason
+    showMainWindow();
   });
+
+  setTimeout(() => showMainWindow(), 8000);
 
   if (serve) {
     console.log('Running in development mode');
