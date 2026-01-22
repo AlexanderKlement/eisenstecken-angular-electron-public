@@ -1,10 +1,10 @@
 import {
   Component,
   EventEmitter,
-  Input,
+  Input, OnChanges,
   OnDestroy,
   OnInit,
-  Output,
+  Output, SimpleChanges,
 } from "@angular/core";
 import { Observable, Subscription } from "rxjs";
 import {
@@ -66,12 +66,14 @@ import { CdkTextareaAutosize } from "@angular/cdk/text-field";
     CdkTextareaAutosize,
   ],
 })
-export class ProductsListComponent implements OnInit, OnDestroy {
+export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() availableProducts$: Observable<Article[]>;
   @Input() orderedProducts$: Observable<OrderedArticle[]>;
   @Input() name: string;
   @Input() orderId: number;
   @Input() available: boolean;
+  // This will reset the search if we need it
+  @Input() resetSearchKey: unknown;
 
   @Output() refreshOrderedArticleListEmitter = new EventEmitter();
   @Output() refreshAvailableArticleListEmitter = new EventEmitter();
@@ -266,44 +268,15 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["resetSearchKey"] && !changes["resetSearchKey"].firstChange) {
+      // Reset the input + also trigger a refresh via searchChange
+      this.search?.setValue("", { emitEvent: true });
+    }
   }
 
-  copyButtonClicked(article: Article): void {
-    const dialogData = ProductsListComponent.createEmptyDialogData(
-      "Produkt kopieren und hinzufügen",
-      article,
-    );
-    const closeFunction = (result: any) => {
-      if (result === undefined) {
-        return;
-      }
-      const orderedArticleCreate =
-        ProductsListComponent.mapDialogData2OrderedArticleCreate(
-          result,
-          article.id,
-        );
-      const articleUpdate =
-        ProductsListComponent.mapDialogData2ArticleUpdate(result);
-      this.api
-        .copyArticleAndModifyArticleArticleIdPost(article.id, articleUpdate)
-        .pipe(first())
-        .subscribe((patchArticle) => {
-          orderedArticleCreate.article_id = patchArticle.id;
-          this.refreshAvailableOrderList();
-          this.api
-            .addOrderedArticleToOrderOrderOrderedArticleOrderIdPut(
-              this.orderId,
-              orderedArticleCreate,
-            )
-            .pipe(first())
-            .subscribe(() => {
-              this.refreshOrderedArticleList();
-            });
-        });
-    };
-    this.openDialog(dialogData, closeFunction);
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   orderButtonClicked(article: Article): void {

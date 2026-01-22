@@ -104,7 +104,7 @@ export async function createWindow(serve: boolean) {
     showMainWindow();
   });
 
-  setTimeout(() => showMainWindow(), 8000);
+  showFallbackTimer = setTimeout(() => showMainWindow(), 8000);
 
   if (serve) {
     console.log('Running in development mode');

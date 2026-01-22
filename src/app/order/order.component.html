@@ -15,12 +15,14 @@
                          [orderId]="lastOrderId" [available]="true"
                          (refreshOrderedArticleListEmitter)="refreshOrderedProducts()"
                          (refreshAvailableArticleListEmitter)="refreshAvailableProducts()"
+                         [resetSearchKey]="fromListSelected?.item?.id + '-' + toListSelected?.item?.id"
                          (searchChange)="onAvailableSearchChange($event)"></app-products-list>
     </div>
     <div fxFlex="24" class="order-column" fxFlexFill [class.active]="step >= 2">
       <app-products-list [orderedProducts$]="orderedProducts$" [name]="orderedProductListName" [orderId]="lastOrderId"
                          [available]="false" (refreshOrderedArticleListEmitter)="refreshOrderedProducts()"
                          (refreshAvailableArticleListEmitter)="refreshAvailableProducts()"
+                         [resetSearchKey]="fromListSelected?.item?.id + '-' + toListSelected?.item?.id"
                          (searchChange)="onOrderedSearchChange($event)"></app-products-list>
     </div>
   </div>
