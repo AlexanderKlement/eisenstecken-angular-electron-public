@@ -23,7 +23,7 @@ import { TableBuilderComponent } from "../../shared/components/table-builder/tab
 })
 export class ArticleSupplierComponent implements OnInit {
   buttons: CustomButton[] = [];
-  articleTableSource: TableDataSource<Article>;
+  articleTableSource: TableDataSource<Article, DefaultService>;
   supplierId: number;
   title = "Artikel";
   type: string;

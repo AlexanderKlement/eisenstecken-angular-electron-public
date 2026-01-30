@@ -20,8 +20,8 @@ import { TableBuilderComponent } from "../shared/components/table-builder/table-
     imports: [ToolbarComponent, MatTabGroup, MatTab, TableBuilderComponent]
 })
 export class SupplierComponent implements OnInit {
-  supplierTableDataSource: TableDataSource<Supplier>;
-  stockTableDataSource: TableDataSource<Stock>;
+  supplierTableDataSource: TableDataSource<Supplier, DefaultService>;
+  stockTableDataSource: TableDataSource<Stock, DefaultService>;
   buttons: CustomButton[] = [];
   suppliersReadAllowed = false;
   stocksReadAllowed = false;

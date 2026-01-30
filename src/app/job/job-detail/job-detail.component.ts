@@ -52,11 +52,11 @@ export class JobDetailComponent implements OnInit {
 
   buttonsSub = [];
 
-  offerDataSource: TableDataSource<Offer>;
-  outgoingInvoiceDataSource: TableDataSource<OutgoingInvoice>;
-  subJobDataSource: TableDataSource<Job>;
-  orderDataSource: TableDataSource<OrderSmall>;
-  deliveryNoteDataSource: TableDataSource<DeliveryNote>;
+  offerDataSource: TableDataSource<Offer, DefaultService>;
+  outgoingInvoiceDataSource: TableDataSource<OutgoingInvoice, DefaultService>;
+  subJobDataSource: TableDataSource<Job, DefaultService>;
+  orderDataSource: TableDataSource<OrderSmall, DefaultService>;
+  deliveryNoteDataSource: TableDataSource<DeliveryNote, DefaultService>;
   ordersAllowed = false;
   outgoingInvoicesAllowed = false;
   offersAllowed = false;

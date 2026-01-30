@@ -12,7 +12,7 @@ import { TableBuilderComponent } from "../shared/components/table-builder/table-
 })
 export class ServiceComponent implements OnInit {
 
-  serviceDataSource: TableDataSource<ServiceSum>;
+  serviceDataSource: TableDataSource<ServiceSum, DefaultService>;
 
   constructor(private api: DefaultService, private router: Router) {
   }

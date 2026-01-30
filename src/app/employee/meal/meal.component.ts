@@ -18,7 +18,7 @@ import { TableBuilderComponent } from "../../shared/components/table-builder/tab
     imports: [ToolbarComponent, TableBuilderComponent]
 })
 export class MealComponent implements OnInit {
-  mealDataSource: TableDataSource<Meal>;
+  mealDataSource: TableDataSource<Meal, DefaultService>;
   eatingPlaceId: number;
   title = "";
   public $refresh: Observable<void>;

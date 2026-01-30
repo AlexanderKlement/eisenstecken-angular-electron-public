@@ -17,8 +17,8 @@ import { TableBuilderComponent } from "../shared/components/table-builder/table-
 
 export class ClientComponent implements OnInit {
 
-    public privateClientDataSource: TableDataSource<Client>;
-    public businessClientDataSource: TableDataSource<Client>;
+    public privateClientDataSource: TableDataSource<Client, DefaultService>;
+    public businessClientDataSource: TableDataSource<Client, DefaultService>;
 
     public buttons: CustomButton[] = [];
     public $refresh: Observable<void>;

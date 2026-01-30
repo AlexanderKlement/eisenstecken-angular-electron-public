@@ -20,7 +20,7 @@ import { TableBuilderComponent } from "../../shared/components/table-builder/tab
     imports: [ToolbarComponent, TableBuilderComponent]
 })
 export class EmployeeServiceComponent implements OnInit {
-    serviceDataSource: TableDataSource<Service>;
+    serviceDataSource: TableDataSource<Service, DefaultService>;
     userId: number;
     buttons: CustomButton[] = [
         {

@@ -22,7 +22,7 @@ import { AsyncPipe } from "@angular/common";
 })
 export class DeliveryNoteComponent implements OnInit {
   buttons: CustomButton[] = [];
-  deliveryNoteDataSource: TableDataSource<DeliveryNote>;
+  deliveryNoteDataSource: TableDataSource<DeliveryNote, DefaultService>;
 
   public $refresh: Observable<void>;
 

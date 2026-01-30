@@ -18,7 +18,7 @@ import { TableBuilderComponent } from "../../../shared/components/table-builder/
 export class IngoingDetailComponent implements OnInit {
 
   infoDataSource: InfoDataSource<IngoingInvoice>;
-  descriptiveArticleSource: TableDataSource<DescriptiveArticle>;
+  descriptiveArticleSource: TableDataSource<DescriptiveArticle, DefaultService>;
   id: number;
   title: "Rechnung: Details";
   public $refresh: Observable<void>;
@@ -77,7 +77,7 @@ export class IngoingDetailComponent implements OnInit {
   }
 
   initDescriptiveArticleTable(): void {
-    this.descriptiveArticleSource = new TableDataSource<DescriptiveArticle>(
+    this.descriptiveArticleSource = new TableDataSource<DescriptiveArticle, DefaultService>(
       this.api,
       (api: DefaultService, filter, sortDirection, skip, limit) =>
         api.readIngoingInvoicesIngoingInvoiceArticlesIngoingInvoiceIdGet(this.id, skip, limit, filter)

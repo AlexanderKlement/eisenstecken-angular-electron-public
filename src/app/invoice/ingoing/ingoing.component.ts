@@ -25,9 +25,9 @@ export class IngoingComponent implements OnInit {
 
   @Input() updateTables$: Observable<void>;
   @Input() $refresh: Observable<void>;
-  allIngoingInvoiceDataSource: TableDataSource<IngoingInvoice>;
-  paidIngoingInvoiceDataSource: TableDataSource<IngoingInvoice>;
-  unPaidIngoingInvoiceDataSource: TableDataSource<IngoingInvoice>;
+  allIngoingInvoiceDataSource: TableDataSource<IngoingInvoice, DefaultService>;
+  paidIngoingInvoiceDataSource: TableDataSource<IngoingInvoice, DefaultService>;
+  unPaidIngoingInvoiceDataSource: TableDataSource<IngoingInvoice, DefaultService>;
 
   public selectedYear = dayjs().year();
   public $year: Observable<number[]>;

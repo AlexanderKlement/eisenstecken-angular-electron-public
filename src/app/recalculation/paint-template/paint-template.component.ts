@@ -27,7 +27,7 @@ export class PaintTemplateComponent implements OnInit {
       },
     },
   ];
-  paintTemplateDataSource: TableDataSource<TemplatePaint>;
+  paintTemplateDataSource: TableDataSource<TemplatePaint, DefaultService>;
   supplierId: number;
   title = "Oberflächen Vorlagen";
 
@@ -39,7 +39,7 @@ export class PaintTemplateComponent implements OnInit {
   }
 
   private initPaintTemplateDataSource() {
-    this.paintTemplateDataSource = new TableDataSource<TemplatePaint>(
+    this.paintTemplateDataSource = new TableDataSource<TemplatePaint, DefaultService>(
       this.api,
       (api, filter, sortDirection, skip, limit) =>
         api.readTemplatePaintsTemplatePaintGet(skip, limit),

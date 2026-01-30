@@ -28,11 +28,11 @@ import { AsyncPipe, DatePipe } from "@angular/common";
     imports: [ToolbarComponent, MatTabGroup, MatTab, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatSelect, MatOption, HoursStepperComponent, MatButton, TableBuilderComponent, AsyncPipe, DatePipe]
 })
 export class EmployeeDetailComponent implements OnInit {
-  feeDataSource: TableDataSource<Fee>;
-  journeyDataSource: TableDataSource<Journey>;
-  mealDataSource: TableDataSource<Meal>;
-  serviceDataSource: TableDataSource<Service>;
-  additionalWorkloadDataSource: TableDataSource<AdditionalWorkload>;
+  feeDataSource: TableDataSource<Fee, DefaultService>;
+  journeyDataSource: TableDataSource<Journey, DefaultService>;
+  mealDataSource: TableDataSource<Meal, DefaultService>;
+  serviceDataSource: TableDataSource<Service, DefaultService>;
+  additionalWorkloadDataSource: TableDataSource<AdditionalWorkload, DefaultService>;
   userId: number;
 
   todayWorkDayLoading = true;

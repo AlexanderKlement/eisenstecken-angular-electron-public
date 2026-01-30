@@ -32,11 +32,11 @@ import { AsyncPipe } from "@angular/common";
     ],
 })
 export class JobComponent implements OnInit {
-  createdJobDataSource: TableDataSource<Job>;
-  acceptedJobDataSource: TableDataSource<Job>;
-  finishedJobDataSource: TableDataSource<Job>;
-  declinedJobDataSource: TableDataSource<Job>;
-  stockTableDataSource: TableDataSource<Stock>;
+  createdJobDataSource: TableDataSource<Job, DefaultService>;
+  acceptedJobDataSource: TableDataSource<Job, DefaultService>;
+  finishedJobDataSource: TableDataSource<Job, DefaultService>;
+  declinedJobDataSource: TableDataSource<Job, DefaultService>;
+  stockTableDataSource: TableDataSource<Stock, DefaultService>;
 
   public $refresh: Observable<void>;
   public $year: Observable<number[]>;

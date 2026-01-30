@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { JobSmall } from './jobSmall';
 import { Order } from './order';
 import { WoodList } from './woodList';
 import { Expense } from './expense';
@@ -19,9 +20,11 @@ export interface Recalculation {
     cost: number;
     expenses: Array<Expense>;
     id: number;
+    jobs: Array<JobSmall>;
     km: number;
     lock: Lock;
     material_charge_percent: number;
+    name: string;
     orders: Array<Order>;
     paints: Array<Paint>;
     pdf?: string | null;

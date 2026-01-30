@@ -80,8 +80,8 @@ export class RecalculationEditComponent
   units$: Observable<Unit[]>;
   templatePaints$: Observable<TemplatePaint[]>;
 
-  orderDataSource: TableDataSource<OrderSmall>;
-  workloadDataSource: TableDataSource<Workload>;
+  orderDataSource: TableDataSource<OrderSmall, DefaultService>;
+  workloadDataSource: TableDataSource<Workload, DefaultService>;
   title = "Nachkalkulation: Bearbeiten";
 
   // eslint-disable-next-line max-len

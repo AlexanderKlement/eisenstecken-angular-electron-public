@@ -28,7 +28,7 @@ import {
   InfoPage,
   WoodList,
   TemplatePaint,
-  Journey, OrderSmall, ArticleSmall, OrderedArticleSmall,
+  Journey, OrderSmall, ArticleSmall, OrderedArticleSmall, RecalculationSmall,
 } from "../../api/openapi";
 
 
@@ -65,6 +65,7 @@ export type DataSourceClass =
   | WoodList
   | TemplatePaint
   | OrderedArticleSmall
+  | RecalculationSmall
   | Journey;
 
 export type RecursiveKeyOf<T, Prefix extends string = never> =

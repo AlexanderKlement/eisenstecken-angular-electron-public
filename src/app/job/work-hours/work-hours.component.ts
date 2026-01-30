@@ -19,7 +19,7 @@ import { TableBuilderComponent } from "../../shared/components/table-builder/tab
 })
 export class WorkHoursComponent implements OnInit {
   buttons: CustomButton[] = [];
-  workloadDataSource: TableDataSource<Workload>;
+  workloadDataSource: TableDataSource<Workload, DefaultService>;
   jobId: number;
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;

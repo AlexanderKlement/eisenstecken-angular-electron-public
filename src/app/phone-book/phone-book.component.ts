@@ -20,10 +20,10 @@ import { MatTabGroup, MatTab } from "@angular/material/tabs";
 })
 export class PhoneBookComponent implements OnInit {
 
-  allContactsDataSource: TableDataSource<Contact>;
-  clientContactsDataSource: TableDataSource<Contact>;
-  supplierContactsDataSource: TableDataSource<Contact>;
-  managementContactsDataSource: TableDataSource<Contact>;
+  allContactsDataSource: TableDataSource<Contact, DefaultService>;
+  clientContactsDataSource: TableDataSource<Contact, DefaultService>;
+  supplierContactsDataSource: TableDataSource<Contact, DefaultService>;
+  managementContactsDataSource: TableDataSource<Contact, DefaultService>;
   buttons = [
     {
       name: "Neuer Kontakt",

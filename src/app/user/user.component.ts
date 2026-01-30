@@ -16,7 +16,7 @@ import { TableBuilderComponent } from "../shared/components/table-builder/table-
     imports: [ToolbarComponent, TableBuilderComponent]
 })
 export class UserComponent implements OnInit {
-  userDataSource: TableDataSource<User>;
+  userDataSource: TableDataSource<User, DefaultService>;
   public buttons: CustomButton[] = [];
 
   constructor(

@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable, of } from "rxjs";
 import { catchError, finalize, map } from "rxjs/operators";
 import { DataSourceClass } from "../../types";
 import { MatPaginatorIntl } from "@angular/material/paginator";
-import { DefaultService } from "../../../../api/openapi";
+import { DefaultService, RecalculationService } from "../../../../api/openapi";
 
 export interface Column<T> {
   name: string; // RecursiveKeyOf<T>; Maybe this is better this way
@@ -59,21 +59,22 @@ export function getGermanPaginatorIntl() {
   return paginatorIntl;
 }
 
-export type LoadFunction<T> = (
-  api: DefaultService,
+export type LoadFunction<T, A> = (
+  api: A,
   filter: string,
   sortDirection: string,
   skip: number,
   limit: number,
 ) => Observable<T[]>;
 
+export type AmountFunction<A> = (api: A) => Observable<number>;
+
 export type ParseFunction<T extends DataSourceClass> = (
   dataSourceClasses: T[],
 ) => Row<T>[];
 
-export type AmountFunction = (api: DefaultService) => Observable<number>;
 
-export class TableDataSource<T extends DataSourceClass> extends DataSource<Row<T>> {
+export class TableDataSource<T extends DataSourceClass, A extends DefaultService | RecalculationService> extends DataSource<Row<T>> {
   public columns: Column<T>[];
   public readonly columnIdentifiers: string[];
   public amount$: Observable<number>;
@@ -84,18 +85,18 @@ export class TableDataSource<T extends DataSourceClass> extends DataSource<Row<T
   private loadingSubject = new BehaviorSubject<boolean>(false);
   // eslint-disable-next-line @typescript-eslint/member-ordering
   public loading$ = this.loadingSubject.asObservable();
-  private readonly loadFunction: LoadFunction<T>;
+  private readonly loadFunction: LoadFunction<T, A>;
   private readonly parseFunction: ParseFunction<T>;
   private dataSubject = new BehaviorSubject<Row<T>[]>([]);
 
   private stopLoading = false;
 
   constructor(
-    private api: DefaultService,
-    loadFunction: LoadFunction<T>,
+    private api: A,
+    loadFunction: LoadFunction<T, A>,
     parseFunction: ParseFunction<T>,
     columns: Column<T>[],
-    amountFunction: AmountFunction,
+    amountFunction: AmountFunction<A>,
     buttonList: TableButton<T>[] = [],
   ) {
     super();

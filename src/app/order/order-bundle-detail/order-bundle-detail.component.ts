@@ -25,7 +25,7 @@ import { TableBuilderComponent } from "../../shared/components/table-builder/tab
     imports: [ToolbarComponent, InfoBuilderComponent, TableBuilderComponent]
 })
 export class OrderBundleDetailComponent implements OnInit {
-  orderDataSource: TableDataSource<Order>;
+  orderDataSource: TableDataSource<Order, DefaultService>;
   infoDataSource: InfoDataSource<OrderBundle>;
   orderBundleId: number;
   buttons: CustomButton[] = [

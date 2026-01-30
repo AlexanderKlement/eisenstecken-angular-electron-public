@@ -28,8 +28,8 @@ export class StockDetailComponent implements OnInit {
   @ViewChild(InfoBuilderComponent) child: InfoBuilderComponent<Supplier>;
   public infoDataSource: InfoDataSource<Stock>;
   public id: number;
-  ingoingDataSource: TableDataSource<OrderSmall>;
-  outgoingDataSource: TableDataSource<OrderSmall>;
+  ingoingDataSource: TableDataSource<OrderSmall, DefaultService>;
+  outgoingDataSource: TableDataSource<OrderSmall, DefaultService>;
   buttons: CustomButton[] = [];
 
   public $refresh: Observable<void>;

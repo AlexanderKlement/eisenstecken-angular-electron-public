@@ -7,6 +7,7 @@ api/article.service.ts
 api/default.service.ts
 api/health.service.ts
 api/orderBundle.service.ts
+api/recalculation.service.ts
 api/scheduler.service.ts
 api/viet.service.ts
 configuration.ts
@@ -69,6 +70,7 @@ model/job.ts
 model/jobCreate.ts
 model/jobSection.ts
 model/jobSectionCreate.ts
+model/jobSmall.ts
 model/jobStatus.ts
 model/jobStatusType.ts
 model/jobStatusUpdateResponse.ts
@@ -117,6 +119,8 @@ model/priceCreate.ts
 model/priceUpdate.ts
 model/recalculation.ts
 model/recalculationCreate.ts
+model/recalculationCreateV2.ts
+model/recalculationSmall.ts
 model/recalculationUpdate.ts
 model/reminder.ts
 model/reminderCreate.ts

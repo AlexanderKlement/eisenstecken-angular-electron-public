@@ -47,11 +47,11 @@ export class RecalculationDetailComponent implements OnInit {
   loading = true;
   recalculation: Recalculation;
 
-  orderDataSource: TableDataSource<OrderSmall>;
-  workloadDataSource: TableDataSource<Workload>;
-  expenseDataSource: TableDataSource<Expense>;
-  paintDataSource: TableDataSource<Paint>;
-  woodListDataSource: TableDataSource<WoodList>;
+  orderDataSource: TableDataSource<OrderSmall, DefaultService>;
+  workloadDataSource: TableDataSource<Workload, DefaultService>;
+  expenseDataSource: TableDataSource<Expense, DefaultService>;
+  paintDataSource: TableDataSource<Paint, DefaultService>;
+  woodListDataSource: TableDataSource<WoodList, DefaultService>;
   jobName$: Observable<string>;
 
   buttons: CustomButton[] = [];

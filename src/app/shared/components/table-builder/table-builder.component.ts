@@ -21,6 +21,7 @@ import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, Ma
 import { MatButton } from "@angular/material/button";
 import { MatTooltip } from "@angular/material/tooltip";
 import { AsyncPipe } from "@angular/common";
+import { DefaultService, RecalculationService } from "../../../../api/openapi";
 
 export interface TableButton {
   name: (values: any) => string;
@@ -29,6 +30,8 @@ export interface TableButton {
   navigate: ($event: any, id: number) => void;
   selectedField: string;
 }
+
+type AnyApi = DefaultService | RecalculationService;
 
 @Component({
     selector: "app-table-builder",
@@ -56,10 +59,11 @@ export interface TableButton {
         AsyncPipe,
     ],
 })
-export class TableBuilderComponent<T extends DataSourceClass>
+
+export class TableBuilderComponent<T extends DataSourceClass,  A extends AnyApi = AnyApi>
   implements OnInit, AfterViewInit, OnDestroy
 {
-  @Input() dataSource: TableDataSource<T>;
+  @Input() dataSource!: TableDataSource<T, A>;
   @Input() title?: string;
   @Input() buttons?: TableButton[] = [];
   @Input() $refresh?: Observable<void>;

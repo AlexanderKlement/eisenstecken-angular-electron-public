@@ -1,9 +1,9 @@
-import { Component,  OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
-import {  Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { Observable, Subscriber } from "rxjs";
 import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
-import { DefaultService, Job } from "../../api/openapi";
+import { DefaultService, RecalculationService, RecalculationSmall } from "../../api/openapi";
 import dayjs from "dayjs/esm";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
 import { MatFormField, MatLabel } from "@angular/material/input";
@@ -12,23 +12,23 @@ import { TableBuilderComponent } from "../shared/components/table-builder/table-
 import { AsyncPipe } from "@angular/common";
 
 @Component({
-    selector: "app-recalculation",
-    templateUrl: "./recalculation.component.html",
-    styleUrls: ["./recalculation.component.scss"],
-    imports: [
-        ToolbarComponent,
-        DefaultLayoutDirective,
-        DefaultLayoutAlignDirective,
-        MatFormField,
-        MatLabel,
-        MatSelect,
-        MatOption,
-        TableBuilderComponent,
-        AsyncPipe,
-    ],
+  selector: 'app-recalculation',
+  templateUrl: './recalculation.component.html',
+  styleUrls: ['./recalculation.component.scss'],
+  imports: [
+    ToolbarComponent,
+    DefaultLayoutDirective,
+    DefaultLayoutAlignDirective,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    TableBuilderComponent,
+    AsyncPipe,
+  ],
 })
 export class RecalculationComponent implements OnInit {
-  jobDataSource: TableDataSource<Job>;
+  recalculationDataSource: TableDataSource<RecalculationSmall, RecalculationService>;
   buttons: CustomButton[] = [
     {
       name: "Oberflächen-Vorlage",
@@ -46,7 +46,9 @@ export class RecalculationComponent implements OnInit {
   constructor(
     private api: DefaultService,
     private router: Router,
-  ) {}
+    private recalculationService: RecalculationService,
+  ) {
+  }
 
   ngOnInit(): void {
     this.initJobDataSource();
@@ -65,16 +67,13 @@ export class RecalculationComponent implements OnInit {
   }
 
   initJobDataSource(): void {
-    this.jobDataSource = new TableDataSource(
-      this.api,
-      (api, filter, sortDirection, skip, limit) =>
-        api.readJobsJobGet(
+    this.recalculationDataSource = new TableDataSource(
+      this.recalculationService,
+      (recalculationService, filter, sortDirection, skip, limit) =>
+        recalculationService.getRecalculations(
           skip,
           limit,
           filter,
-          undefined,
-          "JOBSTATUS_ACCEPTED, JOBSTATUS_COMPLETED",
-          true,
           this.selectedYear,
         ),
       (dataSourceClasses) => {
@@ -82,10 +81,11 @@ export class RecalculationComponent implements OnInit {
         dataSourceClasses.forEach((dataSource) => {
           rows.push({
             values: {
+              names: dataSource.jobs.map(job => job.name).join(", "),
+              codes: dataSource.jobs.map(job => job.code).join(", "),
               name: dataSource.name,
-              code: dataSource.code,
-              "client.name": dataSource.client.fullname,
-              "responsible.fullname": dataSource.responsible.fullname,
+              "client.name": dataSource.jobs[0].client.fullname,
+              "responsible.fullname": dataSource.jobs[0].responsible.fullname,
             },
             route: () => {
               this.router.navigateByUrl(
@@ -97,14 +97,15 @@ export class RecalculationComponent implements OnInit {
         return rows;
       },
       [
-        { name: "code", headerName: "Kommissionsnummer" },
-        { name: "name", headerName: "Kommission" },
+        { name: "codes", headerName: "Kommissionsnummern" },
+        { name: "names", headerName: "Kommissionen" },
+        { name: "name", headerName: "Beschreibung" },
         { name: "client.name", headerName: "Kunde" },
         { name: "responsible.fullname", headerName: "Zuständig" },
       ],
-      (api) => api.readJobCountJobCountGet("JOBSTATUS_COMPLETED", true),
+      (api) => api.getRecalculationCount(this.selectedYear),
     );
-    this.jobDataSource.loadData();
+    this.recalculationDataSource.loadData();
   }
 
   yearChanged() {

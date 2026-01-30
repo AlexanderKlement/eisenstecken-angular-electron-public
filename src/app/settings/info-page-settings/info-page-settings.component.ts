@@ -18,7 +18,7 @@ import { MatButton } from "@angular/material/button";
     imports: [TableBuilderComponent, MatButton]
 })
 export class InfoPageSettingsComponent implements OnInit {
-    infoPageDataSource: TableDataSource<InfoPage>;
+    infoPageDataSource: TableDataSource<InfoPage, DefaultService>;
 
     public buttons: CustomButton[] = [];
     showNewButton = false;

@@ -35,7 +35,7 @@ import { TableBuilderComponent } from "../../shared/components/table-builder/tab
   ],
 })
 export class OrderDetailComponent implements OnInit {
-  articleDataSource: TableDataSource<OrderedArticle>;
+  articleDataSource: TableDataSource<OrderedArticle, DefaultService>;
   infoDataSource: InfoDataSource<Order>;
 
   orderId: number;

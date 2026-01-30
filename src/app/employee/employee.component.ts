@@ -22,12 +22,12 @@ import { TableBuilderComponent } from "../shared/components/table-builder/table-
 })
 export class EmployeeComponent implements OnInit {
 
-  userDataSource: TableDataSource<User>;
-  feeDataSource: TableDataSource<Fee>;
-  journeyDataSource: TableDataSource<Journey>;
-  mealDataSource: TableDataSource<MealSum>;
-  maintenanceDataSource: TableDataSource<Maintenance>;
-  additionalWorkloadDataSource: TableDataSource<AdditionalWorkload>;
+  userDataSource: TableDataSource<User, DefaultService>;
+  feeDataSource: TableDataSource<Fee, DefaultService>;
+  journeyDataSource: TableDataSource<Journey, DefaultService>;
+  mealDataSource: TableDataSource<MealSum, DefaultService>;
+  maintenanceDataSource: TableDataSource<Maintenance, DefaultService>;
+  additionalWorkloadDataSource: TableDataSource<AdditionalWorkload, DefaultService>;
   public buttons: CustomButton[] = [
     {
       name: "Neuer Benutzer",

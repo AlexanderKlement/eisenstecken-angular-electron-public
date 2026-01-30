@@ -25,9 +25,9 @@ export class OutgoingComponent implements OnInit {
 
 
     @Input() $refresh: Observable<void>;
-    allOutgoingInvoiceDataSource: TableDataSource<OutgoingInvoice>;
-    unPaidOutgoingInvoiceDataSource: TableDataSource<OutgoingInvoice>;
-    paidOutgoingInvoiceDataSource: TableDataSource<OutgoingInvoice>;
+    allOutgoingInvoiceDataSource: TableDataSource<OutgoingInvoice, DefaultService>;
+    unPaidOutgoingInvoiceDataSource: TableDataSource<OutgoingInvoice, DefaultService>;
+    paidOutgoingInvoiceDataSource: TableDataSource<OutgoingInvoice, DefaultService>;
 
     public selectedYear = dayjs().year();
     public $year: Observable<number[]>;

@@ -25,10 +25,10 @@ interface Update {
   imports: [MatDialogTitle, MatDialogContent, MatTabGroup, MatTab, TableBuilderComponent, MatInput, MatDialogActions, MatButton, AsyncPipe, Industry40Component, ChatComponent],
 })
 export class InfoDialogComponent implements OnInit {
-  userDataSource: TableDataSource<User>;
-  priceDataSource: TableDataSource<Price>;
-  technicalDataDataSource: TableDataSource<TechnicalData>;
-  credentialDataSource: TableDataSource<Credential>;
+  userDataSource: TableDataSource<User, DefaultService>;
+  priceDataSource: TableDataSource<Price, DefaultService>;
+  technicalDataDataSource: TableDataSource<TechnicalData, DefaultService>;
+  credentialDataSource: TableDataSource<Credential, DefaultService>;
   userCanViewPrice = false;
   infoPages$: Observable<InfoPage[]>;
 

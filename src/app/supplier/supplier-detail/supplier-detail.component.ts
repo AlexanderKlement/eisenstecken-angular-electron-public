@@ -44,10 +44,10 @@ export class SupplierDetailComponent implements OnInit {
   @ViewChild(InfoBuilderComponent) child: InfoBuilderComponent<Supplier>;
   public infoDataSource: InfoDataSource<Supplier>;
   public id: number;
-  createdOrderDataSource: TableDataSource<OrderSmall>;
-  orderedOrderDataSource: TableDataSource<OrderBundle>;
-  deliveredOrderDataSource: TableDataSource<OrderBundle>;
-  requestOrderDataSource: TableDataSource<OrderBundle>;
+  createdOrderDataSource: TableDataSource<OrderSmall, DefaultService>;
+  orderedOrderDataSource: TableDataSource<OrderBundle, DefaultService>;
+  deliveredOrderDataSource: TableDataSource<OrderBundle, DefaultService>;
+  requestOrderDataSource: TableDataSource<OrderBundle, DefaultService>;
   buttons: CustomButton[] = [];
 
   supplier$: Observable<Supplier>;

@@ -23,7 +23,7 @@ export class ClientDetailComponent implements OnInit {
 
   @ViewChild(InfoBuilderComponent) child: InfoBuilderComponent<Client>;
   public infoDataSource: InfoDataSource<Client>;
-  public tableDataSource: TableDataSource<Job>;
+  public tableDataSource: TableDataSource<Job, DefaultService>;
   public id: number;
   public buttons: CustomButton[] = [];
   jobsAvailable = false;

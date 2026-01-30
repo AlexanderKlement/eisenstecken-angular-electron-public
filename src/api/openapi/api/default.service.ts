@@ -14713,6 +14713,7 @@ export class DefaultService extends BaseService {
      * @param jobId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
+     * @deprecated
      */
     public readRecalculationByJobRecalculationJobJobIdGet(jobId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Recalculation>;
     public readRecalculationByJobRecalculationJobJobIdGet(jobId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Recalculation>>;
