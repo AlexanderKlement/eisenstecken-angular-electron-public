@@ -3,7 +3,7 @@
   @if (!loading) {
     <div>
       <div fxLayout="column" fxLayoutAlign="space-around center">
-        <h3>{{jobName$ | async}}</h3>
+        <h3>{{recalculation.name}}</h3>
         <mat-form-field appearance="fill">
           <mat-label>Gesamtpreis</mat-label>
           <input class="form-control" readonly [value]="recalculation.total_sum | currency:'EUR'"

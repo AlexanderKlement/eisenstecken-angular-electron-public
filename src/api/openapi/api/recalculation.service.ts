@@ -19,8 +19,6 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { HTTPValidationError } from '../model/hTTPValidationError';
 // @ts-ignore
-import { Recalculation } from '../model/recalculation';
-// @ts-ignore
 import { RecalculationCreateV2 } from '../model/recalculationCreateV2';
 // @ts-ignore
 import { RecalculationSmall } from '../model/recalculationSmall';
@@ -47,9 +45,9 @@ export class RecalculationService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createRecalculation(recalculationCreateV2: RecalculationCreateV2, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Recalculation>;
-    public createRecalculation(recalculationCreateV2: RecalculationCreateV2, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Recalculation>>;
-    public createRecalculation(recalculationCreateV2: RecalculationCreateV2, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Recalculation>>;
+    public createRecalculation(recalculationCreateV2: RecalculationCreateV2, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RecalculationSmall>;
+    public createRecalculation(recalculationCreateV2: RecalculationCreateV2, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RecalculationSmall>>;
+    public createRecalculation(recalculationCreateV2: RecalculationCreateV2, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RecalculationSmall>>;
     public createRecalculation(recalculationCreateV2: RecalculationCreateV2, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (recalculationCreateV2 === null || recalculationCreateV2 === undefined) {
             throw new Error('Required parameter recalculationCreateV2 was null or undefined when calling createRecalculation.');
@@ -94,7 +92,7 @@ export class RecalculationService extends BaseService {
 
         let localVarPath = `/recalculation/v2/`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Recalculation>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<RecalculationSmall>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: recalculationCreateV2,

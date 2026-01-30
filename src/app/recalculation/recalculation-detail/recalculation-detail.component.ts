@@ -9,7 +9,7 @@ import { LockService } from "../../shared/services/lock.service";
 import { AuthService } from "../../shared/services/auth.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { minutesToDisplayableString } from "../../shared/date.util";
-import { formatCurrency, AsyncPipe, DecimalPipe, CurrencyPipe } from "@angular/common";
+import { formatCurrency, DecimalPipe, CurrencyPipe } from "@angular/common";
 import {
   Recalculation,
   Paint,
@@ -17,7 +17,6 @@ import {
   Expense,
   DefaultService,
   WoodList,
-  Order,
   OrderSmall,
 } from "../../../api/openapi";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
@@ -36,14 +35,13 @@ import { TableBuilderComponent } from "../../shared/components/table-builder/tab
     MatLabel,
     MatInput,
     TableBuilderComponent,
-    AsyncPipe,
     DecimalPipe,
     CurrencyPipe,
   ],
 })
 export class RecalculationDetailComponent implements OnInit {
 
-  jobId: number;
+  recalculationId: number;
   loading = true;
   recalculation: Recalculation;
 
@@ -52,7 +50,6 @@ export class RecalculationDetailComponent implements OnInit {
   expenseDataSource: TableDataSource<Expense, DefaultService>;
   paintDataSource: TableDataSource<Paint, DefaultService>;
   woodListDataSource: TableDataSource<WoodList, DefaultService>;
-  jobName$: Observable<string>;
 
   buttons: CustomButton[] = [];
 
@@ -65,17 +62,17 @@ export class RecalculationDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      this.jobId = parseInt(params.id, 10);
-      if (isNaN(this.jobId)) {
+      this.recalculationId = parseInt(params.id, 10);
+      if (isNaN(this.recalculationId)) {
         console.error("RecalculationDetail: Cannot parse jobId");
         this.router.navigateByUrl("recalculation");
         return;
       }
-      this.api.readRecalculationByJobRecalculationJobJobIdGet(this.jobId).pipe().subscribe(recalculation => {
+      this.api.readRecalculationRecalculationRecalculationIdGet(this.recalculationId).pipe().subscribe(recalculation => {
         if (recalculation === undefined || recalculation === null) {
           this.authService.currentUserHasRight("recalculations:create").pipe(first()).subscribe(allowed => {
             if (allowed) {
-              this.router.navigateByUrl("recalculation/edit/new/" + this.jobId.toString(), { replaceUrl: true });
+              this.router.navigateByUrl("recalculation/edit/new/" + this.recalculationId.toString(), { replaceUrl: true });
             } else {
               this.snackBar.open("Sie sind nicht berechtigt Nachkalkulationen zu erstellen!"
                 , "Ok", {
@@ -118,17 +115,13 @@ export class RecalculationDetailComponent implements OnInit {
     this.initExpenseTable();
     this.initPaintTable();
     this.initWoodListTable();
-    this.jobName$ = this.api.readJobJobJobIdGet(this.jobId).pipe(
-      first(),
-      map(job => "Nachkalkulation: " + job.displayable_name),
-    );
   }
 
   private initOrderTable() {
     this.orderDataSource = new TableDataSource(
       this.api,
       (api, filter, sortDirection, skip, limit) =>
-        api.readOrdersToOrderToOrderableToIdGet(this.jobId, skip, limit, filter),
+        api.readOrdersToOrderToOrderableToIdGet(this.recalculationId, skip, limit, filter),
       (dataSourceClasses) => {
         const rows = [];
         dataSourceClasses.forEach((dataSource) => {
@@ -159,7 +152,7 @@ export class RecalculationDetailComponent implements OnInit {
         { name: "delivery_date", headerName: "Lieferdatum" },
         { name: "status", headerName: "Status" },
       ],
-      (api) => api.readOrdersToCountOrderToOrderableToIdCountGet(this.jobId),
+      (api) => api.readOrdersToCountOrderToOrderableToIdCountGet(this.recalculationId),
     );
     this.orderDataSource.loadData();
   }
@@ -168,7 +161,7 @@ export class RecalculationDetailComponent implements OnInit {
     this.workloadDataSource = new TableDataSource(
       this.api,
       (api, filter, sortDirection, skip, limit) =>
-        api.readWorkloadsWorkloadGet(skip, limit, filter, undefined, this.jobId),
+        api.readWorkloadsWorkloadGet(skip, limit, filter, undefined, this.recalculationId),
       (dataSourceClasses) => {
         const rows = [];
         dataSourceClasses.forEach((dataSource) => {
@@ -191,7 +184,7 @@ export class RecalculationDetailComponent implements OnInit {
         { name: "minutes", headerName: "Zeit" },
         { name: "cost", headerName: "Kosten" },
       ],
-      (api) => api.readWorkloadCountWorkloadCountGet(undefined, this.jobId),
+      (api) => api.readWorkloadCountWorkloadCountGet(undefined, this.recalculationId),
     );
     this.workloadDataSource.loadData();
   }
@@ -297,7 +290,7 @@ export class RecalculationDetailComponent implements OnInit {
       this.api.islockedRecalculationRecalculationIslockedRecalculationIdGet(this.recalculation.id),
       this.api.lockRecalculationRecalculationLockRecalculationIdPost(this.recalculation.id),
       this.api.unlockRecalculationRecalculationUnlockRecalculationIdPost(this.recalculation.id),
-      "recalculation/edit/" + this.recalculation.id.toString() + "/" + this.jobId.toString(),
+      "recalculation/edit/" + this.recalculation.id.toString() + "/" + this.recalculationId.toString(),
     );
   }
 }

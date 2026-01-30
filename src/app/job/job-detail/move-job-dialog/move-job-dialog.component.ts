@@ -3,7 +3,6 @@ import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule 
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
 import { first } from "rxjs/operators";
 import { DefaultService } from "../../../../api/openapi";
-import { FileService } from "../../../shared/services/file.service";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
 import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
@@ -23,7 +22,7 @@ export class MoveJobDialogComponent implements OnInit {
   moveJobFormGroup: UntypedFormGroup;
 
 
-  constructor(private api: DefaultService, private file: FileService,
+  constructor(private api: DefaultService,
               public dialogRef: MatDialogRef<MoveJobDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: ChangePathDialogData) {
   }

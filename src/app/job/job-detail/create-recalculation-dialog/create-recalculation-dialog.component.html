@@ -1,0 +1,74 @@
+@if (job$ | async; as job) {
+  <h1 mat-dialog-title>
+    {{ title }}
+
+    <ng-container>: {{ job.displayable_name }}</ng-container>
+  </h1>
+  <div mat-dialog-content>
+    <form [formGroup]="form" class="dialog-form centered-form">
+
+      <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Materialzuschlag (%)</mat-label>
+        <input matInput
+               type="number"
+               min="0"
+               step="0.1"
+               formControlName="materialChargePercent">
+        <span matSuffix>%</span>
+      </mat-form-field>
+
+    </form>
+    <ng-container>
+
+      <mat-tree
+        [dataSource]="[job]"
+        [childrenAccessor]="childrenAccessor">
+
+        <mat-tree-node *matTreeNodeDef="let node; when: isMain"
+                       matTreeNodePadding
+                       matTreeNodeToggle
+                       [isExpandable]="true"
+                       [isExpanded]="true">
+
+          <mat-checkbox
+            [checked]="mainSelected"
+            [indeterminate]="someSubsSelected(job) && !allSubsSelected(job)"
+            (change)="toggleMainSelected()">
+            {{ node.displayable_name }}
+          </mat-checkbox>
+        </mat-tree-node>
+
+        <mat-tree-node *matTreeNodeDef="let node"
+                       matTreeNodePadding>
+
+          <mat-checkbox
+            [checked]="subSelected.has(node.id)"
+            (change)="toggleSub(node.id)">
+            {{ node.displayable_name }}
+          </mat-checkbox>
+        </mat-tree-node>
+
+      </mat-tree>
+
+    </ng-container>
+  </div>
+  <div mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="dialogRef.close()">Abbrechen</button>
+    <button mat-button type="button"
+            (click)="onSubmitClick()"
+            [disabled]="!hasAnySelection || form.invalid">
+      Speichern
+    </button>
+  </div>
+} @else {
+  <h1 mat-dialog-title>{{ title }}</h1>
+  <div mat-dialog-content>
+    Lädt…
+  </div>
+}
+

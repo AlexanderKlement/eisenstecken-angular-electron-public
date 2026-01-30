@@ -23,11 +23,14 @@ import {
   DefaultService,
   Job,
   Offer,
-  Order, OrderSmall, Recalculation, DeliveryNote,
+  Order, OrderSmall, Recalculation, DeliveryNote, RecalculationService,
 } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { JobStatusBarComponent } from "./job-status-bar/job-status-bar.component";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
+import {
+  CreateRecalculationDialogComponent
+} from "./create-recalculation-dialog/create-recalculation-dialog.component";
 
 @Component({
   selector: 'app-job-detail',
@@ -67,6 +70,7 @@ export class JobDetailComponent implements OnInit {
 
   constructor(
     private api: DefaultService,
+    private recalculationService: RecalculationService,
     private router: Router,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
@@ -375,6 +379,12 @@ export class JobDetailComponent implements OnInit {
         this.router.navigateByUrl("/client/" + this.clientId);
       },
     });
+    this.buttonsMain.push({
+      name: "Nachkalkulation erstellen",
+      navigate: (): void => {
+        this.createRecalculationClicked();
+      },
+    });
     this.authService
       .currentUserHasRight("orders:all")
       .pipe(first())
@@ -680,6 +690,30 @@ export class JobDetailComponent implements OnInit {
         });
         this.initData();
       }
+    });
+  }
+
+  private createRecalculationClicked() {
+    const dialogRef = this.dialog.open(CreateRecalculationDialogComponent, {
+      width: "600px",
+      data: {
+        jobId: this.jobId,
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+          this.recalculationService.createRecalculation(
+            {
+              jobsIds: result.jobIds,
+              materialChargePercent: result.materialChargePercent,
+              name: result.name
+            }
+          ).pipe(first()) .subscribe((recalculation) => {
+              this.router.navigateByUrl(
+                "/recalculation/" + recalculation.id.toString(),
+              );
+            });
+        }
     });
   }
 }
