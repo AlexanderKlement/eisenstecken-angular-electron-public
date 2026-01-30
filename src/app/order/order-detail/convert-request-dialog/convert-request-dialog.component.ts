@@ -1,10 +1,9 @@
 import { Component, Inject, OnInit, ViewChild } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
 import { MatSelectionList, MatListOption } from "@angular/material/list";
-import { combineLatest, Observable } from "rxjs";
+import { Observable } from "rxjs";
 import { first, map } from "rxjs/operators";
-import { DefaultService, OrderedArticle } from "../../../../api/openapi";
-import { CdkScrollable } from "@angular/cdk/scrolling";
+import { ArticleService, DefaultService, OrderedArticle } from "../../../../api/openapi";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
 import { MatButton } from "@angular/material/button";
 import { AsyncPipe } from "@angular/common";
@@ -23,7 +22,7 @@ export interface OrderedArticleReturnDialogData {
     selector: 'app-convert-request-dialog',
     templateUrl: './convert-request-dialog.component.html',
     styleUrls: ['./convert-request-dialog.component.scss'],
-    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatSelectionList, MatListOption, MatDialogActions, MatButton, AsyncPipe]
+    imports: [MatDialogTitle, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatSelectionList, MatListOption, MatDialogActions, MatButton, AsyncPipe]
 })
 export class ConvertRequestDialogComponent implements OnInit {
 
@@ -36,7 +35,7 @@ export class ConvertRequestDialogComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<ConvertRequestDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: ConvertOrderedArticleReturnDialogData,
-              private api: DefaultService) {
+              private api: DefaultService, private articleService: ArticleService,) {
   }
 
 
@@ -49,7 +48,7 @@ export class ConvertRequestDialogComponent implements OnInit {
   }
 
   onSubmitClick() {
-    this.api.convertRequestOrderedArticleConvertRequestsPost(this.getSelectedArticleIds()).pipe(first()).subscribe(() => {
+    this.articleService.convertArticleRequest(this.getSelectedArticleIds()).pipe(first()).subscribe(() => {
       this.dialogRef.close(true);
     });
   }

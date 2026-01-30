@@ -6,7 +6,7 @@ import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/
 import { InfoBuilderComponent } from "../../shared/components/info-builder/info-builder.component";
 import { MatDialog } from "@angular/material/dialog";
 import { OrderDateReturnData, OrderDialogComponent } from "./order-dialog/order-dialog.component";
-import { first, map, shareReplay } from "rxjs/operators";
+import { first, map, shareReplay, switchMap, tap } from "rxjs/operators";
 import dayjs from "dayjs/esm";
 import { AuthService } from "../../shared/services/auth.service";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
@@ -14,7 +14,14 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { FileService } from "../../shared/services/file.service";
 import { EmailService } from "../../shared/services/email.service";
 import { combineLatest, Observable, Subscriber } from "rxjs";
-import { OrderBundleCreate, Supplier, OrderBundle, DefaultService, OrderSmall } from "../../../api/openapi";
+import {
+  OrderBundleCreate,
+  Supplier,
+  OrderBundle,
+  DefaultService,
+  OrderSmall,
+  OrderBundleService,
+} from "../../../api/openapi";
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 import {
@@ -51,7 +58,7 @@ export class SupplierDetailComponent implements OnInit {
   constructor(private api: DefaultService, private authService: AuthService,
               private router: Router, private snackBar: MatSnackBar,
               private route: ActivatedRoute, private file: FileService, private email: EmailService,
-              public dialog: MatDialog) {
+              public dialog: MatDialog, private orderBundleService: OrderBundleService) {
   }
 
   static sendAndDisplayOrderBundlePdf(api: DefaultService, authService: AuthService, email: EmailService,
@@ -86,7 +93,7 @@ export class SupplierDetailComponent implements OnInit {
         return;
       }
       this.supplier$ = this.api.readSupplierSupplierSupplierIdGet(this.id).pipe(
-        shareReplay({ bufferSize: 1, refCount: true }),
+        shareReplay({ bufferSize: 1, refCount: false }),
       );
       this.initSupplierDetail();
       this.initOrderTable(this.id);
@@ -312,8 +319,7 @@ export class SupplierDetailComponent implements OnInit {
     const dialogRef = this.dialog.open(OrderDialogComponent, {
       width: "600px",
       data: {
-        name: this.api.readSupplierSupplierSupplierIdGet(this.id).pipe(
-          map((supplier) => supplier.displayable_name)),
+        name: this.supplier$.pipe(map(s => s.displayable_name)),
         orders: this.api.readOrdersSupplierOrderSupplierSupplierIdGet(this.id, 0, 1000, "", "CREATED", request),
       },
     });
@@ -324,24 +330,32 @@ export class SupplierDetailComponent implements OnInit {
   }
 
   private ordersToOrderSelected(orderDateReturnData: OrderDateReturnData, request: boolean): void {
-    this.api.readSupplierSupplierSupplierIdGet(this.id).pipe(first()).subscribe((supplier) => {
-      const orderBundle: OrderBundleCreate = {
-        description: "",
-        orders: orderDateReturnData.orders,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        delivery_date: orderDateReturnData.date,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        order_from_id: supplier.id,
-        request,
-      };
-      this.api.createOrderBundleOrderBundlePost(orderBundle).pipe(first()).subscribe((newOrderBundle) => {
-        this.deliveredOrderDataSource.loadData();
-        this.orderedOrderDataSource.loadData();
-        this.createdOrderDataSource.loadData();
-        SupplierDetailComponent.sendAndDisplayOrderBundlePdf(this.api, this.authService, this.email,
-          this.file, newOrderBundle, supplier, request);
-      });
-    });
+    this.supplier$.pipe(
+      first(),
+      map((supplier) => ({
+        supplier,
+        payload: {
+          description: "",
+          orders: orderDateReturnData.orders,
+          delivery_date: orderDateReturnData.date,
+          order_from_id: supplier.id,
+          request,
+        } satisfies OrderBundleCreate,
+      })),
+      switchMap(({ supplier, payload }) =>
+        this.orderBundleService.createOrderBundle(payload).pipe(
+          first(),
+          tap((newOrderBundle) => {
+            this.deliveredOrderDataSource.loadData();
+            this.orderedOrderDataSource.loadData();
+            this.createdOrderDataSource.loadData();
+            SupplierDetailComponent.sendAndDisplayOrderBundlePdf(
+              this.api, this.authService, this.email, this.file, newOrderBundle, supplier, request,
+            );
+          }),
+        ),
+      ),
+    ).subscribe();
   }
 
   private supplierDeleteClicked() {

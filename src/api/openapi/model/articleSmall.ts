@@ -12,6 +12,7 @@ import { Lock } from './lock';
 
 
 export interface ArticleSmall { 
+    favorite: boolean;
     id: number;
     lock: Lock;
     mod_number: string;
