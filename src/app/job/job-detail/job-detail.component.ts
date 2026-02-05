@@ -22,8 +22,7 @@ import {
   OutgoingInvoice,
   DefaultService,
   Job,
-  Offer,
-  Order, OrderSmall, Recalculation, DeliveryNote, RecalculationService,
+  Offer, OrderSmall,  DeliveryNote, RecalculationService, RecalculationSmall,
 } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { JobStatusBarComponent } from "./job-status-bar/job-status-bar.component";
@@ -60,10 +59,12 @@ export class JobDetailComponent implements OnInit {
   subJobDataSource: TableDataSource<Job, DefaultService>;
   orderDataSource: TableDataSource<OrderSmall, DefaultService>;
   deliveryNoteDataSource: TableDataSource<DeliveryNote, DefaultService>;
+  recalculationDataSource: TableDataSource<RecalculationSmall, RecalculationService>;
   ordersAllowed = false;
   outgoingInvoicesAllowed = false;
   offersAllowed = false;
   deliveryNoteAllowed = true;
+  recalculationAllowed = true;
   title = "";
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
@@ -366,6 +367,50 @@ export class JobDetailComponent implements OnInit {
     this.deliveryNoteDataSource.loadData();
   }
 
+
+  private initRecalculationTable(): void {
+    this.recalculationDataSource = new TableDataSource(
+      this.recalculationService,
+      (recalculationService, filter, sortDirection, skip, limit) =>
+        recalculationService.getRecalculations(
+          skip,
+          limit,
+          filter,
+          null,
+          this.jobId
+        ),
+      (dataSourceClasses) => {
+        const rows = [];
+        dataSourceClasses.forEach((dataSource) => {
+          rows.push({
+            values: {
+              names: dataSource.jobs.map(job => job.name).join(", "),
+              codes: dataSource.jobs.map(job => job.code).join(", "),
+              name: dataSource.name,
+              "client.name": dataSource.jobs[0].client.fullname,
+              "responsible.fullname": dataSource.jobs[0].responsible.fullname,
+            },
+            route: () => {
+              this.router.navigateByUrl(
+                "/recalculation/" + dataSource.id.toString(),
+              );
+            },
+          });
+        });
+        return rows;
+      },
+      [
+        { name: "codes", headerName: "Kommissionsnummern" },
+        { name: "names", headerName: "Kommissionen" },
+        { name: "name", headerName: "Beschreibung" },
+        { name: "client.name", headerName: "Kunde" },
+        { name: "responsible.fullname", headerName: "Zuständig" },
+      ],
+      (api) => api.getRecalculationCount(null, this.jobId),
+    );
+    this.recalculationDataSource.loadData();
+  }
+
   private initAccessRights() {
     this.buttonsMain.push({
       name: "Zum Kunden",
@@ -594,6 +639,7 @@ export class JobDetailComponent implements OnInit {
     this.initJobDetail(this.jobId);
     this.initOrderTable();
     this.initDeliveryNoteTable();
+    this.initRecalculationTable();
   }
 
   private newInvoiceClicked() {

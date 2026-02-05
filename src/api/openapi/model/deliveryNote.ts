@@ -7,10 +7,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { JobSmall } from './jobSmall';
 import { UserEssential } from './userEssential';
 import { DeliveryNoteReason } from './deliveryNoteReason';
 import { DescriptiveArticle } from './descriptiveArticle';
-import { Job } from './job';
 import { Lock } from './lock';
 
 
@@ -24,7 +24,7 @@ export interface DeliveryNote {
     free: boolean;
     freight: boolean;
     id: number;
-    job?: Job | null;
+    job?: JobSmall | null;
     lock: Lock;
     name: string;
     number: number;

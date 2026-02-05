@@ -7,7 +7,8 @@
 
   @if (isMainJob) {
     <div class="table-section">
-      <app-table-builder [$refresh]="$refresh" [dataSource]="subJobDataSource" title="Unteraufträge"></app-table-builder>
+      <app-table-builder [$refresh]="$refresh" [dataSource]="subJobDataSource"
+                         title="Unteraufträge"></app-table-builder>
     </div>
   }
 
@@ -19,7 +20,8 @@
 
   @if (isMainJob && outgoingInvoicesAllowed) {
     <div class="table-section">
-      <app-table-builder [$refresh]="$refresh" [dataSource]="outgoingInvoiceDataSource" title="Rechnungen"></app-table-builder>
+      <app-table-builder [$refresh]="$refresh" [dataSource]="outgoingInvoiceDataSource"
+                         title="Rechnungen"></app-table-builder>
     </div>
   }
 
@@ -31,7 +33,14 @@
 
   @if (deliveryNoteAllowed) {
     <div class="table-section">
-      <app-table-builder [$refresh]="$refresh" [dataSource]="deliveryNoteDataSource" title="Lieferscheine"></app-table-builder>
+      <app-table-builder [$refresh]="$refresh" [dataSource]="deliveryNoteDataSource"
+                         title="Lieferscheine"></app-table-builder>
+    </div>
+  }
+  @if (recalculationAllowed) {
+    <div class="table-section">
+      <app-table-builder [$refresh]="$refresh" [dataSource]="recalculationDataSource"
+                         title="Nachberechnung"></app-table-builder>
     </div>
   }
 </div>
