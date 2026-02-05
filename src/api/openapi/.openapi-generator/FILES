@@ -68,6 +68,7 @@ model/ingoingInvoice.ts
 model/ingoingInvoiceCreate.ts
 model/job.ts
 model/jobCreate.ts
+model/jobForRecalculation.ts
 model/jobSection.ts
 model/jobSectionCreate.ts
 model/jobSmall.ts
@@ -78,6 +79,7 @@ model/jobTypeType.ts
 model/jobUpdate.ts
 model/journey.ts
 model/language.ts
+model/locationInner.ts
 model/lock.ts
 model/maintenance.ts
 model/maintenanceCreate.ts
@@ -122,6 +124,7 @@ model/recalculationCreate.ts
 model/recalculationCreateV2.ts
 model/recalculationSmall.ts
 model/recalculationUpdate.ts
+model/recalculationV2.ts
 model/reminder.ts
 model/reminderCreate.ts
 model/reminderLevel.ts
@@ -152,7 +155,6 @@ model/userEssential.ts
 model/userPassword.ts
 model/userUpdate.ts
 model/validationError.ts
-model/validationErrorLocInner.ts
 model/vat.ts
 model/vatCreate.ts
 model/vietJob.ts
@@ -171,4 +173,5 @@ model/xmlFileBytes.ts
 model/xmlFileStr.ts
 param.ts
 provide-api.ts
+query.params.ts
 variables.ts

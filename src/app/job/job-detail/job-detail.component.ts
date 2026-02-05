@@ -363,7 +363,7 @@ export class JobDetailComponent implements OnInit {
       (api) => api.readOrdersToCountOrderToOrderableToIdCountGet(this.jobId),
       [],
     );
-    this.orderDataSource.loadData();
+    this.deliveryNoteDataSource.loadData();
   }
 
   private initAccessRights() {

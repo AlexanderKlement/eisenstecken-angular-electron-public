@@ -7,28 +7,18 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { JobSmall } from './jobSmall';
-import { Order } from './order';
+import { JobForRecalculation } from './jobForRecalculation';
 import { WoodList } from './woodList';
 import { Expense } from './expense';
 import { Paint } from './paint';
-import { Lock } from './lock';
-import { Workload } from './workload';
 
 
-export interface Recalculation { 
-    cost: number;
+export interface RecalculationV2 { 
     expenses: Array<Expense>;
-    id: number;
-    jobs: Array<JobSmall>;
-    km: number;
-    lock: Lock;
+    jobs: Array<JobForRecalculation>;
     material_charge_percent: number;
-    name: string;
-    orders: Array<Order>;
     paints: Array<Paint>;
-    pdf?: string | null;
+    totalSum: number;
     wood_lists: Array<WoodList>;
-    workloads: Array<Workload>;
 }
 

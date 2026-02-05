@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import dayjs from "dayjs/esm";
-import { first, map } from "rxjs/operators";
+import { filter, first, map, switchMap, take } from "rxjs/operators";
 import { Observable, Subscriber } from "rxjs";
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { LockService } from "../../shared/services/lock.service";
@@ -17,11 +17,13 @@ import {
   Expense,
   DefaultService,
   WoodList,
-  OrderSmall,
+  OrderSmall, RecalculationService,
 } from "../../../api/openapi";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
 import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
+import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: 'app-recalculation-detail',
@@ -57,7 +59,7 @@ export class RecalculationDetailComponent implements OnInit {
   private $refreshSubscriber: Subscriber<void>;
 
   constructor(private api: DefaultService, private router: Router, private route: ActivatedRoute,
-              private locker: LockService, private authService: AuthService, private snackBar: MatSnackBar) {
+              private locker: LockService, private authService: AuthService, private snackBar: MatSnackBar, private recalculationService: RecalculationService, private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -95,6 +97,12 @@ export class RecalculationDetailComponent implements OnInit {
           name: "Bearbeiten",
           navigate: () => {
             this.editButtonClicked();
+          },
+        });
+        this.buttons.push({
+          name: "Löschen",
+          navigate: () => {
+            this.deleteButtonClicked();
           },
         });
       }
@@ -292,5 +300,28 @@ export class RecalculationDetailComponent implements OnInit {
       this.api.unlockRecalculationRecalculationUnlockRecalculationIdPost(this.recalculation.id),
       "recalculation/edit/" + this.recalculation.id.toString() + "/" + this.recalculationId.toString(),
     );
+  }
+
+  private deleteButtonClicked(): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "400px",
+      data: {
+        title: "Nachkalkulation löschen?",
+        text: "Dieser Schritt kann nicht rückgängig gemacht werden.",
+      },
+    });
+    dialogRef.afterClosed().pipe(
+      take(1),
+      filter(Boolean),
+      switchMap(() => this.recalculationService.deleteRecalculation(this.recalculation.id)),
+    ).subscribe({
+      next: () => {
+        this.router.navigateByUrl("/recalculation");
+      },
+      error: (err) => {
+        console.error("Delete recalculation failed", err);
+        this.snackBar.open("Löschen fehlgeschlagen.", "Ok", { duration: 8000 });
+      },
+    });
   }
 }
