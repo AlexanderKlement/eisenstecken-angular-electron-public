@@ -32,7 +32,7 @@ import {
   OutgoingInvoiceUpdate,
   OutgoingInvoiceCreate,
   DescriptiveArticleCreate,
-  Lock,
+  Lock, PaymentTermEnum,
 } from "../../../api/openapi";
 import {
   DefaultLayoutDirective,
@@ -57,6 +57,12 @@ import { MatSelect, MatOption } from "@angular/material/select";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { AddressFormComponent } from "../../shared/components/address-form/address-form.component";
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
+import { PAYMENT_TERMS } from "../../invoice/payment_terms";
+
+type PaymentTermsResolved = { label: string; daysToAdd: number };
+
+
+
 
 @Component({
   selector: 'app-outgoing-invoice-edit',
@@ -101,6 +107,21 @@ export class OutgoingInvoiceEditComponent
   title = "Ausgangsrechnung: Bearbeiten";
 
   company = false;
+  readonly paymentTerms = PAYMENT_TERMS;
+
+
+  private resolvePaymentTerms(value: PaymentTermEnum): PaymentTermsResolved {
+    switch (value) {
+      case PaymentTermEnum.Gg30:
+        return { label: "30 Tage", daysToAdd: 30 };
+      case PaymentTermEnum.Gg14:
+        return { label: "14 Tage", daysToAdd: 14 };
+      case PaymentTermEnum.OnSight:
+        return { label: "Bei Sicht", daysToAdd: 0 };
+      default:
+        return { label: "", daysToAdd: 0 };
+    }
+  }
 
   constructor(
     api: DefaultService,
@@ -181,7 +202,7 @@ export class OutgoingInvoiceEditComponent
               dialogRef.afterClosed().subscribe((result) => {
                 if (result) {
                   if (this.createMode) {
-                    this.router.navigateByUrl(this.navigationTarget);
+                    this.router.navigateByUrl(this.navigationTarget).then(r => console.log(r));
                   } else {
                     this.api
                       .deleteOutgoingInvoiceOutgoingInvoiceOutgoingInvoiceIdDelete(
@@ -211,6 +232,11 @@ export class OutgoingInvoiceEditComponent
     if (this.createMode) {
       this.title = "Ausgangsrechnung: Erstellen";
     }
+    this.subscription.add(
+      this.invoiceGroup.get("paymentTerms")!.valueChanges.subscribe((value: PaymentTermEnum) => {
+        this.onPaymentTermsChanged(value);
+      }),
+    );
   }
 
   getAddressGroup(): UntypedFormGroup {
@@ -219,6 +245,26 @@ export class OutgoingInvoiceEditComponent
 
   companyCheckBoxClicked(): void {
     this.company = !this.company;
+  }
+
+
+  private onPaymentTermsChanged(value: PaymentTermEnum): void {
+    const resolved = this.resolvePaymentTerms(value);
+
+    // Use invoice date as base; fallback to "now" if missing/invalid
+    const invoiceDateRaw = this.invoiceGroup.get("date")?.value;
+    const baseDate = invoiceDateRaw ? new Date(invoiceDateRaw) : new Date();
+    if (Number.isNaN(baseDate.getTime())) {
+      // If "date" is not parsable, just use today
+      baseDate.setTime(Date.now());
+    }
+
+    const newPaymentDate = new Date(baseDate);
+    newPaymentDate.setDate(newPaymentDate.getDate() + resolved.daysToAdd);
+
+    // Update the fields (emitEvent:false prevents loops if you later subscribe to these too)
+    this.invoiceGroup.get("payment_condition")?.setValue(resolved.label, { emitEvent: false });
+    this.invoiceGroup.get("payment_date")?.setValue(newPaymentDate, { emitEvent: false });
   }
 
   invoiceDeleteFailed(error?: any) {
@@ -261,39 +307,6 @@ export class OutgoingInvoiceEditComponent
       index + 1,
       this.initDescriptiveArticles(),
     );
-  }
-
-  toggleCollapseDescriptiveArticle(index: number | undefined): void {
-    if (index === -1) {
-      const control = this.getDescriptiveArticles().controls;
-      if (control.length === this.hiddenDescriptives.length) {
-        this.hiddenDescriptives = [];
-        return;
-      }
-
-      this.hiddenDescriptives = [];
-      control.forEach((_, idx) => {
-        this.hiddenDescriptives.push(idx);
-      });
-      return;
-    }
-    const oldLength = this.hiddenDescriptives.length;
-    this.hiddenDescriptives = this.hiddenDescriptives.filter(
-      (idx) => idx !== index,
-    );
-    if (oldLength === this.hiddenDescriptives.length) {
-      this.hiddenDescriptives.push(index);
-    }
-  }
-
-  isHidden(index: number | undefined): boolean {
-    if (index === -1) {
-      return (
-        this.getDescriptiveArticles().controls.length ===
-        this.hiddenDescriptives.length
-      );
-    }
-    return this.hiddenDescriptives.filter((idx) => idx === index).length !== 0;
   }
 
   moveDescriptiveArticleUp(index: number): void {
@@ -368,6 +381,7 @@ export class OutgoingInvoiceEditComponent
         payment_date: formatDateTransport(
           this.invoiceGroup.get("payment_date").value,
         ),
+        paymentTerms: this.invoiceGroup.get("paymentTerms").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         vat_id: this.invoiceGroup.get("vat_id").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -418,6 +432,7 @@ export class OutgoingInvoiceEditComponent
         payment_date: formatDateTransport(
           this.invoiceGroup.get("payment_date").value,
         ),
+        paymentTerms: this.invoiceGroup.get("paymentTerms").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         vat_id: this.invoiceGroup.get("vat_id").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -569,6 +584,7 @@ export class OutgoingInvoiceEditComponent
       vat_id: new UntypedFormControl(3),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       payment_condition: new UntypedFormControl(""),
+      paymentTerms: new UntypedFormControl(PaymentTermEnum.Gg30),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       payment_date: new UntypedFormControl(now30gg),
       // eslint-disable-next-line @typescript-eslint/naming-convention

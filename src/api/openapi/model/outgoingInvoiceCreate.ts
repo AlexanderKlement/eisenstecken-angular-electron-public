@@ -9,6 +9,7 @@
  */
 import { AddressCreate } from './addressCreate';
 import { DescriptiveArticleCreate } from './descriptiveArticleCreate';
+import { PaymentTermEnum } from './paymentTermEnum';
 
 
 export interface OutgoingInvoiceCreate { 
@@ -21,10 +22,14 @@ export interface OutgoingInvoiceCreate {
     job_id: number;
     name: string;
     number: string;
+    paymentTerms: PaymentTermEnum;
     payment_condition: string;
     payment_date: string;
     pec: string;
     vat_id: number;
     vat_number: string;
 }
+export namespace OutgoingInvoiceCreate {
+}
+
 

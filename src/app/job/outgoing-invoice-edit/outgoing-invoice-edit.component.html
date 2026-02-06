@@ -9,21 +9,21 @@
             <div class="position-control new-position-btn">
               <app-circle-icon-button (click)="addDescriptiveArticleAt(i)" icon="add" />
             </div>
-            <button type="button" mat-icon-button mat-raised-button (click)="moveDescriptiveArticleUp(i)"
-              [disabled]="i === 0"
-              class="position-control position-up" title="Nach oben schieben">
+            <button type="button" mat-icon-button (click)="moveDescriptiveArticleUp(i)"
+                    [disabled]="i === 0"
+                    class="position-control position-up" title="Nach oben schieben">
               <mat-icon>arrow_upward</mat-icon>
             </button>
-            <button type="button" mat-icon-button mat-raised-button (click)="moveDescriptiveArticleDown(i)"
-              [disabled]="i === getDescriptiveArticles().controls.length - 1"
-              class="position-control position-down" title="Nach unten schieben">
+            <button type="button" mat-icon-button (click)="moveDescriptiveArticleDown(i)"
+                    [disabled]="i === getDescriptiveArticles().controls.length - 1"
+                    class="position-control position-down" title="Nach unten schieben">
               <mat-icon>arrow_downward</mat-icon>
             </button>
             <div fxLayout="row" fxLayoutAlign="space-between center" [formGroupName]="i">
               <mat-form-field appearance="fill" fxFlex="80">
                 <mat-label>Position</mat-label>
                 <textarea rows="3" class="form-control" formControlName="description" maxlength="10000"
-                matInput></textarea>
+                          matInput></textarea>
               </mat-form-field>
               <mat-form-field appearance="fill" fxFlex="4">
                 <mat-label>Menge</mat-label>
@@ -32,7 +32,7 @@
               <mat-form-field appearance="fill" fxFlex="4">
                 <mat-label>Einzelpreis</mat-label>
                 <input class="form-control" type=text formControlName="singlePriceFormatted" (blur)="transformAmount(i)"
-                  matInput>
+                       matInput>
               </mat-form-field>
               <mat-form-field appearance="fill" fxFlex="8">
                 <mat-label>Gesamtpreis</mat-label>
@@ -61,10 +61,12 @@
         <mat-form-field appearance="fill">
           <mat-label>Mehrwertsteuer:</mat-label>
           <mat-select formControlName="vat_id">
-            @for (vat of vatOptions$ | async; track vat) {
-              <mat-option [value]="vat.id">
-                {{vat.name}}
-              </mat-option>
+            @if (vatOptions$ | async; as vatOptions) {
+              @for (vat of vatOptions; track vat.id) {
+                <mat-option [value]="vat.id">
+                  {{ vat.name }}
+                </mat-option>
+              }
             }
           </mat-select>
         </mat-form-field>
@@ -106,6 +108,16 @@
         <app-address-form [address]="getAddressGroup()" fxFlexFill></app-address-form>
         <mat-form-field appearance="fill">
           <mat-label>Zahlungsbedingung:</mat-label>
+          <mat-select formControlName="paymentTerms">
+              @for (payment_term of paymentTerms; track payment_term.label) {
+                <mat-option [value]="payment_term.value">
+                  {{ payment_term.label }}
+                </mat-option>
+              }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Zahlungsbeschreibung:</mat-label>
           <textarea class="form-control" formControlName="payment_condition" matInput></textarea>
         </mat-form-field>
         <mat-form-field appearance="fill">

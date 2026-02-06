@@ -12,6 +12,7 @@ import { Reminder } from './reminder';
 import { Address } from './address';
 import { DescriptiveArticle } from './descriptiveArticle';
 import { Vat } from './vat';
+import { PaymentTermEnum } from './paymentTermEnum';
 import { Lock } from './lock';
 
 
@@ -32,6 +33,7 @@ export interface OutgoingInvoice {
     name: string;
     number: string;
     paid: boolean;
+    paymentTerms: PaymentTermEnum;
     payment_condition: string;
     payment_date: string;
     payments: Array<Payment>;
@@ -42,4 +44,7 @@ export interface OutgoingInvoice {
     vat: Vat;
     vat_number: string;
 }
+export namespace OutgoingInvoice {
+}
+
 

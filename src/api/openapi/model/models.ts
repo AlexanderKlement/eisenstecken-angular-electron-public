@@ -99,6 +99,7 @@ export * from './parameter';
 export * from './parameterCreate';
 export * from './payment';
 export * from './paymentCreate';
+export * from './paymentTermEnum';
 export * from './price';
 export * from './priceCreate';
 export * from './priceUpdate';

@@ -116,6 +116,7 @@ model/parameter.ts
 model/parameterCreate.ts
 model/payment.ts
 model/paymentCreate.ts
+model/paymentTermEnum.ts
 model/price.ts
 model/priceCreate.ts
 model/priceUpdate.ts
