@@ -425,6 +425,14 @@ export class JobDetailComponent implements OnInit {
       },
     });
     this.buttonsMain.push({
+      name: "Lieferschein erstellen",
+      navigate: (): void => {
+        this.router.navigate(["/delivery_note/new"], {
+          queryParams: { jobId: this.jobId.toString() },
+        });
+      },
+    });
+    this.buttonsMain.push({
       name: "Nachkalkulation erstellen",
       navigate: (): void => {
         this.createRecalculationClicked();

@@ -128,6 +128,16 @@ export class DeliveryEditComponent
   ngOnInit(): void {
     super.ngOnInit();
     this.initDeliveryNoteGroup();
+
+    this.route.queryParamMap.subscribe((qp) => {
+      const jobId = Number(qp.get("jobId"));
+      if (!this.createMode) return;
+      if (!Number.isFinite(jobId) || jobId <= 0) return;
+
+      this.deliveryNoteGroup.get("job_id")?.setValue(jobId);
+      this.selectedJobChanged();
+    });
+
     this.essentialJobList = this.api
       .readJobsJobGet(0, 100, "", undefined, "JOBSTATUS_ACCEPTED", true)
       .pipe(
@@ -172,6 +182,8 @@ export class DeliveryEditComponent
       this.title = "Lieferschein: Erstellen";
     }
   }
+
+
 
   onSubmit() {
     this.submitted = true;
