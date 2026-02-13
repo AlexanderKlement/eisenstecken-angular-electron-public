@@ -81,7 +81,7 @@ export class FilterableClickableListComponent implements OnInit, OnDestroy {
         filterString = filterString.toLowerCase();
         return of(
           this.listElements.filter(
-            (element) => element.name.toLowerCase().indexOf(filterString) >= 0,
+            (element) => element.searchText.toLowerCase().indexOf(filterString) >= 0,
           ),
         );
       }),

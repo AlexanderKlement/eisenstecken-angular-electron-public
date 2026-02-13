@@ -82,10 +82,12 @@ export class OrderComponent implements OnInit {
   ): ListItem[] {
     const listItems: ListItem[] = [];
     for (const elem of supportedListElements) {
-      const listItem: ListItem = {
-        name: isJob(elem)
+      const name = isJob(elem)
           ? `${elem.code} | ${elem.displayable_name}`
-          : elem.displayable_name,
+          : elem.displayable_name;
+      const listItem: ListItem = {
+        name: name,
+        searchText: name ,
         item: elem,
         type: elem.type,
         collapse: false,
@@ -98,6 +100,7 @@ export class OrderComponent implements OnInit {
         elem.sub_jobs.forEach((subJob) => {
           listItems.push({
             name: `${subJob.code} | ${subJob.name}`,
+            searchText: `${subJob.code} | ${subJob.displayable_name}`,
             item: subJob,
             type: subJob.type,
             collapse: elem.displayable_name,
