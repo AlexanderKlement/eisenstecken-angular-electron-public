@@ -6,7 +6,7 @@
         <h3>{{recalculation.name}}</h3>
         <mat-form-field appearance="fill">
           <mat-label>Gesamtpreis</mat-label>
-          <input class="form-control" readonly [value]="recalculation.total_sum | currency:'EUR'"
+          <input class="form-control" readonly [value]="recalculation.totalSum | currency:'EUR'"
             matInput>
         </mat-form-field>
       </div>

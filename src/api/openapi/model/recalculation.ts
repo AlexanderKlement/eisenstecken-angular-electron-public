@@ -28,6 +28,7 @@ export interface Recalculation {
     orders: Array<Order>;
     paints: Array<Paint>;
     pdf?: string | null;
+    totalSum: number;
     wood_lists: Array<WoodList>;
     workloads: Array<Workload>;
 }
