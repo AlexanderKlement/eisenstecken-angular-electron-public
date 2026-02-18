@@ -70,7 +70,7 @@ export class OrderDetailComponent implements OnInit {
   public static extractOrderToolTips(dataSource: OrderSmall): string {
     let toolTipString = "";
     for (const article of dataSource.articles) {
-      toolTipString += article.article.name.translation + " - ";
+      toolTipString += article.name.translation + " - ";
     }
     return toolTipString.substring(0, toolTipString.length - 3);
   }
@@ -151,7 +151,7 @@ export class OrderDetailComponent implements OnInit {
             values: {
               // eslint-disable-next-line @typescript-eslint/naming-convention
               "article.name.translation_de":
-              dataSource.article.name.translation_de,
+              dataSource.name.translation_de,
               position: dataSource.position,
               amount: dataSource.amount,
               // eslint-disable-next-line @typescript-eslint/naming-convention

@@ -13,7 +13,7 @@ import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/c
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { OrderDateReturnData, OrderDialogComponent } from "../supplier-detail/order-dialog/order-dialog.component";
 import { Observable, Subscriber } from "rxjs";
-import { DefaultService, Stock, Order, Supplier, OrderBundleCreate, OrderSmall } from "../../../api/openapi";
+import { DefaultService, Stock, Supplier, OrderBundleCreate, OrderSmall } from "../../../api/openapi";
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
@@ -135,7 +135,7 @@ export class StockDetailComponent implements OnInit {
               values: {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 "order_from.displayable_name": dataSource.order_from.displayable_name,
-                articles: dataSource.articles[0].article.name.translation,
+                articles: dataSource.articles[0].name.translation,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 create_date: dayjs(dataSource.create_date).format("L"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -172,7 +172,7 @@ export class StockDetailComponent implements OnInit {
                 "order_to.displayable_name": dataSource.order_to.displayable_name,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 create_date: dayjs(dataSource.create_date).format("LLLL"),
-                articles: dataSource.articles[0].article.name.translation,
+                articles: dataSource.articles[0].name.translation,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 delivery_date: dataSource.delivery_date !== null ? dayjs(dataSource.delivery_date).format("L") : "",
                 "user.fullname": dataSource.user.fullname,

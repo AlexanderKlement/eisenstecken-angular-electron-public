@@ -5,7 +5,7 @@
       @for (orderedArticle of orderedArticles$ | async; track orderedArticle) {
         <mat-list-option
           value="{{orderedArticle.id}}">
-          {{orderedArticle.article.name.translation}}
+          {{orderedArticle.name.translation}}
         </mat-list-option>
       }
     </mat-selection-list>

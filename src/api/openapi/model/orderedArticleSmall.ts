@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Text } from './text';
 import { Unit } from './unit';
 import { ArticleSmall } from './articleSmall';
 
@@ -16,6 +17,7 @@ export interface OrderedArticleSmall {
     article: ArticleSmall;
     comment: string;
     id: number;
+    name: Text;
     ordered_unit: Unit;
     position: string;
     price: number;

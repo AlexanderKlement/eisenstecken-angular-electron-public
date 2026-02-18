@@ -9,7 +9,7 @@
           <mat-selection-list #orderable [multiple]="false" (selectionChange)="orderableClicked()">
             @for (orderedArticle of orderedArticles$ | async; track orderedArticle.id) {
               <mat-list-option [value]="orderedArticle">
-                {{ orderedArticle.article.name.translation }}
+                {{ orderedArticle.name.translation }}
               </mat-list-option>
             }
           </mat-selection-list>

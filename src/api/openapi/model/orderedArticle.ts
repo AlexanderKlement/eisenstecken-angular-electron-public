@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { Article } from './article';
+import { Text } from './text';
 import { Unit } from './unit';
 
 
@@ -16,6 +17,7 @@ export interface OrderedArticle {
     article: Article;
     comment: string;
     id: number;
+    name: Text;
     ordered_unit: Unit;
     position: string;
     price: number;

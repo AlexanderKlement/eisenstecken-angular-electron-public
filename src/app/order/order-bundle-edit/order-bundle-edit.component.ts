@@ -90,7 +90,7 @@ export class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> imp
     for (const article of order.articles) {
       articleFormArray.push(new UntypedFormGroup({
         id: new UntypedFormControl(article.id),
-        name: new UntypedFormControl(article.article.name.translation_de),
+        name: new UntypedFormControl(article.name.translation_de),
         amount: new UntypedFormControl(article.amount),
         // eslint-disable-next-line @typescript-eslint/naming-convention
         mod_number: new UntypedFormControl(article.article.mod_number),
