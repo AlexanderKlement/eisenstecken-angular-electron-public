@@ -1,8 +1,8 @@
 <app-toolbar [title]="title"></app-toolbar>
 <div class="window-container">
   <div fxLayout="column" fxLayoutAlign="space-around center">
-    <h3>{{title}}</h3>
-    <h3>{{jobName$ | async}}</h3>
+    <h3>{{ title }}</h3>
+    <h3>{{ (recalculation$ | async)?.name }}</h3>
   </div>
   <form [formGroup]="recalculationGroup" (submit)="onSubmit()">
     <div fxLayout="column" fxLayoutAlign="space-around center">
@@ -15,7 +15,7 @@
       <h3>Preise Holzlisten</h3>
       @for (wood_list of getWoodLists().controls; track wood_list; let i = $index) {
         <div [formGroupName]="i" fxLayout="row"
-          fxLayoutAlign="space-around center">
+             fxLayoutAlign="space-around center">
           <mat-form-field appearance="fill">
             <mat-label>Bezeichnung</mat-label>
             <input class="form-control" formControlName="name" matInput>
@@ -38,7 +38,7 @@
           <h4>Benutzt</h4>
           @for (paint of getPaints().controls; track paint; let i = $index) {
             <div [formGroupName]="i" fxLayout="row"
-              fxLayoutAlign="space-around center">
+                 fxLayoutAlign="space-around center">
               <mat-form-field appearance="fill">
                 <mat-label>Bezeichnung</mat-label>
                 <input class="form-control" formControlName="name" matInput>
@@ -50,10 +50,12 @@
               <mat-form-field appearance="fill">
                 <mat-label>Einheit</mat-label>
                 <mat-select formControlName="unit_id">
-                  @for (unit of units$ | async; track unit) {
-                    <mat-option [value]="unit.id">
-                      {{unit.name.translation}}
-                    </mat-option>
+                  @if (units$ | async; as units) {
+                    @for (unit of units; track unit) {
+                      <mat-option [value]="unit.id">
+                        {{ unit.name.translation }}
+                      </mat-option>
+                    }
                   }
                 </mat-select>
               </mat-form-field>
@@ -71,11 +73,13 @@
         <div fxLayout="column" fxLayoutAlign="space-around center" class="separator-left">
           <h4>Vorlagen</h4>
           <mat-action-list>
-            @for (templatePaint of (templatePaints$ | async); track templatePaint) {
-              <button mat-list-item
-                (click)="templatePaintClicked(templatePaint)">
-                {{templatePaint.name}}
-              </button>
+            @if (templatePaints$ | async; as templatePaints) {
+              @for (templatePaint of templatePaints; track templatePaint) {
+                <button mat-list-item
+                        (click)="templatePaintClicked(templatePaint)">
+                  {{ templatePaint.name }}
+                </button>
+              }
             }
           </mat-action-list>
         </div>
@@ -85,7 +89,7 @@
       <h3>Zusatzkosten</h3>
       @for (expense of getExpenses().controls; track expense; let i = $index) {
         <div [formGroupName]="i" fxLayout="row" class="wide"
-          fxLayoutAlign="center center">
+             fxLayoutAlign="center center">
           <mat-form-field appearance="fill" class="wide">
             <mat-label>Bezeichnung</mat-label>
             <input class="form-control" formControlName="name" matInput>
@@ -102,7 +106,6 @@
       <app-circle-icon-button (click)="addExpense()" icon="add" />
     </div>
     <app-table-builder [dataSource]="orderDataSource" title="Bestellungen"></app-table-builder>
-    <app-table-builder [dataSource]="workloadDataSource" title="Arbeitszeit"></app-table-builder>
     <div fxLayout="column" fxLayoutAlign="space-around center">
       <h3>Fahrten</h3>
       <div fxLayout="row" fxLayoutAlign="center center" class="wide">

@@ -32,7 +32,7 @@ import {
   WoodList,
   Workload,
   Order,
-  Lock, OrderSmall,
+  Lock, OrderSmall, OrderService, RecalculationService,
 } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import {
@@ -75,18 +75,19 @@ export class RecalculationEditComponent
   implements OnInit, OnDestroy {
   recalculationGroup: UntypedFormGroup;
   navigationTarget = "recalculation";
-  jobId: number;
-  jobName$: Observable<string>;
+  recalculationId: number;
+  recalculation$: Observable<Recalculation>;
   units$: Observable<Unit[]>;
   templatePaints$: Observable<TemplatePaint[]>;
 
-  orderDataSource: TableDataSource<OrderSmall, DefaultService>;
-  workloadDataSource: TableDataSource<Workload, DefaultService>;
+  orderDataSource: TableDataSource<OrderSmall, OrderService>;
   title = "Nachkalkulation: Bearbeiten";
 
   // eslint-disable-next-line max-len
   constructor(
     api: DefaultService,
+    private orderService: OrderService,
+    private recalculationService: RecalculationService,
     router: Router,
     route: ActivatedRoute,
     private file: FileService,
@@ -108,41 +109,19 @@ export class RecalculationEditComponent
     this.templatePaints$ = this.api.readTemplatePaintsTemplatePaintGet();
     this.initRecalculationsGroup();
     this.routeParams.subscribe((params) => {
-      this.jobId = parseInt(params.job_id, 10);
-      if (isNaN(this.jobId)) {
-        console.error("RecalculationEdit: Cannot parse job id");
-        this.router.navigateByUrl(this.navigationTarget);
+      this.recalculationId = parseInt(params.id, 10);
+      if (!this.recalculationId) {
+        console.error("Recalculation id not set!");
+        return;
       }
-      this.initOrderTable();
-      this.initWorkloadTable();
-      this.jobName$ = this.api.readJobJobJobIdGet(this.jobId).pipe(
-        first(),
-        map((job) => job.displayable_name),
-      );
-      if (!this.createMode) {
-        this.api
-          .readRecalculationRecalculationRecalculationIdGet(this.id)
-          .pipe(first())
-          .subscribe((recalculation) => {
-            this.fillFormGroup(recalculation);
-            this.addAtLeastOne();
-          });
-      } else {
-        this.api
-          .getParameterParameterKeyGet("cost_per_km")
-          .pipe(first())
-          .subscribe((cost) => {
-            this.recalculationGroup.get("cost").setValue(cost);
-          });
-        this.api
-          .readDriveDistanceByJobJourneyDistanceJobIdGet(this.jobId)
-          .pipe(first())
-          .subscribe((km) => {
-            this.recalculationGroup.get("km").setValue(km);
-          });
+      this.api.readRecalculationRecalculationRecalculationIdGet( this.recalculationId).pipe(first()).subscribe(recalculation => {
+          this.recalculation$ = new Observable((observer) => {
+            observer.next(recalculation);
+          })
+        this.fillFormGroup(recalculation);
         this.addAtLeastOne();
-      }
-    });
+      })});
+    this.initOrderDataSource();
     if (this.createMode) {
       this.title = "Nachkalkulation: Erstellen";
     }
@@ -320,30 +299,7 @@ export class RecalculationEditComponent
       });
     }
     if (this.createMode) {
-      const recalculationCreate: RecalculationCreate = {
-        expenses,
-        paints,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        wood_lists: woodLists,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        material_charge_percent: this.recalculationGroup.get(
-          "material_charge_percent",
-        ).value,
-        km: this.recalculationGroup.get("km").value,
-        cost: this.recalculationGroup.get("cost").value,
-      };
-      this.api
-        .createRecalculationRecalculationJobIdPost(
-          this.jobId,
-          recalculationCreate,
-        )
-        .pipe(first())
-        .subscribe((recalculation) => {
-          this.file.open(recalculation.pdf);
-          this.router.navigateByUrl("recalculation/" + this.jobId, {
-            replaceUrl: true,
-          });
-        });
+      console.error("Create mode not supported anymore!");
     } else {
       const recalculationUpdate: RecalculationUpdate = {
         expenses,
@@ -357,15 +313,14 @@ export class RecalculationEditComponent
         km: this.recalculationGroup.get("km").value,
         cost: this.recalculationGroup.get("cost").value,
       };
-      this.api
-        .updateRecalculationRecalculationJobIdPut(
-          this.jobId,
+      this.recalculationService.updateRecalculationRecalculationV2RecalculationIdPut(
+          this.recalculationId,
           recalculationUpdate,
         )
         .pipe(first())
         .subscribe((recalculation) => {
-          this.file.open(recalculation.pdf);
-          this.router.navigateByUrl("recalculation/" + this.jobId, {
+          void this.file.open(recalculation.pdf);
+          void this.router.navigateByUrl("recalculation/" + this.recalculationId.toString(), {
             replaceUrl: true,
           });
         });
@@ -383,12 +338,12 @@ export class RecalculationEditComponent
     this.addPaint(paint);
   }
 
-  private initOrderTable() {
+  private initOrderDataSource() {
     this.orderDataSource = new TableDataSource(
-      this.api,
-      (api, filter, sortDirection, skip, limit) =>
-        api.readOrdersToOrderToOrderableToIdGet(
-          this.jobId,
+      this.orderService,
+      (orderService, filter, sortDirection, skip, limit) =>
+        orderService.readOrdersByRecalculationOrderV2RecalculationRecalculationIdGet(
+          this.recalculationId,
           skip,
           limit,
           filter,
@@ -414,7 +369,7 @@ export class RecalculationEditComponent
             },
             route: () => {
               if (this.recalculationGroup.pristine) {
-                this.router.navigateByUrl("/order/" + dataSource.id.toString());
+                void this.router.navigateByUrl("/order/" + dataSource.id.toString());
               } else {
                 const dialogRef = this.dialog.open(ConfirmDialogComponent, {
                   width: "400px",
@@ -443,45 +398,8 @@ export class RecalculationEditComponent
         { name: "delivery_date", headerName: "Lieferdatum" },
         { name: "status", headerName: "Status" },
       ],
-      (api) => api.readOrdersToCountOrderToOrderableToIdCountGet(this.jobId),
+      (orderService) => orderService.readOrdersByRecalculationOrderV2RecalculationCountRecalculationIdGet(this.recalculationId),
     );
     this.orderDataSource.loadData();
-  }
-
-  private initWorkloadTable() {
-    this.workloadDataSource = new TableDataSource(
-      this.api,
-      (api, filter, sortDirection, skip, limit) =>
-        api.readWorkloadsWorkloadGet(
-          skip,
-          limit,
-          filter,
-          undefined,
-          this.jobId,
-        ),
-      (dataSourceClasses) => {
-        const rows = [];
-        dataSourceClasses.forEach((dataSource) => {
-          rows.push({
-            values: {
-              "user.fullname": dataSource.user.fullname,
-              minutes: minutesToDisplayableString(dataSource.minutes),
-              cost: dataSource.cost,
-            },
-            route: () => {
-              //this.router.navigateByUrl('/order/' + dataSource.id.toString());
-            },
-          });
-        });
-        return rows;
-      },
-      [
-        { name: "user.fullname", headerName: "Name" },
-        { name: "minutes", headerName: "Zeit" },
-        { name: "cost", headerName: "Kosten [€]" },
-      ],
-      (api) => api.readWorkloadCountWorkloadCountGet(undefined, this.jobId),
-    );
-    this.workloadDataSource.loadData();
   }
 }

@@ -7,11 +7,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { LocationInner } from './locationInner';
+import { ValidationErrorLocInner } from './validationErrorLocInner';
 
 
 export interface ValidationError { 
-    loc: Array<LocationInner>;
+    loc: Array<ValidationErrorLocInner>;
     msg: string;
     type: string;
 }

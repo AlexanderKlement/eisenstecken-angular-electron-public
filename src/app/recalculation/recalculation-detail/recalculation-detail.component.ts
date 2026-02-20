@@ -298,7 +298,7 @@ export class RecalculationDetailComponent implements OnInit {
       this.api.islockedRecalculationRecalculationIslockedRecalculationIdGet(this.recalculation.id),
       this.api.lockRecalculationRecalculationLockRecalculationIdPost(this.recalculation.id),
       this.api.unlockRecalculationRecalculationUnlockRecalculationIdPost(this.recalculation.id),
-      "recalculation/edit/" + this.recalculation.id.toString() + "/" + this.recalculationId.toString(),
+      "recalculation/edit/" + this.recalculation.id.toString(),
     );
   }
 

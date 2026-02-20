@@ -22,7 +22,7 @@ const routes: Routes = [
         }
     },
     {
-        path: "recalculation/edit/:id/:job_id",
+        path: "recalculation/edit/:id",
         component: RecalculationEditComponent,
         data: {requiresLogin: true}
     },

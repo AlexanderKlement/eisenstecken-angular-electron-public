@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable, of } from "rxjs";
 import { catchError, finalize, map } from "rxjs/operators";
 import { DataSourceClass } from "../../types";
 import { MatPaginatorIntl } from "@angular/material/paginator";
-import { DefaultService, RecalculationService } from "../../../../api/openapi";
+import { DefaultService, OrderService, RecalculationService } from "../../../../api/openapi";
 
 export interface Column<T> {
   name: string; // RecursiveKeyOf<T>; Maybe this is better this way
@@ -74,7 +74,7 @@ export type ParseFunction<T extends DataSourceClass> = (
 ) => Row<T>[];
 
 
-export class TableDataSource<T extends DataSourceClass, A extends DefaultService | RecalculationService> extends DataSource<Row<T>> {
+export class TableDataSource<T extends DataSourceClass, A extends DefaultService | RecalculationService | OrderService > extends DataSource<Row<T>> {
   public columns: Column<T>[];
   public readonly columnIdentifiers: string[];
   public amount$: Observable<number>;
