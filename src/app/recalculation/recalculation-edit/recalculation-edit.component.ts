@@ -11,17 +11,15 @@ import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.c
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { Observable } from "rxjs";
-import { first, map } from "rxjs/operators";
+import { first } from "rxjs/operators";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import dayjs from "dayjs/esm";
-import { minutesToDisplayableString } from "../../shared/date.util";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { FileService } from "../../shared/services/file.service";
 import {
   DefaultService,
   Recalculation,
   RecalculationUpdate,
-  RecalculationCreate,
   Paint,
   PaintCreate,
   TemplatePaint,
@@ -30,8 +28,6 @@ import {
   Unit,
   WoodListCreate,
   WoodList,
-  Workload,
-  Order,
   Lock, OrderSmall, OrderService, RecalculationService,
 } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";

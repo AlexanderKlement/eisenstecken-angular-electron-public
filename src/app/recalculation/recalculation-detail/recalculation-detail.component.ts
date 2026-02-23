@@ -17,7 +17,7 @@ import {
   Expense,
   DefaultService,
   WoodList,
-  OrderSmall, RecalculationService,
+  OrderSmall, RecalculationService, OrderService,
 } from "../../../api/openapi";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
 import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
@@ -47,7 +47,7 @@ export class RecalculationDetailComponent implements OnInit {
   loading = true;
   recalculation: Recalculation;
 
-  orderDataSource: TableDataSource<OrderSmall, DefaultService>;
+  orderDataSource: TableDataSource<OrderSmall, OrderService>;
   workloadDataSource: TableDataSource<Workload, DefaultService>;
   expenseDataSource: TableDataSource<Expense, DefaultService>;
   paintDataSource: TableDataSource<Paint, DefaultService>;
@@ -58,7 +58,7 @@ export class RecalculationDetailComponent implements OnInit {
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
 
-  constructor(private api: DefaultService, private router: Router, private route: ActivatedRoute,
+  constructor(private api: DefaultService, private orderService: OrderService, private router: Router, private route: ActivatedRoute,
               private locker: LockService, private authService: AuthService, private snackBar: MatSnackBar, private recalculationService: RecalculationService, private dialog: MatDialog) {
   }
 
@@ -127,29 +127,37 @@ export class RecalculationDetailComponent implements OnInit {
 
   private initOrderTable() {
     this.orderDataSource = new TableDataSource(
-      this.api,
-      (api, filter, sortDirection, skip, limit) =>
-        api.readOrdersToOrderToOrderableToIdGet(this.recalculationId, skip, limit, filter),
+      this.orderService,
+      (orderService, filter, sortDirection, skip, limit) =>
+        orderService.readOrdersByRecalculationOrderV2RecalculationRecalculationIdGet(
+          this.recalculationId,
+          skip,
+          limit,
+          filter,
+        ),
       (dataSourceClasses) => {
         const rows = [];
         dataSourceClasses.forEach((dataSource) => {
-          rows.push(
-            {
-              values: {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                "order_to.displayable_name": dataSource.order_to.displayable_name,
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                "order_from.displayable_name": dataSource.order_from.displayable_name,
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                create_date: dayjs(dataSource.create_date).format("L"),
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                delivery_date: dataSource.delivery_date === null ? "" : dayjs(dataSource.delivery_date).format("L"),
-                status: dataSource.status_translation,
-              },
-              route: () => {
-                this.router.navigateByUrl("/order/" + dataSource.id.toString());
-              },
-            });
+          rows.push({
+            values: {
+              // eslint-disable-next-line @typescript-eslint/naming-convention
+              "order_to.displayable_name": dataSource.order_to.displayable_name,
+              // eslint-disable-next-line @typescript-eslint/naming-convention
+              "order_from.displayable_name":
+              dataSource.order_from.displayable_name,
+              // eslint-disable-next-line @typescript-eslint/naming-convention
+              create_date: dayjs(dataSource.create_date).format("L"),
+              // eslint-disable-next-line @typescript-eslint/naming-convention
+              delivery_date:
+                dataSource.delivery_date === null
+                  ? ""
+                  : dayjs(dataSource.delivery_date).format("L"),
+              status: dataSource.status_translation,
+            },
+            route: () => {
+              void this.router.navigateByUrl("/order/" + dataSource.id.toString());
+            },
+          });
         });
         return rows;
       },
@@ -160,7 +168,7 @@ export class RecalculationDetailComponent implements OnInit {
         { name: "delivery_date", headerName: "Lieferdatum" },
         { name: "status", headerName: "Status" },
       ],
-      (api) => api.readOrdersToCountOrderToOrderableToIdCountGet(this.recalculationId),
+      (orderService) => orderService.readOrdersByRecalculationOrderV2RecalculationCountRecalculationIdGet(this.recalculationId),
     );
     this.orderDataSource.loadData();
   }
