@@ -11,7 +11,7 @@
 
 export interface OrderArticleCreateV2 { 
     amount: number;
-    articleId: number;
+    articleId?: number | null;
     comment: string;
     favorite: boolean;
     modNumber: string;
