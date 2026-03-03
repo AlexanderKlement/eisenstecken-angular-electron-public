@@ -18,6 +18,7 @@ export interface RecalculationV2 {
     jobs: Array<JobForRecalculation>;
     material_charge_percent: number;
     paints: Array<Paint>;
+    pdf: string | null;
     totalSum: number;
     wood_lists: Array<WoodList>;
 }

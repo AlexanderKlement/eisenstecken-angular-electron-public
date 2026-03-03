@@ -76,6 +76,12 @@ export class OrderComponent implements OnInit {
   ) {
   }
 
+  private static addSpaceAfter4(input: string): string {
+    if (!input) return input;
+    if (input.length <= 4) return input;
+    return `${input.slice(0, 4)} ${input.slice(4)}`;
+  }
+
   private static createListItems(
     supportedListElements: SupportedListElements[],
     highlighted: boolean,
@@ -83,7 +89,7 @@ export class OrderComponent implements OnInit {
     const listItems: ListItem[] = [];
     for (const elem of supportedListElements) {
       const name = isJob(elem)
-          ? `${elem.code} | ${elem.displayable_name}`
+          ? `${OrderComponent.addSpaceAfter4(elem.code)} | ${elem.displayable_name}`
           : elem.displayable_name;
       const listItem: ListItem = {
         name: name,
@@ -92,6 +98,7 @@ export class OrderComponent implements OnInit {
         type: elem.type,
         collapse: false,
         indented: false,
+        bold: isJob(elem),
         highlighted: highlighted,
       };
 
@@ -105,6 +112,7 @@ export class OrderComponent implements OnInit {
             type: subJob.type,
             collapse: elem.displayable_name,
             indented: true,
+            bold: false,
             highlighted: highlighted,
           });
         });

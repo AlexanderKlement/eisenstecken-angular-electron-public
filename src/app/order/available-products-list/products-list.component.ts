@@ -27,7 +27,7 @@ import {
   ArticleUpdateFull,
   OrderedArticleCreate,
   OrderArticleCreateV2,
-  ArticleService,
+  ArticleService, OrderedArticleUpdate,
 } from "../../../api/openapi";
 import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
 import {
@@ -180,7 +180,26 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
       price: dialogData.price,
       comment: dialogData.comment,
       position: dialogData.position,
+      request: dialogData.request
+    };
+  }
+
+  public static mapDialogData2OrderedArticleUpdate(
+    dialogData: OrderDialogData,
+    articleId: number,
+  ): OrderedArticleUpdate {
+    return {
+      amount: dialogData.amount,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      article_id: articleId,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      ordered_unit_id: dialogData.unit_id,
+      price: dialogData.price,
+      comment: dialogData.comment,
+      position: dialogData.position,
       request: dialogData.request,
+      nameDE: dialogData.name,
+      nameIT: dialogData.name
     };
   }
 
@@ -323,31 +342,20 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
           });
         return;
       }
-      const orderedArticleCreate =
-        ProductsListComponent.mapDialogData2OrderedArticleCreate(
+      const orderedArticleUpdate =
+        ProductsListComponent.mapDialogData2OrderedArticleUpdate(
           result,
           orderedArticle.article.id,
         );
-      const articleUpdate =
-        ProductsListComponent.mapDialogData2ArticleUpdate(result);
       this.api
-        .updateArticleArticleArticleIdPut(
-          orderedArticle.article.id,
-          articleUpdate,
+        .updateOrderedArticleOrderedArticleOrderedArticleIdPut(
+          orderedArticle.id,
+          orderedArticleUpdate,
         )
         .pipe(first())
-        .subscribe((article) => {
-          orderedArticleCreate.article_id = article.id;
-          this.api
-            .updateOrderedArticleOrderedArticleOrderedArticleIdPut(
-              orderedArticle.id,
-              orderedArticleCreate,
-            )
-            .pipe(first())
-            .subscribe(() => {
-              this.refreshOrderedArticleList();
-              this.refreshAvailableOrderList();
-            });
+        .subscribe(() => {
+          this.refreshOrderedArticleList();
+          this.refreshAvailableOrderList();
         });
     };
     dialogData$.pipe(first()).subscribe((dialogData) => {

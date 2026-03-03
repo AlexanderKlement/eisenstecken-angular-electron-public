@@ -15,8 +15,8 @@
         <mat-list-option [value]="listElement"
                          [class.collapsed]="listElement.collapse !== false && listElement.collapse !== toListUnCollapse"
                          [class.uncollapsed]="listElement.collapse === toListUnCollapse">
-          <span [class.indented]="listElement.indented"
-                >{{ listElement.name }}</span>
+          <span [class.indented]="listElement.indented" [class.bold]="listElement.bold"
+          >{{ listElement.name }}</span>
         </mat-list-option>
       </div>
     }

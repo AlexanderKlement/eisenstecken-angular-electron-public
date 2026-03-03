@@ -19,13 +19,11 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { HTTPValidationError } from '../model/hTTPValidationError';
 // @ts-ignore
-import { Recalculation } from '../model/recalculation';
-// @ts-ignore
 import { RecalculationCreateV2 } from '../model/recalculationCreateV2';
 // @ts-ignore
 import { RecalculationSmall } from '../model/recalculationSmall';
 // @ts-ignore
-import { RecalculationUpdate } from '../model/recalculationUpdate';
+import { RecalculationUpdateV2 } from '../model/recalculationUpdateV2';
 // @ts-ignore
 import { RecalculationV2 } from '../model/recalculationV2';
 
@@ -362,19 +360,19 @@ export class RecalculationService extends BaseService {
     /**
      * Update Recalculation
      * @param recalculationId 
-     * @param recalculationUpdate 
+     * @param recalculationUpdateV2 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateRecalculationRecalculationV2RecalculationIdPut(recalculationId: number, recalculationUpdate: RecalculationUpdate, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Recalculation>;
-    public updateRecalculationRecalculationV2RecalculationIdPut(recalculationId: number, recalculationUpdate: RecalculationUpdate, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Recalculation>>;
-    public updateRecalculationRecalculationV2RecalculationIdPut(recalculationId: number, recalculationUpdate: RecalculationUpdate, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Recalculation>>;
-    public updateRecalculationRecalculationV2RecalculationIdPut(recalculationId: number, recalculationUpdate: RecalculationUpdate, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateRecalculationRecalculationV2RecalculationIdPut(recalculationId: number, recalculationUpdateV2: RecalculationUpdateV2, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RecalculationV2>;
+    public updateRecalculationRecalculationV2RecalculationIdPut(recalculationId: number, recalculationUpdateV2: RecalculationUpdateV2, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RecalculationV2>>;
+    public updateRecalculationRecalculationV2RecalculationIdPut(recalculationId: number, recalculationUpdateV2: RecalculationUpdateV2, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RecalculationV2>>;
+    public updateRecalculationRecalculationV2RecalculationIdPut(recalculationId: number, recalculationUpdateV2: RecalculationUpdateV2, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (recalculationId === null || recalculationId === undefined) {
             throw new Error('Required parameter recalculationId was null or undefined when calling updateRecalculationRecalculationV2RecalculationIdPut.');
         }
-        if (recalculationUpdate === null || recalculationUpdate === undefined) {
-            throw new Error('Required parameter recalculationUpdate was null or undefined when calling updateRecalculationRecalculationV2RecalculationIdPut.');
+        if (recalculationUpdateV2 === null || recalculationUpdateV2 === undefined) {
+            throw new Error('Required parameter recalculationUpdateV2 was null or undefined when calling updateRecalculationRecalculationV2RecalculationIdPut.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -416,10 +414,10 @@ export class RecalculationService extends BaseService {
 
         let localVarPath = `/recalculation/v2/${this.configuration.encodeParam({name: "recalculationId", value: recalculationId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Recalculation>('put', `${basePath}${localVarPath}`,
+        return this.httpClient.request<RecalculationV2>('put', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: recalculationUpdate,
+                body: recalculationUpdateV2,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

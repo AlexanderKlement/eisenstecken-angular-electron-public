@@ -11,6 +11,7 @@ export interface ListItem {
   collapse: false | string;
   indented: boolean;
   highlighted: boolean;
+  bold: boolean;
 }
 
 

@@ -28,7 +28,7 @@ import {
   Unit,
   WoodListCreate,
   WoodList,
-  Lock, OrderSmall, OrderService, RecalculationService,
+  Lock, OrderSmall, OrderService, RecalculationService, RecalculationUpdateV2,
 } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import {
@@ -137,6 +137,7 @@ export class RecalculationEditComponent
 
   initRecalculationsGroup(): void {
     this.recalculationGroup = new UntypedFormGroup({
+      name: new UntypedFormControl(),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       expenses: new UntypedFormArray([]),
       paints: new UntypedFormArray([]),
@@ -172,6 +173,7 @@ export class RecalculationEditComponent
     }
     this.recalculationGroup.get("km").setValue(recalculation.km);
     this.recalculationGroup.get("cost").setValue(recalculation.cost);
+    this.recalculationGroup.get("name").setValue(recalculation.name);
     this.recalculationGroup
       .get("material_charge_percent")
       .setValue(recalculation.material_charge_percent);
@@ -297,13 +299,12 @@ export class RecalculationEditComponent
     if (this.createMode) {
       console.error("Create mode not supported anymore!");
     } else {
-      const recalculationUpdate: RecalculationUpdate = {
+      const recalculationUpdate: RecalculationUpdateV2 = {
         expenses,
         paints,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        wood_lists: woodLists,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        material_charge_percent: this.recalculationGroup.get(
+        woodLists: woodLists,
+        name: this.recalculationGroup.get("name",).value,
+        materialChargePercent: this.recalculationGroup.get(
           "material_charge_percent",
         ).value,
         km: this.recalculationGroup.get("km").value,

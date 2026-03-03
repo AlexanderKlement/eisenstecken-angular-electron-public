@@ -2,9 +2,14 @@
 <div class="window-container">
   <div fxLayout="column" fxLayoutAlign="space-around center">
     <h3>{{ title }}</h3>
-    <h3>{{ (recalculation$ | async)?.name }}</h3>
   </div>
   <form [formGroup]="recalculationGroup" (submit)="onSubmit()">
+    <div fxLayout="column" fxLayoutAlign="space-around center">
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input type=text class="form-control" formControlName="name" matInput>
+      </mat-form-field>
+    </div>
     <div fxLayout="column" fxLayoutAlign="space-around center">
       <mat-form-field appearance="fill">
         <mat-label>Materialkostenaufschlag [%]</mat-label>

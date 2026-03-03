@@ -10,6 +10,7 @@ api/order.service.ts
 api/orderBundle.service.ts
 api/recalculation.service.ts
 api/scheduler.service.ts
+api/tikTak.service.ts
 api/viet.service.ts
 configuration.ts
 encoder.ts
@@ -107,6 +108,7 @@ model/orderedArticle.ts
 model/orderedArticleCreate.ts
 model/orderedArticlePriceUpdate.ts
 model/orderedArticleSmall.ts
+model/orderedArticleUpdate.ts
 model/outgoingInvoice.ts
 model/outgoingInvoiceCreate.ts
 model/outgoingInvoiceUpdate.ts
@@ -125,6 +127,7 @@ model/recalculationCreate.ts
 model/recalculationCreateV2.ts
 model/recalculationSmall.ts
 model/recalculationUpdate.ts
+model/recalculationUpdateV2.ts
 model/recalculationV2.ts
 model/reminder.ts
 model/reminderCreate.ts
@@ -147,6 +150,9 @@ model/templatePaint.ts
 model/templatePaintCreate.ts
 model/templatePaintUpdate.ts
 model/text.ts
+model/tikTakClient.ts
+model/tikTakCommission.ts
+model/tikTakContact.ts
 model/token.ts
 model/unit.ts
 model/unitCreate.ts

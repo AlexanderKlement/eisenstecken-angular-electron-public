@@ -2,7 +2,7 @@ import {Injectable, Injector} from "@angular/core";
 import {Router} from "@angular/router";
 import {Observable, ReplaySubject} from "rxjs";
 import {first, map} from "rxjs/operators";
-import { DefaultService, Right, User } from '../../../api/openapi';
+import { DefaultService, Right, User } from "../../../api/openapi";
 
 
 export function containsRight(rightString: string, rights: Right[]): boolean {
@@ -47,7 +47,7 @@ export class AuthService {
   doLogout(): void {
     this.removeToken();
     this.user = undefined;
-    this.router.navigateByUrl("login");
+    void this.router.navigateByUrl("login");
   }
 
   async getScopeString(): Promise<string> {

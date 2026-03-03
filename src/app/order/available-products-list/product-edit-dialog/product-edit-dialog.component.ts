@@ -105,7 +105,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
     );
     const formattedAmount = this.currency.transform(
       price,
-      this.currencyCode, "symbol", undefined, this.locale,
+      this.currencyCode, "symbol", "1.4-4", this.locale,
     );
     this.productEditGroup.get("price").setValue(price);
     this.productEditGroup.get("priceFormatted").setValue(formattedAmount);
@@ -148,7 +148,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
       priceFormatted: new UntypedFormControl(
         this.currency.transform(
           this.data.price,
-          this.currencyCode, "symbol", undefined, this.locale,
+          this.currencyCode, "symbol", "1.4-4", this.locale,
         ),
       ),
       // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -206,7 +206,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
 
     const formatted = this.currency.transform(
       price,
-      this.currencyCode, "symbol", undefined, this.locale,
+      this.currencyCode, "symbol", "1.4-4", this.locale,
     );
     this.productEditGroup
       .get("priceFormatted")

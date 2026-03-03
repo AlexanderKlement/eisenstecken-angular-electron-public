@@ -163,6 +163,8 @@ import { OrderedArticleCreate } from '../model/orderedArticleCreate';
 // @ts-ignore
 import { OrderedArticlePriceUpdate } from '../model/orderedArticlePriceUpdate';
 // @ts-ignore
+import { OrderedArticleUpdate } from '../model/orderedArticleUpdate';
+// @ts-ignore
 import { OutgoingInvoice } from '../model/outgoingInvoice';
 // @ts-ignore
 import { OutgoingInvoiceCreate } from '../model/outgoingInvoiceCreate';
@@ -19312,19 +19314,19 @@ export class DefaultService extends BaseService {
     /**
      * Update Ordered Article
      * @param orderedArticleId 
-     * @param orderedArticleCreate 
+     * @param orderedArticleUpdate 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateOrderedArticleOrderedArticleOrderedArticleIdPut(orderedArticleId: number, orderedArticleCreate: OrderedArticleCreate, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OrderedArticle>;
-    public updateOrderedArticleOrderedArticleOrderedArticleIdPut(orderedArticleId: number, orderedArticleCreate: OrderedArticleCreate, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OrderedArticle>>;
-    public updateOrderedArticleOrderedArticleOrderedArticleIdPut(orderedArticleId: number, orderedArticleCreate: OrderedArticleCreate, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OrderedArticle>>;
-    public updateOrderedArticleOrderedArticleOrderedArticleIdPut(orderedArticleId: number, orderedArticleCreate: OrderedArticleCreate, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateOrderedArticleOrderedArticleOrderedArticleIdPut(orderedArticleId: number, orderedArticleUpdate: OrderedArticleUpdate, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OrderedArticle>;
+    public updateOrderedArticleOrderedArticleOrderedArticleIdPut(orderedArticleId: number, orderedArticleUpdate: OrderedArticleUpdate, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OrderedArticle>>;
+    public updateOrderedArticleOrderedArticleOrderedArticleIdPut(orderedArticleId: number, orderedArticleUpdate: OrderedArticleUpdate, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OrderedArticle>>;
+    public updateOrderedArticleOrderedArticleOrderedArticleIdPut(orderedArticleId: number, orderedArticleUpdate: OrderedArticleUpdate, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (orderedArticleId === null || orderedArticleId === undefined) {
             throw new Error('Required parameter orderedArticleId was null or undefined when calling updateOrderedArticleOrderedArticleOrderedArticleIdPut.');
         }
-        if (orderedArticleCreate === null || orderedArticleCreate === undefined) {
-            throw new Error('Required parameter orderedArticleCreate was null or undefined when calling updateOrderedArticleOrderedArticleOrderedArticleIdPut.');
+        if (orderedArticleUpdate === null || orderedArticleUpdate === undefined) {
+            throw new Error('Required parameter orderedArticleUpdate was null or undefined when calling updateOrderedArticleOrderedArticleOrderedArticleIdPut.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -19369,7 +19371,7 @@ export class DefaultService extends BaseService {
         return this.httpClient.request<OrderedArticle>('put', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: orderedArticleCreate,
+                body: orderedArticleUpdate,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

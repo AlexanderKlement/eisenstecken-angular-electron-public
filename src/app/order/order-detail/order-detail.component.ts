@@ -213,7 +213,7 @@ export class OrderDetailComponent implements OnInit {
             return;
           }
           const orderedArticleCreate =
-            ProductsListComponent.mapDialogData2OrderedArticleCreate(
+            ProductsListComponent.mapDialogData2OrderedArticleUpdate(
               result,
               orderedArticle.article.id,
             );
