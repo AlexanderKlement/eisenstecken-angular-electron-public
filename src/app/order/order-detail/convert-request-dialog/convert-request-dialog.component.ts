@@ -3,18 +3,13 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDia
 import { MatSelectionList, MatListOption } from "@angular/material/list";
 import { Observable } from "rxjs";
 import { first, map } from "rxjs/operators";
-import { ArticleService, DefaultService, OrderedArticle } from "../../../../api/openapi";
+import { DefaultService, OrderedArticle, OrderedArticleService } from "../../../../api/openapi";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
 import { MatButton } from "@angular/material/button";
 import { AsyncPipe } from "@angular/common";
 
 export interface ConvertOrderedArticleReturnDialogData {
   orderId: number;
-}
-
-
-export interface OrderedArticleReturnDialogData {
-  success: boolean;
 }
 
 
@@ -35,7 +30,7 @@ export class ConvertRequestDialogComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<ConvertRequestDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: ConvertOrderedArticleReturnDialogData,
-              private api: DefaultService, private articleService: ArticleService,) {
+              private api: DefaultService, private orderedArticleService: OrderedArticleService,) {
   }
 
 
@@ -48,7 +43,7 @@ export class ConvertRequestDialogComponent implements OnInit {
   }
 
   onSubmitClick() {
-    this.articleService.convertArticleRequest(this.getSelectedArticleIds()).pipe(first()).subscribe(() => {
+    this.orderedArticleService.convertArticleRequest(this.getSelectedArticleIds()).pipe(first()).subscribe(() => {
       this.dialogRef.close(true);
     });
   }

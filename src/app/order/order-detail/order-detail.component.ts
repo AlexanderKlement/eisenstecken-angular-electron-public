@@ -19,7 +19,7 @@ import {
   DefaultService,
   OrderedArticle,
   Order,
-  OrderableType, OrderSmall,
+  OrderableType, OrderSmall, OrderedArticleService, ArticleService,
 } from "../../../api/openapi";
 import { InfoBuilderComponent } from "../../shared/components/info-builder/info-builder.component";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
@@ -60,6 +60,8 @@ export class OrderDetailComponent implements OnInit {
 
   constructor(
     private api: DefaultService,
+    private orderedArticleService: OrderedArticleService,
+    private articleService: ArticleService,
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
@@ -196,11 +198,9 @@ export class OrderDetailComponent implements OnInit {
             return;
           }
           if (result.delete) {
-            ProductsListComponent.deleteOrderedArticle(
+            this.api.deleteOrderedArticleOrderedArticleOrderedArticleIdDelete(
               orderedArticle.id,
-              this.api,
-            )
-              .pipe(first())
+            ).pipe(first())
               .subscribe((success) => {
                 if (success) {
                   this.articleDataSource.loadData();
@@ -218,17 +218,16 @@ export class OrderDetailComponent implements OnInit {
               orderedArticle.article.id,
             );
           const articleUpdate =
-            ProductsListComponent.mapDialogData2ArticleUpdate(result);
-          this.api
-            .updateArticleArticleArticleIdPut(
+            ProductsListComponent.mapDialogData2ArticleUpdateV2(result);
+          this.articleService.updateArticle(
               orderedArticle.article.id,
               articleUpdate,
             )
             .pipe(first())
             .subscribe((article) => {
-              orderedArticleCreate.article_id = article.id;
-              this.api
-                .updateOrderedArticleOrderedArticleOrderedArticleIdPut(
+              orderedArticleCreate.articleId = article.id;
+              this.orderedArticleService
+                .updateOrderedArticle(
                   orderedArticle.id,
                   orderedArticleCreate,
                 )
@@ -280,7 +279,7 @@ export class OrderDetailComponent implements OnInit {
   }
 
   private gotoButtonClicked() {
-    this.router.navigateByUrl(this.gotoNavigationTarget);
+    void this.router.navigateByUrl(this.gotoNavigationTarget);
   }
 
   private initGoToButton(): void {

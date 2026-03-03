@@ -17,13 +17,13 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { ArticleCreateV2 } from '../model/articleCreateV2';
-// @ts-ignore
-import { ArticleUpdateV2 } from '../model/articleUpdateV2';
-// @ts-ignore
 import { HTTPValidationError } from '../model/hTTPValidationError';
 // @ts-ignore
+import { OrderArticleCreateV2 } from '../model/orderArticleCreateV2';
+// @ts-ignore
 import { OrderedArticle } from '../model/orderedArticle';
+// @ts-ignore
+import { OrderedArticleUpdateV2 } from '../model/orderedArticleUpdateV2';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -35,26 +35,26 @@ import { BaseService } from '../api.base.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ArticleService extends BaseService {
+export class OrderedArticleService extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
     }
 
     /**
-     * Create Article
-     * @endpoint post /article/v2/
-     * @param articleCreateV2 
+     * Convert Article Request
+     * @endpoint post /ordered_article/v2/convert_request
+     * @param requestBody 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createArticle(articleCreateV2: ArticleCreateV2, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public createArticle(articleCreateV2: ArticleCreateV2, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public createArticle(articleCreateV2: ArticleCreateV2, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public createArticle(articleCreateV2: ArticleCreateV2, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (articleCreateV2 === null || articleCreateV2 === undefined) {
-            throw new Error('Required parameter articleCreateV2 was null or undefined when calling createArticle.');
+    public convertArticleRequest(requestBody: Array<number>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OrderedArticle>>;
+    public convertArticleRequest(requestBody: Array<number>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OrderedArticle>>>;
+    public convertArticleRequest(requestBody: Array<number>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OrderedArticle>>>;
+    public convertArticleRequest(requestBody: Array<number>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (requestBody === null || requestBody === undefined) {
+            throw new Error('Required parameter requestBody was null or undefined when calling convertArticleRequest.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -94,12 +94,81 @@ export class ArticleService extends BaseService {
             }
         }
 
-        let localVarPath = `/article/v2/`;
+        let localVarPath = `/ordered_article/v2/convert_request`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<OrderedArticle>>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: requestBody,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Order Article
+     * @endpoint post /ordered_article/v2/order
+     * @param orderArticleCreateV2 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public orderArticle(orderArticleCreateV2: OrderArticleCreateV2, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public orderArticle(orderArticleCreateV2: OrderArticleCreateV2, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public orderArticle(orderArticleCreateV2: OrderArticleCreateV2, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public orderArticle(orderArticleCreateV2: OrderArticleCreateV2, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (orderArticleCreateV2 === null || orderArticleCreateV2 === undefined) {
+            throw new Error('Required parameter orderArticleCreateV2 was null or undefined when calling orderArticle.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (OAuth2PasswordBearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/ordered_article/v2/order`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: articleCreateV2,
+                body: orderArticleCreateV2,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -111,122 +180,23 @@ export class ArticleService extends BaseService {
     }
 
     /**
-     * Get Articles By Stock
-     * @endpoint get /article/v2/stock/{stock_id}
-     * @param stockId 
-     * @param skip 
-     * @param limit 
-     * @param filterString 
-     * @param orderArticleCrudV2 
+     * Update Ordered Article
+     * @endpoint put /ordered_article/v2/{ordered_article_id}
+     * @param orderedArticleId 
+     * @param orderedArticleUpdateV2 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getArticlesByStock(stockId: number, skip?: number, limit?: number, filterString?: string, orderArticleCrudV2?: any, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OrderedArticle>>;
-    public getArticlesByStock(stockId: number, skip?: number, limit?: number, filterString?: string, orderArticleCrudV2?: any, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OrderedArticle>>>;
-    public getArticlesByStock(stockId: number, skip?: number, limit?: number, filterString?: string, orderArticleCrudV2?: any, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OrderedArticle>>>;
-    public getArticlesByStock(stockId: number, skip?: number, limit?: number, filterString?: string, orderArticleCrudV2?: any, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (stockId === null || stockId === undefined) {
-            throw new Error('Required parameter stockId was null or undefined when calling getArticlesByStock.');
+    public updateOrderedArticle(orderedArticleId: number, orderedArticleUpdateV2: OrderedArticleUpdateV2, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OrderedArticle>;
+    public updateOrderedArticle(orderedArticleId: number, orderedArticleUpdateV2: OrderedArticleUpdateV2, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OrderedArticle>>;
+    public updateOrderedArticle(orderedArticleId: number, orderedArticleUpdateV2: OrderedArticleUpdateV2, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OrderedArticle>>;
+    public updateOrderedArticle(orderedArticleId: number, orderedArticleUpdateV2: OrderedArticleUpdateV2, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (orderedArticleId === null || orderedArticleId === undefined) {
+            throw new Error('Required parameter orderedArticleId was null or undefined when calling updateOrderedArticle.');
         }
-
-        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'skip',
-            <any>skip,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'limit',
-            <any>limit,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'filter_string',
-            <any>filterString,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'order_article_crud_v2',
-            <any>orderArticleCrudV2,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        let localVarHeaders = this.defaultHeaders;
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/article/v2/stock/${this.configuration.encodeParam({name: "stockId", value: stockId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<OrderedArticle>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                params: localVarQueryParameters.toHttpParams(),
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Update Article
-     * @endpoint put /article/v2/{article_id}
-     * @param articleId 
-     * @param articleUpdateV2 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public updateArticle(articleId: number, articleUpdateV2: ArticleUpdateV2, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public updateArticle(articleId: number, articleUpdateV2: ArticleUpdateV2, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public updateArticle(articleId: number, articleUpdateV2: ArticleUpdateV2, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public updateArticle(articleId: number, articleUpdateV2: ArticleUpdateV2, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (articleId === null || articleId === undefined) {
-            throw new Error('Required parameter articleId was null or undefined when calling updateArticle.');
-        }
-        if (articleUpdateV2 === null || articleUpdateV2 === undefined) {
-            throw new Error('Required parameter articleUpdateV2 was null or undefined when calling updateArticle.');
+        if (orderedArticleUpdateV2 === null || orderedArticleUpdateV2 === undefined) {
+            throw new Error('Required parameter orderedArticleUpdateV2 was null or undefined when calling updateOrderedArticle.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -266,12 +236,12 @@ export class ArticleService extends BaseService {
             }
         }
 
-        let localVarPath = `/article/v2/${this.configuration.encodeParam({name: "articleId", value: articleId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
+        let localVarPath = `/ordered_article/v2/${this.configuration.encodeParam({name: "orderedArticleId", value: orderedArticleId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('put', `${basePath}${localVarPath}`,
+        return this.httpClient.request<OrderedArticle>('put', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: articleUpdateV2,
+                body: orderedArticleUpdateV2,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

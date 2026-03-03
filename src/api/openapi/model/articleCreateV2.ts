@@ -9,18 +9,13 @@
  */
 
 
-export interface OrderArticleCreateV2 { 
-    amount: number;
-    articleId?: number | null;
-    comment: string;
+export interface ArticleCreateV2 { 
     favorite: boolean;
     modNumber: string;
     nameDE: string;
     nameIT: string;
-    orderId: number;
-    position: string;
     price: number;
-    request: boolean;
-    unitId: number;
+    supplierID: number;
+    unitID: number;
 }
 

@@ -15,7 +15,8 @@ import {
 import { debounceTime, first } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
 import {
-  OrderDialogData,
+  OrderDialogCreateData,
+  OrderDialogReturnData,
   ProductEditDialogComponent,
 } from "./product-edit-dialog/product-edit-dialog.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -24,10 +25,7 @@ import {
   DefaultService,
   OrderedArticle,
   Article,
-  ArticleUpdateFull,
-  OrderedArticleCreate,
-  OrderArticleCreateV2,
-  ArticleService, OrderedArticleUpdate,
+  ArticleService, OrderedArticleService, OrderedArticleUpdateV2, OrderArticleCreateV2, ArticleCreateV2,
 } from "../../../api/openapi";
 import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
 import {
@@ -41,6 +39,7 @@ import { SlicePipe } from "@angular/common";
 import { BoldSpanPipe } from "../../shared/pipes/boldSearchResult";
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
+import { ArticleUpdateV2 } from "../../../api/openapi/model/articleUpdateV2";
 
 @Component({
   selector: 'app-products-list',
@@ -86,6 +85,7 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
     public dialog: MatDialog,
     private api: DefaultService,
     private articleService: ArticleService,
+    private orderedArticlesService: OrderedArticleService,
     private snackBar: MatSnackBar,
   ) {
   }
@@ -94,154 +94,126 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
     orderedArticle: OrderedArticle,
     title: string,
     blockRequestChange: boolean = false,
-  ): Observable<OrderDialogData> {
-    return new Observable<OrderDialogData>((dialogDataSubscriber) => {
+    blockFavoriteChange: boolean = false,
+  ): Observable<OrderDialogCreateData> {
+    return new Observable<OrderDialogCreateData>((dialogDataSubscriber) => {
       const dialogData = ProductsListComponent.createEmptyDialogData(
         title,
         orderedArticle.article,
       );
       dialogData.amount = orderedArticle.amount;
       dialogData.price = orderedArticle.price;
-      dialogData.unit_id = orderedArticle.ordered_unit.id;
+      dialogData.unitId = orderedArticle.ordered_unit.id;
       dialogData.request = orderedArticle.request;
       dialogData.comment = orderedArticle.comment;
       dialogData.position = orderedArticle.position;
       dialogData.favorite = orderedArticle.article.favorite;
-      dialogData.create = false;
+      dialogData.modNumber = orderedArticle.modNumber;
+      dialogData.createMode = false;
       dialogData.blockRequestChange = blockRequestChange;
-
+      dialogData.blockFavoriteChange = blockFavoriteChange;
       console.log(dialogData);
       dialogDataSubscriber.next(dialogData);
     });
   }
 
-  public static deleteOrderedArticle(
-    orderedArticleId: number,
-    api: DefaultService,
-  ): Observable<boolean> {
-    return api.deleteOrderedArticleOrderedArticleOrderedArticleIdDelete(
-      orderedArticleId,
-    );
-  }
-
-  public static mapDialogData2ArticleUpdate(
-    dialogData: OrderDialogData,
-  ): ArticleUpdateFull {
+  public static mapDialogData2ArticleUpdateV2(
+    dialogData: OrderDialogReturnData,
+  ): ArticleUpdateV2 {
     return {
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      mod_number: dialogData.mod_number,
+      modNumber: dialogData.modNumber,
       price: dialogData.price,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      unit_id: dialogData.unit_id,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      name_de: dialogData.name,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      name_it: dialogData.name,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      category_ids: [],
+      unitID: dialogData.unitId,
+      nameDE: dialogData.name,
+      nameIT: dialogData.name,
       favorite: dialogData.favorite,
     };
   }
 
   public static mapDialogData2OrderArticleCreateV2(
-    dialogData: OrderDialogData,
+    dialogData: OrderDialogReturnData,
     orderId: number,
     articleId?: number,
   ): OrderArticleCreateV2 {
     return {
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       articleId: articleId,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      nameDe: dialogData.name,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      nameIt: dialogData.name,
+      nameDE: dialogData.name,
+      nameIT: dialogData.name,
       comment: dialogData.comment,
       position: dialogData.position,
-      modNumber: dialogData.mod_number,
+      modNumber: dialogData.modNumber,
       request: dialogData.request,
       amount: dialogData.amount,
-      unitId: dialogData.unit_id,
+      unitId: dialogData.unitId,
       price: dialogData.price,
       orderId: orderId,
       favorite: dialogData.favorite,
     };
   }
 
-  public static mapDialogData2OrderedArticleCreate(
-    dialogData: OrderDialogData,
-    articleId: number,
-  ): OrderedArticleCreate {
-    return {
-      amount: dialogData.amount,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      article_id: articleId,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      ordered_unit_id: dialogData.unit_id,
-      price: dialogData.price,
-      comment: dialogData.comment,
-      position: dialogData.position,
-      request: dialogData.request
-    };
-  }
-
   public static mapDialogData2OrderedArticleUpdate(
-    dialogData: OrderDialogData,
+    dialogData: OrderDialogReturnData,
     articleId: number,
-  ): OrderedArticleUpdate {
+  ): OrderedArticleUpdateV2 {
     return {
       amount: dialogData.amount,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      article_id: articleId,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      ordered_unit_id: dialogData.unit_id,
+      articleId: articleId,
+      orderedUnitId: dialogData.unitId,
       price: dialogData.price,
       comment: dialogData.comment,
       position: dialogData.position,
       request: dialogData.request,
       nameDE: dialogData.name,
-      nameIT: dialogData.name
+      nameIT: dialogData.name,
+      modNumber: dialogData.modNumber,
+    };
+  }
+
+  public static mapDialogData2ArticleCreateV2(
+    dialogData: OrderDialogReturnData,
+    supplierId: number,
+  ): ArticleCreateV2 {
+    return {
+      supplierID: supplierId,
+      modNumber: dialogData.modNumber,
+      price: dialogData.price,
+      unitID: dialogData.unitId,
+      nameDE: dialogData.name,
+      nameIT: dialogData.name,
+      favorite: dialogData.favorite,
     };
   }
 
   private static createEmptyDialogData(
     title: string,
     article?: Article,
-  ): OrderDialogData {
-    if (article === undefined) {
-      return {
-        title,
-        amount: 0,
-        name: "",
-        price: 0.0,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        mod_number: "",
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        unit_id: 3,
-        request: false,
-        comment: "",
-        position: "",
-        delete: false,
-        create: true,
-        favorite: false,
-        blockRequestChange: false,
-      };
-    }
-    return {
+  ): OrderDialogCreateData {
+    const base: OrderDialogCreateData = {
       title,
       amount: 0,
-      name: article.name.translation,
-      price: article.price,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      mod_number: article.mod_number,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      unit_id: 3,
+      name: "",
+      price: 0.0,
+      modNumber: "",
+      unitId: 3,
       request: false,
       comment: "",
       position: "",
-      delete: false,
-      create: true,
-      favorite: article.favorite,
+      createMode: true,
+      favorite: false,
       blockRequestChange: false,
+      blockFavoriteChange: false,
+    };
+
+    if (!article) {
+      return base;
+    }
+
+    return {
+      ...base,
+      name: article.name.translation,
+      price: article.price,
+      modNumber: article.mod_number,
+      favorite: article.favorite,
     };
   }
 
@@ -286,28 +258,28 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
       "Produkt hinzufügen",
       article,
     );
-    const closeFunction = (result: any) => {
-      if (result === undefined) {
-        return;
+    const closeFunction = (result: OrderDialogReturnData | undefined) => {
+      if (!result) return;
+      switch (result.mode) {
+        case "delete":
+          return this.handleDeleteArticle(article.id);
+        case "save":
+          return this.handleSaveArticle(
+            result,
+            article.id,
+          );
+        case "add":
+          return this.handleOrderArticle(result, article.id);
+        default:
+          console.error("Unknown mode: " + result.mode);
+          return;
       }
-      const orderedArticleCreate =
-        ProductsListComponent.mapDialogData2OrderArticleCreateV2(
-          result,
-          this.orderId,
-          article.id,
-        );
-      this.articleService.orderArticle(orderedArticleCreate)
-        .pipe(first())
-        .subscribe(() => {
-          this.refreshAvailableOrderList();
-          this.refreshOrderedArticleList();
-        });
     };
     this.openDialog(dialogData, closeFunction);
   }
 
   openDialog(
-    dialogData: OrderDialogData,
+    dialogData: OrderDialogCreateData,
     closeFunction: (result: any) => void,
   ): void {
     const dialogRef = this.dialog.open(ProductEditDialogComponent, {
@@ -322,66 +294,49 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
       orderedArticle,
       "Produkt bearbeiten",
       false,
+      true
     );
-    const closeFunction = (result: any) => {
-      if (result === undefined) {
-        return;
+
+    const closeFunction = (result: OrderDialogReturnData | undefined) => {
+      if (!result) return;
+
+      switch (result.mode) {
+        case "delete":
+          return this.handleDeleteOrderedArticle(orderedArticle.id);
+
+        case "save":
+          return this.handleUpdateOrderedArticle(
+            orderedArticle.id,
+            result,
+            orderedArticle.article.id,
+          );
+          case "add":
+            console.error("Add mode not supported");
+            break;
+        default:
+          console.error("Unknown mode: " + result.mode);
+          return;
       }
-      if (result.delete) {
-        ProductsListComponent.deleteOrderedArticle(orderedArticle.id, this.api)
-          .pipe(first())
-          .subscribe((success) => {
-            if (success) {
-              this.refreshOrderedArticleList();
-              this.refreshAvailableOrderList();
-            } else {
-              this.snackBar.open("Es ist ein Fehler aufgetreten.", "Ok", {
-                duration: 10000,
-              });
-            }
-          });
-        return;
-      }
-      const orderedArticleUpdate =
-        ProductsListComponent.mapDialogData2OrderedArticleUpdate(
-          result,
-          orderedArticle.article.id,
-        );
-      this.api
-        .updateOrderedArticleOrderedArticleOrderedArticleIdPut(
-          orderedArticle.id,
-          orderedArticleUpdate,
-        )
-        .pipe(first())
-        .subscribe(() => {
-          this.refreshOrderedArticleList();
-          this.refreshAvailableOrderList();
-        });
     };
+
     dialogData$.pipe(first()).subscribe((dialogData) => {
       this.openDialog(dialogData, closeFunction);
     });
   }
 
   removeOrderedArticleButtonClicked(orderedArticle: OrderedArticle): void {
-    this.api
-      .deleteOrderedArticleOrderedArticleOrderedArticleIdDelete(
-        orderedArticle.id,
-      )
-      .pipe(first())
-      .subscribe((success) => {
-        if (success) {
-          this.refreshOrderedArticleList();
-        } else {
-          this.snackBar.open(
-            "Artikel konnte nicht gelöscht werden. Bitte probieren sie es später erneut",
-            "Ok",
-            {
-              duration: 10000,
-            },
-          );
-        }
-      });
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "400px",
+      data: {
+        title: "Artikel aus Bestellung entfernen?",
+        text: "Diese Operation kann rückgängig gemacht werden.",
+      },
+    });
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        this.handleDeleteOrderedArticle(orderedArticle.id);
+      }
+    });
   }
 
   removeArticleButtonClicked(article: Article): void {
@@ -392,24 +347,9 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
         text: "Diese Operation kann rückgängig gemacht werden.",
       },
     });
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
-        this.api
-          .deleteArticleArticleArticleIdDelete(article.id)
-          .pipe(first())
-          .subscribe((success) => {
-            if (success) {
-              this.refreshAvailableOrderList();
-            } else {
-              this.snackBar.open(
-                "Artikel konnte nicht gelöscht werden. Bitte probieren sie es später erneut",
-                "Ok",
-                {
-                  duration: 10000,
-                },
-              );
-            }
-          });
+        this.handleDeleteArticle(article.id);
       }
     });
   }
@@ -418,22 +358,25 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
     const dialogData = ProductsListComponent.createEmptyDialogData(
       "Neuen Artikel hinzufügen",
     );
-    const closeFunction = (result: any) => {
-      if (result === undefined) {
-        return;
+    const closeFunction = (result: OrderDialogReturnData | undefined) => {
+      if (!result) return;
+
+      console.log(result);
+
+      switch (result.mode) {
+        case "delete":
+          console.error("Delete mode not supported");
+          break;
+
+        case "save":
+          this.handleCreateArticle(result, this.api);
+          break;
+        case "add":
+          return this.handleOrderArticle(result, undefined);
+        default:
+          console.error("Unknown mode: " + result.mode);
+          return;
       }
-      const orderedArticleCreate =
-        ProductsListComponent.mapDialogData2OrderArticleCreateV2(
-          result,
-          this.orderId,
-          null
-        );
-      this.articleService.orderArticle(orderedArticleCreate)
-        .pipe(first())
-        .subscribe(() => {
-          this.refreshAvailableOrderList();
-          this.refreshOrderedArticleList();
-        });
     };
     this.openDialog(dialogData, closeFunction);
   }
@@ -453,5 +396,102 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
       .subscribe((newArticle) => {
         article.favorite = newArticle.favorite;
       });
+  }
+
+  private refreshBothLists(): void {
+    this.refreshOrderedArticleList();
+    this.refreshAvailableOrderList();
+  }
+
+  private handleOrderArticle(
+    result: OrderDialogReturnData,
+    articleId: number
+  ) {
+    const orderedArticleCreate =
+      ProductsListComponent.mapDialogData2OrderArticleCreateV2(
+        result,
+        this.orderId,
+        articleId,
+      );
+    this.orderedArticlesService.orderArticle(orderedArticleCreate)
+      .pipe(first())
+      .subscribe(() => {
+        this.refreshBothLists();
+      });
+  }
+
+  private handleCreateArticle(
+    result: OrderDialogReturnData,
+    api: DefaultService
+  ) {
+    api.readOrderOrderOrderIdGet(this.orderId)
+      .pipe(first())
+      .subscribe((order) => {
+        const articleCreate = ProductsListComponent.mapDialogData2ArticleCreateV2(
+          result,
+          order.order_from.id,
+        );
+        this.articleService.createArticle(articleCreate).pipe(first()).subscribe(() => {
+          this.refreshBothLists();
+        })
+      });
+
+  }
+
+
+
+  private handleDeleteArticle(articleId: number): void {
+    this.api
+      .deleteArticleArticleArticleIdDelete(articleId)
+      .pipe(first())
+      .subscribe((success) => {
+        if (success) {
+          this.refreshAvailableOrderList();
+        } else {
+          this.snackBar.open(
+            "Artikel konnte nicht gelöscht werden. Bitte probieren sie es später erneut",
+            "Ok",
+            {
+              duration: 10000,
+            },
+          );
+        }
+      });
+  }
+
+  private handleDeleteOrderedArticle(orderedArticleId: number): void {
+    this.api
+      .deleteOrderedArticleOrderedArticleOrderedArticleIdDelete(orderedArticleId)
+      .pipe(first())
+      .subscribe((success) => {
+        if (success) {
+          this.refreshBothLists();
+          return;
+        }
+        this.snackBar.open("Es ist ein Fehler aufgetreten.", "Ok", { duration: 10000 });
+      });
+  }
+
+  private handleUpdateOrderedArticle(
+    orderedArticleId: number,
+    result: OrderDialogReturnData,
+    articleId: number,
+  ): void {
+    const orderedArticleUpdate = ProductsListComponent.mapDialogData2OrderedArticleUpdate(result, articleId);
+    this.orderedArticlesService
+      .updateOrderedArticle(orderedArticleId, orderedArticleUpdate)
+      .pipe(first())
+      .subscribe(() => this.refreshBothLists());
+  }
+
+  private handleSaveArticle(
+    result: OrderDialogReturnData,
+    articleId?: number,
+  ): void {
+    const articleUpdate = ProductsListComponent.mapDialogData2ArticleUpdateV2(result);
+    this.articleService
+      .updateArticle(articleId, articleUpdate)
+      .pipe(first())
+      .subscribe(() => this.refreshBothLists());
   }
 }

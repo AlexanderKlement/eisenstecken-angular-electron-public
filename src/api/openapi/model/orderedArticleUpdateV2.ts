@@ -9,18 +9,16 @@
  */
 
 
-export interface OrderArticleCreateV2 { 
+export interface OrderedArticleUpdateV2 { 
     amount: number;
-    articleId?: number | null;
+    articleId: number;
     comment: string;
-    favorite: boolean;
     modNumber: string;
     nameDE: string;
     nameIT: string;
-    orderId: number;
+    orderedUnitId: number;
     position: string;
     price: number;
     request: boolean;
-    unitId: number;
 }
 

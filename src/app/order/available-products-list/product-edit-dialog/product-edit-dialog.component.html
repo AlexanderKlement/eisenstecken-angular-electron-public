@@ -79,14 +79,30 @@
       </div>
 
     </div>
-    <div fxLayout="row" fxLayoutAlign="space-around start">
-      @if (!createMode) {
-        <button type="button" mat-button (click)="onDeleteClick()">Löschen</button>
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+      @if (createMode) {
+        <button type="button" mat-stroked-button color="warn" (click)="onDeleteClick()">
+          Artikel Löschen
+        </button>
+      } @else {
+        <button type="button" mat-stroked-button color="warn" (click)="onDeleteClick()">
+          Von Bestellung entfernen
+        </button>
       }
-      <span class="spacer"></span>
-      <button type="button" mat-button (click)="onNoClick()">Abbrechen</button>
-      <button type="submit" [disabled]="!productEditGroup.valid" mat-button class="add-button">Hinzufügen
-      </button>
+      <span fxFlex></span>
+      <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+        <button type="button" color="accent" mat-stroked-button (click)="onCancelClick()">Abbrechen</button>
+        <button type="button" (click)="onSaveClick()" mat-raised-button
+                color="primary">
+          Speichern
+        </button>
+
+        @if (createMode) {
+          <button type="submit" [disabled]="!productEditGroup.valid" mat-raised-button color="primary">
+            Hinzufügen
+          </button>
+        }
+      </div>
     </div>
   </form>
 </div>

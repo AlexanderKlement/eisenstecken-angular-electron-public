@@ -17,6 +17,7 @@ export interface OrderedArticleSmall {
     article: ArticleSmall;
     comment: string;
     id: number;
+    modNumber: string;
     name: Text;
     ordered_unit: Unit;
     position: string;

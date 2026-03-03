@@ -9,23 +9,29 @@ import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
 import { MatOption, MatSelect } from "@angular/material/select";
 import { MatButton } from "@angular/material/button";
 
-export interface OrderDialogData {
-  title: string;
+export type OrderDialogMode = "delete" | "save" | "add";
+
+export interface OrderDialogBaseData  {
   name: string;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   amount: number;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  unit_id?: number;
+  unitId: number;
   price: number;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  mod_number: string;
+  modNumber: string;
   request: boolean;
   comment: string;
   position: string;
-  delete: boolean;
-  create: boolean;
   favorite: boolean;
+}
+
+export interface OrderDialogReturnData extends OrderDialogBaseData{
+  mode: OrderDialogMode;
+}
+
+export interface OrderDialogCreateData  extends OrderDialogBaseData{
+  title: string;
   blockRequestChange: boolean;
+  blockFavoriteChange: boolean;
+  createMode: boolean;
 }
 
 @Component({
@@ -59,7 +65,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
 
   constructor(
     public dialogRef: MatDialogRef<ProductEditDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: OrderDialogData,
+    @Inject(MAT_DIALOG_DATA) public data: OrderDialogCreateData,
     @Inject(DEFAULT_CURRENCY_CODE) private readonly currencyCode: string,
     @Inject(LOCALE_ID) private readonly locale: string,
     private api: DefaultService,
@@ -76,23 +82,27 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
     this.unitOptions$ = this.api.readUnitsUnitGet();
     this.blockRequestChange = this.data.blockRequestChange;
     this.initProductEditGroup();
-    this.createMode = this.data.create;
+    this.createMode = this.data.createMode;
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 
-  onNoClick(): void {
+  onCancelClick(): void {
     this.dialogRef.close();
   }
 
+  onSaveClick(): void {
+    this.dialogRef.close(this.getReturnData("save"));
+  }
+
   onAddClick(): void {
-    this.dialogRef.close(this.getReturnData(false));
+    this.dialogRef.close(this.getReturnData("add"));
   }
 
   onDeleteClick(): void {
-    this.dialogRef.close(this.getReturnData(true));
+    this.dialogRef.close(this.getReturnData("delete"));
   }
 
   transformAmount(): void {
@@ -111,28 +121,27 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
     this.productEditGroup.get("priceFormatted").setValue(formattedAmount);
   }
 
-  private getReturnData(deleteOrder: boolean): OrderDialogData {
+  private getReturnData(mode: OrderDialogMode): OrderDialogReturnData {
+    if (!this.data.createMode && mode == "add"){
+      console.error("Cannot add a product to an existing product");
+    }
+
     return {
-      title: this.productEditGroup.get("title").value,
       name: this.productEditGroup.get("name").value,
       amount: this.productEditGroup.get("amount").value,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      unit_id: this.productEditGroup.get("unit_id").value,
+      unitId: this.productEditGroup.get("unit_id").value,
       price: this.productEditGroup.get("price").value,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      mod_number: this.productEditGroup.get("mod_number").value,
+      modNumber: this.productEditGroup.get("mod_number").value,
       request: this.productEditGroup.get("request").value,
       comment: this.productEditGroup.get("comment").value,
       position: this.productEditGroup.get("position").value,
       favorite: this.productEditGroup.get("favorite").value,
-      delete: deleteOrder,
-      create: this.data.create,
-      blockRequestChange: this.blockRequestChange,
+      mode,
     };
   }
 
   private initProductEditGroup(): void {
-    console.log(this.data.unit_id);
+    console.log(this.data.unitId);
     this.productEditGroup = new UntypedFormGroup({
       title: new UntypedFormControl(this.data.title),
       name: new UntypedFormControl(this.data.name, Validators.required),
@@ -142,7 +151,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
       ),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       unit_id: new UntypedFormControl(
-        this.data.unit_id !== null ? this.data.unit_id : 3,
+        this.data.unitId !== null ? this.data.unitId : 3,
       ),
       price: new UntypedFormControl(this.data.price, Validators.min(0)),
       priceFormatted: new UntypedFormControl(
@@ -152,7 +161,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
         ),
       ),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      mod_number: new UntypedFormControl(this.data.mod_number),
+      mod_number: new UntypedFormControl(this.data.modNumber),
       request: new UntypedFormControl(this.data.request),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       total_price: new UntypedFormControl(0),
@@ -162,6 +171,9 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
       position: new UntypedFormControl(this.data.position),
       favorite: new UntypedFormControl(this.data.favorite),
     });
+    if (this.data.blockFavoriteChange) {
+      this.productEditGroup.get("favorite")?.disable({ emitEvent: false });
+    }
     this.subscription.add(
       this.productEditGroup.get("price").valueChanges.subscribe(() => {
         this.updateTotalFromPrice();
