@@ -162,7 +162,7 @@ export class OrderDetailComponent implements OnInit {
               price: formatCurrency(dataSource.price, "de-DE", "EUR"),
             },
             route: () => {
-              this.orderedArticleClicked(dataSource.id);
+              console.log(dataSource.id);
             },
           });
         });
@@ -184,67 +184,6 @@ export class OrderDetailComponent implements OnInit {
   }
 
   private orderedArticleClicked(id: number): void {
-    this.api
-      .readOrderedArticleOrderedArticleOrderedArticleIdGet(id)
-      .pipe(first())
-      .subscribe((orderedArticle) => {
-        const dialogData$ = ProductsListComponent.createEditDialogData(
-          orderedArticle,
-          "Produkt bearbeiten",
-          true,
-        );
-        const closeFunction = (result: any) => {
-          if (result === undefined) {
-            return;
-          }
-          if (result.delete) {
-            this.api.deleteOrderedArticleOrderedArticleOrderedArticleIdDelete(
-              orderedArticle.id,
-            ).pipe(first())
-              .subscribe((success) => {
-                if (success) {
-                  this.articleDataSource.loadData();
-                } else {
-                  this.snackBar.open("Es ist ein Fehler aufgetreten.", "Ok", {
-                    duration: 10000,
-                  });
-                }
-              });
-            return;
-          }
-          const orderedArticleCreate =
-            ProductsListComponent.mapDialogData2OrderedArticleUpdate(
-              result,
-              orderedArticle.article.id,
-            );
-          const articleUpdate =
-            ProductsListComponent.mapDialogData2ArticleUpdateV2(result);
-          this.articleService.updateArticle(
-              orderedArticle.article.id,
-              articleUpdate,
-            )
-            .pipe(first())
-            .subscribe((article) => {
-              orderedArticleCreate.articleId = article.id;
-              this.orderedArticleService
-                .updateOrderedArticle(
-                  orderedArticle.id,
-                  orderedArticleCreate,
-                )
-                .pipe(first())
-                .subscribe(() => {
-                  this.articleDataSource.loadData();
-                });
-            });
-        };
-        dialogData$.pipe(first()).subscribe((dialogData) => {
-          const dialogRef = this.dialog.open(ProductEditDialogComponent, {
-            width: "700px",
-            data: dialogData,
-          });
-          dialogRef.afterClosed().pipe(first()).subscribe(closeFunction);
-        });
-      });
   }
 
   private orderDeleteClicked() {
