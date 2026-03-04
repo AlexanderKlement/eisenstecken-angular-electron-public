@@ -15,6 +15,7 @@ export interface Row<T> {
   values: T;
   route: VoidFunction;
   toolTip?: string;
+  rowClass?: string;
 }
 
 export const defaultValues = {

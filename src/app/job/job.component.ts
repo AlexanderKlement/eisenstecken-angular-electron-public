@@ -1,5 +1,5 @@
 import { Component,  OnInit} from "@angular/core";
-import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
+import { Row, TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
 import {  Router } from "@angular/router";
 import { Observable, Subscriber } from "rxjs";
 import dayjs from "dayjs/esm";
@@ -104,7 +104,13 @@ export class JobComponent implements OnInit {
         ),
       (dataSourceClasses) => {
         const rows = [];
+        let dividerAdded = false;
+
         dataSourceClasses.forEach((dataSource) => {
+          let rowClass = undefined;
+          if (!dividerAdded) {
+            rowClass = dataSource.is_mini ? "is-mini": undefined;
+          }
           rows.push({
             values: {
               name: dataSource.name,
@@ -116,7 +122,10 @@ export class JobComponent implements OnInit {
             route: () => {
               this.router.navigateByUrl("/job/" + dataSource.id.toString());
             },
+            rowClass: rowClass
           });
+
+          if (!dividerAdded && dataSource.is_mini) dividerAdded = true;
         });
         return rows;
       },
@@ -153,7 +162,13 @@ export class JobComponent implements OnInit {
         ),
       (dataSourceClasses) => {
         const rows = [];
+        let dividerAdded = false;
+
         dataSourceClasses.forEach((dataSource) => {
+          let rowClass = undefined;
+          if (!dividerAdded) {
+            rowClass = dataSource.is_mini ? "is-mini": undefined;
+          }
           rows.push({
             values: {
               name: dataSource.name,
@@ -165,7 +180,10 @@ export class JobComponent implements OnInit {
             route: () => {
               this.router.navigateByUrl("/job/" + dataSource.id.toString());
             },
+            rowClass: rowClass
           });
+
+          if (!dividerAdded && dataSource.is_mini) dividerAdded = true;
         });
         return rows;
       },
@@ -202,7 +220,13 @@ export class JobComponent implements OnInit {
         ),
       (dataSourceClasses) => {
         const rows = [];
+        let dividerAdded = false;
+
         dataSourceClasses.forEach((dataSource) => {
+          let rowClass = undefined;
+          if (!dividerAdded) {
+            rowClass = dataSource.is_mini ? "is-mini": undefined;
+          }
           rows.push({
             values: {
               name: dataSource.name,
@@ -214,14 +238,17 @@ export class JobComponent implements OnInit {
             route: () => {
               this.router.navigateByUrl("/job/" + dataSource.id.toString());
             },
+            rowClass: rowClass
           });
+
+          if (!dividerAdded && dataSource.is_mini) dividerAdded = true;
         });
         return rows;
       },
       [
         { name: "code", headerName: "Kommissionsnummer" },
         { name: "name", headerName: "Kommission" },
-        { name: "client.name", headerName: "Kunde" },
+        { name: "client.fullname", headerName: "Kunde" },
         { name: "responsible.fullname", headerName: "Zuständig" },
         { name: "completion", headerName: "Fertigstellung" },
       ],
@@ -251,7 +278,13 @@ export class JobComponent implements OnInit {
         ),
       (dataSourceClasses) => {
         const rows = [];
+        let dividerAdded = false;
+
         dataSourceClasses.forEach((dataSource) => {
+          let rowClass = undefined;
+          if (!dividerAdded) {
+            rowClass = dataSource.is_mini ? "is-mini": undefined;
+          }
           rows.push({
             values: {
               name: dataSource.name,
@@ -263,7 +296,10 @@ export class JobComponent implements OnInit {
             route: () => {
               this.router.navigateByUrl("/job/" + dataSource.id.toString());
             },
+            rowClass: rowClass
           });
+
+          if (!dividerAdded && dataSource.is_mini) dividerAdded = true;
         });
         return rows;
       },

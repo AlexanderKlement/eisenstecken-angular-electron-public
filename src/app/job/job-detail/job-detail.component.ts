@@ -90,7 +90,7 @@ export class JobDetailComponent implements OnInit {
         id = parseInt(params.id, 10);
       } catch {
         console.error("Cannot parse given id");
-        this.router.navigate(["Job"]);
+        void this.router.navigate(["Job"]);
         return;
       }
       this.jobId = id;
@@ -128,7 +128,7 @@ export class JobDetailComponent implements OnInit {
               name: dataSource.code + " - " + dataSource.name,
             },
             route: () => {
-              this.router.navigateByUrl("/job/" + dataSource.id.toString());
+              void this.router.navigateByUrl("/job/" + dataSource.id.toString());
             },
           });
         });
@@ -254,11 +254,11 @@ export class JobDetailComponent implements OnInit {
       [
         {
           property: "name",
-          name: "Name",
+          name: "Kommission",
         },
         {
           property: "code",
-          name: "Kodex",
+          name: "Kommissionsnummer",
         },
         {
           property: "client.fullname",
@@ -638,7 +638,7 @@ export class JobDetailComponent implements OnInit {
       .pipe(first())
       .subscribe((job) => {
         this.isMainJob = job.is_main;
-        this.title = "Auftrag: " + job.displayable_name;
+        this.title = job.code;
         this.clientId = job.client.id;
       });
     this.initOfferTable();

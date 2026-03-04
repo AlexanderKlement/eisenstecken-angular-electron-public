@@ -51,7 +51,7 @@ export class RecalculationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.initJobDataSource();
+    this.initRecalculationDataSource();
     this.initRefreshObservables();
     this.$year = this.api.readAvailableYearsJobYearGet();
   }
@@ -66,7 +66,7 @@ export class RecalculationComponent implements OnInit {
     this.$refreshSubscriber.next();
   }
 
-  initJobDataSource(): void {
+  initRecalculationDataSource(): void {
     this.recalculationDataSource = new TableDataSource(
       this.recalculationService,
       (recalculationService, filter, sortDirection, skip, limit) =>
@@ -109,6 +109,6 @@ export class RecalculationComponent implements OnInit {
   }
 
   yearChanged() {
-    this.initJobDataSource();
+    this.initRecalculationDataSource();
   }
 }

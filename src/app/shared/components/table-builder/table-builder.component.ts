@@ -20,7 +20,7 @@ import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from "@angular/material/table";
 import { MatButton } from "@angular/material/button";
 import { MatTooltip } from "@angular/material/tooltip";
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe, NgClass } from "@angular/common";
 import { DefaultService, OrderService, RecalculationService } from "../../../../api/openapi";
 
 export interface TableButton {
@@ -57,6 +57,7 @@ type AnyApi = DefaultService | RecalculationService | OrderService;
         MatTooltip,
         MatPaginator,
         AsyncPipe,
+        NgClass
     ],
 })
 

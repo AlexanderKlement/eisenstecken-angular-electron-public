@@ -1,7 +1,7 @@
 <div class="table">
   <div fxLayout="row" fxLayoutAlign="space-around center">
     @if (title) {
-      <h3>{{title}}</h3>
+      <h3>{{ title }}</h3>
     }
     <div class="search-input-wrapper">
       <mat-form-field>
@@ -32,18 +32,23 @@
         <mat-header-cell *matHeaderCellDef>Aktionen</mat-header-cell>
         <mat-cell *matCellDef="let element">
           @for (button of buttons; track button) {
-            <button [color]="button.color(element.values['condition'])" [class]="button.class(element.values['condition'])"
-              (click)="button.navigate($event, element.values['id'])"
-            mat-raised-button>{{button.name(element.values['condition'])}}</button>
+            <button [color]="button.color(element.values['condition'])"
+                    [class]="button.class(element.values['condition'])"
+                    (click)="button.navigate($event, element.values['id'])"
+                    mat-raised-button>{{ button.name(element.values['condition']) }}
+            </button>
           }
         </mat-cell>
       </ng-container>
     }
     <mat-header-row *matHeaderRowDef="dataSource.columnIdentifiers; sticky: true"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: dataSource.columnIdentifiers" (click)="rowClicked(row.route)"
+    <mat-row
+      *matRowDef="let row; columns: dataSource.columnIdentifiers"
+      (click)="rowClicked(row.route)"
       matTooltip="{{row.toolTip}}"
-    class="table-row"></mat-row>
+      [ngClass]="row.rowClass ? ['table-row', row.rowClass] : 'table-row'">
+    </mat-row>
   </mat-table>
   <mat-paginator [length]="(dataSource.amount$ | async)" [pageSize]="dataSource.pageSize"
-  [pageSizeOptions]="dataSource.pageSizeOptions" [pageIndex]="dataSource.pageIndex"></mat-paginator>
+                 [pageSizeOptions]="dataSource.pageSizeOptions" [pageIndex]="dataSource.pageIndex"></mat-paginator>
 </div>

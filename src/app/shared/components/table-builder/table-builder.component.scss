@@ -11,10 +11,15 @@
 
 
 .mat-mdc-table {
-  border-collapse: separate!important;
-  border-spacing:0 4px!important;
+  border-collapse: separate !important;
+  border-spacing: 0 4px !important;
 }
 
 .search-input-wrapper {
   margin-top: 16px;
+}
+
+.mat-mdc-row.is-mini,
+.mat-mdc-row.is-mini .mat-mdc-cell {
+  border-top: 1px solid black;
 }
