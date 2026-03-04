@@ -25,7 +25,7 @@ import {
   DefaultService,
   OrderedArticle,
   Article,
-  ArticleService, OrderedArticleService, OrderedArticleUpdateV2, OrderArticleCreateV2, ArticleCreateV2,
+  ArticleService, OrderedArticleService, OrderedArticleUpdateV2, OrderArticleCreateV2, ArticleCreateV2, ArticleUpdateV2,
 } from "../../../api/openapi";
 import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
 import {
@@ -39,7 +39,7 @@ import { SlicePipe } from "@angular/common";
 import { BoldSpanPipe } from "../../shared/pipes/boldSearchResult";
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
-import { ArticleUpdateV2 } from "../../../api/openapi/model/articleUpdateV2";
+import { OrderedArticleEditDialogService } from "./product-edit-dialog/product-edit-dialog.service";
 
 @Component({
   selector: 'app-products-list',
@@ -87,34 +87,8 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
     private articleService: ArticleService,
     private orderedArticlesService: OrderedArticleService,
     private snackBar: MatSnackBar,
+    private orderedArticleEditDialog: OrderedArticleEditDialogService,
   ) {
-  }
-
-  public static createEditDialogData(
-    orderedArticle: OrderedArticle,
-    title: string,
-    blockRequestChange: boolean = false,
-    blockFavoriteChange: boolean = false,
-  ): Observable<OrderDialogCreateData> {
-    return new Observable<OrderDialogCreateData>((dialogDataSubscriber) => {
-      const dialogData = ProductsListComponent.createEmptyDialogData(
-        title,
-        orderedArticle.article,
-      );
-      dialogData.amount = orderedArticle.amount;
-      dialogData.price = orderedArticle.price;
-      dialogData.unitId = orderedArticle.ordered_unit.id;
-      dialogData.request = orderedArticle.request;
-      dialogData.comment = orderedArticle.comment;
-      dialogData.position = orderedArticle.position;
-      dialogData.favorite = orderedArticle.article.favorite;
-      dialogData.modNumber = orderedArticle.modNumber;
-      dialogData.createMode = false;
-      dialogData.blockRequestChange = blockRequestChange;
-      dialogData.blockFavoriteChange = blockFavoriteChange;
-      console.log(dialogData);
-      dialogDataSubscriber.next(dialogData);
-    });
   }
 
   public static mapDialogData2ArticleUpdateV2(
@@ -290,37 +264,11 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   editButtonClicked(orderedArticle: OrderedArticle): void {
-    const dialogData$ = ProductsListComponent.createEditDialogData(
-      orderedArticle,
-      "Produkt bearbeiten",
-      false,
-      true
-    );
-
-    const closeFunction = (result: OrderDialogReturnData | undefined) => {
-      if (!result) return;
-
-      switch (result.mode) {
-        case "delete":
-          return this.handleDeleteOrderedArticle(orderedArticle.id);
-
-        case "save":
-          return this.handleUpdateOrderedArticle(
-            orderedArticle.id,
-            result,
-            orderedArticle.article.id,
-          );
-          case "add":
-            console.error("Add mode not supported");
-            break;
-        default:
-          console.error("Unknown mode: " + result.mode);
-          return;
-      }
-    };
-
-    dialogData$.pipe(first()).subscribe((dialogData) => {
-      this.openDialog(dialogData, closeFunction);
+    this.orderedArticleEditDialog.openEditDialog(orderedArticle, {
+      title: "Produkt bearbeiten",
+      blockRequestChange: false,
+      blockFavoriteChange: true,
+      onSuccess: () => this.refreshBothLists(),
     });
   }
 
@@ -470,18 +418,6 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
         }
         this.snackBar.open("Es ist ein Fehler aufgetreten.", "Ok", { duration: 10000 });
       });
-  }
-
-  private handleUpdateOrderedArticle(
-    orderedArticleId: number,
-    result: OrderDialogReturnData,
-    articleId: number,
-  ): void {
-    const orderedArticleUpdate = ProductsListComponent.mapDialogData2OrderedArticleUpdate(result, articleId);
-    this.orderedArticlesService
-      .updateOrderedArticle(orderedArticleId, orderedArticleUpdate)
-      .pipe(first())
-      .subscribe(() => this.refreshBothLists());
   }
 
   private handleSaveArticle(

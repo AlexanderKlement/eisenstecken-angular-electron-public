@@ -3,10 +3,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { InfoDataSource } from "../../shared/components/info-builder/info-builder.datasource";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { first } from "rxjs/operators";
-import { ProductsListComponent } from "../available-products-list/products-list.component";
-import {
-  ProductEditDialogComponent,
-} from "../available-products-list/product-edit-dialog/product-edit-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
@@ -19,10 +15,13 @@ import {
   DefaultService,
   OrderedArticle,
   Order,
-  OrderableType, OrderSmall, OrderedArticleService, ArticleService,
+  OrderableType, OrderSmall
 } from "../../../api/openapi";
 import { InfoBuilderComponent } from "../../shared/components/info-builder/info-builder.component";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
+import {
+  OrderedArticleEditDialogService
+} from "../available-products-list/product-edit-dialog/product-edit-dialog.service";
 
 @Component({
   selector: 'app-order-detail',
@@ -60,12 +59,12 @@ export class OrderDetailComponent implements OnInit {
 
   constructor(
     private api: DefaultService,
-    private orderedArticleService: OrderedArticleService,
-    private articleService: ArticleService,
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
+    private orderedArticleEditDialog: OrderedArticleEditDialogService,
+
   ) {
   }
 
@@ -162,7 +161,7 @@ export class OrderDetailComponent implements OnInit {
               price: formatCurrency(dataSource.price, "de-DE", "EUR"),
             },
             route: () => {
-              console.log(dataSource.id);
+              this.orderedArticleClicked(dataSource.id);
             },
           });
         });
@@ -184,6 +183,17 @@ export class OrderDetailComponent implements OnInit {
   }
 
   private orderedArticleClicked(id: number): void {
+    this.api
+      .readOrderedArticleOrderedArticleOrderedArticleIdGet(id)
+      .pipe(first())
+      .subscribe((orderedArticle) => {
+        this.orderedArticleEditDialog.openEditDialog(orderedArticle, {
+          title: "Produkt bearbeiten",
+          blockRequestChange: false,
+          blockFavoriteChange: true,
+          onSuccess: () => this.articleDataSource.loadData(),
+        });
+      });
   }
 
   private orderDeleteClicked() {

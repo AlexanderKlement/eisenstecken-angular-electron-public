@@ -77,6 +77,10 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
     return Math.round(input * 100) / 100;
   }
 
+  public static roundTo4Decimals(input: number): number {
+    return Math.round(input * 10000) / 10000;
+  }
+
   ngOnInit(): void {
     this.subscription = new Subscription();
     this.unitOptions$ = this.api.readUnitsUnitGet();
@@ -211,7 +215,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
     const total = this.productEditGroup.get("total_price").value || 0;
 
     const price = amount
-      ? ProductEditDialogComponent.roundTo2Decimals(total / amount)
+      ? ProductEditDialogComponent.roundTo4Decimals(total / amount)
       : 0;
 
     this.productEditGroup.get("price").setValue(price, { emitEvent: false });
