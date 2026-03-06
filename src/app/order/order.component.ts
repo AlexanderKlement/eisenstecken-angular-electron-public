@@ -15,7 +15,7 @@ import {
   OrderableType,
   OrderedArticle,
   Article,
-  DefaultService, OrderedArticleSmall,
+  DefaultService, OrderedArticleSmall, ArticleService,
 } from "../../api/openapi";
 import {
   DefaultLayoutDirective,
@@ -58,20 +58,18 @@ export class OrderComponent implements OnInit {
   availableProductListName = "Verfügbare Artikel";
   availableProducts$: Observable<Article[]>;
   availableProductsSubscriber: Subscriber<Article[]>;
-  private availableArticleFilter = "";
-
   orderedProductListName = "Ausgewählte Artikel";
   orderedProducts$: Observable<OrderedArticle[]>;
   orderedProductsSubscriber: Subscriber<OrderedArticleSmall[]>;
-  private orderedArticleFilter = "";
-
   step = 0;
-
   lastOrderId: number;
   buttons: CustomButton[] = [];
+  private availableArticleFilter = "";
+  private orderedArticleFilter = "";
 
   constructor(
     private api: DefaultService,
+    private articleService: ArticleService,
     private router: Router,
   ) {
   }
@@ -224,6 +222,16 @@ export class OrderComponent implements OnInit {
     this.buttons = [];
   }
 
+  onAvailableSearchChange(filter: string): void {
+    this.availableArticleFilter = (filter ?? "").trim().toLowerCase();
+    this.refreshAvailableProducts();
+  }
+
+  onOrderedSearchChange(filter: string): void {
+    this.orderedArticleFilter = (filter ?? "").trim().toLowerCase();
+    this.refreshOrderedProducts();
+  }
+
   private loadToList() {
     const stocks$ = this.api.readStocksStockGet().pipe(first());
     const acceptedJobs$ = this.api
@@ -269,8 +277,7 @@ export class OrderComponent implements OnInit {
     }
     switch (this.fromListSelected.type) {
       case OrderableType.Stock: {
-        this.api
-          .readArticlesByStockArticleStockStockIdGet(
+        this.articleService.getArticlesByStock(
             this.fromListSelected.item.id,
             0,
             100,
@@ -319,15 +326,5 @@ export class OrderComponent implements OnInit {
         break;
       }
     }
-  }
-
-  onAvailableSearchChange(filter: string): void {
-    this.availableArticleFilter = (filter ?? "").trim().toLowerCase();
-    this.refreshAvailableProducts();
-  }
-
-  onOrderedSearchChange(filter: string): void {
-    this.orderedArticleFilter = (filter ?? "").trim().toLowerCase();
-    this.refreshOrderedProducts();
   }
 }
