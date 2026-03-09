@@ -11,10 +11,10 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpParameterCodec, HttpContext 
+         HttpResponse, HttpEvent, HttpContext 
         }       from '@angular/common/http';
-import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
+import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
 import { HTTPValidationError } from '../model/hTTPValidationError';
@@ -39,10 +39,12 @@ export class OrderService extends BaseService {
 
     /**
      * Read Orders By Recalculation
+     * @endpoint get /order/v2/recalculation/count/{recalculation_id}
      * @param recalculationId 
      * @param filterString 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
+     * @param options additional options
      */
     public readOrdersByRecalculationOrderV2RecalculationCountRecalculationIdGet(recalculationId: number, filterString?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<number>;
     public readOrdersByRecalculationOrderV2RecalculationCountRecalculationIdGet(recalculationId: number, filterString?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<number>>;
@@ -52,9 +54,16 @@ export class OrderService extends BaseService {
             throw new Error('Required parameter recalculationId was null or undefined when calling readOrdersByRecalculationOrderV2RecalculationCountRecalculationIdGet.');
         }
 
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>filterString, 'filter_string');
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'filter_string',
+            <any>filterString,
+            QueryParamStyle.Form,
+            true,
+        );
+
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -86,12 +95,12 @@ export class OrderService extends BaseService {
         return this.httpClient.request<number>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                params: localVarQueryParameters,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
-                transferCache: localVarTransferCache,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );
@@ -99,12 +108,14 @@ export class OrderService extends BaseService {
 
     /**
      * Read Orders By Recalculation
+     * @endpoint get /order/v2/recalculation/{recalculation_id}
      * @param recalculationId 
      * @param skip 
      * @param limit 
      * @param filterString 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
+     * @param options additional options
      */
     public readOrdersByRecalculationOrderV2RecalculationRecalculationIdGet(recalculationId: number, skip?: number, limit?: number, filterString?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OrderSmall>>;
     public readOrdersByRecalculationOrderV2RecalculationRecalculationIdGet(recalculationId: number, skip?: number, limit?: number, filterString?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OrderSmall>>>;
@@ -114,13 +125,34 @@ export class OrderService extends BaseService {
             throw new Error('Required parameter recalculationId was null or undefined when calling readOrdersByRecalculationOrderV2RecalculationRecalculationIdGet.');
         }
 
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>skip, 'skip');
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>limit, 'limit');
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>filterString, 'filter_string');
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'skip',
+            <any>skip,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'limit',
+            <any>limit,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'filter_string',
+            <any>filterString,
+            QueryParamStyle.Form,
+            true,
+        );
+
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -152,12 +184,12 @@ export class OrderService extends BaseService {
         return this.httpClient.request<Array<OrderSmall>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                params: localVarQueryParameters,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
-                transferCache: localVarTransferCache,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
                 reportProgress: reportProgress
             }
         );

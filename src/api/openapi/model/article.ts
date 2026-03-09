@@ -7,14 +7,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Category } from './category';
 import { Text } from './text';
 import { Unit } from './unit';
 import { Lock } from './lock';
 
 
 export interface Article { 
-    categories: Array<Category>;
     deleted: boolean;
     favorite: boolean;
     id: number;

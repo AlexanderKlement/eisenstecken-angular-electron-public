@@ -16,6 +16,7 @@ export interface ArticleCreate {
     name_de: string;
     name_it: string;
     price: number;
+    stockId?: number | null;
     supplier_id?: number | null;
     unit_id: number;
 }

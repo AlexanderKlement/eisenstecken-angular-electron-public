@@ -125,27 +125,10 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
     };
   }
 
-  public static mapDialogData2OrderedArticleUpdate(
-    dialogData: OrderDialogReturnData,
-    articleId: number,
-  ): OrderedArticleUpdateV2 {
-    return {
-      amount: dialogData.amount,
-      articleId: articleId,
-      orderedUnitId: dialogData.unitId,
-      price: dialogData.price,
-      comment: dialogData.comment,
-      position: dialogData.position,
-      request: dialogData.request,
-      nameDE: dialogData.name,
-      nameIT: dialogData.name,
-      modNumber: dialogData.modNumber,
-    };
-  }
-
   public static mapDialogData2ArticleCreateV2(
     dialogData: OrderDialogReturnData,
-    supplierId: number,
+    supplierId?: number,
+    stockId?: number,
   ): ArticleCreateV2 {
     return {
       supplierID: supplierId,
@@ -155,6 +138,7 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
       nameDE: dialogData.name,
       nameIT: dialogData.name,
       favorite: dialogData.favorite,
+      stockId: stockId
     };
   }
 
@@ -309,13 +293,10 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
     const closeFunction = (result: OrderDialogReturnData | undefined) => {
       if (!result) return;
 
-      console.log(result);
-
       switch (result.mode) {
         case "delete":
           console.error("Delete mode not supported");
           break;
-
         case "save":
           this.handleCreateArticle(result, this.api);
           break;
@@ -375,10 +356,23 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
     api.readOrderOrderOrderIdGet(this.orderId)
       .pipe(first())
       .subscribe((order) => {
+        let supplierId: number | undefined = undefined;
+        let stockId: number | undefined = undefined;
+        if (order.order_from.type == "supplier") {
+          supplierId = order.order_from.id;
+        }
+        if (order.order_from.type == "stock") {
+          stockId = order.order_from.id;
+        }
         const articleCreate = ProductsListComponent.mapDialogData2ArticleCreateV2(
           result,
-          order.order_from.id,
+          supplierId,
+          stockId,
         );
+        console.log("ArticleCreate:")
+        console.log(articleCreate);
+        console.log("Result:")
+        console.log(result);
         this.articleService.createArticle(articleCreate).pipe(first()).subscribe(() => {
           this.refreshBothLists();
         })

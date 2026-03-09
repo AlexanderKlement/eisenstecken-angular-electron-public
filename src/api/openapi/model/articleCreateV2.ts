@@ -15,7 +15,8 @@ export interface ArticleCreateV2 {
     nameDE: string;
     nameIT: string;
     price: number;
-    supplierID: number;
+    stockId?: number | null;
+    supplierID?: number | null;
     unitID: number;
 }
 

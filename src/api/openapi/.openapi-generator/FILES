@@ -84,6 +84,7 @@ model/jobTypeType.ts
 model/jobUpdate.ts
 model/journey.ts
 model/language.ts
+model/locationInner.ts
 model/lock.ts
 model/maintenance.ts
 model/maintenanceCreate.ts
@@ -166,7 +167,6 @@ model/userEssential.ts
 model/userPassword.ts
 model/userUpdate.ts
 model/validationError.ts
-model/validationErrorLocInner.ts
 model/vat.ts
 model/vatCreate.ts
 model/vietJob.ts
@@ -185,4 +185,5 @@ model/xmlFileBytes.ts
 model/xmlFileStr.ts
 param.ts
 provide-api.ts
+query.params.ts
 variables.ts
