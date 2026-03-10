@@ -8,9 +8,7 @@ import { checkForUpdatesWhenReady, configureUpdateChannel, wireUpdateEvents } fr
 
 const state = getAppState();
 state.app = app;
-
 Sentry.init({ dsn: 'https://60ac4754e4be476a82b10b0e597dfaa6@sentry.kivi.bz.it/25' });
-
 const args = process.argv.slice(1);
 const serve = args.some(val => val === '--serve');
 const gotTheLock: boolean = app.requestSingleInstanceLock();
@@ -58,15 +56,17 @@ try {
 
     app.whenReady().then(async () => {
       registerAllIpc();
+      await createWindow(serve);
       configureUpdateChannel();
       wireUpdateEvents();
 
-      await createWindow(serve);
-      await initTray();
+      void initTray();
 
       if (!serve) {
         console.info('[main] triggering update check');
-        void checkForUpdatesWhenReady();
+        setTimeout(() => {
+          void checkForUpdatesWhenReady();
+        }, 15000);
       }
     });
 
