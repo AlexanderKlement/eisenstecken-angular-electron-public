@@ -7,13 +7,16 @@ import {
   MatDialogContent,
   MatDialogActions
 } from "@angular/material/dialog";
-import { first } from "rxjs/operators";
-import { DefaultService } from "../../../../api/openapi";
+import { debounceTime, distinctUntilChanged, first, map, startWith, switchMap } from "rxjs/operators";
+import { ClientService, ClientSmall, DefaultService, JobService } from "../../../../api/openapi";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
-import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
-import { MatButton } from "@angular/material/button";
 import { MatTabsModule } from "@angular/material/tabs";
-import { Client } from "../../../model/client";
+import { Observable, of } from "rxjs";
+import { AsyncPipe } from "@angular/common";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatButtonModule } from "@angular/material/button";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
 
 
 export interface ChangePathDialogData {
@@ -21,18 +24,33 @@ export interface ChangePathDialogData {
 }
 
 @Component({
-  selector: "app-change-path-dialog",
+  selector: "app-move-job-dialog",
   templateUrl: "./move-job-dialog.component.html",
   styleUrls: ["./move-job-dialog.component.scss"],
-  imports: [MatDialogTitle, MatTabsModule, MatDialogContent, FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatDialogActions, MatButton]
+  imports: [
+    MatDialogTitle,
+    MatTabsModule,
+    MatDialogContent,
+    FormsModule,
+    ReactiveFormsModule,
+    DefaultLayoutDirective,
+    DefaultLayoutAlignDirective,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDialogActions,
+    MatButtonModule,
+    MatAutocompleteModule,
+    AsyncPipe
+  ]
 })
 export class MoveJobDialogComponent implements OnInit {
   title = "Jahr verschieben";
   moveJobYearFormGroup: UntypedFormGroup;
   moveJobClientFormGroup: UntypedFormGroup;
+  filteredCustomers!: Observable<ClientSmall[]>;
 
 
-  constructor(private api: DefaultService,
+  constructor(private api: DefaultService, private jobService: JobService, private clientService: ClientService,
               public dialogRef: MatDialogRef<MoveJobDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: ChangePathDialogData) {
   }
@@ -40,13 +58,28 @@ export class MoveJobDialogComponent implements OnInit {
   ngOnInit(): void {
     const currentYear = new Date().getFullYear();
     const nextYear = currentYear + 1;
+
     this.moveJobYearFormGroup = new UntypedFormGroup({
       year: new UntypedFormControl(nextYear.toString())
     });
-    this.moveJobYearFormGroup = new UntypedFormGroup({
-      customerId: [],
-      customerSearch: []
+    this.moveJobClientFormGroup = new UntypedFormGroup({
+      customerSearch: new UntypedFormControl(""),
+      customerId: new UntypedFormControl(null)
     });
+
+    this.filteredCustomers = this.moveJobClientFormGroup.get("customerSearch")!.valueChanges.pipe(
+      startWith(""),
+      map(value => typeof value === "string" ? value : value?.name ?? ""),
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(search => {
+        if (!search || search.trim().length < 2) {
+          return of([]);
+        }
+
+        return this.clientService.getClients(0, 10, search.trim());
+      })
+    );
     this.api.readJobJobJobIdGet(this.data.id).pipe(first()).subscribe((job) => {
       this.title += ": " + job.displayable_name;
     });
@@ -56,16 +89,15 @@ export class MoveJobDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  private filterCustomers(value: string): Client[] {
-    const filterValue = value.toLowerCase();
-    return this.customersList.filter(c =>
-      c.name.toLowerCase().includes(filterValue)
-    );
+
+
+  displayCustomer(client: ClientSmall): string {
+    return client ? client.name : "";
   }
 
 
-  public selectCustomer(customerId: number) {
-    this.moveJobClientFormGroup.get("customerId").setValue(customerId);
+  public selectCustomer(customer: ClientSmall) {
+    this.moveJobClientFormGroup.get("customerId")?.setValue(customer.id);
   }
 
   onSubmitYearClick() {
@@ -76,7 +108,16 @@ export class MoveJobDialogComponent implements OnInit {
   }
 
   onSubmitClientClick() {
-    this.api.moveJobToClient()
+    const customerId = this.moveJobClientFormGroup.get("customerId")?.value;
 
+    if (!customerId) {
+      return;
+    }
+
+    this.jobService.moveJobToClient(this.data.id, customerId)
+      .pipe(first())
+      .subscribe(() => {
+        this.dialogRef.close(true);
+      });
   }
 }

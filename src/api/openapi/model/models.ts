@@ -20,6 +20,7 @@ export * from './chatMessageCreate';
 export * from './chatRecipient';
 export * from './client';
 export * from './clientCreate';
+export * from './clientSmall';
 export * from './clientValidation';
 export * from './companyEvent';
 export * from './companyEventCreate';

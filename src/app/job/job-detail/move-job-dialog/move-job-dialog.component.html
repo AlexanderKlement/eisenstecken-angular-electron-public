@@ -16,31 +16,35 @@
       </div>
     </mat-tab>
     <mat-tab label="Kunde">
-      <mat-form-field appearance="fill">
-        <mat-label>Kunde</mat-label>
-        <input
-          type="text"
-          matInput
-          formControlName="customerSearch"
-          [matAutocomplete]="auto">
+      <form [formGroup]="moveJobClientFormGroup">
+        <div fxLayout="column" fxLayoutAlign="space-around center">
+          <mat-form-field appearance="fill">
+            <mat-label>Kunde</mat-label>
+            <input
+              type="text"
+              matInput
+              formControlName="customerSearch"
+              [matAutocomplete]="auto">
 
-        <mat-autocomplete
-          #auto="matAutocomplete"
-          (optionSelected)="selectCustomer($event.option.value)">
+            <mat-autocomplete
+              #auto="matAutocomplete"
+              [displayWith]="displayCustomer"
+              (optionSelected)="selectCustomer($event.option.value)">
 
-          @if (filteredCustomers | async; as customers) {
-            @for (customer of customers; track customer.id) {
-              <mat-option [value]="customer">
-                {{ customer.name }}
-              </mat-option>
-            }
-          }
-
-        </mat-autocomplete>
-      </mat-form-field>
+              @if (filteredCustomers | async; as customers) {
+                @for (customer of customers; track customer.id) {
+                  <mat-option [value]="customer">
+                    {{ customer.fullname }}
+                  </mat-option>
+                }
+              }
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+      </form>
       <div mat-dialog-actions>
         <button mat-button type="button" (click)="onCancelClick()">Abbrechen</button>
-        <button mat-button type="button" (click)="onSubmitCustomerClick()">Speichern</button>
+        <button mat-button type="button" (click)="onSubmitClientClick()">Speichern</button>
       </div>
     </mat-tab>
   </mat-tab-group>
