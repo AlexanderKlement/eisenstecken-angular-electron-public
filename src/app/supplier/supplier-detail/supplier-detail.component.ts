@@ -13,7 +13,7 @@ import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/c
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { FileService } from "../../shared/services/file.service";
 import { EmailService } from "../../shared/services/email.service";
-import { combineLatest, Observable, Subscriber } from "rxjs";
+import { combineLatest, Observable, Subject, merge, of } from "rxjs";
 import {
   OrderBundleCreate,
   Supplier,
@@ -51,9 +51,7 @@ export class SupplierDetailComponent implements OnInit {
   buttons: CustomButton[] = [];
 
   supplier$: Observable<Supplier>;
-  public $refresh: Observable<void>;
-  private $refreshSubscriber: Subscriber<void>;
-
+  private refresh$ = new Subject<void>();
 
   constructor(private api: DefaultService, private authService: AuthService,
               private router: Router, private snackBar: MatSnackBar,
@@ -92,8 +90,9 @@ export class SupplierDetailComponent implements OnInit {
         this.router.navigateByUrl("supplier");
         return;
       }
-      this.supplier$ = this.api.readSupplierSupplierSupplierIdGet(this.id).pipe(
-        shareReplay({ bufferSize: 1, refCount: false }),
+      this.supplier$ = merge(of(void 0), this.refresh$).pipe(
+        switchMap(() => this.api.readSupplierSupplierSupplierIdGet(this.id)),
+        shareReplay({ bufferSize: 1, refCount: true }),
       );
       this.initSupplierDetail();
       this.initOrderTable(this.id);
@@ -144,17 +143,17 @@ export class SupplierDetailComponent implements OnInit {
         });
       }
     });
-    this.initRefreshObservables();
   }
 
-  initRefreshObservables(): void {
-    this.$refresh = new Observable<void>((subscriber => {
-      this.$refreshSubscriber = subscriber;
-    }));
-  }
 
   onAttach(): void {
-    this.$refreshSubscriber.next();
+    this.initSupplierDetail();
+    this.refresh$.next();
+
+    this.createdOrderDataSource?.loadData();
+    this.orderedOrderDataSource?.loadData();
+    this.deliveredOrderDataSource?.loadData();
+    this.requestOrderDataSource?.loadData();
   }
 
   private initSupplierDetail(): void {
@@ -307,7 +306,7 @@ export class SupplierDetailComponent implements OnInit {
         { name: "delivery_date", headerName: "Lieferdatum" },
         { name: "user.fullname", headerName: "Bestellt von" },
       ],
-      (api) => api.readCountOfOrderBundleBySupplierAndStatusOrderBundleSupplierSupplierIdCountGet(supplierId, "DELIVERED"),
+      (api) => api.readCountOfOrderBundleBySupplierAndStatusOrderBundleSupplierSupplierIdCountGet(supplierId, undefined, true),
     );
     this.createdOrderDataSource.loadData();
     this.orderedOrderDataSource.loadData();
@@ -363,7 +362,7 @@ export class SupplierDetailComponent implements OnInit {
       width: "400px",
       data: {
         title: "Lieferant löschen?",
-        text: "Den Lieferanten ausblenden? Diese Aktion KANN rückgängig gemacht werden?",
+        text: "Den Lieferanten ausblenden? Dieser wird nun nicht mehr angezeigt?",
       },
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -375,7 +374,7 @@ export class SupplierDetailComponent implements OnInit {
             this.snackBar.open("Beim Ausblenden ist ein Fehler aufgetreten", "Ok", {
               duration: 10000,
             });
-            console.error("Could not delete order bundle");
+            console.error("Could not disable supplier");
           }
         });
 
