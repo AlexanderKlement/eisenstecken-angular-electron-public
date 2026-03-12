@@ -147,31 +147,31 @@ export class SupplierEditComponent
     };
 
     if (this.createMode) {
-      this.api.createSupplierSupplierPost(supplierCreate).subscribe(
-        (supplier) => {
+      this.api.createSupplierSupplierPost(supplierCreate).subscribe({
+        next: (supplier) => {
           this.createUpdateSuccess(supplier);
         },
-        (error) => {
+        error: (error) => {
           this.createUpdateError(error);
         },
-        () => {
+        complete: () => {
           this.createUpdateComplete();
-        },
-      );
+        }
+      });
     } else {
       this.api
         .updateSupplierSupplierSupplierIdPut(this.id, supplierCreate)
-        .subscribe(
-          (supplier) => {
+        .subscribe({
+          next: (supplier) => {
             this.createUpdateSuccess(supplier);
           },
-          (error) => {
+          error: (error) => {
             this.createUpdateError(error);
           },
-          () => {
+          complete: () => {
             this.createUpdateComplete();
-          },
-        );
+          }
+        });
     }
   }
 
@@ -184,13 +184,9 @@ export class SupplierEditComponent
 
   createUpdateSuccess(supplier: Supplier): void {
     this.id = supplier.id;
-    if (this.createMode) {
-      this.router.navigateByUrl("supplier/", { replaceUrl: true });
-    } else {
-      this.router.navigateByUrl("supplier/" + supplier.id.toString(), {
-        replaceUrl: true,
-      });
-    }
+    void this.router.navigate(["/supplier", supplier.id], {
+      replaceUrl: true,
+    });
   }
 
   getAddressGroup(): UntypedFormGroup {
