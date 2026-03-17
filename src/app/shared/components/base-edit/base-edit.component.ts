@@ -18,9 +18,9 @@ export class BaseEditComponent<T> implements OnInit, OnDestroy, ReusableRoute, D
 
   // to be provided by derived class:
   navigationTarget: string;
-  lockFunction!: (api: DefaultService, id: number) => Observable<Lock>;
-  unlockFunction!: (api: DefaultService, id: number) => Observable<boolean>;
-  dataFunction!: (api: DefaultService, id: number) => Observable<T>;
+  lockFunction!: (id: number) => Observable<Lock>;
+  unlockFunction!: (id: number) => Observable<boolean>;
+  dataFunction!: (id: number) => Observable<T>;
 
   // shared:
   me$!: Observable<User>;
@@ -76,7 +76,7 @@ export class BaseEditComponent<T> implements OnInit, OnDestroy, ReusableRoute, D
       }
 
       if (!this.createMode) {
-        this.lockFunction(this.api, this.id).pipe(first()).subscribe((lock) => {
+        this.lockFunction(this.id).pipe(first()).subscribe((lock) => {
           if (!lock.locked) {
             console.error("BaseEditComponent: Expected resource to be locked.");
             this.goBack();
@@ -88,7 +88,7 @@ export class BaseEditComponent<T> implements OnInit, OnDestroy, ReusableRoute, D
               this.goBack();
               return;
             }
-            this.data$ = this.dataFunction(this.api, this.id);
+            this.data$ = this.dataFunction(this.id);
             this.observableReady();
           });
         });
@@ -106,7 +106,7 @@ export class BaseEditComponent<T> implements OnInit, OnDestroy, ReusableRoute, D
     this.controlsSub?.unsubscribe();
 
     if (!this.createMode) {
-      this.unlockFunction(this.api, this.id).pipe(first()).subscribe((success) => {
+      this.unlockFunction(this.id).pipe(first()).subscribe((success) => {
         if (success) {
           console.info("BaseEdit: SUCCESS: unlocked object with id:", this.id);
         } else {

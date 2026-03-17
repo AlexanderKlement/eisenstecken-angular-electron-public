@@ -42,11 +42,11 @@ export class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> imp
     super(api, router, route, dialog);
   }
 
-  lockFunction = (api: DefaultService, id: number): Observable<Lock> => api.islockedOrderBundleOrderBundleIslockedOrderBundleIdGet(id);
+  lockFunction = (id: number): Observable<Lock> => this.api.islockedOrderBundleOrderBundleIslockedOrderBundleIdGet(id);
 
-  dataFunction = (api: DefaultService, id: number): Observable<OrderBundle> => api.readOrderBundleOrderBundleOrderBundleIdGet(id);
+  dataFunction = (id: number): Observable<OrderBundle> => this.api.readOrderBundleOrderBundleOrderBundleIdGet(id);
 
-  unlockFunction = (api: DefaultService, id: number): Observable<boolean> => api.unlockOrderBundleOrderBundleUnlockOrderBundleIdPost(id);
+  unlockFunction = (id: number): Observable<boolean> => this.api.unlockOrderBundleOrderBundleUnlockOrderBundleIdPost(id);
 
   ngOnInit(): void {
     super.ngOnInit();

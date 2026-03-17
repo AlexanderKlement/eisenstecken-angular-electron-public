@@ -73,12 +73,12 @@ export class ClientEditComponent
     super(api, router, route, dialog);
   }
 
-  lockFunction = (api: DefaultService, id: number): Observable<Lock> =>
-    api.islockedClientClientIslockedClientIdGet(id);
-  dataFunction = (api: DefaultService, id: number): Observable<Client> =>
-    api.readClientClientClientIdGet(id);
-  unlockFunction = (api: DefaultService, id: number): Observable<boolean> =>
-    api.unlockClientClientUnlockClientIdPost(id);
+  lockFunction = (id: number): Observable<Lock> =>
+    this.api.islockedClientClientIslockedClientIdGet(id);
+  dataFunction = (id: number): Observable<Client> =>
+    this.api.readClientClientClientIdGet(id);
+  unlockFunction = (id: number): Observable<boolean> =>
+    this.api.unlockClientClientUnlockClientIdPost(id);
 
   ngOnInit(): void {
     super.ngOnInit();

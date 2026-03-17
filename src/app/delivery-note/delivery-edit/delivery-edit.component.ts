@@ -116,14 +116,14 @@ export class DeliveryEditComponent
     super(api, router, route, dialog);
   }
 
-  lockFunction = (api: DefaultService, id: number): Observable<Lock> =>
-    api.islockedDeliveryNoteDeliveryNoteIslockedDeliveryNoteIdGet(id);
+  lockFunction = (id: number): Observable<Lock> =>
+    this.api.islockedDeliveryNoteDeliveryNoteIslockedDeliveryNoteIdGet(id);
 
-  dataFunction = (api: DefaultService, id: number): Observable<DeliveryNote> =>
-    api.readDeliveryNoteDeliveryNoteDeliveryNoteIdGet(id);
+  dataFunction = (id: number): Observable<DeliveryNote> =>
+    this.api.readDeliveryNoteDeliveryNoteDeliveryNoteIdGet(id);
 
-  unlockFunction = (api: DefaultService, id: number): Observable<boolean> =>
-    api.unlockDeliveryNoteDeliveryNoteUnlockDeliveryNoteIdPost(id);
+  unlockFunction = (id: number): Observable<boolean> =>
+    this.api.unlockDeliveryNoteDeliveryNoteUnlockDeliveryNoteIdPost(id);
 
   ngOnInit(): void {
     super.ngOnInit();

@@ -36,9 +36,9 @@ export class StockEditComponent extends BaseEditComponent<Stock> implements OnIn
     super(api, router, route, dialog);
   }
 
-  lockFunction = (api: DefaultService, id: number): Observable<Lock> => api.islockedStockStockIslockedStockIdGet(id);
-  dataFunction = (api: DefaultService, id: number): Observable<Stock> => api.readStockStockStockIdGet(id);
-  unlockFunction = (api: DefaultService, id: number): Observable<boolean> => api.unlockStockStockUnlockStockIdPost(id);
+  lockFunction = (id: number): Observable<Lock> => this.api.islockedStockStockIslockedStockIdGet(id);
+  dataFunction = (id: number): Observable<Stock> => this.api.readStockStockStockIdGet(id);
+  unlockFunction = (id: number): Observable<boolean> => this.api.unlockStockStockUnlockStockIdPost(id);
 
   ngOnInit(): void {
     super.ngOnInit();

@@ -60,9 +60,9 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
   }
 
 
-  lockFunction = (api: DefaultService, id: number): Observable<Lock> => api.islockedJobJobIslockedJobIdGet(id);
-  dataFunction = (api: DefaultService, id: number): Observable<Job> => api.readJobJobJobIdGet(id);
-  unlockFunction = (api: DefaultService, id: number): Observable<boolean> => api.unlockJobJobUnlockJobIdPost(id);
+  lockFunction = (id: number): Observable<Lock> => this.api.islockedJobJobIslockedJobIdGet(id);
+  dataFunction = (id: number): Observable<Job> => this.api.readJobJobJobIdGet(id);
+  unlockFunction = (id: number): Observable<boolean> => this.api.unlockJobJobUnlockJobIdPost(id);
 
 
   ngOnInit(): void {

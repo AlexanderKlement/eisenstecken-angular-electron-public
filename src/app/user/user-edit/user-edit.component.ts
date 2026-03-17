@@ -93,11 +93,11 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
     super(api, router, route, dialog);
   }
 
-  lockFunction = (api: DefaultService, id: number): Observable<Lock> => api.islockedUserUsersIslockedUserIdGet(id);
+  lockFunction = (id: number): Observable<Lock> => this.api.islockedUserUsersIslockedUserIdGet(id);
 
-  dataFunction = (api: DefaultService, id: number): Observable<User> => api.readUserUsersUserIdGet(id);
+  dataFunction = (id: number): Observable<User> => this.api.readUserUsersUserIdGet(id);
 
-  unlockFunction = (api: DefaultService, id: number): Observable<boolean> => api.unlockUserUsersUnlockUserIdGet(id);
+  unlockFunction = (id: number): Observable<boolean> => this.api.unlockUserUsersUnlockUserIdGet(id);
 
   onCategoryClick(category: string): void {
     this.availableRightCats = this.availableRightCats.map((cat) => {

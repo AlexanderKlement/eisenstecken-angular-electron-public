@@ -113,14 +113,14 @@ export class OfferEditComponent
     super(api, router, route, dialog);
   }
 
-  lockFunction = (api: DefaultService, id: number): Observable<Lock> =>
-    api.islockedOfferOfferIslockedOfferIdGet(id);
+  lockFunction = (id: number): Observable<Lock> =>
+    this.api.islockedOfferOfferIslockedOfferIdGet(id);
 
-  dataFunction = (api: DefaultService, id: number): Observable<Offer> =>
-    api.readOfferOfferOfferIdGet(id);
+  dataFunction = (id: number): Observable<Offer> =>
+    this.api.readOfferOfferOfferIdGet(id);
 
-  unlockFunction = (api: DefaultService, id: number): Observable<boolean> =>
-    api.lockOfferOfferUnlockOfferIdPost(id);
+  unlockFunction = (id: number): Observable<boolean> =>
+    this.api.lockOfferOfferUnlockOfferIdPost(id);
 
   ngOnInit(): void {
     this.subscription = new Subscription();

@@ -90,12 +90,12 @@ export class RecalculationEditComponent
     super(api, router, route, dialog);
   }
 
-  lockFunction = (recalculationService: RecalculationService, id: number): Observable<Lock> =>
-    recalculationService.getRecalculationLock(id);
-  dataFunction = (recalculationService: RecalculationService, id: number): Observable<RecalculationV2> =>
-    recalculationService.getRecalculation(id);
-  unlockFunction = (recalculationService: RecalculationService, id: number): Observable<boolean> =>
-    recalculationService.unlockRecalculation(id);
+  lockFunction = ( id: number): Observable<Lock> =>
+    this.recalculationService.getRecalculationLock(id);
+  dataFunction = (id: number): Observable<RecalculationV2> =>
+    this.recalculationService.getRecalculation(id);
+  unlockFunction = (id: number): Observable<boolean> =>
+    this.recalculationService.unlockRecalculation(id);
 
   ngOnInit(): void {
     super.ngOnInit();

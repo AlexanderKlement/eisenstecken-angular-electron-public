@@ -74,12 +74,12 @@ export class SupplierEditComponent
     super(api, router, route, dialog);
   }
 
-  lockFunction = (api: DefaultService, id: number): Observable<Lock> =>
-    api.islockedSupplierSupplierIslockedSupplierIdGet(id);
-  dataFunction = (api: DefaultService, id: number): Observable<Supplier> =>
-    api.readSupplierSupplierSupplierIdGet(id);
-  unlockFunction = (api: DefaultService, id: number): Observable<boolean> =>
-    api.unlockSupplierSupplierUnlockSupplierIdPost(id);
+  lockFunction = (id: number): Observable<Lock> =>
+    this.api.islockedSupplierSupplierIslockedSupplierIdGet(id);
+  dataFunction = (id: number): Observable<Supplier> =>
+    this.api.readSupplierSupplierSupplierIdGet(id);
+  unlockFunction = (id: number): Observable<boolean> =>
+    this.api.unlockSupplierSupplierUnlockSupplierIdPost(id);
 
   ngOnInit(): void {
     super.ngOnInit();

@@ -50,7 +50,6 @@ export type DataSourceClass =
   | OrderSmall
   | TechnicalData
   | Credential
-  | Recalculation
   | Fee
   | Meal
   | MealSum

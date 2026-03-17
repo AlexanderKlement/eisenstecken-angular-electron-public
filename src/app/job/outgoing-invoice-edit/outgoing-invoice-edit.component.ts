@@ -109,20 +109,6 @@ export class OutgoingInvoiceEditComponent
   company = false;
   readonly paymentTerms = PAYMENT_TERMS;
 
-
-  private resolvePaymentTerms(value: PaymentTermEnum): PaymentTermsResolved {
-    switch (value) {
-      case PaymentTermEnum.Gg30:
-        return { label: "30 Tage", daysToAdd: 30 };
-      case PaymentTermEnum.Gg14:
-        return { label: "14 Tage", daysToAdd: 14 };
-      case PaymentTermEnum.OnSight:
-        return { label: "Bei Sicht", daysToAdd: 0 };
-      default:
-        return { label: "", daysToAdd: 0 };
-    }
-  }
-
   constructor(
     api: DefaultService,
     router: Router,
@@ -150,17 +136,14 @@ export class OutgoingInvoiceEditComponent
     this.recalculateInvoicePrice();
   }
 
-  lockFunction = (api: DefaultService, id: number): Observable<Lock> =>
-    api.islockedOutgoingInvoiceOutgoingInvoiceIslockedOutgoingInvoiceIdGet(id);
+  lockFunction = (id: number): Observable<Lock> =>
+    this.api.islockedOutgoingInvoiceOutgoingInvoiceIslockedOutgoingInvoiceIdGet(id);
 
-  dataFunction = (
-    api: DefaultService,
-    id: number,
-  ): Observable<OutgoingInvoice> =>
-    api.readOutgoingInvoiceOutgoingInvoiceOutgoingInvoiceIdGet(id);
+  dataFunction = (id: number): Observable<OutgoingInvoice> =>
+    this.api.readOutgoingInvoiceOutgoingInvoiceOutgoingInvoiceIdGet(id);
 
-  unlockFunction = (api: DefaultService, id: number): Observable<boolean> =>
-    api.unlockOutgoingInvoiceOutgoingInvoiceUnlockOutgoingInvoiceIdPost(id);
+  unlockFunction = (id: number): Observable<boolean> =>
+    this.api.unlockOutgoingInvoiceOutgoingInvoiceUnlockOutgoingInvoiceIdPost(id);
 
   ngOnInit(): void {
     this.hiddenDescriptives = [];
@@ -245,26 +228,6 @@ export class OutgoingInvoiceEditComponent
 
   companyCheckBoxClicked(): void {
     this.company = !this.company;
-  }
-
-
-  private onPaymentTermsChanged(value: PaymentTermEnum): void {
-    const resolved = this.resolvePaymentTerms(value);
-
-    // Use invoice date as base; fallback to "now" if missing/invalid
-    const invoiceDateRaw = this.invoiceGroup.get("date")?.value;
-    const baseDate = invoiceDateRaw ? new Date(invoiceDateRaw) : new Date();
-    if (Number.isNaN(baseDate.getTime())) {
-      // If "date" is not parsable, just use today
-      baseDate.setTime(Date.now());
-    }
-
-    const newPaymentDate = new Date(baseDate);
-    newPaymentDate.setDate(newPaymentDate.getDate() + resolved.daysToAdd);
-
-    // Update the fields (emitEvent:false prevents loops if you later subscribe to these too)
-    this.invoiceGroup.get("payment_condition")?.setValue(resolved.label, { emitEvent: false });
-    this.invoiceGroup.get("payment_date")?.setValue(newPaymentDate, { emitEvent: false });
   }
 
   invoiceDeleteFailed(error?: any) {
@@ -549,6 +512,38 @@ export class OutgoingInvoiceEditComponent
     }
 
     return descriptiveArticleFormGroup;
+  }
+
+  private resolvePaymentTerms(value: PaymentTermEnum): PaymentTermsResolved {
+    switch (value) {
+      case PaymentTermEnum.Gg30:
+        return { label: "30 Tage", daysToAdd: 30 };
+      case PaymentTermEnum.Gg14:
+        return { label: "14 Tage", daysToAdd: 14 };
+      case PaymentTermEnum.OnSight:
+        return { label: "Bei Sicht", daysToAdd: 0 };
+      default:
+        return { label: "", daysToAdd: 0 };
+    }
+  }
+
+  private onPaymentTermsChanged(value: PaymentTermEnum): void {
+    const resolved = this.resolvePaymentTerms(value);
+
+    // Use invoice date as base; fallback to "now" if missing/invalid
+    const invoiceDateRaw = this.invoiceGroup.get("date")?.value;
+    const baseDate = invoiceDateRaw ? new Date(invoiceDateRaw) : new Date();
+    if (Number.isNaN(baseDate.getTime())) {
+      // If "date" is not parsable, just use today
+      baseDate.setTime(Date.now());
+    }
+
+    const newPaymentDate = new Date(baseDate);
+    newPaymentDate.setDate(newPaymentDate.getDate() + resolved.daysToAdd);
+
+    // Update the fields (emitEvent:false prevents loops if you later subscribe to these too)
+    this.invoiceGroup.get("payment_condition")?.setValue(resolved.label, { emitEvent: false });
+    this.invoiceGroup.get("payment_date")?.setValue(newPaymentDate, { emitEvent: false });
   }
 
   private addDescriptiveArticle(
