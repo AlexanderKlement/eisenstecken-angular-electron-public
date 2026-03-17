@@ -26,9 +26,9 @@ export class OrderedArticleEditDialogService {
     const dialogData: OrderDialogCreateData = {
       title: options?.title ?? "Produkt bearbeiten",
       amount: orderedArticle.amount,
-      name: orderedArticle.article?.name?.translation ?? "",
+      name: orderedArticle.name?.translation,
       price: orderedArticle.price,
-      modNumber: orderedArticle.modNumber ?? orderedArticle.article?.mod_number ?? "",
+      modNumber: orderedArticle.modNumber,
       unitId: orderedArticle.ordered_unit?.id,
       request: orderedArticle.request,
       comment: orderedArticle.comment,

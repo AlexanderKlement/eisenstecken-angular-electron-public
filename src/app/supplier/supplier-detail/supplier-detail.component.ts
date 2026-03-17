@@ -51,7 +51,8 @@ export class SupplierDetailComponent implements OnInit {
   buttons: CustomButton[] = [];
 
   supplier$: Observable<Supplier>;
-  private refresh$ = new Subject<void>();
+  private refreshTrigger$ = new Subject<void>();
+  public $refresh = this.refreshTrigger$.asObservable();
 
   constructor(private api: DefaultService, private authService: AuthService,
               private router: Router, private snackBar: MatSnackBar,
@@ -90,7 +91,7 @@ export class SupplierDetailComponent implements OnInit {
         this.router.navigateByUrl("supplier");
         return;
       }
-      this.supplier$ = merge(of(void 0), this.refresh$).pipe(
+      this.supplier$ = merge(of(void 0), this.refreshTrigger$).pipe(
         switchMap(() => this.api.readSupplierSupplierSupplierIdGet(this.id)),
         shareReplay({ bufferSize: 1, refCount: true }),
       );
@@ -147,8 +148,7 @@ export class SupplierDetailComponent implements OnInit {
 
 
   onAttach(): void {
-    this.initSupplierDetail();
-    this.refresh$.next();
+    this.refreshTrigger$.next();
 
     this.createdOrderDataSource?.loadData();
     this.orderedOrderDataSource?.loadData();

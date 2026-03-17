@@ -14,9 +14,13 @@ import { Paint } from './paint';
 
 
 export interface RecalculationV2 { 
+    cost: number;
     expenses: Array<Expense>;
+    id: number;
     jobs: Array<JobForRecalculation>;
+    km: number;
     material_charge_percent: number;
+    name: string;
     paints: Array<Paint>;
     pdf: string | null;
     totalSum: number;

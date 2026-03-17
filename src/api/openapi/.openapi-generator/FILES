@@ -129,11 +129,8 @@ model/paymentTermEnum.ts
 model/price.ts
 model/priceCreate.ts
 model/priceUpdate.ts
-model/recalculation.ts
-model/recalculationCreate.ts
 model/recalculationCreateV2.ts
 model/recalculationSmall.ts
-model/recalculationUpdate.ts
 model/recalculationUpdateV2.ts
 model/recalculationV2.ts
 model/reminder.ts

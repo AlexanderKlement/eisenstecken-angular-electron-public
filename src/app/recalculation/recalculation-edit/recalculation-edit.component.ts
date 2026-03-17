@@ -18,8 +18,6 @@ import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/c
 import { FileService } from "../../shared/services/file.service";
 import {
   DefaultService,
-  Recalculation,
-  RecalculationUpdate,
   Paint,
   PaintCreate,
   TemplatePaint,
@@ -28,7 +26,7 @@ import {
   Unit,
   WoodListCreate,
   WoodList,
-  Lock, OrderSmall, OrderService, RecalculationService, RecalculationUpdateV2,
+  Lock, OrderSmall, OrderService, RecalculationService, RecalculationUpdateV2, RecalculationV2,
 } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import {
@@ -67,12 +65,12 @@ import { CircleIconButtonComponent } from "../../shared/components/circle-icon-b
   ],
 })
 export class RecalculationEditComponent
-  extends BaseEditComponent<Recalculation>
+  extends BaseEditComponent<RecalculationV2>
   implements OnInit, OnDestroy {
   recalculationGroup: UntypedFormGroup;
   navigationTarget = "recalculation";
   recalculationId: number;
-  recalculation$: Observable<Recalculation>;
+  recalculation$: Observable<RecalculationV2>;
   units$: Observable<Unit[]>;
   templatePaints$: Observable<TemplatePaint[]>;
 
@@ -92,12 +90,12 @@ export class RecalculationEditComponent
     super(api, router, route, dialog);
   }
 
-  lockFunction = (api: DefaultService, id: number): Observable<Lock> =>
-    api.islockedRecalculationRecalculationIslockedRecalculationIdGet(id);
-  dataFunction = (api: DefaultService, id: number): Observable<Recalculation> =>
-    api.readRecalculationRecalculationRecalculationIdGet(id);
-  unlockFunction = (api: DefaultService, id: number): Observable<boolean> =>
-    api.unlockRecalculationRecalculationUnlockRecalculationIdPost(id);
+  lockFunction = (recalculationService: RecalculationService, id: number): Observable<Lock> =>
+    recalculationService.getRecalculationLock(id);
+  dataFunction = (recalculationService: RecalculationService, id: number): Observable<RecalculationV2> =>
+    recalculationService.getRecalculation(id);
+  unlockFunction = (recalculationService: RecalculationService, id: number): Observable<boolean> =>
+    recalculationService.unlockRecalculation(id);
 
   ngOnInit(): void {
     super.ngOnInit();
@@ -110,7 +108,7 @@ export class RecalculationEditComponent
         console.error("Recalculation id not set!");
         return;
       }
-      this.api.readRecalculationRecalculationRecalculationIdGet( this.recalculationId).pipe(first()).subscribe(recalculation => {
+      this.recalculationService.getRecalculation( this.recalculationId).pipe(first()).subscribe(recalculation => {
           this.recalculation$ = new Observable((observer) => {
             observer.next(recalculation);
           })
@@ -161,7 +159,7 @@ export class RecalculationEditComponent
       });
   }
 
-  fillFormGroup(recalculation: Recalculation): void {
+  fillFormGroup(recalculation: RecalculationV2): void {
     for (const expense of recalculation.expenses) {
       this.addExpense(expense);
     }

@@ -151,8 +151,7 @@ export class OrderDetailComponent implements OnInit {
           rows.push({
             values: {
               // eslint-disable-next-line @typescript-eslint/naming-convention
-              "article.name.translation_de":
-              dataSource.name.translation_de,
+              "article.name.translation_de":  dataSource.name.translation_de,
               position: dataSource.position,
               amount: dataSource.amount,
               // eslint-disable-next-line @typescript-eslint/naming-convention

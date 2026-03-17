@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import dayjs from "dayjs/esm";
-import { filter, first, map, switchMap, take } from "rxjs/operators";
+import { filter, first, switchMap, take } from "rxjs/operators";
 import { Observable, Subscriber } from "rxjs";
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { LockService } from "../../shared/services/lock.service";
@@ -11,13 +11,12 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { minutesToDisplayableString } from "../../shared/date.util";
 import { formatCurrency, DecimalPipe, CurrencyPipe } from "@angular/common";
 import {
-  Recalculation,
   Paint,
   Workload,
   Expense,
   DefaultService,
   WoodList,
-  OrderSmall, RecalculationService, OrderService,
+  OrderSmall, RecalculationService, OrderService, RecalculationV2,
 } from "../../../api/openapi";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
 import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
@@ -45,7 +44,7 @@ export class RecalculationDetailComponent implements OnInit {
 
   recalculationId: number;
   loading = true;
-  recalculation: Recalculation;
+  recalculation: RecalculationV2;
 
   orderDataSource: TableDataSource<OrderSmall, OrderService>;
   workloadDataSource: TableDataSource<Workload, DefaultService>;
@@ -58,8 +57,8 @@ export class RecalculationDetailComponent implements OnInit {
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
 
-  constructor(private api: DefaultService, private orderService: OrderService, private router: Router, private route: ActivatedRoute,
-              private locker: LockService, private authService: AuthService, private snackBar: MatSnackBar, private recalculationService: RecalculationService, private dialog: MatDialog) {
+  constructor(private api: DefaultService, private orderService: OrderService, private recalculationService: RecalculationService,  private router: Router, private route: ActivatedRoute,
+              private locker: LockService, private authService: AuthService, private snackBar: MatSnackBar,  private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -70,7 +69,7 @@ export class RecalculationDetailComponent implements OnInit {
         this.router.navigateByUrl("recalculation");
         return;
       }
-      this.api.readRecalculationRecalculationRecalculationIdGet(this.recalculationId).pipe().subscribe(recalculation => {
+      this.recalculationService.getRecalculation(this.recalculationId).pipe().subscribe(recalculation => {
         if (recalculation === undefined || recalculation === null) {
           this.authService.currentUserHasRight("recalculations:create").pipe(first()).subscribe(allowed => {
             if (allowed) {
@@ -303,9 +302,9 @@ export class RecalculationDetailComponent implements OnInit {
 
   private editButtonClicked(): void {
     this.locker.getLockAndTryNavigate(
-      this.api.islockedRecalculationRecalculationIslockedRecalculationIdGet(this.recalculation.id),
-      this.api.lockRecalculationRecalculationLockRecalculationIdPost(this.recalculation.id),
-      this.api.unlockRecalculationRecalculationUnlockRecalculationIdPost(this.recalculation.id),
+      this.recalculationService.getRecalculationLock(this.recalculation.id),
+      this.recalculationService.lockRecalculation(this.recalculation.id),
+      this.recalculationService.unlockRecalculation(this.recalculation.id),
       "recalculation/edit/" + this.recalculation.id.toString(),
     );
   }
