@@ -19,11 +19,11 @@ export interface RecalculationV2 {
     id: number;
     jobs: Array<JobForRecalculation>;
     km: number;
-    material_charge_percent: number;
+    materialChargePercent: number;
     name: string;
     paints: Array<Paint>;
     pdf: string | null;
     totalSum: number;
-    wood_lists: Array<WoodList>;
+    woodLists: Array<WoodList>;
 }
 

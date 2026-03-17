@@ -31,16 +31,17 @@ export class LockService {
         });
     }
 
-    private lockAndNavigate(lockFunction: Observable<boolean>, navigationTarget: string): void {
-        lockFunction.pipe(first()).subscribe((success) => {
-            if (success) {
-                this.router.navigateByUrl(navigationTarget);
-            } else {
-                console.error("LockService: Unable to lock desired resource");
-            }
-        });
-
-    }
+  private lockAndNavigate(lockRequest$: Observable<any>, navigationTarget: string): void {
+      // we can make this an Observable<void> to ensure that the navigation only occurs when the lock is successfully acquired
+    lockRequest$.pipe(first()).subscribe({
+      next: () => {
+        this.router.navigateByUrl(navigationTarget);
+      },
+      error: (err) => {
+        console.error("LockService: Unable to lock desired resource", err);
+      }
+    });
+  }
 
     private showLockDialog(lock: Lock, unlockObservable: Observable<boolean>): void {
         this.dialog.open(LockDialogComponent, {

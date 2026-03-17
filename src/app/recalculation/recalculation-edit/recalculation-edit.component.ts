@@ -166,7 +166,7 @@ export class RecalculationEditComponent
     for (const paint of recalculation.paints) {
       this.addPaint(paint);
     }
-    for (const woodList of recalculation.wood_lists) {
+    for (const woodList of recalculation.woodLists) {
       this.addWoodList(woodList);
     }
     this.recalculationGroup.get("km").setValue(recalculation.km);
@@ -174,7 +174,7 @@ export class RecalculationEditComponent
     this.recalculationGroup.get("name").setValue(recalculation.name);
     this.recalculationGroup
       .get("material_charge_percent")
-      .setValue(recalculation.material_charge_percent);
+      .setValue(recalculation.materialChargePercent);
   }
 
   getExpenses(): UntypedFormArray {

@@ -15,7 +15,7 @@ export interface RecalculationSmall {
     id: number;
     jobs: Array<JobSmall>;
     km: number;
-    material_charge_percent: number;
+    materialChargePercent: number;
     name: string;
     pdf?: string | null;
 }
