@@ -7,7 +7,7 @@ import {
 import { CustomButton } from "../../../shared/components/toolbar/toolbar.component";
 import { AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { Observable, Subject, Subscriber } from "rxjs";
-import { AuthService } from "../../../shared/services/auth.service";
+import { AuthStateService } from "../../../shared/services/auth-state.service";
 import { first } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { MatStepper, StepperOrientation, MatStep, MatStepLabel, MatStepperNext, MatStepperPrevious } from "@angular/material/stepper";
@@ -118,7 +118,7 @@ export class HoursStepperComponent implements OnInit {
   @ViewChild('stepper') private stepper: MatStepper;
 
   constructor(private api: DefaultService, private dialog: MatDialog,
-              private authService: AuthService, private router: Router) {
+              private authService: AuthStateService, private router: Router) {
   }
 
   static generateHourString(hours: number, minutes: number, mobile = false): string {
@@ -310,9 +310,6 @@ export class HoursStepperComponent implements OnInit {
 
   onAddCarClick(): void {
     const jobEnums = [JobEnum.accepted];
-    if (this.user.office) {
-      jobEnums.push(JobEnum.created);
-    }
     const data: HoursStepperDriveDialogData = {
       jobEnums,
       jobFormGroup: this.jobFormGroup,
@@ -598,7 +595,7 @@ export class HoursStepperComponent implements OnInit {
 
   private getData() {
     this.authService.getCurrentUser().pipe(first()).subscribe((currentUser) => {
-      if (currentUser.office) {
+      if (currentUser) {
         this.jobs$ = this.api.readJobsJobGet(0, 200, "", undefined, "JOBSTATUS_ACCEPTED, JOBSTATUS_CREATED", true);
       } else {
         this.jobs$ = this.api.readJobsJobGet(0, 200, "", undefined, "JOBSTATUS_ACCEPTED", true);

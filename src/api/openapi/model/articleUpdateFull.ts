@@ -10,7 +10,6 @@
 
 
 export interface ArticleUpdateFull { 
-    category_ids: Array<number>;
     favorite?: boolean | null;
     mod_number: string;
     name_de: string;

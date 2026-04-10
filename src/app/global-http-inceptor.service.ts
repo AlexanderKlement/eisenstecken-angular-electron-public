@@ -13,7 +13,7 @@ import { EMPTY, Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { AuthService } from "./shared/services/auth.service";
+import { AuthStateService } from "./shared/services/auth-state.service";
 import { LocalConfigRenderer } from "./LocalConfigRenderer";
 
 @Injectable()
@@ -27,7 +27,7 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
   constructor(
     public router: Router,
     private snackBar: MatSnackBar,
-    private authService: AuthService,
+    private authService: AuthStateService,
     httpBackend: HttpBackend,
   ) {
     // Raw HttpClient: bypasses interceptors

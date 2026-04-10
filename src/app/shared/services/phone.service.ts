@@ -1,6 +1,6 @@
 /* eslint-disable no-bitwise */
 import {Injectable} from "@angular/core";
-import {AuthService} from "./auth.service";
+import {AuthStateService} from "./auth-state.service";
 import {first} from "rxjs/operators";
 
 const eisenDomain = "eisenstecken.konvoicepro.eu";
@@ -36,7 +36,7 @@ export class PhoneService {
   private callResolver: (value: (PromiseLike<void> | void)) => void;
   private callRejector: (reason?: any) => void;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthStateService) {
   }
 
   call(cellNumber: string): Promise<void> {

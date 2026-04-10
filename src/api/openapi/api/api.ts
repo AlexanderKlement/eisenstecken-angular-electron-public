@@ -1,5 +1,7 @@
 export * from './article.service';
 import { ArticleService } from './article.service';
+export * from './auth.service';
+import { AuthService } from './auth.service';
 export * from './client.service';
 import { ClientService } from './client.service';
 export * from './default.service';
@@ -22,4 +24,4 @@ export * from './tikTak.service';
 import { TikTakService } from './tikTak.service';
 export * from './viet.service';
 import { VietService } from './viet.service';
-export const APIS = [ArticleService, ClientService, DefaultService, HealthService, JobService, OrderService, OrderBundleService, OrderedArticleService, RecalculationService, SchedulerService, TikTakService, VietService];
+export const APIS = [ArticleService, AuthService, ClientService, DefaultService, HealthService, JobService, OrderService, OrderBundleService, OrderedArticleService, RecalculationService, SchedulerService, TikTakService, VietService];

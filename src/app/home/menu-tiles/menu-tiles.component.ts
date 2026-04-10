@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { matchRightsToMenuTiles, MenuTileDetail } from './menu-tile.settings';
-import { DefaultService } from '../../../api/openapi';
-import { MatGridList, MatGridTile } from '@angular/material/grid-list';
-import { SingleMenuTileComponent } from './single-menu-tile/single-menu-tile.component';
-import { FlexModule } from 'ng-flex-layout';
-import { AsyncPipe } from '@angular/common';
+import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+import { matchScopesToMenuTiles, MenuTileDetail } from "./menu-tile.settings";
+import { DefaultService } from "../../../api/openapi";
+import { MatGridList, MatGridTile } from "@angular/material/grid-list";
+import { SingleMenuTileComponent } from "./single-menu-tile/single-menu-tile.component";
+import { FlexModule } from "ng-flex-layout";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
     selector: 'app-menu-tiles',
@@ -27,7 +27,7 @@ export class MenuTilesComponent implements OnInit {
   ngOnInit(): void {
     const userObservable = this.api.readUsersMeUsersMeGet();
     this.menuTiles$ = userObservable.pipe(
-      map(user => matchRightsToMenuTiles(user.rights)),
+      map(user => matchScopesToMenuTiles(user.scopes)),
     );
   }
 }

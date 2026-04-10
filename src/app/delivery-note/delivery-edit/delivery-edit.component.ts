@@ -13,7 +13,7 @@ import {
   ReactiveFormsModule,
 } from "@angular/forms";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
-import { AuthService } from "../../shared/services/auth.service";
+import { AuthStateService } from "../../shared/services/auth-state.service";
 import {
   CustomButton,
   ToolbarComponent,
@@ -29,7 +29,7 @@ import {
   Lock,
   DefaultService,
   DescriptiveArticle,
-  DescriptiveArticleCreate,
+  DescriptiveArticleCreate, ScopeEnum,
 } from "../../../api/openapi";
 import {
   DefaultLayoutDirective,
@@ -108,7 +108,7 @@ export class DeliveryEditComponent
     api: DefaultService,
     router: Router,
     route: ActivatedRoute,
-    private authService: AuthService,
+    private authService: AuthStateService,
     private snackBar: MatSnackBar,
     private file: FileService,
     dialog: MatDialog,
@@ -165,7 +165,7 @@ export class DeliveryEditComponent
       this.addDescriptiveArticleAt(0);
     } else {
       this.authService
-        .currentUserHasRight("delivery_notes:delete")
+        .currentUserHasScope(ScopeEnum.Office)
         .pipe(first())
         .subscribe((allowed) => {
           if (allowed) {

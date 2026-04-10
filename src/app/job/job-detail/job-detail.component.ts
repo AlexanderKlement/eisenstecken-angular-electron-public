@@ -6,7 +6,7 @@ import { first, map } from "rxjs/operators";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { LockService } from "../../shared/services/lock.service";
 import dayjs from "dayjs/esm";
-import { AuthService } from "../../shared/services/auth.service";
+import { AuthStateService } from "../../shared/services/auth-state.service";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -22,7 +22,7 @@ import {
   OutgoingInvoice,
   DefaultService,
   Job,
-  Offer, OrderSmall,  DeliveryNote, RecalculationService, RecalculationSmall,
+  Offer, OrderSmall,  DeliveryNote, RecalculationService, RecalculationSmall, ScopeEnum,
 } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { JobStatusBarComponent } from "./job-status-bar/job-status-bar.component";
@@ -76,7 +76,7 @@ export class JobDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
     private locker: LockService,
-    private authService: AuthService,
+    private authService: AuthStateService,
     private dialog: MatDialog,
     private file: FileService,
   ) {
@@ -161,7 +161,7 @@ export class JobDetailComponent implements OnInit {
             },
             route: () => {
               this.authService
-                .currentUserHasRight("offers:modify")
+                .currentUserHasScope(ScopeEnum.Office)
                 .pipe(first())
                 .subscribe((allowed) => {
                   if (allowed) {
@@ -212,7 +212,7 @@ export class JobDetailComponent implements OnInit {
             },
             route: () => {
               this.authService
-                .currentUserHasRight("outgoing_invoices:modify")
+                .currentUserHasScope(ScopeEnum.Office)
                 .pipe(first())
                 .subscribe((allowed) => {
                   if (allowed) {
@@ -439,26 +439,26 @@ export class JobDetailComponent implements OnInit {
       },
     });
     this.authService
-      .currentUserHasRight("orders:all")
+      .currentUserHasScope(ScopeEnum.Office)
       .pipe(first())
       .subscribe((allowed) => {
         this.ordersAllowed = allowed;
       });
     this.authService
-      .currentUserHasRight("offers:all")
+      .currentUserHasScope(ScopeEnum.Office)
       .pipe(first())
       .subscribe((allowed) => {
         this.offersAllowed = allowed;
       });
     this.authService
-      .currentUserHasRight("outgoing_invoices:all")
+      .currentUserHasScope(ScopeEnum.Office)
       .pipe(first())
       .subscribe((allowed) => {
         this.outgoingInvoicesAllowed = allowed;
       });
 
     this.authService
-      .currentUserHasRight("jobs:modify")
+      .currentUserHasScope(ScopeEnum.Office)
       .pipe(first())
       .subscribe((allowed) => {
         if (allowed) {
@@ -490,7 +490,7 @@ export class JobDetailComponent implements OnInit {
       });
 
     this.authService
-      .currentUserHasRight("offers:create")
+      .currentUserHasScope(ScopeEnum.Office)
       .pipe(first())
       .subscribe((allowed) => {
         if (allowed) {
@@ -506,7 +506,7 @@ export class JobDetailComponent implements OnInit {
       });
 
     this.authService
-      .currentUserHasRight("outgoing_invoices:create")
+      .currentUserHasScope(ScopeEnum.Office)
       .pipe(first())
       .subscribe((allowed) => {
         if (allowed) {
@@ -520,7 +520,7 @@ export class JobDetailComponent implements OnInit {
       });
 
     this.authService
-      .currentUserHasRight("work_hours:all")
+      .currentUserHasScope(ScopeEnum.Office)
       .pipe(first())
       .subscribe((allowed) => {
         if (allowed) {
@@ -534,7 +534,7 @@ export class JobDetailComponent implements OnInit {
       });
 
     this.authService
-      .currentUserHasRight("work_hours:all")
+      .currentUserHasScope(ScopeEnum.Office)
       .pipe(first())
       .subscribe((allowed) => {
         if (allowed) {
@@ -550,7 +550,7 @@ export class JobDetailComponent implements OnInit {
       });
 
     this.authService
-      .currentUserHasRight("jobs:delete")
+      .currentUserHasScope(ScopeEnum.Office)
       .pipe(first())
       .subscribe((allowed) => {
         if (allowed) {
@@ -570,7 +570,7 @@ export class JobDetailComponent implements OnInit {
       });
 
     this.authService
-      .currentUserHasRight("orders:all")
+      .currentUserHasScope(ScopeEnum.Office)
       .pipe(first())
       .subscribe((allowed) => {
         if (allowed) {

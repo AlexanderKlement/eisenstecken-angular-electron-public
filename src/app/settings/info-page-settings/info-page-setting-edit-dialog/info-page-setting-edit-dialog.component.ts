@@ -3,8 +3,8 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogCont
 import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { first } from "rxjs/operators";
 import { ConfirmDialogComponent } from "../../../shared/components/confirm-dialog/confirm-dialog.component";
-import { AuthService } from "../../../shared/services/auth.service";
-import { DefaultService, InfoPageUpdate, InfoPageCreate} from "../../../../api/openapi";
+import { AuthStateService } from "../../../shared/services/auth-state.service";
+import { DefaultService, InfoPageUpdate, InfoPageCreate, ScopeEnum } from "../../../../api/openapi";
 import { CdkScrollable } from "@angular/cdk/scrolling";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
 import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
@@ -19,7 +19,7 @@ export interface InfoPageEditDialogData {
     selector: 'app-info-page-setting-edit-dialog',
     templateUrl: './info-page-setting-edit-dialog.component.html',
     styleUrls: ['./info-page-setting-edit-dialog.component.scss'],
-    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatDialogActions, MatButton]
+    imports: [MatDialogTitle, MatDialogContent, FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatDialogActions, MatButton]
 })
 export class InfoPageSettingEditDialogComponent implements OnInit {
   title: string;
@@ -29,7 +29,7 @@ export class InfoPageSettingEditDialogComponent implements OnInit {
   id: number;
 
   constructor(
-    public dialogRef: MatDialogRef<InfoPageEditDialogData>, public dialog: MatDialog, private authService: AuthService,
+    public dialogRef: MatDialogRef<InfoPageEditDialogData>, public dialog: MatDialog, private authService: AuthStateService,
     @Inject(MAT_DIALOG_DATA) public data: InfoPageEditDialogData, private api: DefaultService,
   ) {
   }
@@ -43,12 +43,13 @@ export class InfoPageSettingEditDialogComponent implements OnInit {
       body: new UntypedFormControl(""),
     });
     if (!this.createMode) {
-      this.api.readInfoPageInfoPageIdGet(this.id).pipe(first()).subscribe((infoPage) => {
+      this.api.readInfoPageInfoPageInfoPageIdGet(this.id).pipe(first()).subscribe((infoPage) => {
         this.infoPageGroup.get("name").setValue(infoPage.name);
         this.infoPageGroup.get("body").setValue(infoPage.body);
       });
+
     }
-    this.authService.currentUserHasRight("info_pages:delete").pipe(first()).subscribe((access) => {
+    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe((access) => {
       if (access && !this.createMode) {
         this.showDeleteButton = true;
       }
@@ -75,7 +76,7 @@ export class InfoPageSettingEditDialogComponent implements OnInit {
         body: this.infoPageGroup.get("body").value,
         name: this.infoPageGroup.get("name").value,
       };
-      this.api.updateInfoPageInfoPageIdPut(this.id, infoPageUpdate).pipe(first()).subscribe(() => {
+      this.api.updateInfoPageInfoPageInfoPageIdPut(this.id, infoPageUpdate).pipe(first()).subscribe(() => {
         this.dialogRef.close();
       });
     }
@@ -91,7 +92,7 @@ export class InfoPageSettingEditDialogComponent implements OnInit {
     });
     confirmDialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.api.deleteInfoPageInfoPageIdDelete(this.id).pipe(first()).subscribe(() => {
+        this.api.deleteInfoPageInfoPageInfoPageIdDelete(this.id).pipe(first()).subscribe(() => {
           this.dialogRef.close();
         });
       }

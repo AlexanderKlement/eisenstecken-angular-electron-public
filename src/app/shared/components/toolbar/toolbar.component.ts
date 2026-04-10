@@ -2,7 +2,7 @@ import { Component, Input } from "@angular/core";
 import { Location } from "@angular/common";
 import { Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
-import { AuthService } from "../../services/auth.service";
+import { AuthStateService } from "../../services/auth-state.service";
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 import { MatToolbar } from "@angular/material/toolbar";
 import { MatButton } from "@angular/material/button";
@@ -29,7 +29,7 @@ export class ToolbarComponent {
     private router: Router,
     private location: Location,
     private dialog: MatDialog,
-    private authService: AuthService,
+    private authService: AuthStateService,
   ) {}
 
   backButtonClicked(): void {

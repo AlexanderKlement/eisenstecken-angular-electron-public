@@ -10,7 +10,6 @@
 
 
 export interface ChatRecipient { 
-    cost: number;
     email: string;
     firstname: string;
     fullname: string;

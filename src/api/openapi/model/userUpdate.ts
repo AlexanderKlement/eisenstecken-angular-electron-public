@@ -10,18 +10,13 @@
 
 
 export interface UserUpdate { 
-    chat: boolean;
-    cost: number;
     dial: string;
     email: string;
-    employee: boolean;
     firstname: string;
     handy: string;
-    hours: boolean;
     innovaphone_pass: string;
     innovaphone_user: string;
     notifications: boolean;
-    office: boolean;
     position: string;
     secondname: string;
     tel: string;

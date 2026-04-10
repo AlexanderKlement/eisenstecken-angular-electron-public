@@ -10,7 +10,6 @@
 
 
 export interface UserEssential { 
-    cost: number;
     email: string;
     firstname: string;
     fullname: string;

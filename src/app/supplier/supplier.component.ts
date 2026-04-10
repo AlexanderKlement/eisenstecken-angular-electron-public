@@ -1,14 +1,14 @@
 import { Component, ComponentRef, OnInit } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
 import {
-  DefaultService,
+  DefaultService, ScopeEnum,
   Stock,
   Supplier} from "../../api/openapi";
 import { LockService } from "../shared/services/lock.service";
 import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
-import { AuthService } from "../shared/services/auth.service";
+import { AuthStateService } from "../shared/services/auth-state.service";
 import { Observable, Subscriber } from "rxjs";
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
 import { TableBuilderComponent } from "../shared/components/table-builder/table-builder.component";
@@ -33,7 +33,7 @@ export class SupplierComponent implements OnInit {
     private api: DefaultService,
     private locker: LockService,
     private router: Router,
-    private authService: AuthService,
+    private authService: AuthStateService,
   ) { }
 
   ngOnInit(): void {
@@ -77,7 +77,7 @@ export class SupplierComponent implements OnInit {
     );
     this.supplierTableDataSource.loadData();
     this.authService
-      .currentUserHasRight("suppliers:create")
+      .currentUserHasScope(ScopeEnum.Office)
       .pipe(first())
       .subscribe((allowed) => {
         if (allowed) {
@@ -90,7 +90,7 @@ export class SupplierComponent implements OnInit {
         }
       });
     this.authService
-      .currentUserHasRight("stocks:create")
+      .currentUserHasScope(ScopeEnum.Office)
       .pipe(first())
       .subscribe((allowed) => {
         if (allowed) {
@@ -103,13 +103,13 @@ export class SupplierComponent implements OnInit {
         }
       });
     this.authService
-      .currentUserHasRight("stocks:all")
+      .currentUserHasScope(ScopeEnum.Office)
       .pipe(first())
       .subscribe((allowed) => {
         this.stocksReadAllowed = true;
       });
     this.authService
-      .currentUserHasRight("suppliers:all")
+      .currentUserHasScope(ScopeEnum.Office)
       .pipe(first())
       .subscribe((allowed) => {
         this.suppliersReadAllowed = true;

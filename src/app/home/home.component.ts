@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { AuthService } from "../shared/services/auth.service";
+import { AuthStateService } from "../shared/services/auth-state.service";
 import { InfoDialogComponent } from "./info-dialog/info-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { DefaultService } from "../../api/openapi";
@@ -31,7 +31,7 @@ import { CircleIconButtonComponent } from "../shared/components/circle-icon-butt
 })
 export class HomeComponent implements OnInit {
   constructor(
-    private authService: AuthService,
+    private authService: AuthStateService,
     private dialog: MatDialog,
     private api: DefaultService,
   ) {

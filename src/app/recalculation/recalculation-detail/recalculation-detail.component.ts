@@ -6,7 +6,7 @@ import { filter, first, switchMap, take } from "rxjs/operators";
 import { Observable, Subscriber } from "rxjs";
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { LockService } from "../../shared/services/lock.service";
-import { AuthService } from "../../shared/services/auth.service";
+import { AuthStateService } from "../../shared/services/auth-state.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { minutesToDisplayableString } from "../../shared/date.util";
 import { formatCurrency, DecimalPipe, CurrencyPipe } from "@angular/common";
@@ -16,7 +16,7 @@ import {
   Expense,
   DefaultService,
   WoodList,
-  OrderSmall, RecalculationService, OrderService, RecalculationV2,
+  OrderSmall, RecalculationService, OrderService, RecalculationV2, ScopeEnum,
 } from "../../../api/openapi";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
 import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
@@ -57,8 +57,8 @@ export class RecalculationDetailComponent implements OnInit {
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
 
-  constructor(private api: DefaultService, private orderService: OrderService, private recalculationService: RecalculationService,  private router: Router, private route: ActivatedRoute,
-              private locker: LockService, private authService: AuthService, private snackBar: MatSnackBar,  private dialog: MatDialog) {
+  constructor(private api: DefaultService, private orderService: OrderService, private recalculationService: RecalculationService, private router: Router, private route: ActivatedRoute,
+              private locker: LockService, private authService: AuthStateService, private snackBar: MatSnackBar, private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -71,7 +71,7 @@ export class RecalculationDetailComponent implements OnInit {
       }
       this.recalculationService.getRecalculation(this.recalculationId).pipe().subscribe(recalculation => {
         if (recalculation === undefined || recalculation === null) {
-          this.authService.currentUserHasRight("recalculations:create").pipe(first()).subscribe(allowed => {
+          this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
             if (allowed) {
               this.router.navigateByUrl("recalculation/edit/new/" + this.recalculationId.toString(), { replaceUrl: true });
             } else {
@@ -90,7 +90,7 @@ export class RecalculationDetailComponent implements OnInit {
         this.loading = false;
       });
     });
-    this.authService.currentUserHasRight("recalculations:modify").pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttons.push({
           name: "Bearbeiten",

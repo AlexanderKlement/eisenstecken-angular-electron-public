@@ -7,13 +7,13 @@ import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import dayjs from "dayjs/esm";
-import { AuthService } from "../../shared/services/auth.service";
+import { AuthStateService } from "../../shared/services/auth-state.service";
 import { first, map } from "rxjs/operators";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { OrderDateReturnData, OrderDialogComponent } from "../supplier-detail/order-dialog/order-dialog.component";
 import { Observable, Subscriber } from "rxjs";
-import { DefaultService, Stock, Supplier, OrderBundleCreate, OrderSmall } from "../../../api/openapi";
+import { DefaultService, Stock, Supplier, OrderBundleCreate, OrderSmall, ScopeEnum } from "../../../api/openapi";
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
@@ -35,7 +35,7 @@ export class StockDetailComponent implements OnInit {
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
 
-  constructor(private api: DefaultService, private authService: AuthService,
+  constructor(private api: DefaultService, private authService: AuthStateService,
               private router: Router, private snackBar: MatSnackBar,
               private route: ActivatedRoute,
               public dialog: MatDialog) {
@@ -53,7 +53,7 @@ export class StockDetailComponent implements OnInit {
       this.initStockDetail(this.id);
       this.initOrderTable();
     });
-    this.authService.currentUserHasRight("stocks:modify").pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttons.push({
           name: "Bearbeiten",
@@ -63,7 +63,7 @@ export class StockDetailComponent implements OnInit {
         });
       }
     });
-    this.authService.currentUserHasRight("stocks:delete").pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttons.push({
           name: "Lager ausblenden",
@@ -73,7 +73,7 @@ export class StockDetailComponent implements OnInit {
         });
       }
     });
-    this.authService.currentUserHasRight("orders:modify").pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttons.push({
           name: "Bestellung(en) senden",
@@ -83,7 +83,7 @@ export class StockDetailComponent implements OnInit {
         });
       }
     });
-    this.authService.currentUserHasRight("articles:all").pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttons.push({
           name: "Artikel",

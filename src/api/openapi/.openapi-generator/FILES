@@ -4,6 +4,7 @@ api.base.service.ts
 api.module.ts
 api/api.ts
 api/article.service.ts
+api/auth.service.ts
 api/client.service.ts
 api/default.service.ts
 api/health.service.ts
@@ -30,12 +31,11 @@ model/articleSmall.ts
 model/articleUpdate.ts
 model/articleUpdateFull.ts
 model/articleUpdateV2.ts
+model/authResponse.ts
 model/calendar.ts
 model/calendarEntry.ts
 model/calendarEntryCreate.ts
 model/car.ts
-model/category.ts
-model/categoryCreate.ts
 model/chatMessage.ts
 model/chatMessageCreate.ts
 model/chatRecipient.ts
@@ -55,6 +55,7 @@ model/country.ts
 model/credential.ts
 model/credentialCreate.ts
 model/credentialUpdate.ts
+model/credentials.ts
 model/deliveryNote.ts
 model/deliveryNoteCreate.ts
 model/deliveryNoteReason.ts
@@ -136,7 +137,7 @@ model/recalculationV2.ts
 model/reminder.ts
 model/reminderCreate.ts
 model/reminderLevel.ts
-model/right.ts
+model/scopeEnum.ts
 model/service.ts
 model/serviceCreate.ts
 model/serviceSum.ts
@@ -157,7 +158,7 @@ model/text.ts
 model/tikTakClient.ts
 model/tikTakCommission.ts
 model/tikTakContact.ts
-model/token.ts
+model/tikTakEmployee.ts
 model/unit.ts
 model/unitCreate.ts
 model/user.ts

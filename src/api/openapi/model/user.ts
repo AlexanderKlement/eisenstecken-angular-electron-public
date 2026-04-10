@@ -7,27 +7,22 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Right } from './right';
+import { ScopeEnum } from './scopeEnum';
 
 
 export interface User { 
-    chat: boolean;
-    cost: number;
     dial: string;
-    disabled?: boolean | null;
+    disabled: boolean;
     email: string;
-    employee: boolean;
     firstname: string;
     fullname: string;
     handy: string;
-    hours: boolean;
     id: number;
     innovaphone_pass: string;
     innovaphone_user: string;
     notifications: boolean;
-    office: boolean;
     position: string;
-    rights?: Array<Right>;
+    scopes: Array<ScopeEnum>;
     secondname: string;
     tel: string;
 }

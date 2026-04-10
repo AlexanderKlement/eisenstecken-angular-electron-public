@@ -8,7 +8,7 @@ import {
 import { first } from "rxjs/operators";
 import { CalendarService } from "./calendar.service";
 import dayjs from "dayjs/esm";
-import { AuthService } from "../../services/auth.service";
+import { AuthStateService } from "../../services/auth-state.service";
 import {
   DefaultLayoutDirective,
   DefaultLayoutAlignDirective,
@@ -20,6 +20,7 @@ import { MatToolbar } from "@angular/material/toolbar";
 import { DefaultShowHideDirective } from "ng-flex-layout/extended";
 import { CalendarDayComponent } from "./calendar-day/calendar-day.component";
 import { CircleIconButtonComponent } from "../circle-icon-button/circle-icon-button.component";
+import { ScopeEnum } from "../../../../api/openapi";
 
 @Component({
   selector: "app-calendar",
@@ -50,7 +51,7 @@ export class SimpleCalendarComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private calendar: CalendarService,
-    private authService: AuthService,
+    private authService: AuthStateService,
   ) {
     this.dayManager = new DayManager(0, 7, true);
     this.amountOfDays = this.dayManager.amountOfDaysString;
@@ -58,7 +59,7 @@ export class SimpleCalendarComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService
-      .currentUserHasRight("calendars:create")
+      .currentUserHasScope(ScopeEnum.Office)
       .pipe(first())
       .subscribe((allowed) => {
         this.createAllowed = allowed;

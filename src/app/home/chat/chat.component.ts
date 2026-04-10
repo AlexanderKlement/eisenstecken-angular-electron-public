@@ -6,7 +6,7 @@ import { first } from "rxjs/operators";
 import { ElectronService } from "../../core/services";
 import { Router } from "@angular/router";
 import { EmailService } from "../../shared/services/email.service";
-import { AuthService } from "../../shared/services/auth.service";
+import { AuthStateService } from "../../shared/services/auth-state.service";
 import { ChatMessage, ChatRecipient} from "../../../api/openapi";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexDirective } from "ng-flex-layout";
 import { ChatMessageComponent } from "./chat-message/chat-message.component";
@@ -39,7 +39,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   subscription: Subscription;
 
   constructor(private chatService: ChatService, private electron: ElectronService,
-              private router: Router, private email: EmailService, private authService: AuthService) {
+              private router: Router, private email: EmailService, private authService: AuthStateService) {
   }
 
   ngOnInit(): void {
@@ -99,7 +99,6 @@ export class ChatComponent implements OnInit, OnDestroy {
       own: false,
       recipient: null,
       sender: {
-        cost: 0,
         email: "system@eisenstecken.it",
         firstname: "System",
         fullname: "System",

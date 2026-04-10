@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
-import {AuthService} from "../../../shared/services/auth.service";
+import {AuthStateService} from "../../../shared/services/auth-state.service";
 import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {CompanyEventCreate, CompanyEventEnum, CompanyEventUpdate, DefaultService} from "../../../../api/openapi";
 import { CdkScrollable } from "@angular/cdk/scrolling";
@@ -49,7 +49,7 @@ export class EventCalendarDialogComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<EventCalendarDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: EventCalendarDialogData,
-              private api: DefaultService, private authService: AuthService) {
+              private api: DefaultService, private authService: AuthStateService) {
   }
 
 

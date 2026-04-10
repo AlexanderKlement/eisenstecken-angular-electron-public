@@ -68,7 +68,7 @@ export class EmployeeComponent implements OnInit {
     this.userDataSource = new TableDataSource(
       this.api,
       (api, filter, sortDirection, skip, limit) =>
-        api.readUsersUsersGet(skip, filter, limit, true),
+        api.readUsersUsersGet(skip, filter, limit),
       (dataSourceClasses) => {
         const rows = [];
         dataSourceClasses.forEach((dataSource) => {
@@ -87,7 +87,7 @@ export class EmployeeComponent implements OnInit {
       [
         { name: "fullname", headerName: "Name" },
       ],
-      (api) => api.readUserCountUsersCountGet(true),
+      (api) => api.readUserCountUsersCountGet(),
     );
     this.userDataSource.loadData();
   }

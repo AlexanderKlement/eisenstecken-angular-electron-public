@@ -1,6 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
-import {AuthService} from "../shared/services/auth.service";
+import {AuthStateService} from "../shared/services/auth-state.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
     password: new UntypedFormControl(""),
   });
 
-  constructor(private authService: AuthService, protected snackBar: MatSnackBar, private router: Router) {
+  constructor(private authService: AuthStateService, protected snackBar: MatSnackBar, private router: Router) {
   }
 
   ngOnInit(): void {

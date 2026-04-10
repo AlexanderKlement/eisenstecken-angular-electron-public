@@ -4,11 +4,11 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { WorkHourEditDialogComponent } from "./work-hour-edit-dialog/work-hour-edit-dialog.component";
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
-import { AuthService } from "../../shared/services/auth.service";
+import { AuthStateService } from "../../shared/services/auth-state.service";
 import { first } from "rxjs/operators";
 import { minutesToDisplayableString } from "../../shared/date.util";
 import { Observable, Subscriber } from "rxjs";
-import { Workload, DefaultService } from "../../../api/openapi";
+import { Workload, DefaultService, ScopeEnum } from "../../../api/openapi";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
 @Component({
@@ -26,7 +26,7 @@ export class WorkHoursComponent implements OnInit {
 
 
   constructor(private api: DefaultService, private route: ActivatedRoute,
-              private router: Router, public dialog: MatDialog, private authService: AuthService) {
+              private router: Router, public dialog: MatDialog, private authService: AuthStateService) {
   }
 
   ngOnInit(): void {
@@ -40,7 +40,7 @@ export class WorkHoursComponent implements OnInit {
       this.initWorkloadTable();
     });
 
-    this.authService.currentUserHasRight("work_hours:create").pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttons.push({
           name: "Arbeitsstunden hinzufügen",
@@ -97,7 +97,7 @@ export class WorkHoursComponent implements OnInit {
                 cost: dataSource.cost,
               },
               route: () => {
-                this.authService.currentUserHasRight("work_hours:modify").pipe(first()).subscribe(allowed => {
+                this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
                   if (allowed) {
                     this.workHourClicked(dataSource.user.id);
                   }

@@ -8,7 +8,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { OrderDateReturnData, OrderDialogComponent } from "./order-dialog/order-dialog.component";
 import { first, map, shareReplay, switchMap, tap } from "rxjs/operators";
 import dayjs from "dayjs/esm";
-import { AuthService } from "../../shared/services/auth.service";
+import { AuthStateService } from "../../shared/services/auth-state.service";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { FileService } from "../../shared/services/file.service";
@@ -20,7 +20,7 @@ import {
   OrderBundle,
   DefaultService,
   OrderSmall,
-  OrderBundleService,
+  OrderBundleService, ScopeEnum,
 } from "../../../api/openapi";
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
@@ -54,13 +54,13 @@ export class SupplierDetailComponent implements OnInit {
   private refreshTrigger$ = new Subject<void>();
   public $refresh = this.refreshTrigger$.asObservable();
 
-  constructor(private api: DefaultService, private authService: AuthService,
+  constructor(private api: DefaultService, private authService: AuthStateService,
               private router: Router, private snackBar: MatSnackBar,
               private route: ActivatedRoute, private file: FileService, private email: EmailService,
               public dialog: MatDialog, private orderBundleService: OrderBundleService) {
   }
 
-  static sendAndDisplayOrderBundlePdf(api: DefaultService, authService: AuthService, email: EmailService,
+  static sendAndDisplayOrderBundlePdf(api: DefaultService, authService: AuthStateService, email: EmailService,
                                       file: FileService, orderBundle: OrderBundle, supplier: Supplier, request: boolean = false) {
 
     let subject$ = api.getParameterParameterKeyGet("order_subject");
@@ -98,7 +98,7 @@ export class SupplierDetailComponent implements OnInit {
       this.initSupplierDetail();
       this.initOrderTable(this.id);
     });
-    this.authService.currentUserHasRight("suppliers:modify").pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttons.push({
           name: "Bearbeiten",
@@ -108,7 +108,7 @@ export class SupplierDetailComponent implements OnInit {
         });
       }
     });
-    this.authService.currentUserHasRight("orders:modify").pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttons.push({
           name: "Bestellung(en) senden",
@@ -124,7 +124,7 @@ export class SupplierDetailComponent implements OnInit {
         });
       }
     });
-    this.authService.currentUserHasRight("suppliers:delete").pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttons.push({
           name: "Lieferant ausblenden",
@@ -134,7 +134,7 @@ export class SupplierDetailComponent implements OnInit {
         });
       }
     });
-    this.authService.currentUserHasRight("articles:all").pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttons.push({
           name: "Artikel",

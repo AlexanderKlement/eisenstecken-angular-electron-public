@@ -82,8 +82,6 @@ export class ArticleEditDialogComponent implements OnInit {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         name_it: this.articleEditGroup.get("name").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        category_ids: [],
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         supplier_id: this.data.supplierId,
         favorite: this.articleEditGroup.get("favorite").value,
       };
@@ -104,8 +102,6 @@ export class ArticleEditDialogComponent implements OnInit {
         name_de: this.articleEditGroup.get("name").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         name_it: this.articleEditGroup.get("name").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        category_ids: [],
         favorite: this.articleEditGroup.get("favorite").value,
       };
       this.api

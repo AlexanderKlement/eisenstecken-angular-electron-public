@@ -14,7 +14,7 @@ import { APP_CONFIG } from "./environments/environment";
 import { LocalConfigRenderer } from "./app/LocalConfigRenderer";
 import { Router, RouteReuseStrategy } from "@angular/router";
 import { Configuration, ApiModule } from "./api/openapi";
-import { AuthService } from "./app/shared/services/auth.service";
+import { AuthStateService } from "./app/shared/services/auth-state.service";
 import { AccessGuard } from "./app/shared/services/access-guard.service";
 import { ChatService } from "./app/home/chat/chat.service";
 import { CurrencyPipe, DatePipe, CommonModule } from "@angular/common";
@@ -145,11 +145,11 @@ bootstrapApplication(AppComponent, {
     }),
     {
       provide: Configuration,
-      useFactory: (authService: AuthService) => new Configuration({
+      useFactory: (authService: AuthStateService) => new Configuration({
         accessToken: authService.getToken.bind(authService),
         basePath: LocalConfigRenderer.getInstance().getApi(),
       }),
-      deps: [AuthService],
+      deps: [AuthStateService],
       multi: false,
     },
     AccessGuard,

@@ -3,9 +3,9 @@ import { TableDataSource } from "../shared/components/table-builder/table-builde
 import { Router } from "@angular/router";
 import { LockService } from "../shared/services/lock.service";
 import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
-import { AuthService } from "../shared/services/auth.service";
+import { AuthStateService } from "../shared/services/auth-state.service";
 import { first } from "rxjs/operators";
-import { DefaultService, User } from "../../api/openapi";
+import { DefaultService, ScopeEnum, User } from "../../api/openapi";
 import { TableBuilderComponent } from "../shared/components/table-builder/table-builder.component";
 
 
@@ -23,7 +23,7 @@ export class UserComponent implements OnInit {
     private api: DefaultService,
     private locker: LockService,
     private router: Router,
-    private authService: AuthService,
+    private authService: AuthStateService,
   ) { }
 
   ngOnInit(): void {
@@ -40,7 +40,7 @@ export class UserComponent implements OnInit {
             },
             route: () => {
               this.authService
-                .currentUserHasRight("users:create")
+                .currentUserHasScope(ScopeEnum.Office)
                 .pipe(first())
                 .subscribe((allowed) => {
                   if (allowed) {
@@ -64,7 +64,7 @@ export class UserComponent implements OnInit {
     );
     this.userDataSource.loadData();
     this.authService
-      .currentUserHasRight("users:create")
+      .currentUserHasScope(ScopeEnum.Office)
       .pipe(first())
       .subscribe((allowed) => {
         if (allowed) {

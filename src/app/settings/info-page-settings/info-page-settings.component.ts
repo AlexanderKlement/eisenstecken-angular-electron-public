@@ -1,13 +1,13 @@
 import {Component, OnInit} from "@angular/core";
 import {TableDataSource} from "../../shared/components/table-builder/table-builder.datasource";
 import {first} from "rxjs/operators";
-import {AuthService} from "../../shared/services/auth.service";
+import {AuthStateService} from "../../shared/services/auth-state.service";
 import {CustomButton} from "../../shared/components/toolbar/toolbar.component";
 import {MatDialog} from "@angular/material/dialog";
 import {
     InfoPageSettingEditDialogComponent
 } from "./info-page-setting-edit-dialog/info-page-setting-edit-dialog.component";
-import {DefaultService, InfoPage} from "../../../api/openapi";
+import {DefaultService, InfoPage, ScopeEnum } from "../../../api/openapi";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 import { MatButton } from "@angular/material/button";
 
@@ -23,7 +23,7 @@ export class InfoPageSettingsComponent implements OnInit {
     public buttons: CustomButton[] = [];
     showNewButton = false;
 
-    constructor(private api: DefaultService, private authService: AuthService, private dialog: MatDialog) {
+    constructor(private api: DefaultService, private authService: AuthStateService, private dialog: MatDialog) {
     }
 
     ngOnInit(): void {
@@ -40,7 +40,7 @@ export class InfoPageSettingsComponent implements OnInit {
                                 body: dataSource.body.substring(0, 40)
                             },
                             route: () => {
-                                this.authService.currentUserHasRight("info_pages:create").pipe(first()).subscribe((allowed) => {
+                                this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe((allowed) => {
                                     if (allowed) {
                                         this.openDialog(dataSource.id);
                                     }
@@ -58,7 +58,7 @@ export class InfoPageSettingsComponent implements OnInit {
         );
         this.infoPageDataSource.loadData();
 
-        this.authService.currentUserHasRight("info_pages:create").pipe(first()).subscribe(allowed => {
+        this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
             if (allowed) {
                 this.showNewButton = true;
             }

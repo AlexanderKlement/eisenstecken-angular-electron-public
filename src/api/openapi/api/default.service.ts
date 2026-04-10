@@ -35,10 +35,6 @@ import { CalendarEntryCreate } from '../model/calendarEntryCreate';
 // @ts-ignore
 import { Car } from '../model/car';
 // @ts-ignore
-import { Category } from '../model/category';
-// @ts-ignore
-import { CategoryCreate } from '../model/categoryCreate';
-// @ts-ignore
 import { ChatMessage } from '../model/chatMessage';
 // @ts-ignore
 import { ChatMessageCreate } from '../model/chatMessageCreate';
@@ -187,8 +183,6 @@ import { PriceUpdate } from '../model/priceUpdate';
 // @ts-ignore
 import { ReminderCreate } from '../model/reminderCreate';
 // @ts-ignore
-import { Right } from '../model/right';
-// @ts-ignore
 import { Service } from '../model/service';
 // @ts-ignore
 import { ServiceCreate } from '../model/serviceCreate';
@@ -220,8 +214,6 @@ import { TemplatePaint } from '../model/templatePaint';
 import { TemplatePaintCreate } from '../model/templatePaintCreate';
 // @ts-ignore
 import { TemplatePaintUpdate } from '../model/templatePaintUpdate';
-// @ts-ignore
-import { Token } from '../model/token';
 // @ts-ignore
 import { Unit } from '../model/unit';
 // @ts-ignore
@@ -1174,73 +1166,6 @@ export class DefaultService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: calendarEntryCreate,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Create Category
-     * @param categoryCreate 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public createCategoryCategoryPost(categoryCreate: CategoryCreate, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Category>;
-    public createCategoryCategoryPost(categoryCreate: CategoryCreate, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Category>>;
-    public createCategoryCategoryPost(categoryCreate: CategoryCreate, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Category>>;
-    public createCategoryCategoryPost(categoryCreate: CategoryCreate, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (categoryCreate === null || categoryCreate === undefined) {
-            throw new Error('Required parameter categoryCreate was null or undefined when calling createCategoryCategoryPost.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (OAuth2PasswordBearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/category/`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Category>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: categoryCreate,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -3517,63 +3442,6 @@ export class DefaultService extends BaseService {
     }
 
     /**
-     * Delete Category
-     * @param categoryId 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public deleteCategoryCategoryCategoryIdDelete(categoryId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
-    public deleteCategoryCategoryCategoryIdDelete(categoryId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
-    public deleteCategoryCategoryCategoryIdDelete(categoryId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<boolean>>;
-    public deleteCategoryCategoryCategoryIdDelete(categoryId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (categoryId === null || categoryId === undefined) {
-            throw new Error('Required parameter categoryId was null or undefined when calling deleteCategoryCategoryCategoryIdDelete.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (OAuth2PasswordBearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/category/${this.configuration.encodeParam({name: "categoryId", value: categoryId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<boolean>('delete', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Delete Client
      * @param clientId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -3860,16 +3728,16 @@ export class DefaultService extends BaseService {
 
     /**
      * Delete Info Page
-     * @param id 
+     * @param infoPageId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteInfoPageInfoPageIdDelete(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
-    public deleteInfoPageInfoPageIdDelete(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
-    public deleteInfoPageInfoPageIdDelete(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<boolean>>;
-    public deleteInfoPageInfoPageIdDelete(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling deleteInfoPageInfoPageIdDelete.');
+    public deleteInfoPageInfoPageInfoPageIdDelete(infoPageId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
+    public deleteInfoPageInfoPageInfoPageIdDelete(infoPageId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
+    public deleteInfoPageInfoPageInfoPageIdDelete(infoPageId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<boolean>>;
+    public deleteInfoPageInfoPageInfoPageIdDelete(infoPageId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (infoPageId === null || infoPageId === undefined) {
+            throw new Error('Required parameter infoPageId was null or undefined when calling deleteInfoPageInfoPageInfoPageIdDelete.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -3900,7 +3768,7 @@ export class DefaultService extends BaseService {
             }
         }
 
-        let localVarPath = `/info_page/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
+        let localVarPath = `/info_page/${this.configuration.encodeParam({name: "infoPageId", value: infoPageId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<boolean>('delete', `${basePath}${localVarPath}`,
             {
@@ -4781,9 +4649,9 @@ export class DefaultService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteUserUsersUserIdDelete(userId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
-    public deleteUserUsersUserIdDelete(userId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
-    public deleteUserUsersUserIdDelete(userId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<boolean>>;
+    public deleteUserUsersUserIdDelete(userId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteUserUsersUserIdDelete(userId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteUserUsersUserIdDelete(userId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
     public deleteUserUsersUserIdDelete(userId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (userId === null || userId === undefined) {
             throw new Error('Required parameter userId was null or undefined when calling deleteUserUsersUserIdDelete.');
@@ -4819,7 +4687,7 @@ export class DefaultService extends BaseService {
 
         let localVarPath = `/users/${this.configuration.encodeParam({name: "userId", value: userId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<boolean>('delete', `${basePath}${localVarPath}`,
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -6016,65 +5884,6 @@ export class DefaultService extends BaseService {
     }
 
     /**
-     * Get Rights
-     * @param skip 
-     * @param limit 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getRightsRightsGet(skip?: number, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<Right>>;
-    public getRightsRightsGet(skip?: number, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<Right>>>;
-    public getRightsRightsGet(skip?: number, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<Right>>>;
-    public getRightsRightsGet(skip?: number, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>skip, 'skip');
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>limit, 'limit');
-
-        let localVarHeaders = this.defaultHeaders;
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/rights/`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<Right>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                params: localVarQueryParameters,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Get Status Options
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -6228,77 +6037,6 @@ export class DefaultService extends BaseService {
         return this.httpClient.request<Array<WorkDay>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Grant Rights To User
-     * @param userId 
-     * @param requestBody 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public grantRightsToUserUsersRightsUserIdPost(userId: number, requestBody: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<User>;
-    public grantRightsToUserUsersRightsUserIdPost(userId: number, requestBody: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<User>>;
-    public grantRightsToUserUsersRightsUserIdPost(userId: number, requestBody: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<User>>;
-    public grantRightsToUserUsersRightsUserIdPost(userId: number, requestBody: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (userId === null || userId === undefined) {
-            throw new Error('Required parameter userId was null or undefined when calling grantRightsToUserUsersRightsUserIdPost.');
-        }
-        if (requestBody === null || requestBody === undefined) {
-            throw new Error('Required parameter requestBody was null or undefined when calling grantRightsToUserUsersRightsUserIdPost.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (OAuth2PasswordBearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/users/rights/${this.configuration.encodeParam({name: "userId", value: userId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<User>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: requestBody,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -7956,227 +7694,6 @@ export class DefaultService extends BaseService {
     }
 
     /**
-     * Logged In
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public loggedInTokenValidationGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
-    public loggedInTokenValidationGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
-    public loggedInTokenValidationGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<boolean>>;
-    public loggedInTokenValidationGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (OAuth2PasswordBearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/token_validation`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<boolean>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Login For Access Token Simple
-     * @param username 
-     * @param password 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public loginForAccessTokenSimpleTokenSimplePost(username: string, password: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Token>;
-    public loginForAccessTokenSimpleTokenSimplePost(username: string, password: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Token>>;
-    public loginForAccessTokenSimpleTokenSimplePost(username: string, password: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Token>>;
-    public loginForAccessTokenSimpleTokenSimplePost(username: string, password: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (username === null || username === undefined) {
-            throw new Error('Required parameter username was null or undefined when calling loginForAccessTokenSimpleTokenSimplePost.');
-        }
-        if (password === null || password === undefined) {
-            throw new Error('Required parameter password was null or undefined when calling loginForAccessTokenSimpleTokenSimplePost.');
-        }
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>username, 'username');
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>password, 'password');
-
-        let localVarHeaders = this.defaultHeaders;
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/token_simple`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Token>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                params: localVarQueryParameters,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Login For Access Token
-     * @param password 
-     * @param username 
-     * @param allScopes 
-     * @param clientId 
-     * @param clientSecret 
-     * @param grantType 
-     * @param scope 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public loginForAccessTokenTokenPost(password: string, username: string, allScopes?: boolean, clientId?: string, clientSecret?: string, grantType?: string, scope?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Token>;
-    public loginForAccessTokenTokenPost(password: string, username: string, allScopes?: boolean, clientId?: string, clientSecret?: string, grantType?: string, scope?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Token>>;
-    public loginForAccessTokenTokenPost(password: string, username: string, allScopes?: boolean, clientId?: string, clientSecret?: string, grantType?: string, scope?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Token>>;
-    public loginForAccessTokenTokenPost(password: string, username: string, allScopes?: boolean, clientId?: string, clientSecret?: string, grantType?: string, scope?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (password === null || password === undefined) {
-            throw new Error('Required parameter password was null or undefined when calling loginForAccessTokenTokenPost.');
-        }
-        if (username === null || username === undefined) {
-            throw new Error('Required parameter username was null or undefined when calling loginForAccessTokenTokenPost.');
-        }
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>allScopes, 'all_scopes');
-
-        let localVarHeaders = this.defaultHeaders;
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/x-www-form-urlencoded'
-        ];
-
-        const canConsumeForm = this.canConsumeForm(consumes);
-
-        let localVarFormParams: { append(param: string, value: any): any; };
-        let localVarUseForm = false;
-        let localVarConvertFormParamsToString = false;
-        if (localVarUseForm) {
-            localVarFormParams = new FormData();
-        } else {
-            localVarFormParams = new HttpParams({encoder: this.encoder});
-        }
-
-        if (clientId !== undefined) {
-            localVarFormParams = localVarFormParams.append('client_id', <any>clientId) as any || localVarFormParams;
-        }
-        if (clientSecret !== undefined) {
-            localVarFormParams = localVarFormParams.append('client_secret', <any>clientSecret) as any || localVarFormParams;
-        }
-        if (grantType !== undefined) {
-            localVarFormParams = localVarFormParams.append('grant_type', <any>grantType) as any || localVarFormParams;
-        }
-        if (password !== undefined) {
-            localVarFormParams = localVarFormParams.append('password', <any>password) as any || localVarFormParams;
-        }
-        if (scope !== undefined) {
-            localVarFormParams = localVarFormParams.append('scope', <any>scope) as any || localVarFormParams;
-        }
-        if (username !== undefined) {
-            localVarFormParams = localVarFormParams.append('username', <any>username) as any || localVarFormParams;
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/token`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Token>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: localVarConvertFormParamsToString ? localVarFormParams.toString() : localVarFormParams,
-                params: localVarQueryParameters,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Move Job To Year
      * @param jobId 
      * @param year 
@@ -9424,65 +8941,6 @@ export class DefaultService extends BaseService {
     }
 
     /**
-     * Read Categories
-     * @param skip 
-     * @param limit 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public readCategoriesCategoryGet(skip?: number, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<Category>>;
-    public readCategoriesCategoryGet(skip?: number, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<Category>>>;
-    public readCategoriesCategoryGet(skip?: number, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<Category>>>;
-    public readCategoriesCategoryGet(skip?: number, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>skip, 'skip');
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>limit, 'limit');
-
-        let localVarHeaders = this.defaultHeaders;
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/category/`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<Category>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                params: localVarQueryParameters,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Read Chat Messages Since Id
      * @param lastId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -9708,13 +9166,21 @@ export class DefaultService extends BaseService {
 
     /**
      * Read Client Count
+     * @param privateOnly 
+     * @param companyOnly 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readClientCountClientCountGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<number>;
-    public readClientCountClientCountGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<number>>;
-    public readClientCountClientCountGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<number>>;
-    public readClientCountClientCountGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public readClientCountClientCountGet(privateOnly?: boolean, companyOnly?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<number>;
+    public readClientCountClientCountGet(privateOnly?: boolean, companyOnly?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<number>>;
+    public readClientCountClientCountGet(privateOnly?: boolean, companyOnly?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<number>>;
+    public readClientCountClientCountGet(privateOnly?: boolean, companyOnly?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>privateOnly, 'private_only');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>companyOnly, 'company_only');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -9749,6 +9215,7 @@ export class DefaultService extends BaseService {
         return this.httpClient.request<number>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -9952,24 +9419,16 @@ export class DefaultService extends BaseService {
     /**
      * Read Contact
      * @param contactId 
-     * @param skip 
-     * @param limit 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readContactContactContactIdGet(contactId: number, skip?: number, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Contact>;
-    public readContactContactContactIdGet(contactId: number, skip?: number, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Contact>>;
-    public readContactContactContactIdGet(contactId: number, skip?: number, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Contact>>;
-    public readContactContactContactIdGet(contactId: number, skip?: number, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public readContactContactContactIdGet(contactId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Contact>;
+    public readContactContactContactIdGet(contactId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Contact>>;
+    public readContactContactContactIdGet(contactId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Contact>>;
+    public readContactContactContactIdGet(contactId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (contactId === null || contactId === undefined) {
             throw new Error('Required parameter contactId was null or undefined when calling readContactContactContactIdGet.');
         }
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>skip, 'skip');
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>limit, 'limit');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -10004,7 +9463,6 @@ export class DefaultService extends BaseService {
         return this.httpClient.request<Contact>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -10326,24 +9784,16 @@ export class DefaultService extends BaseService {
     /**
      * Read Credential
      * @param credentialId 
-     * @param skip 
-     * @param limit 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readCredentialCredentialCredentialIdGet(credentialId: number, skip?: number, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<Credential>>;
-    public readCredentialCredentialCredentialIdGet(credentialId: number, skip?: number, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<Credential>>>;
-    public readCredentialCredentialCredentialIdGet(credentialId: number, skip?: number, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<Credential>>>;
-    public readCredentialCredentialCredentialIdGet(credentialId: number, skip?: number, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public readCredentialCredentialCredentialIdGet(credentialId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<Credential>>;
+    public readCredentialCredentialCredentialIdGet(credentialId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<Credential>>>;
+    public readCredentialCredentialCredentialIdGet(credentialId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<Credential>>>;
+    public readCredentialCredentialCredentialIdGet(credentialId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (credentialId === null || credentialId === undefined) {
             throw new Error('Required parameter credentialId was null or undefined when calling readCredentialCredentialCredentialIdGet.');
         }
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>skip, 'skip');
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>limit, 'limit');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -10378,7 +9828,6 @@ export class DefaultService extends BaseService {
         return this.httpClient.request<Array<Credential>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -11132,16 +10581,16 @@ export class DefaultService extends BaseService {
 
     /**
      * Read Info Page
-     * @param id 
+     * @param infoPageId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readInfoPageInfoPageIdGet(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InfoPage>;
-    public readInfoPageInfoPageIdGet(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InfoPage>>;
-    public readInfoPageInfoPageIdGet(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InfoPage>>;
-    public readInfoPageInfoPageIdGet(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling readInfoPageInfoPageIdGet.');
+    public readInfoPageInfoPageInfoPageIdGet(infoPageId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InfoPage>;
+    public readInfoPageInfoPageInfoPageIdGet(infoPageId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InfoPage>>;
+    public readInfoPageInfoPageInfoPageIdGet(infoPageId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InfoPage>>;
+    public readInfoPageInfoPageInfoPageIdGet(infoPageId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (infoPageId === null || infoPageId === undefined) {
+            throw new Error('Required parameter infoPageId was null or undefined when calling readInfoPageInfoPageInfoPageIdGet.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -11172,7 +10621,7 @@ export class DefaultService extends BaseService {
             }
         }
 
-        let localVarPath = `/info_page/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
+        let localVarPath = `/info_page/${this.configuration.encodeParam({name: "infoPageId", value: infoPageId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<InfoPage>('get', `${basePath}${localVarPath}`,
             {
@@ -14284,24 +13733,16 @@ export class DefaultService extends BaseService {
     /**
      * Read Price
      * @param priceId 
-     * @param skip 
-     * @param limit 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readPricePricePriceIdGet(priceId: number, skip?: number, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<Price>>;
-    public readPricePricePriceIdGet(priceId: number, skip?: number, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<Price>>>;
-    public readPricePricePriceIdGet(priceId: number, skip?: number, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<Price>>>;
-    public readPricePricePriceIdGet(priceId: number, skip?: number, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public readPricePricePriceIdGet(priceId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<Price>>;
+    public readPricePricePriceIdGet(priceId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<Price>>>;
+    public readPricePricePriceIdGet(priceId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<Price>>>;
+    public readPricePricePriceIdGet(priceId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (priceId === null || priceId === undefined) {
             throw new Error('Required parameter priceId was null or undefined when calling readPricePricePriceIdGet.');
         }
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>skip, 'skip');
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>limit, 'limit');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -14336,7 +13777,6 @@ export class DefaultService extends BaseService {
         return this.httpClient.request<Array<Price>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -14892,27 +14332,16 @@ export class DefaultService extends BaseService {
     /**
      * Read Subjob Count By Job
      * @param jobId 
-     * @param filter 
-     * @param skip 
-     * @param limit 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readSubjobCountByJobJobSubjobCountByJobJobIdGet(jobId: number, filter?: string, skip?: number, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<number>;
-    public readSubjobCountByJobJobSubjobCountByJobJobIdGet(jobId: number, filter?: string, skip?: number, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<number>>;
-    public readSubjobCountByJobJobSubjobCountByJobJobIdGet(jobId: number, filter?: string, skip?: number, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<number>>;
-    public readSubjobCountByJobJobSubjobCountByJobJobIdGet(jobId: number, filter?: string, skip?: number, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public readSubjobCountByJobJobSubjobCountByJobJobIdGet(jobId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<number>;
+    public readSubjobCountByJobJobSubjobCountByJobJobIdGet(jobId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<number>>;
+    public readSubjobCountByJobJobSubjobCountByJobJobIdGet(jobId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<number>>;
+    public readSubjobCountByJobJobSubjobCountByJobJobIdGet(jobId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling readSubjobCountByJobJobSubjobCountByJobJobIdGet.');
         }
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>filter, 'filter');
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>skip, 'skip');
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>limit, 'limit');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -14947,7 +14376,6 @@ export class DefaultService extends BaseService {
         return this.httpClient.request<number>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -15330,24 +14758,16 @@ export class DefaultService extends BaseService {
     /**
      * Read Technical Data
      * @param technicalDataId 
-     * @param skip 
-     * @param limit 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readTechnicalDataTechnicalDataTechnicalDataIdGet(technicalDataId: number, skip?: number, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<TechnicalData>>;
-    public readTechnicalDataTechnicalDataTechnicalDataIdGet(technicalDataId: number, skip?: number, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<TechnicalData>>>;
-    public readTechnicalDataTechnicalDataTechnicalDataIdGet(technicalDataId: number, skip?: number, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<TechnicalData>>>;
-    public readTechnicalDataTechnicalDataTechnicalDataIdGet(technicalDataId: number, skip?: number, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public readTechnicalDataTechnicalDataTechnicalDataIdGet(technicalDataId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<TechnicalData>>;
+    public readTechnicalDataTechnicalDataTechnicalDataIdGet(technicalDataId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<TechnicalData>>>;
+    public readTechnicalDataTechnicalDataTechnicalDataIdGet(technicalDataId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<TechnicalData>>>;
+    public readTechnicalDataTechnicalDataTechnicalDataIdGet(technicalDataId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (technicalDataId === null || technicalDataId === undefined) {
             throw new Error('Required parameter technicalDataId was null or undefined when calling readTechnicalDataTechnicalDataTechnicalDataIdGet.');
         }
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>skip, 'skip');
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>limit, 'limit');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -15382,7 +14802,6 @@ export class DefaultService extends BaseService {
         return this.httpClient.request<Array<TechnicalData>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -15650,6 +15069,9 @@ export class DefaultService extends BaseService {
 
         let localVarHeaders = this.defaultHeaders;
 
+        // authentication (OAuth2PasswordBearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
+
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'application/json'
         ]);
@@ -15691,18 +15113,13 @@ export class DefaultService extends BaseService {
 
     /**
      * Read User Count
-     * @param employeesOnly 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readUserCountUsersCountGet(employeesOnly?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<number>;
-    public readUserCountUsersCountGet(employeesOnly?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<number>>;
-    public readUserCountUsersCountGet(employeesOnly?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<number>>;
-    public readUserCountUsersCountGet(employeesOnly?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>employeesOnly, 'employees_only');
+    public readUserCountUsersCountGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<number>;
+    public readUserCountUsersCountGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<number>>;
+    public readUserCountUsersCountGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<number>>;
+    public readUserCountUsersCountGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -15733,113 +15150,6 @@ export class DefaultService extends BaseService {
         }
 
         let localVarPath = `/users/count`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<number>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                params: localVarQueryParameters,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Read User Count
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public readUserCountUsersEmployeeCountGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<number>;
-    public readUserCountUsersEmployeeCountGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<number>>;
-    public readUserCountUsersEmployeeCountGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<number>>;
-    public readUserCountUsersEmployeeCountGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (OAuth2PasswordBearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/users/employee/count`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<number>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Read User Count
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public readUserCountUsersEmployeeGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<number>;
-    public readUserCountUsersEmployeeGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<number>>;
-    public readUserCountUsersEmployeeGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<number>>;
-    public readUserCountUsersEmployeeGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (OAuth2PasswordBearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/users/employee`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<number>('get', `${basePath}${localVarPath}`,
             {
@@ -15969,14 +15279,13 @@ export class DefaultService extends BaseService {
      * @param skip 
      * @param filterString 
      * @param limit 
-     * @param employeesOnly 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readUsersUsersGet(skip?: number, filterString?: string, limit?: number, employeesOnly?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<User>>;
-    public readUsersUsersGet(skip?: number, filterString?: string, limit?: number, employeesOnly?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<User>>>;
-    public readUsersUsersGet(skip?: number, filterString?: string, limit?: number, employeesOnly?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<User>>>;
-    public readUsersUsersGet(skip?: number, filterString?: string, limit?: number, employeesOnly?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public readUsersUsersGet(skip?: number, filterString?: string, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<User>>;
+    public readUsersUsersGet(skip?: number, filterString?: string, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<User>>>;
+    public readUsersUsersGet(skip?: number, filterString?: string, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<User>>>;
+    public readUsersUsersGet(skip?: number, filterString?: string, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
@@ -15985,8 +15294,6 @@ export class DefaultService extends BaseService {
           <any>filterString, 'filter_string');
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
           <any>limit, 'limit');
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>employeesOnly, 'employees_only');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -17841,77 +17148,6 @@ export class DefaultService extends BaseService {
     }
 
     /**
-     * Update Category
-     * @param categoryId 
-     * @param categoryCreate 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public updateCategoryCategoryCategoryIdPut(categoryId: number, categoryCreate: CategoryCreate, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Category>;
-    public updateCategoryCategoryCategoryIdPut(categoryId: number, categoryCreate: CategoryCreate, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Category>>;
-    public updateCategoryCategoryCategoryIdPut(categoryId: number, categoryCreate: CategoryCreate, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Category>>;
-    public updateCategoryCategoryCategoryIdPut(categoryId: number, categoryCreate: CategoryCreate, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (categoryId === null || categoryId === undefined) {
-            throw new Error('Required parameter categoryId was null or undefined when calling updateCategoryCategoryCategoryIdPut.');
-        }
-        if (categoryCreate === null || categoryCreate === undefined) {
-            throw new Error('Required parameter categoryCreate was null or undefined when calling updateCategoryCategoryCategoryIdPut.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (OAuth2PasswordBearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/category/${this.configuration.encodeParam({name: "categoryId", value: categoryId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Category>('put', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: categoryCreate,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Update Client
      * @param clientId 
      * @param clientCreate 
@@ -18280,20 +17516,20 @@ export class DefaultService extends BaseService {
 
     /**
      * Update Info Page
-     * @param id 
+     * @param infoPageId 
      * @param infoPageUpdate 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateInfoPageInfoPageIdPut(id: number, infoPageUpdate: InfoPageUpdate, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InfoPage>;
-    public updateInfoPageInfoPageIdPut(id: number, infoPageUpdate: InfoPageUpdate, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InfoPage>>;
-    public updateInfoPageInfoPageIdPut(id: number, infoPageUpdate: InfoPageUpdate, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InfoPage>>;
-    public updateInfoPageInfoPageIdPut(id: number, infoPageUpdate: InfoPageUpdate, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling updateInfoPageInfoPageIdPut.');
+    public updateInfoPageInfoPageInfoPageIdPut(infoPageId: number, infoPageUpdate: InfoPageUpdate, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InfoPage>;
+    public updateInfoPageInfoPageInfoPageIdPut(infoPageId: number, infoPageUpdate: InfoPageUpdate, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InfoPage>>;
+    public updateInfoPageInfoPageInfoPageIdPut(infoPageId: number, infoPageUpdate: InfoPageUpdate, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InfoPage>>;
+    public updateInfoPageInfoPageInfoPageIdPut(infoPageId: number, infoPageUpdate: InfoPageUpdate, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (infoPageId === null || infoPageId === undefined) {
+            throw new Error('Required parameter infoPageId was null or undefined when calling updateInfoPageInfoPageInfoPageIdPut.');
         }
         if (infoPageUpdate === null || infoPageUpdate === undefined) {
-            throw new Error('Required parameter infoPageUpdate was null or undefined when calling updateInfoPageInfoPageIdPut.');
+            throw new Error('Required parameter infoPageUpdate was null or undefined when calling updateInfoPageInfoPageInfoPageIdPut.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -18333,7 +17569,7 @@ export class DefaultService extends BaseService {
             }
         }
 
-        let localVarPath = `/info_page/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
+        let localVarPath = `/info_page/${this.configuration.encodeParam({name: "infoPageId", value: infoPageId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<InfoPage>('put', `${basePath}${localVarPath}`,
             {
@@ -19353,9 +18589,6 @@ export class DefaultService extends BaseService {
         }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (OAuth2PasswordBearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'application/json'

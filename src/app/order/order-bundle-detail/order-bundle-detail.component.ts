@@ -11,7 +11,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { FileService } from "../../shared/services/file.service";
 import { EmailService } from "../../shared/services/email.service";
 import { SupplierDetailComponent } from "../../supplier/supplier-detail/supplier-detail.component";
-import { AuthService } from "../../shared/services/auth.service";
+import { AuthStateService } from "../../shared/services/auth-state.service";
 import { OrderDetailComponent } from "../order-detail/order-detail.component";
 import { Observable, Subscriber } from "rxjs";
 import { DefaultService, OrderBundle, Supplier, Order, OrderableType } from "../../../api/openapi";
@@ -46,7 +46,7 @@ export class OrderBundleDetailComponent implements OnInit {
   private $refreshSubscriber: Subscriber<void>;
 
 
-  constructor(private api: DefaultService, private route: ActivatedRoute, private router: Router, private authService: AuthService,
+  constructor(private api: DefaultService, private route: ActivatedRoute, private router: Router, private authService: AuthStateService,
               private file: FileService, private email: EmailService,
               public dialog: MatDialog, private locker: LockService, private snackBar: MatSnackBar) {
 

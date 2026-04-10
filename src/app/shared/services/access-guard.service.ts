@@ -1,20 +1,20 @@
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { AuthService } from './auth.service';
-import { ElectronService } from '../../core/services';
-import { isPlatformBrowser } from '@angular/common';
+import { Injectable, Inject, PLATFORM_ID } from "@angular/core";
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
+import { AuthStateService } from "./auth-state.service";
+import { ElectronService } from "../../core/services";
+import { isPlatformBrowser } from "@angular/common";
 
 @Injectable({ providedIn: 'root' })
 export class AccessGuard implements CanActivate {
 
   private readonly limitAccessHosts: string[] = [
-    'stunden.eisenstecken.kivi.bz.it',
-    'timedev.app.eisenstecken.it',
-    'time.app.eisenstecken.it',
+    "stunden.eisenstecken.kivi.bz.it",
+    "timedev.app.eisenstecken.it",
+    "time.app.eisenstecken.it",
   ];
 
   constructor(
-    private authService: AuthService,
+    private authService: AuthStateService,
     private router: Router,
     private electron: ElectronService,
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -29,8 +29,8 @@ export class AccessGuard implements CanActivate {
     const requiresLogin = route.data?.requiresLogin !== false;
 
     if (requiresLogin && !this.authService.isLoggedIn()) {
-      console.warn('Not logged in!');
-      return this.router.createUrlTree(['login']);
+      console.warn("Not logged in!");
+      return this.router.createUrlTree(["login"]);
     }
 
     return this.redirectWorkHours(route);
@@ -44,9 +44,9 @@ export class AccessGuard implements CanActivate {
     if (!this.limitAccessHosts.includes(hostname)) return true;
 
     // allow /mobile routes, or Electron app
-    const firstSeg = route.url[0]?.path ?? '';
-    if (firstSeg.startsWith('mobile') || this.electron.isElectron) return true;
+    const firstSeg = route.url[0]?.path ?? "";
+    if (firstSeg.startsWith("mobile") || this.electron.isElectron) return true;
 
-    return this.router.createUrlTree(['mobile']);
+    return this.router.createUrlTree(["mobile"]);
   }
 }

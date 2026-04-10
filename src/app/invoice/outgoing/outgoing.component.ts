@@ -2,14 +2,14 @@ import {Component, Input, OnInit} from "@angular/core";
 import {TableDataSource} from "../../shared/components/table-builder/table-builder.datasource";
 import {LockService} from "../../shared/services/lock.service";
 import {first} from "rxjs/operators";
-import {AuthService} from "../../shared/services/auth.service";
+import {AuthStateService} from "../../shared/services/auth-state.service";
 import dayjs from "dayjs/esm";
 import { TableButton, TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 import {ConfirmDialogComponent} from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {Observable} from "rxjs";
 import { formatCurrency, AsyncPipe } from "@angular/common";
-import { DefaultService, OutgoingInvoice } from "../../../api/openapi";
+import { DefaultService, OutgoingInvoice, ScopeEnum } from "../../../api/openapi";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
 import { MatFormField, MatLabel } from "@angular/material/input";
 import { MatSelect, MatOption } from "@angular/material/select";
@@ -44,7 +44,7 @@ export class OutgoingComponent implements OnInit {
         },
     ];
 
-    constructor(private api: DefaultService, private locker: LockService, private authService: AuthService, private dialog: MatDialog) {
+    constructor(private api: DefaultService, private locker: LockService, private authService: AuthStateService, private dialog: MatDialog) {
     }
 
     ngOnInit(): void {
@@ -137,7 +137,7 @@ export class OutgoingComponent implements OnInit {
                                 condition: dataSource.paid
                             },
                             route: () => {
-                                this.authService.currentUserHasRight("outgoing_invoices:modify").pipe(first()).subscribe(allowed => {
+                                this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
                                     if (allowed) {
                                         this.locker.getLockAndTryNavigate(
                                             this.api.islockedOutgoingInvoiceOutgoingInvoiceIslockedOutgoingInvoiceIdGet(dataSource.id),
@@ -186,7 +186,7 @@ export class OutgoingComponent implements OnInit {
                                 condition: dataSource.paid
                             },
                             route: () => {
-                                this.authService.currentUserHasRight("outgoing_invoices:modify").pipe(first()).subscribe(allowed => {
+                                this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
                                     if (allowed) {
                                         this.locker.getLockAndTryNavigate(
                                             this.api.islockedOutgoingInvoiceOutgoingInvoiceIslockedOutgoingInvoiceIdGet(dataSource.id),
@@ -235,7 +235,7 @@ export class OutgoingComponent implements OnInit {
                                 condition: dataSource.paid
                             },
                             route: () => {
-                                this.authService.currentUserHasRight("outgoing_invoices:modify").pipe(first()).subscribe(allowed => {
+                                this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
                                     if (allowed) {
                                         this.locker.getLockAndTryNavigate(
                                             this.api.islockedOutgoingInvoiceOutgoingInvoiceIslockedOutgoingInvoiceIdGet(dataSource.id),

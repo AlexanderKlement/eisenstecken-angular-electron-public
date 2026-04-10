@@ -6,7 +6,7 @@ import {
 } from "../event-calendar-dialog/event-calendar-dialog.component";
 import {first} from "rxjs/operators";
 import {Subject, Subscription} from "rxjs";
-import {AuthService} from "../../../shared/services/auth.service";
+import {AuthStateService} from "../../../shared/services/auth-state.service";
 import {DefaultService, CompanyEvent, CompanyEventEnum} from "../../../../api/openapi";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
 import { NgClass } from "@angular/common";
@@ -38,7 +38,7 @@ export class EventCalendarDayComponent implements OnInit, OnChanges, OnDestroy {
   companyClosed = false;
 
 
-  constructor(private api: DefaultService, public dialog: MatDialog, private authService: AuthService) {
+  constructor(private api: DefaultService, public dialog: MatDialog, private authService: AuthStateService) {
   }
 
   ngOnInit(): void {

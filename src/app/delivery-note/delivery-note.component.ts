@@ -4,10 +4,10 @@ import dayjs from "dayjs/esm";
 import { Router } from "@angular/router";
 import { LockService } from "../shared/services/lock.service";
 import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
-import { AuthService } from "../shared/services/auth.service";
+import { AuthStateService } from "../shared/services/auth-state.service";
 import { first } from "rxjs/operators";
 import { Observable, Subscriber } from "rxjs";
-import { DeliveryNote, DefaultService } from "../../api/openapi";
+import { DeliveryNote, DefaultService, ScopeEnum } from "../../api/openapi";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
 import { MatFormField, MatLabel } from "@angular/material/input";
 import { MatSelect, MatOption } from "@angular/material/select";
@@ -31,12 +31,12 @@ export class DeliveryNoteComponent implements OnInit {
 
   private $refreshSubscriber: Subscriber<void>;
 
-  constructor(private api: DefaultService, private locker: LockService, private router: Router, private authService: AuthService) {
+  constructor(private api: DefaultService, private locker: LockService, private router: Router, private authService: AuthStateService) {
   }
 
   ngOnInit(): void {
     this.initDeliveryNotes();
-    this.authService.currentUserHasRight("delivery_notes:modify").pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttons.push({
           name: "Neuer Lieferschein",
@@ -84,7 +84,7 @@ export class DeliveryNoteComponent implements OnInit {
                 "job.displayable_name": dataSource.job ? dataSource.job.code + " - " + dataSource.job.displayable_name : "",
               },
               route: () => {
-                this.authService.currentUserHasRight("delivery_notes:modify").pipe(first()).subscribe(allowed => {
+                this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
                   if (allowed) {
                     this.locker.getLockAndTryNavigate(
                       this.api.islockedDeliveryNoteDeliveryNoteIslockedDeliveryNoteIdGet(dataSource.id),

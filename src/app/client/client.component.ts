@@ -2,10 +2,10 @@ import {Component, ComponentRef, OnInit} from "@angular/core";
 import {TableDataSource} from "../shared/components/table-builder/table-builder.datasource";
 import {ActivatedRoute, Router} from "@angular/router";
 import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
-import {AuthService} from "../shared/services/auth.service";
+import {AuthStateService} from "../shared/services/auth-state.service";
 import {first} from "rxjs/operators";
 import {Observable, Subscriber} from "rxjs";
-import {DefaultService, Client} from "../../api/openapi";
+import {DefaultService, Client, ScopeEnum } from "../../api/openapi";
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
 import { TableBuilderComponent } from "../shared/components/table-builder/table-builder.component";
 @Component({
@@ -24,13 +24,13 @@ export class ClientComponent implements OnInit {
     public $refresh: Observable<void>;
     private $refreshSubscriber: Subscriber<void>;
 
-    constructor(private api: DefaultService, private router: Router, private authService: AuthService) {
+    constructor(private api: DefaultService, private router: Router, private authService: AuthStateService) {
     }
 
     ngOnInit(): void {
         this.initPrivateClients();
         this.initBusinessClients();
-        this.authService.currentUserHasRight("clients:create").pipe(first()).subscribe(allowed => {
+        this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
             if (allowed) {
                 this.buttons.push({
                     name: "Neuer Kunde",

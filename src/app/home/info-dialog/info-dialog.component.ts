@@ -1,10 +1,10 @@
 import {Component, OnInit} from "@angular/core";
 import {TableDataSource} from "../../shared/components/table-builder/table-builder.datasource";
 import { MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
-import {AuthService} from "../../shared/services/auth.service";
+import {AuthStateService} from "../../shared/services/auth-state.service";
 import {first} from "rxjs/operators";
 import {Observable} from "rxjs";
-import {DefaultService, User, Price, TechnicalData, Credential, InfoPage} from "../../../api/openapi";
+import {DefaultService, User, Price, TechnicalData, Credential, InfoPage, ScopeEnum } from "../../../api/openapi";
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 import { MatInput } from "@angular/material/input";
@@ -575,7 +575,7 @@ export class InfoDialogComponent implements OnInit {
   ];
 
 
-  constructor(private api: DefaultService, public dialogRef: MatDialogRef<InfoDialogComponent>, private authService: AuthService) {
+  constructor(private api: DefaultService, public dialogRef: MatDialogRef<InfoDialogComponent>, private authService: AuthStateService) {
   }
 
   ngOnInit():
@@ -584,7 +584,7 @@ export class InfoDialogComponent implements OnInit {
     this.initPriceDataSource();
     this.initTechnicalDataDataSource();
     this.initCredentialDataSource();
-    this.authService.currentUserHasRight("prices:all").pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
       this.userCanViewPrice = allowed;
     });
     this.infoPages$ = this.api.readInfoPagesInfoPageGet();
@@ -593,7 +593,7 @@ export class InfoDialogComponent implements OnInit {
   initUserDataSource(): void {
     this.userDataSource = new TableDataSource(
       this.api,
-      (api, filter, sortDirection, skip, limit) => api.readUsersUsersGet(skip, filter, limit, true),
+      (api, filter, sortDirection, skip, limit) => api.readUsersUsersGet(skip, filter, limit),
       (dataSourceClasses) => {
         const rows = [];
         dataSourceClasses.forEach((dataSource) => {
@@ -620,7 +620,7 @@ export class InfoDialogComponent implements OnInit {
         {name: "handy", headerName: "Handy"},
         {name: "dial", headerName: "Kurzwahl"},
       ],
-      (api) => api.readUserCountUsersEmployeeCountGet()
+      (api) => api.readUserCountUsersCountGet(),
     );
     this.userDataSource.loadData();
   }

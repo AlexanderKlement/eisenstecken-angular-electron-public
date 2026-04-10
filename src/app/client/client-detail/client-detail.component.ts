@@ -4,13 +4,13 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {TableDataSource} from "../../shared/components/table-builder/table-builder.datasource";
 import {InfoBuilderComponent} from "../../shared/components/info-builder/info-builder.component";
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
-import {AuthService} from "../../shared/services/auth.service";
+import {AuthStateService} from "../../shared/services/auth-state.service";
 import {first} from "rxjs/operators";
 import {ConfirmDialogComponent} from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
 import {Observable, Subscriber} from "rxjs";
-import { Client, DefaultService, Job } from "../../../api/openapi";
+import { Client, DefaultService, Job, ScopeEnum } from "../../../api/openapi";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
 @Component({
@@ -33,7 +33,7 @@ export class ClientDetailComponent implements OnInit {
 
   constructor(private api: DefaultService, private dialog: MatDialog,
               private snackBar: MatSnackBar, private router: Router, private route: ActivatedRoute,
-              private authService: AuthService) {
+              private authService: AuthStateService) {
   }
 
   initRefreshObservables(): void {
@@ -57,7 +57,7 @@ export class ClientDetailComponent implements OnInit {
       this.initInfoDataSource();
       this.initTableDataSource();
     });
-    this.authService.currentUserHasRight("clients:modify").pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttons.push({
           name: "Bearbeiten",
@@ -67,7 +67,7 @@ export class ClientDetailComponent implements OnInit {
         });
       }
     });
-    this.authService.currentUserHasRight("jobs:create").pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttons.push({
             name: "Neuer Auftrag",
@@ -78,10 +78,10 @@ export class ClientDetailComponent implements OnInit {
         );
       }
     });
-    this.authService.currentUserHasRight("jobs:all").pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
       this.jobsAvailable = allowed;
     });
-    this.authService.currentUserHasRight("clients:delete").pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttons.push({
             name: "Kunde löschen",

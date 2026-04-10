@@ -4,7 +4,7 @@ import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule 
 import { ActivatedRoute, Router } from "@angular/router";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
 import { first, map, tap } from "rxjs/operators";
-import { AuthService } from "../../shared/services/auth.service";
+import { AuthStateService } from "../../shared/services/auth-state.service";
 import dayjs from "dayjs/esm";
 import { User, Lock, Job, JobUpdate, SubJobCreate, DefaultService, JobCreate } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
@@ -55,7 +55,7 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
 
   users$: Observable<User[]>;
 
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute, private authService: AuthService, dialog: MatDialog) {
+  constructor(api: DefaultService, router: Router, route: ActivatedRoute, private authService: AuthStateService, dialog: MatDialog) {
     super(api, router, route, dialog);
   }
 
@@ -68,7 +68,7 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
   ngOnInit(): void {
     super.ngOnInit();
     this.initJobGroup();
-    this.users$ = this.api.readUsersUsersGet(0, "", 100, true).pipe(map((users) => users.filter(user => user.office)));
+    this.users$ = this.api.readUsersUsersGet(0, "", 100);
     if (this.createMode) {
       this.routeParams.subscribe((params) => {
         if (params.sub !== undefined && params.sub === "sub") {

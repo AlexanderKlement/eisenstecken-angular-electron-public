@@ -1,5 +1,5 @@
 import { Component, ComponentRef, OnInit } from "@angular/core";
-import { AuthService } from "../shared/services/auth.service";
+import { AuthStateService } from "../shared/services/auth-state.service";
 import { first } from "rxjs/operators";
 import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
 import { MatDialog } from "@angular/material/dialog";
@@ -11,7 +11,7 @@ import { Observable, Subscriber } from "rxjs";
 import { ConfirmDialogComponent } from "../shared/components/confirm-dialog/confirm-dialog.component";
 import { FileService } from "../shared/services/file.service";
 import { ActivatedRoute } from "@angular/router";
-import { DefaultService } from "../../api/openapi";
+import { DefaultService, ScopeEnum } from "../../api/openapi";
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
 import { OutgoingComponent } from "./outgoing/outgoing.component";
 import { IngoingComponent } from "./ingoing/ingoing.component";
@@ -59,14 +59,14 @@ export class InvoiceComponent implements OnInit {
   buttons: CustomButton[] = [];
   private $refreshSubscriber: Subscriber<void>;
 
-  constructor(private authService: AuthService, private dialog: MatDialog, private api: DefaultService, private file: FileService) {
+  constructor(private authService: AuthStateService, private dialog: MatDialog, private api: DefaultService, private file: FileService) {
   }
 
   ngOnInit(): void {
-    this.authService.currentUserHasRight("outgoing_invoices:all").pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
       this.outgoingInvoicesAvailable = allowed;
     });
-    this.authService.currentUserHasRight("ingoing_invoices:all").pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
       this.ingoingInvoicesAvailable = allowed;
     });
     this.updateChildTables$ = new Observable<void>((subscriber => {

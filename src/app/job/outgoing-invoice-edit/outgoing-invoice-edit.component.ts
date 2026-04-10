@@ -17,7 +17,7 @@ import {
   CustomButton,
   ToolbarComponent,
 } from "../../shared/components/toolbar/toolbar.component";
-import { AuthService } from "../../shared/services/auth.service";
+import { AuthStateService } from "../../shared/services/auth-state.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import dayjs from "dayjs/esm";
 import { formatDateTransport } from "../../shared/date.util";
@@ -32,7 +32,7 @@ import {
   OutgoingInvoiceUpdate,
   OutgoingInvoiceCreate,
   DescriptiveArticleCreate,
-  Lock, PaymentTermEnum,
+  Lock, PaymentTermEnum, ScopeEnum,
 } from "../../../api/openapi";
 import {
   DefaultLayoutDirective,
@@ -115,7 +115,7 @@ export class OutgoingInvoiceEditComponent
     route: ActivatedRoute,
     private currency: CurrencyPipe,
     private location: Location,
-    private authService: AuthService,
+    private authService: AuthStateService,
     private snackBar: MatSnackBar,
     private file: FileService,
     @Inject(DEFAULT_CURRENCY_CODE) private readonly currencyCode: string,
@@ -168,7 +168,7 @@ export class OutgoingInvoiceEditComponent
       });
     }
     this.authService
-      .currentUserHasRight("outgoing_invoices:delete")
+      .currentUserHasScope(ScopeEnum.Office)
       .pipe(first())
       .subscribe((allowed) => {
         if (allowed) {

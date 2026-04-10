@@ -33,7 +33,6 @@ import { FilterableClickableListComponent } from "./components/filterable-clicka
 import { LoadingComponent } from "./components/loading/loading.component";
 import { MatCardModule } from "@angular/material/card";
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
-import { RightFilterPipe } from "./pipes/right";
 import { ConfirmDialogComponent } from "./components/confirm-dialog/confirm-dialog.component";
 import { MinuteHourComponent } from "./components/minute-hour/minute-hour.component";
 import { SplitTextNewlinePipe } from "./pipes/common";
@@ -87,7 +86,6 @@ import { FlexLayoutModule, FlexModule } from "ng-flex-layout";
         CalendarDayComponent,
         FilterableClickableListComponent,
         LoadingComponent,
-        RightFilterPipe,
         BoldSpanPipe,
         SplitTextNewlinePipe,
         ConfirmDialogComponent,
@@ -105,7 +103,6 @@ import { FlexLayoutModule, FlexModule } from "ng-flex-layout";
         SimpleCalendarComponent,
         FilterableClickableListComponent,
         LoadingComponent,
-        RightFilterPipe,
         BoldSpanPipe,
         SplitTextNewlinePipe,
         MinuteHourComponent,
