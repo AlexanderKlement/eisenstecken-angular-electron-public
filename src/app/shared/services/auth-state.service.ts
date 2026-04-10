@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Injector } from "@angular/core";
 import { Router } from "@angular/router";
 import { Observable, ReplaySubject } from "rxjs";
 import { first, map } from "rxjs/operators";
@@ -7,8 +7,8 @@ import {
   DefaultService,
   ScopeEnum,
   User,
-  Configuration
 } from "../../../api/openapi";
+import { TokenService } from "./token.service";
 
 @Injectable({
   providedIn: "root"
@@ -18,24 +18,24 @@ export class AuthStateService {
   private user?: ReplaySubject<User>;
 
   constructor(
+    private injector: Injector,
     private router: Router,
+    private tokenService: TokenService,
     private authService: AuthService,
     private defaultService: DefaultService,
-    private configuration: Configuration
   ) {}
 
+
   getToken(): string | null {
-    return localStorage.getItem(AuthStateService.accessTokenKey);
+    return this.tokenService.getToken();
   }
 
   setToken(token: string): void {
     localStorage.setItem(AuthStateService.accessTokenKey, token);
-    this.configuration.credentials.OAuth2PasswordBearer = token;
   }
 
   removeToken(): void {
     localStorage.removeItem(AuthStateService.accessTokenKey);
-    this.configuration.credentials.OAuth2PasswordBearer = null;
   }
 
   isLoggedIn(): boolean {

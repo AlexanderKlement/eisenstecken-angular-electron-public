@@ -145,12 +145,10 @@ bootstrapApplication(AppComponent, {
     }),
     {
       provide: Configuration,
-      useFactory: (authService: AuthStateService) => new Configuration({
-        accessToken: authService.getToken.bind(authService),
+      useFactory: () => new Configuration({
+        accessToken: () => localStorage.getItem("access_token") ?? "",
         basePath: LocalConfigRenderer.getInstance().getApi(),
       }),
-      deps: [AuthStateService],
-      multi: false,
     },
     AccessGuard,
     ChatService,

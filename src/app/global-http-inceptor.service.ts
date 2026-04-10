@@ -13,25 +13,28 @@ import { EMPTY, Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { AuthStateService } from "./shared/services/auth-state.service";
+import { TokenService } from "./shared/services/token.service";
 import { LocalConfigRenderer } from "./LocalConfigRenderer";
 
 @Injectable()
 export class GlobalHttpInterceptorService implements HttpInterceptor {
-
   private isLoggingOut = false;
   private isProbingMe = false;
-
   private rawHttp: HttpClient;
 
   constructor(
     public router: Router,
     private snackBar: MatSnackBar,
-    private authService: AuthStateService,
+    private tokenService: TokenService,
     httpBackend: HttpBackend,
   ) {
-    // Raw HttpClient: bypasses interceptors
     this.rawHttp = new HttpClient(httpBackend);
+  }
+
+  private doLogout(): void {
+    this.tokenService.removeToken();
+    this.isLoggingOut = true;
+    void this.router.navigateByUrl("login");
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -58,35 +61,30 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
         if (error.status === 401) {
           console.warn("Not authorized for " + url);
 
-          // 1) If /users/me itself is unauthorized -> logout + swallow
           if (isUsersMe) {
             if (!this.isLoggingOut) {
-              this.isLoggingOut = true;
-              this.authService.doLogout();
+              this.doLogout();
             }
             return EMPTY;
           }
 
-          // 2) For other 401s -> probe /users/me (once) to decide whether to logout
           if (!this.isProbingMe && !this.isLoggingOut) {
             this.isProbingMe = true;
 
             const base = LocalConfigRenderer.getInstance().getApi().replace(/\/+$/, "");
-            const token = this.authService.getToken();
+            const token = this.tokenService.getToken();
             const headers = token
               ? new HttpHeaders({ Authorization: `Bearer ${token}` })
               : new HttpHeaders();
 
             this.rawHttp.get(`${base}/users/me`, { headers }).subscribe({
               next: () => {
-                // Session is still valid; don't logout
                 this.isProbingMe = false;
               },
               error: (meErr: unknown) => {
                 this.isProbingMe = false;
                 if (meErr instanceof HttpErrorResponse && meErr.status === 401 && !this.isLoggingOut) {
-                  this.isLoggingOut = true;
-                  this.authService.doLogout();
+                  this.doLogout();
                 }
               },
             });
