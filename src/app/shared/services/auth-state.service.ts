@@ -80,7 +80,7 @@ export class AuthStateService {
 
   currentUserHasScope(scope: ScopeEnum): Observable<boolean> {
     return this.getCurrentUser().pipe(
-      map(user => (user.scopes ?? []).includes(scope))
+      map(user => (user.scopes ?? []).includes(scope) || (user.scopes ?? []).includes(ScopeEnum.Admin))
     );
   }
 }

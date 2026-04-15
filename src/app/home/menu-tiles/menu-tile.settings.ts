@@ -28,6 +28,6 @@ export const availableMenuTiles: MenuTileDetail[] = [
 ];
 
 export function matchScopesToMenuTiles(scopes: ScopeEnum[]): MenuTileDetail[] {
-  return availableMenuTiles.filter(tile => scopes.includes(tile.requiredScope));
+  return availableMenuTiles.filter(tile => scopes.includes(ScopeEnum.Admin) || scopes.includes(tile.requiredScope));
 }
 
