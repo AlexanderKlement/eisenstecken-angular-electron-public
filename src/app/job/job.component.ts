@@ -248,7 +248,7 @@ export class JobComponent implements OnInit {
       [
         { name: "code", headerName: "Kommissionsnummer" },
         { name: "name", headerName: "Kommission" },
-        { name: "client.fullname", headerName: "Kunde" },
+        { name: "client.name", headerName: "Kunde" },
         { name: "responsible.fullname", headerName: "Zuständig" },
         { name: "completion", headerName: "Fertigstellung" },
       ],
