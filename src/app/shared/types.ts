@@ -27,7 +27,7 @@ import {
   InfoPage,
   WoodList,
   TemplatePaint,
-  Journey, OrderSmall, ArticleSmall, OrderedArticleSmall, RecalculationSmall,
+  Journey, OrderSmall, ArticleSmall, OrderedArticleSmall, RecalculationSmall, TikTakEmployee
 } from "../../api/openapi";
 
 
@@ -61,6 +61,7 @@ export type DataSourceClass =
   | Maintenance
   | InfoPage
   | WoodList
+  | TikTakEmployee
   | TemplatePaint
   | OrderedArticleSmall
   | RecalculationSmall

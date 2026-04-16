@@ -1,9 +1,25 @@
 <mat-toolbar color="accent" class="toolbar">
-  <span class="title">{{title}}</span>
+  <span class="title">{{ title }}</span>
   <span class="toolbar-spacer"></span>
   <div class="buttons-container">
     @for (button of buttonList; track button) {
-      <a (click)="buttonClicked(button)" mat-button>{{button.name}}</a>
+      @if (button.dropdown) {
+        <button mat-button [matMenuTriggerFor]="menu">
+          {{ button.name }}
+          <mat-icon iconPositionEnd>arrow_drop_down</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          @for (item of button.dropdown; track item) {
+            @if (item.error) {
+              <button mat-menu-item class="danger-button" (click)="buttonClicked(item)">{{ item.name }}</button>
+            } @else {
+              <button mat-menu-item (click)="buttonClicked(item)">{{ item.name }}</button>
+            }
+          }
+        </mat-menu>
+      } @else {
+        <button (click)="buttonClicked(button)" mat-button>{{ button.name }}</button>
+      }
     }
     @if (showBackButton) {
       <app-circle-icon-button (click)="backButtonClicked()" icon="arrow_back" backgroundColor="transparent" />
