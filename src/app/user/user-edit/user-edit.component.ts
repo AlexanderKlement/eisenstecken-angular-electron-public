@@ -2,18 +2,18 @@ import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
-import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { Observable } from "rxjs";
 import { first, tap } from "rxjs/operators";
-import { MatSelectionList, MatListOption } from "@angular/material/list";
+import { MatListOption, MatSelectionList } from "@angular/material/list";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { AuthStateService } from "../../shared/services/auth-state.service";
-import { UserPassword, UserUpdate, UserCreate, User, DefaultService, Lock, ScopeEnum } from "../../../api/openapi";
-import { MatTabGroup, MatTab } from "@angular/material/tabs";
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
-import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { DefaultService, Lock, ScopeEnum, User, UserCreate, UserPassword, UserUpdate } from "../../../api/openapi";
+import { MatTab, MatTabGroup } from "@angular/material/tabs";
+import { DefaultLayoutAlignDirective, DefaultLayoutDirective, DefaultLayoutGapDirective } from "ng-flex-layout";
+import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { MatButton } from "@angular/material/button";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
@@ -46,13 +46,13 @@ const titles = {
   delivery_notes: "Lieferscheine",
   prices: "Preise",
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  work_hours: "Arbeitsstunden",
+  work_hours: "Arbeitsstunden"
 };
 
 @Component({
-    selector: 'app-user-edit',
-    templateUrl: './user-edit.component.html',
-    styleUrls: ['./user-edit.component.scss'],
+  selector: "app-user-edit",
+  templateUrl: "./user-edit.component.html",
+  styleUrls: ["./user-edit.component.scss"],
   imports: [
     ToolbarComponent,
     MatTabGroup,
@@ -68,12 +68,13 @@ const titles = {
     MatButton,
     MatProgressSpinner,
     MatSelectionList,
-    MatListOption
-  ],
+    MatListOption,
+    DefaultLayoutGapDirective
+  ]
 })
 export class UserEditComponent extends BaseEditComponent<User> implements OnInit, OnDestroy {
 
-  @ViewChild('rights') rightsSelected: MatSelectionList;
+  @ViewChild("rights") rightsSelected: MatSelectionList;
 
   userGroup: UntypedFormGroup;
   passwordGroup: UntypedFormGroup;
@@ -81,6 +82,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
   availableRightCats: { key: string; open: boolean; title: string }[];
   userRights: Right[];
   rightsLoaded = false;
+  firstTabLabel = "Stammdaten";
 
 
   navigationTarget = "user";
@@ -137,6 +139,9 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
   ngOnInit(): void {
     this.availableRightCats = [];
     super.ngOnInit();
+    if (this.createMode) {
+      this.firstTabLabel = "Erstellen";
+    }
     this.userGroup = new UntypedFormGroup({
       firstname: new UntypedFormControl(""),
       secondname: new UntypedFormControl(""),
@@ -155,10 +160,10 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
       innovaphone_user: new UntypedFormControl(""),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       innovaphone_pass: new UntypedFormControl(""),
-      notifications: new UntypedFormControl(true),
+      notifications: new UntypedFormControl(true)
     });
     this.passwordGroup = new UntypedFormGroup({
-      password: new UntypedFormControl(""),
+      password: new UntypedFormControl("")
     });
     if (!this.createMode) {
       /* THIS WILL BE REMOVED
@@ -187,7 +192,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
           name: "Benutzer löschen",
           navigate: (): void => {
             this.userDeleteClicked();
-          },
+          }
         });
       }
     });
@@ -204,7 +209,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
       if (user.id === this.id) {
         this.snackBar.open("Der derzeit angemeldete Benutzer kann nicht gelöscht werden!"
           , "Ok", {
-            duration: 10000,
+            duration: 10000
           });
         return;
       }
@@ -212,8 +217,8 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
         width: "400px",
         data: {
           title: "Benutzer löschen?",
-          text: "Hinweis: Dieser Schritt KANN rückgängig gemacht werden.",
-        },
+          text: "Hinweis: Dieser Schritt KANN rückgängig gemacht werden."
+        }
       });
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
@@ -268,7 +273,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
     this.navigationTarget = "user/edit/" + user.id.toString();
     this.router.navigateByUrl(this.navigationTarget, { replaceUrl: true });
     this.snackBar.open("Speichern erfolgreich!", "Ok", {
-      duration: 3000,
+      duration: 3000
     });
   }
 
@@ -292,7 +297,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
         innovaphone_user: this.userGroup.get("innovaphone_user").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         innovaphone_pass: this.userGroup.get("innovaphone_pass").value,
-        notifications: this.userGroup.get("notifications").value,
+        notifications: this.userGroup.get("notifications").value
       };
       this.api.createUserUsersPost(userCreate).pipe(first()).subscribe((user) => {
         this.createUpdateSuccess(user);
@@ -314,7 +319,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
         innovaphone_user: this.userGroup.get("innovaphone_user").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         innovaphone_pass: this.userGroup.get("innovaphone_pass").value,
-        notifications: this.userGroup.get("notifications").value,
+        notifications: this.userGroup.get("notifications").value
       };
       this.api.updateUserUsersUserIdPut(this.id, userUpdate).pipe(first()).subscribe((user) => {
         this.createUpdateSuccess(user);
@@ -332,7 +337,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
 
   onSubmitPassword(): void {
     const userPassword: UserPassword = {
-      password: this.passwordGroup.get("password").value,
+      password: this.passwordGroup.get("password").value
     };
     this.api.updateUserPasswordUsersPasswordUserIdPut(this.id, userPassword).pipe(first()).subscribe((user) => {
       this.createUpdateSuccess(user);

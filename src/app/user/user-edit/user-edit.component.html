@@ -1,17 +1,34 @@
 <app-toolbar [title]="title" [buttonList]="buttons"></app-toolbar>
 <div class="window-container">
   <mat-tab-group>
-    <mat-tab label="Allgemein">
+    <mat-tab label="{{ firstTabLabel }}">
       <form (ngSubmit)="onSubmitGeneral()" [formGroup]="userGroup">
-        <div fxLayout="column" fxLayoutAlign="space-around center">
-          <mat-form-field appearance="fill">
-            <mat-label>Vorname</mat-label>
-            <input class="form-control" formControlName="firstname" matInput>
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Nachname</mat-label>
-            <input class="form-control" formControlName="secondname" matInput>
-          </mat-form-field>
+        <div fxLayout="column" fxLayoutAlign="space-around stretch">
+          <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="center">
+            <mat-form-field appearance="fill">
+              <mat-label>Vorname</mat-label>
+              <input class="form-control" formControlName="firstname" matInput>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Nachname</mat-label>
+              <input class="form-control" formControlName="secondname" matInput>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="center">
+            <mat-form-field appearance="fill">
+              <mat-label>Geschlecht</mat-label>
+              <select class="form-control" formControlName="gender">
+                <option value="male" selected>Männlich</option>
+                <option value="female">Weiblich</option>
+              </select>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Geburtsdatum</mat-label>
+              <input class="form-control" formControlName="birthdate" matInput>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="center">
+          </div>
           <mat-form-field appearance="fill">
             <mat-label>Mail</mat-label>
             <input class="form-control" formControlName="email" matInput>
@@ -51,7 +68,7 @@
       </form>
     </mat-tab>
     @if (!createMode && grantRightsAvailable) {
-      <mat-tab label="Rechte">
+      <mat-tab label="Arbeisverhältnis">
         <div fxLayout="column" fxLayoutAlign="space-around center">
           @if (!rightsLoaded) {
             <div>
@@ -91,8 +108,21 @@
       </mat-tab>
     }
     @if (!createMode) {
-      <mat-tab label="Password">
+      <mat-tab label="Zugänge und Rechte">
         <form (ngSubmit)="onSubmitPassword()" [formGroup]="passwordGroup">
+          <div fxLayout="column" fxLayoutAlign="space-around center">
+            <mat-form-field appearance="fill">
+              <mat-label>Neues Password</mat-label>
+              <input class="form-control" formControlName="password" matInput>
+            </mat-form-field>
+            <button [disabled]="submitted" mat-raised-button type="submit" class="save-btn">Speichern</button>
+          </div>
+        </form>
+      </mat-tab>
+    }
+    @if (!createMode) {
+      <mat-tab label="Arbeitsbekleidung">
+        <form (ngSubmit)="onSubmitDress()" [formGroup]="passwordGroup">
           <div fxLayout="column" fxLayoutAlign="space-around center">
             <mat-form-field appearance="fill">
               <mat-label>Neues Password</mat-label>

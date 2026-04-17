@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Observable, ReplaySubject, Subscription } from "rxjs";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { first } from "rxjs/operators";
-import { DefaultService, User, Lock } from "../../../../api/openapi";
+import { DefaultService, Lock, User } from "../../../../api/openapi";
 import { AbstractControl } from "@angular/forms";
 import { ReusableRoute } from "../../reusable-route";
 import { DirtyAware } from "../../guards/dirty-form.guard";
@@ -10,9 +10,9 @@ import { MatDialog } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 
 @Component({
-    selector: 'app-base-edit',
-    template: ``,
-    styleUrls: ['./base-edit.component.scss'],
+  selector: "app-base-edit",
+  template: ``,
+  styleUrls: ["./base-edit.component.scss"]
 })
 export class BaseEditComponent<T> implements OnInit, OnDestroy, ReusableRoute, DirtyAware {
 
@@ -130,7 +130,8 @@ export class BaseEditComponent<T> implements OnInit, OnDestroy, ReusableRoute, D
     // We don’t need to flip any flags here—CanDeactivate will just call isDirty()
     // But we subscribe so derived classes can optionally hook side-effects later if desired.
     for (const ctrl of this.controlsBeforeBack) {
-      this.controlsSub.add(ctrl.valueChanges.subscribe(() => { /* no-op */ }));
+      this.controlsSub.add(ctrl.valueChanges.subscribe(() => { /* no-op */
+      }));
     }
   }
 
