@@ -1,10 +1,11 @@
 <app-toolbar [title]="title" [buttonList]="buttons"></app-toolbar>
 <div class="window-container">
-  <mat-tab-group>
+  <mat-tab-group dynamicHeight>
     <mat-tab label="{{ firstTabLabel }}">
       <form (ngSubmit)="onSubmitGeneral()" [formGroup]="userGroup">
-        <div fxLayout="column" fxLayoutAlign="space-around stretch">
-          <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="center">
+        <div fxLayout="column" fxLayoutAlign="stretch" class="padding-top">
+          <h3>Persönliche Daten</h3>
+          <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
             <mat-form-field appearance="fill">
               <mat-label>Vorname</mat-label>
               <input class="form-control" formControlName="firstname" matInput>
@@ -14,121 +15,294 @@
               <input class="form-control" formControlName="secondname" matInput>
             </mat-form-field>
           </div>
-          <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="center">
+          <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
             <mat-form-field appearance="fill">
               <mat-label>Geschlecht</mat-label>
-              <select class="form-control" formControlName="gender">
-                <option value="male" selected>Männlich</option>
-                <option value="female">Weiblich</option>
-              </select>
+              <mat-select class="form-control">
+                <mat-option value="male">Männlich</mat-option>
+                <mat-option value="female">Weiblich</mat-option>
+              </mat-select>
             </mat-form-field>
             <mat-form-field appearance="fill">
               <mat-label>Geburtsdatum</mat-label>
-              <input class="form-control" formControlName="birthdate" matInput>
+              <input class="form-control" matInput>
             </mat-form-field>
           </div>
-          <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="center">
+          <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+
+            <mat-form-field appearance="fill">
+              <mat-label>Geburtsort</mat-label>
+              <input class="form-control" matInput>
+            </mat-form-field>
+            <div class="spacer"></div>
           </div>
-          <mat-form-field appearance="fill">
-            <mat-label>Mail</mat-label>
-            <input class="form-control" formControlName="email" matInput>
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Telefon</mat-label>
-            <input class="form-control" formControlName="tel" matInput>
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Handy</mat-label>
-            <input class="form-control" formControlName="handy" matInput>
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Kurzwahl</mat-label>
-            <input class="form-control" formControlName="dial" matInput>
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Position</mat-label>
-            <input class="form-control" formControlName="position" matInput>
-          </mat-form-field>
+          <h3>Kontakt</h3>
+          <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+            <mat-form-field appearance="fill">
+              <mat-label>Mail (geschäftlich)</mat-label>
+              <input class="form-control" formControlName="email" matInput>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>E-Mail (privat)</mat-label>
+              <input class="form-control" matInput>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+            <mat-form-field appearance="fill">
+              <mat-label>Telefon</mat-label>
+              <input class="form-control" formControlName="tel" matInput>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Handy</mat-label>
+              <input class="form-control" formControlName="handy" matInput>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+            <mat-form-field appearance="fill">
+              <mat-label>Kurzwahl</mat-label>
+              <input class="form-control" formControlName="dial" matInput>
+            </mat-form-field>
+            <div class="spacer"></div>
+          </div>
+          <h3>Administrative Daten</h3>
+          <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+
+            <mat-form-field appearance="fill">
+              <mat-label>Position</mat-label>
+              <input class="form-control" formControlName="position" matInput>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Steuernummer</mat-label>
+              <input class="form-control" formControlName="position" matInput>
+            </mat-form-field>
+          </div>
           @if (createMode) {
-            <mat-form-field>
-              <mat-label>Password</mat-label>
-              <input class="form-control" formControlName="password" matInput>
-            </mat-form-field>
+            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+              <mat-form-field appearance="fill">
+                <mat-label>Innovaphone Benutzer</mat-label>
+                <input class="form-control" formControlName="innovaphone_user" matInput>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Innovaphone Password</mat-label>
+                <input class="form-control" formControlName="innovaphone_pass" matInput>
+              </mat-form-field>
+            </div>
+            <h3>Password</h3>
+            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+              <mat-form-field>
+                <mat-label>Password</mat-label>
+                <input class="form-control" formControlName="password" matInput>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Password Wiederholen</mat-label>
+                <input class="form-control" matInput>
+              </mat-form-field>
+            </div>
           }
-          <mat-form-field appearance="fill">
-            <mat-label>Innovaphone Benutzer</mat-label>
-            <input class="form-control" formControlName="innovaphone_user" matInput>
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Innovaphone Password</mat-label>
-            <input class="form-control" formControlName="innovaphone_pass" matInput>
-          </mat-form-field>
-          <button [disabled]="submitted" mat-raised-button type="submit" class="save-btn">Speichern</button>
+          <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="center">
+            <button [disabled]="submitted" mat-raised-button type="submit" class="save-btn">Speichern</button>
+          </div>
         </div>
       </form>
     </mat-tab>
-    @if (!createMode && grantRightsAvailable) {
+    @if (!createMode) {
       <mat-tab label="Arbeisverhältnis">
-        <div fxLayout="column" fxLayoutAlign="space-around center">
-          @if (!rightsLoaded) {
-            <div>
-              <mat-spinner></mat-spinner>
+        <form (ngSubmit)="onSubmitWorkThings()" [formGroup]="workThingsGroup">
+          <div fxLayout="column" fxLayoutAlign="stretch" class="padding-top">
+            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+              <mat-form-field>
+                <mat-label>Interne Kosten</mat-label>
+                <input class="form-control" formControlName="cost" matInput>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Arbeitsmodell (M-D-M-D-F-S)</mat-label>
+                <input class="form-control" formControlName="workmodel" matInput>
+              </mat-form-field>
             </div>
-          }
-          @if (rightsLoaded) {
-            <mat-selection-list #rights class="right-selection">
-              @for (cat of availableRightCats; track cat) {
-                <div class="category {{cat.open ? 'open' : ''}}">
-                  <div class="category-option">
-                    <div class="clickable" (click)="onCategoryClick(cat.key)"></div>
-                    <mat-checkbox
-                      class="category-checkbox"
-                      [checked]="userHasRightCategory(cat.key) === 'checked'"
-                      [indeterminate]="userHasRightCategory(cat.key) === 'indeterminate'"
-                      (change)="onCategoryCheck(cat.key, userHasRightCategory(cat.key))">
-                    </mat-checkbox>
-                    <div class="category-title">{{ cat.title }}</div>
-                  </div>
-                  @for (right of availableRights | RightFilter: cat.key; track right) {
-                    <mat-list-option
-                      [selected]="userHasRight(right.key)"
-                      value="{{right.key}}" (click)="onRightCheck(right)">
-                      {{ right.key }} : {{ right.description }}
-                    </mat-list-option>
-                  }
-                </div>
-              }
-            </mat-selection-list>
-          }
-          <button [disabled]="submitted" mat-raised-button type="button" (click)="onSubmitRights()"
-                  class="save-btn">
-            Speichern
-          </button>
-        </div>
+            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+              <mat-form-field>
+                <mat-label>Tag UID</mat-label>
+                <input class="form-control" formControlName="taguid" matInput>
+              </mat-form-field>
+              <div class="spacer"></div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+              <mat-checkbox formControlName="export" class="form-control">Mitarbeiter nach TikTak exportieren
+              </mat-checkbox>
+            </div>
+            <div class="v-line"></div>
+            <h3>Stundensätze</h3>
+            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+              <mat-form-field>
+                <mat-label>Stundensatz</mat-label>
+                <input class="form-control" matInput>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Startdatum</mat-label>
+                <input class="form-control" matInput>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Enddatum</mat-label>
+                <input class="form-control" matInput>
+              </mat-form-field>
+              <app-circle-icon-button class="del-button" icon="delete" (click)="onSubmitWorkThings()" />
+            </div>
+            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="center" class="padding-top">
+              <button [disabled]="submitted" mat-raised-button type="button" (click)="onSubmitWorkThings()"
+                      class="save-btn">
+                Speichern
+              </button>
+              <button [disabled]="submitted" mat-raised-button type="button" (click)="onSubmitWorkThings()"
+                      class="save-btn">
+                Neuer Stundensatz
+              </button>
+            </div>
+            <div class="v-line"></div>
+            <h3>Arbeitsverhältnis</h3>
+            <span>Gesamte Arbeitszeit bisher: {{ sumYears }} Jahre</span>
+            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+              <mat-form-field>
+                <mat-label>Start Arbeitsverhältnis</mat-label>
+                <input class="form-control" matInput>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Ende Arbeitsverhältnis</mat-label>
+                <input class="form-control" matInput>
+              </mat-form-field>
+              <app-circle-icon-button class="del-button" icon="delete" (click)="onSubmitWorkThings()" />
+
+            </div>
+            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="center" class="padding-top">
+              <button [disabled]="submitted" mat-raised-button type="button" (click)="onSubmitWorkThings()"
+                      class="save-btn">
+                Speichern
+              </button>
+              <button [disabled]="submitted" mat-raised-button type="button" (click)="onSubmitWorkThings()"
+                      class="save-btn">
+                Neuer Stundensatz
+              </button>
+            </div>
+          </div>
+        </form>
       </mat-tab>
     }
-    @if (!createMode) {
+    @if (!createMode && grantRightsAvailable) {
       <mat-tab label="Zugänge und Rechte">
+        <form (ngSubmit)="onSubmitRights()" [formGroup]="rightsGroup">
+          <div fxLayout="column" fxLayoutAlign="stretch" class="padding-top">
+            <h3>Systemzugänge</h3>
+            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+
+              <mat-form-field appearance="fill">
+                <mat-label>Rechte</mat-label>
+                <mat-select class="form-control" formControlName="right">
+                  <mat-option value="admin">Admin</mat-option>
+                  <mat-option value="office">Büro</mat-option>
+                  <mat-option value="workshop">Werkstatt</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+              <mat-form-field appearance="fill">
+                <mat-label>Innovaphone Benutzer</mat-label>
+                <input class="form-control" matInput formControlName="innovaphone_user">
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Innovaphone Password</mat-label>
+                <input class="form-control" matInput formControlName="innovaphone_pass">
+              </mat-form-field>
+            </div>
+            <h2>Schlüssel</h2>
+            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+              <mat-form-field appearance="fill">
+                <mat-label>Firmenschlüssel Nummer</mat-label>
+                <input class="form-control" matInput formControlName="keynumber">
+              </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+              <mat-form-field appearance="fill">
+                <mat-label>Kaffeeschlüssel</mat-label>
+                <mat-select class="form-control" formControlName="coffee">
+                  <mat-option value="true">Ja</mat-option>
+                  <mat-option value="false">Nein</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+              <mat-form-field appearance="fill">
+                <mat-label>Alarmschlüssel</mat-label>
+                <input class="form-control" matInput formControlName="alarm">
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
         <form (ngSubmit)="onSubmitPassword()" [formGroup]="passwordGroup">
-          <div fxLayout="column" fxLayoutAlign="space-around center">
-            <mat-form-field appearance="fill">
-              <mat-label>Neues Password</mat-label>
-              <input class="form-control" formControlName="password" matInput>
-            </mat-form-field>
-            <button [disabled]="submitted" mat-raised-button type="submit" class="save-btn">Speichern</button>
+
+          <div fxLayout="column" fxLayoutAlign="stretch" class="padding-top">
+            <h3>Neues Passwort festlegen</h3>
+
+            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+              <mat-form-field appearance="fill">
+                <mat-label>Password</mat-label>
+                <input class="form-control" formControlName="password" matInput>
+              </mat-form-field>
+            </div>
           </div>
         </form>
       </mat-tab>
     }
     @if (!createMode) {
       <mat-tab label="Arbeitsbekleidung">
-        <form (ngSubmit)="onSubmitDress()" [formGroup]="passwordGroup">
-          <div fxLayout="column" fxLayoutAlign="space-around center">
-            <mat-form-field appearance="fill">
-              <mat-label>Neues Password</mat-label>
-              <input class="form-control" formControlName="password" matInput>
-            </mat-form-field>
-            <button [disabled]="submitted" mat-raised-button type="submit" class="save-btn">Speichern</button>
+        <form (ngSubmit)="onSubmitDress()" [formGroup]="dressGroup">
+          <div fxLayout="column" fxLayoutAlign="stretch" class="padding-top">
+            <h3>Arbeitsbekleidung</h3>
+            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+              <mat-form-field appearance="fill">
+                <mat-label>Größe Pullower</mat-label>
+                <input class="form-control" formControlName="chestplate" matInput>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Größe T-Shirt</mat-label>
+                <input class="form-control" formControlName="tshirt" matInput>
+              </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+              <mat-form-field appearance="fill">
+                <mat-label>Größe Hose</mat-label>
+                <input class="form-control" formControlName="leggins" matInput>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Größe Schuhe</mat-label>
+                <input class="form-control" formControlName="shoes" matInput>
+              </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+              <mat-form-field appearance="fill">
+                <mat-label>Modell Schuhe</mat-label>
+                <input class="form-control" formControlName="shoesmodel" matInput>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Sohle</mat-label>
+                <input class="form-control" formControlName="sohle" matInput>
+              </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+              <mat-form-field appearance="fill">
+                <mat-label>Werkzeuggurt</mat-label>
+                <mat-select class="form-control" formControlName="shield">
+                  <mat-option value="true">Ja</mat-option>
+                  <mat-option value="false">Nein</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Gehörschutz</mat-label>
+                <input class="form-control" formControlName="helmet" matInput>
+              </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+              <mat-checkbox formControlName="export" class="form-control">Nutzer beim Bekleidungsexport berücksichtigen
+              </mat-checkbox>
+            </div>
           </div>
         </form>
       </mat-tab>

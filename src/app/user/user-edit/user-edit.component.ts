@@ -5,7 +5,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { Observable } from "rxjs";
 import { first, tap } from "rxjs/operators";
-import { MatListOption, MatSelectionList } from "@angular/material/list";
+import { MatSelectionList } from "@angular/material/list";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
@@ -14,10 +14,11 @@ import { DefaultService, Lock, ScopeEnum, User, UserCreate, UserPassword, UserUp
 import { MatTab, MatTabGroup } from "@angular/material/tabs";
 import { DefaultLayoutAlignDirective, DefaultLayoutDirective, DefaultLayoutGapDirective } from "ng-flex-layout";
 import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
-import { MatCheckbox } from "@angular/material/checkbox";
 import { MatButton } from "@angular/material/button";
-import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { Right } from "../../model/right";
+import { MatOption, MatSelect } from "@angular/material/select";
+import { MatCheckbox } from "@angular/material/checkbox";
+import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
 
 const titles = {
   users: "Benutzer",
@@ -64,12 +65,12 @@ const titles = {
     MatFormField,
     MatLabel,
     MatInput,
-    MatCheckbox,
     MatButton,
-    MatProgressSpinner,
-    MatSelectionList,
-    MatListOption,
-    DefaultLayoutGapDirective
+    DefaultLayoutGapDirective,
+    MatSelect,
+    MatOption,
+    MatCheckbox,
+    CircleIconButtonComponent
   ]
 })
 export class UserEditComponent extends BaseEditComponent<User> implements OnInit, OnDestroy {
@@ -77,13 +78,16 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
   @ViewChild("rights") rightsSelected: MatSelectionList;
 
   userGroup: UntypedFormGroup;
+  workThingsGroup: UntypedFormGroup;
   passwordGroup: UntypedFormGroup;
+  rightsGroup: UntypedFormGroup;
+  dressGroup: UntypedFormGroup;
   availableRights: Right[];
   availableRightCats: { key: string; open: boolean; title: string }[];
   userRights: Right[];
   rightsLoaded = false;
   firstTabLabel = "Stammdaten";
-
+  sumYears = 0;
 
   navigationTarget = "user";
   buttons: CustomButton[] = [];
@@ -145,6 +149,9 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
     this.userGroup = new UntypedFormGroup({
       firstname: new UntypedFormControl(""),
       secondname: new UntypedFormControl(""),
+      gender: new UntypedFormControl(""),
+      birthdate: new UntypedFormControl(""),
+      city: new UntypedFormControl(""),
       email: new UntypedFormControl(""),
       tel: new UntypedFormControl(""),
       password: new UntypedFormControl(""),
@@ -162,8 +169,35 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
       innovaphone_pass: new UntypedFormControl(""),
       notifications: new UntypedFormControl(true)
     });
+    this.workThingsGroup = new UntypedFormGroup({
+      cost: new UntypedFormControl(""),
+      workmodel: new UntypedFormControl(""),
+      taguid: new UntypedFormControl(""),
+      export: new UntypedFormControl(true)
+    });
     this.passwordGroup = new UntypedFormGroup({
       password: new UntypedFormControl("")
+    });
+    this.rightsGroup = new UntypedFormGroup({
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      innovaphone_user: new UntypedFormControl(""),
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      innovaphone_pass: new UntypedFormControl(""),
+      right: new UntypedFormControl(""),
+      keynumber: new UntypedFormControl(""),
+      coffee: new UntypedFormControl(true),
+      alarm: new UntypedFormControl("")
+    });
+    this.dressGroup = new UntypedFormGroup({
+      tshirt: new UntypedFormControl(""),
+      chestplate: new UntypedFormControl(""),
+      leggins: new UntypedFormControl(""),
+      shoes: new UntypedFormControl(""),
+      shoesmodel: new UntypedFormControl(""),
+      shield: new UntypedFormControl(""),
+      helmet: new UntypedFormControl(""),
+      sohle: new UntypedFormControl(""),
+      export: new UntypedFormControl(true)
     });
     if (!this.createMode) {
       /* THIS WILL BE REMOVED
@@ -187,6 +221,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
        */
     }
     this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
+      this.grantRightsAvailable = allowed;
       if (allowed) {
         this.buttons.push({
           name: "Benutzer löschen",
@@ -194,10 +229,18 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
             this.userDeleteClicked();
           }
         });
+        this.rightsGroup.patchValue({ right: ScopeEnum.Office });
       }
     });
-    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
-      this.grantRightsAvailable = allowed;
+    this.authService.currentUserHasScope(ScopeEnum.Workshop).pipe(first()).subscribe(allowed => {
+      if (allowed) {
+        this.rightsGroup.patchValue({ right: ScopeEnum.Workshop });
+      }
+    });
+    this.authService.currentUserHasScope(ScopeEnum.Admin).pipe(first()).subscribe(allowed => {
+      if (allowed) {
+        this.rightsGroup.patchValue({ right: ScopeEnum.Admin });
+      }
     });
     if (this.createMode) {
       this.title = "Benutzer: Erstellen";
@@ -264,7 +307,13 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
   observableReady(): void {
     super.observableReady();
     if (!this.createMode) {
-      this.data$.pipe(tap(user => this.userGroup.patchValue(user)), first()).subscribe();
+      this.data$.pipe(tap(user => {
+        this.userGroup.patchValue(user);
+        this.rightsGroup.patchValue({
+          innovaphone_user: user.innovaphone_user,
+          innovaphone_pass: user.innovaphone_pass
+        });
+      }), first()).subscribe();
     }
   }
 
@@ -329,6 +378,14 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
         this.createUpdateComplete();
       });
     }
+  }
+
+  onSubmitDress(): void {
+    // TODO
+  }
+
+  onSubmitWorkThings(): void {
+    // TODO
   }
 
   onSubmitRights(): void {
