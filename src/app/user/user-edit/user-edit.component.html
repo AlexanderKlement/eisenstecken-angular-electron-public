@@ -18,21 +18,24 @@
           <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
             <mat-form-field appearance="fill">
               <mat-label>Geschlecht</mat-label>
-              <mat-select class="form-control">
+              <mat-select class="form-control" formControlName="gender">
                 <mat-option value="male">Männlich</mat-option>
                 <mat-option value="female">Weiblich</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field appearance="fill">
               <mat-label>Geburtsdatum</mat-label>
-              <input class="form-control" matInput>
+              <input class="form-control" matInput formControlName="birthdate"
+                     [matDatepicker]="birthdate_picker">
+              <mat-datepicker-toggle matSuffix [for]="birthdate_picker"></mat-datepicker-toggle>
+              <mat-datepicker #birthdate_picker></mat-datepicker>
             </mat-form-field>
           </div>
           <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
 
             <mat-form-field appearance="fill">
               <mat-label>Geburtsort</mat-label>
-              <input class="form-control" matInput>
+              <input class="form-control" matInput formControlName="birth_city">
             </mat-form-field>
             <div class="spacer"></div>
           </div>
@@ -44,7 +47,7 @@
             </mat-form-field>
             <mat-form-field appearance="fill">
               <mat-label>E-Mail (privat)</mat-label>
-              <input class="form-control" matInput>
+              <input class="form-control" matInput formControlName="email2">
             </mat-form-field>
           </div>
           <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
@@ -66,14 +69,33 @@
           </div>
           <h3>Administrative Daten</h3>
           <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
-
             <mat-form-field appearance="fill">
               <mat-label>Position</mat-label>
               <input class="form-control" formControlName="position" matInput>
             </mat-form-field>
             <mat-form-field appearance="fill">
               <mat-label>Steuernummer</mat-label>
-              <input class="form-control" formControlName="position" matInput>
+              <input class="form-control" formControlName="vat_number" matInput>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+            <mat-form-field appearance="fill">
+              <mat-label>Adresse</mat-label>
+              <input class="form-control" formControlName="address" matInput>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Gemeinde</mat-label>
+              <input class="form-control" formControlName="city" matInput>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+            <mat-form-field appearance="fill">
+              <mat-label>PLZ</mat-label>
+              <input class="form-control" formControlName="plz" matInput>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Land</mat-label>
+              <input class="form-control" formControlName="country" matInput>
             </mat-form-field>
           </div>
           @if (createMode) {
@@ -107,8 +129,8 @@
     </mat-tab>
     @if (!createMode) {
       <mat-tab label="Arbeisverhältnis">
-        <form (ngSubmit)="onSubmitWorkThings()" [formGroup]="workThingsGroup">
-          <div fxLayout="column" fxLayoutAlign="stretch" class="padding-top">
+        <div fxLayout="column" fxLayoutAlign="stretch" class="padding-top">
+          <form (ngSubmit)="onSubmitEmployment()" [formGroup]="employmentGroup">
             <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
               <mat-form-field>
                 <mat-label>Interne Kosten</mat-label>
@@ -132,27 +154,35 @@
             </div>
             <div class="v-line"></div>
             <h3>Stundensätze</h3>
-            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
-              <mat-form-field>
-                <mat-label>Stundensatz</mat-label>
-                <input class="form-control" matInput>
-              </mat-form-field>
-              <mat-form-field>
-                <mat-label>Startdatum</mat-label>
-                <input class="form-control" matInput>
-              </mat-form-field>
-              <mat-form-field>
-                <mat-label>Enddatum</mat-label>
-                <input class="form-control" matInput>
-              </mat-form-field>
-              <app-circle-icon-button class="del-button" icon="delete" (click)="onSubmitWorkThings()" />
-            </div>
+            <ng-container formArrayName="employmentCosts">
+              @for (control of employmentGroup.controls.employmentCosts.controls; track control.controls.id; let idx = $index) {
+                <ng-container [formGroupName]="idx">
+                  <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+                    <mat-form-field>
+                      <mat-label>Stundensatz</mat-label>
+                      <input class="form-control" matInput formControlName="cost">
+                    </mat-form-field>
+                    <mat-form-field>
+                      <mat-label>Startdatum</mat-label>
+                      <input class="form-control" matInput formControlName="start_date"
+                             [matDatepicker]="start_date_picker">
+                      <mat-datepicker-toggle matSuffix [for]="start_date_picker"></mat-datepicker-toggle>
+                      <mat-datepicker #start_date_picker></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <mat-label>Enddatum</mat-label>
+                      <input class="form-control" matInput formControlName="end_date"
+                             [matDatepicker]="end_date_picker">
+                      <mat-datepicker-toggle matSuffix [for]="end_date_picker"></mat-datepicker-toggle>
+                      <mat-datepicker #end_date_picker></mat-datepicker>
+                    </mat-form-field>
+                    <app-circle-icon-button class="del-button" icon="delete" (click)="onRemoveEmploymentCost(idx)" />
+                  </div>
+                </ng-container>
+              }
+            </ng-container>
             <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="center" class="padding-top">
-              <button [disabled]="submitted" mat-raised-button type="button" (click)="onSubmitWorkThings()"
-                      class="save-btn">
-                Speichern
-              </button>
-              <button [disabled]="submitted" mat-raised-button type="button" (click)="onSubmitWorkThings()"
+              <button [disabled]="submitted" mat-raised-button type="button" (click)="onAddEmploymentCost()"
                       class="save-btn">
                 Neuer Stundensatz
               </button>
@@ -160,30 +190,44 @@
             <div class="v-line"></div>
             <h3>Arbeitsverhältnis</h3>
             <span>Gesamte Arbeitszeit bisher: {{ sumYears }} Jahre</span>
-            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
-              <mat-form-field>
-                <mat-label>Start Arbeitsverhältnis</mat-label>
-                <input class="form-control" matInput>
-              </mat-form-field>
-              <mat-form-field>
-                <mat-label>Ende Arbeitsverhältnis</mat-label>
-                <input class="form-control" matInput>
-              </mat-form-field>
-              <app-circle-icon-button class="del-button" icon="delete" (click)="onSubmitWorkThings()" />
-
-            </div>
+            <ng-container formArrayName="employmentRelationships">
+              @for (control of employmentGroup.controls.employmentRelationships.controls; track control.controls.id; let index = $index) {
+                <ng-container [formGroupName]="index">
+                  <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
+                    <mat-form-field>
+                      <mat-label>Start Arbeitsverhältnis</mat-label>
+                      <input class="form-control" matInput formControlName="start_date"
+                             [matDatepicker]="start_date_picker">
+                      <mat-datepicker-toggle matSuffix [for]="start_date_picker"></mat-datepicker-toggle>
+                      <mat-datepicker #start_date_picker></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <mat-label>Ende Arbeitsverhältnis</mat-label>
+                      <input class="form-control" matInput formControlName="end_date"
+                             [matDatepicker]="end_date_picker">
+                      <mat-datepicker-toggle matSuffix [for]="end_date_picker"></mat-datepicker-toggle>
+                      <mat-datepicker #end_date_picker></mat-datepicker>
+                    </mat-form-field>
+                    <app-circle-icon-button class="del-button" icon="delete" (click)="onRemoveRelationship(index)" />
+                  </div>
+                </ng-container>
+              }
+            </ng-container>
             <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="center" class="padding-top">
-              <button [disabled]="submitted" mat-raised-button type="button" (click)="onSubmitWorkThings()"
+              <button [disabled]="submitted" mat-raised-button type="button" (click)="onAddRelationship()"
+                      class="save-btn">
+                Neues Arbeitsverhältnis
+              </button>
+            </div>
+            <div class="v-line"></div>
+            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="center" class="padding-top">
+              <button [disabled]="submitted" mat-raised-button type="button" (click)="onSubmitEmployment()"
                       class="save-btn">
                 Speichern
               </button>
-              <button [disabled]="submitted" mat-raised-button type="button" (click)="onSubmitWorkThings()"
-                      class="save-btn">
-                Neuer Stundensatz
-              </button>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </mat-tab>
     }
     @if (!createMode && grantRightsAvailable) {
@@ -235,6 +279,12 @@
               </mat-form-field>
             </div>
           </div>
+          <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="center" class="padding-top">
+            <button [disabled]="submitted" mat-raised-button type="button" (click)="onSubmitRights()"
+                    class="save-btn">
+              Speichern
+            </button>
+          </div>
         </form>
         <form (ngSubmit)="onSubmitPassword()" [formGroup]="passwordGroup">
 
@@ -246,6 +296,12 @@
                 <mat-label>Password</mat-label>
                 <input class="form-control" formControlName="password" matInput>
               </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="center" class="padding-top">
+              <button [disabled]="submitted" mat-raised-button type="button" (click)="onSubmitPassword()"
+                      class="save-btn">
+                Speichern
+              </button>
             </div>
           </div>
         </form>

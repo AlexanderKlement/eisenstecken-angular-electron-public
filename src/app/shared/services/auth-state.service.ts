@@ -3,10 +3,11 @@ import { Router } from "@angular/router";
 import { Observable, ReplaySubject } from "rxjs";
 import { first, map } from "rxjs/operators";
 import {
+  AuthResponse,
   AuthService,
   DefaultService,
   ScopeEnum,
-  User,
+  User
 } from "../../../api/openapi";
 import { TokenService } from "./token.service";
 
@@ -15,6 +16,7 @@ import { TokenService } from "./token.service";
 })
 export class AuthStateService {
   static accessTokenKey = "access_token";
+  static refreshTokenKey = "refresh_token";
   private user?: ReplaySubject<User>;
 
   constructor(
@@ -22,20 +24,23 @@ export class AuthStateService {
     private router: Router,
     private tokenService: TokenService,
     private authService: AuthService,
-    private defaultService: DefaultService,
-  ) {}
+    private defaultService: DefaultService
+  ) {
+  }
 
 
   getToken(): string | null {
     return this.tokenService.getToken();
   }
 
-  setToken(token: string): void {
-    localStorage.setItem(AuthStateService.accessTokenKey, token);
+  setToken(token: AuthResponse): void {
+    localStorage.setItem(AuthStateService.accessTokenKey, token.accessToken);
+    localStorage.setItem(AuthStateService.refreshTokenKey, token.refreshToken);
   }
 
   removeToken(): void {
     localStorage.removeItem(AuthStateService.accessTokenKey);
+    localStorage.removeItem(AuthStateService.refreshTokenKey);
   }
 
   isLoggedIn(): boolean {
@@ -55,7 +60,7 @@ export class AuthStateService {
       this.authService.login(credentials).subscribe({
         next: (token) => {
           if (token.accessToken?.length > 0) {
-            this.setToken(token.accessToken);
+            this.setToken(token);
             this.user = undefined;
             resolve(true);
           } else {

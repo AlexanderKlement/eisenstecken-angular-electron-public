@@ -1,6 +1,10 @@
 @use "../../shared/components/base-edit/base-edit.component";
 
-button{
+button {
   display: block;
   margin: 0 auto;
+}
+
+.padding-bottom {
+  padding-bottom: 1rem;
 }

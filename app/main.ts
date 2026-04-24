@@ -1,16 +1,16 @@
-import { app } from 'electron';
-import * as Sentry from '@sentry/electron/main';
-import { createWindow } from './window';
-import { getAppState } from './singleton';
-import { initTray } from './tray';
-import { registerAllIpc } from './ipc';
-import { checkForUpdatesWhenReady, configureUpdateChannel, wireUpdateEvents } from './update';
+import { app } from "electron";
+import * as Sentry from "@sentry/electron/main";
+import { createWindow } from "./window";
+import { getAppState } from "./singleton";
+import { initTray } from "./tray";
+import { registerAllIpc } from "./ipc";
+import { checkForUpdatesWhenReady, configureUpdateChannel, wireUpdateEvents } from "./update";
 
 const state = getAppState();
 state.app = app;
-Sentry.init({ dsn: 'https://60ac4754e4be476a82b10b0e597dfaa6@sentry.kivi.bz.it/25' });
+Sentry.init({ dsn: "https://60ac4754e4be476a82b10b0e597dfaa6@sentry.kivi.bz.it/25" });
 const args = process.argv.slice(1);
-const serve = args.some(val => val === '--serve');
+const serve = args.some(val => val === "--serve");
 const gotTheLock: boolean = app.requestSingleInstanceLock();
 
 
@@ -18,8 +18,8 @@ try {
   if (!gotTheLock) {
     app.quit();
   } else {
-    app.on('second-instance', async () => {
-      console.warn('Second instance detected');
+    app.on("second-instance", async () => {
+      console.warn("Second instance detected");
       const state = getAppState();
 
       if (!state.win) {
@@ -39,19 +39,19 @@ try {
       state.win.setAlwaysOnTop(true);
       state.win.setAlwaysOnTop(false);
     });
-    if (app.getName().toLowerCase().includes('beta')) {
-      const path = require('path');
-      const os = require('os');
-      const betaUserData = path.join(os.homedir(), '.eisenstecken-beta');
-      app.setPath('userData', betaUserData);
+    if (app.getName().toLowerCase().includes("beta")) {
+      const path = require("path");
+      const os = require("os");
+      const betaUserData = path.join(os.homedir(), ".eisenstecken-beta");
+      app.setPath("userData", betaUserData);
     }
 
-    if (app.getName().toLowerCase().includes('beta')) {
-      const path = require('path');
-      const appDataBase = app.getPath('appData'); // e.g. %APPDATA% or ~/Library/Application Support
-      const betaUserData = path.join(appDataBase, 'Eisenstecken-Eibel-Beta');
-      app.setPath('userData', betaUserData);
-      console.info('Using beta userData folder:', betaUserData);
+    if (app.getName().toLowerCase().includes("beta")) {
+      const path = require("path");
+      const appDataBase = app.getPath("appData"); // e.g. %APPDATA% or ~/Library/Application Support
+      const betaUserData = path.join(appDataBase, "Eisenstecken-Eibel-Beta");
+      app.setPath("userData", betaUserData);
+      console.info("Using beta userData folder:", betaUserData);
     }
 
     app.whenReady().then(async () => {
@@ -63,20 +63,20 @@ try {
       void initTray();
 
       if (!serve) {
-        console.info('[main] triggering update check');
+        console.info("[main] triggering update check");
         setTimeout(() => {
           void checkForUpdatesWhenReady();
         }, 15000);
       }
     });
 
-    app.on('window-all-closed', () => {
-      if (process.platform !== 'darwin') {
+    app.on("window-all-closed", () => {
+      if (process.platform !== "darwin") {
         app.quit();
       }
     });
 
-    app.on('activate', async () => {
+    app.on("activate", async () => {
       const state = getAppState();
       if (!state.win) {
         await createWindow(serve);
@@ -85,11 +85,10 @@ try {
       }
     });
 
-    app.on('before-quit', function() {
+    app.on("before-quit", function() {
       const state = getAppState();
       state.isQuitting = true;
     });
-
 
   }
 } catch (e) {

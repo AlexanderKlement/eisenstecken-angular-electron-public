@@ -4,6 +4,9 @@ import { catchError, finalize, map } from "rxjs/operators";
 import { DataSourceClass } from "../../types";
 import { MatPaginatorIntl } from "@angular/material/paginator";
 import { DefaultService, OrderService, RecalculationService, TikTakService } from "../../../../api/openapi";
+import { MatTableDataSource } from "@angular/material/table";
+import { MatSort, Sort } from "@angular/material/sort";
+import { Input } from "@angular/core";
 
 export interface Column<T> {
   name: string; // RecursiveKeyOf<T>; Maybe this is better this way
@@ -20,10 +23,10 @@ export interface Row<T> {
 
 export const defaultValues = {
   filter: "",
-  sortDirection: "ASC",
+  sortDirection: "asc",
   pageIndex: 0,
   pageSize: 100,
-  pageSizeOptions: [100, 200, 500],
+  pageSizeOptions: [100, 200, 500]
 };
 
 export interface TableButton<T> {
@@ -65,17 +68,29 @@ export type LoadFunction<T, A> = (
   filter: string,
   sortDirection: string,
   skip: number,
-  limit: number,
+  limit: number
 ) => Observable<T[]>;
 
 export type AmountFunction<A> = (api: A) => Observable<number>;
+export type SortFunction<A> = (a: A, b: A) => number;
 
 export type ParseFunction<T extends DataSourceClass> = (
-  dataSourceClasses: T[],
+  dataSourceClasses: T[]
 ) => Row<T>[];
 
+function sortFunction<T>(sort: Sort, a: Row<T>, b: Row<T>) {
+  let aVal = sort.direction === "asc" ? b.values[sort.active] : a.values[sort.active];
+  let bVal = sort.direction === "asc" ? a.values[sort.active] : b.values[sort.active];
+  if (typeof aVal === "string" && typeof bVal === "string") {
+    return aVal.localeCompare(bVal);
+  }
+  if (typeof aVal === "number" && typeof bVal === "number") {
+    return aVal - bVal;
+  }
+  return 0;
+}
 
-export class TableDataSource<T extends DataSourceClass, A extends DefaultService | RecalculationService | OrderService | TikTakService > extends DataSource<Row<T>> {
+export class TableDataSource<T extends DataSourceClass, A extends DefaultService | RecalculationService | OrderService | TikTakService> extends DataSource<Row<T>> {
   public columns: Column<T>[];
   public readonly columnIdentifiers: string[];
   public amount$: Observable<number>;
@@ -90,6 +105,8 @@ export class TableDataSource<T extends DataSourceClass, A extends DefaultService
   private readonly parseFunction: ParseFunction<T>;
   private dataSubject = new BehaviorSubject<Row<T>[]>([]);
 
+  private sortActive?: string;
+  private sortDirection?: "asc" | "desc" | "";
   private stopLoading = false;
 
   constructor(
@@ -99,16 +116,28 @@ export class TableDataSource<T extends DataSourceClass, A extends DefaultService
     columns: Column<T>[],
     amountFunction: AmountFunction<A>,
     buttonList: TableButton<T>[] = [],
+    defaultSort?: string,
+    defaultSortDirection: "asc" | "desc" | "" = "asc"
   ) {
     super();
     this.loadFunction = loadFunction;
     this.parseFunction = parseFunction;
     this.columns = columns;
     this.columnIdentifiers = this.columns.map((column) =>
-      column.name.toString(),
+      column.name.toString()
     );
     this.amount$ = amountFunction(api);
     this.buttonList = buttonList;
+    this.sortActive = defaultSort;
+    this.sortDirection = defaultSortDirection;
+  }
+
+  public onSort(sort: Sort) {
+    this.sortActive = sort.active;
+    this.sortDirection = sort.direction;
+    this.dataSubject.next(this.dataSubject.getValue().sort(
+      (a, b) => sortFunction(sort, a, b)
+    ));
   }
 
   public connect(_: CollectionViewer): Observable<Row<T>[]> {
@@ -125,7 +154,7 @@ export class TableDataSource<T extends DataSourceClass, A extends DefaultService
     sortDirection?: string,
     pageIndex?: number,
     pageSize?: number,
-    enableLoading: boolean = true,
+    enableLoading: boolean = true
   ): void {
     if (this.stopLoading) {
       return;
@@ -139,22 +168,31 @@ export class TableDataSource<T extends DataSourceClass, A extends DefaultService
       filter || defaultValues.filter,
       sortDirection || defaultValues.sortDirection,
       pageIndex || defaultValues.pageIndex,
-      pageSize || defaultValues.pageSize,
+      pageSize || defaultValues.pageSize
     )
       .pipe(
         catchError(() => of([])),
         finalize(() => this.loadingSubject.next(false)),
-        map((row) => this.parseFunction(row)),
+        map((row) => this.parseFunction(row))
       )
       .subscribe({
         next: (data) => {
           this.pageIndex = pageIndex || defaultValues.pageIndex;
-          this.dataSubject.next(data);
+          if (this.sortActive) {
+            this.dataSubject.next(data.sort(
+              (a, b) => sortFunction({
+                active: this.sortActive,
+                direction: this.sortDirection
+              }, a, b)
+            ));
+          } else {
+            this.dataSubject.next(data);
+          }
         },
         error: (error) => {
           console.warn(error);
           this.stopLoading = true;
-        },
+        }
       });
   }
 
@@ -162,7 +200,7 @@ export class TableDataSource<T extends DataSourceClass, A extends DefaultService
     filter: string,
     sortDirection: string,
     pageIndex: number,
-    pageSize: number,
+    pageSize: number
   ): Observable<T[]> {
     return this.loadFunction(this.api, filter, sortDirection, pageSize * pageIndex, pageSize);
   }

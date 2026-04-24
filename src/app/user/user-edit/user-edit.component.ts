@@ -2,7 +2,15 @@ import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
-import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import {
+  FormArray,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  UntypedFormControl,
+  UntypedFormGroup
+} from "@angular/forms";
 import { Observable } from "rxjs";
 import { first, tap } from "rxjs/operators";
 import { MatSelectionList } from "@angular/material/list";
@@ -13,42 +21,12 @@ import { AuthStateService } from "../../shared/services/auth-state.service";
 import { DefaultService, Lock, ScopeEnum, User, UserCreate, UserPassword, UserUpdate } from "../../../api/openapi";
 import { MatTab, MatTabGroup } from "@angular/material/tabs";
 import { DefaultLayoutAlignDirective, DefaultLayoutDirective, DefaultLayoutGapDirective } from "ng-flex-layout";
-import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
+import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
-import { Right } from "../../model/right";
 import { MatOption, MatSelect } from "@angular/material/select";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
-
-const titles = {
-  users: "Benutzer",
-  calendars: "Kalender",
-  vats: "Mehrwertssteuer Einstellungen",
-  units: "Einheiten",
-  suppliers: "Lieferanten",
-  stocks: "Lager",
-  rights: "Rechte Verwaltung",
-  orders: "Bestellungen",
-  offers: "Angebote",
-  jobs: "Aufträge",
-  parameters: "Parameter Einstellungen",
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  ingoing_invoices: "Eingangsrechnungen",
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  outgoing_invoices: "Ausgangsrechnungen",
-  clients: "Kundenverwaltung",
-  categories: "Produkt-Kategorien",
-  articles: "Produkte",
-  reminders: "Mahnwesen",
-  payments: "Zahlungen",
-  hours: "Stunden eintragen",
-  recalculations: "Nachkalkulation",
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  delivery_notes: "Lieferscheine",
-  prices: "Preise",
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  work_hours: "Arbeitsstunden"
-};
+import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular/material/datepicker";
 
 @Component({
   selector: "app-user-edit",
@@ -70,22 +48,39 @@ const titles = {
     MatSelect,
     MatOption,
     MatCheckbox,
-    CircleIconButtonComponent
+    CircleIconButtonComponent,
+    MatDatepickerInput,
+    MatDatepicker,
+    MatDatepickerToggle,
+    MatSuffix
   ]
 })
 export class UserEditComponent extends BaseEditComponent<User> implements OnInit, OnDestroy {
 
   @ViewChild("rights") rightsSelected: MatSelectionList;
-
   userGroup: UntypedFormGroup;
-  workThingsGroup: UntypedFormGroup;
+  employmentGroup: FormGroup<{
+    employmentCosts: FormArray<FormGroup<{
+      id: FormControl<number>;
+      cost: FormControl<number>;
+      start_date: FormControl<string>;
+      end_date: FormControl<string>;
+    }>>;
+    cost: FormControl<number>;
+    workmodel: FormControl<string>;
+    taguid: FormControl<string>;
+    export: FormControl<boolean>
+    employmentRelationships: FormArray<FormGroup<{
+      id: FormControl<number>;
+      start_date: FormControl<string>;
+      end_date: FormControl<string>;
+    }>>;
+  }>;
   passwordGroup: UntypedFormGroup;
   rightsGroup: UntypedFormGroup;
   dressGroup: UntypedFormGroup;
-  availableRights: Right[];
+
   availableRightCats: { key: string; open: boolean; title: string }[];
-  userRights: Right[];
-  rightsLoaded = false;
   firstTabLabel = "Stammdaten";
   sumYears = 0;
 
@@ -104,42 +99,6 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
 
   unlockFunction = (id: number): Observable<boolean> => this.api.unlockUserUsersUnlockUserIdGet(id);
 
-  onCategoryClick(category: string): void {
-    this.availableRightCats = this.availableRightCats.map((cat) => {
-      if (cat.key === category) {
-        return { key: cat.key, open: !cat.open, title: cat.title };
-      } else {
-        return cat;
-      }
-    });
-  }
-
-  onCategoryCheck(category: string, checkstate: "unchecked" | "checked" | "indeterminate"): void {
-    switch (checkstate) {
-      case "checked":
-        this.userRights = this.userRights.filter((userRight) => !userRight.key.startsWith(category));
-        break;
-      case "indeterminate":
-      case "unchecked":
-        this.availableRights.forEach((right) => {
-          if (right.key.startsWith(category) && this.userRights.filter((userRight) => userRight.id === right.id).length === 0) {
-            this.userRights.push(right);
-          }
-        });
-        break;
-      default:
-        break;
-    }
-  }
-
-  onRightCheck(right: Right): void {
-    if (this.userRights.filter(userRight => userRight.id === right.id).length === 0) {
-      this.userRights.push(right);
-    } else {
-      this.userRights = this.userRights.filter((userRight) => userRight.id !== right.id);
-    }
-  }
-
   ngOnInit(): void {
     this.availableRightCats = [];
     super.ngOnInit();
@@ -151,11 +110,18 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
       secondname: new UntypedFormControl(""),
       gender: new UntypedFormControl(""),
       birthdate: new UntypedFormControl(""),
-      city: new UntypedFormControl(""),
+      birth_city: new UntypedFormControl(""),
       email: new UntypedFormControl(""),
+      email2: new UntypedFormControl(""),
+      vat_number: new UntypedFormControl(""),
+      address: new UntypedFormControl(""),
+      city: new UntypedFormControl(""),
+      plz: new UntypedFormControl(""),
+      country: new UntypedFormControl(""),
       tel: new UntypedFormControl(""),
       password: new UntypedFormControl(""),
       handy: new UntypedFormControl(""),
+      handyPrefix: new UntypedFormControl(""),
       office: new UntypedFormControl(false),
       employee: new UntypedFormControl(true),
       position: new UntypedFormControl(""),
@@ -169,11 +135,13 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
       innovaphone_pass: new UntypedFormControl(""),
       notifications: new UntypedFormControl(true)
     });
-    this.workThingsGroup = new UntypedFormGroup({
-      cost: new UntypedFormControl(""),
-      workmodel: new UntypedFormControl(""),
-      taguid: new UntypedFormControl(""),
-      export: new UntypedFormControl(true)
+    this.employmentGroup = new FormGroup({
+      cost: new FormControl(0),
+      workmodel: new FormControl(""),
+      taguid: new FormControl(""),
+      export: new FormControl(true),
+      employmentCosts: new FormArray([]),
+      employmentRelationships: new FormArray([])
     });
     this.passwordGroup = new UntypedFormGroup({
       password: new UntypedFormControl("")
@@ -247,6 +215,35 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
     }
   }
 
+  onAddEmploymentCost() {
+    console.log("New employment cost");
+    let employmentCost = new FormGroup({
+      id: new FormControl(1),
+      cost: new FormControl(0),
+      start_date: new FormControl(""),
+      end_date: new FormControl("")
+    });
+    this.employmentGroup.controls.employmentCosts.push(employmentCost);
+  }
+
+  onRemoveEmploymentCost(index: number) {
+    this.employmentGroup.controls.employmentCosts.removeAt(index);
+  }
+
+  onAddRelationship() {
+    console.log("New relationship");
+    let relationship = new FormGroup({
+      id: new FormControl(1),
+      start_date: new FormControl(""),
+      end_date: new FormControl("")
+    });
+    this.employmentGroup.controls.employmentRelationships.push(relationship);
+  }
+
+  onRemoveRelationship(index: number) {
+    this.employmentGroup.controls.employmentRelationships.removeAt(index);
+  }
+
   userDeleteClicked(): void {
     this.authService.getCurrentUser().pipe(first()).subscribe(user => {
       if (user.id === this.id) {
@@ -272,31 +269,6 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
         }
       });
     });
-  }
-
-  userHasRight(rightKey: string): boolean {
-    for (const userRight of this.userRights) {
-      if (userRight.key === rightKey) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  userHasRightCategory(rightCategory: string): "unchecked" | "checked" | "indeterminate" {
-    let hasAll = true;
-    let hasOne = false;
-    for (const right of this.availableRights) {
-      if (right.key.startsWith(rightCategory)) {
-        if (this.userHasRight(right.key)) {
-          hasOne = true;
-        }
-        if (!this.userHasRight(right.key)) {
-          hasAll = false;
-        }
-      }
-    }
-    return hasAll ? "checked" : hasOne ? "indeterminate" : "unchecked";
   }
 
   ngOnDestroy(): void {
@@ -384,12 +356,12 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
     // TODO
   }
 
-  onSubmitWorkThings(): void {
+  onSubmitEmployment(): void {
     // TODO
   }
 
   onSubmitRights(): void {
-    const selectedKeys = this.rightsSelected.selectedOptions.selected.map((obj) => obj.value);
+    // TODO
   }
 
   onSubmitPassword(): void {

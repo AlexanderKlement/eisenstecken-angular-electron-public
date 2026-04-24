@@ -7,8 +7,7 @@
     "name": "Kivi",
     "email": "info@kivi.bz.it"
   },
-  "keywords": [
-  ],
+  "keywords": [],
   "main": "app/main.js",
   "private": true,
   "license": "MIT",
@@ -65,6 +64,7 @@
     "ngx-material-timepicker": "13.1.1",
     "rxjs": "^7.4.0",
     "tslib": "^2.1.0",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
     "yaml": "1.10.2",
     "zone.js": "0.15.1"
   },

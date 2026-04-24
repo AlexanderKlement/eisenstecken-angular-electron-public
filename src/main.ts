@@ -6,7 +6,7 @@ import {
   LOCALE_ID,
   Injectable,
   importProvidersFrom,
-  DEFAULT_CURRENCY_CODE,
+  DEFAULT_CURRENCY_CODE
 } from "@angular/core";
 import * as Sentry from "@sentry/angular";
 import { apiConfigFactory } from "./app/app.module";
@@ -29,7 +29,7 @@ import {
   CalendarNativeDateFormatter,
   DateFormatterParams,
   CalendarModule,
-  DateAdapter,
+  DateAdapter
 } from "angular-calendar";
 import { BrowserModule, bootstrapApplication } from "@angular/platform-browser";
 import { provideAnimations } from "@angular/platform-browser/animations";
@@ -89,7 +89,7 @@ const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>
 Sentry.init({
   dsn: "https://739b39d0b92749a485e48a80da87816e@sentry.kivi.bz.it/26",
   integrations: [],
-  tracesSampleRate: 0.3,
+  tracesSampleRate: 0.3
 });
 
 if (APP_CONFIG.production) {
@@ -120,23 +120,23 @@ bootstrapApplication(AppComponent, {
   providers: [
     importProvidersFrom(CommonModule, BrowserModule, CalendarModule.forRoot({
       provide: DateAdapter,
-      useFactory: adapterFactory,
+      useFactory: adapterFactory
     }), FormsModule, SharedModule, HomeModule, JobModule, ClientModule, UserModule, SettingsModule, SupplierModule, OrderModule, LoginModule, MatBottomSheetModule, InvoiceModule, EmployeeModule, EventCalendarModule, MobileAppModule, RecalculationModule, ApiModule.forRoot(apiConfigFactory), AppRoutingModule, FlexLayoutModule, DeliveryNoteModule, DebugModule, ServiceModule, TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
         useFactory: httpLoaderFactory,
-        deps: [HttpClient],
-      },
+        deps: [HttpClient]
+      }
     }), ReactiveFormsModule, MatCheckboxModule, MatInputModule, MatTableModule, MatPaginatorModule, MatSortModule, MatProgressSpinnerModule, MatSelectModule, MatButtonModule, MatToolbarModule, MatNativeDateModule, PhoneBookModule, MatSnackBarModule, MatIconModule),
     {
       provide: ErrorHandler,
       useValue: Sentry.createErrorHandler({
-        showDialog: false,
-      }),
+        showDialog: false
+      })
     },
     {
       provide: Sentry.TraceService,
-      deps: [Router],
+      deps: [Router]
     },
     provideAppInitializer(() => {
       const initializerFn = (() => () => {
@@ -146,9 +146,11 @@ bootstrapApplication(AppComponent, {
     {
       provide: Configuration,
       useFactory: () => new Configuration({
-        accessToken: () => localStorage.getItem("access_token") ?? "",
-        basePath: LocalConfigRenderer.getInstance().getApi(),
-      }),
+        credentials: {
+          "OAuth2PasswordBearer": () => localStorage.getItem("access_token") ?? ""
+        },
+        basePath: LocalConfigRenderer.getInstance().getApi()
+      })
     },
     AccessGuard,
     ChatService,
@@ -156,27 +158,27 @@ bootstrapApplication(AppComponent, {
     DatePipe,
     {
       provide: MAT_DATE_LOCALE,
-      useValue: "de-DE",
+      useValue: "de-DE"
     },
     {
       provide: LOCALE_ID,
-      useValue: "de-DE",
+      useValue: "de-DE"
     },
     {
       provide: DEFAULT_CURRENCY_CODE,
-      useValue: "EUR",
+      useValue: "EUR"
     },
     { provide: MatPaginatorIntl, useValue: getGermanPaginatorIntl() },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: GlobalHttpInterceptorService,
-      multi: true,
+      multi: true
     },
     { provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
     { provide: CalendarDateFormatter, useClass: CustomDateFormatter },
     provideHttpClient(withInterceptorsFromDi()),
-    provideAnimations(),
-  ],
+    provideAnimations()
+  ]
 })
   .catch((err) => {
     try {
