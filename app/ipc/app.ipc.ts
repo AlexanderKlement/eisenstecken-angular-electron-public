@@ -29,7 +29,7 @@ export function registerAppIpc(): void {
   ipcMain.on("app_path_sync", (event) => {
     event.returnValue = { path: app.getPath("appData") };
   });
-  ipcMain.on("save_file", async (_, { content, title, filters }) => {
+  ipcMain.on("save_file", async (event, { content, title, filters }) => {
     const { filePath, canceled } = await dialog.showSaveDialog({
       defaultPath: title,
       filters
@@ -37,6 +37,12 @@ export function registerAppIpc(): void {
     if (canceled || !filePath) {
       return;
     }
-    fs.writeFileSync(filePath, content, { encoding: "latin1" });
+    try {
+      fs.writeFileSync(filePath, content, { encoding: "latin1" });
+      event.returnValue = { success: true };
+    } catch (e) {
+      dialog.showErrorBox("Error", "Fehler beim speichern");
+      event.returnValue = { success: false, error: e };
+    }
   });
 }

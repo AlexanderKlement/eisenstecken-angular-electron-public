@@ -9,12 +9,13 @@
  */
 
 
-export interface ChatRecipient { 
+export interface UserUpdateMe { 
+    dial: string;
     email: string;
     firstname: string;
-    fullname: string;
-    id: number;
+    handy: string;
     notifications: boolean;
+    position: string;
     secondname: string;
     tel: string;
 }

@@ -9,13 +9,10 @@
  */
 
 
-export interface ChatRecipient { 
-    email: string;
-    firstname: string;
-    fullname: string;
-    id: number;
-    notifications: boolean;
-    secondname: string;
-    tel: string;
+export interface HourlyRateUpdateCreate { 
+    end_date?: string | null;
+    id?: number | null;
+    rate: number;
+    start_date: string;
 }
 

@@ -22,6 +22,8 @@ import { AuthResponse } from '../model/authResponse';
 import { Credentials } from '../model/credentials';
 // @ts-ignore
 import { HTTPValidationError } from '../model/hTTPValidationError';
+// @ts-ignore
+import { TokenEnum } from '../model/tokenEnum';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -37,6 +39,83 @@ export class AuthService extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
+    }
+
+    /**
+     * Generate Access Token
+     * @param password 
+     * @param days 
+     * @param hours 
+     * @param minutes 
+     * @param tokenType 
+     * @param userId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public generateAccessToken(password: string, days?: number, hours?: number, minutes?: number, tokenType?: TokenEnum, userId?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<string>;
+    public generateAccessToken(password: string, days?: number, hours?: number, minutes?: number, tokenType?: TokenEnum, userId?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
+    public generateAccessToken(password: string, days?: number, hours?: number, minutes?: number, tokenType?: TokenEnum, userId?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
+    public generateAccessToken(password: string, days?: number, hours?: number, minutes?: number, tokenType?: TokenEnum, userId?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (password === null || password === undefined) {
+            throw new Error('Required parameter password was null or undefined when calling generateAccessToken.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>password, 'password');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>days, 'days');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>hours, 'hours');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>minutes, 'minutes');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>tokenType, 'token_type');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>userId, 'user_id');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (OAuth2PasswordBearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/auth/generate_access_token`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<string>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**

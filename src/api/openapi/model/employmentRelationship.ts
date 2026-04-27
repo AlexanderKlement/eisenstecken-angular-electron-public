@@ -9,13 +9,10 @@
  */
 
 
-export interface ChatRecipient { 
-    email: string;
-    firstname: string;
-    fullname: string;
+export interface EmploymentRelationship { 
+    end_date?: string | null;
     id: number;
-    notifications: boolean;
-    secondname: string;
-    tel: string;
+    start_date: string;
+    user_id: number;
 }
 

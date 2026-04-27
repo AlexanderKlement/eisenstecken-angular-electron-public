@@ -7,7 +7,7 @@ import { ElectronService } from "../../core/services";
 import { Router } from "@angular/router";
 import { EmailService } from "../../shared/services/email.service";
 import { AuthStateService } from "../../shared/services/auth-state.service";
-import { ChatMessage, ChatRecipient} from "../../../api/openapi";
+import { ChatMessage, ChatRecipient } from "../../../api/openapi";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexDirective } from "ng-flex-layout";
 import { ChatMessageComponent } from "./chat-message/chat-message.component";
 import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
@@ -17,21 +17,21 @@ import { AsyncPipe } from "@angular/common";
 import { LocalConfigRenderer } from "../../LocalConfigRenderer";
 
 @Component({
-  selector: 'app-chat',
-  templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.scss'],
-  imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexDirective, ChatMessageComponent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatSelect, MatOption, MatButton, AsyncPipe],
+  selector: "app-chat",
+  templateUrl: "./chat.component.html",
+  styleUrls: ["./chat.component.scss"],
+  imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexDirective, ChatMessageComponent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatSelect, MatOption, MatButton, AsyncPipe]
 })
 export class ChatComponent implements OnInit, OnDestroy {
 
-  @ViewChild('chatMsgBox') chatMsgBox: ElementRef;
+  @ViewChild("chatMsgBox") chatMsgBox: ElementRef;
 
   messages: ChatMessage[] = [];
   recipients$: Observable<ChatRecipient[]>; //This will fail if we have more than 1 chat component -> ReplaySubject
   whatsapp: boolean;
   chatGroup: UntypedFormGroup = new UntypedFormGroup({
     messageInput: new UntypedFormControl(""),
-    recipientSelect: new UntypedFormControl(0),
+    recipientSelect: new UntypedFormControl(0)
   });
 
   buttonLocked = false;
@@ -89,7 +89,7 @@ export class ChatComponent implements OnInit, OnDestroy {
         console.error(message);
       }, () => {
         this.releaseSendButton();
-      },
+      }
     );
   }
 
@@ -103,21 +103,21 @@ export class ChatComponent implements OnInit, OnDestroy {
         firstname: "System",
         fullname: "System",
         id: -1,
-        innovaphone_pass: "",
-        innovaphone_user: "",
+        //innovaphone_pass: "",
+        // innovaphone_user: "",
         notifications: false,
         secondname: "System",
-        tel: "",
+        tel: ""
       },
       text: text,
-      timestamp: Date.now().toString(),
+      timestamp: Date.now().toString()
     });
   }
 
   private resetChatControl() {
     this.chatGroup.reset({
       messageInput: "",
-      recipientSelect: 0,
+      recipientSelect: 0
     });
   }
 

@@ -38,15 +38,16 @@ export class UserComponent implements OnInit {
     this.userDataSource = new TableDataSource(
       this.api,
       (api, filter, sortDirection, skip, limit) =>
-        api.readUsersUsersGet(skip, filter, limit),
+        api.readUserListUsersListGet(skip, filter, limit),
       (dataSourceClasses) => {
         const rows = [];
         dataSourceClasses.forEach((dataSource) => {
           rows.push({
             values: {
               fullname: dataSource.secondname + " " + dataSource.firstname,
-              hours: dataSource.id, // TODO
+              hours: dataSource.employment_years, // TODO
               position: dataSource.position,
+              rights: dataSource.scopes.includes(ScopeEnum.Admin) ? "Admin" : dataSource.scopes.includes(ScopeEnum.Office) ? "Büro" : dataSource.scopes.includes(ScopeEnum.Workshop) ? "Werkstatt" : "",
               email: dataSource.email
             },
             route: () => {
@@ -72,7 +73,8 @@ export class UserComponent implements OnInit {
       },
       [
         { name: "fullname", sortable: true, headerName: "Name" },
-        { name: "position", sortable: false, headerName: "Posizion" },
+        { name: "position", sortable: false, headerName: "Position" },
+        { name: "rights", sortable: false, headerName: "Rechte" },
         { name: "email", sortable: false, headerName: "E-Mail" }, {
         name: "hours",
         sortable: true,
@@ -101,7 +103,7 @@ export class UserComponent implements OnInit {
         }];
         this.api.readUsersUsersGet().pipe(catchError(() => of([]))).subscribe({
           next: (data: User[]) => {
-            data.map(u => ({
+            data.filter(u => !!u.export_dress).map(u => ({
               ...u,
               fullname: u.secondname + " " + u.firstname
             })).sort(
@@ -109,17 +111,17 @@ export class UserComponent implements OnInit {
             ).forEach((user: User) => {
               rows.push([
                 user.fullname,
-                "0",// TODO
-                "0",
-                "0",
-                "0",
-                "0",
-                "0",
-                "0"
+                user.sweater,
+                user.shirt,
+                user.pants,
+                user.shoes,
+                user.shoe_model,
+                user.belt ? "Ja" : "Nein",
+                user.ear_protection
               ]);
             });
             const content = rows.map(row => row.join(";")).join("\n");
-            this.electronService.ipcRenderer.send("save_file", { content, title, filters });
+            console.log(this.electronService.ipcRenderer.send("save_file", { content, title, filters }));
           },
           error: err => {
             console.warn(err);

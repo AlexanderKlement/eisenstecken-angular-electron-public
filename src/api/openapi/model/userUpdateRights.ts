@@ -7,18 +7,18 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ScopeEnum } from './scopeEnum';
 
 
-export interface UserUpdate { 
-    dial: string;
-    email: string;
-    firstname: string;
-    handy: string;
+export interface UserUpdateRights { 
+    alarm_key?: string | null;
+    coffee_key?: boolean | null;
     innovaphone_pass: string;
     innovaphone_user: string;
-    notifications: boolean;
-    position: string;
-    secondname: string;
-    tel: string;
+    key_number?: string | null;
+    scope?: ScopeEnum | null;
 }
+export namespace UserUpdateRights {
+}
+
 

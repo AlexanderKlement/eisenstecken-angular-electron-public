@@ -9,13 +9,9 @@
  */
 
 
-export interface ChatRecipient { 
-    email: string;
-    firstname: string;
-    fullname: string;
-    id: number;
-    notifications: boolean;
-    secondname: string;
-    tel: string;
-}
+export const TokenEnum = {
+    Access: 'ACCESS',
+    Refresh: 'REFRESH'
+} as const;
+export type TokenEnum = typeof TokenEnum[keyof typeof TokenEnum];
 

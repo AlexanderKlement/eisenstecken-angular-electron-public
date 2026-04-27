@@ -18,7 +18,15 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { AuthStateService } from "../../shared/services/auth-state.service";
-import { DefaultService, Lock, ScopeEnum, User, UserCreate, UserPassword, UserUpdate } from "../../../api/openapi";
+import {
+  DefaultService, GenderEnum,
+  Lock,
+  ScopeEnum,
+  User,
+  UserCreate,
+  UserPassword,
+  UserUpdateBase, UserUpdateDress, UserUpdateEmployment, UserUpdateRights
+} from "../../../api/openapi";
 import { MatTab, MatTabGroup } from "@angular/material/tabs";
 import { DefaultLayoutAlignDirective, DefaultLayoutDirective, DefaultLayoutGapDirective } from "ng-flex-layout";
 import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
@@ -66,10 +74,10 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
       start_date: FormControl<string>;
       end_date: FormControl<string>;
     }>>;
-    cost: FormControl<number>;
+    internal_cost: FormControl<number>;
     workmodel: FormControl<string>;
-    taguid: FormControl<string>;
-    export: FormControl<boolean>
+    tag_uid: FormControl<string>;
+    export_tiktak: FormControl<boolean>
     employmentRelationships: FormArray<FormGroup<{
       id: FormControl<number>;
       start_date: FormControl<string>;
@@ -109,37 +117,31 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
       firstname: new UntypedFormControl(""),
       secondname: new UntypedFormControl(""),
       gender: new UntypedFormControl(""),
-      birthdate: new UntypedFormControl(""),
-      birth_city: new UntypedFormControl(""),
+      birthday: new UntypedFormControl(""),
+      birthplace: new UntypedFormControl(""),
       email: new UntypedFormControl(""),
-      email2: new UntypedFormControl(""),
+      email_private: new UntypedFormControl(""),
       vat_number: new UntypedFormControl(""),
       address: new UntypedFormControl(""),
       city: new UntypedFormControl(""),
-      plz: new UntypedFormControl(""),
+      postal_code: new UntypedFormControl(""),
       country: new UntypedFormControl(""),
       tel: new UntypedFormControl(""),
       password: new UntypedFormControl(""),
       handy: new UntypedFormControl(""),
       handyPrefix: new UntypedFormControl(""),
-      office: new UntypedFormControl(false),
-      employee: new UntypedFormControl(true),
       position: new UntypedFormControl(""),
       dial: new UntypedFormControl(""),
       cost: new UntypedFormControl(""),
-      chat: new UntypedFormControl(false),
-      hours: new UntypedFormControl(true),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       innovaphone_user: new UntypedFormControl(""),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       innovaphone_pass: new UntypedFormControl(""),
       notifications: new UntypedFormControl(true)
     });
     this.employmentGroup = new FormGroup({
-      cost: new FormControl(0),
+      internal_cost: new FormControl(0),
       workmodel: new FormControl(""),
-      taguid: new FormControl(""),
-      export: new FormControl(true),
+      tag_uid: new FormControl(""),
+      export_tiktak: new FormControl(true),
       employmentCosts: new FormArray([]),
       employmentRelationships: new FormArray([])
     });
@@ -147,47 +149,24 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
       password: new UntypedFormControl("")
     });
     this.rightsGroup = new UntypedFormGroup({
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       innovaphone_user: new UntypedFormControl(""),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       innovaphone_pass: new UntypedFormControl(""),
-      right: new UntypedFormControl(""),
-      keynumber: new UntypedFormControl(""),
-      coffee: new UntypedFormControl(true),
-      alarm: new UntypedFormControl("")
+      scope: new UntypedFormControl(""),
+      key_number: new UntypedFormControl(""),
+      coffee_key: new FormControl(true),
+      alarm_key: new UntypedFormControl("")
     });
     this.dressGroup = new UntypedFormGroup({
-      tshirt: new UntypedFormControl(""),
-      chestplate: new UntypedFormControl(""),
-      leggins: new UntypedFormControl(""),
+      shirt: new UntypedFormControl(""),
+      sweater: new UntypedFormControl(""),
+      pants: new UntypedFormControl(""),
       shoes: new UntypedFormControl(""),
-      shoesmodel: new UntypedFormControl(""),
-      shield: new UntypedFormControl(""),
-      helmet: new UntypedFormControl(""),
-      sohle: new UntypedFormControl(""),
-      export: new UntypedFormControl(true)
+      shoe_model: new UntypedFormControl(""),
+      belt: new FormControl(false),
+      ear_protection: new UntypedFormControl(""),
+      sole: new UntypedFormControl(""),
+      export_dress: new UntypedFormControl(true)
     });
-    if (!this.createMode) {
-      /* THIS WILL BE REMOVED
-      this.api.getRightsRightsGet().pipe(first()).subscribe((rights) => {
-        this.availableRights = rights;
-        rights.forEach(right => {
-          const rightKeyCat = right.key.split(":")[0];
-          if (this.availableRightCats.filter(cat => cat.key === rightKeyCat).length === 0) {
-            let title = titles[rightKeyCat];
-            if (typeof title === "undefined") {
-              title = "Neue Kategorie";
-            }
-            this.availableRightCats.push({ key: rightKeyCat, open: false, title });
-          }
-        });
-        this.api.readUserUsersUserIdGet(this.id).pipe(first()).subscribe((user) => {
-          this.userRights = user.rights;
-          this.rightsLoaded = true;
-        });
-      });
-       */
-    }
     this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
       this.grantRightsAvailable = allowed;
       if (allowed) {
@@ -197,17 +176,6 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
             this.userDeleteClicked();
           }
         });
-        this.rightsGroup.patchValue({ right: ScopeEnum.Office });
-      }
-    });
-    this.authService.currentUserHasScope(ScopeEnum.Workshop).pipe(first()).subscribe(allowed => {
-      if (allowed) {
-        this.rightsGroup.patchValue({ right: ScopeEnum.Workshop });
-      }
-    });
-    this.authService.currentUserHasScope(ScopeEnum.Admin).pipe(first()).subscribe(allowed => {
-      if (allowed) {
-        this.rightsGroup.patchValue({ right: ScopeEnum.Admin });
       }
     });
     if (this.createMode) {
@@ -281,10 +249,51 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
     if (!this.createMode) {
       this.data$.pipe(tap(user => {
         this.userGroup.patchValue(user);
+        this.rightsGroup.patchValue(user);
         this.rightsGroup.patchValue({
-          innovaphone_user: user.innovaphone_user,
-          innovaphone_pass: user.innovaphone_pass
+          scope: user.scopes.at(0),
+          coffee_key: user.coffee_key ? "true" : "false"
         });
+        this.employmentGroup.patchValue(user);
+        this.dressGroup.patchValue(user);
+        this.dressGroup.patchValue({
+          belt: user.belt ? "true" : "false"
+        });
+        this.employmentGroup.patchValue({
+          workmodel: `${user.hours_monday ?? 0}-${user.hours_tuesday ?? 0}-${user.hours_wednesday ?? 0}-${user.hours_thursday ?? 0}-${user.hours_friday ?? 0}-${user.hours_saturday ?? 0}`
+        });
+        this.api.getHourlyRatesUsersHourlyRatesUserIdGet(user.id).pipe(
+          tap(hourlyRates => {
+            hourlyRates.forEach((hr) => {
+              let employmentCost = new FormGroup({
+                cost: new FormControl(hr.rate),
+                end_date: new FormControl(hr.end_date),
+                id: new FormControl(hr.id),
+                start_date: new FormControl(hr.start_date)
+              });
+              this.employmentGroup.controls.employmentCosts.push(employmentCost);
+            });
+          }),
+          first()).subscribe();
+        this.api.getEmploymentRelationshipsUsersEmploymentRelationshipsUserIdGet(user.id).pipe(
+          tap(empRels => {
+            this.sumYears = 0;
+            const year_in_ms = 1000 * 60 * 60 * 24 * 365;
+            empRels.forEach(er => {
+              let start = new Date(er.start_date);
+              let end = er.end_date && er.end_date.length !== 0 ? new Date(er.end_date) : new Date();
+              let amount = end.getTime() - start.getTime();
+              this.sumYears += amount / year_in_ms;
+              let employmentCost = new FormGroup({
+                end_date: new FormControl(er.end_date),
+                id: new FormControl(er.id),
+                start_date: new FormControl(er.start_date)
+              });
+              this.employmentGroup.controls.employmentRelationships.push(employmentCost);
+            });
+            this.sumYears = Math.round(this.sumYears * 10) / 10;
+          }),
+          first()).subscribe();
       }), first()).subscribe();
     }
   }
@@ -328,7 +337,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
         this.createUpdateComplete();
       });
     } else {
-      const userUpdate: UserUpdate = {
+      const userUpdate: UserUpdateBase = {
         email: this.userGroup.get("email").value,
         tel: this.userGroup.get("tel").value,
         firstname: this.userGroup.get("firstname").value,
@@ -337,12 +346,21 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
         dial: this.userGroup.get("dial").value,
         position: this.userGroup.get("position").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        innovaphone_user: this.userGroup.get("innovaphone_user").value,
+        //innovaphone_user: this.userGroup.get("innovaphone_user").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        innovaphone_pass: this.userGroup.get("innovaphone_pass").value,
-        notifications: this.userGroup.get("notifications").value
+        //innovaphone_pass: this.userGroup.get("innovaphone_pass").value,
+        notifications: true,
+        address: this.userGroup.get("address").value,
+        city: this.userGroup.get("city").value,
+        birthday: this.userGroup.get("birthday").value,
+        country: this.userGroup.get("country").value,
+        gender: this.userGroup.get("gender").value as GenderEnum,
+        birthplace: this.userGroup.get("birthplace").value,
+        email_private: this.userGroup.get("email_private").value,
+        vat_number: this.userGroup.get("vat_number").value,
+        postal_code: this.userGroup.get("postal_code").value
       };
-      this.api.updateUserUsersUserIdPut(this.id, userUpdate).pipe(first()).subscribe((user) => {
+      this.api.updateUserBaseUsersBaseUserIdPut(this.id, userUpdate).pipe(first()).subscribe((user) => {
         this.createUpdateSuccess(user);
       }, (error) => {
         this.createUpdateError(error);
@@ -353,15 +371,87 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
   }
 
   onSubmitDress(): void {
-    // TODO
+    this.onSubmit();
+    const userUpdate: UserUpdateDress = {
+      shirt: this.dressGroup.get("shirt").value,
+      sweater: this.dressGroup.get("sweater").value,
+      sole: this.dressGroup.get("sole").value,
+      shoe_model: this.dressGroup.get("shoe_model").value,
+      shoes: this.dressGroup.get("shoes").value,
+      export_dress: this.dressGroup.get("export_dress").value,
+      belt: this.dressGroup.get("belt").value === "true",
+      pants: this.dressGroup.get("pants").value,
+      ear_protection: this.dressGroup.get("ear_protection").value
+    };
+    this.api.updateUserDressUsersDressUserIdPut(this.id, userUpdate).pipe(first()).subscribe((user) => {
+      this.createUpdateSuccess(user);
+    }, (error) => {
+      this.createUpdateError(error);
+    }, () => {
+      this.createUpdateComplete();
+    });
   }
 
   onSubmitEmployment(): void {
-    // TODO
+    const hours = this.employmentGroup.get("workmodel").value.split("-");
+    if (hours.length != 6 || !!hours.find(h => Number.isNaN(parseFloat(h)))) {
+      this.snackBar.open("Falsches Format für: Arbeitsmodell (M-D-M-D-F-S)!", "Ok", {
+        duration: 3000
+      });
+      return;
+    }
+    this.onSubmit();
+
+    const userUpdate: UserUpdateEmployment = {
+      export_tiktak: this.employmentGroup.get("export_tiktak").value,
+      hours_monday: parseFloat(hours[0]),
+      hours_tuesday: parseFloat(hours[1]),
+      hours_wednesday: parseFloat(hours[2]),
+      hours_thursday: parseFloat(hours[3]),
+      hours_friday: parseFloat(hours[4]),
+      hours_saturday: parseFloat(hours[5]),
+      tag_uid: this.employmentGroup.get("tag_uid").value,
+      internal_cost: this.employmentGroup.get("internal_cost").value,
+      employment_relationships: this.employmentGroup.get("employmentRelationships").value.map((relGroup) => (
+        {
+          start_date: relGroup.start_date,
+          end_date: relGroup.end_date && relGroup.end_date.length !== 0 ? relGroup.end_date : undefined,
+          id: undefined
+        }
+      )),
+      hourly_rates: this.employmentGroup.get("employmentCosts").value.map(hourly => ({
+        start_date: hourly.start_date,
+        end_date: hourly.end_date && hourly.end_date.length !== 0 ? hourly.end_date : undefined,
+        rate: hourly.cost
+      }))
+    };
+    this.api.updateUserEmploymentUsersEmploymentUserIdPut(this.id, userUpdate).pipe(first()).subscribe((user) => {
+      this.createUpdateSuccess(user);
+    }, (error) => {
+      this.createUpdateError(error);
+    }, () => {
+      this.createUpdateComplete();
+    });
   }
 
   onSubmitRights(): void {
-    // TODO
+    this.onSubmit();
+
+    const userUpdate: UserUpdateRights = {
+      alarm_key: this.rightsGroup.get("alarm_key").value,
+      coffee_key: this.rightsGroup.get("coffee_key").value == "true",
+      key_number: this.rightsGroup.get("key_number").value,
+      scope: this.rightsGroup.get("scope").value,
+      innovaphone_user: this.rightsGroup.get("innovaphone_user").value,
+      innovaphone_pass: this.rightsGroup.get("innovaphone_pass").value
+    };
+    this.api.updateUserRightsUsersRightsUserIdPut(this.id, userUpdate).pipe(first()).subscribe((user) => {
+      this.createUpdateSuccess(user);
+    }, (error) => {
+      this.createUpdateError(error);
+    }, () => {
+      this.createUpdateComplete();
+    });
   }
 
   onSubmitPassword(): void {
@@ -376,4 +466,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
       this.createUpdateComplete();
     });
   }
+
+  protected readonly GenderEnum = GenderEnum;
+  protected readonly ScopeEnum = ScopeEnum;
 }

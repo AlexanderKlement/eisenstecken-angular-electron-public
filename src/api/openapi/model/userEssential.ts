@@ -14,8 +14,6 @@ export interface UserEssential {
     firstname: string;
     fullname: string;
     id: number;
-    innovaphone_pass: string;
-    innovaphone_user: string;
     notifications: boolean;
     secondname: string;
     tel: string;

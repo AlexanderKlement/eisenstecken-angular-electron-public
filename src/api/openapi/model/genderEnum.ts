@@ -9,13 +9,9 @@
  */
 
 
-export interface ChatRecipient { 
-    email: string;
-    firstname: string;
-    fullname: string;
-    id: number;
-    notifications: boolean;
-    secondname: string;
-    tel: string;
-}
+export const GenderEnum = {
+    Male: 'MALE',
+    Female: 'FEMALE'
+} as const;
+export type GenderEnum = typeof GenderEnum[keyof typeof GenderEnum];
 

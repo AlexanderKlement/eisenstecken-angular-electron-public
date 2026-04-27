@@ -11,7 +11,7 @@ import { ScopeEnum } from './scopeEnum';
 import { GenderEnum } from './genderEnum';
 
 
-export interface User { 
+export interface UserListElement { 
     address?: string | null;
     alarm_key?: string | null;
     belt?: boolean | null;
@@ -25,6 +25,7 @@ export interface User {
     ear_protection?: string | null;
     email: string;
     email_private?: string | null;
+    employment_years: number;
     export_dress?: boolean | null;
     export_tiktak?: boolean | null;
     firstname: string;
@@ -57,7 +58,7 @@ export interface User {
     tel: string;
     vat_number?: string | null;
 }
-export namespace User {
+export namespace UserListElement {
 }
 
 

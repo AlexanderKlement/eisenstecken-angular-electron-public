@@ -19,13 +19,13 @@
             <mat-form-field appearance="fill">
               <mat-label>Geschlecht</mat-label>
               <mat-select class="form-control" formControlName="gender">
-                <mat-option value="male">Männlich</mat-option>
-                <mat-option value="female">Weiblich</mat-option>
+                <mat-option value="{{ GenderEnum.Male }}">Männlich</mat-option>
+                <mat-option value="{{ GenderEnum.Female }}">Weiblich</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field appearance="fill">
               <mat-label>Geburtsdatum</mat-label>
-              <input class="form-control" matInput formControlName="birthdate"
+              <input class="form-control" matInput formControlName="birthday"
                      [matDatepicker]="birthdate_picker">
               <mat-datepicker-toggle matSuffix [for]="birthdate_picker"></mat-datepicker-toggle>
               <mat-datepicker #birthdate_picker></mat-datepicker>
@@ -35,7 +35,7 @@
 
             <mat-form-field appearance="fill">
               <mat-label>Geburtsort</mat-label>
-              <input class="form-control" matInput formControlName="birth_city">
+              <input class="form-control" matInput formControlName="birthplace">
             </mat-form-field>
             <div class="spacer"></div>
           </div>
@@ -47,7 +47,7 @@
             </mat-form-field>
             <mat-form-field appearance="fill">
               <mat-label>E-Mail (privat)</mat-label>
-              <input class="form-control" matInput formControlName="email2">
+              <input class="form-control" matInput formControlName="email_private">
             </mat-form-field>
           </div>
           <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
@@ -91,7 +91,7 @@
           <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
             <mat-form-field appearance="fill">
               <mat-label>PLZ</mat-label>
-              <input class="form-control" formControlName="plz" matInput>
+              <input class="form-control" formControlName="postal_code" matInput>
             </mat-form-field>
             <mat-form-field appearance="fill">
               <mat-label>Land</mat-label>
@@ -134,7 +134,7 @@
             <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
               <mat-form-field>
                 <mat-label>Interne Kosten</mat-label>
-                <input class="form-control" formControlName="cost" matInput>
+                <input class="form-control" formControlName="internal_cost" matInput>
               </mat-form-field>
               <mat-form-field>
                 <mat-label>Arbeitsmodell (M-D-M-D-F-S)</mat-label>
@@ -144,12 +144,12 @@
             <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
               <mat-form-field>
                 <mat-label>Tag UID</mat-label>
-                <input class="form-control" formControlName="taguid" matInput>
+                <input class="form-control" formControlName="tag_uid" matInput>
               </mat-form-field>
               <div class="spacer"></div>
             </div>
             <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
-              <mat-checkbox formControlName="export" class="form-control">Mitarbeiter nach TikTak exportieren
+              <mat-checkbox formControlName="export_tiktak" class="form-control">Mitarbeiter nach TikTak exportieren
               </mat-checkbox>
             </div>
             <div class="v-line"></div>
@@ -239,10 +239,10 @@
 
               <mat-form-field appearance="fill">
                 <mat-label>Rechte</mat-label>
-                <mat-select class="form-control" formControlName="right">
-                  <mat-option value="admin">Admin</mat-option>
-                  <mat-option value="office">Büro</mat-option>
-                  <mat-option value="workshop">Werkstatt</mat-option>
+                <mat-select class="form-control" formControlName="scope">
+                  <mat-option value="{{ ScopeEnum.Admin }}">Admin</mat-option>
+                  <mat-option value="{{ ScopeEnum.Office }}">Büro</mat-option>
+                  <mat-option value="{{ ScopeEnum.Workshop }}">Werkstatt</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -260,13 +260,11 @@
             <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
               <mat-form-field appearance="fill">
                 <mat-label>Firmenschlüssel Nummer</mat-label>
-                <input class="form-control" matInput formControlName="keynumber">
+                <input class="form-control" matInput formControlName="key_number">
               </mat-form-field>
-            </div>
-            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
               <mat-form-field appearance="fill">
                 <mat-label>Kaffeeschlüssel</mat-label>
-                <mat-select class="form-control" formControlName="coffee">
+                <mat-select class="form-control" formControlName="coffee_key">
                   <mat-option value="true">Ja</mat-option>
                   <mat-option value="false">Nein</mat-option>
                 </mat-select>
@@ -275,8 +273,9 @@
             <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
               <mat-form-field appearance="fill">
                 <mat-label>Alarmschlüssel</mat-label>
-                <input class="form-control" matInput formControlName="alarm">
+                <input class="form-control" matInput formControlName="alarm_key">
               </mat-form-field>
+              <div class="spacer"></div>
             </div>
           </div>
           <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="center" class="padding-top">
@@ -315,17 +314,17 @@
             <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
               <mat-form-field appearance="fill">
                 <mat-label>Größe Pullower</mat-label>
-                <input class="form-control" formControlName="chestplate" matInput>
+                <input class="form-control" formControlName="sweater" matInput>
               </mat-form-field>
               <mat-form-field appearance="fill">
                 <mat-label>Größe T-Shirt</mat-label>
-                <input class="form-control" formControlName="tshirt" matInput>
+                <input class="form-control" formControlName="shirt" matInput>
               </mat-form-field>
             </div>
             <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
               <mat-form-field appearance="fill">
                 <mat-label>Größe Hose</mat-label>
-                <input class="form-control" formControlName="leggins" matInput>
+                <input class="form-control" formControlName="pants" matInput>
               </mat-form-field>
               <mat-form-field appearance="fill">
                 <mat-label>Größe Schuhe</mat-label>
@@ -335,29 +334,37 @@
             <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
               <mat-form-field appearance="fill">
                 <mat-label>Modell Schuhe</mat-label>
-                <input class="form-control" formControlName="shoesmodel" matInput>
+                <input class="form-control" formControlName="shoe_model" matInput>
               </mat-form-field>
               <mat-form-field appearance="fill">
                 <mat-label>Sohle</mat-label>
-                <input class="form-control" formControlName="sohle" matInput>
+                <input class="form-control" formControlName="sole" matInput>
               </mat-form-field>
             </div>
             <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
               <mat-form-field appearance="fill">
                 <mat-label>Werkzeuggurt</mat-label>
-                <mat-select class="form-control" formControlName="shield">
+                <mat-select class="form-control" formControlName="belt">
                   <mat-option value="true">Ja</mat-option>
                   <mat-option value="false">Nein</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field appearance="fill">
                 <mat-label>Gehörschutz</mat-label>
-                <input class="form-control" formControlName="helmet" matInput>
+                <input class="form-control" formControlName="ear_protection" matInput>
               </mat-form-field>
             </div>
             <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
-              <mat-checkbox formControlName="export" class="form-control">Nutzer beim Bekleidungsexport berücksichtigen
+              <mat-checkbox formControlName="export_dress" class="form-control">Nutzer beim Bekleidungsexport
+                berücksichtigen
               </mat-checkbox>
+            </div>
+
+            <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="center" class="padding-top">
+              <button [disabled]="submitted" mat-raised-button type="button" (click)="onSubmitDress()"
+                      class="save-btn">
+                Speichern
+              </button>
             </div>
           </div>
         </form>
