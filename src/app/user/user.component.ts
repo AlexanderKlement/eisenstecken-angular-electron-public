@@ -8,18 +8,17 @@ import { catchError, first } from "rxjs/operators";
 import { DefaultService, ScopeEnum, User } from "../../api/openapi";
 import { TableBuilderComponent } from "../shared/components/table-builder/table-builder.component";
 import { MatTab, MatTabGroup } from "@angular/material/tabs";
-import { InfoPageSettingsComponent } from "../settings/info-page-settings/info-page-settings.component";
-import { ipcRenderer } from "electron";
 
 import { ElectronService } from "../core/services";
 import { of } from "rxjs";
+import { UserNotesComponent } from "./user-notes/user-notes.component";
 
 
 @Component({
   selector: "app-user",
   templateUrl: "./user.component.html",
   styleUrls: ["./user.component.scss"],
-  imports: [ToolbarComponent, TableBuilderComponent, MatTabGroup, MatTab, InfoPageSettingsComponent]
+  imports: [ToolbarComponent, TableBuilderComponent, MatTabGroup, MatTab, UserNotesComponent]
 })
 export class UserComponent implements OnInit {
   userDataSource: TableDataSource<User, DefaultService>;
@@ -45,7 +44,7 @@ export class UserComponent implements OnInit {
           rows.push({
             values: {
               fullname: dataSource.secondname + " " + dataSource.firstname,
-              hours: dataSource.employment_years, // TODO
+              hours: dataSource.employment_years + " Jahre",
               position: dataSource.position,
               rights: dataSource.scopes.includes(ScopeEnum.Admin) ? "Admin" : dataSource.scopes.includes(ScopeEnum.Office) ? "Büro" : dataSource.scopes.includes(ScopeEnum.Workshop) ? "Werkstatt" : "",
               email: dataSource.email
@@ -121,7 +120,7 @@ export class UserComponent implements OnInit {
               ]);
             });
             const content = rows.map(row => row.join(";")).join("\n");
-            console.log(this.electronService.ipcRenderer.send("save_file", { content, title, filters }));
+            this.electronService.ipcRenderer.send("save_file", { content, title, filters });
           },
           error: err => {
             console.warn(err);

@@ -1,15 +1,16 @@
-import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, forwardRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import {
+  AbstractControl,
   FormArray,
   FormControl,
   FormGroup,
-  FormsModule,
+  FormsModule, NG_VALIDATORS,
   ReactiveFormsModule,
   UntypedFormControl,
-  UntypedFormGroup
+  UntypedFormGroup, ValidationErrors, ValidatorFn, Validators
 } from "@angular/forms";
 import { Observable } from "rxjs";
 import { first, tap } from "rxjs/operators";
@@ -29,12 +30,21 @@ import {
 } from "../../../api/openapi";
 import { MatTab, MatTabGroup } from "@angular/material/tabs";
 import { DefaultLayoutAlignDirective, DefaultLayoutDirective, DefaultLayoutGapDirective } from "ng-flex-layout";
-import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
+import { MatError, MatFormField, MatInput, MatLabel, MatPrefix, MatSuffix } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
 import { MatOption, MatSelect } from "@angular/material/select";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
 import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular/material/datepicker";
+import { MatIcon } from "@angular/material/icon";
+import dayjs from "dayjs/esm";
+import {
+  EmploymentRelationshipControl, EmploymentValidatorDirective,
+  HourlyControl,
+  HourlyValidatorDirective,
+  WorkmodelValidatorDirective
+} from "./user-edit.directive";
+
 
 @Component({
   selector: "app-user-edit",
@@ -60,7 +70,11 @@ import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular
     MatDatepickerInput,
     MatDatepicker,
     MatDatepickerToggle,
-    MatSuffix
+    MatSuffix,
+    MatIcon,
+    WorkmodelValidatorDirective,
+    HourlyValidatorDirective,
+    EmploymentValidatorDirective
   ]
 })
 export class UserEditComponent extends BaseEditComponent<User> implements OnInit, OnDestroy {
@@ -68,21 +82,12 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
   @ViewChild("rights") rightsSelected: MatSelectionList;
   userGroup: UntypedFormGroup;
   employmentGroup: FormGroup<{
-    employmentCosts: FormArray<FormGroup<{
-      id: FormControl<number>;
-      cost: FormControl<number>;
-      start_date: FormControl<string>;
-      end_date: FormControl<string>;
-    }>>;
+    hourlies: FormArray<FormGroup<HourlyControl>>;
     internal_cost: FormControl<number>;
     workmodel: FormControl<string>;
     tag_uid: FormControl<string>;
     export_tiktak: FormControl<boolean>
-    employmentRelationships: FormArray<FormGroup<{
-      id: FormControl<number>;
-      start_date: FormControl<string>;
-      end_date: FormControl<string>;
-    }>>;
+    employmentRelationships: FormArray<FormGroup<EmploymentRelationshipControl>>;
   }>;
   passwordGroup: UntypedFormGroup;
   rightsGroup: UntypedFormGroup;
@@ -91,7 +96,6 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
   availableRightCats: { key: string; open: boolean; title: string }[];
   firstTabLabel = "Stammdaten";
   sumYears = 0;
-
   navigationTarget = "user";
   buttons: CustomButton[] = [];
   grantRightsAvailable = false;
@@ -142,7 +146,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
       workmodel: new FormControl(""),
       tag_uid: new FormControl(""),
       export_tiktak: new FormControl(true),
-      employmentCosts: new FormArray([]),
+      hourlies: new FormArray([]),
       employmentRelationships: new FormArray([])
     });
     this.passwordGroup = new UntypedFormGroup({
@@ -183,28 +187,29 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
     }
   }
 
-  onAddEmploymentCost() {
-    console.log("New employment cost");
-    let employmentCost = new FormGroup({
-      id: new FormControl(1),
+
+  onAddHourly() {
+    let hourly = new FormGroup<HourlyControl>({
+      id: new FormControl(-1),
       cost: new FormControl(0),
       start_date: new FormControl(""),
       end_date: new FormControl("")
     });
-    this.employmentGroup.controls.employmentCosts.push(employmentCost);
+    this.employmentGroup.controls.hourlies.push(hourly);
   }
 
-  onRemoveEmploymentCost(index: number) {
-    this.employmentGroup.controls.employmentCosts.removeAt(index);
+  onRemoveHourly(index: number) {
+    this.employmentGroup.controls.hourlies.removeAt(index);
   }
+
 
   onAddRelationship() {
-    console.log("New relationship");
     let relationship = new FormGroup({
-      id: new FormControl(1),
-      start_date: new FormControl(""),
-      end_date: new FormControl("")
-    });
+        id: new FormControl(-1),
+        start_date: new FormControl(""),
+        end_date: new FormControl("")
+      }
+    );
     this.employmentGroup.controls.employmentRelationships.push(relationship);
   }
 
@@ -243,6 +248,20 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
     super.ngOnDestroy();
   }
 
+  sortDate<T extends { start_date: string }>(a: T, b: T): number {
+    try {
+      const aDate = new Date(a.start_date);
+      const bDate = new Date(b.start_date);
+      return aDate.getTime() - bDate.getTime();
+    } catch (e) {
+      console.error(e);
+      return 0;
+    }
+  }
+
+  markHoursAsTouched(idx: number) {
+    this.employmentGroup.controls.hourlies.at(idx).get("start_date")?.markAsTouched({ emitEvent: true });
+  }
 
   observableReady(): void {
     super.observableReady();
@@ -264,14 +283,14 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
         });
         this.api.getHourlyRatesUsersHourlyRatesUserIdGet(user.id).pipe(
           tap(hourlyRates => {
-            hourlyRates.forEach((hr) => {
-              let employmentCost = new FormGroup({
+            hourlyRates.sort(this.sortDate).forEach((hr, index) => {
+              let hourly = new FormGroup({
                 cost: new FormControl(hr.rate),
                 end_date: new FormControl(hr.end_date),
                 id: new FormControl(hr.id),
                 start_date: new FormControl(hr.start_date)
               });
-              this.employmentGroup.controls.employmentCosts.push(employmentCost);
+              this.employmentGroup.controls.hourlies.push(hourly);
             });
           }),
           first()).subscribe();
@@ -279,7 +298,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
           tap(empRels => {
             this.sumYears = 0;
             const year_in_ms = 1000 * 60 * 60 * 24 * 365;
-            empRels.forEach(er => {
+            empRels.sort(this.sortDate).forEach(er => {
               let start = new Date(er.start_date);
               let end = er.end_date && er.end_date.length !== 0 ? new Date(er.end_date) : new Date();
               let amount = end.getTime() - start.getTime();
@@ -301,10 +320,13 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
   createUpdateSuccess(user: User): void {
     this.id = user.id;
     this.navigationTarget = "user/edit/" + user.id.toString();
-    this.router.navigateByUrl(this.navigationTarget, { replaceUrl: true });
+
     this.snackBar.open("Speichern erfolgreich!", "Ok", {
       duration: 3000
     });
+    setTimeout(() => {
+      this.router.navigateByUrl(this.navigationTarget, { onSameUrlNavigation: "reload" }).then();
+    }, 1000);
   }
 
   onSubmit(): void {
@@ -323,9 +345,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
         handy: this.userGroup.get("handy").value,
         dial: this.userGroup.get("dial").value,
         position: this.userGroup.get("position").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         innovaphone_user: this.userGroup.get("innovaphone_user").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         innovaphone_pass: this.userGroup.get("innovaphone_pass").value,
         notifications: this.userGroup.get("notifications").value
       };
@@ -345,10 +365,6 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
         handy: this.userGroup.get("handy").value,
         dial: this.userGroup.get("dial").value,
         position: this.userGroup.get("position").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        //innovaphone_user: this.userGroup.get("innovaphone_user").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        //innovaphone_pass: this.userGroup.get("innovaphone_pass").value,
         notifications: true,
         address: this.userGroup.get("address").value,
         city: this.userGroup.get("city").value,
@@ -400,6 +416,9 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
       });
       return;
     }
+    if (!this.employmentGroup.valid) {
+      return;
+    }
     this.onSubmit();
 
     const userUpdate: UserUpdateEmployment = {
@@ -419,7 +438,7 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
           id: undefined
         }
       )),
-      hourly_rates: this.employmentGroup.get("employmentCosts").value.map(hourly => ({
+      hourly_rates: this.employmentGroup.get("hourlies").value.map(hourly => ({
         start_date: hourly.start_date,
         end_date: hourly.end_date && hourly.end_date.length !== 0 ? hourly.end_date : undefined,
         rate: hourly.cost
@@ -469,4 +488,5 @@ export class UserEditComponent extends BaseEditComponent<User> implements OnInit
 
   protected readonly GenderEnum = GenderEnum;
   protected readonly ScopeEnum = ScopeEnum;
+  protected readonly JSON = JSON;
 }

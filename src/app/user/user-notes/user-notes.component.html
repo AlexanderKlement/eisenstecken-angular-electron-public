@@ -1,0 +1,7 @@
+<app-table-builder [dataSource]="userNoteDataSource" noSearch="true"></app-table-builder>
+<div class="padding-bottom">
+  @if (showNewButton) {
+    <button (click)="openDialog(0)" mat-raised-button type="button">Neu</button>
+  }
+</div>
+

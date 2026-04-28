@@ -138,7 +138,7 @@
               </mat-form-field>
               <mat-form-field>
                 <mat-label>Arbeitsmodell (M-D-M-D-F-S)</mat-label>
-                <input class="form-control" formControlName="workmodel" matInput>
+                <input class="form-control" formControlName="workmodel" matInput appWorkmodelInvalid>
               </mat-form-field>
             </div>
             <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
@@ -154,50 +154,83 @@
             </div>
             <div class="v-line"></div>
             <h3>Stundensätze</h3>
-            <ng-container formArrayName="employmentCosts">
-              @for (control of employmentGroup.controls.employmentCosts.controls; track control.controls.id; let idx = $index) {
-                <ng-container [formGroupName]="idx">
+            <ng-container formArrayName="hourlies">
+              @for (control of employmentGroup.controls.hourlies.controls; track control.controls.id; let idx = $index; ) {
+                <ng-container [formGroupName]="idx" appHourlyInvalid
+                              [beforeRow]="idx === 0 ? undefined : employmentGroup.controls.hourlies.controls.at(idx-1)"
+                              [afterRow]="employmentGroup.controls.hourlies.controls.at(idx+1)">
+
+                  @if (control.hasError("dateInvalid")) {
+                    <span style="color: red">Datum-Format ungültig</span>
+                  }
+                  @if (control.hasError("dateBefore")) {
+                    <span style="color: red">Datum darf nicht mit vorheriger reihe überschneiden</span>
+                  }
+                  @if (control.hasError("startBeforeEnd")) {
+                    <span style="color: red">Start-Datum darf nicht vor End-Datum sein</span>
+                  }
                   <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
                     <mat-form-field>
                       <mat-label>Stundensatz</mat-label>
-                      <input class="form-control" matInput formControlName="cost">
+                      <input class="form-control" matInput formControlName="cost" name="cost">
+
                     </mat-form-field>
                     <mat-form-field>
-                      <mat-label>Startdatum</mat-label>
+                      <mat-label>Start-Datum</mat-label>
                       <input class="form-control" matInput formControlName="start_date"
-                             [matDatepicker]="start_date_picker">
+                             [matDatepicker]="start_date_picker" (dateChange)="markHoursAsTouched(idx)">
+                      @if (control.hasError("dateInvalid") || control.hasError("dateBefore") || control.hasError("startBeforeEnd")) {
+                        <mat-icon style="color: red" matSuffix>warning</mat-icon>
+                      }
                       <mat-datepicker-toggle matSuffix [for]="start_date_picker"></mat-datepicker-toggle>
                       <mat-datepicker #start_date_picker></mat-datepicker>
                     </mat-form-field>
                     <mat-form-field>
-                      <mat-label>Enddatum</mat-label>
+                      <mat-label>End-Datum</mat-label>
                       <input class="form-control" matInput formControlName="end_date"
                              [matDatepicker]="end_date_picker">
+                      @if (control.hasError("startBeforeEnd")) {
+                        <mat-icon style="color: red" matSuffix>warning</mat-icon>
+                      }
                       <mat-datepicker-toggle matSuffix [for]="end_date_picker"></mat-datepicker-toggle>
                       <mat-datepicker #end_date_picker></mat-datepicker>
                     </mat-form-field>
-                    <app-circle-icon-button class="del-button" icon="delete" (click)="onRemoveEmploymentCost(idx)" />
+                    <app-circle-icon-button class="del-button" icon="delete" (click)="onRemoveHourly(idx)" />
                   </div>
                 </ng-container>
               }
             </ng-container>
             <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="center" class="padding-top">
-              <button [disabled]="submitted" mat-raised-button type="button" (click)="onAddEmploymentCost()"
+              <button [disabled]="submitted" mat-raised-button type="button" (click)="onAddHourly()"
                       class="save-btn">
                 Neuer Stundensatz
               </button>
             </div>
             <div class="v-line"></div>
             <h3>Arbeitsverhältnis</h3>
-            <span>Gesamte Arbeitszeit bisher: {{ sumYears }} Jahre</span>
+            <span>Gesamte Arbeitszeit bisher: {{ sumYears }} Jahre<br /></span>
             <ng-container formArrayName="employmentRelationships">
-              @for (control of employmentGroup.controls.employmentRelationships.controls; track control.controls.id; let index = $index) {
-                <ng-container [formGroupName]="index">
+              @for (control of employmentGroup.controls.employmentRelationships.controls; track control.controls.id; let idx = $index) {
+                <ng-container [formGroupName]="idx" appEmploymentInvalid
+                              [beforeRow]="idx === 0 ? undefined : employmentGroup.controls.employmentRelationships.controls.at(idx-1)"
+                              [afterRow]="employmentGroup.controls.employmentRelationships.controls.at(idx+1)">
+                  @if (control.hasError("dateInvalid")) {
+                    <span style="color: red">Datum-Format ungültig</span>
+                  }
+                  @if (control.hasError("dateBefore")) {
+                    <span style="color: red">Datum darf nicht mit vorheriger reihe überschneiden</span>
+                  }
+                  @if (control.hasError("startBeforeEnd")) {
+                    <span style="color: red">Start-Datum darf nicht vor End-Datum sein</span>
+                  }
                   <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
                     <mat-form-field>
                       <mat-label>Start Arbeitsverhältnis</mat-label>
                       <input class="form-control" matInput formControlName="start_date"
                              [matDatepicker]="start_date_picker">
+                      @if (control.hasError("dateInvalid") || control.hasError("dateBefore") || control.hasError("startBeforeEnd")) {
+                        <mat-icon style="color: red" matSuffix>warning</mat-icon>
+                      }
                       <mat-datepicker-toggle matSuffix [for]="start_date_picker"></mat-datepicker-toggle>
                       <mat-datepicker #start_date_picker></mat-datepicker>
                     </mat-form-field>
@@ -205,10 +238,13 @@
                       <mat-label>Ende Arbeitsverhältnis</mat-label>
                       <input class="form-control" matInput formControlName="end_date"
                              [matDatepicker]="end_date_picker">
+                      @if (control.hasError("startBeforeEnd")) {
+                        <mat-icon style="color: red" matSuffix>warning</mat-icon>
+                      }
                       <mat-datepicker-toggle matSuffix [for]="end_date_picker"></mat-datepicker-toggle>
                       <mat-datepicker #end_date_picker></mat-datepicker>
                     </mat-form-field>
-                    <app-circle-icon-button class="del-button" icon="delete" (click)="onRemoveRelationship(index)" />
+                    <app-circle-icon-button class="del-button" icon="delete" (click)="onRemoveRelationship(idx)" />
                   </div>
                 </ng-container>
               }
@@ -256,7 +292,7 @@
                 <input class="form-control" matInput formControlName="innovaphone_pass">
               </mat-form-field>
             </div>
-            <h2>Schlüssel</h2>
+            <h3>Schlüssel</h3>
             <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start">
               <mat-form-field appearance="fill">
                 <mat-label>Firmenschlüssel Nummer</mat-label>

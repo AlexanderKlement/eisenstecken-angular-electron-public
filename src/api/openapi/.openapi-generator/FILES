@@ -171,6 +171,9 @@ model/user.ts
 model/userCreate.ts
 model/userEssential.ts
 model/userListElement.ts
+model/userNote.ts
+model/userNoteCreate.ts
+model/userNoteUpdate.ts
 model/userPassword.ts
 model/userUpdateBase.ts
 model/userUpdateDress.ts
