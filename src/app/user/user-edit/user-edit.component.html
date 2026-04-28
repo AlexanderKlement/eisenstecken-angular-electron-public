@@ -179,9 +179,13 @@
                       <mat-label>Start-Datum</mat-label>
                       <input class="form-control" matInput formControlName="start_date"
                              [matDatepicker]="start_date_picker" (dateChange)="markHoursAsTouched(idx)">
-                      @if (control.hasError("dateInvalid") || control.hasError("dateBefore") || control.hasError("startBeforeEnd")) {
-                        <mat-icon style="color: red" matSuffix>warning</mat-icon>
-                      }
+
+                      <mat-icon style="color: red" matSuffix>
+                        @if (control.hasError("dateInvalid") || control.hasError("dateBefore") || control.hasError("startBeforeEnd")) {
+                          warning
+                        }
+                      </mat-icon>
+
                       <mat-datepicker-toggle matSuffix [for]="start_date_picker"></mat-datepicker-toggle>
                       <mat-datepicker #start_date_picker></mat-datepicker>
                     </mat-form-field>
@@ -189,9 +193,13 @@
                       <mat-label>End-Datum</mat-label>
                       <input class="form-control" matInput formControlName="end_date"
                              [matDatepicker]="end_date_picker">
-                      @if (control.hasError("startBeforeEnd")) {
-                        <mat-icon style="color: red" matSuffix>warning</mat-icon>
-                      }
+
+                      <mat-icon style="color: red" matSuffix>
+                        @if (control.hasError("startBeforeEnd")) {
+                          warning
+                        }
+                      </mat-icon>
+
                       <mat-datepicker-toggle matSuffix [for]="end_date_picker"></mat-datepicker-toggle>
                       <mat-datepicker #end_date_picker></mat-datepicker>
                     </mat-form-field>
@@ -228,9 +236,12 @@
                       <mat-label>Start Arbeitsverhältnis</mat-label>
                       <input class="form-control" matInput formControlName="start_date"
                              [matDatepicker]="start_date_picker">
-                      @if (control.hasError("dateInvalid") || control.hasError("dateBefore") || control.hasError("startBeforeEnd")) {
-                        <mat-icon style="color: red" matSuffix>warning</mat-icon>
-                      }
+                      <mat-icon style="color: red" matSuffix>
+                        @if (control.hasError("dateInvalid") || control.hasError("dateBefore") || control.hasError("startBeforeEnd")) {
+                          warning
+                        }
+                      </mat-icon>
+
                       <mat-datepicker-toggle matSuffix [for]="start_date_picker"></mat-datepicker-toggle>
                       <mat-datepicker #start_date_picker></mat-datepicker>
                     </mat-form-field>
@@ -238,9 +249,13 @@
                       <mat-label>Ende Arbeitsverhältnis</mat-label>
                       <input class="form-control" matInput formControlName="end_date"
                              [matDatepicker]="end_date_picker">
-                      @if (control.hasError("startBeforeEnd")) {
-                        <mat-icon style="color: red" matSuffix>warning</mat-icon>
-                      }
+
+                      <mat-icon style="color: red" matSuffix>
+                        @if (control.hasError("startBeforeEnd")) {
+                          warning
+                        }
+                      </mat-icon>
+
                       <mat-datepicker-toggle matSuffix [for]="end_date_picker"></mat-datepicker-toggle>
                       <mat-datepicker #end_date_picker></mat-datepicker>
                     </mat-form-field>
