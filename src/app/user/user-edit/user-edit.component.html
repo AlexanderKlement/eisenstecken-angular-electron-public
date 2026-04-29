@@ -117,7 +117,8 @@
               </mat-form-field>
               <mat-form-field>
                 <mat-label>Password Wiederholen</mat-label>
-                <input class="form-control" matInput>
+                <input class="form-control" formControlName="password_repeat" matInput appPasswordRepeatValid
+                       [otherInput]="userGroup.controls.password">
               </mat-form-field>
             </div>
           }
@@ -345,6 +346,11 @@
               <mat-form-field appearance="fill">
                 <mat-label>Password</mat-label>
                 <input class="form-control" formControlName="password" matInput>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Password Wiederholen</mat-label>
+                <input class="form-control" formControlName="password_repeat" matInput appPasswordRepeatValid
+                       [otherInput]="passwordGroup.controls.password">
               </mat-form-field>
             </div>
             <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="center" class="padding-top">

@@ -7,19 +7,32 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { GenderEnum } from './genderEnum';
 
 
 export interface UserCreate { 
+    address?: string | null;
+    birthday?: string | null;
+    birthplace?: string | null;
+    city?: string | null;
+    country?: string | null;
     dial: string;
     email: string;
+    email_private?: string | null;
     firstname: string;
+    gender?: GenderEnum | null;
     handy: string;
     innovaphone_pass: string;
     innovaphone_user: string;
     notifications: boolean;
     password: string;
     position: string;
+    postal_code?: string | null;
     secondname: string;
     tel: string;
+    vat_number?: string | null;
 }
+export namespace UserCreate {
+}
+
 

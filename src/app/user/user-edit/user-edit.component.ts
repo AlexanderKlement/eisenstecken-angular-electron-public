@@ -7,7 +7,8 @@ import {
   FormsModule,
   ReactiveFormsModule,
   UntypedFormControl,
-  UntypedFormGroup
+  UntypedFormGroup,
+  Validators
 } from "@angular/forms";
 import { Observable } from "rxjs";
 import { first, tap } from "rxjs/operators";
@@ -40,8 +41,11 @@ import { MatIcon } from "@angular/material/icon";
 import {
   EmploymentRelationshipControl,
   EmploymentValidatorDirective,
+  GeneralControl,
   HourlyControl,
   HourlyValidatorDirective,
+  PasswordControl,
+  PasswordRepeatValidatorDirective,
   WorkmodelValidatorDirective
 } from "./user-edit.directive";
 
@@ -74,7 +78,8 @@ import {
     MatIcon,
     WorkmodelValidatorDirective,
     HourlyValidatorDirective,
-    EmploymentValidatorDirective
+    EmploymentValidatorDirective,
+    PasswordRepeatValidatorDirective
   ]
 })
 export default class UserEditComponent extends BaseEditComponent<User> implements OnInit, OnDestroy {
@@ -83,7 +88,7 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
 
 
   @ViewChild("rights") rightsSelected: MatSelectionList;
-  userGroup: UntypedFormGroup;
+  userGroup: FormGroup<GeneralControl>;
   employmentGroup: FormGroup<{
     hourlies: FormArray<FormGroup<HourlyControl>>;
     internal_cost: FormControl<number>;
@@ -92,7 +97,7 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
     export_tiktak: FormControl<boolean>
     employmentRelationships: FormArray<FormGroup<EmploymentRelationshipControl>>;
   }>;
-  passwordGroup: UntypedFormGroup;
+  passwordGroup: FormGroup<PasswordControl>;
   rightsGroup: UntypedFormGroup;
   dressGroup: UntypedFormGroup;
 
@@ -117,29 +122,28 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
     if (this.createMode) {
       this.firstTabLabel = "Erstellen";
     }
-    this.userGroup = new UntypedFormGroup({
-      firstname: new UntypedFormControl(""),
-      secondname: new UntypedFormControl(""),
-      gender: new UntypedFormControl(""),
-      birthday: new UntypedFormControl(""),
-      birthplace: new UntypedFormControl(""),
-      email: new UntypedFormControl(""),
-      email_private: new UntypedFormControl(""),
-      vat_number: new UntypedFormControl(""),
-      address: new UntypedFormControl(""),
-      city: new UntypedFormControl(""),
-      postal_code: new UntypedFormControl(""),
-      country: new UntypedFormControl(""),
-      tel: new UntypedFormControl(""),
-      password: new UntypedFormControl(""),
-      handy: new UntypedFormControl(""),
-      handyPrefix: new UntypedFormControl(""),
-      position: new UntypedFormControl(""),
-      dial: new UntypedFormControl(""),
-      cost: new UntypedFormControl(""),
-      innovaphone_user: new UntypedFormControl(""),
-      innovaphone_pass: new UntypedFormControl(""),
-      notifications: new UntypedFormControl(true)
+    this.userGroup = new FormGroup<GeneralControl>({
+      firstname: new FormControl("", this.createMode ? Validators.required : undefined),
+      secondname: new FormControl("", this.createMode ? Validators.required : undefined),
+      gender: new FormControl(""),
+      birthday: new FormControl(""),
+      birthplace: new FormControl(""),
+      email: new FormControl("", this.createMode ? Validators.required : undefined),
+      email_private: new FormControl(""),
+      vat_number: new FormControl(""),
+      address: new FormControl(""),
+      city: new FormControl(""),
+      postal_code: new FormControl(""),
+      country: new FormControl(""),
+      tel: new FormControl("", this.createMode ? Validators.required : undefined),
+      password: new FormControl("", this.createMode ? Validators.required : undefined),
+      handy: new FormControl("", this.createMode ? Validators.required : undefined),
+      position: new FormControl("", this.createMode ? Validators.required : undefined),
+      dial: new FormControl("", this.createMode ? Validators.required : undefined),
+      innovaphone_user: new FormControl(""),
+      innovaphone_pass: new FormControl(""),
+      notifications: new FormControl(true),
+      password_repeat: new FormControl("", this.createMode ? Validators.required : undefined)
     });
     this.employmentGroup = new FormGroup({
       internal_cost: new FormControl(0),
@@ -149,8 +153,9 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
       hourlies: new FormArray([]),
       employmentRelationships: new FormArray([])
     });
-    this.passwordGroup = new UntypedFormGroup({
-      password: new UntypedFormControl("")
+    this.passwordGroup = new FormGroup<PasswordControl>({
+      password: new FormControl("", Validators.required),
+      password_repeat: new FormControl("", Validators.required)
     });
     this.rightsGroup = new UntypedFormGroup({
       innovaphone_user: new UntypedFormControl(""),
@@ -171,9 +176,9 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
       sole: new UntypedFormControl(""),
       export_dress: new UntypedFormControl(true)
     });
-    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
+    this.authService.currentUserHasScope(ScopeEnum.Admin).pipe(first()).subscribe(allowed => {
       this.grantRightsAvailable = allowed;
-      if (allowed) {
+      if (allowed && !this.createMode) {
         this.buttons.push({
           name: "Benutzer löschen",
           navigate: (): void => {
@@ -263,56 +268,63 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
     this.employmentGroup.controls.hourlies.at(idx).get("start_date")?.markAsTouched({ emitEvent: true });
   }
 
+  fillForms(user: User) {
+    this.userGroup.patchValue(user);
+    this.rightsGroup.patchValue(user);
+    this.rightsGroup.patchValue({
+      scope: user.scopes.at(0),
+      coffee_key: user.coffee_key ? "true" : "false"
+    });
+    this.employmentGroup.patchValue(user);
+    this.dressGroup.patchValue(user);
+    this.dressGroup.patchValue({
+      belt: user.belt ? "true" : "false"
+    });
+    this.employmentGroup.patchValue({
+      workmodel: `${user.hours_monday ?? 0}-${user.hours_tuesday ?? 0}-${user.hours_wednesday ?? 0}-${user.hours_thursday ?? 0}-${user.hours_friday ?? 0}-${user.hours_saturday ?? 0}`
+    });
+    this.api.getHourlyRatesUsersHourlyRatesUserIdGet(user.id).pipe(
+      tap(hourlyRates => {
+        this.employmentGroup.controls.hourlies.clear();
+        hourlyRates.sort(this.sortDate).forEach((hr) => {
+          let hourly = new FormGroup({
+            cost: new FormControl(hr.rate),
+            end_date: new FormControl(hr.end_date),
+            id: new FormControl(hr.id),
+            start_date: new FormControl(hr.start_date)
+          });
+          this.employmentGroup.controls.hourlies.push(hourly);
+        });
+      }),
+      first()).subscribe();
+    this.api.getEmploymentRelationshipsUsersEmploymentRelationshipsUserIdGet(user.id).pipe(
+      tap(empRels => {
+        this.employmentGroup.controls.employmentRelationships.clear();
+        this.sumYears = 0;
+        const year_in_ms = 1000 * 60 * 60 * 24 * 365;
+        empRels.sort(this.sortDate).forEach(er => {
+          let start = new Date(er.start_date);
+          let end = er.end_date && er.end_date.length !== 0 ? new Date(er.end_date) : new Date();
+          let amount = end.getTime() - start.getTime();
+          this.sumYears += amount / year_in_ms;
+          let employmentCost = new FormGroup({
+            end_date: new FormControl(er.end_date),
+            id: new FormControl(er.id),
+            start_date: new FormControl(er.start_date)
+          });
+          this.employmentGroup.controls.employmentRelationships.push(employmentCost);
+        });
+        this.sumYears = Math.round(this.sumYears * 10) / 10;
+      }),
+      first()).subscribe();
+  }
+
   observableReady(): void {
     super.observableReady();
     if (!this.createMode) {
       this.data$.pipe(tap(user => {
-        this.userGroup.patchValue(user);
-        this.rightsGroup.patchValue(user);
-        this.rightsGroup.patchValue({
-          scope: user.scopes.at(0),
-          coffee_key: user.coffee_key ? "true" : "false"
-        });
-        this.employmentGroup.patchValue(user);
-        this.dressGroup.patchValue(user);
-        this.dressGroup.patchValue({
-          belt: user.belt ? "true" : "false"
-        });
-        this.employmentGroup.patchValue({
-          workmodel: `${user.hours_monday ?? 0}-${user.hours_tuesday ?? 0}-${user.hours_wednesday ?? 0}-${user.hours_thursday ?? 0}-${user.hours_friday ?? 0}-${user.hours_saturday ?? 0}`
-        });
-        this.api.getHourlyRatesUsersHourlyRatesUserIdGet(user.id).pipe(
-          tap(hourlyRates => {
-            hourlyRates.sort(this.sortDate).forEach((hr) => {
-              let hourly = new FormGroup({
-                cost: new FormControl(hr.rate),
-                end_date: new FormControl(hr.end_date),
-                id: new FormControl(hr.id),
-                start_date: new FormControl(hr.start_date)
-              });
-              this.employmentGroup.controls.hourlies.push(hourly);
-            });
-          }),
-          first()).subscribe();
-        this.api.getEmploymentRelationshipsUsersEmploymentRelationshipsUserIdGet(user.id).pipe(
-          tap(empRels => {
-            this.sumYears = 0;
-            const year_in_ms = 1000 * 60 * 60 * 24 * 365;
-            empRels.sort(this.sortDate).forEach(er => {
-              let start = new Date(er.start_date);
-              let end = er.end_date && er.end_date.length !== 0 ? new Date(er.end_date) : new Date();
-              let amount = end.getTime() - start.getTime();
-              this.sumYears += amount / year_in_ms;
-              let employmentCost = new FormGroup({
-                end_date: new FormControl(er.end_date),
-                id: new FormControl(er.id),
-                start_date: new FormControl(er.start_date)
-              });
-              this.employmentGroup.controls.employmentRelationships.push(employmentCost);
-            });
-            this.sumYears = Math.round(this.sumYears * 10) / 10;
-          }),
-          first()).subscribe();
+
+        this.fillForms(user);
       }), first()).subscribe();
     }
   }
@@ -320,13 +332,16 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
   createUpdateSuccess(user: User): void {
     this.id = user.id;
     this.navigationTarget = "user/edit/" + user.id.toString();
-
     this.snackBar.open("Speichern erfolgreich!", "Ok", {
       duration: 3000
     });
-    setTimeout(() => {
-      this.router.navigateByUrl(this.navigationTarget, { onSameUrlNavigation: "reload" }).then();
-    }, 1000);
+    if (this.createMode) {
+      setTimeout(() => {
+        this.router.navigateByUrl(this.navigationTarget, { replaceUrl: true }).then();
+      }, 1000);
+    } else {
+      this.fillForms(user);
+    }
   }
 
   onSubmit(): void {
@@ -336,6 +351,30 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
   onSubmitGeneral(): void {
     this.onSubmit();
     if (this.createMode) {
+      const pw = this.userGroup.get("password").value;
+      const pwRepeat = this.userGroup.get("password_repeat").value;
+      if (pw != pwRepeat) {
+        this.snackBar.open("Passwörter stimmen nicht überein", "Ok", {
+          duration: 3000
+        });
+        this.submitted = false;
+        return;
+      }
+      if (!this.userGroup.valid) {
+        this.snackBar.open("Bitte die mit * markierten Felder ausfüllen", "Ok", {
+          duration: 3000
+        });
+        this.submitted = false;
+        return;
+      }
+      let gender: GenderEnum | null = null;
+      let val = this.userGroup.get("gender").value;
+      if (val === GenderEnum.Female || val === GenderEnum.Male)
+        gender = val;
+      let birthday = this.userGroup.get("birthday").value;
+      if (birthday === "") {
+        birthday = null;
+      }
       const userCreate: UserCreate = {
         email: this.userGroup.get("email").value,
         tel: this.userGroup.get("tel").value,
@@ -347,7 +386,16 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
         position: this.userGroup.get("position").value,
         innovaphone_user: this.userGroup.get("innovaphone_user").value,
         innovaphone_pass: this.userGroup.get("innovaphone_pass").value,
-        notifications: this.userGroup.get("notifications").value
+        notifications: this.userGroup.get("notifications").value,
+        birthday,
+        city: this.userGroup.get("city").value,
+        country: this.userGroup.get("country").value,
+        address: this.userGroup.get("address").value,
+        gender,
+        postal_code: this.userGroup.get("postal_code").value,
+        vat_number: this.userGroup.get("vat_number").value,
+        email_private: this.userGroup.get("email_private").value,
+        birthplace: this.userGroup.get("birthplace").value
       };
       this.api.createUserUsersPost(userCreate).pipe(first()).subscribe((user) => {
         this.createUpdateSuccess(user);
@@ -357,6 +405,14 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
         this.createUpdateComplete();
       });
     } else {
+      let gender: GenderEnum | null = null;
+      let val = this.userGroup.get("gender").value;
+      if (val === GenderEnum.Female || val === GenderEnum.Male)
+        gender = val;
+      let birthday = this.userGroup.get("birthday").value;
+      if (birthday === "") {
+        birthday = null;
+      }
       const userUpdate: UserUpdateBase = {
         email: this.userGroup.get("email").value,
         tel: this.userGroup.get("tel").value,
@@ -368,9 +424,9 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
         notifications: true,
         address: this.userGroup.get("address").value,
         city: this.userGroup.get("city").value,
-        birthday: this.userGroup.get("birthday").value,
+        birthday,
         country: this.userGroup.get("country").value,
-        gender: this.userGroup.get("gender").value as GenderEnum,
+        gender,
         birthplace: this.userGroup.get("birthplace").value,
         email_private: this.userGroup.get("email_private").value,
         vat_number: this.userGroup.get("vat_number").value,
@@ -474,8 +530,18 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
   }
 
   onSubmitPassword(): void {
+    this.onSubmit();
+    const password = this.passwordGroup.get("password").value;
+    const pwRepeat = this.passwordGroup.get("password_repeat").value;
+    if (password != pwRepeat || !this.passwordGroup.valid) {
+      this.snackBar.open("Passwörter stimmen nicht überein", "Ok", {
+        duration: 3000
+      });
+      this.submitted = false;
+      return;
+    }
     const userPassword: UserPassword = {
-      password: this.passwordGroup.get("password").value
+      password
     };
     this.api.updateUserPasswordUsersPasswordUserIdPut(this.id, userPassword).pipe(first()).subscribe((user) => {
       this.createUpdateSuccess(user);
@@ -488,5 +554,4 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
 
   protected readonly GenderEnum = GenderEnum;
   protected readonly ScopeEnum = ScopeEnum;
-  protected readonly JSON = JSON;
 }

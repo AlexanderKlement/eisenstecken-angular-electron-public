@@ -45,6 +45,25 @@
     cursor: pointer;
   }
 
+  .save {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: darkgreen;
+    box-shadow: 0 0 3px #999;
+    background: #fff;
+    border-radius: 100%;
+    padding: 3px;
+
+    &.hidden {
+      display: none;
+    }
+
+    &.waiting {
+      color: orange;
+    }
+  }
+
   &:hover:before {
     display: none;
   }

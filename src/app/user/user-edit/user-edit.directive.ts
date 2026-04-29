@@ -1,16 +1,35 @@
-import {
-  AbstractControl,
-  FormArray,
-  FormControl,
-  FormGroup,
-  NG_VALIDATORS,
-  ValidationErrors,
-  Validator
-} from "@angular/forms";
+import { AbstractControl, FormControl, FormGroup, NG_VALIDATORS, ValidationErrors, Validator } from "@angular/forms";
 import { Directive, forwardRef, input } from "@angular/core";
-import { HourlyRate } from "../../../api/openapi";
 import dayjs from "dayjs/esm";
 
+export type GeneralControl = {
+  firstname: FormControl<string>,
+  secondname: FormControl<string>,
+  gender: FormControl<string>,
+  birthday: FormControl<string>,
+  birthplace: FormControl<string>,
+  email: FormControl<string>,
+  email_private: FormControl<string>,
+  vat_number: FormControl<string>,
+  address: FormControl<string>,
+  city: FormControl<string>,
+  postal_code: FormControl<string>,
+  country: FormControl<string>,
+  tel: FormControl<string>,
+  password: FormControl<string>,
+  password_repeat: FormControl<string>,
+  handy: FormControl<string>,
+  position: FormControl<string>,
+  dial: FormControl<string>,
+  innovaphone_user: FormControl<string>,
+  innovaphone_pass: FormControl<string>,
+  notifications: FormControl<boolean>
+}
+
+export type PasswordControl = {
+  password: FormControl<string>,
+  password_repeat: FormControl<string>,
+}
 
 export type HourlyControl = {
   id: FormControl<number>;
@@ -137,5 +156,31 @@ export class EmploymentValidatorDirective implements Validator {
     const nextStart = parseDate(this.afterRow ? this.afterRow()?.get("start_date") ?? Infinity : Infinity);
     return validateDates(thisStart, thisEnd, prevEnd, nextStart);
 
+  }
+}
+
+@Directive({
+  selector: "[appPasswordRepeatValid]",
+  providers: [
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => PasswordRepeatValidatorDirective),
+      multi: true
+    }
+  ]
+})
+export class PasswordRepeatValidatorDirective implements Validator {
+  readonly otherInput = input<FormControl<string>>();
+
+  validate(control: AbstractControl): ValidationErrors | null {
+    if (this.otherInput) {
+      const input = this.otherInput();
+      if (input && input.value.length > 0) {
+        if (input.value !== control.value) {
+          return { passwordNotSame: true };
+        }
+      }
+      return null;
+    }
   }
 }

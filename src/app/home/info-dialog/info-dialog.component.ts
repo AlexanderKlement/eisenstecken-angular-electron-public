@@ -1,11 +1,19 @@
-import { Component, OnInit, inject } from "@angular/core";
-import {TableDataSource} from "../../shared/components/table-builder/table-builder.datasource";
-import { MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
-import {AuthStateService} from "../../shared/services/auth-state.service";
-import {first} from "rxjs/operators";
-import {Observable} from "rxjs";
-import {DefaultService, User, Price, TechnicalData, Credential, InfoPage, ScopeEnum } from "../../../api/openapi";
-import { MatTabGroup, MatTab } from "@angular/material/tabs";
+import { Component, inject, OnInit } from "@angular/core";
+import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
+import { MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from "@angular/material/dialog";
+import { AuthStateService } from "../../shared/services/auth-state.service";
+import { first } from "rxjs/operators";
+import { Observable } from "rxjs";
+import {
+  Credential,
+  DefaultService,
+  InfoPage,
+  Price,
+  ScopeEnum,
+  TechnicalData,
+  UserContact
+} from "../../../api/openapi";
+import { MatTab, MatTabGroup } from "@angular/material/tabs";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 import { MatInput } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
@@ -19,17 +27,17 @@ interface Update {
 }
 
 @Component({
-    selector: 'app-info-dialog',
-    templateUrl: './info-dialog.component.html',
-    styleUrls: ['./info-dialog.component.scss'],
-  imports: [MatDialogTitle, MatDialogContent, MatTabGroup, MatTab, TableBuilderComponent, MatInput, MatDialogActions, MatButton, AsyncPipe, Industry40Component, ChatComponent],
+  selector: "app-info-dialog",
+  templateUrl: "./info-dialog.component.html",
+  styleUrls: ["./info-dialog.component.scss"],
+  imports: [MatDialogTitle, MatDialogContent, MatTabGroup, MatTab, TableBuilderComponent, MatInput, MatDialogActions, MatButton, AsyncPipe, Industry40Component, ChatComponent]
 })
 export class InfoDialogComponent implements OnInit {
   private api = inject(DefaultService);
   dialogRef = inject<MatDialogRef<InfoDialogComponent>>(MatDialogRef);
   private authService = inject(AuthStateService);
 
-  userDataSource: TableDataSource<User, DefaultService>;
+  userDataSource: TableDataSource<UserContact, DefaultService>;
   priceDataSource: TableDataSource<Price, DefaultService>;
   technicalDataDataSource: TableDataSource<TechnicalData, DefaultService>;
   credentialDataSource: TableDataSource<Credential, DefaultService>;
@@ -50,7 +58,7 @@ export class InfoDialogComponent implements OnInit {
       versionName: "1.1.17",
       changes: [
         "Benutzer wird ausgeloggt wenn sein token verfällt.",
-        "Buttons werden nun wieder hinzugefügt wenn sich die Daten ändern.",
+        "Buttons werden nun wieder hinzugefügt wenn sich die Daten ändern."
       ]
     },
     {
@@ -114,7 +122,7 @@ export class InfoDialogComponent implements OnInit {
         "Ausgangsrechnungen sollten nun beim ersten mal speichern schon erstellt werden.",
         "Elektronische Rechnung entfernt nun auch das IT vor dem Codice Fiscale",
         "Checkbox hinzugefügt, damit Tom eingehende Artikel abhaken kann",
-        "Absender zu Bestellungs-PDF hinzugefügt",
+        "Absender zu Bestellungs-PDF hinzugefügt"
       ]
     },
     {
@@ -130,7 +138,7 @@ export class InfoDialogComponent implements OnInit {
     {
       versionName: "1.1.9",
       changes: [
-        'Bestellte Artikel in "Ausgewählte Artikel" werden nun richtig geordnet',
+        "Bestellte Artikel in \"Ausgewählte Artikel\" werden nun richtig geordnet",
         "Die Adressen bei PDF sind nun in der richtigen Reihenfolge",
         "Anfragen können nun in Bestellungen umgewandelt werden"
       ]
@@ -146,11 +154,11 @@ export class InfoDialogComponent implements OnInit {
       versionName: "1.1.7",
       changes: [
         "Notizen auf dem Homedisplay werden nun immer in der gleichen Reihenfolge dargestellt",
-        'Programmname "Eisenstecken - Eibel" in Windows auf "Eibel" beschränkt. Dies betrifft den Betreff oben links' +
+        "Programmname \"Eisenstecken - Eibel\" in Windows auf \"Eibel\" beschränkt. Dies betrifft den Betreff oben links" +
         " und die Beschreibung in der Miniaturansicht",
         "Kalender und Chat Tabs sind nun auf dem Homescreen linksbündig",
         "Das Bild im Knopf in der Taskleiste ist nun kleiner. Das Feld zum klicken bleibt gleich groß",
-        'Die Ausloggen taste wurde entfernt. Ausloggen kann nun erreicht werden, wenn man "!logout" in den Chat eingibt',
+        "Die Ausloggen taste wurde entfernt. Ausloggen kann nun erreicht werden, wenn man \"!logout\" in den Chat eingibt",
         "Mehr Abstand zwischen den beiden Kalendern auf der Startseite",
         "Notizen auf der Startseite haben nun die gleiche Farbe wie die anderen Akzentlinien",
         "Aufträge können nun mit dem Text Fertigstellung versehen werden.",
@@ -158,18 +166,18 @@ export class InfoDialogComponent implements OnInit {
         "Dies sollte uns auch mehr Möglichkeiten geben um die PDFs anders zu gestalten.",
         "Neues PDF hinzugefügt: Angenommene Aufträge als kurze Übersicht für die Werkstatt",
         "Sucher in Lieferscheinen repariert",
-        'Bei Lieferscheinen neue Spalte "Aufträge" hinzugefügt',
+        "Bei Lieferscheinen neue Spalte \"Aufträge\" hinzugefügt",
         "Bei Aufträgen kann nun direkt auf den Kunden gesprungen werden.",
         "Lieferscheine unterstützen nun mehrere Zeilen in der Artikelbeschreibung",
         "Kleiner Anpassungen im Kunden- und Aufträge erstellen/bearbeiten Fenster.",
         "Lieferscheine, Ein- und Ausgangsrechnungen werden nun nach Jahren sortiert angezeigt. Ähnlich wie dies " +
         "bei Aufträgen der Fall ist.",
         "Grafische Änderungen bei Rechnungen erstellen/bearbeiten",
-        'Titel "Allgemeine Materialbeschreibung" kann nun auch unbenannt werden',
+        "Titel \"Allgemeine Materialbeschreibung\" kann nun auch unbenannt werden",
         "Angebot können nun auch mit Prozenten rabattiert werden",
         "Ausgangsrechnungen haben nun eigene Kundendaten. Beim Erstellen einer Ausgansrechnung werden dies vom Kunden übernommen.",
         "Sollte die Steuernummer bei elektronischen Rechnungen nicht gesetzt sein, wird nun die Umsatzsteuer-ID (Partita IVA) verwendet",
-        "Sollten Aufträge gelöscht werden, wird das Backup nun in den Unterordner 11_Verwaltung geschoben.",
+        "Sollten Aufträge gelöscht werden, wird das Backup nun in den Unterordner 11_Verwaltung geschoben."
       ]
     },
     {
@@ -178,7 +186,7 @@ export class InfoDialogComponent implements OnInit {
         "Notizen sollten nun nicht mehr die Reihenfolge verändern",
         "Neustarten knopf sollte nach diesem Update wirklich funktionieren",
         "Bei Lieferscheinen sollte nach dem Bearbeiten die Zurücktaste wie gewohnt funktionieren.",
-        'Kontake können nun nach "Kunden" oder "Unternehmen" verschoben werden ohne das der entsprechende Kunde ' +
+        "Kontake können nun nach \"Kunden\" oder \"Unternehmen\" verschoben werden ohne das der entsprechende Kunde " +
         "im System angelegt werden muss",
         "Kontakte werden nun im Telefonbuch besser dargestellt.",
         "Fehler behoben, der das Telefonieren verhindert hat.",
@@ -209,7 +217,7 @@ export class InfoDialogComponent implements OnInit {
         "Suche bei Kontakten verbessert. Achtung: Die Suche scheint in anderen Orten noch nicht zu funktionieren",
         "Kontakte füllen nun in Kunden und Lieferanten teile bereits aus",
         "Lieferanten in Unternehmen unbenannt",
-        'Telefonnummen können nun nur noch Ziffern und "+" sein',
+        "Telefonnummen können nun nur noch Ziffern und \"+\" sein",
         "Falls ein Kontakt keine Telefonnummer oder Email enthält, kann er nicht gespeichert werden.",
         "Lieferanten können nun aus der Bestellliste ausgeblendet werden"
       ]
@@ -243,23 +251,23 @@ export class InfoDialogComponent implements OnInit {
       changes: [
         "Materialkostenaufschlag wird nun korrekt gespeichert.",
         "Rechnungen werden nun wieder im korrekten Ordner abgespeichert und korrekt nach dem Erzeugen geöffnet.",
-        "Frischeis Bestellungen sollten nun korrekt in Outlook geöffnet werden.",
+        "Frischeis Bestellungen sollten nun korrekt in Outlook geöffnet werden."
       ]
     },
     {
       versionName: "1.0.5",
       changes: [
-        'Artikellisten-PDF enthält nun auch das Feld "Bemerkung (intern)" unter jedem Artikel',
+        "Artikellisten-PDF enthält nun auch das Feld \"Bemerkung (intern)\" unter jedem Artikel",
         "Aufträge können beim Erstellen nun auch auf andere Jahre gelegt werden. Das Erstellfenster füllt das " +
         "derzeitige Jahr aus, der Benutzer kann dies jedoch ändern.",
-        "Teamsitzungen wurden von 9 auf 14 uhr verschoben",
+        "Teamsitzungen wurden von 9 auf 14 uhr verschoben"
 
       ]
     },
     {
       versionName: "1.0.4",
       changes: [
-        'Rechnungen, Angebote und Lieferscheine, markieren sich selbst als "bearbeitet", wenn mindestens ein Eingabefeld ' +
+        "Rechnungen, Angebote und Lieferscheine, markieren sich selbst als \"bearbeitet\", wenn mindestens ein Eingabefeld " +
         "modifiziert wurde. Falls das Fenster nun ohne zu speichern verlassen wird, kann wird der Benutzer auf die " +
         "ungespeicherten " +
         "Änderungen hingewiesen. Achtung: Hier wird nicht der Inhalt verglichen, sondern jediglich darauf geachtet ob " +
@@ -287,10 +295,10 @@ export class InfoDialogComponent implements OnInit {
         "Masterpassword eingeführt",
         "Anmeldebildschirm für Smartphones vergrößert",
         "Fehler behoben, bei dem die Zurücktaste nicht mehr funktioniert hat, nachdem man einen Kunden bearbeitet hat.",
-        'Nachkalkulation wird nun in Ordner generiert "9_Nachkalkulation"',
+        "Nachkalkulation wird nun in Ordner generiert \"9_Nachkalkulation\"",
         "Suche für Kunden mit mehreren Namen optimiert (Bsp: Kerschbaumer Konrad)",
         "Lehrlingslogo für pdfs auf 2022 aktualisiert.",
-        'Mail versand optimiert: "Mails sollten nun nicht mehr Vorlagen erzeugen und geben eine Fehlermeldung zurück, ' +
+        "Mail versand optimiert: \"Mails sollten nun nicht mehr Vorlagen erzeugen und geben eine Fehlermeldung zurück, " +
         "falls nicht gesandt werden."
       ]
     },
@@ -322,7 +330,7 @@ export class InfoDialogComponent implements OnInit {
         "Beim Erstellen/Bearbeiten von Rechnungen, hat das Beschreibungen-Feld nun mehrere Zeilen.",
         "Mod Nummber bei Bestellungen hat nun eine maximale Länge von 30 Zeichen",
         "Fehler behoben, wo bei Anfragen senden auch andere Artikel von diesem Lieferanten verschwunden sind.",
-        "Angebote haben nun ein Feld wo Kunden unterschreiben können.",
+        "Angebote haben nun ein Feld wo Kunden unterschreiben können."
       ]
     },
     {
@@ -336,7 +344,7 @@ export class InfoDialogComponent implements OnInit {
     {
       versionName: "0.9.7",
       changes: [
-        'Empfängerkodex wird nun standartmäßig mit "0000000" eingeführt.',
+        "Empfängerkodex wird nun standartmäßig mit \"0000000\" eingeführt.",
         "Sollte man Artikel löschen wollen, wird nun ein Bestätigungsdialog geöffnet."
       ]
     },
@@ -373,15 +381,15 @@ export class InfoDialogComponent implements OnInit {
         "Da die Tabellen nun nicht immer neu geladen werden, kann es vorkommen, dass beim Erstellen eines Auftrags," +
         " Lieferschein, Rechnung usw. der neue Eintrag nicht sofort in der Tabelle erscheint. Daher wird beim Erstellen nun " +
         "der lokale Inhalt mit dem Server verglichen und gegebenenfalls synchronisiert. Des weiteren wird ein solcher Check " +
-        "alle 60 Sekunden asugeführt um Updates anderer Benutzer zeitnah zu sehen.",
+        "alle 60 Sekunden asugeführt um Updates anderer Benutzer zeitnah zu sehen."
       ]
     },
     {
       versionName: "0.9.2",
       changes: [
         "Die meisten Seiten merken sich nun ihren jeweiligen Status. Das heißt, das Such oder Filteroptionen auch noch " +
-        'verfügbar sind wenn man eine andere Seite geöffnet hat. Dies trifft nicht auf Seiten zu die den Name "Erstellen" ' +
-        'oder "Bearbeiten" im Titel tragen.',
+        "verfügbar sind wenn man eine andere Seite geöffnet hat. Dies trifft nicht auf Seiten zu die den Name \"Erstellen\" " +
+        "oder \"Bearbeiten\" im Titel tragen."
       ]
     },
     {
@@ -393,7 +401,7 @@ export class InfoDialogComponent implements OnInit {
         "Die ESC-Taste hat nun die gleiche Funktion wie die Zurücktaste.",
         "Abgeschlossene Aufträge werden nun in einen separaten Ordner verschoben.",
         "Mehrwertsteuer und Rabatt werden nun im Angebot richtig angezeigt.",
-        'Suche nach Bestellungen in Aufträgen funktioniert nun auch auf Spalte "Herkunft"',
+        "Suche nach Bestellungen in Aufträgen funktioniert nun auch auf Spalte \"Herkunft\"",
         "Passwordmanager gibt mehr Übersicht über geänderte Passwörter",
         "Bis Logout Knopf verschoben wird, einen Bestätigungsdialog eingeführt",
         "Zahlungen bei Ausgangsrechnungen sollte nun wieder funktionieren.",
@@ -403,11 +411,11 @@ export class InfoDialogComponent implements OnInit {
     {
       versionName: "0.9.0",
       changes: [
-        'Das Programm wird nun bei einem Klick auf "Minimieren" oder "Schließen" immer rechts ' +
+        "Das Programm wird nun bei einem Klick auf \"Minimieren\" oder \"Schließen\" immer rechts " +
         "unten als in die Taskleiste " +
         "geschoben. Wieder geöffnet kann das Programm wie gewohnt über die Verknüpfung oder " +
         "mit Rechtsklick auf die Taskleiste und " +
-        '"Offnen". Wichtig: Ein vollständiges Schließen ist nur über die Option "Schließen" in der Taskleiste möglich.',
+        "\"Offnen\". Wichtig: Ein vollständiges Schließen ist nur über die Option \"Schließen\" in der Taskleiste möglich.",
         "Der aktuelle Tag wird nun im Kalender farbig markiert."
       ]
     },
@@ -418,7 +426,7 @@ export class InfoDialogComponent implements OnInit {
         "Digital unterschriebene Rechnungen (.p7m) werden nun korrekt übertragen und sollten nun problemlos " +
         "importiert werden können.",
         "Eisenstecken-Logo oben links, wird nun nicht mehr so groß wenn man mit der Maus darüberfährt.",
-        'Eingangsrechnungen mit dem Dokumententype "TD04" (=Gutschrift) zeigen nun einen negativen Gesamtbetrag an.',
+        "Eingangsrechnungen mit dem Dokumententype \"TD04\" (=Gutschrift) zeigen nun einen negativen Gesamtbetrag an.",
         "Kalender started nun immer an einem Montag",
         "Kalendertage Samstag und Sonntag sind nun leicht transparent um diese einfacher zu erkennen.",
         "Notizen haben nun ein schlichteres Design",
@@ -446,7 +454,7 @@ export class InfoDialogComponent implements OnInit {
         "Fehler behoben, bei dem Aritkel, die von Lager auf Aufträgen bestellt wurden, nicht korrekt registriert wurden.",
         "Bei Angebot die Postitionsüberschrift (hoffentlich) wieder auf Roboto geändert und Fett gemacht.",
         "Bindestrich bei Auftragscode in Artikellistenpdf eingefügt.",
-        'Ein- und Ausgangsrechnungen werden nun in "Alle", "Bezahlt" und "Unbezahlt" unterteilt.',
+        "Ein- und Ausgangsrechnungen werden nun in \"Alle\", \"Bezahlt\" und \"Unbezahlt\" unterteilt.",
         "Aufträge können nun korrekt nach dem Nachnamen des Kunden durchsucht werden.",
         "Rechnungen bearbeiten Fenster sollte nun nach dem speichern auf das korrekte Feld zurückverweisen."
       ]
@@ -468,12 +476,12 @@ export class InfoDialogComponent implements OnInit {
       versionName: "0.8.16",
       changes: [
         "Bei Kunden kann jetzt ein Ansprechpartner mit angegeben werden.",
-        'Nachkalkulation enthält nun einen neue Lists: "Preise Holzliste". Hier können verschiedene Preise angegeben werden.' +
-        ' Dies ersetzt das Feld "Preis Holzliste"',
+        "Nachkalkulation enthält nun einen neue Lists: \"Preise Holzliste\". Hier können verschiedene Preise angegeben werden." +
+        " Dies ersetzt das Feld \"Preis Holzliste\"",
         "Oberflächen bei Nachkalkulation wird nun mit einer Einheit versehen. Als Standart wird Liter verwendet.",
         "Grafische Ausbesserungen bei Nachkalkulations-pdf",
         "Es können nun Vorlagen für Oberflächen in Nachkalkulation erstellt werden.",
-        'Suchfunktion bei "Bestellungen: Details" sollte nun wie gewünscht funktionieren.',
+        "Suchfunktion bei \"Bestellungen: Details\" sollte nun wie gewünscht funktionieren.",
         "Die Schriftart Roboto-Bold ist nun im Programm enthalten und muss nicht separat installiert werden"
       ]
     },
@@ -485,8 +493,8 @@ export class InfoDialogComponent implements OnInit {
         "Ausgangsrechnungen enthalten nun nicht mehr den Auftragsnamen im Dateinamen.",
         "Artikel werden bei Bestellungen nun anders geordnet: Favoriten -> Alphabetisch; Andere -> Neueste zuerst.",
         "Aufträge werden jetzt anders geordnet: Nimm x der neuesten Aufträge -> ordne Hauptaufträge vor Kleinstaufträge -> " +
-        "ordner nach Kodex alphabetisch absteigend",
-      ],
+        "ordner nach Kodex alphabetisch absteigend"
+      ]
     },
     {
       versionName: "0.8.14",
@@ -499,31 +507,31 @@ export class InfoDialogComponent implements OnInit {
         "Text bei Nachkalkulation sollte nun früher aufhöhren.",
         "Bei Nachkalkulatio wurde spalte Name in Kommission umbenannt.",
         "Nachkalkulationen können nun auch nach Kunden durchsucht werden.",
-        'In der Ansicht "Bestellungen: Zusammenstellen" können nun auch Artikel gelöscht werden.',
+        "In der Ansicht \"Bestellungen: Zusammenstellen\" können nun auch Artikel gelöscht werden.",
         "Lierschein Beschreibung Feld ist nun breiter",
         "Kommazahlen wurden überarbeitet und sollten nun korrekt mit 2 Nachkommastellen (Mengenangaben ausgenommen) " +
-        'angezeigt. Als Kommazeichen wird "," verwendet. Sollte ich was übersehen haben bitte melden.'
+        "angezeigt. Als Kommazeichen wird \",\" verwendet. Sollte ich was übersehen haben bitte melden."
       ]
     },
     {
       versionName: "0.8.13",
       changes: [
         "Angebot zeigt nun die Nummerierungen der einzelnen Positionen während des Erstellens oder Bearbeiten an.",
-        'Checkbox "Alternative" (bei Angebot) ist nun viel kleiner.',
-        'Nachkalkulationen sind nun für Aufträge mit Status "Fertig" UND "Angenommen" verfügbar',
+        "Checkbox \"Alternative\" (bei Angebot) ist nun viel kleiner.",
+        "Nachkalkulationen sind nun für Aufträge mit Status \"Fertig\" UND \"Angenommen\" verfügbar",
         "Nachkalkulation enthält nun zusätzliche optionale Felder für Oberflächen.",
         "Man schreibt nicht mehr unter den Klebestreifen bei den Notizen auf der Startseite.",
         "Bei Angeboten erstellen oder bearbeiten sind Positionen nun nummeriert.",
-        'In den Ansichten "Versendete Bestellungen" und "Bestellungen: Details" werden die Felder die ein Datum enthalten ' +
+        "In den Ansichten \"Versendete Bestellungen\" und \"Bestellungen: Details\" werden die Felder die ein Datum enthalten " +
         "nun korrekt formatiert.",
         "Rechnungen löschen sollte nun wie gewünscht funktionieren.",
         "MwStr. Nr. und Str.Nr sind nun beim Rechnungspdf auf der richtigen Position.",
         "Materialbeschreibung im Angebots PDF wird nun bei Postionsnummerierung ignoriert.",
         "Anfragen sind nun verfügbar: Bestellte Artikel, die als Anfrage markiert wurden, können nun beim Lieferanten " +
-        'unter dem separaten Menüpunkte "Anfrage verschicken" als PDF generiert und versandt werden. Das PDF wurde ' +
+        "unter dem separaten Menüpunkte \"Anfrage verschicken\" als PDF generiert und versandt werden. Das PDF wurde " +
         "nach Gefühl gestaltet. Einfach melden falls ich hier noch was ändern soll.",
-        'Die Ansicht "Bestellung" wurde verbreitert und das Feld mit dem Artikelname ist nun mehrzeilig falls notwendig',
-        'Bei der Ansicht "Bestellung" werden Suchergebnisse nun fatt markiert.',
+        "Die Ansicht \"Bestellung\" wurde verbreitert und das Feld mit dem Artikelname ist nun mehrzeilig falls notwendig",
+        "Bei der Ansicht \"Bestellung\" werden Suchergebnisse nun fatt markiert.",
         "Lieferant: Details hat neuen Tab mit allen Anfragen"
       ]
     },
@@ -532,7 +540,7 @@ export class InfoDialogComponent implements OnInit {
       changes: [
         "Stück ist nun Standardeinheit bei Bestellungen.",
         "Einzelne oder mehrere Artikel können nun auf andere Aufträge oder Lager verschoben werden.",
-        'In der Ansicht "Lieferanten/Lager" werden Lieferanten nun im gleichen Stil geordnet wie bei den Bestellungen: ' +
+        "In der Ansicht \"Lieferanten/Lager\" werden Lieferanten nun im gleichen Stil geordnet wie bei den Bestellungen: " +
         "Favoriten: Alphabetisch(Auftsteigend) -> Nicht Favoriten: Alphabetisch(Aufsteigend).",
         "Bei Versendete Bestellungen (das sind im Grunde all jene zu denen die Bestllung PDFs generiert wurden, gibt " +
         "es jetzt eine Schaltfläche die das erneute generieren der PDFs erlaubt. Diese überschreiben NICHT das vorhergende PDF.",
@@ -548,8 +556,8 @@ export class InfoDialogComponent implements OnInit {
         "erstellte/bestellte oder erhaltenen." +
         "Bestellung vorhanden sein, wird jeder neue Artikel zu dieser hinzugefügt. Über den Status kann keine" +
         " Einflussnahme mehr getätigt werden.",
-        'In der Ansicht "Bestellung: Details, kann nun direkt zu den entsprechenden Lagern oder Lieferant navigiert werden.',
-        'Bei Angeboten erstellen oder bearbeiten ist das "+" nun fixiert und weiter rechts',
+        "In der Ansicht \"Bestellung: Details, kann nun direkt zu den entsprechenden Lagern oder Lieferant navigiert werden.",
+        "Bei Angeboten erstellen oder bearbeiten ist das \"+\" nun fixiert und weiter rechts",
         "Im Homebildschirm wurden die Menükacheln überarbeitet um der neuen Bildschirmgröße gerecht zu werden."
       ]
     },
@@ -561,19 +569,19 @@ export class InfoDialogComponent implements OnInit {
         "Dazu zählen Position und Name, welche jetzt direkt vom jeweiligen Benutzer verwendet werden.",
         "Das Beschreibungsfeld bei Angebot erstellen oder bearbeiten ist nun breiter.",
         "Das Beschreibungsfeld bei Angebot erstellen oder bearbeiten passt sich nun in der Höhe laufend an.",
-        'Wenn man im Fenster "Bestellungen: Details" die Einheit ändert, sollte diese nun korrekt übernommen werden.',
+        "Wenn man im Fenster \"Bestellungen: Details\" die Einheit ändert, sollte diese nun korrekt übernommen werden.",
         "Lieferanten können nun als Favorit markiert werden (Im Fenster Bestellungen). Markierte erscheinen in der" +
         "List ganz oben",
         "Sollten auf einen Lierferanten mehrere Bestellungen an einem Tag gemacht werden, wird jetzt nicht mehr " +
         "das alte PDF ausgeliefert.",
         "Bei externer Bestellpdf wird nun angegeben wer die Bestellung aufgegeben hat.",
-        'Das PDF "Artikelliste" sollte nun angemessen neue Zeile nehmen und den Text nicht mehr übereinander schreiben',
+        "Das PDF \"Artikelliste\" sollte nun angemessen neue Zeile nehmen und den Text nicht mehr übereinander schreiben",
         "Update Benachrichtigung verschwindet nun nicht mehr hinter Chat/Calendar Frame",
         "Preis von Angebot wird ab jetzt in der Liste ohne MwSt. angezeigt",
-        'Angbot wird jetzt nach folgendem Schema benannt "AUFTRAG_KODEX"_"ANGEBOT_NUMMER".pdf',
+        "Angbot wird jetzt nach folgendem Schema benannt \"AUFTRAG_KODEX\"_\"ANGEBOT_NUMMER\".pdf",
         "Artikelliste PDF wird nun nach Lieferant - Position geordnet",
         "Die Ansicht Bestellung: Details, ordnet nun Artikel auch nach Position",
-        'Das PDF "Bestellung extern" zeigt nun wieder die richtige Überschrift bei Liefertermin an'
+        "Das PDF \"Bestellung extern\" zeigt nun wieder die richtige Überschrift bei Liefertermin an"
       ]
     }
   ];
@@ -593,7 +601,7 @@ export class InfoDialogComponent implements OnInit {
   initUserDataSource(): void {
     this.userDataSource = new TableDataSource(
       this.api,
-      (api, filter, sortDirection, skip, limit) => api.readUsersUsersGet(skip, filter, limit),
+      (api, filter, sortDirection, skip, limit) => api.readContactsUsersContactsGet(skip, filter, limit),
       (dataSourceClasses) => {
         const rows = [];
         dataSourceClasses.forEach((dataSource) => {
@@ -605,7 +613,7 @@ export class InfoDialogComponent implements OnInit {
                 tel: dataSource.tel,
                 handy: dataSource.handy,
                 // eslint-disable-next-line no-underscore-dangle
-                dial: dataSource.dial,
+                dial: dataSource.dial
               },
               route: () => {
               }
@@ -614,13 +622,13 @@ export class InfoDialogComponent implements OnInit {
         return rows;
       },
       [
-        {name: "fullname", headerName: "Name"},
-        {name: "email", headerName: "Email"},
-        {name: "tel", headerName: "Telefon"},
-        {name: "handy", headerName: "Handy"},
-        {name: "dial", headerName: "Kurzwahl"},
+        { name: "fullname", headerName: "Name" },
+        { name: "email", headerName: "Email" },
+        { name: "tel", headerName: "Telefon" },
+        { name: "handy", headerName: "Handy" },
+        { name: "dial", headerName: "Kurzwahl" }
       ],
-      (api) => api.readUserCountUsersCountGet(),
+      (api) => api.readContactCountContactCountGet()
     );
     this.userDataSource.loadData();
   }
@@ -637,7 +645,7 @@ export class InfoDialogComponent implements OnInit {
               values: {
                 name: dataSource.name,
                 price: dataSource.price,
-                comment: dataSource.comment,
+                comment: dataSource.comment
               },
               route: () => {
               }
@@ -646,9 +654,9 @@ export class InfoDialogComponent implements OnInit {
         return rows;
       },
       [
-        {name: "name", headerName: "Name"},
-        {name: "price", headerName: "Preis"},
-        {name: "comment", headerName: "Kommentar"},
+        { name: "name", headerName: "Name" },
+        { name: "price", headerName: "Preis" },
+        { name: "comment", headerName: "Kommentar" }
       ],
       (api) => api.readPriceCountPriceCountGet()
     );
@@ -668,7 +676,7 @@ export class InfoDialogComponent implements OnInit {
                 name: dataSource.name,
                 height: dataSource.height,
                 width: dataSource.width,
-                length: dataSource.length,
+                length: dataSource.length
               },
               route: () => {
               }
@@ -677,10 +685,10 @@ export class InfoDialogComponent implements OnInit {
         return rows;
       },
       [
-        {name: "name", headerName: "Name"},
-        {name: "height", headerName: "Höhe"},
-        {name: "width", headerName: "Breite"},
-        {name: "length", headerName: "Länge"},
+        { name: "name", headerName: "Name" },
+        { name: "height", headerName: "Höhe" },
+        { name: "width", headerName: "Breite" },
+        { name: "length", headerName: "Länge" }
       ],
       (api) => api.readTechnicalDataCountTechnicalDataCountGet()
     );
@@ -700,7 +708,7 @@ export class InfoDialogComponent implements OnInit {
                 name: dataSource.name,
                 username: dataSource.username,
                 password: dataSource.password,
-                url: dataSource.url,
+                url: dataSource.url
               },
               route: () => {
               }
@@ -709,10 +717,10 @@ export class InfoDialogComponent implements OnInit {
         return rows;
       },
       [
-        {name: "name", headerName: "Firma"},
-        {name: "username", headerName: "Benutzername"},
-        {name: "password", headerName: "Password"},
-        {name: "url", headerName: "Link/Kommentar"},
+        { name: "name", headerName: "Firma" },
+        { name: "username", headerName: "Benutzername" },
+        { name: "password", headerName: "Password" },
+        { name: "url", headerName: "Link/Kommentar" }
       ],
       (api) => api.readCredentialCountCredentialCountGet()
     );

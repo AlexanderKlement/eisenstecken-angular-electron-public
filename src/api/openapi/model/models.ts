@@ -145,6 +145,7 @@ export * from './tokenEnum';
 export * from './unit';
 export * from './unitCreate';
 export * from './user';
+export * from './userContact';
 export * from './userCreate';
 export * from './userEssential';
 export * from './userListElement';

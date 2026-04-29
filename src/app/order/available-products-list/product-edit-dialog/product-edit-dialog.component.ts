@@ -1,4 +1,4 @@
-import { Component, DEFAULT_CURRENCY_CODE, LOCALE_ID, OnDestroy, OnInit, inject } from "@angular/core";
+import { Component, DEFAULT_CURRENCY_CODE, inject, LOCALE_ID, OnDestroy, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogContent, MatDialogRef, MatDialogTitle } from "@angular/material/dialog";
 import { Observable, Subscription } from "rxjs";
 import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
@@ -11,7 +11,7 @@ import { MatButton } from "@angular/material/button";
 
 export type OrderDialogMode = "delete" | "save" | "add";
 
-export interface OrderDialogBaseData  {
+export interface OrderDialogBaseData {
   name: string;
   amount: number;
   unitId: number;
@@ -23,11 +23,11 @@ export interface OrderDialogBaseData  {
   favorite: boolean;
 }
 
-export interface OrderDialogReturnData extends OrderDialogBaseData{
+export interface OrderDialogReturnData extends OrderDialogBaseData {
   mode: OrderDialogMode;
 }
 
-export interface OrderDialogCreateData  extends OrderDialogBaseData{
+export interface OrderDialogCreateData extends OrderDialogBaseData {
   title: string;
   blockRequestChange: boolean;
   blockFavoriteChange: boolean;
@@ -35,9 +35,9 @@ export interface OrderDialogCreateData  extends OrderDialogBaseData{
 }
 
 @Component({
-  selector: 'app-product-edit-dialog',
-  templateUrl: './product-edit-dialog.component.html',
-  styleUrls: ['./product-edit-dialog.component.scss'],
+  selector: "app-product-edit-dialog",
+  templateUrl: "./product-edit-dialog.component.html",
+  styleUrls: ["./product-edit-dialog.component.scss"],
   imports: [
     MatDialogTitle,
     MatDialogContent,
@@ -53,8 +53,8 @@ export interface OrderDialogCreateData  extends OrderDialogBaseData{
     MatOption,
     DefaultFlexDirective,
     MatButton,
-    AsyncPipe,
-  ],
+    AsyncPipe
+  ]
 })
 export class ProductEditDialogComponent implements OnInit, OnDestroy {
   dialogRef = inject<MatDialogRef<ProductEditDialogComponent>>(MatDialogRef);
@@ -112,18 +112,18 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
         .get("priceFormatted")
         .value.replace("€", "")
         .replace(".", "")
-        .replace(",", "."),
+        .replace(",", ".")
     );
     const formattedAmount = this.currency.transform(
       price,
-      this.currencyCode, "symbol", "1.4-4", this.locale,
+      this.currencyCode, "symbol", "1.4-4", this.locale
     );
     this.productEditGroup.get("price").setValue(price);
     this.productEditGroup.get("priceFormatted").setValue(formattedAmount);
   }
 
   private getReturnData(mode: OrderDialogMode): OrderDialogReturnData {
-    if (!this.data.createMode && mode == "add"){
+    if (!this.data.createMode && mode == "add") {
       console.error("Cannot add a product to an existing product");
     }
 
@@ -137,7 +137,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
       comment: this.productEditGroup.get("comment").value,
       position: this.productEditGroup.get("position").value,
       favorite: this.productEditGroup.get("favorite").value,
-      mode,
+      mode
     };
   }
 
@@ -148,18 +148,18 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
       name: new UntypedFormControl(this.data.name, Validators.required),
       amount: new UntypedFormControl(
         this.data.amount,
-        Validators.min(0.0000001),
+        Validators.min(0.0000001)
       ),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       unit_id: new UntypedFormControl(
-        this.data.unitId !== null ? this.data.unitId : 3,
+        this.data.unitId !== null ? this.data.unitId : 3
       ),
       price: new UntypedFormControl(this.data.price, Validators.min(0)),
       priceFormatted: new UntypedFormControl(
         this.currency.transform(
           this.data.price,
-          this.currencyCode, "symbol", "1.4-4", this.locale,
-        ),
+          this.currencyCode, "symbol", "1.4-4", this.locale
+        )
       ),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       mod_number: new UntypedFormControl(this.data.modNumber),
@@ -170,7 +170,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
       single_price_insert: new UntypedFormControl(true),
       comment: new UntypedFormControl(this.data.comment),
       position: new UntypedFormControl(this.data.position),
-      favorite: new UntypedFormControl(this.data.favorite),
+      favorite: new UntypedFormControl(this.data.favorite)
     });
     if (this.data.blockFavoriteChange) {
       this.productEditGroup.get("favorite")?.disable({ emitEvent: false });
@@ -178,17 +178,17 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.productEditGroup.get("price").valueChanges.subscribe(() => {
         this.updateTotalFromPrice();
-      }),
+      })
     );
     this.subscription.add(
       this.productEditGroup.get("amount").valueChanges.subscribe(() => {
         this.updateTotalFromPrice();
-      }),
+      })
     );
     this.subscription.add(
       this.productEditGroup.get("total_price").valueChanges.subscribe(() => {
         this.updatePriceFromTotal();
-      }),
+      })
     );
     this.updateTotalFromPrice();
   }
@@ -200,7 +200,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
 
   private updateTotalFromPrice(): void {
     const total = ProductEditDialogComponent.roundTo2Decimals(
-      this.calcTotalPrice(),
+      this.calcTotalPrice()
     );
     this.productEditGroup
       .get("total_price")
@@ -219,7 +219,7 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
 
     const formatted = this.currency.transform(
       price,
-      this.currencyCode, "symbol", "1.4-4", this.locale,
+      this.currencyCode, "symbol", "1.4-4", this.locale
     );
     this.productEditGroup
       .get("priceFormatted")

@@ -1,9 +1,13 @@
 @if (noteVisible) {
   <div class="single-note">
     <span (click)="deleteNoteClicked()" class="material-icons close">delete</span>
+    <mat-icon class="save"
+              [class.hidden]="saved === 0"
+              [class.waiting]="saved === 1">{{ saved === 0 ? "" : saved === 2 ? "cloud_done" : "cloud_upload" }}
+    </mat-icon>
     <div class="text">
       <textarea [formControl]="singleNoteTextArea"
-      class="note-text">{{note.text}}</textarea>
+                class="note-text">{{ note.text }}</textarea>
     </div>
   </div>
 }

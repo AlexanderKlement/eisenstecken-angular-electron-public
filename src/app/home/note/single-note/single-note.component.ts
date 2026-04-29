@@ -1,14 +1,15 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
-import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { distinctUntilChanged, first } from 'rxjs/operators';
-import { DefaultService, Note, NoteCreate } from '../../../../api/openapi';
+import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from "@angular/core";
+import { FormsModule, ReactiveFormsModule, UntypedFormControl } from "@angular/forms";
+import { Subscription } from "rxjs";
+import { debounceTime, distinctUntilChanged, first, tap } from "rxjs/operators";
+import { DefaultService, Note, NoteCreate } from "../../../../api/openapi";
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
-    selector: 'app-single-note',
-    templateUrl: './single-note.component.html',
-    styleUrls: ['./single-note.component.scss'],
-    imports: [FormsModule, ReactiveFormsModule]
+  selector: "app-single-note",
+  templateUrl: "./single-note.component.html",
+  styleUrls: ["./single-note.component.scss"],
+  imports: [FormsModule, ReactiveFormsModule, MatIcon]
 })
 export class SingleNoteComponent implements OnInit, OnDestroy {
   private api = inject(DefaultService);
@@ -17,6 +18,7 @@ export class SingleNoteComponent implements OnInit, OnDestroy {
   @Input() note: Note;
   @Output() noteDeleted = new EventEmitter<Note>();
   noteVisible = true;
+  saved: number = 0;
   public subscriptions = new Subscription();
 
   singleNoteTextArea = new UntypedFormControl();
@@ -25,10 +27,21 @@ export class SingleNoteComponent implements OnInit, OnDestroy {
     this.singleNoteTextArea.setValue(this.note.text);
 
     this.subscriptions.add(this.singleNoteTextArea.valueChanges
-      .pipe(distinctUntilChanged()) // makes sure the value has actually changed.
+      .pipe(
+        tap(() => {
+          this.saved = 1;
+        }),
+        debounceTime(500),
+        distinctUntilChanged()
+      )
       .subscribe(data => {
         const noteCreate: NoteCreate = { text: data };
-        this.api.updateNoteEntryNoteNoteIdPut(this.note.id, noteCreate).pipe(first()).subscribe();
+        this.api.updateNoteEntryNoteNoteIdPut(this.note.id, noteCreate).pipe(first()).subscribe(() => {
+          this.saved = 2;
+          setTimeout(() => {
+            this.saved = 0;
+          }, 10000);
+        });
       }));
   }
 

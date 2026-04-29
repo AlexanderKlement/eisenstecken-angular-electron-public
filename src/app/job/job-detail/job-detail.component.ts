@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from "@angular/core";
+import { Component, inject, OnInit, ViewChild } from "@angular/core";
 import { InfoDataSource } from "../../shared/components/info-builder/info-builder.datasource";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InfoBuilderComponent } from "../../shared/components/info-builder/info-builder.component";
@@ -74,7 +74,6 @@ export default class JobDetailComponent implements OnInit {
   orderDataSource: TableDataSource<OrderSmall, DefaultService>;
   deliveryNoteDataSource: TableDataSource<DeliveryNote, DefaultService>;
   recalculationDataSource: TableDataSource<RecalculationSmall, RecalculationService>;
-  ordersAllowed = false;
   outgoingInvoicesAllowed = false;
   offersAllowed = false;
   deliveryNoteAllowed = true;
@@ -418,11 +417,11 @@ export default class JobDetailComponent implements OnInit {
       name: "Erstellen",
       dropdown: [
         {
-          name: "Lieferschein erstellen",
+          name: "Neuer Unterauftrag",
           navigate: (): void => {
-            this.router.navigate(["/delivery_note/new"], {
-              queryParams: { jobId: this.jobId.toString() }
-            });
+            this.router.navigateByUrl(
+              "/job/edit/new/" + this.jobId.toString() + "/sub"
+            );
           }
         },
         {
@@ -435,11 +434,74 @@ export default class JobDetailComponent implements OnInit {
     });
     this.buttonsMain.push({
       name: "Aktionen",
-      dropdown: []
+      dropdown: [
+        {
+          name: "Bearbeiten",
+          navigate: (): void => {
+            this.child.editButtonClicked();
+          }
+        }, {
+          name: "Pfad anpassen",
+          navigate: (): void => {
+            this.changePathClicked();
+          }
+        }, {
+          name: "Verschieben",
+          navigate: (): void => {
+            this.moveButtonClicked();
+          }
+        }, {
+          name: "Stunden importieren",
+          navigate: (): void => {
+            this.router.navigateByUrl("/work_hours/" + this.jobId.toString());
+          }
+        }, {
+          name: "Bestellen",
+          navigate: (): void => {
+            this.router.navigateByUrl("order");
+          }
+        }, {
+          name: "Artikelliste drucken",
+          navigate: (): void => {
+            this.printOrdersClicked();
+          }
+        }, {
+          name: "Auftrag löschen",
+          error: true,
+          navigate: (): void => {
+            this.jobDeleteClicked();
+          }
+        }
+      ]
     });
     this.buttonsSub.push({
       name: "Aktionen",
-      dropdown: []
+      dropdown: [
+        {
+          name: "Bearbeiten",
+          navigate: (): void => {
+            this.child.editButtonClicked();
+          }
+        },
+        {
+          name: "Bestellen",
+          navigate: (): void => {
+            this.router.navigateByUrl("order");
+          }
+        },
+        {
+          name: "Artikelliste drucken",
+          navigate: (): void => {
+            this.printOrdersClicked();
+          }
+        }, {
+          name: "Unterauftrag löschen",
+          error: true,
+          navigate: (): void => {
+            this.jobDeleteClicked();
+          }
+        }
+      ]
     });
     this.buttonsMain.push({
       name: "Zum Kunden",
@@ -454,14 +516,29 @@ export default class JobDetailComponent implements OnInit {
       }
     });
     this.authService
-      .currentUserHasScope(ScopeEnum.Office)
+      .currentUserHasScope(ScopeEnum.Admin)
       .pipe(first())
       .subscribe((allowed) => {
-        this.ordersAllowed = allowed;
+        this.deliveryNoteAllowed = allowed;
         this.offersAllowed = allowed;
         this.outgoingInvoicesAllowed = allowed;
         if (allowed) {
 
+          this.buttonsMain[0].dropdown.push(
+            {
+              name: "Lieferschein erstellen",
+              navigate: (): void => {
+                this.router.navigate(["/delivery_note/new"], {
+                  queryParams: { jobId: this.jobId.toString() }
+                });
+              }
+            });
+          this.buttonsMain[0].dropdown.push({
+            name: "Neue Rechnung",
+            navigate: (): void => {
+              this.newInvoiceClicked();
+            }
+          });
           this.buttonsMain[0].dropdown.push({
             name: "Neues Angebot",
             navigate: (): void => {
@@ -470,91 +547,7 @@ export default class JobDetailComponent implements OnInit {
               );
             }
           });
-          this.buttonsMain[0].dropdown.push({
-            name: "Neue Rechnung",
-            navigate: (): void => {
-              this.newInvoiceClicked();
-            }
-          });
-          this.buttonsMain[0].dropdown.push({
-            name: "Neuer Unterauftrag",
-            navigate: (): void => {
-              this.router.navigateByUrl(
-                "/job/edit/new/" + this.jobId.toString() + "/sub"
-              );
-            }
-          });
-          this.buttonsMain[1].dropdown.push({
-            name: "Bearbeiten",
-            navigate: (): void => {
-              this.child.editButtonClicked();
-            }
-          });
-          this.buttonsMain[1].dropdown.push({
-            name: "Pfad anpassen",
-            navigate: (): void => {
-              this.changePathClicked();
-            }
-          });
-          this.buttonsMain[1].dropdown.push({
-            name: "Verschieben",
-            navigate: (): void => {
-              this.moveButtonClicked();
-            }
-          });
-          this.buttonsMain[1].dropdown.push({
-            name: "Stunden importieren",
-            navigate: (): void => {
-              this.router.navigateByUrl("/work_hours/" + this.jobId.toString());
-            }
-          });
-          this.buttonsMain[1].dropdown.push({
-            name: "Bestellen",
-            navigate: (): void => {
-              this.router.navigateByUrl("order");
-            }
-          });
 
-          this.buttonsMain[1].dropdown.push({
-            name: "Artikelliste drucken",
-            navigate: (): void => {
-              this.printOrdersClicked();
-            }
-          });
-          this.buttonsMain[1].dropdown.push({
-            name: "Auftrag löschen",
-            error: true,
-            navigate: (): void => {
-              this.jobDeleteClicked();
-            }
-          });
-
-
-          this.buttonsSub[0].dropdown.push({
-            name: "Bearbeiten",
-            navigate: (): void => {
-              this.child.editButtonClicked();
-            }
-          });
-          this.buttonsSub[0].dropdown.push({
-            name: "Bestellen",
-            navigate: (): void => {
-              this.router.navigateByUrl("order");
-            }
-          });
-          this.buttonsSub[0].dropdown.push({
-            name: "Artikelliste drucken",
-            navigate: (): void => {
-              this.printOrdersClicked();
-            }
-          });
-          this.buttonsSub[0].dropdown.push({
-            name: "Unterauftrag löschen",
-            error: true,
-            navigate: (): void => {
-              this.jobDeleteClicked();
-            }
-          });
         }
       });
   }

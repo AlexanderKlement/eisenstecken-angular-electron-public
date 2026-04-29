@@ -168,6 +168,7 @@ model/tokenEnum.ts
 model/unit.ts
 model/unitCreate.ts
 model/user.ts
+model/userContact.ts
 model/userCreate.ts
 model/userEssential.ts
 model/userListElement.ts

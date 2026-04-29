@@ -25,11 +25,10 @@
     </div>
   }
 
-  @if (ordersAllowed) {
-    <div class="table-section">
-      <app-table-builder [$refresh]="$refresh" [dataSource]="orderDataSource" title="Bestellungen"></app-table-builder>
-    </div>
-  }
+  <div class="table-section">
+    <app-table-builder [$refresh]="$refresh" [dataSource]="orderDataSource" title="Bestellungen"></app-table-builder>
+  </div>
+
 
   @if (deliveryNoteAllowed) {
     <div class="table-section">
@@ -37,11 +36,10 @@
                          title="Lieferscheine"></app-table-builder>
     </div>
   }
-  @if (recalculationAllowed) {
-    <div class="table-section">
-      <app-table-builder [$refresh]="$refresh" [dataSource]="recalculationDataSource"
-                         title="Nachkalkulation"></app-table-builder>
-    </div>
-  }
+  <div class="table-section">
+    <app-table-builder [$refresh]="$refresh" [dataSource]="recalculationDataSource"
+                       title="Nachkalkulation"></app-table-builder>
+  </div>
+
 </div>
 

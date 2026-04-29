@@ -1,33 +1,39 @@
 import {
-  Stock,
-  Client,
-  User,
-  Calendar,
-  Job,
-  Offer,
   Article,
-  OrderBundle,
-  Order,
-  OrderedArticle,
-  OutgoingInvoice,
-  IngoingInvoice,
-  Supplier,
+  ArticleSmall,
+  Calendar,
+  Client,
   Contact,
-  Price,
-  TechnicalData,
   Credential,
+  Expense,
   Fee,
+  InfoPage,
+  IngoingInvoice,
+  Job,
+  Journey,
+  Maintenance,
   Meal,
   MealSum,
-  Expense,
-  Workload,
+  Offer,
+  Order,
+  OrderBundle,
+  OrderedArticle,
+  OrderedArticleSmall,
+  OrderSmall,
+  OutgoingInvoice,
+  Price,
+  RecalculationSmall,
   Service,
   ServiceSum,
-  Maintenance,
-  InfoPage,
-  WoodList,
+  Stock,
+  Supplier,
+  TechnicalData,
   TemplatePaint,
-  Journey, OrderSmall, ArticleSmall, OrderedArticleSmall, RecalculationSmall, TikTakEmployee
+  TikTakEmployee,
+  User,
+  UserContact,
+  WoodList,
+  Workload
 } from "../../api/openapi";
 
 
@@ -42,6 +48,7 @@ export type DataSourceClass =
   | OrderBundle
   | Order
   | OrderedArticle
+  | UserContact
   | OutgoingInvoice
   | IngoingInvoice
   | Supplier
