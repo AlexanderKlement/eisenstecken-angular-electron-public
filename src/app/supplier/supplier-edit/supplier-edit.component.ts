@@ -6,7 +6,7 @@ import {
   UntypedFormControl,
   UntypedFormGroup,
   FormsModule,
-  ReactiveFormsModule,
+  ReactiveFormsModule
 } from "@angular/forms";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
@@ -17,13 +17,13 @@ import {
   Language,
   Lock,
   Supplier,
-  SupplierCreate,
+  SupplierCreate
 } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import {
   DefaultLayoutDirective,
   DefaultLayoutAlignDirective,
-  FlexModule,
+  FlexModule
 } from "ng-flex-layout";
 import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
@@ -56,13 +56,12 @@ import { MatDialog } from "@angular/material/dialog";
     AddressFormComponent,
     FlexModule,
     AsyncPipe,
-    CircleIconButtonComponent,
-  ],
+    CircleIconButtonComponent
+  ]
 })
-export class SupplierEditComponent
+export default class SupplierEditComponent
   extends BaseEditComponent<Supplier>
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   supplierGroup: UntypedFormGroup;
 
   navigationTarget = "supplier";
@@ -114,7 +113,7 @@ export class SupplierEditComponent
         lastname: contactGroup.get("lastname").value,
         tel: contactGroup.get("tel").value,
         mail: contactGroup.get("mail").value,
-        note: contactGroup.get("note").value,
+        note: contactGroup.get("note").value
       });
     }
 
@@ -138,12 +137,12 @@ export class SupplierEditComponent
         city: this.supplierGroup.get("address.city").value,
         cap: this.supplierGroup.get("address.cap").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        country_code: this.supplierGroup.get("address.country").value,
+        country_code: this.supplierGroup.get("address.country").value
       },
       // eslint-disable-next-line @typescript-eslint/naming-convention
       language_code: this.supplierGroup.get("language").value,
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      show_in_orders: this.showInOrders,
+      show_in_orders: this.showInOrders
     };
 
     if (this.createMode) {
@@ -185,7 +184,7 @@ export class SupplierEditComponent
   createUpdateSuccess(supplier: Supplier): void {
     this.id = supplier.id;
     void this.router.navigate(["/supplier", supplier.id], {
-      replaceUrl: true,
+      replaceUrl: true
     });
   }
 
@@ -203,8 +202,8 @@ export class SupplierEditComponent
             language: client.language.code,
             name: client.name,
             address: {
-              country: client.address.country.code,
-            },
+              country: client.address.country.code
+            }
           });
           this.showInOrders = client.show_in_orders;
           for (const contact of client.contacts) {
@@ -231,7 +230,7 @@ export class SupplierEditComponent
         lastname: new UntypedFormControl(contact.lastname),
         tel: new UntypedFormControl(contact.tel),
         mail: new UntypedFormControl(contact.mail),
-        note: new UntypedFormControl(contact.note),
+        note: new UntypedFormControl(contact.note)
       });
     } else {
       return new UntypedFormGroup({
@@ -241,7 +240,7 @@ export class SupplierEditComponent
         lastname: new UntypedFormControl(""),
         tel: new UntypedFormControl("+39"),
         mail: new UntypedFormControl(""),
-        note: new UntypedFormControl(""),
+        note: new UntypedFormControl("")
       });
     }
   }
@@ -274,8 +273,8 @@ export class SupplierEditComponent
         street_number: new UntypedFormControl(""),
         city: new UntypedFormControl(""),
         cap: new UntypedFormControl(""),
-        country: new UntypedFormControl("IT"),
-      }),
+        country: new UntypedFormControl("IT")
+      })
     });
     this.supplierGroup.get("name").valueChanges.subscribe(() => {
       for (const contact of this.getContacts().controls) {

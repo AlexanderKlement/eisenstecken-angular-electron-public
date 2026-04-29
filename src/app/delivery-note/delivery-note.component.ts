@@ -13,14 +13,14 @@ import { MatFormField, MatLabel } from "@angular/material/input";
 import { MatSelect, MatOption } from "@angular/material/select";
 import { TableBuilderComponent } from "../shared/components/table-builder/table-builder.component";
 import { AsyncPipe } from "@angular/common";
-
+ 
 @Component({
-    selector: 'app-delivery-note',
-    templateUrl: './delivery-note.component.html',
-    styleUrls: ['./delivery-note.component.scss'],
-    imports: [ToolbarComponent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatSelect, MatOption, TableBuilderComponent, AsyncPipe]
+  selector: "app-delivery-note",
+  templateUrl: "./delivery-note.component.html",
+  styleUrls: ["./delivery-note.component.scss"],
+  imports: [ToolbarComponent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatSelect, MatOption, TableBuilderComponent, AsyncPipe]
 })
-export class DeliveryNoteComponent implements OnInit {
+export default class DeliveryNoteComponent implements OnInit {
   buttons: CustomButton[] = [];
   deliveryNoteDataSource: TableDataSource<DeliveryNote, DefaultService>;
 
@@ -42,7 +42,7 @@ export class DeliveryNoteComponent implements OnInit {
           name: "Neuer Lieferschein",
           navigate: () => {
             this.router.navigateByUrl("delivery_note/new");
-          },
+          }
         });
       }
     });
@@ -81,7 +81,7 @@ export class DeliveryNoteComponent implements OnInit {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 delivery_address: dataSource.delivery_address,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                "job.displayable_name": dataSource.job ? dataSource.job.code + " - " + dataSource.job.displayable_name : "",
+                "job.displayable_name": dataSource.job ? dataSource.job.code + " - " + dataSource.job.displayable_name : ""
               },
               route: () => {
                 this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
@@ -90,11 +90,11 @@ export class DeliveryNoteComponent implements OnInit {
                       this.api.islockedDeliveryNoteDeliveryNoteIslockedDeliveryNoteIdGet(dataSource.id),
                       this.api.lockDeliveryNoteDeliveryNoteLockDeliveryNoteIdPost(dataSource.id),
                       this.api.unlockDeliveryNoteDeliveryNoteUnlockDeliveryNoteIdPost(dataSource.id),
-                      "delivery_note/" + dataSource.id.toString(),
+                      "delivery_note/" + dataSource.id.toString()
                     );
                   }
                 });
-              },
+              }
             });
         });
         return rows;
@@ -104,9 +104,9 @@ export class DeliveryNoteComponent implements OnInit {
         { name: "date", headerName: "Datum" },
         { name: "name", headerName: "Empfänger" },
         { name: "delivery_address", headerName: "Adresse" },
-        { name: "job.displayable_name", headerName: "Auftrag" },
+        { name: "job.displayable_name", headerName: "Auftrag" }
       ],
-      (api) => api.readDeliveryNoteCountDeliveryNoteCountGet(undefined, undefined, this.selectedYear),
+      (api) => api.readDeliveryNoteCountDeliveryNoteCountGet(undefined, undefined, this.selectedYear)
     );
     this.deliveryNoteDataSource.loadData();
   }

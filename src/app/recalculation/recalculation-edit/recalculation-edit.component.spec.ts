@@ -1,16 +1,16 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { RecalculationEditComponent } from './recalculation-edit.component';
+import RecalculationEditComponent from "./recalculation-edit.component";
 
-describe('RecalculationEditComponent', () => {
+describe("RecalculationEditComponent", () => {
   let component: RecalculationEditComponent;
   let fixture: ComponentFixture<RecalculationEditComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [RecalculationEditComponent]
-})
-    .compileComponents();
+      imports: [RecalculationEditComponent]
+    })
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('RecalculationEditComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

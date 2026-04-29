@@ -5,7 +5,7 @@ import {
   UntypedFormGroup,
   Validators,
   FormsModule,
-  ReactiveFormsModule,
+  ReactiveFormsModule
 } from "@angular/forms";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -26,12 +26,12 @@ import {
   Unit,
   WoodListCreate,
   WoodList,
-  Lock, OrderSmall, OrderService, RecalculationService, RecalculationUpdateV2, RecalculationV2,
+  Lock, OrderSmall, OrderService, RecalculationService, RecalculationUpdateV2, RecalculationV2
 } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import {
   DefaultLayoutDirective,
-  DefaultLayoutAlignDirective,
+  DefaultLayoutAlignDirective
 } from "ng-flex-layout";
 import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
@@ -42,9 +42,9 @@ import { AsyncPipe } from "@angular/common";
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
 
 @Component({
-  selector: 'app-recalculation-edit',
-  templateUrl: './recalculation-edit.component.html',
-  styleUrls: ['./recalculation-edit.component.scss'],
+  selector: "app-recalculation-edit",
+  templateUrl: "./recalculation-edit.component.html",
+  styleUrls: ["./recalculation-edit.component.scss"],
   imports: [
     ToolbarComponent,
     DefaultLayoutDirective,
@@ -61,10 +61,10 @@ import { CircleIconButtonComponent } from "../../shared/components/circle-icon-b
     MatListItem,
     TableBuilderComponent,
     AsyncPipe,
-    CircleIconButtonComponent,
-  ],
+    CircleIconButtonComponent
+  ]
 })
-export class RecalculationEditComponent
+export default class RecalculationEditComponent
   extends BaseEditComponent<RecalculationV2>
   implements OnInit, OnDestroy {
   recalculationGroup: UntypedFormGroup;
@@ -76,8 +76,7 @@ export class RecalculationEditComponent
 
   orderDataSource: TableDataSource<OrderSmall, OrderService>;
   title = "Nachkalkulation: Bearbeiten";
-
-  // eslint-disable-next-line max-len
+  
   constructor(
     api: DefaultService,
     private orderService: OrderService,
@@ -85,12 +84,12 @@ export class RecalculationEditComponent
     router: Router,
     route: ActivatedRoute,
     private file: FileService,
-    dialog: MatDialog,
+    dialog: MatDialog
   ) {
     super(api, router, route, dialog);
   }
 
-  lockFunction = ( id: number): Observable<Lock> =>
+  lockFunction = (id: number): Observable<Lock> =>
     this.recalculationService.getRecalculationLock(id);
   dataFunction = (id: number): Observable<RecalculationV2> =>
     this.recalculationService.getRecalculation(id);
@@ -108,13 +107,14 @@ export class RecalculationEditComponent
         console.error("Recalculation id not set!");
         return;
       }
-      this.recalculationService.getRecalculation( this.recalculationId).pipe(first()).subscribe(recalculation => {
-          this.recalculation$ = new Observable((observer) => {
-            observer.next(recalculation);
-          })
+      this.recalculationService.getRecalculation(this.recalculationId).pipe(first()).subscribe(recalculation => {
+        this.recalculation$ = new Observable((observer) => {
+          observer.next(recalculation);
+        });
         this.fillFormGroup(recalculation);
         this.addAtLeastOne();
-      })});
+      });
+    });
     this.initOrderDataSource();
     if (this.createMode) {
       this.title = "Nachkalkulation: Erstellen";
@@ -144,10 +144,10 @@ export class RecalculationEditComponent
       // eslint-disable-next-line @typescript-eslint/naming-convention
       material_charge_percent: new UntypedFormControl(
         30,
-        Validators.compose([Validators.min(0), Validators.max(100)]),
+        Validators.compose([Validators.min(0), Validators.max(100)])
       ),
       km: new UntypedFormControl(0.0),
-      cost: new UntypedFormControl(0.0),
+      cost: new UntypedFormControl(0.0)
     });
     this.api
       .getParameterParameterKeyGet("recalculation_percent")
@@ -194,13 +194,13 @@ export class RecalculationEditComponent
       return new UntypedFormGroup({
         id: new UntypedFormControl(expense.id),
         amount: new UntypedFormControl(expense.amount),
-        name: new UntypedFormControl(expense.name),
+        name: new UntypedFormControl(expense.name)
       });
     } else {
       return new UntypedFormGroup({
         id: new UntypedFormControl(0),
         amount: new UntypedFormControl(0),
-        name: new UntypedFormControl(""),
+        name: new UntypedFormControl("")
       });
     }
   }
@@ -224,13 +224,13 @@ export class RecalculationEditComponent
       return new UntypedFormGroup({
         id: new UntypedFormControl(wood_list.id),
         price: new UntypedFormControl(wood_list.price),
-        name: new UntypedFormControl(wood_list.name),
+        name: new UntypedFormControl(wood_list.name)
       });
     } else {
       return new UntypedFormGroup({
         id: new UntypedFormControl(0),
         price: new UntypedFormControl(0),
-        name: new UntypedFormControl(""),
+        name: new UntypedFormControl("")
       });
     }
   }
@@ -255,7 +255,7 @@ export class RecalculationEditComponent
         name: new UntypedFormControl(paint.name),
         price: new UntypedFormControl(paint.price),
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        unit_id: new UntypedFormControl(paint.unit.id),
+        unit_id: new UntypedFormControl(paint.unit.id)
       });
     } else {
       return new UntypedFormGroup({
@@ -264,7 +264,7 @@ export class RecalculationEditComponent
         name: new UntypedFormControl(""),
         price: new UntypedFormControl(0),
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        unit_id: new UntypedFormControl(4),
+        unit_id: new UntypedFormControl(4)
       });
     }
   }
@@ -274,7 +274,7 @@ export class RecalculationEditComponent
     for (const expenseGroup of this.getExpenses().controls) {
       expenses.push({
         name: expenseGroup.get("name").value,
-        amount: expenseGroup.get("amount").value,
+        amount: expenseGroup.get("amount").value
       });
     }
     const paints: PaintCreate[] = [];
@@ -284,14 +284,14 @@ export class RecalculationEditComponent
         price: paintGroup.get("price").value,
         amount: paintGroup.get("amount").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        unit_id: paintGroup.get("unit_id").value,
+        unit_id: paintGroup.get("unit_id").value
       });
     }
     const woodLists: WoodListCreate[] = [];
     for (const woodListGroup of this.getWoodLists().controls) {
       woodLists.push({
         name: woodListGroup.get("name").value,
-        price: woodListGroup.get("price").value,
+        price: woodListGroup.get("price").value
       });
     }
     if (this.createMode) {
@@ -301,22 +301,22 @@ export class RecalculationEditComponent
         expenses,
         paints,
         woodLists: woodLists,
-        name: this.recalculationGroup.get("name",).value,
+        name: this.recalculationGroup.get("name").value,
         materialChargePercent: this.recalculationGroup.get(
-          "material_charge_percent",
+          "material_charge_percent"
         ).value,
         km: this.recalculationGroup.get("km").value,
-        cost: this.recalculationGroup.get("cost").value,
+        cost: this.recalculationGroup.get("cost").value
       };
       this.recalculationService.updateRecalculationRecalculationV2RecalculationIdPut(
-          this.recalculationId,
-          recalculationUpdate,
-        )
+        this.recalculationId,
+        recalculationUpdate
+      )
         .pipe(first())
         .subscribe((recalculation) => {
           void this.file.open(recalculation.pdf);
           void this.router.navigateByUrl("recalculation/" + this.recalculationId.toString(), {
-            replaceUrl: true,
+            replaceUrl: true
           });
         });
     }
@@ -328,7 +328,7 @@ export class RecalculationEditComponent
       amount: 0,
       price: templatePaint.price,
       id: -1,
-      unit: templatePaint.unit,
+      unit: templatePaint.unit
     };
     this.addPaint(paint);
   }
@@ -341,7 +341,7 @@ export class RecalculationEditComponent
           this.recalculationId,
           skip,
           limit,
-          filter,
+          filter
         ),
       (dataSourceClasses) => {
         const rows = [];
@@ -360,7 +360,7 @@ export class RecalculationEditComponent
                 dataSource.delivery_date === null
                   ? ""
                   : dayjs(dataSource.delivery_date).format("L"),
-              status: dataSource.status_translation,
+              status: dataSource.status_translation
             },
             route: () => {
               if (this.recalculationGroup.pristine) {
@@ -370,18 +370,18 @@ export class RecalculationEditComponent
                   width: "400px",
                   data: {
                     title: "Nachkalkulation verlassen?",
-                    text: "Nicht gespeicherte Änderungen gehen eventuell verloren!",
-                  },
+                    text: "Nicht gespeicherte Änderungen gehen eventuell verloren!"
+                  }
                 });
                 dialogRef.afterClosed().subscribe((result) => {
                   if (result) {
                     this.router.navigateByUrl(
-                      "/order/" + dataSource.id.toString(),
+                      "/order/" + dataSource.id.toString()
                     );
                   }
                 });
               }
-            },
+            }
           });
         });
         return rows;
@@ -391,9 +391,9 @@ export class RecalculationEditComponent
         { name: "order_from.displayable_name", headerName: "Herkunft" },
         { name: "create_date", headerName: "Erstelldatum" },
         { name: "delivery_date", headerName: "Lieferdatum" },
-        { name: "status", headerName: "Status" },
+        { name: "status", headerName: "Status" }
       ],
-      (orderService) => orderService.readOrdersByRecalculationOrderV2RecalculationCountRecalculationIdGet(this.recalculationId),
+      (orderService) => orderService.readOrdersByRecalculationOrderV2RecalculationCountRecalculationIdGet(this.recalculationId)
     );
     this.orderDataSource.loadData();
   }

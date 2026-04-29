@@ -16,7 +16,7 @@ import {
   Expense,
   DefaultService,
   WoodList,
-  OrderSmall, RecalculationService, OrderService, RecalculationV2, ScopeEnum,
+  OrderSmall, RecalculationService, OrderService, RecalculationV2, ScopeEnum
 } from "../../../api/openapi";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
 import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
@@ -25,9 +25,9 @@ import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/c
 import { MatDialog } from "@angular/material/dialog";
 
 @Component({
-  selector: 'app-recalculation-detail',
-  templateUrl: './recalculation-detail.component.html',
-  styleUrls: ['./recalculation-detail.component.scss'],
+  selector: "app-recalculation-detail",
+  templateUrl: "./recalculation-detail.component.html",
+  styleUrls: ["./recalculation-detail.component.scss"],
   imports: [
     ToolbarComponent,
     DefaultLayoutDirective,
@@ -37,10 +37,10 @@ import { MatDialog } from "@angular/material/dialog";
     MatInput,
     TableBuilderComponent,
     DecimalPipe,
-    CurrencyPipe,
-  ],
+    CurrencyPipe
+  ]
 })
-export class RecalculationDetailComponent implements OnInit {
+export default class RecalculationDetailComponent implements OnInit {
 
   recalculationId: number;
   loading = true;
@@ -77,7 +77,7 @@ export class RecalculationDetailComponent implements OnInit {
             } else {
               this.snackBar.open("Sie sind nicht berechtigt Nachkalkulationen zu erstellen!"
                 , "Ok", {
-                  duration: 10000,
+                  duration: 10000
                 });
               this.router.navigateByUrl("recalculation");
             }
@@ -90,19 +90,20 @@ export class RecalculationDetailComponent implements OnInit {
         this.loading = false;
       });
     });
+    
     this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttons.push({
           name: "Bearbeiten",
           navigate: () => {
             this.editButtonClicked();
-          },
+          }
         });
         this.buttons.push({
           name: "Löschen",
           navigate: () => {
             this.deleteButtonClicked();
-          },
+          }
         });
       }
     });
@@ -132,7 +133,7 @@ export class RecalculationDetailComponent implements OnInit {
           this.recalculationId,
           skip,
           limit,
-          filter,
+          filter
         ),
       (dataSourceClasses) => {
         const rows = [];
@@ -151,11 +152,11 @@ export class RecalculationDetailComponent implements OnInit {
                 dataSource.delivery_date === null
                   ? ""
                   : dayjs(dataSource.delivery_date).format("L"),
-              status: dataSource.status_translation,
+              status: dataSource.status_translation
             },
             route: () => {
               void this.router.navigateByUrl("/order/" + dataSource.id.toString());
-            },
+            }
           });
         });
         return rows;
@@ -165,9 +166,9 @@ export class RecalculationDetailComponent implements OnInit {
         { name: "order_from.displayable_name", headerName: "Herkunft" },
         { name: "create_date", headerName: "Erstelldatum" },
         { name: "delivery_date", headerName: "Lieferdatum" },
-        { name: "status", headerName: "Status" },
+        { name: "status", headerName: "Status" }
       ],
-      (orderService) => orderService.readOrdersByRecalculationOrderV2RecalculationCountRecalculationIdGet(this.recalculationId),
+      (orderService) => orderService.readOrdersByRecalculationOrderV2RecalculationCountRecalculationIdGet(this.recalculationId)
     );
     this.orderDataSource.loadData();
   }
@@ -185,11 +186,11 @@ export class RecalculationDetailComponent implements OnInit {
               values: {
                 "user.fullname": dataSource.user.fullname,
                 minutes: minutesToDisplayableString(dataSource.minutes),
-                cost: formatCurrency(dataSource.cost, "de-DE", "EUR"),
+                cost: formatCurrency(dataSource.cost, "de-DE", "EUR")
               },
               route: () => {
                 //this.router.navigateByUrl('/order/' + dataSource.id.toString());
-              },
+              }
             });
         });
         return rows;
@@ -197,9 +198,9 @@ export class RecalculationDetailComponent implements OnInit {
       [
         { name: "user.fullname", headerName: "Name" },
         { name: "minutes", headerName: "Zeit" },
-        { name: "cost", headerName: "Kosten" },
+        { name: "cost", headerName: "Kosten" }
       ],
-      (api) => api.readWorkloadCountWorkloadCountGet(undefined, this.recalculationId),
+      (api) => api.readWorkloadCountWorkloadCountGet(undefined, this.recalculationId)
     );
     this.workloadDataSource.loadData();
   }
@@ -216,20 +217,20 @@ export class RecalculationDetailComponent implements OnInit {
             {
               values: {
                 name: dataSource.name,
-                amount: formatCurrency(dataSource.amount, "de-DE", "EUR"),
+                amount: formatCurrency(dataSource.amount, "de-DE", "EUR")
               },
               route: () => {
                 //this.router.navigateByUrl('/order/' + dataSource.id.toString());
-              },
+              }
             });
         });
         return rows;
       },
       [
         { name: "name", headerName: "Beschreibung" },
-        { name: "amount", headerName: "Kosten" },
+        { name: "amount", headerName: "Kosten" }
       ],
-      (api) => api.readExpenseCountExpenseCountGet(this.recalculation.id),
+      (api) => api.readExpenseCountExpenseCountGet(this.recalculation.id)
     );
     this.expenseDataSource.loadData();
   }
@@ -249,11 +250,11 @@ export class RecalculationDetailComponent implements OnInit {
                 price: formatCurrency(dataSource.price, "de-DE", "EUR"),
                 unit: dataSource.unit.name.translation,
                 amount: dataSource.amount,
-                id: formatCurrency(dataSource.price * dataSource.amount, "de-DE", "EUR"),
+                id: formatCurrency(dataSource.price * dataSource.amount, "de-DE", "EUR")
               },
               route: () => {
                 //this.router.navigateByUrl('/order/' + dataSource.id.toString());
-              },
+              }
             });
         });
         return rows;
@@ -263,9 +264,9 @@ export class RecalculationDetailComponent implements OnInit {
         { name: "amount", headerName: "Menge" },
         { name: "unit", headerName: "Einheit" },
         { name: "price", headerName: "Einzelpreis" },
-        { name: "id", headerName: "Gesamtpreis" },
+        { name: "id", headerName: "Gesamtpreis" }
       ],
-      (api) => api.readPaintCountPaintCountGet(this.recalculation.id),
+      (api) => api.readPaintCountPaintCountGet(this.recalculation.id)
     );
     this.paintDataSource.loadData();
   }
@@ -282,20 +283,20 @@ export class RecalculationDetailComponent implements OnInit {
             {
               values: {
                 name: dataSource.name,
-                price: formatCurrency(dataSource.price, "de-DE", "EUR"),
+                price: formatCurrency(dataSource.price, "de-DE", "EUR")
               },
               route: () => {
                 //this.router.navigateByUrl('/order/' + dataSource.id.toString());
-              },
+              }
             });
         });
         return rows;
       },
       [
         { name: "name", headerName: "Beschreibung" },
-        { name: "price", headerName: "Preis" },
+        { name: "price", headerName: "Preis" }
       ],
-      (api) => api.readWoodListCountWoodListCountGet(this.recalculation.id),
+      (api) => api.readWoodListCountWoodListCountGet(this.recalculation.id)
     );
     this.woodListDataSource.loadData();
   }
@@ -305,7 +306,7 @@ export class RecalculationDetailComponent implements OnInit {
       this.recalculationService.getRecalculationLock(this.recalculation.id),
       this.recalculationService.lockRecalculation(this.recalculation.id),
       this.recalculationService.unlockRecalculation(this.recalculation.id),
-      "recalculation/edit/" + this.recalculation.id.toString(),
+      "recalculation/edit/" + this.recalculation.id.toString()
     );
   }
 
@@ -314,13 +315,13 @@ export class RecalculationDetailComponent implements OnInit {
       width: "400px",
       data: {
         title: "Nachkalkulation löschen?",
-        text: "Dieser Schritt kann nicht rückgängig gemacht werden.",
-      },
+        text: "Dieser Schritt kann nicht rückgängig gemacht werden."
+      }
     });
     dialogRef.afterClosed().pipe(
       take(1),
       filter(Boolean),
-      switchMap(() => this.recalculationService.deleteRecalculation(this.recalculation.id)),
+      switchMap(() => this.recalculationService.deleteRecalculation(this.recalculation.id))
     ).subscribe({
       next: () => {
         this.router.navigateByUrl("/recalculation");
@@ -328,7 +329,7 @@ export class RecalculationDetailComponent implements OnInit {
       error: (err) => {
         console.error("Delete recalculation failed", err);
         this.snackBar.open("Löschen fehlgeschlagen.", "Ok", { duration: 8000 });
-      },
+      }
     });
   }
 }

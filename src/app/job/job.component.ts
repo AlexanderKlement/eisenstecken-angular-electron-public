@@ -1,6 +1,6 @@
-import { Component,  OnInit} from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Row, TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
-import {  Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { Observable, Subscriber } from "rxjs";
 import dayjs from "dayjs/esm";
 import { FileService } from "../shared/services/file.service";
@@ -12,26 +12,26 @@ import { MatSelect, MatOption } from "@angular/material/select";
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
 import { TableBuilderComponent } from "../shared/components/table-builder/table-builder.component";
 import { AsyncPipe } from "@angular/common";
-
+ 
 @Component({
-    selector: "app-job",
-    templateUrl: "./job.component.html",
-    styleUrls: ["./job.component.scss"],
-    imports: [
-        ToolbarComponent,
-        DefaultLayoutDirective,
-        DefaultLayoutAlignDirective,
-        MatFormField,
-        MatLabel,
-        MatSelect,
-        MatOption,
-        MatTabGroup,
-        MatTab,
-        TableBuilderComponent,
-        AsyncPipe,
-    ],
+  selector: "app-job",
+  templateUrl: "./job.component.html",
+  styleUrls: ["./job.component.scss"],
+  imports: [
+    ToolbarComponent,
+    DefaultLayoutDirective,
+    DefaultLayoutAlignDirective,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    MatTabGroup,
+    MatTab,
+    TableBuilderComponent,
+    AsyncPipe
+  ]
 })
-export class JobComponent implements OnInit {
+export default class JobComponent implements OnInit {
   createdJobDataSource: TableDataSource<Job, DefaultService>;
   acceptedJobDataSource: TableDataSource<Job, DefaultService>;
   finishedJobDataSource: TableDataSource<Job, DefaultService>;
@@ -49,8 +49,8 @@ export class JobComponent implements OnInit {
         this.api.generateJobPdfJobPdfPost().subscribe((pdf) => {
           this.file.open(pdf);
         });
-      },
-    },
+      }
+    }
   ];
 
   private $refreshSubscriber: Subscriber<void>;
@@ -58,8 +58,9 @@ export class JobComponent implements OnInit {
   constructor(
     private api: DefaultService,
     private router: Router,
-    private file: FileService,
-  ) {}
+    private file: FileService
+  ) {
+  }
 
   ngOnInit(): void {
     this.initJobTables();
@@ -100,7 +101,7 @@ export class JobComponent implements OnInit {
           undefined,
           "JOBSTATUS_CREATED",
           true,
-          this.selectedYear,
+          this.selectedYear
         ),
       (dataSourceClasses) => {
         const rows = [];
@@ -109,7 +110,7 @@ export class JobComponent implements OnInit {
         dataSourceClasses.forEach((dataSource) => {
           let rowClass = undefined;
           if (!dividerAdded) {
-            rowClass = dataSource.is_mini ? "is-mini": undefined;
+            rowClass = dataSource.is_mini ? "is-mini" : undefined;
           }
           rows.push({
             values: {
@@ -117,7 +118,7 @@ export class JobComponent implements OnInit {
               code: dataSource.code,
               "client.name": dataSource.client.fullname,
               "responsible.fullname": dataSource.responsible.fullname,
-              completion: dataSource.completion,
+              completion: dataSource.completion
             },
             route: () => {
               this.router.navigateByUrl("/job/" + dataSource.id.toString());
@@ -134,15 +135,15 @@ export class JobComponent implements OnInit {
         { name: "name", headerName: "Kommission" },
         { name: "client.name", headerName: "Kunde" },
         { name: "responsible.fullname", headerName: "Zuständig" },
-        { name: "completion", headerName: "Fertigstellung" },
+        { name: "completion", headerName: "Fertigstellung" }
       ],
       (api) =>
         api.readJobCountJobCountGet(
           "JOBSTATUS_CREATED",
           true,
           undefined,
-          this.selectedYear,
-        ),
+          this.selectedYear
+        )
     );
     this.createdJobDataSource.loadData();
   }
@@ -158,7 +159,7 @@ export class JobComponent implements OnInit {
           undefined,
           "JOBSTATUS_ACCEPTED",
           true,
-          this.selectedYear,
+          this.selectedYear
         ),
       (dataSourceClasses) => {
         const rows = [];
@@ -167,7 +168,7 @@ export class JobComponent implements OnInit {
         dataSourceClasses.forEach((dataSource) => {
           let rowClass = undefined;
           if (!dividerAdded) {
-            rowClass = dataSource.is_mini ? "is-mini": undefined;
+            rowClass = dataSource.is_mini ? "is-mini" : undefined;
           }
           rows.push({
             values: {
@@ -175,7 +176,7 @@ export class JobComponent implements OnInit {
               code: dataSource.code,
               "client.name": dataSource.client.fullname,
               "responsible.fullname": dataSource.responsible.fullname,
-              completion: dataSource.completion,
+              completion: dataSource.completion
             },
             route: () => {
               this.router.navigateByUrl("/job/" + dataSource.id.toString());
@@ -192,15 +193,15 @@ export class JobComponent implements OnInit {
         { name: "name", headerName: "Kommission" },
         { name: "client.name", headerName: "Kunde" },
         { name: "responsible.fullname", headerName: "Zuständig" },
-        { name: "completion", headerName: "Fertigstellung" },
+        { name: "completion", headerName: "Fertigstellung" }
       ],
       (api) =>
         api.readJobCountJobCountGet(
           "JOBSTATUS_ACCEPTED",
           true,
           undefined,
-          this.selectedYear,
-        ),
+          this.selectedYear
+        )
     );
     this.acceptedJobDataSource.loadData();
   }
@@ -216,7 +217,7 @@ export class JobComponent implements OnInit {
           undefined,
           "JOBSTATUS_COMPLETED",
           true,
-          this.selectedYear,
+          this.selectedYear
         ),
       (dataSourceClasses) => {
         const rows = [];
@@ -225,7 +226,7 @@ export class JobComponent implements OnInit {
         dataSourceClasses.forEach((dataSource) => {
           let rowClass = undefined;
           if (!dividerAdded) {
-            rowClass = dataSource.is_mini ? "is-mini": undefined;
+            rowClass = dataSource.is_mini ? "is-mini" : undefined;
           }
           rows.push({
             values: {
@@ -233,7 +234,7 @@ export class JobComponent implements OnInit {
               code: dataSource.code,
               "client.name": dataSource.client.fullname,
               "responsible.fullname": dataSource.responsible.fullname,
-              completion: dataSource.completion,
+              completion: dataSource.completion
             },
             route: () => {
               this.router.navigateByUrl("/job/" + dataSource.id.toString());
@@ -250,15 +251,15 @@ export class JobComponent implements OnInit {
         { name: "name", headerName: "Kommission" },
         { name: "client.name", headerName: "Kunde" },
         { name: "responsible.fullname", headerName: "Zuständig" },
-        { name: "completion", headerName: "Fertigstellung" },
+        { name: "completion", headerName: "Fertigstellung" }
       ],
       (api) =>
         api.readJobCountJobCountGet(
           "JOBSTATUS_COMPLETED",
           true,
           undefined,
-          this.selectedYear,
-        ),
+          this.selectedYear
+        )
     );
     this.finishedJobDataSource.loadData();
   }
@@ -274,7 +275,7 @@ export class JobComponent implements OnInit {
           undefined,
           "JOBSTATUS_DECLINED",
           true,
-          this.selectedYear,
+          this.selectedYear
         ),
       (dataSourceClasses) => {
         const rows = [];
@@ -283,7 +284,7 @@ export class JobComponent implements OnInit {
         dataSourceClasses.forEach((dataSource) => {
           let rowClass = undefined;
           if (!dividerAdded) {
-            rowClass = dataSource.is_mini ? "is-mini": undefined;
+            rowClass = dataSource.is_mini ? "is-mini" : undefined;
           }
           rows.push({
             values: {
@@ -291,7 +292,7 @@ export class JobComponent implements OnInit {
               code: dataSource.code,
               "client.name": dataSource.client.fullname,
               "responsible.fullname": dataSource.responsible.fullname,
-              completion: dataSource.completion,
+              completion: dataSource.completion
             },
             route: () => {
               this.router.navigateByUrl("/job/" + dataSource.id.toString());
@@ -308,15 +309,15 @@ export class JobComponent implements OnInit {
         { name: "name", headerName: "Kommission" },
         { name: "client.name", headerName: "Kunde" },
         { name: "responsible.fullname", headerName: "Zuständig" },
-        { name: "completion", headerName: "Fertigstellung" },
+        { name: "completion", headerName: "Fertigstellung" }
       ],
       (api) =>
         api.readJobCountJobCountGet(
           "JOBSTATUS_DECLINED",
           true,
           undefined,
-          this.selectedYear,
-        ),
+          this.selectedYear
+        )
     );
     this.declinedJobDataSource.loadData();
   }
@@ -332,17 +333,17 @@ export class JobComponent implements OnInit {
           rows.push({
             values: {
               id: dataSource.id,
-              name: dataSource.name,
+              name: dataSource.name
             },
             route: () => {
               this.router.navigateByUrl("stock/" + dataSource.id.toString());
-            },
+            }
           });
         });
         return rows;
       },
       [{ name: "name", headerName: "Name" }],
-      (api) => api.readStockCountStockCountGet(),
+      (api) => api.readStockCountStockCountGet()
     );
     this.stockTableDataSource.loadData();
   }

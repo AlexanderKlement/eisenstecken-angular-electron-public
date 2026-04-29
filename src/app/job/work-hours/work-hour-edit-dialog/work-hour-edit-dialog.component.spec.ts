@@ -1,16 +1,16 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { WorkHourEditDialogComponent } from './work-hour-edit-dialog.component';
+import { WorkHourEditDialogComponent } from "./work-hour-edit-dialog.component";
 
-describe('WorkHourEditDialogComponent', () => {
+describe("WorkHourEditDialogComponent", () => {
   let component: WorkHourEditDialogComponent;
   let fixture: ComponentFixture<WorkHourEditDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [WorkHourEditDialogComponent]
-})
-    .compileComponents();
+      imports: [WorkHourEditDialogComponent]
+    })
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('WorkHourEditDialogComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

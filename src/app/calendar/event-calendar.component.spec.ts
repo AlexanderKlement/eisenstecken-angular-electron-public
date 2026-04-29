@@ -1,16 +1,16 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { EventCalendarComponent } from './event-calendar.component';
+import EventCalendarComponent from "./event-calendar.component";
 
-describe('CalendarComponent', () => {
+describe("CalendarComponent", () => {
   let component: EventCalendarComponent;
   let fixture: ComponentFixture<EventCalendarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [EventCalendarComponent]
-})
-    .compileComponents();
+      imports: [EventCalendarComponent]
+    })
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('CalendarComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

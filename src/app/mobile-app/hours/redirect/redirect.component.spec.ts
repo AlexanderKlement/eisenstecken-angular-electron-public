@@ -1,16 +1,16 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { RedirectComponent } from './redirect.component';
+import RedirectComponent from "./redirect.component";
 
-describe('RedirectComponent', () => {
+describe("RedirectComponent", () => {
   let component: RedirectComponent;
   let fixture: ComponentFixture<RedirectComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [RedirectComponent]
-})
-    .compileComponents();
+      imports: [RedirectComponent]
+    })
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('RedirectComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

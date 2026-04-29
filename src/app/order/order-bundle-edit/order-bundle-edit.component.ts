@@ -4,7 +4,13 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { first } from "rxjs/operators";
-import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import {
+  UntypedFormArray,
+  UntypedFormControl,
+  UntypedFormGroup,
+  FormsModule,
+  ReactiveFormsModule
+} from "@angular/forms";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { OrderBundle, DefaultService, Order, Lock, OrderedArticlePriceUpdate } from "../../../api/openapi";
@@ -15,24 +21,24 @@ import { MatIcon } from "@angular/material/icon";
 import { MatButton } from "@angular/material/button";
 
 @Component({
-    selector: 'app-order-bundle-edit',
-    templateUrl: './order-bundle-edit.component.html',
-    styleUrls: ['./order-bundle-edit.component.scss'],
-    imports: [
-        ToolbarComponent,
-        FormsModule,
-        ReactiveFormsModule,
-        DefaultLayoutDirective,
-        DefaultLayoutAlignDirective,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        MatIcon,
-        DefaultFlexDirective,
-        MatButton,
-    ],
+  selector: "app-order-bundle-edit",
+  templateUrl: "./order-bundle-edit.component.html",
+  styleUrls: ["./order-bundle-edit.component.scss"],
+  imports: [
+    ToolbarComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    DefaultLayoutDirective,
+    DefaultLayoutAlignDirective,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatIcon,
+    DefaultFlexDirective,
+    MatButton
+  ]
 })
-export class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> implements OnInit {
+export default class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> implements OnInit {
 
   orderBundleId: number;
   navigationTarget = "supplier";
@@ -73,7 +79,7 @@ export class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> imp
 
   initOrderBundleGroup() {
     this.orderBundleGroup = new UntypedFormGroup({
-      orders: new UntypedFormArray([]),
+      orders: new UntypedFormArray([])
     });
   }
 
@@ -95,7 +101,7 @@ export class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> imp
         // eslint-disable-next-line @typescript-eslint/naming-convention
         mod_number: new UntypedFormControl(article.article.mod_number),
         unit: new UntypedFormControl(article.ordered_unit.name.translation_de),
-        price: new UntypedFormControl(article.price),
+        price: new UntypedFormControl(article.price)
       }));
     }
 
@@ -104,7 +110,7 @@ export class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> imp
       order_from: new UntypedFormControl(order.order_from.displayable_name),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       order_to: new UntypedFormControl(order.order_to.displayable_name),
-      articles: articleFormArray,
+      articles: articleFormArray
     });
   }
 
@@ -114,7 +120,7 @@ export class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> imp
       for (const article of (order.get("articles") as UntypedFormArray).controls) {
         priceUpdate.push({
           id: parseInt(article.get("id").value, 10),
-          price: parseFloat(article.get("price").value),
+          price: parseFloat(article.get("price").value)
         });
       }
     } //This does not work anymore
@@ -134,8 +140,8 @@ export class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> imp
       width: "400px",
       data: {
         title: "Artikel löschen?",
-        text: "Dieser Schritt kann nicht rückgängig gemacht werden.",
-      },
+        text: "Dieser Schritt kann nicht rückgängig gemacht werden."
+      }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -146,7 +152,7 @@ export class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> imp
             } else {
               this.snackbar.open("Der Artikel konnte leider nicht gelöscht werden. Bitte probieren sie es später erneut"
                 , "Ok", {
-                  duration: 10000,
+                  duration: 10000
                 });
             }
           });

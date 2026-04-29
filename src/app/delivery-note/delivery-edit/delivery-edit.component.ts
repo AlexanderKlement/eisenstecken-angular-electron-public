@@ -10,13 +10,13 @@ import {
   UntypedFormGroup,
   Validators,
   FormsModule,
-  ReactiveFormsModule,
+  ReactiveFormsModule
 } from "@angular/forms";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { AuthStateService } from "../../shared/services/auth-state.service";
 import {
   CustomButton,
-  ToolbarComponent,
+  ToolbarComponent
 } from "../../shared/components/toolbar/toolbar.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { formatDateTransport } from "../../shared/date.util";
@@ -29,13 +29,13 @@ import {
   Lock,
   DefaultService,
   DescriptiveArticle,
-  DescriptiveArticleCreate, ScopeEnum,
+  DescriptiveArticleCreate, ScopeEnum
 } from "../../../api/openapi";
 import {
   DefaultLayoutDirective,
   DefaultLayoutAlignDirective,
   DefaultFlexDirective,
-  FlexModule,
+  FlexModule
 } from "ng-flex-layout";
 import { MatIconButton, MatButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
@@ -43,21 +43,20 @@ import {
   MatFormField,
   MatLabel,
   MatInput,
-  MatSuffix,
+  MatSuffix
 } from "@angular/material/input";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { MatSelect, MatOption } from "@angular/material/select";
 import {
   MatDatepickerInput,
   MatDatepickerToggle,
-  MatDatepicker,
+  MatDatepicker
 } from "@angular/material/datepicker";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { AsyncPipe } from "@angular/common";
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
 
 export interface JobMinimal {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   displayable_name: string;
   id: number;
 }
@@ -89,13 +88,12 @@ export interface JobMinimal {
     MatDatepicker,
     MatCheckbox,
     AsyncPipe,
-    CircleIconButtonComponent,
-  ],
+    CircleIconButtonComponent
+  ]
 })
-export class DeliveryEditComponent
+export default class DeliveryEditComponent
   extends BaseEditComponent<DeliveryNote>
-  implements OnInit
-{
+  implements OnInit {
   deliveryNoteGroup: UntypedFormGroup;
   submitted = false;
   navigationTarget = "delivery_note";
@@ -111,7 +109,7 @@ export class DeliveryEditComponent
     private authService: AuthStateService,
     private snackBar: MatSnackBar,
     private file: FileService,
-    dialog: MatDialog,
+    dialog: MatDialog
   ) {
     super(api, router, route, dialog);
   }
@@ -146,10 +144,10 @@ export class DeliveryEditComponent
           minimalJobs.splice(0, 0, {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             displayable_name: "Selbst eintragen",
-            id: 0,
+            id: 0
           });
           return minimalJobs;
-        }),
+        })
       );
     this.deliveryNoteReasons =
       this.api.readDeliveryNoteReasonsDeliveryNoteReasonsGet();
@@ -173,7 +171,7 @@ export class DeliveryEditComponent
               name: "Lieferschein löschen",
               navigate: () => {
                 this.deliveryNoteDeleteClicked();
-              },
+              }
             });
           }
         });
@@ -182,7 +180,6 @@ export class DeliveryEditComponent
       this.title = "Lieferschein: Erstellen";
     }
   }
-
 
 
   onSubmit() {
@@ -198,7 +195,7 @@ export class DeliveryEditComponent
         discount: 0,
         alternative: false,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        vat_id: 1,
+        vat_id: 1
       });
     }
     if (this.createMode) {
@@ -221,8 +218,8 @@ export class DeliveryEditComponent
         articles: descriptiveArticles,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         delivery_note_reason_id: this.deliveryNoteGroup.get(
-          "delivery_note_reason_id",
-        ).value,
+          "delivery_note_reason_id"
+        ).value
       };
       this.api
         .createDeliveryNoteDeliveryNotePost(deliveryNoteCreate)
@@ -238,7 +235,7 @@ export class DeliveryEditComponent
           },
           () => {
             this.createUpdateComplete();
-          },
+          }
         );
     } else {
       const deliveryNoteUpdate: DeliveryNoteUpdate = {
@@ -260,13 +257,13 @@ export class DeliveryEditComponent
         articles: descriptiveArticles,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         delivery_note_reason_id: this.deliveryNoteGroup.get(
-          "delivery_note_reason_id",
-        ).value,
+          "delivery_note_reason_id"
+        ).value
       };
       this.api
         .updateDeliveryNoteDeliveryNoteDeliveryNoteIdPut(
           this.id,
-          deliveryNoteUpdate,
+          deliveryNoteUpdate
         )
         .pipe(first())
         .subscribe(
@@ -280,7 +277,7 @@ export class DeliveryEditComponent
           },
           () => {
             this.createUpdateComplete();
-          },
+          }
         );
     }
   }
@@ -288,7 +285,7 @@ export class DeliveryEditComponent
   addDescriptiveArticleAt(index: number) {
     this.getDescriptiveArticles().insert(
       index + 1,
-      this.initDescriptiveArticles(),
+      this.initDescriptiveArticles()
     );
   }
 
@@ -315,8 +312,8 @@ export class DeliveryEditComponent
       width: "400px",
       data: {
         title: "Position löschen?",
-        text: "Dieser Schritt kann nicht rückgängig gemacht werden.",
-      },
+        text: "Dieser Schritt kann nicht rückgängig gemacht werden."
+      }
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -354,7 +351,7 @@ export class DeliveryEditComponent
         .setValue(deliveryNote.number);
       for (const article of deliveryNote.articles) {
         this.getDescriptiveArticles().push(
-          this.initDescriptiveArticles(article),
+          this.initDescriptiveArticles(article)
         );
       }
       if (this.getDescriptiveArticles().controls.length === 0) {
@@ -367,23 +364,23 @@ export class DeliveryEditComponent
   }
 
   protected initDescriptiveArticles(
-    descriptiveArticle?: DescriptiveArticle,
+    descriptiveArticle?: DescriptiveArticle
   ): UntypedFormGroup {
     if (descriptiveArticle === undefined) {
       return new UntypedFormGroup({
         description: new UntypedFormControl("", Validators.required),
-        amount: new UntypedFormControl("", Validators.required),
+        amount: new UntypedFormControl("", Validators.required)
       });
     } else {
       return new UntypedFormGroup({
         description: new UntypedFormControl(
           descriptiveArticle.description,
-          Validators.required,
+          Validators.required
         ),
         amount: new UntypedFormControl(
           descriptiveArticle.amount,
-          Validators.required,
-        ),
+          Validators.required
+        )
       });
     }
   }
@@ -409,7 +406,7 @@ export class DeliveryEditComponent
       // eslint-disable-next-line @typescript-eslint/naming-convention
       job_id: new UntypedFormControl(0),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      delivery_note_reason_id: new UntypedFormControl(3),
+      delivery_note_reason_id: new UntypedFormControl(3)
     });
   }
 
@@ -418,8 +415,8 @@ export class DeliveryEditComponent
       width: "400px",
       data: {
         title: "Lieferschein löschen?",
-        text: "Den Lieferschein löschen? Diese Aktion kann NICHT rückgängig gemacht werden!",
-      },
+        text: "Den Lieferschein löschen? Diese Aktion kann NICHT rückgängig gemacht werden!"
+      }
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -434,8 +431,8 @@ export class DeliveryEditComponent
                 "Lieferschein konnte nicht gelöscht werden",
                 "Ok",
                 {
-                  duration: 10000,
-                },
+                  duration: 10000
+                }
               );
             }
           });

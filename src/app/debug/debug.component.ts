@@ -1,11 +1,11 @@
-import {Component, OnInit} from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
-import {EmailService} from "../shared/services/email.service";
-import {FileService} from "../shared/services/file.service";
-import {TrayService} from "../shared/services/tray.service";
-import {Router} from "@angular/router";
-import {ipcRenderer} from "electron";
-import {ElectronService} from "../core/services";
+import { EmailService } from "../shared/services/email.service";
+import { FileService } from "../shared/services/file.service";
+import { TrayService } from "../shared/services/tray.service";
+import { Router } from "@angular/router";
+import { ipcRenderer } from "electron";
+import { ElectronService } from "../core/services";
 import { ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
@@ -13,12 +13,12 @@ import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
 
 @Component({
-    selector: 'app-debug',
-    templateUrl: './debug.component.html',
-    styleUrls: ['./debug.component.scss'],
-    imports: [ToolbarComponent, MatTabGroup, MatTab, FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatButton]
+  selector: "app-debug",
+  templateUrl: "./debug.component.html",
+  styleUrls: ["./debug.component.scss"],
+  imports: [ToolbarComponent, MatTabGroup, MatTab, FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatButton]
 })
-export class DebugComponent implements OnInit {
+export default class DebugComponent implements OnInit {
   emailFormGroup: UntypedFormGroup;
   openFileFormGroup: UntypedFormGroup;
   showFileFormGroup: UntypedFormGroup;
@@ -43,13 +43,13 @@ export class DebugComponent implements OnInit {
         this.emailFormGroup.get("email").value,
         this.emailFormGroup.get("subject").value,
         this.emailFormGroup.get("body").value,
-        this.emailFormGroup.get("attachment").value,
+        this.emailFormGroup.get("attachment").value
       );
     } else {
       this.email.sendMail(
         this.emailFormGroup.get("email").value,
         this.emailFormGroup.get("subject").value,
-        this.emailFormGroup.get("body").value,
+        this.emailFormGroup.get("body").value
       );
     }
   }
@@ -109,14 +109,14 @@ export class DebugComponent implements OnInit {
 
   private initSelectFolderGroup() {
     this.selectFolderFormGroup = new UntypedFormGroup({
-      path: new UntypedFormControl(""),
+      path: new UntypedFormControl("")
     });
   }
 
   private initTrayBalloonFromGroup() {
     this.trayBalloonFormGroup = new UntypedFormGroup({
       title: new UntypedFormControl(""),
-      content: new UntypedFormControl(""),
+      content: new UntypedFormControl("")
     });
   }
 

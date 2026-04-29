@@ -20,7 +20,7 @@ import {
   OrderBundle,
   DefaultService,
   OrderSmall,
-  OrderBundleService, ScopeEnum,
+  OrderBundleService, ScopeEnum
 } from "../../../api/openapi";
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
@@ -28,18 +28,18 @@ import {
   DefaultFlexDirective,
   DefaultLayoutAlignDirective,
   DefaultLayoutDirective,
-  DefaultLayoutGapDirective, FlexModule,
+  DefaultLayoutGapDirective, FlexModule
 } from "ng-flex-layout";
 import { AsyncPipe } from "@angular/common";
 import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
 
 @Component({
-  selector: 'app-supplier-detail',
-  templateUrl: './supplier-detail.component.html',
-  styleUrls: ['./supplier-detail.component.scss'],
-  imports: [ToolbarComponent, InfoBuilderComponent, MatTabGroup, MatTab, TableBuilderComponent, DefaultLayoutDirective, AsyncPipe, MatFormField, MatInput, MatLabel, DefaultFlexDirective, DefaultLayoutAlignDirective, DefaultLayoutGapDirective, FlexModule],
+  selector: "app-supplier-detail",
+  templateUrl: "./supplier-detail.component.html",
+  styleUrls: ["./supplier-detail.component.scss"],
+  imports: [ToolbarComponent, InfoBuilderComponent, MatTabGroup, MatTab, TableBuilderComponent, DefaultLayoutDirective, AsyncPipe, MatFormField, MatInput, MatLabel, DefaultFlexDirective, DefaultLayoutAlignDirective, DefaultLayoutGapDirective, FlexModule]
 })
-export class SupplierDetailComponent implements OnInit {
+export default class SupplierDetailComponent implements OnInit {
 
   @ViewChild(InfoBuilderComponent) child: InfoBuilderComponent<Supplier>;
   public infoDataSource: InfoDataSource<Supplier>;
@@ -93,7 +93,7 @@ export class SupplierDetailComponent implements OnInit {
       }
       this.supplier$ = merge(of(void 0), this.refreshTrigger$).pipe(
         switchMap(() => this.api.readSupplierSupplierSupplierIdGet(this.id)),
-        shareReplay({ bufferSize: 1, refCount: true }),
+        shareReplay({ bufferSize: 1, refCount: true })
       );
       this.initSupplierDetail();
       this.initOrderTable(this.id);
@@ -104,7 +104,7 @@ export class SupplierDetailComponent implements OnInit {
           name: "Bearbeiten",
           navigate: () => {
             this.child.editButtonClicked();
-          },
+          }
         });
       }
     });
@@ -114,13 +114,13 @@ export class SupplierDetailComponent implements OnInit {
           name: "Bestellung(en) senden",
           navigate: () => {
             this.sendOrderButtonClicked(false);
-          },
+          }
         });
         this.buttons.push({
           name: "Anfrage(n) senden",
           navigate: () => {
             this.sendOrderButtonClicked(true);
-          },
+          }
         });
       }
     });
@@ -130,7 +130,7 @@ export class SupplierDetailComponent implements OnInit {
           name: "Lieferant ausblenden",
           navigate: () => {
             this.supplierDeleteClicked();
-          },
+          }
         });
       }
     });
@@ -140,7 +140,7 @@ export class SupplierDetailComponent implements OnInit {
           name: "Artikel",
           navigate: () => {
             this.router.navigateByUrl("supplier/articles/" + this.id.toString());
-          },
+          }
         });
       }
     });
@@ -162,25 +162,25 @@ export class SupplierDetailComponent implements OnInit {
       [
         {
           property: "name",
-          name: "Name",
+          name: "Name"
         },
         {
           property: "address.street_number",
-          name: "Adresse",
+          name: "Adresse"
         },
         {
           property: "address.city",
-          name: "Gemeinde",
+          name: "Gemeinde"
         },
         {
           property: "send_order_to",
-          name: "Bestellung an",
-        },
+          name: "Bestellung an"
+        }
       ],
       "/supplier/edit/" + this.id.toString(),
       this.api.islockedSupplierSupplierIslockedSupplierIdGet(this.id),
       this.api.lockSupplierSupplierLockSupplierIdPost(this.id),
-      this.api.unlockSupplierSupplierUnlockSupplierIdPost(this.id),
+      this.api.unlockSupplierSupplierUnlockSupplierIdPost(this.id)
     );
   }
 
@@ -200,12 +200,12 @@ export class SupplierDetailComponent implements OnInit {
                 "order_to.displayable_name": dataSource.order_to.displayable_name,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 description: dataSource.description,
-                "user.fullname": dataSource.user.fullname,
+                "user.fullname": dataSource.user.fullname
 
               },
               route: () => {
                 this.router.navigateByUrl("/order/" + dataSource.id.toString());
-              },
+              }
             });
         });
         return rows;
@@ -214,9 +214,9 @@ export class SupplierDetailComponent implements OnInit {
         { name: "id", headerName: "ID" },
         { name: "order_to.displayable_name", headerName: "Ziel" },
         { name: "description", headerName: "Beschreibung" },
-        { name: "user.fullname", headerName: "Bestellt von" },
+        { name: "user.fullname", headerName: "Bestellt von" }
       ],
-      (api) => api.readOrderCountOrderSupplierSupplierIdCountGet(supplierId, "CREATED"),
+      (api) => api.readOrderCountOrderSupplierSupplierIdCountGet(supplierId, "CREATED")
     );
     this.orderedOrderDataSource = new TableDataSource(
       this.api,
@@ -232,11 +232,11 @@ export class SupplierDetailComponent implements OnInit {
                 create_date: dayjs(dataSource.create_date).format("L"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 delivery_date: dayjs(dataSource.delivery_date).format("L"),
-                "user.fullname": dataSource.user.fullname,
+                "user.fullname": dataSource.user.fullname
               },
               route: () => {
                 this.router.navigateByUrl("/order_bundle/" + dataSource.id.toString());
-              },
+              }
             });
         });
         return rows;
@@ -244,9 +244,9 @@ export class SupplierDetailComponent implements OnInit {
       [
         { name: "create_date", headerName: "Bestelldatum" },
         { name: "delivery_date", headerName: "Lieferdatum" },
-        { name: "user.fullname", headerName: "Bestellt von" },
+        { name: "user.fullname", headerName: "Bestellt von" }
       ],
-      (api) => api.readCountOfOrderBundleBySupplierAndStatusOrderBundleSupplierSupplierIdCountGet(supplierId, "ORDERED"),
+      (api) => api.readCountOfOrderBundleBySupplierAndStatusOrderBundleSupplierSupplierIdCountGet(supplierId, "ORDERED")
     );
     this.deliveredOrderDataSource = new TableDataSource(
       this.api,
@@ -262,11 +262,11 @@ export class SupplierDetailComponent implements OnInit {
                 create_date: dayjs(dataSource.create_date).format("L"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 delivery_date: dayjs(dataSource.delivery_date).format("L"),
-                "user.fullname": dataSource.user.fullname,
+                "user.fullname": dataSource.user.fullname
               },
               route: () => {
                 this.router.navigateByUrl("/order_bundle/" + dataSource.id.toString());
-              },
+              }
             });
         });
         return rows;
@@ -274,9 +274,9 @@ export class SupplierDetailComponent implements OnInit {
       [
         { name: "create_date", headerName: "Bestelldatum" },
         { name: "delivery_date", headerName: "Lieferdatum" },
-        { name: "user.fullname", headerName: "Bestellt von" },
+        { name: "user.fullname", headerName: "Bestellt von" }
       ],
-      (api) => api.readCountOfOrderBundleBySupplierAndStatusOrderBundleSupplierSupplierIdCountGet(supplierId, "DELIVERED"),
+      (api) => api.readCountOfOrderBundleBySupplierAndStatusOrderBundleSupplierSupplierIdCountGet(supplierId, "DELIVERED")
     );
     this.requestOrderDataSource = new TableDataSource(
       this.api,
@@ -292,11 +292,11 @@ export class SupplierDetailComponent implements OnInit {
                 create_date: dayjs(dataSource.create_date).format("L"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 delivery_date: dayjs(dataSource.delivery_date).format("L"),
-                "user.fullname": dataSource.user.fullname,
+                "user.fullname": dataSource.user.fullname
               },
               route: () => {
                 this.router.navigateByUrl("/order_bundle/" + dataSource.id.toString());
-              },
+              }
             });
         });
         return rows;
@@ -304,9 +304,9 @@ export class SupplierDetailComponent implements OnInit {
       [
         { name: "create_date", headerName: "Bestelldatum" },
         { name: "delivery_date", headerName: "Lieferdatum" },
-        { name: "user.fullname", headerName: "Bestellt von" },
+        { name: "user.fullname", headerName: "Bestellt von" }
       ],
-      (api) => api.readCountOfOrderBundleBySupplierAndStatusOrderBundleSupplierSupplierIdCountGet(supplierId, undefined, true),
+      (api) => api.readCountOfOrderBundleBySupplierAndStatusOrderBundleSupplierSupplierIdCountGet(supplierId, undefined, true)
     );
     this.createdOrderDataSource.loadData();
     this.orderedOrderDataSource.loadData();
@@ -319,8 +319,8 @@ export class SupplierDetailComponent implements OnInit {
       width: "600px",
       data: {
         name: this.supplier$.pipe(map(s => s.displayable_name)),
-        orders: this.api.readOrdersSupplierOrderSupplierSupplierIdGet(this.id, 0, 1000, "", "CREATED", request),
-      },
+        orders: this.api.readOrdersSupplierOrderSupplierSupplierIdGet(this.id, 0, 1000, "", "CREATED", request)
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -338,8 +338,8 @@ export class SupplierDetailComponent implements OnInit {
           orders: orderDateReturnData.orders,
           delivery_date: orderDateReturnData.date,
           order_from_id: supplier.id,
-          request,
-        } satisfies OrderBundleCreate,
+          request
+        } satisfies OrderBundleCreate
       })),
       switchMap(({ supplier, payload }) =>
         this.orderBundleService.createOrderBundle(payload).pipe(
@@ -349,11 +349,11 @@ export class SupplierDetailComponent implements OnInit {
             this.orderedOrderDataSource.loadData();
             this.createdOrderDataSource.loadData();
             SupplierDetailComponent.sendAndDisplayOrderBundlePdf(
-              this.api, this.authService, this.email, this.file, newOrderBundle, supplier, request,
+              this.api, this.authService, this.email, this.file, newOrderBundle, supplier, request
             );
-          }),
-        ),
-      ),
+          })
+        )
+      )
     ).subscribe();
   }
 
@@ -362,8 +362,8 @@ export class SupplierDetailComponent implements OnInit {
       width: "400px",
       data: {
         title: "Lieferant löschen?",
-        text: "Den Lieferanten ausblenden? Dieser wird nun nicht mehr angezeigt?",
-      },
+        text: "Den Lieferanten ausblenden? Dieser wird nun nicht mehr angezeigt?"
+      }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -372,7 +372,7 @@ export class SupplierDetailComponent implements OnInit {
             this.router.navigateByUrl("supplier");
           } else {
             this.snackBar.open("Beim Ausblenden ist ein Fehler aufgetreten", "Ok", {
-              duration: 10000,
+              duration: 10000
             });
             console.error("Could not disable supplier");
           }

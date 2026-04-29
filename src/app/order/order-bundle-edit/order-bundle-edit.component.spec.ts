@@ -1,16 +1,16 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { OrderBundleEditComponent } from './order-bundle-edit.component';
+import OrderBundleEditComponent from "./order-bundle-edit.component";
 
-describe('OrderBundleEditComponent', () => {
+describe("OrderBundleEditComponent", () => {
   let component: OrderBundleEditComponent;
   let fixture: ComponentFixture<OrderBundleEditComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [OrderBundleEditComponent]
-})
-    .compileComponents();
+      imports: [OrderBundleEditComponent]
+    })
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('OrderBundleEditComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

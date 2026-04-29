@@ -14,7 +14,7 @@ import { formatCurrency } from "@angular/common";
 import { OrderPrintDialogComponent, OrderReturnData } from "./order-print-dialog/order-print-dialog.component";
 import { FileService } from "../../shared/services/file.service";
 import { ChangePathDialogComponent } from "./change-path-dialog/change-path-dialog.component";
-import { OrderDetailComponent } from "../../order/order-detail/order-detail.component";
+import OrderDetailComponent from "../../order/order-detail/order-detail.component";
 import { Observable, Subscriber } from "rxjs";
 import { MoveJobDialogComponent } from "./move-job-dialog/move-job-dialog.component";
 import {
@@ -46,7 +46,7 @@ import {
     TableBuilderComponent
   ]
 })
-export class JobDetailComponent implements OnInit {
+export default class JobDetailComponent implements OnInit {
   @ViewChild(InfoBuilderComponent) child: InfoBuilderComponent<Job>;
 
   public infoDataSource: InfoDataSource<Job>;
@@ -461,24 +461,8 @@ export class JobDetailComponent implements OnInit {
       .pipe(first())
       .subscribe((allowed) => {
         this.ordersAllowed = allowed;
-      });
-    this.authService
-      .currentUserHasScope(ScopeEnum.Office)
-      .pipe(first())
-      .subscribe((allowed) => {
         this.offersAllowed = allowed;
-      });
-    this.authService
-      .currentUserHasScope(ScopeEnum.Office)
-      .pipe(first())
-      .subscribe((allowed) => {
         this.outgoingInvoicesAllowed = allowed;
-      });
-
-    this.authService
-      .currentUserHasScope(ScopeEnum.Office)
-      .pipe(first())
-      .subscribe((allowed) => {
         if (allowed) {
 
           this.buttonsMain[0].dropdown.push({

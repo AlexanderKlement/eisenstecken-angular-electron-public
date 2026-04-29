@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
-import { Router } from "@angular/router";
+import { Router, RouterOutlet } from "@angular/router";
 import { LockService } from "../shared/services/lock.service";
 import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
 import { AuthStateService } from "../shared/services/auth-state.service";
@@ -18,9 +18,9 @@ import { UserNotesComponent } from "./user-notes/user-notes.component";
   selector: "app-user",
   templateUrl: "./user.component.html",
   styleUrls: ["./user.component.scss"],
-  imports: [ToolbarComponent, TableBuilderComponent, MatTabGroup, MatTab, UserNotesComponent]
+  imports: [ToolbarComponent, TableBuilderComponent, MatTabGroup, MatTab, UserNotesComponent, RouterOutlet]
 })
-export class UserComponent implements OnInit {
+export default class UserComponent implements OnInit {
   userDataSource: TableDataSource<User, DefaultService>;
   public buttons: CustomButton[] = [];
 

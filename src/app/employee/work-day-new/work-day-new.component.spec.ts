@@ -1,16 +1,16 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { WorkDayNewComponent } from './work-day-new.component';
+import WorkDayNewComponent from "./work-day-new.component";
 
-describe('WorkDayNewComponent', () => {
+describe("WorkDayNewComponent", () => {
   let component: WorkDayNewComponent;
   let fixture: ComponentFixture<WorkDayNewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [WorkDayNewComponent]
-})
-    .compileComponents();
+      imports: [WorkDayNewComponent]
+    })
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('WorkDayNewComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

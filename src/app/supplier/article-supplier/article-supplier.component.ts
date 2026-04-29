@@ -2,13 +2,13 @@ import { Component, OnInit } from "@angular/core";
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import {
   Column,
-  TableDataSource,
+  TableDataSource
 } from "../../shared/components/table-builder/table-builder.datasource";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Observable } from "rxjs";
 import {
   ArticleEditDialogComponent,
-  ArticleEditDialogData,
+  ArticleEditDialogData
 } from "./article-edit-dialog/article-edit-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { first } from "rxjs/operators";
@@ -16,12 +16,12 @@ import { DefaultService, Article } from "../../../api/openapi";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
 @Component({
-    selector: "app-article-supplier",
-    templateUrl: "./article-supplier.component.html",
-    styleUrls: ["./article-supplier.component.scss"],
-    imports: [ToolbarComponent, TableBuilderComponent],
+  selector: "app-article-supplier",
+  templateUrl: "./article-supplier.component.html",
+  styleUrls: ["./article-supplier.component.scss"],
+  imports: [ToolbarComponent, TableBuilderComponent]
 })
-export class ArticleSupplierComponent implements OnInit {
+export default class ArticleSupplierComponent implements OnInit {
   buttons: CustomButton[] = [];
   articleTableSource: TableDataSource<Article, DefaultService>;
   supplierId: number;
@@ -35,15 +35,16 @@ export class ArticleSupplierComponent implements OnInit {
     // {name: "vat", headerName: "MwSt."},
     { name: "mod_number", headerName: "Mod Nummer" },
     { name: "favorite", headerName: "Favorit" },
-    { name: "last_order_date", headerName: "Letztes Bestelldatum" },
+    { name: "last_order_date", headerName: "Letztes Bestelldatum" }
   ];
 
   constructor(
     private dialog: MatDialog,
     private api: DefaultService,
     private route: ActivatedRoute,
-    private router: Router,
-  ) {}
+    private router: Router
+  ) {
+  }
 
   parseFunction = (dataSourceClasses: Article[]) => {
     const rows = [];
@@ -59,11 +60,11 @@ export class ArticleSupplierComponent implements OnInit {
           favorite: dataSource.favorite ? "Ja" : "Nein",
           last_order_date: dataSource.last_order_date
             ? new Date(dataSource.last_order_date).toLocaleDateString()
-            : "-",
+            : "-"
         },
         route: () => {
           this.articleClicked(dataSource.id);
-        },
+        }
       });
     });
     return rows;
@@ -103,7 +104,7 @@ export class ArticleSupplierComponent implements OnInit {
       name: "Neuer Artikel",
       navigate: () => {
         this.openArticleDialog(-1, this.supplierId, this.type);
-      },
+      }
     });
   }
 
@@ -115,14 +116,14 @@ export class ArticleSupplierComponent implements OnInit {
           this.supplierId,
           skip,
           limit,
-          filter,
+          filter
         ),
       this.parseFunction,
       this.columns,
       (api) =>
         api.readArticleCountBySupplierArticleSupplierCountSupplierIdGet(
-          this.supplierId,
-        ),
+          this.supplierId
+        )
     );
     this.articleTableSource.loadData();
   }
@@ -135,14 +136,14 @@ export class ArticleSupplierComponent implements OnInit {
           this.supplierId,
           skip,
           limit,
-          filter,
+          filter
         ),
       this.parseFunction,
       this.columns,
       (api) =>
         api.readArticleCountBySupplierArticleSupplierCountSupplierIdGet(
-          this.supplierId,
-        ),
+          this.supplierId
+        )
     );
     this.articleTableSource.loadData();
   }
@@ -155,11 +156,11 @@ export class ArticleSupplierComponent implements OnInit {
     const dialogData: ArticleEditDialogData = {
       id,
       type,
-      supplierId, //this is not really important, since i can get it from the article her
+      supplierId //this is not really important, since i can get it from the article her
     };
     const dialogRef = this.dialog.open(ArticleEditDialogComponent, {
       width: "500px",
-      data: dialogData,
+      data: dialogData
     });
     dialogRef
       .afterClosed()

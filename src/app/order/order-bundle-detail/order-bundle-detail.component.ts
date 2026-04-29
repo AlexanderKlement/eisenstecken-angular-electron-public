@@ -10,21 +10,22 @@ import { LockService } from "../../shared/services/lock.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { FileService } from "../../shared/services/file.service";
 import { EmailService } from "../../shared/services/email.service";
-import { SupplierDetailComponent } from "../../supplier/supplier-detail/supplier-detail.component";
+import SupplierDetailComponent from "../../supplier/supplier-detail/supplier-detail.component";
 import { AuthStateService } from "../../shared/services/auth-state.service";
-import { OrderDetailComponent } from "../order-detail/order-detail.component";
+import OrderDetailComponent from "../order-detail/order-detail.component";
 import { Observable, Subscriber } from "rxjs";
 import { DefaultService, OrderBundle, Supplier, Order, OrderableType } from "../../../api/openapi";
 import { InfoBuilderComponent } from "../../shared/components/info-builder/info-builder.component";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
+
 @Component({
-    selector: 'app-order-bundle-detail',
-    templateUrl: './order-bundle-detail.component.html',
-    styleUrls: ['./order-bundle-detail.component.scss'],
-    imports: [ToolbarComponent, InfoBuilderComponent, TableBuilderComponent]
+  selector: "app-order-bundle-detail",
+  templateUrl: "./order-bundle-detail.component.html",
+  styleUrls: ["./order-bundle-detail.component.scss"],
+  imports: [ToolbarComponent, InfoBuilderComponent, TableBuilderComponent]
 })
-export class OrderBundleDetailComponent implements OnInit {
+export default class OrderBundleDetailComponent implements OnInit {
   orderDataSource: TableDataSource<Order, DefaultService>;
   infoDataSource: InfoDataSource<OrderBundle>;
   orderBundleId: number;
@@ -33,14 +34,14 @@ export class OrderBundleDetailComponent implements OnInit {
       name: "Löschen",
       navigate: (): void => {
         this.orderDeleteClicked();
-      },
+      }
     },
     {
       name: "PDF neu generieren",
       navigate: (): void => {
         this.regeneratePdfClicked();
-      },
-    },
+      }
+    }
   ];
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
@@ -85,8 +86,8 @@ export class OrderBundleDetailComponent implements OnInit {
       width: "400px",
       data: {
         title: "Bestellung löschen?",
-        text: "Bestellung wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden!",
-      },
+        text: "Bestellung wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden!"
+      }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -95,7 +96,7 @@ export class OrderBundleDetailComponent implements OnInit {
             this.orderDataSource.loadData();
           } else {
             this.snackBar.open("Bestellung konnte nicht gelöscht werden", "Ok", {
-              duration: 10000,
+              duration: 10000
             });
             console.error("Could not delete order bundle");
           }
@@ -111,25 +112,25 @@ export class OrderBundleDetailComponent implements OnInit {
       [
         {
           property: "order_from.name",
-          name: "Name",
+          name: "Name"
         },
         {
           property: "create_date_formatted",
-          name: "Bestelldatum",
+          name: "Bestelldatum"
         },
         {
           property: "delivery_date_formatted",
-          name: "Lieferdatumdatum",
+          name: "Lieferdatumdatum"
         },
         {
           property: "user.fullname",
-          name: "Bestellung versendet:",
-        },
+          name: "Bestellung versendet:"
+        }
       ],
       "/order/" + this.orderBundleId.toString(),
       undefined,
       undefined,
-      undefined,
+      undefined
     );
   }
 
@@ -145,20 +146,20 @@ export class OrderBundleDetailComponent implements OnInit {
             {
               values: {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                "order_to.name": dataSource.order_to.name,
+                "order_to.name": dataSource.order_to.name
               },
               route: () => {
                 this.router.navigateByUrl("/order/" + dataSource.id.toString());
               },
-              toolTip: OrderDetailComponent.extractOrderToolTips(dataSource),
+              toolTip: OrderDetailComponent.extractOrderToolTips(dataSource)
             });
         });
         return rows;
       },
       [
-        { name: "order_to.name", headerName: "Ziel" },
+        { name: "order_to.name", headerName: "Ziel" }
       ],
-      (api) => api.readOrdersByOrderBundleOrderBundleOrdersOrderBundleIdCountGet(this.orderBundleId),
+      (api) => api.readOrdersByOrderBundleOrderBundleOrdersOrderBundleIdCountGet(this.orderBundleId)
     );
     this.orderDataSource.loadData();
   }

@@ -3,35 +3,35 @@ import { Observable, Subscriber, combineLatest } from "rxjs";
 import {
   isJob,
   ListItem,
-  SupportedListElements,
+  SupportedListElements
 } from "../shared/components/filterable-clickable-list/filterable-clickable-list.types";
 import { first } from "rxjs/operators";
 import {
   CustomButton,
-  ToolbarComponent,
+  ToolbarComponent
 } from "../shared/components/toolbar/toolbar.component";
 import { Router } from "@angular/router";
 import {
   OrderableType,
   OrderedArticle,
   Article,
-  DefaultService, OrderedArticleSmall, ArticleService,
+  DefaultService, OrderedArticleSmall, ArticleService
 } from "../../api/openapi";
 import {
   DefaultLayoutDirective,
   DefaultLayoutAlignDirective,
   FlexModule,
-  DefaultFlexDirective,
+  DefaultFlexDirective
 } from "ng-flex-layout";
 import {
-  FilterableClickableListComponent,
+  FilterableClickableListComponent
 } from "../shared/components/filterable-clickable-list/filterable-clickable-list.component";
 import { ProductsListComponent } from "./available-products-list/products-list.component";
-
+ 
 @Component({
-  selector: 'app-order',
-  templateUrl: './order.component.html',
-  styleUrls: ['./order.component.scss'],
+  selector: "app-order",
+  templateUrl: "./order.component.html",
+  styleUrls: ["./order.component.scss"],
   imports: [
     ToolbarComponent,
     DefaultLayoutDirective,
@@ -39,10 +39,10 @@ import { ProductsListComponent } from "./available-products-list/products-list.c
     FlexModule,
     DefaultFlexDirective,
     FilterableClickableListComponent,
-    ProductsListComponent,
-  ],
+    ProductsListComponent
+  ]
 })
-export class OrderComponent implements OnInit {
+export default class OrderComponent implements OnInit {
   toListName = "Bestelle für Aufträge oder Lager";
   toList$: Observable<ListItem[]>; //Here go stocks and suppliers
   toListSubscriber: Subscriber<ListItem[]>;
@@ -70,7 +70,7 @@ export class OrderComponent implements OnInit {
   constructor(
     private api: DefaultService,
     private articleService: ArticleService,
-    private router: Router,
+    private router: Router
   ) {
   }
 
@@ -82,22 +82,22 @@ export class OrderComponent implements OnInit {
 
   private static createListItems(
     supportedListElements: SupportedListElements[],
-    highlighted: boolean,
+    highlighted: boolean
   ): ListItem[] {
     const listItems: ListItem[] = [];
     for (const elem of supportedListElements) {
       const name = isJob(elem)
-          ? `${OrderComponent.addSpaceAfter4(elem.code)} | ${elem.displayable_name}`
-          : elem.displayable_name;
+        ? `${OrderComponent.addSpaceAfter4(elem.code)} | ${elem.displayable_name}`
+        : elem.displayable_name;
       const listItem: ListItem = {
         name: name,
-        searchText: name ,
+        searchText: name,
         item: elem,
         type: elem.type,
         collapse: false,
         indented: false,
         bold: isJob(elem),
-        highlighted: highlighted,
+        highlighted: highlighted
       };
 
       listItems.push(listItem);
@@ -111,7 +111,7 @@ export class OrderComponent implements OnInit {
             collapse: elem.displayable_name,
             indented: true,
             bold: false,
-            highlighted: highlighted,
+            highlighted: highlighted
           });
         });
       }
@@ -130,12 +130,12 @@ export class OrderComponent implements OnInit {
     this.availableProducts$ = new Observable<Article[]>(
       (availableProductsSubscriber) => {
         this.availableProductsSubscriber = availableProductsSubscriber;
-      },
+      }
     );
     this.orderedProducts$ = new Observable<OrderedArticle[]>(
       (orderedProductsSubscriber) => {
         this.orderedProductsSubscriber = orderedProductsSubscriber;
-      },
+      }
     );
   }
 
@@ -181,7 +181,7 @@ export class OrderComponent implements OnInit {
     this.api
       .readOrderFromToOrderFromOrderableFromIdToOrderableToIdGet(
         this.fromListSelected.item.id,
-        this.toListSelected.item.id,
+        this.toListSelected.item.id
       )
       .pipe(first())
       .subscribe((order) => {
@@ -202,7 +202,7 @@ export class OrderComponent implements OnInit {
       }
       case OrderableType.Supplier: {
         console.error(
-          "OrderComponent: an item with type SUPPLIER has been clicked in TO list",
+          "OrderComponent: an item with type SUPPLIER has been clicked in TO list"
         );
         break;
       }
@@ -278,11 +278,11 @@ export class OrderComponent implements OnInit {
     switch (this.fromListSelected.type) {
       case OrderableType.Stock: {
         this.articleService.getArticlesByStock(
-            this.fromListSelected.item.id,
-            0,
-            100,
-            this.availableArticleFilter ?? "",
-          )
+          this.fromListSelected.item.id,
+          0,
+          100,
+          this.availableArticleFilter ?? ""
+        )
           .pipe(first())
           .subscribe((articles) => {
             this.availableProductsSubscriber.next(articles);
@@ -292,13 +292,13 @@ export class OrderComponent implements OnInit {
           name: "Öffne Lager",
           navigate: () => {
             this.router.navigateByUrl("stock/" + this.fromListSelected.item.id).then(r => console.log(r));
-          },
+          }
         });
         break;
       }
       case OrderableType.Job: {
         console.error(
-          "OrderComponent: an item with type JOB has been clicked in FROM list",
+          "OrderComponent: an item with type JOB has been clicked in FROM list"
         );
         break;
       }
@@ -308,7 +308,7 @@ export class OrderComponent implements OnInit {
             this.fromListSelected.item.id,
             0,
             100,
-            this.availableArticleFilter ?? "",
+            this.availableArticleFilter ?? ""
           )
           .pipe(first())
           .subscribe((articles) => {
@@ -319,9 +319,9 @@ export class OrderComponent implements OnInit {
           name: "Öffne Lieferant",
           navigate: () => {
             this.router.navigateByUrl(
-              "supplier/" + this.fromListSelected.item.id,
+              "supplier/" + this.fromListSelected.item.id
             );
-          },
+          }
         });
         break;
       }

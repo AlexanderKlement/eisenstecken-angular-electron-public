@@ -9,13 +9,13 @@ import {
   UntypedFormControl,
   UntypedFormGroup,
   FormsModule,
-  ReactiveFormsModule,
+  ReactiveFormsModule
 } from "@angular/forms";
 import { first, tap } from "rxjs/operators";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import {
   CustomButton,
-  ToolbarComponent,
+  ToolbarComponent
 } from "../../shared/components/toolbar/toolbar.component";
 import { AuthStateService } from "../../shared/services/auth-state.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -32,13 +32,13 @@ import {
   OutgoingInvoiceUpdate,
   OutgoingInvoiceCreate,
   DescriptiveArticleCreate,
-  Lock, PaymentTermEnum, ScopeEnum,
+  Lock, PaymentTermEnum, ScopeEnum
 } from "../../../api/openapi";
 import {
   DefaultLayoutDirective,
   DefaultLayoutAlignDirective,
   DefaultFlexDirective,
-  FlexModule,
+  FlexModule
 } from "ng-flex-layout";
 import { MatIconButton, MatButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
@@ -46,12 +46,12 @@ import {
   MatFormField,
   MatLabel,
   MatInput,
-  MatSuffix,
+  MatSuffix
 } from "@angular/material/input";
 import {
   MatDatepickerInput,
   MatDatepickerToggle,
-  MatDatepicker,
+  MatDatepicker
 } from "@angular/material/datepicker";
 import { MatSelect, MatOption } from "@angular/material/select";
 import { MatCheckbox } from "@angular/material/checkbox";
@@ -62,12 +62,10 @@ import { PAYMENT_TERMS } from "../../invoice/payment_terms";
 type PaymentTermsResolved = { label: string; daysToAdd: number };
 
 
-
-
 @Component({
-  selector: 'app-outgoing-invoice-edit',
-  templateUrl: './outgoing-invoice-edit.component.html',
-  styleUrls: ['./outgoing-invoice-edit.component.scss'],
+  selector: "app-outgoing-invoice-edit",
+  templateUrl: "./outgoing-invoice-edit.component.html",
+  styleUrls: ["./outgoing-invoice-edit.component.scss"],
   imports: [
     ToolbarComponent,
     FormsModule,
@@ -91,10 +89,10 @@ type PaymentTermsResolved = { label: string; daysToAdd: number };
     MatCheckbox,
     AddressFormComponent,
     AsyncPipe,
-    CircleIconButtonComponent,
-  ],
+    CircleIconButtonComponent
+  ]
 })
-export class OutgoingInvoiceEditComponent
+export default class OutgoingInvoiceEditComponent
   extends BaseEditComponent<OutgoingInvoice>
   implements OnInit, OnDestroy {
   invoiceGroup: UntypedFormGroup;
@@ -120,7 +118,7 @@ export class OutgoingInvoiceEditComponent
     private file: FileService,
     @Inject(DEFAULT_CURRENCY_CODE) private readonly currencyCode: string,
     @Inject(LOCALE_ID) private readonly locale: string,
-    dialog: MatDialog,
+    dialog: MatDialog
   ) {
     super(api, router, route, dialog);
   }
@@ -131,7 +129,7 @@ export class OutgoingInvoiceEditComponent
     formGroup
       .get("total_price")
       .setValue(
-        this.currency.transform(totalPrice, this.currencyCode, "symbol", undefined, this.locale),
+        this.currency.transform(totalPrice, this.currencyCode, "symbol", undefined, this.locale)
       );
     this.recalculateInvoicePrice();
   }
@@ -179,8 +177,8 @@ export class OutgoingInvoiceEditComponent
                 width: "400px",
                 data: {
                   title: "Rechnung löschen?",
-                  text: "Dieser Schritt kann nicht rückgängig gemacht werden.",
-                },
+                  text: "Dieser Schritt kann nicht rückgängig gemacht werden."
+                }
               });
               dialogRef.afterClosed().subscribe((result) => {
                 if (result) {
@@ -189,7 +187,7 @@ export class OutgoingInvoiceEditComponent
                   } else {
                     this.api
                       .deleteOutgoingInvoiceOutgoingInvoiceOutgoingInvoiceIdDelete(
-                        this.id,
+                        this.id
                       )
                       .pipe(first())
                       .subscribe(
@@ -203,12 +201,12 @@ export class OutgoingInvoiceEditComponent
                         },
                         (error) => {
                           this.invoiceDeleteFailed(error);
-                        },
+                        }
                       );
                   }
                 }
               });
-            },
+            }
           });
         }
       });
@@ -218,7 +216,7 @@ export class OutgoingInvoiceEditComponent
     this.subscription.add(
       this.invoiceGroup.get("paymentTerms")!.valueChanges.subscribe((value: PaymentTermEnum) => {
         this.onPaymentTermsChanged(value);
-      }),
+      })
     );
   }
 
@@ -238,8 +236,8 @@ export class OutgoingInvoiceEditComponent
       "Die Rechnung konnte leider nicht gelöscht werden.",
       "Ok",
       {
-        duration: 10000,
-      },
+        duration: 10000
+      }
     );
     this.location.back();
   }
@@ -255,8 +253,8 @@ export class OutgoingInvoiceEditComponent
       width: "400px",
       data: {
         title: "Position löschen?",
-        text: "Dieser Schritt kann nicht rückgängig gemacht werden.",
-      },
+        text: "Dieser Schritt kann nicht rückgängig gemacht werden."
+      }
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -268,7 +266,7 @@ export class OutgoingInvoiceEditComponent
   addDescriptiveArticleAt(index: number): void {
     this.getDescriptiveArticles().insert(
       index + 1,
-      this.initDescriptiveArticles(),
+      this.initDescriptiveArticles()
     );
   }
 
@@ -296,14 +294,14 @@ export class OutgoingInvoiceEditComponent
         .get("singlePriceFormatted")
         .value.replace("€", "")
         .replace(".", "")
-        .replace(",", "."),
+        .replace(",", ".")
     );
     const formattedAmount = this.currency.transform(
       singlePrice,
       this.currencyCode,
       "symbol",
       undefined,
-      this.locale,
+      this.locale
     );
     descriptiveArticle.get("single_price").setValue(singlePrice);
     descriptiveArticle.get("singlePriceFormatted").setValue(formattedAmount);
@@ -325,10 +323,10 @@ export class OutgoingInvoiceEditComponent
           // eslint-disable-next-line @typescript-eslint/naming-convention
           descriptive_articles: [],
           // eslint-disable-next-line @typescript-eslint/naming-convention
-          vat_id: this.invoiceGroup.get("vat_id").value,
+          vat_id: this.invoiceGroup.get("vat_id").value
         };
         descriptiveArticles.push(descriptiveArticle);
-      },
+      }
     );
 
     const fullName = this.invoiceGroup.get("name").value.toString();
@@ -342,7 +340,7 @@ export class OutgoingInvoiceEditComponent
         payment_condition: this.invoiceGroup.get("payment_condition").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         payment_date: formatDateTransport(
-          this.invoiceGroup.get("payment_date").value,
+          this.invoiceGroup.get("payment_date").value
         ),
         paymentTerms: this.invoiceGroup.get("paymentTerms").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -367,8 +365,8 @@ export class OutgoingInvoiceEditComponent
           city: this.invoiceGroup.get("address.city").value,
           cap: this.invoiceGroup.get("address.cap").value,
           // eslint-disable-next-line @typescript-eslint/naming-convention
-          country_code: this.invoiceGroup.get("address.country").value,
-        },
+          country_code: this.invoiceGroup.get("address.country").value
+        }
       };
       this.api
         .createOutgoingInvoiceOutgoingInvoicePost(invoiceCreate)
@@ -382,7 +380,7 @@ export class OutgoingInvoiceEditComponent
           },
           () => {
             this.createUpdateComplete();
-          },
+          }
         );
     } else {
       const invoiceUpdate: OutgoingInvoiceUpdate = {
@@ -393,7 +391,7 @@ export class OutgoingInvoiceEditComponent
         payment_condition: this.invoiceGroup.get("payment_condition").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         payment_date: formatDateTransport(
-          this.invoiceGroup.get("payment_date").value,
+          this.invoiceGroup.get("payment_date").value
         ),
         paymentTerms: this.invoiceGroup.get("paymentTerms").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -416,13 +414,13 @@ export class OutgoingInvoiceEditComponent
           city: this.invoiceGroup.get("address.city").value,
           cap: this.invoiceGroup.get("address.cap").value,
           // eslint-disable-next-line @typescript-eslint/naming-convention
-          country_code: this.invoiceGroup.get("address.country").value,
-        },
+          country_code: this.invoiceGroup.get("address.country").value
+        }
       };
       this.api
         .updateOutgoingInvoiceOutgoingInvoiceOutgoingInvoiceIdPut(
           this.id,
-          invoiceUpdate,
+          invoiceUpdate
         )
         .pipe(first())
         .subscribe(
@@ -434,7 +432,7 @@ export class OutgoingInvoiceEditComponent
           },
           () => {
             this.createUpdateComplete();
-          },
+          }
         );
     }
   }
@@ -454,7 +452,7 @@ export class OutgoingInvoiceEditComponent
           this.getDescriptiveArticles().removeAt(0);
           invoice.descriptive_articles.forEach((descriptiveArticle) => {
             this.getDescriptiveArticles().push(
-              this.initDescriptiveArticles(descriptiveArticle),
+              this.initDescriptiveArticles(descriptiveArticle)
             );
           });
           this.company = invoice.isCompany;
@@ -463,8 +461,8 @@ export class OutgoingInvoiceEditComponent
             vat_id: invoice.vat.id,
 
             address: {
-              country: invoice.address.country.code,
-            },
+              country: invoice.address.country.code
+            }
           });
           this.jobId = invoice.job_id;
           this.recalculateInvoicePrice();
@@ -473,7 +471,7 @@ export class OutgoingInvoiceEditComponent
   }
 
   protected initDescriptiveArticles(
-    descriptiveArticle?: DescriptiveArticle,
+    descriptiveArticle?: DescriptiveArticle
   ): UntypedFormGroup {
     const descriptiveArticleFormGroup = new UntypedFormGroup({
       description: new UntypedFormControl(""),
@@ -482,7 +480,7 @@ export class OutgoingInvoiceEditComponent
       single_price: new UntypedFormControl("0"),
       singlePriceFormatted: new UntypedFormControl("0,00 €"),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      total_price: new UntypedFormControl("0"),
+      total_price: new UntypedFormControl("0")
     });
 
     this.subscription.add(
@@ -490,12 +488,12 @@ export class OutgoingInvoiceEditComponent
         .get("single_price")
         .valueChanges.subscribe(() => {
         this.calcTotalPrice(descriptiveArticleFormGroup);
-      }),
+      })
     );
     this.subscription.add(
       descriptiveArticleFormGroup.get("amount").valueChanges.subscribe(() => {
         this.calcTotalPrice(descriptiveArticleFormGroup);
-      }),
+      })
     );
 
     if (descriptiveArticle !== undefined) {
@@ -506,8 +504,8 @@ export class OutgoingInvoiceEditComponent
         single_price: descriptiveArticle.single_price,
         singlePriceFormatted: this.currency.transform(
           descriptiveArticle.single_price,
-          this.currencyCode, "symbol", undefined, this.locale,
-        ),
+          this.currencyCode, "symbol", undefined, this.locale
+        )
       });
     }
 
@@ -550,7 +548,7 @@ export class OutgoingInvoiceEditComponent
     name: string,
     amount: string,
     singlePrice: string,
-    totalPrice: string,
+    totalPrice: string
   ): void {
     const descriptiveArticleFormGroup = new UntypedFormGroup({
       description: new UntypedFormControl(name),
@@ -558,10 +556,10 @@ export class OutgoingInvoiceEditComponent
       // eslint-disable-next-line @typescript-eslint/naming-convention
       single_price: new UntypedFormControl(singlePrice),
       singlePriceFormatted: new UntypedFormControl(
-        this.currency.transform(singlePrice, this.currencyCode, "symbol", undefined, this.locale),
+        this.currency.transform(singlePrice, this.currencyCode, "symbol", undefined, this.locale)
       ),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      total_price: new UntypedFormControl(totalPrice),
+      total_price: new UntypedFormControl(totalPrice)
     });
     this.getDescriptiveArticles().push(descriptiveArticleFormGroup);
   }
@@ -584,7 +582,7 @@ export class OutgoingInvoiceEditComponent
       payment_date: new UntypedFormControl(now30gg),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       descriptive_articles: new UntypedFormArray([
-        this.initDescriptiveArticles(),
+        this.initDescriptiveArticles()
       ]),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       invoice_price: new UntypedFormControl(),
@@ -593,7 +591,7 @@ export class OutgoingInvoiceEditComponent
         street_number: new UntypedFormControl(""),
         city: new UntypedFormControl(""),
         cap: new UntypedFormControl(""),
-        country: new UntypedFormControl("IT"),
+        country: new UntypedFormControl("IT")
       }),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       vat_number: new UntypedFormControl("IT"),
@@ -602,7 +600,7 @@ export class OutgoingInvoiceEditComponent
       // eslint-disable-next-line @typescript-eslint/naming-convention
       codice_destinatario: new UntypedFormControl("0000000"),
       pec: new UntypedFormControl(""),
-      name: new UntypedFormControl(""),
+      name: new UntypedFormControl("")
     });
     this.api
       .getNextRgNumberOutgoingInvoiceRgNumberGet()
@@ -619,12 +617,12 @@ export class OutgoingInvoiceEditComponent
         invoicePrice +=
           parseFloat(descriptiveArticleControl.get("single_price").value) *
           parseFloat(descriptiveArticleControl.get("amount").value);
-      },
+      }
     );
     this.invoiceGroup
       .get("invoice_price")
       .setValue(
-        this.currency.transform(invoicePrice, this.currencyCode, "symbol", undefined, this.locale),
+        this.currency.transform(invoicePrice, this.currencyCode, "symbol", undefined, this.locale)
       );
   }
 
@@ -632,7 +630,7 @@ export class OutgoingInvoiceEditComponent
     const langCodeLower = client.language.code.toLowerCase();
     this.getAndFillParameters(
       "payment_condition",
-      "invoice_payment_condition_" + langCodeLower,
+      "invoice_payment_condition_" + langCodeLower
     );
     this.company = client.isCompany;
     this.invoiceGroup
@@ -644,7 +642,7 @@ export class OutgoingInvoiceEditComponent
       street_number: client.address.street_number,
       city: client.address.city,
       cap: client.address.cap,
-      country: client.address.country.code,
+      country: client.address.country.code
     });
     this.invoiceGroup.get("vat_number").setValue(client.vat_number);
     this.invoiceGroup.get("fiscal_code").setValue(client.fiscal_code);
@@ -660,7 +658,7 @@ export class OutgoingInvoiceEditComponent
       .pipe(first())
       .subscribe((parameter) => {
         this.invoiceGroup.patchValue({
-          [formControlName]: parameter,
+          [formControlName]: parameter
         });
       });
   }
@@ -678,7 +676,7 @@ export class OutgoingInvoiceEditComponent
             dayjs(outgoingInvoice.date, "YYYY-MM-DD").format("DD.MM.YYYY"),
             "1",
             (outgoingInvoice.full_price_without_vat * -1).toString(),
-            (outgoingInvoice.full_price_without_vat * -1).toString(),
+            (outgoingInvoice.full_price_without_vat * -1).toString()
           );
         }
         //this.addDescriptiveArticleAt(this.getDescriptiveArticles().length - 1);

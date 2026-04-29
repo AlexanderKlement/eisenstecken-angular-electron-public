@@ -1,16 +1,16 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { RecalculationDetailComponent } from './recalculation-detail.component';
+import RecalculationDetailComponent from "./recalculation-detail.component";
 
-describe('RecalculationDetailComponent', () => {
+describe("RecalculationDetailComponent", () => {
   let component: RecalculationDetailComponent;
   let fixture: ComponentFixture<RecalculationDetailComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [RecalculationDetailComponent]
-})
-    .compileComponents();
+      imports: [RecalculationDetailComponent]
+    })
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('RecalculationDetailComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

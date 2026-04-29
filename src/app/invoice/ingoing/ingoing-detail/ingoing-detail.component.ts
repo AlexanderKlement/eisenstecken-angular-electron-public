@@ -10,12 +10,12 @@ import { InfoBuilderComponent } from "../../../shared/components/info-builder/in
 import { TableBuilderComponent } from "../../../shared/components/table-builder/table-builder.component";
 
 @Component({
-    selector: 'app-ingoing-detail',
-    templateUrl: './ingoing-detail.component.html',
-    styleUrls: ['./ingoing-detail.component.scss'],
-    imports: [ToolbarComponent, InfoBuilderComponent, TableBuilderComponent]
+  selector: "app-ingoing-detail",
+  templateUrl: "./ingoing-detail.component.html",
+  styleUrls: ["./ingoing-detail.component.scss"],
+  imports: [ToolbarComponent, InfoBuilderComponent, TableBuilderComponent]
 })
-export class IngoingDetailComponent implements OnInit {
+export default class IngoingDetailComponent implements OnInit {
 
   infoDataSource: InfoDataSource<IngoingInvoice>;
   descriptiveArticleSource: TableDataSource<DescriptiveArticle, DefaultService>;
@@ -61,18 +61,18 @@ export class IngoingDetailComponent implements OnInit {
       [
         {
           property: "name",
-          name: "Firma",
+          name: "Firma"
         },
         {
           property: "number",
-          name: "Nummer",
+          name: "Nummer"
         },
         {
           property: "date_formatted",
-          name: "Datum",
-        },
+          name: "Datum"
+        }
       ],
-      "", undefined, undefined, undefined,
+      "", undefined, undefined, undefined
     );
   }
 
@@ -103,11 +103,11 @@ export class IngoingDetailComponent implements OnInit {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 total_without: formatCurrency(dataSource.single_price * dataSource.amount * (1 -
                   dataSource.discount / 100),
-                  "de-DE", "EUR"),
+                  "de-DE", "EUR")
               },
               route: () => {
                 console.log(dataSource);
-              },
+              }
             });
         });
         return rows;
@@ -121,9 +121,9 @@ export class IngoingDetailComponent implements OnInit {
         { name: "discount", headerName: "Rabatt" },
         { name: "vat", headerName: "MwSt." },
         { name: "total_without", headerName: "Gesamt [ohne MwSt.]" },
-        { name: "total_with", headerName: "Gesamt [mit MwSt.]" },
+        { name: "total_with", headerName: "Gesamt [mit MwSt.]" }
       ],
-      (api) => api.readIngoingInvoicesIngoingInvoiceArticlesCountIngoingInvoiceIdGet(this.id),
+      (api) => api.readIngoingInvoicesIngoingInvoiceArticlesCountIngoingInvoiceIdGet(this.id)
     );
     this.descriptiveArticleSource.loadData();
   }

@@ -13,12 +13,12 @@ import { ToolbarComponent } from "../shared/components/toolbar/toolbar.component
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
 
 @Component({
-    selector: 'app-phone-book',
-    templateUrl: './phone-book.component.html',
-    styleUrls: ['./phone-book.component.scss'],
-    imports: [ToolbarComponent, MatTabGroup, MatTab, TableBuilderComponent]
+  selector: "app-phone-book",
+  templateUrl: "./phone-book.component.html",
+  styleUrls: ["./phone-book.component.scss"],
+  imports: [ToolbarComponent, MatTabGroup, MatTab, TableBuilderComponent]
 })
-export class PhoneBookComponent implements OnInit {
+export default class PhoneBookComponent implements OnInit {
 
   allContactsDataSource: TableDataSource<Contact, DefaultService>;
   clientContactsDataSource: TableDataSource<Contact, DefaultService>;
@@ -29,7 +29,7 @@ export class PhoneBookComponent implements OnInit {
       name: "Neuer Kontakt",
       navigate: (): void => {
         this.openContactDialog(-1);
-      },
+      }
     }];
 
   tableButtons: TableButton[] = [
@@ -40,8 +40,8 @@ export class PhoneBookComponent implements OnInit {
         this.callClicked($event, id);
       },
       color: (_) => "primary",
-      selectedField: "id",
-    },
+      selectedField: "id"
+    }
   ];
 
   constructor(private api: DefaultService, private router: Router, private dialog: MatDialog,
@@ -59,7 +59,7 @@ export class PhoneBookComponent implements OnInit {
         this.phoneService.close();
         Sentry.captureMessage(JSON.stringify(this.phoneService.getLog()));
         this.snackBar.open("Anruf fehlgeschlagen: " + err, "Ok", {
-          duration: 5000,
+          duration: 5000
         });
       });
     });
@@ -86,11 +86,11 @@ export class PhoneBookComponent implements OnInit {
 
   private openContactDialog(id: number) {
     const dialogData: ContactDialogData = {
-      id,
+      id
     };
     const dialogRef = this.dialog.open(ContactEditDialogComponent, {
       width: "500px",
-      data: dialogData,
+      data: dialogData
     });
     dialogRef.afterClosed().pipe(first()).subscribe(result => {
       if (result) {
@@ -115,11 +115,11 @@ export class PhoneBookComponent implements OnInit {
                 tel: dataSource.tel,
                 mail: dataSource.mail,
                 note: dataSource.note,
-                id: dataSource.id,
+                id: dataSource.id
               },
               route: () => {
                 this.openContactDialog(dataSource.id);
-              },
+              }
             });
         });
         return rows;
@@ -128,9 +128,9 @@ export class PhoneBookComponent implements OnInit {
         { name: "name", headerName: "Name" },
         { name: "tel", headerName: "Telefon" },
         { name: "mail", headerName: "Mail" },
-        { name: "note", headerName: "Notiz" },
+        { name: "note", headerName: "Notiz" }
       ],
-      (api) => api.readContactCountContactCountGet(undefined, ""),
+      (api) => api.readContactCountContactCountGet(undefined, "")
     );
     this.allContactsDataSource.loadData();
   }
@@ -151,11 +151,11 @@ export class PhoneBookComponent implements OnInit {
                 tel: dataSource.tel,
                 mail: dataSource.mail,
                 note: dataSource.note,
-                id: dataSource.id,
+                id: dataSource.id
               },
               route: () => {
                 this.openContactDialog(dataSource.id);
-              },
+              }
             });
         });
         return rows;
@@ -164,9 +164,9 @@ export class PhoneBookComponent implements OnInit {
         { name: "name", headerName: "Name" },
         { name: "tel", headerName: "Telefon" },
         { name: "mail", headerName: "Mail" },
-        { name: "note", headerName: "Notiz" },
+        { name: "note", headerName: "Notiz" }
       ],
-      (api) => api.readContactCountContactCountGet(ContactTypeEnum.Supplier, ""),
+      (api) => api.readContactCountContactCountGet(ContactTypeEnum.Supplier, "")
     );
     this.supplierContactsDataSource.loadData();
   }
@@ -187,11 +187,11 @@ export class PhoneBookComponent implements OnInit {
                 tel: dataSource.tel,
                 mail: dataSource.mail,
                 note: dataSource.note,
-                id: dataSource.id,
+                id: dataSource.id
               },
               route: () => {
                 this.openContactDialog(dataSource.id);
-              },
+              }
             });
         });
         return rows;
@@ -200,9 +200,9 @@ export class PhoneBookComponent implements OnInit {
         { name: "name", headerName: "Name" },
         { name: "tel", headerName: "Telefon" },
         { name: "mail", headerName: "Mail" },
-        { name: "note", headerName: "Notiz" },
+        { name: "note", headerName: "Notiz" }
       ],
-      (api) => api.readContactCountContactCountGet(ContactTypeEnum.Client, ""),
+      (api) => api.readContactCountContactCountGet(ContactTypeEnum.Client, "")
     );
     this.clientContactsDataSource.loadData();
   }
@@ -223,11 +223,11 @@ export class PhoneBookComponent implements OnInit {
                 tel: dataSource.tel,
                 mail: dataSource.mail,
                 note: dataSource.note,
-                id: dataSource.id,
+                id: dataSource.id
               },
               route: () => {
                 this.openContactDialog(dataSource.id);
-              },
+              }
             });
         });
         return rows;
@@ -236,9 +236,9 @@ export class PhoneBookComponent implements OnInit {
         { name: "name", headerName: "Name" },
         { name: "tel", headerName: "Telefon" },
         { name: "mail", headerName: "Mail" },
-        { name: "note", headerName: "Notiz" },
+        { name: "note", headerName: "Notiz" }
       ],
-      (api) => api.readContactCountContactCountGet(ContactTypeEnum.Management, ""),
+      (api) => api.readContactCountContactCountGet(ContactTypeEnum.Management, "")
     );
     this.managementContactsDataSource.loadData();
   }

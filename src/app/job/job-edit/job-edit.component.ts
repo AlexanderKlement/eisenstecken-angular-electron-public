@@ -18,28 +18,28 @@ import { AsyncPipe } from "@angular/common";
 import { MatDialog } from "@angular/material/dialog";
 
 @Component({
-    selector: 'app-job-edit',
-    templateUrl: './job-edit.component.html',
-    styleUrls: ['./job-edit.component.scss'],
-    imports: [
-        ToolbarComponent,
-        FormsModule,
-        ReactiveFormsModule,
-        DefaultLayoutDirective,
-        DefaultLayoutAlignDirective,
-        MatCheckbox,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        MatSelect,
-        MatOption,
-        AddressFormComponent,
-        FlexModule,
-        MatButton,
-        AsyncPipe,
-    ],
+  selector: "app-job-edit",
+  templateUrl: "./job-edit.component.html",
+  styleUrls: ["./job-edit.component.scss"],
+  imports: [
+    ToolbarComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    DefaultLayoutDirective,
+    DefaultLayoutAlignDirective,
+    MatCheckbox,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatSelect,
+    MatOption,
+    AddressFormComponent,
+    FlexModule,
+    MatButton,
+    AsyncPipe
+  ]
 })
-export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, OnDestroy {
+export default class JobEditComponent extends BaseEditComponent<Job> implements OnInit, OnDestroy {
 
   clientId: number;
   subMode = false;
@@ -116,9 +116,9 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
           street_number: new UntypedFormControl(""),
           city: new UntypedFormControl(""),
           cap: new UntypedFormControl(""),
-          country: new UntypedFormControl("IT"),
+          country: new UntypedFormControl("IT")
         }),
-        completion: new UntypedFormControl(""),
+        completion: new UntypedFormControl("")
       });
     } else {
       this.jobGroup = new UntypedFormGroup({
@@ -130,9 +130,9 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
           street_number: new UntypedFormControl(""),
           city: new UntypedFormControl(""),
           cap: new UntypedFormControl(""),
-          country: new UntypedFormControl("IT"),
+          country: new UntypedFormControl("IT")
         }),
-        completion: new UntypedFormControl(""),
+        completion: new UntypedFormControl("")
       });
     }
   }
@@ -173,9 +173,9 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
           // eslint-disable-next-line @typescript-eslint/naming-convention
           responsible_id: job.responsible.id,
           address: {
-            country: job.address.country.code,
+            country: job.address.country.code
           },
-          completion: job.completion,
+          completion: job.completion
         });
       });
     }
@@ -201,10 +201,10 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
         city: this.jobGroup.get("address.city").value,
         cap: this.jobGroup.get("address.cap").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        country_code: this.jobGroup.get("address.country").value,
+        country_code: this.jobGroup.get("address.country").value
       },
       type: this.jobGroup.get("minijob").value ? "JOBYTPE_MINI" : "JOBTYPE_MAIN",
-      completion: this.jobGroup.get("completion").value,
+      completion: this.jobGroup.get("completion").value
     };
     this.api.createJobJobPost(jobCreate).subscribe((job) => {
       this.createUpdateSuccess(job);
@@ -218,7 +218,7 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
   private onSubmitSubJobCreate(): void {
     const subJobCreate: SubJobCreate = {
       description: this.jobGroup.get("description").value,
-      name: this.jobGroup.get("name").value,
+      name: this.jobGroup.get("name").value
     };
     this.api.addSubjobToJobJobSubJobJobIdPost(this.mainJobId, subJobCreate).subscribe((job) => {
       this.createUpdateSuccess(job, true);
@@ -243,9 +243,9 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
         city: this.jobGroup.get("address.city").value,
         cap: this.jobGroup.get("address.cap").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        country_code: this.jobGroup.get("address.country").value,
+        country_code: this.jobGroup.get("address.country").value
       },
-      completion: this.jobGroup.get("completion").value,
+      completion: this.jobGroup.get("completion").value
     };
     this.api.updateJobJobJobIdPut(this.id, jobUpdate).subscribe((job) => {
       this.createUpdateSuccess(job);
@@ -259,7 +259,7 @@ export class JobEditComponent extends BaseEditComponent<Job> implements OnInit, 
   private onSubmitSubJobEdit(): void {
     const subJobCreate: SubJobCreate = {
       description: this.jobGroup.get("description").value,
-      name: this.jobGroup.get("name").value,
+      name: this.jobGroup.get("name").value
     };
     this.api.updateSubjobJobSubJobSubjobIdPut(this.id, subJobCreate).subscribe((job) => {
       this.createUpdateSuccess(job);

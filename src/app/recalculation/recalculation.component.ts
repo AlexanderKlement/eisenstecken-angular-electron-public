@@ -11,10 +11,11 @@ import { MatSelect, MatOption } from "@angular/material/select";
 import { TableBuilderComponent } from "../shared/components/table-builder/table-builder.component";
 import { AsyncPipe } from "@angular/common";
 
+
 @Component({
-  selector: 'app-recalculation',
-  templateUrl: './recalculation.component.html',
-  styleUrls: ['./recalculation.component.scss'],
+  selector: "app-recalculation",
+  templateUrl: "./recalculation.component.html",
+  styleUrls: ["./recalculation.component.scss"],
   imports: [
     ToolbarComponent,
     DefaultLayoutDirective,
@@ -24,18 +25,18 @@ import { AsyncPipe } from "@angular/common";
     MatSelect,
     MatOption,
     TableBuilderComponent,
-    AsyncPipe,
-  ],
+    AsyncPipe
+  ]
 })
-export class RecalculationComponent implements OnInit {
+export default class RecalculationComponent implements OnInit {
   recalculationDataSource: TableDataSource<RecalculationSmall, RecalculationService>;
   buttons: CustomButton[] = [
     {
       name: "Oberflächen-Vorlage",
       navigate: () => {
         this.router.navigateByUrl("paint-template");
-      },
-    },
+      }
+    }
   ];
 
   public $refresh: Observable<void>;
@@ -46,7 +47,7 @@ export class RecalculationComponent implements OnInit {
   constructor(
     private api: DefaultService,
     private router: Router,
-    private recalculationService: RecalculationService,
+    private recalculationService: RecalculationService
   ) {
   }
 
@@ -74,7 +75,7 @@ export class RecalculationComponent implements OnInit {
           skip,
           limit,
           filter,
-          this.selectedYear,
+          this.selectedYear
         ),
       (dataSourceClasses) => {
         const rows = [];
@@ -85,13 +86,13 @@ export class RecalculationComponent implements OnInit {
               codes: dataSource.jobs.map(job => job.code).join(", "),
               name: dataSource.name,
               "client.name": dataSource.jobs[0].client.fullname,
-              "responsible.fullname": dataSource.jobs[0].responsible.fullname,
+              "responsible.fullname": dataSource.jobs[0].responsible.fullname
             },
             route: () => {
               this.router.navigateByUrl(
-                "/recalculation/" + dataSource.id.toString(),
+                "/recalculation/" + dataSource.id.toString()
               );
-            },
+            }
           });
         });
         return rows;
@@ -101,9 +102,9 @@ export class RecalculationComponent implements OnInit {
         { name: "names", headerName: "Kommissionen" },
         { name: "name", headerName: "Beschreibung" },
         { name: "client.name", headerName: "Kunde" },
-        { name: "responsible.fullname", headerName: "Zuständig" },
+        { name: "responsible.fullname", headerName: "Zuständig" }
       ],
-      (api) => api.getRecalculationCount(this.selectedYear),
+      (api) => api.getRecalculationCount(this.selectedYear)
     );
     this.recalculationDataSource.loadData();
   }

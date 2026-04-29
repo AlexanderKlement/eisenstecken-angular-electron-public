@@ -12,12 +12,12 @@ import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.compon
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
 @Component({
-    selector: 'app-meal',
-    templateUrl: './meal.component.html',
-    styleUrls: ['./meal.component.scss'],
-    imports: [ToolbarComponent, TableBuilderComponent]
+  selector: "app-meal",
+  templateUrl: "./meal.component.html",
+  styleUrls: ["./meal.component.scss"],
+  imports: [ToolbarComponent, TableBuilderComponent]
 })
-export class MealComponent implements OnInit {
+export default class MealComponent implements OnInit {
   mealDataSource: TableDataSource<Meal, DefaultService>;
   eatingPlaceId: number;
   title = "";
@@ -65,20 +65,20 @@ export class MealComponent implements OnInit {
               values: {
                 date: dayjs(dataSource.date).format("DD.MM.YYYY"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                "user.fullname": dataSource.user.fullname,
+                "user.fullname": dataSource.user.fullname
               },
               route: () => {
                 this.mealClicked(dataSource.id);
-              },
+              }
             });
         });
         return rows;
       },
       [
         { name: "date", headerName: "Datum" },
-        { name: "user.fullname", headerName: "Angestellter" },
+        { name: "user.fullname", headerName: "Angestellter" }
       ],
-      (api) => api.readMealCountMealCountGet(undefined, this.eatingPlaceId),
+      (api) => api.readMealCountMealCountGet(undefined, this.eatingPlaceId)
     );
     this.mealDataSource.loadData();
   }
@@ -88,8 +88,8 @@ export class MealComponent implements OnInit {
       width: "400px",
       data: {
         title: "Mahlzeit löschen?",
-        text: "Mahlzeit löschen? Diese Aktion kann nicht rückgängig gemacht werden!",
-      },
+        text: "Mahlzeit löschen? Diese Aktion kann nicht rückgängig gemacht werden!"
+      }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -98,7 +98,7 @@ export class MealComponent implements OnInit {
             this.mealDataSource.loadData();
           } else {
             this.snackBar.open("Mahlzeit konnte nicht gelöscht werden", "Ok", {
-              duration: 10000,
+              duration: 10000
             });
           }
         });

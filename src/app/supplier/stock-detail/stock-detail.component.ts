@@ -18,12 +18,12 @@ import { MatTabGroup, MatTab } from "@angular/material/tabs";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
 @Component({
-    selector: 'app-stock-detail',
-    templateUrl: './stock-detail.component.html',
-    styleUrls: ['./stock-detail.component.scss'],
-    imports: [ToolbarComponent, InfoBuilderComponent, MatTabGroup, MatTab, TableBuilderComponent]
+  selector: "app-stock-detail",
+  templateUrl: "./stock-detail.component.html",
+  styleUrls: ["./stock-detail.component.scss"],
+  imports: [ToolbarComponent, InfoBuilderComponent, MatTabGroup, MatTab, TableBuilderComponent]
 })
-export class StockDetailComponent implements OnInit {
+export default class StockDetailComponent implements OnInit {
 
   @ViewChild(InfoBuilderComponent) child: InfoBuilderComponent<Supplier>;
   public infoDataSource: InfoDataSource<Stock>;
@@ -59,7 +59,7 @@ export class StockDetailComponent implements OnInit {
           name: "Bearbeiten",
           navigate: () => {
             this.child.editButtonClicked();
-          },
+          }
         });
       }
     });
@@ -69,7 +69,7 @@ export class StockDetailComponent implements OnInit {
           name: "Lager ausblenden",
           navigate: () => {
             this.stockDeleteClicked();
-          },
+          }
         });
       }
     });
@@ -79,7 +79,7 @@ export class StockDetailComponent implements OnInit {
           name: "Bestellung(en) senden",
           navigate: () => {
             this.sendOrderButtonClicked();
-          },
+          }
         });
       }
     });
@@ -89,7 +89,7 @@ export class StockDetailComponent implements OnInit {
           name: "Artikel",
           navigate: () => {
             this.router.navigateByUrl("stock/articles/" + this.id.toString());
-          },
+          }
         });
       }
     });
@@ -112,13 +112,13 @@ export class StockDetailComponent implements OnInit {
       [
         {
           property: "name",
-          name: "Name",
-        },
+          name: "Name"
+        }
       ],
       "/stock/edit/" + this.id.toString(),
       this.api.islockedStockStockIslockedStockIdGet(this.id),
       this.api.lockStockStockLockStockIdPost(this.id),
-      this.api.unlockStockStockUnlockStockIdPost(this.id),
+      this.api.unlockStockStockUnlockStockIdPost(this.id)
     );
   }
 
@@ -140,11 +140,11 @@ export class StockDetailComponent implements OnInit {
                 create_date: dayjs(dataSource.create_date).format("L"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 delivery_date: dataSource.delivery_date !== null ? dayjs(dataSource.delivery_date).format("L") : "",
-                "user.fullname": dataSource.user.fullname,
+                "user.fullname": dataSource.user.fullname
               },
               route: () => {
                 this.router.navigateByUrl("/order/" + dataSource.id.toString());
-              },
+              }
             });
         });
         return rows;
@@ -154,9 +154,9 @@ export class StockDetailComponent implements OnInit {
         { name: "articles", headerName: "Artikel" },
         { name: "create_date", headerName: "Bestelldatum" },
         { name: "delivery_date", headerName: "Lieferdatum" },
-        { name: "user.fullname", headerName: "Bestellt von" },
+        { name: "user.fullname", headerName: "Bestellt von" }
       ],
-      (api) => api.readOrdersToCountOrderToOrderableToIdCountGet(this.id),
+      (api) => api.readOrdersToCountOrderToOrderableToIdCountGet(this.id)
     );
     this.outgoingDataSource = new TableDataSource(
       this.api,
@@ -176,11 +176,11 @@ export class StockDetailComponent implements OnInit {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 delivery_date: dataSource.delivery_date !== null ? dayjs(dataSource.delivery_date).format("L") : "",
                 "user.fullname": dataSource.user.fullname,
-                status: dataSource.status_translation,
+                status: dataSource.status_translation
               },
               route: () => {
                 this.router.navigateByUrl("/order/" + dataSource.id.toString());
-              },
+              }
             });
         });
         return rows;
@@ -190,9 +190,9 @@ export class StockDetailComponent implements OnInit {
         { name: "articles", headerName: "Artikel" },
         { name: "create_date", headerName: "Bestelldatum" },
         { name: "delivery_date", headerName: "Lieferdatum" },
-        { name: "user.fullname", headerName: "Bestellt von" },
+        { name: "user.fullname", headerName: "Bestellt von" }
       ],
-      (api) => api.readOrdersFromCountOrderFromOrderableFromIdCountGet(this.id),
+      (api) => api.readOrdersFromCountOrderFromOrderableFromIdCountGet(this.id)
     );
     this.ingoingDataSource.loadData();
     this.outgoingDataSource.loadData();
@@ -203,8 +203,8 @@ export class StockDetailComponent implements OnInit {
       width: "400px",
       data: {
         title: "Lager löschen?",
-        text: "Das Lager ausblenden? Diese Aktion KANN rückgängig gemacht werden?",
-      },
+        text: "Das Lager ausblenden? Diese Aktion KANN rückgängig gemacht werden?"
+      }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -213,7 +213,7 @@ export class StockDetailComponent implements OnInit {
             this.router.navigateByUrl("supplier");
           } else {
             this.snackBar.open("Beim Ausblenden ist ein Fehler aufgetreten", "Ok", {
-              duration: 10000,
+              duration: 10000
             });
             console.error("Could not delete order bundle");
           }
@@ -228,8 +228,8 @@ export class StockDetailComponent implements OnInit {
       data: {
         name: this.api.readStockStockStockIdGet(this.id).pipe(
           map((supplier) => supplier.displayable_name)),
-        orders: this.api.readOrdersFromOrderFromOrderableFromIdGet(this.id, 0, 1000, "", "CREATED"),
-      },
+        orders: this.api.readOrdersFromOrderFromOrderableFromIdGet(this.id, 0, 1000, "", "CREATED")
+      }
     });
 
 
@@ -247,13 +247,13 @@ export class StockDetailComponent implements OnInit {
         delivery_date: orderDateReturnData.date,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         order_from_id: stock.id,
-        request: false,
+        request: false
       };
       this.api.createOrderBundleOrderBundlePost(orderBundle).pipe(first()).subscribe((_) => {
         this.ingoingDataSource.loadData();
         this.outgoingDataSource.loadData();
         this.snackBar.open("Erfolgreich bestellt!", "Ok", {
-          duration: 1000,
+          duration: 1000
         });
       });
     });

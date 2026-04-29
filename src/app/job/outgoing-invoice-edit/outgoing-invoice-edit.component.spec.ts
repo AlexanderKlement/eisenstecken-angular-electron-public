@@ -1,16 +1,16 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { OutgoingInvoiceEditComponent } from './outgoing-invoice-edit.component';
+import OutgoingInvoiceEditComponent from "./outgoing-invoice-edit.component";
 
-describe('OutgoingInvoiceEditComponent', () => {
+describe("OutgoingInvoiceEditComponent", () => {
   let component: OutgoingInvoiceEditComponent;
   let fixture: ComponentFixture<OutgoingInvoiceEditComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [OutgoingInvoiceEditComponent]
-})
-    .compileComponents();
+      imports: [OutgoingInvoiceEditComponent]
+    })
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('OutgoingInvoiceEditComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

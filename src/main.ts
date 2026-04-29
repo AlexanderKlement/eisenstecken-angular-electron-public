@@ -5,6 +5,7 @@ import {
   provideAppInitializer,
   LOCALE_ID,
   Injectable,
+  ApplicationConfig,
   importProvidersFrom,
   DEFAULT_CURRENCY_CODE
 } from "@angular/core";
@@ -12,9 +13,8 @@ import * as Sentry from "@sentry/angular";
 import { apiConfigFactory } from "./app/app.module";
 import { APP_CONFIG } from "./environments/environment";
 import { LocalConfigRenderer } from "./app/LocalConfigRenderer";
-import { Router, RouteReuseStrategy } from "@angular/router";
+import { provideRouter, RouteReuseStrategy } from "@angular/router";
 import { Configuration, ApiModule } from "./api/openapi";
-import { AuthStateService } from "./app/shared/services/auth-state.service";
 import { AccessGuard } from "./app/shared/services/access-guard.service";
 import { ChatService } from "./app/home/chat/chat.service";
 import { CurrencyPipe, DatePipe, CommonModule } from "@angular/common";
@@ -36,25 +36,8 @@ import { provideAnimations } from "@angular/platform-browser/animations";
 import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SharedModule } from "./app/shared/shared.module";
-import { HomeModule } from "./app/home/home.module";
-import { JobModule } from "./app/job/job.module";
-import { ClientModule } from "./app/client/client.module";
-import { UserModule } from "./app/user/user.module";
-import { SettingsModule } from "./app/settings/settings.module";
-import { SupplierModule } from "./app/supplier/supplier.module";
-import { OrderModule } from "./app/order/order.module";
-import { LoginModule } from "./app/login/login.module";
 import { MatBottomSheetModule } from "@angular/material/bottom-sheet";
-import { InvoiceModule } from "./app/invoice/invoice.module";
-import { EmployeeModule } from "./app/employee/employee.module";
-import { EventCalendarModule } from "./app/calendar/event-calendar.module";
-import { MobileAppModule } from "./app/mobile-app/mobile-app.module";
-import { RecalculationModule } from "./app/recalculation/recalculation.module";
-import { AppRoutingModule } from "./app/app-routing.module";
 import { FlexLayoutModule } from "ng-flex-layout";
-import { DeliveryNoteModule } from "./app/delivery-note/delivery-note.module";
-import { DebugModule } from "./app/debug/debug.module";
-import { ServiceModule } from "./app/service/service.module";
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { MatCheckboxModule } from "@angular/material/checkbox";
@@ -65,10 +48,10 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatSelectModule } from "@angular/material/select";
 import { MatButtonModule } from "@angular/material/button";
 import { MatToolbarModule } from "@angular/material/toolbar";
-import { PhoneBookModule } from "./app/phone-book/phone-book.module";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatIconModule } from "@angular/material/icon";
 import { AppComponent } from "./app/app.component";
+import { routes } from "./app/app.routes";
 
 console.log("APP_CONFIG.production =", APP_CONFIG.production);
 console.log("APP_CONFIG.apiBasePath =", APP_CONFIG.apiBasePath);
@@ -119,25 +102,24 @@ if (typeof window !== "undefined" &&
 bootstrapApplication(AppComponent, {
   providers: [
     importProvidersFrom(CommonModule, BrowserModule, CalendarModule.forRoot({
-      provide: DateAdapter,
-      useFactory: adapterFactory
-    }), FormsModule, SharedModule, HomeModule, JobModule, ClientModule, UserModule, SettingsModule, SupplierModule, OrderModule, LoginModule, MatBottomSheetModule, InvoiceModule, EmployeeModule, EventCalendarModule, MobileAppModule, RecalculationModule, ApiModule.forRoot(apiConfigFactory), AppRoutingModule, FlexLayoutModule, DeliveryNoteModule, DebugModule, ServiceModule, TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: httpLoaderFactory,
-        deps: [HttpClient]
-      }
-    }), ReactiveFormsModule, MatCheckboxModule, MatInputModule, MatTableModule, MatPaginatorModule, MatSortModule, MatProgressSpinnerModule, MatSelectModule, MatButtonModule, MatToolbarModule, MatNativeDateModule, PhoneBookModule, MatSnackBarModule, MatIconModule),
+        provide: DateAdapter,
+        useFactory: adapterFactory
+      }), FormsModule, SharedModule, MatBottomSheetModule,
+      ApiModule.forRoot(apiConfigFactory), FlexLayoutModule,
+      TranslateModule.forRoot({
+        loader: {
+          provide: TranslateLoader,
+          useFactory: httpLoaderFactory,
+          deps: [HttpClient]
+        }
+      }), ReactiveFormsModule, MatCheckboxModule, MatInputModule, MatTableModule, MatPaginatorModule, MatSortModule, MatProgressSpinnerModule, MatSelectModule, MatButtonModule, MatToolbarModule, MatNativeDateModule, MatSnackBarModule, MatIconModule),
     {
       provide: ErrorHandler,
       useValue: Sentry.createErrorHandler({
         showDialog: false
       })
     },
-    {
-      provide: Sentry.TraceService,
-      deps: [Router]
-    },
+    provideRouter(routes),
     provideAppInitializer(() => {
       const initializerFn = (() => () => {
       })();

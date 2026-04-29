@@ -4,7 +4,7 @@ import { first } from "rxjs/operators";
 import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
 import { MatDialog } from "@angular/material/dialog";
 import {
-  OutgoingInvoiceNumberDialogComponent,
+  OutgoingInvoiceNumberDialogComponent
 } from "./outgoing/outgoing-invoice-number-dialog/outgoing-invoice-number-dialog.component";
 import { ImportXmlDialogComponent } from "./ingoing/import-xml-dialog/import-xml-dialog.component";
 import { Observable, Subscriber } from "rxjs";
@@ -17,12 +17,12 @@ import { OutgoingComponent } from "./outgoing/outgoing.component";
 import { IngoingComponent } from "./ingoing/ingoing.component";
 
 @Component({
-    selector: 'app-invoice',
-    templateUrl: './invoice.component.html',
-    styleUrls: ['./invoice.component.scss'],
-    imports: [ToolbarComponent, MatTabGroup, MatTab, OutgoingComponent, IngoingComponent]
+  selector: "app-invoice",
+  templateUrl: "./invoice.component.html",
+  styleUrls: ["./invoice.component.scss"],
+  imports: [ToolbarComponent, MatTabGroup, MatTab, OutgoingComponent, IngoingComponent]
 })
-export class InvoiceComponent implements OnInit {
+export default class InvoiceComponent implements OnInit {
   outgoingInvoicesAvailable = false;
   ingoingInvoicesAvailable = false;
   updateChildTablesSubscriber: Subscriber<void>;
@@ -36,25 +36,25 @@ export class InvoiceComponent implements OnInit {
     name: "Nächste Rechnungsnummer setzen",
     navigate: (): void => {
       this.outgoingInvoiceNumberClicked();
-    },
+    }
   };
   importIngoingInvoicesButton = {
     name: "Eingangsrechnungen importieren",
     navigate: (): void => {
       this.importIngoingInvoiceClicked();
-    },
+    }
   };
   printUnpaidIngoingInvoices = {
     name: "Unbezahlte drucken",
     navigate: (): void => {
       this.printUnpaidIngoingInvoicesClicked();
-    },
+    }
   };
   printUnpaidOutgoingInvoices = {
     name: "Unbezahlte drucken",
     navigate: (): void => {
       this.printUnpaidOutgoingInvoicesClicked();
-    },
+    }
   };
   buttons: CustomButton[] = [];
   private $refreshSubscriber: Subscriber<void>;
@@ -103,13 +103,13 @@ export class InvoiceComponent implements OnInit {
 
   private outgoingInvoiceNumberClicked(): void {
     this.dialog.open(OutgoingInvoiceNumberDialogComponent, {
-      width: "600px",
+      width: "600px"
     });
   }
 
   private importIngoingInvoiceClicked() {
     const dialogRef = this.dialog.open(ImportXmlDialogComponent, {
-      width: "600px",
+      width: "600px"
     });
     dialogRef.afterClosed().subscribe((refresh) => {
       if (refresh) {

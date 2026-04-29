@@ -22,12 +22,12 @@ import { TableBuilderComponent } from "../../shared/components/table-builder/tab
 import { AsyncPipe, DatePipe } from "@angular/common";
 
 @Component({
-    selector: 'app-employee-detail',
-    templateUrl: './employee-detail.component.html',
-    styleUrls: ['./employee-detail.component.scss'],
-    imports: [ToolbarComponent, MatTabGroup, MatTab, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatSelect, MatOption, HoursStepperComponent, MatButton, TableBuilderComponent, AsyncPipe, DatePipe]
+  selector: "app-employee-detail",
+  templateUrl: "./employee-detail.component.html",
+  styleUrls: ["./employee-detail.component.scss"],
+  imports: [ToolbarComponent, MatTabGroup, MatTab, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatSelect, MatOption, HoursStepperComponent, MatButton, TableBuilderComponent, AsyncPipe, DatePipe]
 })
-export class EmployeeDetailComponent implements OnInit {
+export default class EmployeeDetailComponent implements OnInit {
   feeDataSource: TableDataSource<Fee, DefaultService>;
   journeyDataSource: TableDataSource<Journey, DefaultService>;
   mealDataSource: TableDataSource<Meal, DefaultService>;
@@ -53,8 +53,8 @@ export class EmployeeDetailComponent implements OnInit {
       name: "Neuer Arbeitstag",
       navigate: (): void => {
         this.router.navigateByUrl("/work_day/new/" + this.userId.toString());
-      },
-    },
+      }
+    }
   ];
   title = "";
 
@@ -112,7 +112,7 @@ export class EmployeeDetailComponent implements OnInit {
         name: buttonName,
         navigate: () => {
           this.serviceCreateClicked();
-        },
+        }
       });
     } else {
       for (let i = 0; i < this.buttons.length; i++) {
@@ -153,11 +153,11 @@ export class EmployeeDetailComponent implements OnInit {
               values: {
                 date: dataSource.date,
                 amount: dataSource.amount,
-                reason: dataSource.reason,
+                reason: dataSource.reason
               },
               route: () => {
                 this.router.navigateByUrl("employee");
-              },
+              }
             });
         });
         return rows;
@@ -165,9 +165,9 @@ export class EmployeeDetailComponent implements OnInit {
       [
         { name: "date", headerName: "Datum" },
         { name: "reason", headerName: "Grund" },
-        { name: "amount", headerName: "Menge" },
+        { name: "amount", headerName: "Menge" }
       ],
-      (api) => api.readFeeCountFeeCountGet(this.userId),
+      (api) => api.readFeeCountFeeCountGet(this.userId)
     );
     this.feeDataSource.loadData();
   }
@@ -186,11 +186,11 @@ export class EmployeeDetailComponent implements OnInit {
                 date: dayjs(dataSource.date).format("dddd, DD.MM.YYYY"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 "user.fullname": dataSource.user.fullname,
-                minutes: minutesToDisplayableString(dataSource.minutes),
+                minutes: minutesToDisplayableString(dataSource.minutes)
               },
               route: () => {
                 this.serviceClicked(dataSource.id);
-              },
+              }
             });
         });
         return rows;
@@ -198,9 +198,9 @@ export class EmployeeDetailComponent implements OnInit {
       [
         { name: "date", headerName: "Datum" },
         { name: "user.fullname", headerName: "Angestellter" },
-        { name: "minutes", headerName: "Zeit" },
+        { name: "minutes", headerName: "Zeit" }
       ],
-      (api) => api.readServiceCountServiceCountGet(this.userId),
+      (api) => api.readServiceCountServiceCountGet(this.userId)
     );
     this.serviceDataSource.loadData();
   }
@@ -208,7 +208,7 @@ export class EmployeeDetailComponent implements OnInit {
   private serviceClicked(id: number) {
     const dialogRef = this.dialog.open(ServiceDialogComponent, {
       width: "900px",
-      data: { id },
+      data: { id }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -231,11 +231,11 @@ export class EmployeeDetailComponent implements OnInit {
                 date: dataSource.date,
                 "car.name": dataSource.car.name,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                distance_km: dataSource.distance_km,
+                distance_km: dataSource.distance_km
               },
               route: () => {
                 this.router.navigateByUrl("employee");
-              },
+              }
             });
         });
         return rows;
@@ -243,9 +243,9 @@ export class EmployeeDetailComponent implements OnInit {
       [
         { name: "date", headerName: "Datum" },
         { name: "car.name", headerName: "Auto" },
-        { name: "distance_km", headerName: "Distanz [km]" },
+        { name: "distance_km", headerName: "Distanz [km]" }
       ],
-      (api) => api.readJourneyCountJourneyCountGet(this.userId),
+      (api) => api.readJourneyCountJourneyCountGet(this.userId)
     );
     this.journeyDataSource.loadData();
   }
@@ -263,20 +263,20 @@ export class EmployeeDetailComponent implements OnInit {
               values: {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 "eating_place.name": dataSource.eating_place.name,
-                date: dataSource.date,
+                date: dataSource.date
               },
               route: () => {
                 this.router.navigateByUrl("employee");
-              },
+              }
             });
         });
         return rows;
       },
       [
         { name: "eating_place.name", headerName: "Restaurant" },
-        { name: "date", headerName: "Datum" },
+        { name: "date", headerName: "Datum" }
       ],
-      (api) => api.readMealCountMealCountGet(this.userId),
+      (api) => api.readMealCountMealCountGet(this.userId)
     );
     this.mealDataSource.loadData();
   }
@@ -284,7 +284,7 @@ export class EmployeeDetailComponent implements OnInit {
   private serviceCreateClicked() {
     const dialogRef = this.dialog.open(ServiceCreateDialogComponent, {
       width: "900px",
-      data: { userId: this.userId },
+      data: { userId: this.userId }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -307,11 +307,11 @@ export class EmployeeDetailComponent implements OnInit {
                 date: dayjs(dataSource.date).format("dddd, DD.MM.YYYY"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 minutes: minutesToDisplayableString(dataSource.minutes),
-                description: dataSource.description,
+                description: dataSource.description
               },
               route: () => {
                 this.additionalWorkloadClicked(dataSource.id);
-              },
+              }
             });
         });
         return rows;
@@ -319,9 +319,9 @@ export class EmployeeDetailComponent implements OnInit {
       [
         { name: "date", headerName: "Datum" },
         { name: "description", headerName: "Beschreibung" },
-        { name: "minutes", headerName: "Zeit" },
+        { name: "minutes", headerName: "Zeit" }
       ],
-      (api) => api.readAdditionalWorkloadCountAdditionalWorkloadCountGet(this.userId),
+      (api) => api.readAdditionalWorkloadCountAdditionalWorkloadCountGet(this.userId)
     );
     this.additionalWorkloadDataSource.loadData();
   }
@@ -331,8 +331,8 @@ export class EmployeeDetailComponent implements OnInit {
       width: "400px",
       data: {
         title: "Zusätzliche Arbeiten löschen?",
-        text: "Zusätzliche Arbeiten löschen? Diese Aktion kann nicht rückgängig gemacht werden!",
-      },
+        text: "Zusätzliche Arbeiten löschen? Diese Aktion kann nicht rückgängig gemacht werden!"
+      }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -341,7 +341,7 @@ export class EmployeeDetailComponent implements OnInit {
             this.additionalWorkloadDataSource.loadData();
           } else {
             this.snackBar.open("Zusätzliche Arbeiten konnten nicht gelöscht werden", "Ok", {
-              duration: 10000,
+              duration: 10000
             });
           }
         });

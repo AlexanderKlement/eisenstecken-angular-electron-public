@@ -1,16 +1,16 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { PaintTemplateComponent } from './paint-template.component';
+import PaintTemplateComponent from "./paint-template.component";
 
-describe('PaintTemplateComponent', () => {
+describe("PaintTemplateComponent", () => {
   let component: PaintTemplateComponent;
   let fixture: ComponentFixture<PaintTemplateComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [PaintTemplateComponent]
-})
-    .compileComponents();
+      imports: [PaintTemplateComponent]
+    })
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('PaintTemplateComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

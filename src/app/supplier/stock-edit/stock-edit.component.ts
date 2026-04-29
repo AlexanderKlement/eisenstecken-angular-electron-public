@@ -12,22 +12,22 @@ import { MatButton } from "@angular/material/button";
 import { MatDialog } from "@angular/material/dialog";
 
 @Component({
-    selector: 'app-stock-edit',
-    templateUrl: './stock-edit.component.html',
-    styleUrls: ['./stock-edit.component.scss'],
-    imports: [
-        ToolbarComponent,
-        FormsModule,
-        ReactiveFormsModule,
-        DefaultLayoutDirective,
-        DefaultLayoutAlignDirective,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        MatButton,
-    ],
+  selector: "app-stock-edit",
+  templateUrl: "./stock-edit.component.html",
+  styleUrls: ["./stock-edit.component.scss"],
+  imports: [
+    ToolbarComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    DefaultLayoutDirective,
+    DefaultLayoutAlignDirective,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatButton
+  ]
 })
-export class StockEditComponent extends BaseEditComponent<Stock> implements OnInit, OnDestroy {
+export default class StockEditComponent extends BaseEditComponent<Stock> implements OnInit, OnDestroy {
   stockGroup: UntypedFormGroup;
   navigationTarget = "stock";
   title = "Lager: Bearbeiten";
@@ -63,7 +63,7 @@ export class StockEditComponent extends BaseEditComponent<Stock> implements OnIn
 
     if (this.createMode) {
       const stockCreate: StockCreate = {
-        name: this.stockGroup.get("name").value,
+        name: this.stockGroup.get("name").value
       };
 
       this.api.createStockStockPost(stockCreate).subscribe((stock) => {
@@ -75,7 +75,7 @@ export class StockEditComponent extends BaseEditComponent<Stock> implements OnIn
       });
     } else {
       const stockUpdate: StockUpdate = {
-        name: this.stockGroup.get("name").value,
+        name: this.stockGroup.get("name").value
       };
 
       this.api.updateStockStockStockIdPut(this.id, stockUpdate).subscribe((stock) => {
@@ -99,7 +99,7 @@ export class StockEditComponent extends BaseEditComponent<Stock> implements OnIn
 
   private initStockGroup(): void {
     this.stockGroup = new UntypedFormGroup({
-      name: new UntypedFormControl(""),
+      name: new UntypedFormControl("")
     });
   }
 

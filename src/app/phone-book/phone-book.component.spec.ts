@@ -1,16 +1,16 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { PhoneBookComponent } from './phone-book.component';
+import PhoneBookComponent from "./phone-book.component";
 
-describe('PhoneBookComponent', () => {
+describe("PhoneBookComponent", () => {
   let component: PhoneBookComponent;
   let fixture: ComponentFixture<PhoneBookComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [PhoneBookComponent]
-})
-    .compileComponents();
+      imports: [PhoneBookComponent]
+    })
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('PhoneBookComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

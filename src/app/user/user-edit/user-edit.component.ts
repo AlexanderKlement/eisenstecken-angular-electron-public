@@ -77,7 +77,7 @@ import {
     EmploymentValidatorDirective
   ]
 })
-export class UserEditComponent extends BaseEditComponent<User> implements OnInit, OnDestroy {
+export default class UserEditComponent extends BaseEditComponent<User> implements OnInit, OnDestroy {
 
   @ViewChild("rights") rightsSelected: MatSelectionList;
   userGroup: UntypedFormGroup;

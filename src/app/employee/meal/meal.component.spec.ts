@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { MealComponent } from "./meal.component";
+import MealComponent from "./meal.component";
 
 describe("MealComponent", () => {
   let component: MealComponent;
@@ -8,9 +8,9 @@ describe("MealComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [MealComponent]
-})
-    .compileComponents();
+      imports: [MealComponent]
+    })
+      .compileComponents();
   });
 
   beforeEach(() => {

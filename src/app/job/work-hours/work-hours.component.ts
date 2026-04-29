@@ -12,12 +12,12 @@ import { Workload, DefaultService, ScopeEnum } from "../../../api/openapi";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
 @Component({
-    selector: 'app-work-hours',
-    templateUrl: './work-hours.component.html',
-    styleUrls: ['./work-hours.component.scss'],
-    imports: [ToolbarComponent, TableBuilderComponent]
+  selector: "app-work-hours",
+  templateUrl: "./work-hours.component.html",
+  styleUrls: ["./work-hours.component.scss"],
+  imports: [ToolbarComponent, TableBuilderComponent]
 })
-export class WorkHoursComponent implements OnInit {
+export default class WorkHoursComponent implements OnInit {
   buttons: CustomButton[] = [];
   workloadDataSource: TableDataSource<Workload, DefaultService>;
   jobId: number;
@@ -46,7 +46,7 @@ export class WorkHoursComponent implements OnInit {
           name: "Arbeitsstunden hinzufügen",
           navigate: () => {
             this.workHourClicked(-1);
-          },
+          }
         });
       }
     });
@@ -68,8 +68,8 @@ export class WorkHoursComponent implements OnInit {
       width: "600px",
       data: {
         userId,
-        jobId: this.jobId,
-      },
+        jobId: this.jobId
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -94,7 +94,7 @@ export class WorkHoursComponent implements OnInit {
                 minutes: minutesToDisplayableString(dataSource.minutes),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 minutes_direction: minutesToDisplayableString(dataSource.minutes_direction),
-                cost: dataSource.cost,
+                cost: dataSource.cost
               },
               route: () => {
                 this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
@@ -103,7 +103,7 @@ export class WorkHoursComponent implements OnInit {
                   }
                 });
 
-              },
+              }
             });
         });
         return rows;
@@ -112,9 +112,9 @@ export class WorkHoursComponent implements OnInit {
         { name: "user.fullname", headerName: "Name" },
         { name: "minutes", headerName: "Zeit" },
         { name: "minutes_direction", headerName: "Regie" },
-        { name: "cost", headerName: "Kosten [€]" },
+        { name: "cost", headerName: "Kosten [€]" }
       ],
-      (api) => api.readWorkloadCountWorkloadCountGet(undefined, this.jobId),
+      (api) => api.readWorkloadCountWorkloadCountGet(undefined, this.jobId)
     );
     this.workloadDataSource.loadData();
   }

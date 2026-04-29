@@ -3,7 +3,8 @@ import { TableDataSource } from "../shared/components/table-builder/table-builde
 import {
   DefaultService, ScopeEnum,
   Stock,
-  Supplier} from "../../api/openapi";
+  Supplier
+} from "../../api/openapi";
 import { LockService } from "../shared/services/lock.service";
 import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -14,12 +15,12 @@ import { MatTabGroup, MatTab } from "@angular/material/tabs";
 import { TableBuilderComponent } from "../shared/components/table-builder/table-builder.component";
 
 @Component({
-    selector: "app-supplier",
-    templateUrl: "./supplier.component.html",
-    styleUrls: ["./supplier.component.scss"],
-    imports: [ToolbarComponent, MatTabGroup, MatTab, TableBuilderComponent]
+  selector: "app-supplier",
+  templateUrl: "./supplier.component.html",
+  styleUrls: ["./supplier.component.scss"],
+  imports: [ToolbarComponent, MatTabGroup, MatTab, TableBuilderComponent]
 })
-export class SupplierComponent implements OnInit {
+export default class SupplierComponent implements OnInit {
   supplierTableDataSource: TableDataSource<Supplier, DefaultService>;
   stockTableDataSource: TableDataSource<Stock, DefaultService>;
   buttons: CustomButton[] = [];
@@ -33,8 +34,9 @@ export class SupplierComponent implements OnInit {
     private api: DefaultService,
     private locker: LockService,
     private router: Router,
-    private authService: AuthStateService,
-  ) { }
+    private authService: AuthStateService
+  ) {
+  }
 
   ngOnInit(): void {
     this.initSupplierDataSource();
@@ -63,17 +65,17 @@ export class SupplierComponent implements OnInit {
           rows.push({
             values: {
               id: dataSource.id,
-              name: dataSource.name,
+              name: dataSource.name
             },
             route: () => {
               this.router.navigateByUrl("supplier/" + dataSource.id.toString());
-            },
+            }
           });
         });
         return rows;
       },
       [{ name: "name", headerName: "Name" }],
-      (api) => api.readSupplierCountSupplierCountGet(),
+      (api) => api.readSupplierCountSupplierCountGet()
     );
     this.supplierTableDataSource.loadData();
     this.authService
@@ -85,7 +87,7 @@ export class SupplierComponent implements OnInit {
             name: "Neuer Lieferant",
             navigate: () => {
               this.router.navigateByUrl("supplier/edit/new");
-            },
+            }
           });
         }
       });
@@ -98,7 +100,7 @@ export class SupplierComponent implements OnInit {
             name: "Neues Lager",
             navigate: () => {
               this.router.navigateByUrl("stock/edit/new");
-            },
+            }
           });
         }
       });
@@ -127,17 +129,17 @@ export class SupplierComponent implements OnInit {
           rows.push({
             values: {
               id: dataSource.id,
-              name: dataSource.name,
+              name: dataSource.name
             },
             route: () => {
               this.router.navigateByUrl("stock/" + dataSource.id.toString());
-            },
+            }
           });
         });
         return rows;
       },
       [{ name: "name", headerName: "Name" }],
-      (api) => api.readStockCountStockCountGet(),
+      (api) => api.readStockCountStockCountGet()
     );
     this.stockTableDataSource.loadData();
   }

@@ -11,15 +11,17 @@ import { InfoSettingsComponent } from "./info-settings/info-settings.component";
 import { InfoPageSettingsComponent } from "./info-page-settings/info-page-settings.component";
 
 @Component({
-    selector: 'app-settings',
-    templateUrl: './settings.component.html',
-    styleUrls: ['./settings.component.scss'],
-    imports: [ToolbarComponent, MatTabGroup, MatTab, GeneralSettingsComponent, OfferSettingsComponent, InvoiceSettingsComponent, DeliverySettingsComponent, OrderSettingsComponent, ReminderSettingsComponent, InfoSettingsComponent, InfoPageSettingsComponent]
+  selector: "app-settings",
+  templateUrl: "./settings.component.html",
+  styleUrls: ["./settings.component.scss"],
+  imports: [ToolbarComponent, MatTabGroup, MatTab, GeneralSettingsComponent, OfferSettingsComponent, InvoiceSettingsComponent, DeliverySettingsComponent, OrderSettingsComponent, ReminderSettingsComponent, InfoSettingsComponent, InfoPageSettingsComponent]
 })
-export class SettingsComponent implements OnInit {
+export default class SettingsComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
 }
+

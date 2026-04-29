@@ -1,16 +1,16 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { DeliveryEditComponent } from './delivery-edit.component';
-
-describe('DeliveryEditComponent', () => {
+import DeliveryEditComponent from "./delivery-edit.component";
+ 
+describe("DeliveryEditComponent", () => {
   let component: DeliveryEditComponent;
   let fixture: ComponentFixture<DeliveryEditComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [DeliveryEditComponent]
-})
-    .compileComponents();
+      imports: [DeliveryEditComponent]
+    })
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('DeliveryEditComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

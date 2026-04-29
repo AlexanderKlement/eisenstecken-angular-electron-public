@@ -4,13 +4,14 @@ import { Router } from "@angular/router";
 import { DefaultService, ServiceSum } from "../../api/openapi";
 import { TableBuilderComponent } from "../shared/components/table-builder/table-builder.component";
 
+
 @Component({
-    selector: 'app-service',
-    templateUrl: './service.component.html',
-    styleUrls: ['./service.component.scss'],
-    imports: [TableBuilderComponent]
+  selector: "app-service",
+  templateUrl: "./service.component.html",
+  styleUrls: ["./service.component.scss"],
+  imports: [TableBuilderComponent]
 })
-export class ServiceComponent implements OnInit {
+export default class ServiceComponent implements OnInit {
 
   serviceDataSource: TableDataSource<ServiceSum, DefaultService>;
 
@@ -34,24 +35,24 @@ export class ServiceComponent implements OnInit {
               values: {
                 //month: dayjs(dataSource.month).format('MMMM YYYY'),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                "user.fullname": dataSource.user.fullname,
+                "user.fullname": dataSource.user.fullname
                 //internal: minutesToDisplayableString(dataSource.internal),
                 //external: minutesToDisplayableString(dataSource.external),
               },
               route: () => {
                 this.router.navigateByUrl("service/" + dataSource.user.id.toString());
-              },
+              }
             });
         });
         return rows;
       },
       [
         //{name: 'month', headerName: 'Zeitraum'},
-        { name: "user.fullname", headerName: "Name" },
+        { name: "user.fullname", headerName: "Name" }
         //{name: 'internal', headerName: 'Intern'},
         //{name: 'external', headerName: 'Extern'}
       ],
-      (api) => api.readServiceSumCountServiceSumCountGet(),
+      (api) => api.readServiceSumCountServiceSumCountGet()
     );
     this.serviceDataSource.loadData();
   }

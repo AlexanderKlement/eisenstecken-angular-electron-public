@@ -5,27 +5,28 @@ import { formatCurrency } from "@angular/common";
 import { first } from "rxjs/operators";
 import {
   PaintTemplateEditDialogComponent,
-  PaintTemplateEditDialogData,
+  PaintTemplateEditDialogData
 } from "./paint-template-edit-dialog/paint-template-edit-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { DefaultService, TemplatePaint } from "../../../api/openapi";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
+
 @Component({
-    selector: 'app-paint-template',
-    templateUrl: './paint-template.component.html',
-    styleUrls: ['./paint-template.component.scss'],
-    imports: [ToolbarComponent, TableBuilderComponent]
+  selector: "app-paint-template",
+  templateUrl: "./paint-template.component.html",
+  styleUrls: ["./paint-template.component.scss"],
+  imports: [ToolbarComponent, TableBuilderComponent]
 })
-export class PaintTemplateComponent implements OnInit {
+export default class PaintTemplateComponent implements OnInit {
 
   buttons: CustomButton[] = [
     {
       name: "Neue Oberflächen-Vorlage",
       navigate: () => {
         this.openPaintTemplateDialog(-1);
-      },
-    },
+      }
+    }
   ];
   paintTemplateDataSource: TableDataSource<TemplatePaint, DefaultService>;
   supplierId: number;
@@ -51,11 +52,11 @@ export class PaintTemplateComponent implements OnInit {
               values: {
                 name: dataSource.name,
                 unit: dataSource.unit.name.translation,
-                price: formatCurrency(dataSource.price, "de-DE", "EUR"),
+                price: formatCurrency(dataSource.price, "de-DE", "EUR")
               },
               route: () => {
                 this.openPaintTemplateDialog(dataSource.id);
-              },
+              }
             });
         });
         return rows;
@@ -63,20 +64,20 @@ export class PaintTemplateComponent implements OnInit {
       [
         { name: "name", headerName: "Bezeichnung" },
         { name: "unit", headerName: "Einheit" },
-        { name: "price", headerName: "Preis" },
+        { name: "price", headerName: "Preis" }
       ],
-      (api) => api.readTemplatePaintCountTemplatePaintCountGet(),
+      (api) => api.readTemplatePaintCountTemplatePaintCountGet()
     );
     this.paintTemplateDataSource.loadData();
   }
 
   private openPaintTemplateDialog(id: number) {
     const dialogData: PaintTemplateEditDialogData = {
-      id,
+      id
     };
     const dialogRef = this.dialog.open(PaintTemplateEditDialogComponent, {
       width: "500px",
-      data: dialogData,
+      data: dialogData
     });
     dialogRef.afterClosed().pipe(first()).subscribe(result => {
       if (result) {

@@ -8,18 +8,18 @@ import { HoursStepperComponent } from "./hours-stepper/hours-stepper.component";
 import { MatButton } from "@angular/material/button";
 
 @Component({
-    selector: 'app-hours',
-    templateUrl: './hours.component.html',
-    styleUrls: ['./hours.component.scss'],
-    imports: [
-        ToolbarComponent,
-        DefaultLayoutDirective,
-        DefaultLayoutAlignDirective,
-        HoursStepperComponent,
-        MatButton,
-    ],
+  selector: "app-hours",
+  templateUrl: "./hours.component.html",
+  styleUrls: ["./hours.component.scss"],
+  imports: [
+    ToolbarComponent,
+    DefaultLayoutDirective,
+    DefaultLayoutAlignDirective,
+    HoursStepperComponent,
+    MatButton
+  ]
 })
-export class HoursComponent implements OnInit {
+export default class HoursComponent implements OnInit {
 
   loading = true;
   buttons: CustomButton[] = [];

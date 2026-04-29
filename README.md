@@ -115,17 +115,10 @@ First we have to change the version numbers in `package.json` in the root and ro
 
 The build the update exe and publish the release on GitHub
 
-## Adding new modules:
-
-- `ng generate module NAME --routing`
-- `ng generate component NAME`
-- Register in `app.module.ts` and `app-routing.module.ts`
-
 ## Fixed the import not being possible for openapi-generate-client:
 
 npx -y @openapitools/openapi-generator-cli@latest version-manager list
 npx -y @openapitools/openapi-generator-cli@latest version-manager set 7.10.0
-
 
 ## Unregistered Service Worker like this:
 

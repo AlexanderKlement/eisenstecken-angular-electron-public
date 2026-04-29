@@ -24,16 +24,16 @@ import {
 } from "../available-products-list/product-edit-dialog/product-edit-dialog.service";
 
 @Component({
-  selector: 'app-order-detail',
-  templateUrl: './order-detail.component.html',
-  styleUrls: ['./order-detail.component.scss'],
+  selector: "app-order-detail",
+  templateUrl: "./order-detail.component.html",
+  styleUrls: ["./order-detail.component.scss"],
   imports: [
     ToolbarComponent,
     InfoBuilderComponent,
-    TableBuilderComponent,
-  ],
+    TableBuilderComponent
+  ]
 })
-export class OrderDetailComponent implements OnInit {
+export default class OrderDetailComponent implements OnInit {
   articleDataSource: TableDataSource<OrderedArticle, DefaultService>;
   infoDataSource: InfoDataSource<Order>;
 
@@ -46,14 +46,14 @@ export class OrderDetailComponent implements OnInit {
       name: "Löschen",
       navigate: (): void => {
         this.orderDeleteClicked();
-      },
+      }
     },
     {
       name: "Artikel verschieben",
       navigate: (): void => {
         this.moveOrderedArticlesClicked();
-      },
-    },
+      }
+    }
   ];
   private $refreshSubscriber: Subscriber<void>;
 
@@ -63,8 +63,7 @@ export class OrderDetailComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private orderedArticleEditDialog: OrderedArticleEditDialogService,
-
+    private orderedArticleEditDialog: OrderedArticleEditDialogService
   ) {
   }
 
@@ -96,7 +95,7 @@ export class OrderDetailComponent implements OnInit {
               name: "Anfragen bestellen",
               navigate: (): void => {
                 this.convertArticlesClicked();
-              },
+              }
             });
           }
         });
@@ -120,17 +119,17 @@ export class OrderDetailComponent implements OnInit {
       [
         {
           property: "order_from.name",
-          name: "Lieferant",
+          name: "Lieferant"
         },
         {
           property: "order_to.name",
-          name: "Empfänger",
-        },
+          name: "Empfänger"
+        }
       ],
       "/order/" + this.orderId.toString(),
       undefined,
       undefined,
-      undefined,
+      undefined
     );
   }
 
@@ -143,7 +142,7 @@ export class OrderDetailComponent implements OnInit {
           skip,
           limit,
           filter,
-          true,
+          true
         ),
       (dataSourceClasses) => {
         const rows = [];
@@ -151,17 +150,17 @@ export class OrderDetailComponent implements OnInit {
           rows.push({
             values: {
               // eslint-disable-next-line @typescript-eslint/naming-convention
-              "article.name.translation_de":  dataSource.name.translation_de,
+              "article.name.translation_de": dataSource.name.translation_de,
               position: dataSource.position,
               amount: dataSource.amount,
               // eslint-disable-next-line @typescript-eslint/naming-convention
               "ordered_unit.name.translation_de":
               dataSource.ordered_unit.name.translation_de,
-              price: formatCurrency(dataSource.price, "de-DE", "EUR"),
+              price: formatCurrency(dataSource.price, "de-DE", "EUR")
             },
             route: () => {
               this.orderedArticleClicked(dataSource.id);
-            },
+            }
           });
         });
         return rows;
@@ -171,12 +170,12 @@ export class OrderDetailComponent implements OnInit {
         { name: "position", headerName: "Position" },
         { name: "amount", headerName: "Menge" },
         { name: "ordered_unit.name.translation_de", headerName: "Einheit" },
-        { name: "price", headerName: "Einzelpreis" },
+        { name: "price", headerName: "Einzelpreis" }
       ],
       (api) =>
         api.readOrderedArticleCountByOrderOrderedArticleOrderOrderIdCountGet(
-          this.orderId,
-        ),
+          this.orderId
+        )
     );
     this.articleDataSource.loadData();
   }
@@ -190,7 +189,7 @@ export class OrderDetailComponent implements OnInit {
           title: "Produkt bearbeiten",
           blockRequestChange: false,
           blockFavoriteChange: true,
-          onSuccess: () => this.articleDataSource.loadData(),
+          onSuccess: () => this.articleDataSource.loadData()
         });
       });
   }
@@ -200,8 +199,8 @@ export class OrderDetailComponent implements OnInit {
       width: "400px",
       data: {
         title: "Bestellung löschen?",
-        text: "Bestellung wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden!",
-      },
+        text: "Bestellung wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden!"
+      }
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -216,8 +215,8 @@ export class OrderDetailComponent implements OnInit {
                 "Bestellung konnte nicht gelöscht werden",
                 "Ok",
                 {
-                  duration: 10000,
-                },
+                  duration: 10000
+                }
               );
               console.error("Could not delete order");
             }
@@ -240,7 +239,7 @@ export class OrderDetailComponent implements OnInit {
             name: "Gehe zu Lieferant",
             navigate: (): void => {
               this.gotoButtonClicked();
-            },
+            }
           });
           this.gotoNavigationTarget =
             "supplier/" + order.order_from.id.toString();
@@ -249,7 +248,7 @@ export class OrderDetailComponent implements OnInit {
             name: "Gehe zu Lager",
             navigate: (): void => {
               this.gotoButtonClicked();
-            },
+            }
           });
           this.gotoNavigationTarget = "stock/" + order.order_from.id.toString();
         }
@@ -260,8 +259,8 @@ export class OrderDetailComponent implements OnInit {
     const dialogRef = this.dialog.open(ConvertRequestDialogComponent, {
       width: "800px",
       data: {
-        orderId: this.orderId,
-      },
+        orderId: this.orderId
+      }
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -275,8 +274,8 @@ export class OrderDetailComponent implements OnInit {
     const dialogRef = this.dialog.open(OrderedArticleMoveDialogComponent, {
       width: "800px",
       data: {
-        orderId: this.orderId,
-      },
+        orderId: this.orderId
+      }
     });
 
     dialogRef.afterClosed().subscribe((result) => {

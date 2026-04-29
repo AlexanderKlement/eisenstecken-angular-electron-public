@@ -1,16 +1,16 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { StockEditComponent } from './stock-edit.component';
+import StockEditComponent from "./stock-edit.component";
 
-describe('StockEditComponent', () => {
+describe("StockEditComponent", () => {
   let component: StockEditComponent;
   let fixture: ComponentFixture<StockEditComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [StockEditComponent]
-})
-    .compileComponents();
+      imports: [StockEditComponent]
+    })
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('StockEditComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

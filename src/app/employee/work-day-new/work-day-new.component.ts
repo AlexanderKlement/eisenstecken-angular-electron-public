@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import {ActivatedRoute, Router} from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { UntypedFormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
@@ -8,24 +8,25 @@ import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from "@angular
 import { HoursStepperComponent } from "../../mobile-app/hours/hours-stepper/hours-stepper.component";
 
 @Component({
-    selector: 'app-work-day-new',
-    templateUrl: './work-day-new.component.html',
-    styleUrls: ['./work-day-new.component.scss'],
-    imports: [ToolbarComponent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatDatepickerInput, FormsModule, ReactiveFormsModule, MatDatepickerToggle, MatSuffix, MatDatepicker, HoursStepperComponent]
+  selector: "app-work-day-new",
+  templateUrl: "./work-day-new.component.html",
+  styleUrls: ["./work-day-new.component.scss"],
+  imports: [ToolbarComponent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatDatepickerInput, FormsModule, ReactiveFormsModule, MatDatepickerToggle, MatSuffix, MatDatepicker, HoursStepperComponent]
 })
-export class WorkDayNewComponent implements OnInit {
+export default class WorkDayNewComponent implements OnInit {
   newWorkday: any;
   loading = true;
   userId: number;
   selectedDate: Date;
   dateFormControl: UntypedFormControl;
 
-  constructor(private route: ActivatedRoute, private router: Router) { }
+  constructor(private route: ActivatedRoute, private router: Router) {
+  }
 
   ngOnInit(): void {
     this.dateFormControl = new UntypedFormControl(new Date());
-    this.dateFormControl.valueChanges.subscribe(() =>  {
-        this.selectedDate = new Date(this.dateFormControl.value);
+    this.dateFormControl.valueChanges.subscribe(() => {
+      this.selectedDate = new Date(this.dateFormControl.value);
     });
     this.route.params.subscribe(params => {
       this.userId = parseInt(params.id, 10);

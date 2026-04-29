@@ -1,16 +1,16 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { MobileAppComponent } from './mobile-app.component';
+import MobileAppComponent from "./mobile-app.component";
 
-describe('MobileAppComponent', () => {
+describe("MobileAppComponent", () => {
   let component: MobileAppComponent;
   let fixture: ComponentFixture<MobileAppComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [MobileAppComponent]
-})
-    .compileComponents();
+      imports: [MobileAppComponent]
+    })
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('MobileAppComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

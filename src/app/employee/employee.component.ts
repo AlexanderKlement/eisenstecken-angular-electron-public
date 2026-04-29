@@ -1,8 +1,8 @@
-import { Component,OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
 import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
 import { LockService } from "../shared/services/lock.service";
-import {  Router } from "@angular/router";
+import { Router } from "@angular/router";
 import dayjs from "dayjs/esm";
 import { ConfirmDialogComponent } from "../shared/components/confirm-dialog/confirm-dialog.component";
 import { first } from "rxjs/operators";
@@ -15,12 +15,12 @@ import { MatTabGroup, MatTab } from "@angular/material/tabs";
 import { TableBuilderComponent } from "../shared/components/table-builder/table-builder.component";
 
 @Component({
-    selector: 'app-employee',
-    templateUrl: './employee.component.html',
-    styleUrls: ['./employee.component.scss'],
-    imports: [ToolbarComponent, MatTabGroup, MatTab, TableBuilderComponent]
+  selector: "app-employee",
+  templateUrl: "./employee.component.html",
+  styleUrls: ["./employee.component.scss"],
+  imports: [ToolbarComponent, MatTabGroup, MatTab, TableBuilderComponent]
 })
-export class EmployeeComponent implements OnInit {
+export default class EmployeeComponent implements OnInit {
 
   userDataSource: TableDataSource<User, DefaultService>;
   feeDataSource: TableDataSource<Fee, DefaultService>;
@@ -33,8 +33,8 @@ export class EmployeeComponent implements OnInit {
       name: "Neuer Benutzer",
       navigate: (): void => {
         this.router.navigateByUrl("/user/edit/new");
-      },
-    },
+      }
+    }
   ];
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
@@ -75,19 +75,19 @@ export class EmployeeComponent implements OnInit {
           rows.push(
             {
               values: {
-                fullname: dataSource.fullname,
+                fullname: dataSource.fullname
               },
               route: () => {
                 this.router.navigateByUrl("/employee/" + dataSource.id.toString());
-              },
+              }
             });
         });
         return rows;
       },
       [
-        { name: "fullname", headerName: "Name" },
+        { name: "fullname", headerName: "Name" }
       ],
-      (api) => api.readUserCountUsersCountGet(),
+      (api) => api.readUserCountUsersCountGet()
     );
     this.userDataSource.loadData();
   }
@@ -106,11 +106,11 @@ export class EmployeeComponent implements OnInit {
                 "user.fullname": dataSource.user.fullname,
                 amount: dataSource.amount,
                 reason: dataSource.reason,
-                date: dayjs(dataSource.date).format("L"),
+                date: dayjs(dataSource.date).format("L")
               },
               route: () => {
                 this.feeClicked(dataSource.id);
-              },
+              }
             });
         });
         return rows;
@@ -119,9 +119,9 @@ export class EmployeeComponent implements OnInit {
         { name: "user.fullname", headerName: "Benutzer" },
         { name: "date", headerName: "Datum" },
         { name: "reason", headerName: "Grund" },
-        { name: "amount", headerName: "Menge [€]" },
+        { name: "amount", headerName: "Menge [€]" }
       ],
-      (api) => api.readFeeCountFeeCountGet(),
+      (api) => api.readFeeCountFeeCountGet()
     );
     this.feeDataSource.loadData();
   }
@@ -141,11 +141,11 @@ export class EmployeeComponent implements OnInit {
                 "car.name": dataSource.car.name,
                 date: dayjs(dataSource.date).format("L"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                distance_km: dataSource.distance_km,
+                distance_km: dataSource.distance_km
               },
               route: () => {
                 this.journeyClicked(dataSource.id);
-              },
+              }
             });
         });
         return rows;
@@ -154,9 +154,9 @@ export class EmployeeComponent implements OnInit {
         { name: "user.fullname", headerName: "Benutzer" },
         { name: "date", headerName: "Datum" },
         { name: "car.name", headerName: "Auto" },
-        { name: "distance_km", headerName: "Distanz [km]" },
+        { name: "distance_km", headerName: "Distanz [km]" }
       ],
-      (api) => api.readJourneyCountJourneyCountGet(),
+      (api) => api.readJourneyCountJourneyCountGet()
     );
     this.journeyDataSource.loadData();
   }
@@ -175,11 +175,11 @@ export class EmployeeComponent implements OnInit {
                 date: dayjs(dataSource.date).format("MMMM YYYY"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 "eating_place.name": dataSource.eating_place.name,
-                sum: dataSource.sum,
+                sum: dataSource.sum
               },
               route: () => {
                 this.router.navigateByUrl("meal/" + dataSource.eating_place.id.toString());
-              },
+              }
             });
         });
         return rows;
@@ -187,9 +187,9 @@ export class EmployeeComponent implements OnInit {
       [
         { name: "eating_place.name", headerName: "Restaurant" },
         { name: "date", headerName: "Datum" },
-        { name: "sum", headerName: "Anzahl" },
+        { name: "sum", headerName: "Anzahl" }
       ],
-      (api) => api.readMealSumsMealSumCountGet(),
+      (api) => api.readMealSumsMealSumCountGet()
     );
     this.mealDataSource.loadData();
   }
@@ -199,8 +199,8 @@ export class EmployeeComponent implements OnInit {
       width: "400px",
       data: {
         title: "Spese löschen?",
-        text: "Spese löschen? Diese Aktion kann nicht rückgängig gemacht werden!",
-      },
+        text: "Spese löschen? Diese Aktion kann nicht rückgängig gemacht werden!"
+      }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -209,7 +209,7 @@ export class EmployeeComponent implements OnInit {
             this.feeDataSource.loadData();
           } else {
             this.snackBar.open("Spese konnte nicht gelöscht werden", "Ok", {
-              duration: 10000,
+              duration: 10000
             });
           }
         });
@@ -222,8 +222,8 @@ export class EmployeeComponent implements OnInit {
       width: "400px",
       data: {
         title: "Fahrt löschen?",
-        text: "Fahrt löschen? Diese Aktion kann nicht rückgängig gemacht werden!",
-      },
+        text: "Fahrt löschen? Diese Aktion kann nicht rückgängig gemacht werden!"
+      }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -232,7 +232,7 @@ export class EmployeeComponent implements OnInit {
             this.journeyDataSource.loadData();
           } else {
             this.snackBar.open("Fahrt konnte nicht gelöscht werden", "Ok", {
-              duration: 10000,
+              duration: 10000
             });
           }
         });
@@ -255,11 +255,11 @@ export class EmployeeComponent implements OnInit {
                 month: dayjs(dataSource.month).format("MMMM YYYY"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 "user.fullname": dataSource.user.fullname,
-                minutes: minutesToDisplayableString(dataSource.minutes),
+                minutes: minutesToDisplayableString(dataSource.minutes)
               },
               route: () => {
                 this.maintenanceClicked();
-              },
+              }
             });
         });
         return rows;
@@ -267,9 +267,9 @@ export class EmployeeComponent implements OnInit {
       [
         { name: "month", headerName: "Zeitraum" },
         { name: "user.fullname", headerName: "Name" },
-        { name: "minutes", headerName: "Minutes" },
+        { name: "minutes", headerName: "Minutes" }
       ],
-      (api) => api.readMaintenanceCountMaintenanceCountGet(),
+      (api) => api.readMaintenanceCountMaintenanceCountGet()
     );
     this.maintenanceDataSource.loadData();
   }
@@ -294,11 +294,11 @@ export class EmployeeComponent implements OnInit {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 "user.fullname": dataSource.user.fullname,
                 minutes: minutesToDisplayableString(dataSource.minutes),
-                description: dataSource.description,
+                description: dataSource.description
               },
               route: () => {
                 this.additionalWorkloadClicked(dataSource.id);
-              },
+              }
             });
         });
         return rows;
@@ -307,9 +307,9 @@ export class EmployeeComponent implements OnInit {
         { name: "date", headerName: "Datum" },
         { name: "user.fullname", headerName: "Name" },
         { name: "description", headerName: "Beschreibung" },
-        { name: "minutes", headerName: "Zeit" },
+        { name: "minutes", headerName: "Zeit" }
       ],
-      (api) => api.readAdditionalWorkloadCountAdditionalWorkloadCountGet(),
+      (api) => api.readAdditionalWorkloadCountAdditionalWorkloadCountGet()
     );
     this.additionalWorkloadDataSource.loadData();
   }
@@ -319,8 +319,8 @@ export class EmployeeComponent implements OnInit {
       width: "400px",
       data: {
         title: "Zusätzliche Arbeiten löschen?",
-        text: "Zusätzliche Arbeiten löschen? Diese Aktion kann nicht rückgängig gemacht werden!",
-      },
+        text: "Zusätzliche Arbeiten löschen? Diese Aktion kann nicht rückgängig gemacht werden!"
+      }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -329,7 +329,7 @@ export class EmployeeComponent implements OnInit {
             this.additionalWorkloadDataSource.loadData();
           } else {
             this.snackBar.open("Zusätzliche Arbeiten konnten nicht gelöscht werden", "Ok", {
-              duration: 10000,
+              duration: 10000
             });
           }
         });

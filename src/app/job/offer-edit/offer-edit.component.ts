@@ -5,7 +5,7 @@ import {
   UntypedFormControl,
   UntypedFormGroup,
   FormsModule,
-  ReactiveFormsModule,
+  ReactiveFormsModule
 } from "@angular/forms";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -17,11 +17,11 @@ import { FileService } from "../../shared/services/file.service";
 import { formatDateTransport } from "../../shared/date.util";
 import {
   CustomButton,
-  ToolbarComponent,
+  ToolbarComponent
 } from "../../shared/components/toolbar/toolbar.component";
 import {
   CurrencyPipe,
-  AsyncPipe,
+  AsyncPipe
 } from "@angular/common";
 import {
   DescriptiveArticleCreate,
@@ -31,7 +31,7 @@ import {
   Vat,
   DefaultService,
   DescriptiveArticle,
-  Lock,
+  Lock
 } from "../../../api/openapi";
 import { MatIconButton, MatButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
@@ -39,13 +39,13 @@ import {
   DefaultLayoutDirective,
   DefaultLayoutAlignDirective,
   DefaultFlexDirective,
-  FlexModule,
+  FlexModule
 } from "ng-flex-layout";
 import {
   MatFormField,
   MatLabel,
   MatInput,
-  MatSuffix,
+  MatSuffix
 } from "@angular/material/input";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { MatCheckbox } from "@angular/material/checkbox";
@@ -53,14 +53,14 @@ import { MatSelect, MatOption } from "@angular/material/select";
 import {
   MatDatepickerInput,
   MatDatepickerToggle,
-  MatDatepicker,
+  MatDatepicker
 } from "@angular/material/datepicker";
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
 
 @Component({
-  selector: 'app-offer-edit',
-  templateUrl: './offer-edit.component.html',
-  styleUrls: ['./offer-edit.component.scss'],
+  selector: "app-offer-edit",
+  templateUrl: "./offer-edit.component.html",
+  styleUrls: ["./offer-edit.component.scss"],
   imports: [
     ToolbarComponent,
     MatIconButton,
@@ -84,10 +84,10 @@ import { CircleIconButtonComponent } from "../../shared/components/circle-icon-b
     MatSuffix,
     MatDatepicker,
     AsyncPipe,
-    CircleIconButtonComponent,
-  ],
+    CircleIconButtonComponent
+  ]
 })
-export class OfferEditComponent
+export default class OfferEditComponent
   extends BaseEditComponent<Offer>
   implements OnInit, OnDestroy {
   navigationTarget = "job";
@@ -108,7 +108,7 @@ export class OfferEditComponent
     private currency: CurrencyPipe,
     @Inject(DEFAULT_CURRENCY_CODE) private readonly currencyCode: string,
     @Inject(LOCALE_ID) private readonly locale: string,
-    dialog: MatDialog,
+    dialog: MatDialog
   ) {
     super(api, router, route, dialog);
   }
@@ -152,7 +152,7 @@ export class OfferEditComponent
       name: "Angebot löschen",
       navigate: (): void => {
         this.onOfferDeleteClicked();
-      },
+      }
     });
   }
 
@@ -168,7 +168,7 @@ export class OfferEditComponent
       (descriptiveArticleControl) => {
         const subDescriptiveArticleArray: DescriptiveArticleCreate[] = [];
         this.getSubDescriptiveArticles(
-          descriptiveArticleControl,
+          descriptiveArticleControl
         ).controls.forEach((subDescriptiveArticleControl) => {
           const subDescriptiveArticle: DescriptiveArticleCreate = {
             name: "",
@@ -180,7 +180,7 @@ export class OfferEditComponent
             discount: 0,
             alternative: subDescriptiveArticleControl.get("alternative").value,
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            vat_id: 1,
+            vat_id: 1
           };
           subDescriptiveArticleArray.push(subDescriptiveArticle);
         });
@@ -195,10 +195,10 @@ export class OfferEditComponent
           // eslint-disable-next-line @typescript-eslint/naming-convention
           descriptive_articles: subDescriptiveArticleArray,
           // eslint-disable-next-line @typescript-eslint/naming-convention
-          vat_id: 1,
+          vat_id: 1
         };
         descriptiveArticles.push(descriptiveArticle);
-      },
+      }
     );
 
     if (this.createMode) {
@@ -223,8 +223,8 @@ export class OfferEditComponent
         material_description: this.offerGroup.get("material_description").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         material_description_title: this.offerGroup.get(
-          "material_description_title",
-        ).value,
+          "material_description_title"
+        ).value
       };
       this.api
         .createOfferOfferPost(offerCreate)
@@ -238,7 +238,7 @@ export class OfferEditComponent
           },
           () => {
             this.createUpdateComplete();
-          },
+          }
         );
     } else {
       const offerUpdate: OfferUpdate = {
@@ -260,8 +260,8 @@ export class OfferEditComponent
         material_description: this.offerGroup.get("material_description").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         material_description_title: this.offerGroup.get(
-          "material_description_title",
-        ).value,
+          "material_description_title"
+        ).value
       };
       this.api.updateOfferOfferOfferIdPut(this.id, offerUpdate).subscribe(
         (offer) => {
@@ -272,7 +272,7 @@ export class OfferEditComponent
         },
         () => {
           this.createUpdateComplete();
-        },
+        }
       );
     }
   }
@@ -282,7 +282,7 @@ export class OfferEditComponent
     this.file.open(offer.pdf);
     this.resetDirtyState();
     this.router.navigateByUrl("job/" + this.jobId.toString(), {
-      replaceUrl: true,
+      replaceUrl: true
     });
   }
 
@@ -292,14 +292,14 @@ export class OfferEditComponent
       this.data$
         .pipe(
           tap((offer) =>
-            this.offerGroup.patchValue(offer, { emitEvent: false }),
-          ),
+            this.offerGroup.patchValue(offer, { emitEvent: false })
+          )
         )
         .subscribe((offer) => {
           this.getDescriptiveArticles().removeAt(0);
           offer.descriptive_articles.forEach((descriptiveArticle) => {
             this.getDescriptiveArticles().push(
-              this.initDescriptiveArticles(descriptiveArticle),
+              this.initDescriptiveArticles(descriptiveArticle)
             );
           });
           this.offerGroup.patchValue(
@@ -319,9 +319,9 @@ export class OfferEditComponent
               // eslint-disable-next-line @typescript-eslint/naming-convention
               material_description: offer.material_description,
               // eslint-disable-next-line @typescript-eslint/naming-convention
-              material_description_title: offer.material_description_title,
+              material_description_title: offer.material_description_title
             },
-            { emitEvent: false },
+            { emitEvent: false }
           );
           this.jobId = offer.job_id;
           this.recalculateOfferPrice();
@@ -358,7 +358,7 @@ export class OfferEditComponent
     }
     const oldLength = this.hiddenDescriptives.length;
     this.hiddenDescriptives = this.hiddenDescriptives.filter(
-      (idx) => idx !== index,
+      (idx) => idx !== index
     );
     if (oldLength === this.hiddenDescriptives.length) {
       this.hiddenDescriptives.push(index);
@@ -380,8 +380,8 @@ export class OfferEditComponent
       width: "400px",
       data: {
         title: "Position löschen?",
-        text: "Dieser Schritt kann nicht rückgängig gemacht werden.",
-      },
+        text: "Dieser Schritt kann nicht rückgängig gemacht werden."
+      }
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -393,7 +393,7 @@ export class OfferEditComponent
   addDescriptiveArticleAt(index: number): void {
     this.getDescriptiveArticles().insert(
       index + 1,
-      this.initDescriptiveArticles(),
+      this.initDescriptiveArticles()
     );
   }
 
@@ -418,8 +418,8 @@ export class OfferEditComponent
         title: "Änderungen verwerfen?",
         text: "Du hast ungespeicherte Änderungen. Willst du diese wirklich verwerfen?",
         confirm: "Verwerfen",
-        cancel: "Abbrechen",
-      },
+        cancel: "Abbrechen"
+      }
     });
 
     return await dialogRef.afterClosed().toPromise();
@@ -427,14 +427,14 @@ export class OfferEditComponent
 
   removeDescriptiveSubArticle(
     descriptiveArticleControl: AbstractControl,
-    j: number,
+    j: number
   ): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: "400px",
       data: {
         title: "Position löschen?",
-        text: "Dieser Schritt kann nicht rückgängig gemacht werden.",
-      },
+        text: "Dieser Schritt kann nicht rückgängig gemacht werden."
+      }
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -449,31 +449,31 @@ export class OfferEditComponent
 
   addDescriptiveSubArticle(
     descriptiveArticleControl: AbstractControl,
-    j: number,
+    j: number
   ): void {
     this.getSubDescriptiveArticles(descriptiveArticleControl).insert(
       j + 1,
-      this.initSubDescriptiveArticles(),
+      this.initSubDescriptiveArticles()
     );
   }
 
   transformAmount(i: number, j: number) {
     const subDescriptiveArticle = this.getSubDescriptiveArticles(
-      this.getDescriptiveArticles().at(i),
+      this.getDescriptiveArticles().at(i)
     ).at(j);
     const singlePrice = parseFloat(
       subDescriptiveArticle
         .get("singlePriceFormatted")
         .value.replace("€", "")
         .replace(".", "")
-        .replace(",", "."),
+        .replace(",", ".")
     );
     const formattedAmount = this.currency.transform(
       singlePrice,
       this.currencyCode,
       "symbol",
       undefined,
-      this.locale,
+      this.locale
     );
     subDescriptiveArticle
       .get("single_price")
@@ -485,35 +485,35 @@ export class OfferEditComponent
   }
 
   private initDescriptiveArticles(
-    descriptiveArticle?: DescriptiveArticle,
+    descriptiveArticle?: DescriptiveArticle
   ): UntypedFormGroup {
     if (descriptiveArticle === undefined) {
       return new UntypedFormGroup({
         description: new UntypedFormControl(""),
         // eslint-disable-next-line @typescript-eslint/naming-convention
         sub_descriptive_articles: new UntypedFormArray([
-          this.initSubDescriptiveArticles(),
-        ]),
+          this.initSubDescriptiveArticles()
+        ])
       });
     } else {
       const subDescriptiveArticles: UntypedFormGroup[] = [];
       descriptiveArticle.descriptive_article.forEach(
         (subDescriptiveArticle) => {
           subDescriptiveArticles.push(
-            this.initSubDescriptiveArticles(subDescriptiveArticle),
+            this.initSubDescriptiveArticles(subDescriptiveArticle)
           );
-        },
+        }
       );
       return new UntypedFormGroup({
         description: new UntypedFormControl(descriptiveArticle.description),
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        sub_descriptive_articles: new UntypedFormArray(subDescriptiveArticles),
+        sub_descriptive_articles: new UntypedFormArray(subDescriptiveArticles)
       });
     }
   }
 
   private initSubDescriptiveArticles(
-    subDescriptiveArticle?: DescriptiveArticle,
+    subDescriptiveArticle?: DescriptiveArticle
   ): UntypedFormGroup {
     let subDescriptiveArticleGroup;
     if (subDescriptiveArticle === undefined) {
@@ -523,7 +523,7 @@ export class OfferEditComponent
         // eslint-disable-next-line @typescript-eslint/naming-convention
         single_price: new UntypedFormControl(0.0),
         singlePriceFormatted: new UntypedFormControl("0,00 €"),
-        alternative: new UntypedFormControl(false),
+        alternative: new UntypedFormControl(false)
       });
     } else {
       subDescriptiveArticleGroup = new UntypedFormGroup({
@@ -531,7 +531,7 @@ export class OfferEditComponent
         amount: new UntypedFormControl(subDescriptiveArticle.amount),
         // eslint-disable-next-line @typescript-eslint/naming-convention
         single_price: new UntypedFormControl(
-          subDescriptiveArticle.single_price,
+          subDescriptiveArticle.single_price
         ),
         singlePriceFormatted: new UntypedFormControl(
           this.currency.transform(
@@ -539,10 +539,10 @@ export class OfferEditComponent
             this.currencyCode,
             "symbol",
             undefined,
-            this.locale,
-          ),
+            this.locale
+          )
         ),
-        alternative: new UntypedFormControl(subDescriptiveArticle.alternative),
+        alternative: new UntypedFormControl(subDescriptiveArticle.alternative)
       });
     }
 
@@ -551,19 +551,19 @@ export class OfferEditComponent
         .get("single_price")
         .valueChanges.subscribe(() => {
         this.recalculateOfferPrice();
-      }),
+      })
     );
     this.subscription.add(
       subDescriptiveArticleGroup.get("amount").valueChanges.subscribe(() => {
         this.recalculateOfferPrice();
-      }),
+      })
     );
     this.subscription.add(
       subDescriptiveArticleGroup
         .get("alternative")
         .valueChanges.subscribe(() => {
         this.recalculateOfferPrice();
-      }),
+      })
     );
     return subDescriptiveArticleGroup;
   }
@@ -573,8 +573,8 @@ export class OfferEditComponent
       width: "400px",
       data: {
         title: "Angebot löschen?",
-        text: "Dieser Schritt kann nicht rückgängig gemacht werden.",
-      },
+        text: "Dieser Schritt kann nicht rückgängig gemacht werden."
+      }
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -585,13 +585,13 @@ export class OfferEditComponent
             .subscribe((success) => {
               if (success) {
                 this.router.navigateByUrl("job/" + this.jobId.toString(), {
-                  replaceUrl: true,
+                  replaceUrl: true
                 });
               }
             });
         } else {
           this.router.navigateByUrl("job/" + this.jobId.toString(), {
-            replaceUrl: true,
+            replaceUrl: true
           });
         }
       }
@@ -602,7 +602,7 @@ export class OfferEditComponent
     const langCodeLower = langCode.toLowerCase();
     this.getAndFillParameters(
       "in_price_included",
-      "offer_in_price_included_" + langCodeLower,
+      "offer_in_price_included_" + langCodeLower
     );
     this.getAndFillParameters("validity", "offer_validity_" + langCodeLower);
     this.getAndFillParameters("delivery", "offer_delivery_" + langCodeLower);
@@ -616,9 +616,9 @@ export class OfferEditComponent
       .subscribe((parameter) => {
         this.offerGroup.patchValue(
           {
-            [formControlName]: parameter,
+            [formControlName]: parameter
           },
-          { emitEvent: false },
+          { emitEvent: false }
         );
       });
   }
@@ -641,14 +641,14 @@ export class OfferEditComponent
       material_description: new UntypedFormControl(""),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       material_description_title: new UntypedFormControl(
-        "Allgemeine Materialbeschreibung",
+        "Allgemeine Materialbeschreibung"
       ),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       descriptive_articles: new UntypedFormArray([
-        this.initDescriptiveArticles(),
+        this.initDescriptiveArticles()
       ]),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      offer_price: new UntypedFormControl(""),
+      offer_price: new UntypedFormControl("")
     });
   }
 
@@ -664,7 +664,7 @@ export class OfferEditComponent
       (descriptiveArticleControl) => {
         (
           descriptiveArticleControl.get(
-            "sub_descriptive_articles",
+            "sub_descriptive_articles"
           ) as UntypedFormArray
         ).controls.forEach((subDescriptiveArticleControl) => {
           if (subDescriptiveArticleControl.get("alternative").value) {
@@ -674,7 +674,7 @@ export class OfferEditComponent
             parseFloat(subDescriptiveArticleControl.get("single_price").value) *
             parseFloat(subDescriptiveArticleControl.get("amount").value);
         });
-      },
+      }
     );
     offerPrice -= this.offerGroup.get("discount_amount").value;
     offerPrice *= 1 - this.offerGroup.get("discount_percentage").value / 100;
@@ -686,9 +686,9 @@ export class OfferEditComponent
           this.currencyCode,
           "symbol",
           undefined,
-          this.locale,
+          this.locale
         ),
-        { emitEvent: false },
+        { emitEvent: false }
       );
   }
 }

@@ -6,7 +6,7 @@ import {
   UntypedFormControl,
   UntypedFormGroup,
   FormsModule,
-  ReactiveFormsModule,
+  ReactiveFormsModule
 } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { tap } from "rxjs/operators";
@@ -18,13 +18,13 @@ import {
   DefaultService,
   Lock,
   ContactCreate,
-  ClientCreate,
+  ClientCreate
 } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import {
   DefaultLayoutDirective,
   DefaultLayoutAlignDirective,
-  FlexModule,
+  FlexModule
 } from "ng-flex-layout";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
@@ -55,13 +55,12 @@ import { MatButton } from "@angular/material/button";
     FlexModule,
     AsyncPipe,
     CircleIconButtonComponent,
-    MatButton,
-  ],
+    MatButton
+  ]
 })
-export class ClientEditComponent
+export default class ClientEditComponent
   extends BaseEditComponent<Client>
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   title = "Kunde: Bearbeiten";
   navigationTarget = "/client";
   clientGroup: UntypedFormGroup;
@@ -107,8 +106,8 @@ export class ClientEditComponent
         street_number: new UntypedFormControl(""),
         city: new UntypedFormControl(""),
         cap: new UntypedFormControl(""),
-        country: new UntypedFormControl("IT"),
-      }),
+        country: new UntypedFormControl("IT")
+      })
     });
     this.genderOptions$ = this.api.readGendersGenderGet();
     this.languageOptions$ = this.api.readLanguagesLanguageGet();
@@ -159,7 +158,7 @@ export class ClientEditComponent
         lastname: contactGroup.get("lastname").value,
         tel: contactGroup.get("tel").value,
         mail: contactGroup.get("mail").value,
-        note: contactGroup.get("note").value,
+        note: contactGroup.get("note").value
       });
     }
 
@@ -194,12 +193,12 @@ export class ClientEditComponent
         city: this.clientGroup.get("address.city").value,
         cap: this.clientGroup.get("address.cap").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        country_code: this.clientGroup.get("address.country").value,
+        country_code: this.clientGroup.get("address.country").value
       },
       // eslint-disable-next-line @typescript-eslint/naming-convention
       gender_code: this.clientGroup.get("gender").value,
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      language_code: this.clientGroup.get("language").value,
+      language_code: this.clientGroup.get("language").value
     };
 
     if (this.createMode) {
@@ -212,7 +211,7 @@ export class ClientEditComponent
         },
         () => {
           this.createUpdateComplete();
-        },
+        }
       );
     } else {
       this.api.updateClientClientClientIdPut(this.id, clientCreate).subscribe(
@@ -224,7 +223,7 @@ export class ClientEditComponent
         },
         () => {
           this.createUpdateComplete();
-        },
+        }
       );
     }
   }
@@ -239,7 +238,7 @@ export class ClientEditComponent
   createUpdateSuccess(client: Client): void {
     this.id = client.id;
     this.router.navigateByUrl("client/" + this.id.toString(), {
-      replaceUrl: true,
+      replaceUrl: true
     });
   }
 
@@ -258,8 +257,8 @@ export class ClientEditComponent
             language: client.language.code,
             gender: client.gender.code,
             address: {
-              country: client.address.country.code,
-            },
+              country: client.address.country.code
+            }
           });
           for (const contact of client.contacts) {
             this.addContact(contact);
@@ -289,7 +288,7 @@ export class ClientEditComponent
         lastname: new UntypedFormControl(contact.lastname),
         tel: new UntypedFormControl(contact.tel),
         mail: new UntypedFormControl(contact.mail),
-        note: new UntypedFormControl(contact.note),
+        note: new UntypedFormControl(contact.note)
       });
     } else {
       return new UntypedFormGroup({
@@ -297,11 +296,11 @@ export class ClientEditComponent
         name: new UntypedFormControl(this.clientGroup.get("name").value),
         name1: new UntypedFormControl(""),
         lastname: new UntypedFormControl(
-          this.clientGroup.get("lastname").value,
+          this.clientGroup.get("lastname").value
         ),
         tel: new UntypedFormControl("+39"),
         mail: new UntypedFormControl(""),
-        note: new UntypedFormControl(""),
+        note: new UntypedFormControl("")
       });
     }
   }
