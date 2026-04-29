@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
 import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
 import { LockService } from "../shared/services/lock.service";
@@ -21,6 +21,12 @@ import { TableBuilderComponent } from "../shared/components/table-builder/table-
   imports: [ToolbarComponent, MatTabGroup, MatTab, TableBuilderComponent]
 })
 export default class EmployeeComponent implements OnInit {
+  private api = inject(DefaultService);
+  private locker = inject(LockService);
+  private router = inject(Router);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
+
 
   userDataSource: TableDataSource<User, DefaultService>;
   feeDataSource: TableDataSource<Fee, DefaultService>;
@@ -38,10 +44,6 @@ export default class EmployeeComponent implements OnInit {
   ];
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
-
-  constructor(private api: DefaultService, private locker: LockService, private router: Router,
-              private dialog: MatDialog, private snackBar: MatSnackBar) {
-  }
 
   ngOnInit(): void {
     this.initUserDataSource();

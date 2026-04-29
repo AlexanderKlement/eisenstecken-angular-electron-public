@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
 import { NgOptimizedImage } from "@angular/common";
@@ -10,8 +10,8 @@ import { NgOptimizedImage } from "@angular/common";
   imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, NgOptimizedImage]
 })
 export default class PageNotFoundComponent {
-  constructor(private router: Router) {
-  }
+  private router = inject(Router);
+
 
 
   homeClicked() {

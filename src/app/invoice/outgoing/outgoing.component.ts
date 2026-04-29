@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from "@angular/core";
+import { Component, Input, OnInit, inject } from "@angular/core";
 import {TableDataSource} from "../../shared/components/table-builder/table-builder.datasource";
 import {LockService} from "../../shared/services/lock.service";
 import {first} from "rxjs/operators";
@@ -22,6 +22,11 @@ import { MatTabGroup, MatTab } from "@angular/material/tabs";
     imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatSelect, MatOption, MatTabGroup, MatTab, TableBuilderComponent, AsyncPipe]
 })
 export class OutgoingComponent implements OnInit {
+    private api = inject(DefaultService);
+    private locker = inject(LockService);
+    private authService = inject(AuthStateService);
+    private dialog = inject(MatDialog);
+
 
 
     @Input() $refresh: Observable<void>;
@@ -43,9 +48,6 @@ export class OutgoingComponent implements OnInit {
             selectedField: "id",
         },
     ];
-
-    constructor(private api: DefaultService, private locker: LockService, private authService: AuthStateService, private dialog: MatDialog) {
-    }
 
     ngOnInit(): void {
         this.initDataSources();

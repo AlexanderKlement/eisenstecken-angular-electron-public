@@ -1,22 +1,20 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
-import { ActivatedRoute, Router } from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { first } from "rxjs/operators";
 import {
+  FormsModule,
+  ReactiveFormsModule,
   UntypedFormArray,
   UntypedFormControl,
-  UntypedFormGroup,
-  FormsModule,
-  ReactiveFormsModule
+  UntypedFormGroup
 } from "@angular/forms";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
-import { OrderBundle, DefaultService, Order, Lock, OrderedArticlePriceUpdate } from "../../../api/openapi";
+import { Lock, Order, OrderBundle, OrderedArticlePriceUpdate } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective } from "ng-flex-layout";
-import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { DefaultFlexDirective, DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
+import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
 import { MatIcon } from "@angular/material/icon";
 import { MatButton } from "@angular/material/button";
 
@@ -39,14 +37,12 @@ import { MatButton } from "@angular/material/button";
   ]
 })
 export default class OrderBundleEditComponent extends BaseEditComponent<OrderBundle> implements OnInit {
+  private snackbar = inject(MatSnackBar);
+
 
   orderBundleId: number;
   navigationTarget = "supplier";
   orderBundleGroup: UntypedFormGroup;
-
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute, private snackbar: MatSnackBar, dialog: MatDialog) {
-    super(api, router, route, dialog);
-  }
 
   lockFunction = (id: number): Observable<Lock> => this.api.islockedOrderBundleOrderBundleIslockedOrderBundleIdGet(id);
 

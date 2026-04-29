@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, inject } from "@angular/core";
 import { InfoBuilderComponent } from "../../shared/components/info-builder/info-builder.component";
 
 import { InfoDataSource } from "../../shared/components/info-builder/info-builder.datasource";
@@ -24,6 +24,13 @@ import { TableBuilderComponent } from "../../shared/components/table-builder/tab
   imports: [ToolbarComponent, InfoBuilderComponent, MatTabGroup, MatTab, TableBuilderComponent]
 })
 export default class StockDetailComponent implements OnInit {
+  private api = inject(DefaultService);
+  private authService = inject(AuthStateService);
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
+  private route = inject(ActivatedRoute);
+  dialog = inject(MatDialog);
+
 
   @ViewChild(InfoBuilderComponent) child: InfoBuilderComponent<Supplier>;
   public infoDataSource: InfoDataSource<Stock>;
@@ -34,12 +41,6 @@ export default class StockDetailComponent implements OnInit {
 
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
-
-  constructor(private api: DefaultService, private authService: AuthStateService,
-              private router: Router, private snackBar: MatSnackBar,
-              private route: ActivatedRoute,
-              public dialog: MatDialog) {
-  }
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {

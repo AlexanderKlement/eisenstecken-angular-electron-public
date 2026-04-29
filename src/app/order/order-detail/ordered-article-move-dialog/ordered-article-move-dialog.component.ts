@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogRef,
@@ -36,6 +36,10 @@ interface SimpleOrderable {
   imports: [MatDialogTitle, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatStepper, MatStep, MatStepLabel, MatSelectionList, MatListOption, MatButton, MatStepperNext, MatStepperPrevious, MatList, MatListItem, MatDialogActions, AsyncPipe],
 })
 export class OrderedArticleMoveDialogComponent implements OnInit {
+  dialogRef = inject<MatDialogRef<OrderedArticleMoveDialogComponent>>(MatDialogRef);
+  data = inject<OrderedArticleMoveDialogData>(MAT_DIALOG_DATA);
+  private api = inject(DefaultService);
+
 
   @ViewChild('articles') articlesSelected: MatSelectionList;
   @ViewChild('orderable') orderableSelected: MatSelectionList;
@@ -46,11 +50,6 @@ export class OrderedArticleMoveDialogComponent implements OnInit {
   oneOrderableSelected = false;
 
   error = false;
-
-  constructor(public dialogRef: MatDialogRef<OrderedArticleMoveDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: OrderedArticleMoveDialogData,
-              private api: DefaultService) {
-  }
 
 
   jobStock2SimpleOrderable = (element: Job | Stock): SimpleOrderable => ({

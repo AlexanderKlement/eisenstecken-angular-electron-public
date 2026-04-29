@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
 import { first } from "rxjs/operators";
 import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -22,15 +22,14 @@ export interface ServiceCreateDialogData {
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, FormsModule, MatDatepickerInput, ReactiveFormsModule, MatDatepickerToggle, MatSuffix, MatDatepicker, MinuteHourComponent, MatDialogActions, MatButton]
 })
 export class ServiceCreateDialogComponent implements OnInit {
+  dialogRef = inject<MatDialogRef<ServiceCreateDialogComponent>>(MatDialogRef);
+  data = inject<ServiceCreateDialogData>(MAT_DIALOG_DATA);
+  private api = inject(DefaultService);
+
 
   user: User;
   loading = true;
   serviceGroup: UntypedFormGroup;
-
-  constructor(public dialogRef: MatDialogRef<ServiceCreateDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: ServiceCreateDialogData,
-              private api: DefaultService) {
-  }
 
   ngOnInit(): void {
     this.api.readUserUsersUserIdGet(this.data.userId).pipe(first()).subscribe((user) => {

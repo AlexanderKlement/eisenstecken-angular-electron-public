@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
 import { Router } from "@angular/router";
 import { DefaultService, ServiceSum } from "../../api/openapi";
@@ -12,11 +12,11 @@ import { TableBuilderComponent } from "../shared/components/table-builder/table-
   imports: [TableBuilderComponent]
 })
 export default class ServiceComponent implements OnInit {
+  private api = inject(DefaultService);
+  private router = inject(Router);
+
 
   serviceDataSource: TableDataSource<ServiceSum, DefaultService>;
-
-  constructor(private api: DefaultService, private router: Router) {
-  }
 
   ngOnInit(): void {
     this.initServiceDataSource();

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -41,6 +41,12 @@ export interface UserNoteEditDialogData {
   imports: [MatDialogTitle, MatDialogContent, FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatDialogActions, MatButton]
 })
 export class UserNotesEditDialogComponent implements OnInit {
+  dialogRef = inject<MatDialogRef<UserNoteEditDialogData>>(MatDialogRef);
+  dialog = inject(MatDialog);
+  private authService = inject(AuthStateService);
+  data = inject<UserNoteEditDialogData>(MAT_DIALOG_DATA);
+  private api = inject(DefaultService);
+
   title: string;
   createMode = true;
   userNoteGroup: FormGroup<{
@@ -49,12 +55,6 @@ export class UserNotesEditDialogComponent implements OnInit {
   }>;
   showDeleteButton = false;
   id: number;
-
-  constructor(
-    public dialogRef: MatDialogRef<UserNoteEditDialogData>, public dialog: MatDialog, private authService: AuthStateService,
-    @Inject(MAT_DIALOG_DATA) public data: UserNoteEditDialogData, private api: DefaultService
-  ) {
-  }
 
 
   ngOnInit(): void {

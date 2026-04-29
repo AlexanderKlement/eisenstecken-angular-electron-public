@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
 import dayjs from "dayjs/esm";
 import { Router } from "@angular/router";
@@ -21,6 +21,11 @@ import { AsyncPipe } from "@angular/common";
   imports: [ToolbarComponent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatSelect, MatOption, TableBuilderComponent, AsyncPipe]
 })
 export default class DeliveryNoteComponent implements OnInit {
+  private api = inject(DefaultService);
+  private locker = inject(LockService);
+  private router = inject(Router);
+  private authService = inject(AuthStateService);
+
   buttons: CustomButton[] = [];
   deliveryNoteDataSource: TableDataSource<DeliveryNote, DefaultService>;
 
@@ -30,9 +35,6 @@ export default class DeliveryNoteComponent implements OnInit {
   public $year: Observable<number[]>;
 
   private $refreshSubscriber: Subscriber<void>;
-
-  constructor(private api: DefaultService, private locker: LockService, private router: Router, private authService: AuthStateService) {
-  }
 
   ngOnInit(): void {
     this.initDeliveryNotes();

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, inject } from "@angular/core";
 import { MatSelectionList, MatListOption } from "@angular/material/list";
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
 import { Observable } from "rxjs";
@@ -25,13 +25,12 @@ export interface OrderReturnData {
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatSelectionList, MatListOption, MatDialogActions, MatButton, AsyncPipe]
 })
 export class OrderPrintDialogComponent implements OnInit {
+  dialogRef = inject<MatDialogRef<OrderPrintDialogComponent>>(MatDialogRef);
+  data = inject<OrderDialogData>(MAT_DIALOG_DATA);
+
 
   @ViewChild('orders') ordersSelected: MatSelectionList;
   error = false;
-
-  constructor(public dialogRef: MatDialogRef<OrderPrintDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: OrderDialogData) {
-  }
 
   ngOnInit(): void {
   }

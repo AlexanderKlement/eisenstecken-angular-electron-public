@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogContent } from "@angular/material/dialog";
 import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { first, map, startWith } from "rxjs/operators";
@@ -29,6 +29,11 @@ interface AutoCompleteOption {
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatButtonToggleGroup, MatButtonToggle, MatAutocompleteTrigger, MatAutocomplete, MatOption, MatButton, AsyncPipe]
 })
 export class ContactEditDialogComponent implements OnInit {
+  dialogRef = inject<MatDialogRef<ContactDialogData>>(MatDialogRef);
+  private dialog = inject(MatDialog);
+  data = inject<ContactDialogData>(MAT_DIALOG_DATA);
+  private api = inject(DefaultService);
+
   createMode = false;
   title = "Kontakt bearbeiten";
   contactGroup: UntypedFormGroup;
@@ -54,13 +59,6 @@ export class ContactEditDialogComponent implements OnInit {
   clientOptions: AutoCompleteOption[] = [];
   filteredSupplierOptions: Observable<AutoCompleteOption[]>;
   filteredClientOptions: Observable<AutoCompleteOption[]>;
-
-  constructor(
-    public dialogRef: MatDialogRef<ContactDialogData>,
-    private dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: ContactDialogData,
-    private api: DefaultService,
-  ) { }
 
   ngOnInit(): void {
     this.contactType = new UntypedFormControl(ContactTypeEnum.Business);

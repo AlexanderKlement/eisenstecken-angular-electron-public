@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from "@angular/material/dialog";
 import { MatButton } from "@angular/material/button";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
@@ -27,9 +27,9 @@ import { AsyncPipe } from "@angular/common";
   styleUrl: './industry-4-0-create-dialog.component.scss',
 })
 export class Industry40CreateDialogComponent {
+  private viet = inject(VietService);
+  dialogRef = inject<MatDialogRef<Industry40CreateDialogComponent>>(MatDialogRef);
 
-  constructor(private viet: VietService, public dialogRef: MatDialogRef<Industry40CreateDialogComponent>) {
-  }
 
   public readonly formGroup = new FormGroup({
     job_id: new FormControl<string>("", {

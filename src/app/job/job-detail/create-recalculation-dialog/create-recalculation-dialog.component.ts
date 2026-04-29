@@ -1,4 +1,4 @@
-import { Component, Inject} from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { DefaultService, Job } from "../../../../api/openapi";
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from "@angular/material/dialog";
 import { shareReplay, tap } from "rxjs/operators";
@@ -43,6 +43,10 @@ export interface CreateRecalculationDialogResult {
   styleUrl: './create-recalculation-dialog.component.scss'
 })
 export class CreateRecalculationDialogComponent {
+  private api = inject(DefaultService);
+  dialogRef = inject<MatDialogRef<CreateRecalculationDialogComponent>>(MatDialogRef);
+  data = inject<CreateRecalculationDialogData>(MAT_DIALOG_DATA);
+
   title = "Nachkalkulation erstellen"
   mainSelected = true;
   subSelected = new Set<number>();
@@ -61,12 +65,6 @@ export class CreateRecalculationDialogComponent {
     materialChargePercent: this.materialChargePercentCtrl,
     name: this.nameCtrl,
   });
-
-
-  constructor(private api: DefaultService,
-              public dialogRef: MatDialogRef<CreateRecalculationDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: CreateRecalculationDialogData) {
-  }
 
   readonly job$: Observable<Job> = this.api
     .readJobJobJobIdGet(this.data.jobId)

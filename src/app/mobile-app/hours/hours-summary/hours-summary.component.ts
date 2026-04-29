@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from "@angular/core";
+import { Component, Input, OnDestroy, OnInit, inject } from "@angular/core";
 import {AbstractControl, UntypedFormArray, UntypedFormGroup} from "@angular/forms";
 import {HoursStepperComponent, JobEnum} from "../hours-stepper/hours-stepper.component";
 import {first, map} from "rxjs/operators";
@@ -13,6 +13,8 @@ import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-lay
     imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective]
 })
 export class HoursSummaryComponent implements OnInit, OnDestroy {
+    private api = inject(DefaultService);
+
 
     @Input() hourFormGroup: UntypedFormGroup;
     @Input() jobFormGroup: UntypedFormGroup;
@@ -27,9 +29,6 @@ export class HoursSummaryComponent implements OnInit, OnDestroy {
     additionalWorkloadString = "";
     refreshInterval: NodeJS.Timeout;
     refreshRateSeconds = 0.8;
-
-    constructor(private api: DefaultService) {
-    }
 
     ngOnInit(): void {
         this.refreshInterval = setInterval(() => {

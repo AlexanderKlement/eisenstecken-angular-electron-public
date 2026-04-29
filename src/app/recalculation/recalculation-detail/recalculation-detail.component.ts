@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import dayjs from "dayjs/esm";
@@ -41,6 +41,16 @@ import { MatDialog } from "@angular/material/dialog";
   ]
 })
 export default class RecalculationDetailComponent implements OnInit {
+  private api = inject(DefaultService);
+  private orderService = inject(OrderService);
+  private recalculationService = inject(RecalculationService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private locker = inject(LockService);
+  private authService = inject(AuthStateService);
+  private snackBar = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
+
 
   recalculationId: number;
   loading = true;
@@ -56,10 +66,6 @@ export default class RecalculationDetailComponent implements OnInit {
 
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
-
-  constructor(private api: DefaultService, private orderService: OrderService, private recalculationService: RecalculationService, private router: Router, private route: ActivatedRoute,
-              private locker: LockService, private authService: AuthStateService, private snackBar: MatSnackBar, private dialog: MatDialog) {
-  }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {

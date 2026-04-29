@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit, inject } from "@angular/core";
 import { Observable } from "rxjs";
 import { first, tap } from "rxjs/operators";
 import { Router } from "@angular/router";
@@ -37,6 +37,11 @@ import {
   ],
 })
 export class CalendarDayComponent implements OnInit, OnDestroy {
+  private api = inject(DefaultService);
+  private router = inject(Router);
+  private calendar = inject(CalendarService);
+  private dialog = inject(MatDialog);
+
   @Input() day: number;
   @Input() calendarId: number;
   @Input() public: boolean;
@@ -48,13 +53,6 @@ export class CalendarDayComponent implements OnInit, OnDestroy {
   loading = true;
   weekend = false;
   today = false;
-
-  constructor(
-    private api: DefaultService,
-    private router: Router,
-    private calendar: CalendarService,
-    private dialog: MatDialog,
-  ) {}
 
   ngOnInit(): void {
     const currentDayId = dayjs().add(this.day, "days").day();

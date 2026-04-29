@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { matchScopesToMenuTiles, MenuTileDetail } from "./menu-tile.settings";
@@ -15,12 +15,14 @@ import { AsyncPipe } from "@angular/common";
     imports: [MatGridList, MatGridTile, SingleMenuTileComponent, FlexModule, AsyncPipe]
 })
 export class MenuTilesComponent implements OnInit {
+  private api = inject(DefaultService);
+
 
   menuTiles$: Observable<MenuTileDetail[]>;
 
   now: number;
 
-  constructor(private api: DefaultService) {
+  constructor() {
     this.now = ((new Date()).getMonth() * 100) + (new Date()).getDate();
   }
 

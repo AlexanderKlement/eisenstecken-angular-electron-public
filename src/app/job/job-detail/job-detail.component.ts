@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, inject } from "@angular/core";
 import { InfoDataSource } from "../../shared/components/info-builder/info-builder.datasource";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InfoBuilderComponent } from "../../shared/components/info-builder/info-builder.component";
@@ -47,6 +47,16 @@ import {
   ]
 })
 export default class JobDetailComponent implements OnInit {
+  private api = inject(DefaultService);
+  private recalculationService = inject(RecalculationService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private snackBar = inject(MatSnackBar);
+  private locker = inject(LockService);
+  private authService = inject(AuthStateService);
+  private dialog = inject(MatDialog);
+  private file = inject(FileService);
+
   @ViewChild(InfoBuilderComponent) child: InfoBuilderComponent<Job>;
 
   public infoDataSource: InfoDataSource<Job>;
@@ -72,19 +82,6 @@ export default class JobDetailComponent implements OnInit {
   title = "";
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
-
-  constructor(
-    private api: DefaultService,
-    private recalculationService: RecalculationService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private snackBar: MatSnackBar,
-    private locker: LockService,
-    private authService: AuthStateService,
-    private dialog: MatDialog,
-    private file: FileService
-  ) {
-  }
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {

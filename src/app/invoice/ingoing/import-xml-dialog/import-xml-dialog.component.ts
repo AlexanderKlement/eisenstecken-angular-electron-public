@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import {
   UntypedFormArray,
   UntypedFormControl,
@@ -46,17 +46,15 @@ import { CircleIconButtonComponent } from "../../../shared/components/circle-ico
   ],
 })
 export class ImportXmlDialogComponent implements OnInit {
+  private api = inject(DefaultService);
+  private file = inject(FileService);
+  private electron = inject(ElectronService);
+  dialogRef = inject<MatDialogRef<ImportXmlDialogComponent>>(MatDialogRef);
+  private snackBar = inject(MatSnackBar);
+
   selectXmlFormGroup: UntypedFormGroup;
   title: "Digitale Rechnungen auswählen";
   loading = false;
-
-  constructor(
-    private api: DefaultService,
-    private file: FileService,
-    private electron: ElectronService,
-    public dialogRef: MatDialogRef<ImportXmlDialogComponent>,
-    private snackBar: MatSnackBar,
-  ) {}
 
   ngOnInit(): void {
     this.selectXmlFormGroup = new UntypedFormGroup({

@@ -1,38 +1,37 @@
 import {
   Component,
   EventEmitter,
-  Input, OnChanges,
+  inject,
+  Input,
+  OnChanges,
   OnDestroy,
   OnInit,
-  Output, SimpleChanges,
+  Output,
+  SimpleChanges
 } from "@angular/core";
 import { Observable, Subscription } from "rxjs";
-import {
-  UntypedFormControl,
-  FormsModule,
-  ReactiveFormsModule,
-} from "@angular/forms";
+import { FormsModule, ReactiveFormsModule, UntypedFormControl } from "@angular/forms";
 import { debounceTime, first } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
 import {
   OrderDialogCreateData,
   OrderDialogReturnData,
-  ProductEditDialogComponent,
+  ProductEditDialogComponent
 } from "./product-edit-dialog/product-edit-dialog.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import {
-  DefaultService,
-  OrderedArticle,
   Article,
-  ArticleService, OrderedArticleService, OrderedArticleUpdateV2, OrderArticleCreateV2, ArticleCreateV2, ArticleUpdateV2,
+  ArticleCreateV2,
+  ArticleService,
+  ArticleUpdateV2,
+  DefaultService,
+  OrderArticleCreateV2,
+  OrderedArticle,
+  OrderedArticleService
 } from "../../../api/openapi";
-import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
-import {
-  DefaultLayoutDirective,
-  DefaultLayoutAlignDirective,
-  FlexModule,
-} from "ng-flex-layout";
+import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
+import { DefaultLayoutAlignDirective, DefaultLayoutDirective, FlexModule } from "ng-flex-layout";
 import { MatButton } from "@angular/material/button";
 import { MatList, MatListItem } from "@angular/material/list";
 import { SlicePipe } from "@angular/common";
@@ -42,9 +41,9 @@ import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { OrderedArticleEditDialogService } from "./product-edit-dialog/product-edit-dialog.service";
 
 @Component({
-  selector: 'app-products-list',
-  templateUrl: './products-list.component.html',
-  styleUrls: ['./products-list.component.scss'],
+  selector: "app-products-list",
+  templateUrl: "./products-list.component.html",
+  styleUrls: ["./products-list.component.scss"],
   imports: [
     MatFormField,
     MatLabel,
@@ -60,12 +59,19 @@ import { OrderedArticleEditDialogService } from "./product-edit-dialog/product-e
     SlicePipe,
     BoldSpanPipe,
     CircleIconButtonComponent,
-    CdkTextareaAutosize,
-  ],
+    CdkTextareaAutosize
+  ]
 })
 export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
+  dialog = inject(MatDialog);
+  private api = inject(DefaultService);
+  private articleService = inject(ArticleService);
+  private orderedArticlesService = inject(OrderedArticleService);
+  private snackBar = inject(MatSnackBar);
+  private orderedArticleEditDialog = inject(OrderedArticleEditDialogService);
+
   @Input() availableProducts$: Observable<Article[]>;
-  @Input() orderedProducts$: Observable<OrderedArticle[]>;
+  @Input({}) orderedProducts$: Observable<OrderedArticle[]>;
   @Input() name: string;
   @Input() orderId: number;
   @Input() available: boolean;
@@ -81,18 +87,8 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
   articles: Article[];
   subscription: Subscription;
 
-  constructor(
-    public dialog: MatDialog,
-    private api: DefaultService,
-    private articleService: ArticleService,
-    private orderedArticlesService: OrderedArticleService,
-    private snackBar: MatSnackBar,
-    private orderedArticleEditDialog: OrderedArticleEditDialogService,
-  ) {
-  }
-
   public static mapDialogData2ArticleUpdateV2(
-    dialogData: OrderDialogReturnData,
+    dialogData: OrderDialogReturnData
   ): ArticleUpdateV2 {
     return {
       modNumber: dialogData.modNumber,
@@ -100,14 +96,14 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
       unitID: dialogData.unitId,
       nameDE: dialogData.name,
       nameIT: dialogData.name,
-      favorite: dialogData.favorite,
+      favorite: dialogData.favorite
     };
   }
 
   public static mapDialogData2OrderArticleCreateV2(
     dialogData: OrderDialogReturnData,
     orderId: number,
-    articleId?: number,
+    articleId?: number
   ): OrderArticleCreateV2 {
     return {
       articleId: articleId,
@@ -121,14 +117,14 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
       unitId: dialogData.unitId,
       price: dialogData.price,
       orderId: orderId,
-      favorite: dialogData.favorite,
+      favorite: dialogData.favorite
     };
   }
 
   public static mapDialogData2ArticleCreateV2(
     dialogData: OrderDialogReturnData,
     supplierId?: number,
-    stockId?: number,
+    stockId?: number
   ): ArticleCreateV2 {
     return {
       supplierID: supplierId,
@@ -144,7 +140,7 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
 
   private static createEmptyDialogData(
     title: string,
-    article?: Article,
+    article?: Article
   ): OrderDialogCreateData {
     const base: OrderDialogCreateData = {
       title,
@@ -159,7 +155,7 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
       createMode: true,
       favorite: false,
       blockRequestChange: false,
-      blockFavoriteChange: false,
+      blockFavoriteChange: false
     };
 
     if (!article) {
@@ -171,7 +167,7 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
       name: article.name.translation,
       price: article.price,
       modNumber: article.mod_number,
-      favorite: article.favorite,
+      favorite: article.favorite
     };
   }
 
@@ -182,20 +178,20 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
     this.subscription.add(
       this.search.valueChanges.pipe(debounceTime(200)).subscribe((v) => {
         this.searchChange.emit((v ?? "").toString());
-      }),
+      })
     );
 
     if (this.available) {
       this.subscription.add(
         this.availableProducts$.subscribe((products) => {
           this.articles = products ?? [];
-        }),
+        })
       );
     } else {
       this.subscription.add(
         this.orderedProducts$.subscribe((products) => {
           this.orderedArticles = products ?? [];
-        }),
+        })
       );
     }
   }
@@ -214,7 +210,7 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
   orderButtonClicked(article: Article): void {
     const dialogData = ProductsListComponent.createEmptyDialogData(
       "Produkt hinzufügen",
-      article,
+      article
     );
     const closeFunction = (result: OrderDialogReturnData | undefined) => {
       if (!result) return;
@@ -224,7 +220,7 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
         case "save":
           return this.handleSaveArticle(
             result,
-            article.id,
+            article.id
           );
         case "add":
           return this.handleOrderArticle(result, article.id);
@@ -238,11 +234,11 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
 
   openDialog(
     dialogData: OrderDialogCreateData,
-    closeFunction: (result: any) => void,
+    closeFunction: (result: any) => void
   ): void {
     const dialogRef = this.dialog.open(ProductEditDialogComponent, {
       width: "700px",
-      data: dialogData,
+      data: dialogData
     });
     dialogRef.afterClosed().pipe(first()).subscribe(closeFunction);
   }
@@ -252,7 +248,7 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
       title: "Produkt bearbeiten",
       blockRequestChange: false,
       blockFavoriteChange: true,
-      onSuccess: () => this.refreshBothLists(),
+      onSuccess: () => this.refreshBothLists()
     });
   }
 
@@ -261,8 +257,8 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
       width: "400px",
       data: {
         title: "Artikel aus Bestellung entfernen?",
-        text: "Diese Operation kann rückgängig gemacht werden.",
-      },
+        text: "Diese Operation kann rückgängig gemacht werden."
+      }
     });
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
@@ -276,8 +272,8 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
       width: "400px",
       data: {
         title: "Artikel löschen?",
-        text: "Diese Operation kann rückgängig gemacht werden.",
-      },
+        text: "Diese Operation kann rückgängig gemacht werden."
+      }
     });
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
@@ -288,7 +284,7 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
 
   addButtonClicked(): void {
     const dialogData = ProductsListComponent.createEmptyDialogData(
-      "Neuen Artikel hinzufügen",
+      "Neuen Artikel hinzufügen"
     );
     const closeFunction = (result: OrderDialogReturnData | undefined) => {
       if (!result) return;
@@ -340,7 +336,7 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
       ProductsListComponent.mapDialogData2OrderArticleCreateV2(
         result,
         this.orderId,
-        articleId,
+        articleId
       );
     this.orderedArticlesService.orderArticle(orderedArticleCreate)
       .pipe(first())
@@ -367,19 +363,18 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
         const articleCreate = ProductsListComponent.mapDialogData2ArticleCreateV2(
           result,
           supplierId,
-          stockId,
+          stockId
         );
-        console.log("ArticleCreate:")
+        console.log("ArticleCreate:");
         console.log(articleCreate);
-        console.log("Result:")
+        console.log("Result:");
         console.log(result);
         this.articleService.createArticle(articleCreate).pipe(first()).subscribe(() => {
           this.refreshBothLists();
-        })
+        });
       });
 
   }
-
 
 
   private handleDeleteArticle(articleId: number): void {
@@ -394,8 +389,8 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
             "Artikel konnte nicht gelöscht werden. Bitte probieren sie es später erneut",
             "Ok",
             {
-              duration: 10000,
-            },
+              duration: 10000
+            }
           );
         }
       });
@@ -416,7 +411,7 @@ export class ProductsListComponent implements OnInit, OnDestroy, OnChanges {
 
   private handleSaveArticle(
     result: OrderDialogReturnData,
-    articleId?: number,
+    articleId?: number
   ): void {
     const articleUpdate = ProductsListComponent.mapDialogData2ArticleUpdateV2(result);
     this.articleService

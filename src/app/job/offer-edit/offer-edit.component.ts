@@ -1,60 +1,37 @@
-import { Component, DEFAULT_CURRENCY_CODE, Inject, LOCALE_ID, OnDestroy, OnInit } from "@angular/core";
+import { Component, DEFAULT_CURRENCY_CODE, inject, LOCALE_ID, OnDestroy, OnInit } from "@angular/core";
 import {
   AbstractControl,
+  FormsModule,
+  ReactiveFormsModule,
   UntypedFormArray,
   UntypedFormControl,
-  UntypedFormGroup,
-  FormsModule,
-  ReactiveFormsModule
+  UntypedFormGroup
 } from "@angular/forms";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
-import { ActivatedRoute, Router } from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
 import { Observable, Subscription } from "rxjs";
 import { first, tap } from "rxjs/operators";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { FileService } from "../../shared/services/file.service";
 import { formatDateTransport } from "../../shared/date.util";
+import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
+import { AsyncPipe, CurrencyPipe } from "@angular/common";
 import {
-  CustomButton,
-  ToolbarComponent
-} from "../../shared/components/toolbar/toolbar.component";
-import {
-  CurrencyPipe,
-  AsyncPipe
-} from "@angular/common";
-import {
+  DescriptiveArticle,
   DescriptiveArticleCreate,
+  Lock,
+  Offer,
   OfferCreate,
   OfferUpdate,
-  Offer,
-  Vat,
-  DefaultService,
-  DescriptiveArticle,
-  Lock
+  Vat
 } from "../../../api/openapi";
-import { MatIconButton, MatButton } from "@angular/material/button";
+import { MatButton, MatIconButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
-import {
-  DefaultLayoutDirective,
-  DefaultLayoutAlignDirective,
-  DefaultFlexDirective,
-  FlexModule
-} from "ng-flex-layout";
-import {
-  MatFormField,
-  MatLabel,
-  MatInput,
-  MatSuffix
-} from "@angular/material/input";
+import { DefaultFlexDirective, DefaultLayoutAlignDirective, DefaultLayoutDirective, FlexModule } from "ng-flex-layout";
+import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { MatCheckbox } from "@angular/material/checkbox";
-import { MatSelect, MatOption } from "@angular/material/select";
-import {
-  MatDatepickerInput,
-  MatDatepickerToggle,
-  MatDatepicker
-} from "@angular/material/datepicker";
+import { MatOption, MatSelect } from "@angular/material/select";
+import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular/material/datepicker";
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
 
 @Component({
@@ -90,6 +67,11 @@ import { CircleIconButtonComponent } from "../../shared/components/circle-icon-b
 export default class OfferEditComponent
   extends BaseEditComponent<Offer>
   implements OnInit, OnDestroy {
+  private file = inject(FileService);
+  private currency = inject(CurrencyPipe);
+  private readonly currencyCode = inject(DEFAULT_CURRENCY_CODE);
+  private readonly locale = inject(LOCALE_ID);
+
   navigationTarget = "job";
   jobId: number;
   offerGroup: UntypedFormGroup;
@@ -100,18 +82,6 @@ export default class OfferEditComponent
   buttons: CustomButton[] = [];
   subscription: Subscription;
 
-  constructor(
-    api: DefaultService,
-    router: Router,
-    route: ActivatedRoute,
-    private file: FileService,
-    private currency: CurrencyPipe,
-    @Inject(DEFAULT_CURRENCY_CODE) private readonly currencyCode: string,
-    @Inject(LOCALE_ID) private readonly locale: string,
-    dialog: MatDialog
-  ) {
-    super(api, router, route, dialog);
-  }
 
   lockFunction = (id: number): Observable<Lock> =>
     this.api.islockedOfferOfferIslockedOfferIdGet(id);

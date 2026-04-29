@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
 import { Router } from "@angular/router";
 import { Observable, Subscriber } from "rxjs";
@@ -29,6 +29,10 @@ import { AsyncPipe } from "@angular/common";
   ]
 })
 export default class RecalculationComponent implements OnInit {
+  private api = inject(DefaultService);
+  private router = inject(Router);
+  private recalculationService = inject(RecalculationService);
+
   recalculationDataSource: TableDataSource<RecalculationSmall, RecalculationService>;
   buttons: CustomButton[] = [
     {
@@ -43,13 +47,6 @@ export default class RecalculationComponent implements OnInit {
   public $year: Observable<number[]>;
   private $refreshSubscriber: Subscriber<void>;
   public selectedYear = dayjs().year();
-
-  constructor(
-    private api: DefaultService,
-    private router: Router,
-    private recalculationService: RecalculationService
-  ) {
-  }
 
   ngOnInit(): void {
     this.initRecalculationDataSource();

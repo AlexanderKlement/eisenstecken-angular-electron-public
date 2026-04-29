@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
 import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { first } from "rxjs/operators";
@@ -22,17 +22,17 @@ export interface InfoPageEditDialogData {
     imports: [MatDialogTitle, MatDialogContent, FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatDialogActions, MatButton]
 })
 export class InfoPageSettingEditDialogComponent implements OnInit {
+  dialogRef = inject<MatDialogRef<InfoPageEditDialogData>>(MatDialogRef);
+  dialog = inject(MatDialog);
+  private authService = inject(AuthStateService);
+  data = inject<InfoPageEditDialogData>(MAT_DIALOG_DATA);
+  private api = inject(DefaultService);
+
   title: string;
   createMode = true;
   infoPageGroup: UntypedFormGroup;
   showDeleteButton = false;
   id: number;
-
-  constructor(
-    public dialogRef: MatDialogRef<InfoPageEditDialogData>, public dialog: MatDialog, private authService: AuthStateService,
-    @Inject(MAT_DIALOG_DATA) public data: InfoPageEditDialogData, private api: DefaultService,
-  ) {
-  }
 
 
   ngOnInit(): void {

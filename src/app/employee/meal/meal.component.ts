@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import dayjs from "dayjs/esm";
 import { MatDialog } from "@angular/material/dialog";
@@ -18,15 +18,16 @@ import { TableBuilderComponent } from "../../shared/components/table-builder/tab
   imports: [ToolbarComponent, TableBuilderComponent]
 })
 export default class MealComponent implements OnInit {
+  private api = inject(DefaultService);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
+  private route = inject(ActivatedRoute);
+
   mealDataSource: TableDataSource<Meal, DefaultService>;
   eatingPlaceId: number;
   title = "";
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
-
-
-  constructor(private api: DefaultService, private dialog: MatDialog, private snackBar: MatSnackBar, private route: ActivatedRoute) {
-  }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {

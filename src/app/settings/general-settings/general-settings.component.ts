@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {BaseSettingsComponent} from "../base-settings.component";
 import {DefaultService} from "../../../api/openapi";
@@ -14,6 +14,9 @@ import { MatButton } from "@angular/material/button";
     imports: [FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatButton]
 })
 export class GeneralSettingsComponent extends BaseSettingsComponent  implements OnInit{
+  protected api: DefaultService;
+  protected snackBar: MatSnackBar;
+
 
   keyList = [
     "general_name_pre",
@@ -34,8 +37,14 @@ export class GeneralSettingsComponent extends BaseSettingsComponent  implements 
     "general_order_path",
   ];
 
-  constructor(protected api: DefaultService, protected snackBar: MatSnackBar) {
+  constructor() {
+    const api = inject(DefaultService);
+    const snackBar = inject(MatSnackBar);
+
     super(api, snackBar);
+  
+    this.api = api;
+    this.snackBar = snackBar;
   }
 
   ngOnInit(): void {

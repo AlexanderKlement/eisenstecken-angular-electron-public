@@ -1,4 +1,4 @@
-import { Component, ComponentRef, OnInit } from "@angular/core";
+import { Component, ComponentRef, OnInit, inject } from "@angular/core";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
@@ -18,16 +18,17 @@ import { TableBuilderComponent } from "../../shared/components/table-builder/tab
   imports: [ToolbarComponent, TableBuilderComponent]
 })
 export default class WorkHoursComponent implements OnInit {
+  private api = inject(DefaultService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  dialog = inject(MatDialog);
+  private authService = inject(AuthStateService);
+
   buttons: CustomButton[] = [];
   workloadDataSource: TableDataSource<Workload, DefaultService>;
   jobId: number;
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
-
-
-  constructor(private api: DefaultService, private route: ActivatedRoute,
-              private router: Router, public dialog: MatDialog, private authService: AuthStateService) {
-  }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {

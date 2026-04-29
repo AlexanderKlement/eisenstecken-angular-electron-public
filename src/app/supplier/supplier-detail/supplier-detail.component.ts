@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, inject } from "@angular/core";
 import { InfoDataSource } from "../../shared/components/info-builder/info-builder.datasource";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
@@ -40,6 +40,16 @@ import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
   imports: [ToolbarComponent, InfoBuilderComponent, MatTabGroup, MatTab, TableBuilderComponent, DefaultLayoutDirective, AsyncPipe, MatFormField, MatInput, MatLabel, DefaultFlexDirective, DefaultLayoutAlignDirective, DefaultLayoutGapDirective, FlexModule]
 })
 export default class SupplierDetailComponent implements OnInit {
+  private api = inject(DefaultService);
+  private authService = inject(AuthStateService);
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
+  private route = inject(ActivatedRoute);
+  private file = inject(FileService);
+  private email = inject(EmailService);
+  dialog = inject(MatDialog);
+  private orderBundleService = inject(OrderBundleService);
+
 
   @ViewChild(InfoBuilderComponent) child: InfoBuilderComponent<Supplier>;
   public infoDataSource: InfoDataSource<Supplier>;
@@ -53,12 +63,6 @@ export default class SupplierDetailComponent implements OnInit {
   supplier$: Observable<Supplier>;
   private refreshTrigger$ = new Subject<void>();
   public $refresh = this.refreshTrigger$.asObservable();
-
-  constructor(private api: DefaultService, private authService: AuthStateService,
-              private router: Router, private snackBar: MatSnackBar,
-              private route: ActivatedRoute, private file: FileService, private email: EmailService,
-              public dialog: MatDialog, private orderBundleService: OrderBundleService) {
-  }
 
   static sendAndDisplayOrderBundlePdf(api: DefaultService, authService: AuthStateService, email: EmailService,
                                       file: FileService, orderBundle: OrderBundle, supplier: Supplier, request: boolean = false) {

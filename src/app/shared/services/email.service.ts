@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import {ElectronService} from "../../core/services";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponent} from "../components/confirm-dialog/confirm-dialog.component";
@@ -8,11 +8,14 @@ import {first} from "rxjs/operators";
     providedIn: 'root'
 })
 export class EmailService {
+    private electronService = inject(ElectronService);
+    private dialog = inject(MatDialog);
+
 
     mailArray: string[] = [];
 
 
-    constructor(private electronService: ElectronService, private dialog: MatDialog) {
+    constructor() {
         this.initMailResponse();
     }
 

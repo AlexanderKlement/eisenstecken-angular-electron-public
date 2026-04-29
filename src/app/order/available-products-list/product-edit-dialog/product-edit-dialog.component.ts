@@ -1,4 +1,4 @@
-import { Component, DEFAULT_CURRENCY_CODE, Inject, LOCALE_ID, OnDestroy, OnInit } from "@angular/core";
+import { Component, DEFAULT_CURRENCY_CODE, LOCALE_ID, OnDestroy, OnInit, inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogContent, MatDialogRef, MatDialogTitle } from "@angular/material/dialog";
 import { Observable, Subscription } from "rxjs";
 import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
@@ -57,21 +57,18 @@ export interface OrderDialogCreateData  extends OrderDialogBaseData{
   ],
 })
 export class ProductEditDialogComponent implements OnInit, OnDestroy {
+  dialogRef = inject<MatDialogRef<ProductEditDialogComponent>>(MatDialogRef);
+  data = inject<OrderDialogCreateData>(MAT_DIALOG_DATA);
+  private readonly currencyCode = inject(DEFAULT_CURRENCY_CODE);
+  private readonly locale = inject(LOCALE_ID);
+  private api = inject(DefaultService);
+  private currency = inject(CurrencyPipe);
+
   unitOptions$: Observable<Unit[]>;
   productEditGroup: UntypedFormGroup;
   subscription: Subscription;
   createMode: boolean;
   blockRequestChange = false;
-
-  constructor(
-    public dialogRef: MatDialogRef<ProductEditDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: OrderDialogCreateData,
-    @Inject(DEFAULT_CURRENCY_CODE) private readonly currencyCode: string,
-    @Inject(LOCALE_ID) private readonly locale: string,
-    private api: DefaultService,
-    private currency: CurrencyPipe,
-  ) {
-  }
 
   public static roundTo2Decimals(input: number): number {
     return Math.round(input * 100) / 100;

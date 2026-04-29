@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogContent } from "@angular/material/dialog";
 import {Observable} from "rxjs";
 import {first} from "rxjs/operators";
@@ -20,10 +20,9 @@ export interface LockDialogData {
 })
 
 export class LockDialogComponent implements OnInit {
+    dialogRef = inject<MatDialogRef<LockDialogComponent>>(MatDialogRef);
+    data = inject<LockDialogData>(MAT_DIALOG_DATA);
 
-    constructor(public dialogRef: MatDialogRef<LockDialogComponent>,
-                @Inject(MAT_DIALOG_DATA) public data: LockDialogData) {
-    }
 
     ngOnInit(): void {
     }

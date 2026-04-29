@@ -1,15 +1,13 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
-import { ActivatedRoute, Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { first } from "rxjs/operators";
-import { DefaultService, Lock, Stock, StockCreate, StockUpdate } from "../../../api/openapi";
+import { Lock, Stock, StockCreate, StockUpdate } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
-import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
+import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
-import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: "app-stock-edit",
@@ -32,9 +30,6 @@ export default class StockEditComponent extends BaseEditComponent<Stock> impleme
   navigationTarget = "stock";
   title = "Lager: Bearbeiten";
 
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog) {
-    super(api, router, route, dialog);
-  }
 
   lockFunction = (id: number): Observable<Lock> => this.api.islockedStockStockIslockedStockIdGet(id);
   dataFunction = (id: number): Observable<Stock> => this.api.readStockStockStockIdGet(id);

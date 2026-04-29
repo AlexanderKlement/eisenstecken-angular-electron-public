@@ -1,21 +1,19 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
-import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
+import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
-import { first, map, tap } from "rxjs/operators";
+import { first, tap } from "rxjs/operators";
 import { AuthStateService } from "../../shared/services/auth-state.service";
 import dayjs from "dayjs/esm";
-import { User, Lock, Job, JobUpdate, SubJobCreate, DefaultService, JobCreate } from "../../../api/openapi";
+import { Job, JobCreate, JobUpdate, Lock, SubJobCreate, User } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule } from "ng-flex-layout";
+import { DefaultLayoutAlignDirective, DefaultLayoutDirective, FlexModule } from "ng-flex-layout";
 import { MatCheckbox } from "@angular/material/checkbox";
-import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
-import { MatSelect, MatOption } from "@angular/material/select";
+import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
+import { MatOption, MatSelect } from "@angular/material/select";
 import { AddressFormComponent } from "../../shared/components/address-form/address-form.component";
 import { MatButton } from "@angular/material/button";
 import { AsyncPipe } from "@angular/common";
-import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: "app-job-edit",
@@ -40,6 +38,8 @@ import { MatDialog } from "@angular/material/dialog";
   ]
 })
 export default class JobEditComponent extends BaseEditComponent<Job> implements OnInit, OnDestroy {
+  private authService = inject(AuthStateService);
+
 
   clientId: number;
   subMode = false;
@@ -54,10 +54,6 @@ export default class JobEditComponent extends BaseEditComponent<Job> implements 
   title = "Auftrag: Bearbeiten";
 
   users$: Observable<User[]>;
-
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute, private authService: AuthStateService, dialog: MatDialog) {
-    super(api, router, route, dialog);
-  }
 
 
   lockFunction = (id: number): Observable<Lock> => this.api.islockedJobJobIslockedJobIdGet(id);

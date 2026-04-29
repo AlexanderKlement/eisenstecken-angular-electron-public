@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from "@angular/core";
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, inject } from "@angular/core";
 import dayjs, {Dayjs} from "dayjs/esm";
 import {MatDialog} from "@angular/material/dialog";
 import {
@@ -21,6 +21,10 @@ import { EventCalendarEventComponent } from "../event-calendar-event/event-calen
     imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, NgClass, DefaultClassDirective, MatIcon, EventCalendarEventComponent]
 })
 export class EventCalendarDayComponent implements OnInit, OnChanges, OnDestroy {
+  private api = inject(DefaultService);
+  dialog = inject(MatDialog);
+  private authService = inject(AuthStateService);
+
 
   @Input() week: number;
   @Input() day: number;
@@ -36,10 +40,6 @@ export class EventCalendarDayComponent implements OnInit, OnChanges, OnDestroy {
   events: CompanyEvent[] = [];
 
   companyClosed = false;
-
-
-  constructor(private api: DefaultService, public dialog: MatDialog, private authService: AuthStateService) {
-  }
 
   ngOnInit(): void {
     this.isoDateString = this.date.format("YYYY-MM-DD");

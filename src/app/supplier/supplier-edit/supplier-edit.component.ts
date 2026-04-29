@@ -1,39 +1,25 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
-import { ActivatedRoute, Router } from "@angular/router";
 import {
+  FormsModule,
+  ReactiveFormsModule,
   UntypedFormArray,
   UntypedFormControl,
-  UntypedFormGroup,
-  FormsModule,
-  ReactiveFormsModule
+  UntypedFormGroup
 } from "@angular/forms";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
-import {
-  Contact,
-  ContactCreate,
-  DefaultService,
-  Language,
-  Lock,
-  Supplier,
-  SupplierCreate
-} from "../../../api/openapi";
+import { Contact, ContactCreate, Language, Lock, Supplier, SupplierCreate } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
-import {
-  DefaultLayoutDirective,
-  DefaultLayoutAlignDirective,
-  FlexModule
-} from "ng-flex-layout";
-import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { DefaultLayoutAlignDirective, DefaultLayoutDirective, FlexModule } from "ng-flex-layout";
+import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
-import { MatSelect, MatOption } from "@angular/material/select";
+import { MatOption, MatSelect } from "@angular/material/select";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { AddressFormComponent } from "../../shared/components/address-form/address-form.component";
 import { AsyncPipe } from "@angular/common";
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
-import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: "app-supplier-edit",
@@ -68,10 +54,6 @@ export default class SupplierEditComponent
   languageOptions$: Observable<Language[]>;
   title = "Lieferant: Bearbeiten";
   showInOrders = true;
-
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog) {
-    super(api, router, route, dialog);
-  }
 
   lockFunction = (id: number): Observable<Lock> =>
     this.api.islockedSupplierSupplierIslockedSupplierIdGet(id);

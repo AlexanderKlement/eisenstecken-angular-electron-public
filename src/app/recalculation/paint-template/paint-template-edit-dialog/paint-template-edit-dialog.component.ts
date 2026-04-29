@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent } from '@angular/material/dialog';
@@ -22,16 +22,15 @@ export interface PaintTemplateEditDialogData {
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatSelect, MatOption, MatButton, AsyncPipe]
 })
 export class PaintTemplateEditDialogComponent implements OnInit {
+  dialogRef = inject<MatDialogRef<PaintTemplateEditDialogData>>(MatDialogRef);
+  data = inject<PaintTemplateEditDialogData>(MAT_DIALOG_DATA);
+  private api = inject(DefaultService);
+
 
   title = 'Oberflächen-Vorlage bearbeiten';
   templatePaintEditGroup: UntypedFormGroup;
   createMode = false;
   unitOptions$: Observable<Unit[]>;
-
-
-  constructor(public dialogRef: MatDialogRef<PaintTemplateEditDialogData>,
-              @Inject(MAT_DIALOG_DATA) public data: PaintTemplateEditDialogData, private api: DefaultService) {
-  }
 
   ngOnInit(): void {
     if (this.data.id <= 0) {

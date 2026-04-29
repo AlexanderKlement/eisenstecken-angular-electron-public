@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, inject } from "@angular/core";
 import { DayManager } from "./day.manager";
 import { MatDialog } from "@angular/material/dialog";
 import {
@@ -39,6 +39,10 @@ import { ScopeEnum } from "../../../../api/openapi";
   ],
 })
 export class SimpleCalendarComponent implements OnInit {
+  dialog = inject(MatDialog);
+  private calendar = inject(CalendarService);
+  private authService = inject(AuthStateService);
+
   @Input() calendarId: number;
   @Input() public: boolean;
 
@@ -48,11 +52,7 @@ export class SimpleCalendarComponent implements OnInit {
   amountOfDays: string;
   createAllowed = false;
 
-  constructor(
-    public dialog: MatDialog,
-    private calendar: CalendarService,
-    private authService: AuthStateService,
-  ) {
+  constructor() {
     this.dayManager = new DayManager(0, 7, true);
     this.amountOfDays = this.dayManager.amountOfDaysString;
   }

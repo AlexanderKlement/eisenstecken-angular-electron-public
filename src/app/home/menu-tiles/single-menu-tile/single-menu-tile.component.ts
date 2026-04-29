@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from "@angular/core";
+import { Component, Input, OnInit, inject } from "@angular/core";
 import {MenuTileDetail} from "../menu-tile.settings";
 import {Router} from "@angular/router";
 import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexDirective } from "ng-flex-layout";
@@ -11,10 +11,10 @@ import { MatIcon } from "@angular/material/icon";
     imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexDirective, MatIcon]
 })
 export class SingleMenuTileComponent implements OnInit {
+  private router = inject(Router);
+
 
   @Input() tile: MenuTileDetail;
-
-  constructor(private router: Router) { }
 
   ngOnInit(): void {
   }

@@ -1,4 +1,4 @@
-import { Component, ComponentRef, OnInit } from "@angular/core";
+import { Component, ComponentRef, OnInit, inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InfoDataSource } from "../../shared/components/info-builder/info-builder.datasource";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
@@ -34,6 +34,13 @@ import {
   ]
 })
 export default class OrderDetailComponent implements OnInit {
+  private api = inject(DefaultService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
+  private orderedArticleEditDialog = inject(OrderedArticleEditDialogService);
+
   articleDataSource: TableDataSource<OrderedArticle, DefaultService>;
   infoDataSource: InfoDataSource<Order>;
 
@@ -56,16 +63,6 @@ export default class OrderDetailComponent implements OnInit {
     }
   ];
   private $refreshSubscriber: Subscriber<void>;
-
-  constructor(
-    private api: DefaultService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar,
-    private orderedArticleEditDialog: OrderedArticleEditDialogService
-  ) {
-  }
 
   public static extractOrderToolTips(dataSource: OrderSmall): string {
     let toolTipString = "";

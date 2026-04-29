@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Country, DefaultService } from '../../../../api/openapi';
@@ -14,12 +14,11 @@ import { AsyncPipe } from '@angular/common';
     imports: [FormsModule, FlexModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatSelect, MatOption, AsyncPipe]
 })
 export class AddressFormComponent implements OnInit {
+  private api = inject(DefaultService);
+
 
   @Input() address: UntypedFormGroup;
   countryOptions$: Observable<Country[]>;
-
-  constructor(private api: DefaultService) {
-  }
 
   ngOnInit(): void {
     this.countryOptions$ = this.api.readCountriesAddressCountriesGet();

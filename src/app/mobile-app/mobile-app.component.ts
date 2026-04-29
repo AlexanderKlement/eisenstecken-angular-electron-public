@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
 import { Router } from "@angular/router";
 import { MatNavList, MatListItem } from "@angular/material/list";
@@ -12,10 +12,9 @@ import { MatIcon } from "@angular/material/icon";
   imports: [ToolbarComponent, MatNavList, MatListItem, MatIconButton, MatIcon]
 })
 export default class MobileAppComponent implements OnInit {
-  buttons: CustomButton[] = [];
+  private router = inject(Router);
 
-  constructor(private router: Router) {
-  }
+  buttons: CustomButton[] = [];
 
   ngOnInit(): void {
   }

@@ -1,4 +1,4 @@
-import { Injectable, Injector } from "@angular/core";
+import { Injectable, Injector, inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { Observable, ReplaySubject } from "rxjs";
 import { first, map } from "rxjs/operators";
@@ -15,18 +15,15 @@ import { TokenService } from "./token.service";
   providedIn: "root"
 })
 export class AuthStateService {
+  private injector = inject(Injector);
+  private router = inject(Router);
+  private tokenService = inject(TokenService);
+  private authService = inject(AuthService);
+  private defaultService = inject(DefaultService);
+
   static accessTokenKey = "access_token";
   static refreshTokenKey = "refresh_token";
   private user?: ReplaySubject<User>;
-
-  constructor(
-    private injector: Injector,
-    private router: Router,
-    private tokenService: TokenService,
-    private authService: AuthService,
-    private defaultService: DefaultService
-  ) {
-  }
 
 
   getToken(): string | null {

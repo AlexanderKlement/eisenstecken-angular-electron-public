@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { EmailService } from "../shared/services/email.service";
 import { FileService } from "../shared/services/file.service";
@@ -19,15 +19,17 @@ import { MatButton } from "@angular/material/button";
   imports: [ToolbarComponent, MatTabGroup, MatTab, FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatButton]
 })
 export default class DebugComponent implements OnInit {
+  private email = inject(EmailService);
+  private file = inject(FileService);
+  private tray = inject(TrayService);
+  private electronService = inject(ElectronService);
+  private router = inject(Router);
+
   emailFormGroup: UntypedFormGroup;
   openFileFormGroup: UntypedFormGroup;
   showFileFormGroup: UntypedFormGroup;
   selectFolderFormGroup: UntypedFormGroup;
   trayBalloonFormGroup: UntypedFormGroup;
-
-  constructor(private email: EmailService, private file: FileService, private tray: TrayService, private electronService: ElectronService,
-              private router: Router) {
-  }
 
   ngOnInit(): void {
     this.initEmailGroup();

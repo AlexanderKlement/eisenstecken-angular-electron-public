@@ -1,4 +1,4 @@
-import {Injectable, OnDestroy} from "@angular/core";
+import { Injectable, OnDestroy, inject } from "@angular/core";
 import {Observable, Subscriber} from "rxjs";
 import {first, tap} from "rxjs/operators";
 import {ElectronService} from "../../core/services";
@@ -9,6 +9,10 @@ import { ChatMessage, ChatMessageCreate, ChatRecipient, DefaultService } from '.
     providedIn: 'root'
 })
 export class ChatService implements OnDestroy {
+    private api = inject(DefaultService);
+    private electron = inject(ElectronService);
+    private tray = inject(TrayService);
+
 
     private secondsBetweenNewMessageCheck = 5;
 
@@ -26,7 +30,7 @@ export class ChatService implements OnDestroy {
 
     //TODO: i left a lot of stuff here, because we are not finished yet, but i am leaving it until we are finished
 
-    constructor(private api: DefaultService, private electron: ElectronService, private tray: TrayService) {
+    constructor() {
         this.initLastMessage();
         this.messages$ = new Observable((messageSubscriber) => {
             this.messageSubscriber = messageSubscriber;

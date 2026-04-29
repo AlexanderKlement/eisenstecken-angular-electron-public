@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { first } from "rxjs/operators";
 import dayjs from "dayjs/esm";
 import {
@@ -49,6 +49,10 @@ export interface CalendarData {
   imports: [MatDialogTitle, MatDialogContent, MatProgressSpinner, FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatDatepickerInput, MatDatepickerToggle, MatSuffix, MatDatepicker, NgxMaterialTimepickerModule, MatButton],
 })
 export class CalendarEditComponent implements OnInit {
+  private api = inject(DefaultService);
+  dialogRef = inject<MatDialogRef<CalendarEditComponent>>(MatDialogRef);
+  data = inject<CalendarData>(MAT_DIALOG_DATA);
+
   submitted = false;
   createMode: boolean;
 
@@ -59,10 +63,6 @@ export class CalendarEditComponent implements OnInit {
   ready = false;
 
   primaryTheme = timepickerTheme;
-
-  constructor(private api: DefaultService, public dialogRef: MatDialogRef<CalendarEditComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: CalendarData) {
-  }
 
   ngOnInit(): void {
     if (this.data.calendarEntryId === undefined) {

@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import {
   HttpBackend,
   HttpClient,
@@ -19,18 +19,19 @@ import { AuthResponse } from "../api/openapi";
 
 @Injectable()
 export class GlobalHttpInterceptorService implements HttpInterceptor {
+  router = inject(Router);
+  private snackBar = inject(MatSnackBar);
+  private tokenService = inject(TokenService);
+
   private isLoggingOut = false;
   private isProbingMe = false;
   private isDoingRefresh = false;
   private rawHttp: HttpClient;
   private refreshTokenSubject = new Subject<string | null>();
 
-  constructor(
-    public router: Router,
-    private snackBar: MatSnackBar,
-    private tokenService: TokenService,
-    httpBackend: HttpBackend
-  ) {
+  constructor() {
+    const httpBackend = inject(HttpBackend);
+
     this.rawHttp = new HttpClient(httpBackend);
   }
 

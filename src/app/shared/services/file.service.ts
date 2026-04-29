@@ -1,13 +1,12 @@
-import {Injectable} from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import {ElectronService} from "../../core/services";
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileService {
+  private electronService = inject(ElectronService);
 
-  constructor(private electronService: ElectronService) {
-  }
 
   open(path: string): Promise<string> {
     if (!this.electronService.isElectron) {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AuthStateService } from "../shared/services/auth-state.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -14,14 +14,15 @@ import { MatButton } from "@angular/material/button";
   imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatButton]
 })
 export default class LoginComponent implements OnInit {
+  private authService = inject(AuthStateService);
+  protected snackBar = inject(MatSnackBar);
+  private router = inject(Router);
+
 
   loginForm = new UntypedFormGroup({
     username: new UntypedFormControl(""),
     password: new UntypedFormControl("")
   });
-
-  constructor(private authService: AuthStateService, protected snackBar: MatSnackBar, private router: Router) {
-  }
 
   ngOnInit(): void {
   }

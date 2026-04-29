@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -20,6 +20,11 @@ import { TableBuilderComponent } from "../../shared/components/table-builder/tab
   imports: [ToolbarComponent, TableBuilderComponent]
 })
 export default class EmployeeServiceComponent implements OnInit {
+  private api = inject(DefaultService);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
+  private route = inject(ActivatedRoute);
+
   serviceDataSource: TableDataSource<Service, DefaultService>;
   userId: number;
   buttons: CustomButton[] = [
@@ -33,9 +38,6 @@ export default class EmployeeServiceComponent implements OnInit {
   title = "";
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
-
-  constructor(private api: DefaultService, private dialog: MatDialog, private snackBar: MatSnackBar, private route: ActivatedRoute) {
-  }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {

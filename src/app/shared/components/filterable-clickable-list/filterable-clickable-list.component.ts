@@ -1,11 +1,4 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  Output,
-  EventEmitter,
-  OnDestroy,
-} from "@angular/core";
+import { Component, Input, OnInit, Output, EventEmitter, OnDestroy, inject } from "@angular/core";
 import { Observable, of, Subscription } from "rxjs";
 import {
   ListItem,
@@ -46,6 +39,8 @@ import { CircleIconButtonComponent } from "../circle-icon-button/circle-icon-but
   ],
 })
 export class FilterableClickableListComponent implements OnInit, OnDestroy {
+  private api = inject(DefaultService);
+
   @Input() listElements$: Observable<ListItem[]>;
   @Input() name: string;
   @Output() clickEventEmitter = new EventEmitter<ListItem>();
@@ -57,8 +52,6 @@ export class FilterableClickableListComponent implements OnInit, OnDestroy {
   listElementControl: UntypedFormControl;
   search$: Observable<ListItem[]>;
   subscription: Subscription;
-
-  constructor(private api: DefaultService) {}
 
   ngOnInit(): void {
     this.subscription = new Subscription();

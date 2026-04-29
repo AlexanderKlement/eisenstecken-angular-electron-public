@@ -1,4 +1,4 @@
-import { Component, ComponentRef, OnInit } from "@angular/core";
+import { Component, ComponentRef, OnInit, inject } from "@angular/core";
 import { InfoDataSource } from "../../../shared/components/info-builder/info-builder.datasource";
 import { ActivatedRoute } from "@angular/router";
 import { TableDataSource } from "../../../shared/components/table-builder/table-builder.datasource";
@@ -16,6 +16,9 @@ import { TableBuilderComponent } from "../../../shared/components/table-builder/
   imports: [ToolbarComponent, InfoBuilderComponent, TableBuilderComponent]
 })
 export default class IngoingDetailComponent implements OnInit {
+  private api = inject(DefaultService);
+  private route = inject(ActivatedRoute);
+
 
   infoDataSource: InfoDataSource<IngoingInvoice>;
   descriptiveArticleSource: TableDataSource<DescriptiveArticle, DefaultService>;
@@ -23,9 +26,6 @@ export default class IngoingDetailComponent implements OnInit {
   title: "Rechnung: Details";
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
-
-  constructor(private api: DefaultService, private route: ActivatedRoute) {
-  }
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {

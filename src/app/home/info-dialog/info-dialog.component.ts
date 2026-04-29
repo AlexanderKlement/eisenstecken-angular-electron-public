@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import {TableDataSource} from "../../shared/components/table-builder/table-builder.datasource";
 import { MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
 import {AuthStateService} from "../../shared/services/auth-state.service";
@@ -25,6 +25,10 @@ interface Update {
   imports: [MatDialogTitle, MatDialogContent, MatTabGroup, MatTab, TableBuilderComponent, MatInput, MatDialogActions, MatButton, AsyncPipe, Industry40Component, ChatComponent],
 })
 export class InfoDialogComponent implements OnInit {
+  private api = inject(DefaultService);
+  dialogRef = inject<MatDialogRef<InfoDialogComponent>>(MatDialogRef);
+  private authService = inject(AuthStateService);
+
   userDataSource: TableDataSource<User, DefaultService>;
   priceDataSource: TableDataSource<Price, DefaultService>;
   technicalDataDataSource: TableDataSource<TechnicalData, DefaultService>;
@@ -573,10 +577,6 @@ export class InfoDialogComponent implements OnInit {
       ]
     }
   ];
-
-
-  constructor(private api: DefaultService, public dialogRef: MatDialogRef<InfoDialogComponent>, private authService: AuthStateService) {
-  }
 
   ngOnInit():
     void {

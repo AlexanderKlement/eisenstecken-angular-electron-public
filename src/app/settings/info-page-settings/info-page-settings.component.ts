@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import {TableDataSource} from "../../shared/components/table-builder/table-builder.datasource";
 import {first} from "rxjs/operators";
 import {AuthStateService} from "../../shared/services/auth-state.service";
@@ -18,13 +18,14 @@ import { MatButton } from "@angular/material/button";
     imports: [TableBuilderComponent, MatButton]
 })
 export class InfoPageSettingsComponent implements OnInit {
+    private api = inject(DefaultService);
+    private authService = inject(AuthStateService);
+    private dialog = inject(MatDialog);
+
     infoPageDataSource: TableDataSource<InfoPage, DefaultService>;
 
     public buttons: CustomButton[] = [];
     showNewButton = false;
-
-    constructor(private api: DefaultService, private authService: AuthStateService, private dialog: MatDialog) {
-    }
 
     ngOnInit(): void {
         this.infoPageDataSource = new TableDataSource(

@@ -7,7 +7,9 @@
   ],
   "overrides": [
     {
-      "files": ["*.ts"],
+      "files": [
+        "*.ts"
+      ],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
         "ecmaVersion": 2017,
@@ -24,22 +26,21 @@
         "es6": true,
         "browser": true
       },
-      "plugins": ["@typescript-eslint"],
+      "plugins": [
+        "@typescript-eslint"
+      ],
       "extends": [
         "plugin:@angular-eslint/recommended"
       ],
       "rules": {
         "prefer-template": "off",
-        "prefer-arrow/prefer-arrow-functions": "off",
-        "@typescript-eslint/quotes": [
-          "warn",
-          "double",
-          { "avoidEscape": true, "allowTemplateLiterals": true }
-        ]
+        "prefer-arrow/prefer-arrow-functions": "off"
       }
     },
     {
-      "files": ["*.html"],
+      "files": [
+        "*.html"
+      ],
       "rules": {}
     }
   ]

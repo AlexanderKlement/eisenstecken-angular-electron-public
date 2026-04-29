@@ -2,37 +2,22 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
 import {
+  FormsModule,
+  ReactiveFormsModule,
   UntypedFormArray,
   UntypedFormControl,
-  UntypedFormGroup,
-  FormsModule,
-  ReactiveFormsModule
+  UntypedFormGroup
 } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
 import { tap } from "rxjs/operators";
-import {
-  Contact,
-  Gender,
-  Language,
-  Client,
-  DefaultService,
-  Lock,
-  ContactCreate,
-  ClientCreate
-} from "../../../api/openapi";
+import { Client, ClientCreate, Contact, ContactCreate, Gender, Language, Lock } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
-import {
-  DefaultLayoutDirective,
-  DefaultLayoutAlignDirective,
-  FlexModule
-} from "ng-flex-layout";
+import { DefaultLayoutAlignDirective, DefaultLayoutDirective, FlexModule } from "ng-flex-layout";
 import { MatCheckbox } from "@angular/material/checkbox";
-import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
-import { MatSelect, MatOption } from "@angular/material/select";
+import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
+import { MatOption, MatSelect } from "@angular/material/select";
 import { AddressFormComponent } from "../../shared/components/address-form/address-form.component";
 import { AsyncPipe } from "@angular/common";
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
-import { MatDialog } from "@angular/material/dialog";
 import { MatButton } from "@angular/material/button";
 
 @Component({
@@ -68,9 +53,6 @@ export default class ClientEditComponent
   genderOptions$: Observable<Gender[]>;
   languageOptions$: Observable<Language[]>;
 
-  constructor(api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog) {
-    super(api, router, route, dialog);
-  }
 
   lockFunction = (id: number): Observable<Lock> =>
     this.api.islockedClientClientIslockedClientIdGet(id);

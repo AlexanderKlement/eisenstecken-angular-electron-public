@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogContent } from "@angular/material/dialog";
 import { Observable } from "rxjs";
@@ -47,17 +47,15 @@ export interface ArticleEditDialogData {
     ],
 })
 export class ArticleEditDialogComponent implements OnInit {
+  dialogRef = inject<MatDialogRef<ArticleEditDialogData>>(MatDialogRef);
+  private dialog = inject(MatDialog);
+  data = inject<ArticleEditDialogData>(MAT_DIALOG_DATA);
+  private api = inject(DefaultService);
+
   title = "Artikel bearbeiten";
   articleEditGroup: UntypedFormGroup;
   createMode = false;
   unitOptions$: Observable<Unit[]>;
-
-  constructor(
-    public dialogRef: MatDialogRef<ArticleEditDialogData>,
-    private dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: ArticleEditDialogData,
-    private api: DefaultService,
-  ) {}
 
   ngOnInit(): void {
     if (this.data.id <= 0) {

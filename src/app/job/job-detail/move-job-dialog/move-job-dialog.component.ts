@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {
   MAT_DIALOG_DATA,
@@ -44,16 +44,16 @@ export interface ChangePathDialogData {
   ]
 })
 export class MoveJobDialogComponent implements OnInit {
+  private api = inject(DefaultService);
+  private jobService = inject(JobService);
+  private clientService = inject(ClientService);
+  dialogRef = inject<MatDialogRef<MoveJobDialogComponent>>(MatDialogRef);
+  data = inject<ChangePathDialogData>(MAT_DIALOG_DATA);
+
   title = "Jahr verschieben";
   moveJobYearFormGroup: UntypedFormGroup;
   moveJobClientFormGroup: UntypedFormGroup;
   filteredCustomers!: Observable<ClientSmall[]>;
-
-
-  constructor(private api: DefaultService, private jobService: JobService, private clientService: ClientService,
-              public dialogRef: MatDialogRef<MoveJobDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: ChangePathDialogData) {
-  }
 
   ngOnInit(): void {
     const currentYear = new Date().getFullYear();

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { first } from "rxjs/operators";
 import { AuthStateService } from "../../shared/services/auth-state.service";
@@ -16,13 +16,14 @@ import { UserNotesEditDialogComponent } from "./user-notes-edit-dialog/user-note
   imports: [TableBuilderComponent, MatButton]
 })
 export class UserNotesComponent implements OnInit {
+  private api = inject(DefaultService);
+  private authService = inject(AuthStateService);
+  private dialog = inject(MatDialog);
+
   userNoteDataSource: TableDataSource<UserNote, DefaultService>;
 
   public buttons: CustomButton[] = [];
   showNewButton = false;
-
-  constructor(private api: DefaultService, private authService: AuthStateService, private dialog: MatDialog) {
-  }
 
   ngOnInit(): void {
     this.userNoteDataSource = new TableDataSource(

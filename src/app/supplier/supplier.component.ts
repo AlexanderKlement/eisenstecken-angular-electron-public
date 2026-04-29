@@ -1,4 +1,4 @@
-import { Component, ComponentRef, OnInit } from "@angular/core";
+import { Component, ComponentRef, OnInit, inject } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
 import {
   DefaultService, ScopeEnum,
@@ -21,6 +21,11 @@ import { TableBuilderComponent } from "../shared/components/table-builder/table-
   imports: [ToolbarComponent, MatTabGroup, MatTab, TableBuilderComponent]
 })
 export default class SupplierComponent implements OnInit {
+  private api = inject(DefaultService);
+  private locker = inject(LockService);
+  private router = inject(Router);
+  private authService = inject(AuthStateService);
+
   supplierTableDataSource: TableDataSource<Supplier, DefaultService>;
   stockTableDataSource: TableDataSource<Stock, DefaultService>;
   buttons: CustomButton[] = [];
@@ -29,14 +34,6 @@ export default class SupplierComponent implements OnInit {
 
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
-
-  constructor(
-    private api: DefaultService,
-    private locker: LockService,
-    private router: Router,
-    private authService: AuthStateService
-  ) {
-  }
 
   ngOnInit(): void {
     this.initSupplierDataSource();

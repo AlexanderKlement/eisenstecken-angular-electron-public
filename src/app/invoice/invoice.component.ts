@@ -1,4 +1,4 @@
-import { Component, ComponentRef, OnInit } from "@angular/core";
+import { Component, ComponentRef, OnInit, inject } from "@angular/core";
 import { AuthStateService } from "../shared/services/auth-state.service";
 import { first } from "rxjs/operators";
 import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
@@ -23,6 +23,11 @@ import { IngoingComponent } from "./ingoing/ingoing.component";
   imports: [ToolbarComponent, MatTabGroup, MatTab, OutgoingComponent, IngoingComponent]
 })
 export default class InvoiceComponent implements OnInit {
+  private authService = inject(AuthStateService);
+  private dialog = inject(MatDialog);
+  private api = inject(DefaultService);
+  private file = inject(FileService);
+
   outgoingInvoicesAvailable = false;
   ingoingInvoicesAvailable = false;
   updateChildTablesSubscriber: Subscriber<void>;
@@ -58,9 +63,6 @@ export default class InvoiceComponent implements OnInit {
   };
   buttons: CustomButton[] = [];
   private $refreshSubscriber: Subscriber<void>;
-
-  constructor(private authService: AuthStateService, private dialog: MatDialog, private api: DefaultService, private file: FileService) {
-  }
 
   ngOnInit(): void {
     this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {

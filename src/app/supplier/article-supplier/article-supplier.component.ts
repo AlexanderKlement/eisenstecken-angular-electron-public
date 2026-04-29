@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import {
   Column,
@@ -22,6 +22,11 @@ import { TableBuilderComponent } from "../../shared/components/table-builder/tab
   imports: [ToolbarComponent, TableBuilderComponent]
 })
 export default class ArticleSupplierComponent implements OnInit {
+  private dialog = inject(MatDialog);
+  private api = inject(DefaultService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
   buttons: CustomButton[] = [];
   articleTableSource: TableDataSource<Article, DefaultService>;
   supplierId: number;
@@ -37,14 +42,6 @@ export default class ArticleSupplierComponent implements OnInit {
     { name: "favorite", headerName: "Favorit" },
     { name: "last_order_date", headerName: "Letztes Bestelldatum" }
   ];
-
-  constructor(
-    private dialog: MatDialog,
-    private api: DefaultService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {
-  }
 
   parseFunction = (dataSourceClasses: Article[]) => {
     const rows = [];

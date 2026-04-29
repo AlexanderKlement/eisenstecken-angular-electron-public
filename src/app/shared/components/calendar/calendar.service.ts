@@ -1,4 +1,4 @@
-import {Injectable, OnDestroy} from "@angular/core";
+import { Injectable, OnDestroy, inject } from "@angular/core";
 import {Observable, Subscriber} from "rxjs";
 import {first} from "rxjs/operators";
 import {TrayService} from "../../services/tray.service";
@@ -20,6 +20,9 @@ export interface CalendarListElement {
     providedIn: 'root'
 })
 export class CalendarService implements OnDestroy {
+    private api = inject(DefaultService);
+    private tray = inject(TrayService);
+
 
     minutesBetweenUpdate = 10;
     randomMaxSeconds = 100;
@@ -31,7 +34,7 @@ export class CalendarService implements OnDestroy {
     private notificationIntervalDistanceMinutes = 15;
     private calendarEntriesAlreadyNotified: number[] = [];
 
-    constructor(private api: DefaultService, private tray: TrayService) {
+    constructor() {
         this.notificationInterval = setInterval(() => {
             this.api.readNextCalendarEntriesInCalendarNextTimeMinutesGet(this.notificationIntervalDistanceMinutes)
                 .pipe(first()).subscribe((calendarEntries) => {

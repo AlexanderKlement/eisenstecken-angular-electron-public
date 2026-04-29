@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { formatCurrency } from "@angular/common";
@@ -19,6 +19,9 @@ import { TableBuilderComponent } from "../../shared/components/table-builder/tab
   imports: [ToolbarComponent, TableBuilderComponent]
 })
 export default class PaintTemplateComponent implements OnInit {
+  private api = inject(DefaultService);
+  private dialog = inject(MatDialog);
+
 
   buttons: CustomButton[] = [
     {
@@ -31,9 +34,6 @@ export default class PaintTemplateComponent implements OnInit {
   paintTemplateDataSource: TableDataSource<TemplatePaint, DefaultService>;
   supplierId: number;
   title = "Oberflächen Vorlagen";
-
-  constructor(private api: DefaultService, private dialog: MatDialog) {
-  }
 
   ngOnInit(): void {
     this.initPaintTemplateDataSource();

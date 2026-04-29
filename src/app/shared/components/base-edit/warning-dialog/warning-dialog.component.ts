@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogContent } from "@angular/material/dialog";
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { MatButton } from '@angular/material/button';
@@ -15,9 +15,9 @@ export interface WarningDialogData {
     imports: [CdkScrollable, MatDialogContent, MatButton]
 })
 export class WarningDialogComponent implements OnInit {
+  dialogRef = inject<MatDialogRef<WarningDialogComponent>>(MatDialogRef);
+  data = inject<WarningDialogData>(MAT_DIALOG_DATA);
 
-  constructor(public dialogRef: MatDialogRef<WarningDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: WarningDialogData) { }
 
   ngOnInit(): void {
   }

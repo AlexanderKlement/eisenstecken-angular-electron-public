@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {first} from "rxjs/operators";
 import { MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
@@ -15,12 +15,11 @@ import { MatButton } from "@angular/material/button";
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatDialogActions, MatButton]
 })
 export class OutgoingInvoiceNumberDialogComponent implements OnInit {
+    dialogRef = inject<MatDialogRef<OutgoingInvoiceNumberDialogComponent>>(MatDialogRef);
+    private api = inject(DefaultService);
+
 
     outgoingInvoiceNumberFormGroup: UntypedFormGroup;
-
-    constructor(public dialogRef: MatDialogRef<OutgoingInvoiceNumberDialogComponent>,
-                private api: DefaultService) {
-    }
 
 
     ngOnInit(): void {

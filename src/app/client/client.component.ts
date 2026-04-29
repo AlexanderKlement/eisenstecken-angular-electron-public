@@ -1,4 +1,4 @@
-import { Component, ComponentRef, OnInit } from "@angular/core";
+import { Component, ComponentRef, OnInit, inject } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
 import { ActivatedRoute, Router } from "@angular/router";
 import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
@@ -17,6 +17,10 @@ import { TableBuilderComponent } from "../shared/components/table-builder/table-
 })
 
 export default class ClientComponent implements OnInit {
+  private api = inject(DefaultService);
+  private router = inject(Router);
+  private authService = inject(AuthStateService);
+
 
   public privateClientDataSource: TableDataSource<Client, DefaultService>;
   public businessClientDataSource: TableDataSource<Client, DefaultService>;
@@ -24,9 +28,6 @@ export default class ClientComponent implements OnInit {
   public buttons: CustomButton[] = [];
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
-
-  constructor(private api: DefaultService, private router: Router, private authService: AuthStateService) {
-  }
 
   ngOnInit(): void {
     this.initPrivateClients();

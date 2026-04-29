@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, inject } from "@angular/core";
 import { Location } from "@angular/common";
 import { Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
@@ -29,18 +29,15 @@ export interface CustomButton {
   imports: [MatToolbar, MatButton, CircleIconButtonComponent, MatMenu, MatMenuItem, MatMenuTrigger, MatIcon]
 })
 export class ToolbarComponent {
+  private router = inject(Router);
+  private location = inject(Location);
+  private dialog = inject(MatDialog);
+  private authService = inject(AuthStateService);
+
   @Input() buttonList?: CustomButton[];
   @Input() title = "";
   @Input() showBackButton = true;
   @Input() showLogoutButton = false;
-
-  constructor(
-    private router: Router,
-    private location: Location,
-    private dialog: MatDialog,
-    private authService: AuthStateService
-  ) {
-  }
 
   backButtonClicked(): void {
     this.location.back();

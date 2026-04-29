@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
@@ -28,6 +28,12 @@ import { AsyncPipe, DatePipe } from "@angular/common";
   imports: [ToolbarComponent, MatTabGroup, MatTab, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatSelect, MatOption, HoursStepperComponent, MatButton, TableBuilderComponent, AsyncPipe, DatePipe]
 })
 export default class EmployeeDetailComponent implements OnInit {
+  private api = inject(DefaultService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
+
   feeDataSource: TableDataSource<Fee, DefaultService>;
   journeyDataSource: TableDataSource<Journey, DefaultService>;
   mealDataSource: TableDataSource<Meal, DefaultService>;
@@ -61,10 +67,6 @@ export default class EmployeeDetailComponent implements OnInit {
   public $refresh: Observable<void>;
   showSummaryOnly = true;
   private $refreshSubscriber: Subscriber<void>;
-
-  constructor(private api: DefaultService, private route: ActivatedRoute, private router: Router,
-              private dialog: MatDialog, private snackBar: MatSnackBar) {
-  }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {

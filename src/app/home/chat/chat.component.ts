@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from "@angular/core";
 import { ChatService } from "./chat.service";
 import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { Observable, Subscription } from "rxjs";
@@ -23,6 +23,12 @@ import { LocalConfigRenderer } from "../../LocalConfigRenderer";
   imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexDirective, ChatMessageComponent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatSelect, MatOption, MatButton, AsyncPipe]
 })
 export class ChatComponent implements OnInit, OnDestroy {
+  private chatService = inject(ChatService);
+  private electron = inject(ElectronService);
+  private router = inject(Router);
+  private email = inject(EmailService);
+  private authService = inject(AuthStateService);
+
 
   @ViewChild("chatMsgBox") chatMsgBox: ElementRef;
 
@@ -37,10 +43,6 @@ export class ChatComponent implements OnInit, OnDestroy {
   buttonLocked = false;
 
   subscription: Subscription;
-
-  constructor(private chatService: ChatService, private electron: ElectronService,
-              private router: Router, private email: EmailService, private authService: AuthStateService) {
-  }
 
   ngOnInit(): void {
     this.chatService.subscribe();

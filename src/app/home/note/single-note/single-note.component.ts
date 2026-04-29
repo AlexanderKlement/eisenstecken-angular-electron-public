@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged, first } from 'rxjs/operators';
@@ -11,6 +11,8 @@ import { DefaultService, Note, NoteCreate } from '../../../../api/openapi';
     imports: [FormsModule, ReactiveFormsModule]
 })
 export class SingleNoteComponent implements OnInit, OnDestroy {
+  private api = inject(DefaultService);
+
 
   @Input() note: Note;
   @Output() noteDeleted = new EventEmitter<Note>();
@@ -18,9 +20,6 @@ export class SingleNoteComponent implements OnInit, OnDestroy {
   public subscriptions = new Subscription();
 
   singleNoteTextArea = new UntypedFormControl();
-
-  constructor(private api: DefaultService) {
-  }
 
   ngOnInit(): void {
     this.singleNoteTextArea.setValue(this.note.text);

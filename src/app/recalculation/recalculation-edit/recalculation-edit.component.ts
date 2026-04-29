@@ -1,15 +1,13 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import {
+  FormsModule,
+  ReactiveFormsModule,
   UntypedFormArray,
   UntypedFormControl,
   UntypedFormGroup,
-  Validators,
-  FormsModule,
-  ReactiveFormsModule
+  Validators
 } from "@angular/forms";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
-import { ActivatedRoute, Router } from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { first } from "rxjs/operators";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
@@ -17,25 +15,26 @@ import dayjs from "dayjs/esm";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { FileService } from "../../shared/services/file.service";
 import {
-  DefaultService,
-  Paint,
-  PaintCreate,
-  TemplatePaint,
   Expense,
   ExpenseCreate,
+  Lock,
+  OrderService,
+  OrderSmall,
+  Paint,
+  PaintCreate,
+  RecalculationService,
+  RecalculationUpdateV2,
+  RecalculationV2,
+  TemplatePaint,
   Unit,
-  WoodListCreate,
   WoodList,
-  Lock, OrderSmall, OrderService, RecalculationService, RecalculationUpdateV2, RecalculationV2
+  WoodListCreate
 } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
-import {
-  DefaultLayoutDirective,
-  DefaultLayoutAlignDirective
-} from "ng-flex-layout";
-import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
+import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
-import { MatSelect, MatOption } from "@angular/material/select";
+import { MatOption, MatSelect } from "@angular/material/select";
 import { MatActionList, MatListItem } from "@angular/material/list";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 import { AsyncPipe } from "@angular/common";
@@ -67,6 +66,10 @@ import { CircleIconButtonComponent } from "../../shared/components/circle-icon-b
 export default class RecalculationEditComponent
   extends BaseEditComponent<RecalculationV2>
   implements OnInit, OnDestroy {
+  private orderService = inject(OrderService);
+  private recalculationService = inject(RecalculationService);
+  private file = inject(FileService);
+
   recalculationGroup: UntypedFormGroup;
   navigationTarget = "recalculation";
   recalculationId: number;
@@ -76,18 +79,7 @@ export default class RecalculationEditComponent
 
   orderDataSource: TableDataSource<OrderSmall, OrderService>;
   title = "Nachkalkulation: Bearbeiten";
-  
-  constructor(
-    api: DefaultService,
-    private orderService: OrderService,
-    private recalculationService: RecalculationService,
-    router: Router,
-    route: ActivatedRoute,
-    private file: FileService,
-    dialog: MatDialog
-  ) {
-    super(api, router, route, dialog);
-  }
+
 
   lockFunction = (id: number): Observable<Lock> =>
     this.recalculationService.getRecalculationLock(id);

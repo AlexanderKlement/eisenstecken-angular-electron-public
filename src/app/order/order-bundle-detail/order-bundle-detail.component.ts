@@ -1,4 +1,4 @@
-import { Component, ComponentRef, OnInit } from "@angular/core";
+import { Component, ComponentRef, OnInit, inject } from "@angular/core";
 import { InfoDataSource } from "../../shared/components/info-builder/info-builder.datasource";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -26,6 +26,16 @@ import { TableBuilderComponent } from "../../shared/components/table-builder/tab
   imports: [ToolbarComponent, InfoBuilderComponent, TableBuilderComponent]
 })
 export default class OrderBundleDetailComponent implements OnInit {
+  private api = inject(DefaultService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private authService = inject(AuthStateService);
+  private file = inject(FileService);
+  private email = inject(EmailService);
+  dialog = inject(MatDialog);
+  private locker = inject(LockService);
+  private snackBar = inject(MatSnackBar);
+
   orderDataSource: TableDataSource<Order, DefaultService>;
   infoDataSource: InfoDataSource<OrderBundle>;
   orderBundleId: number;
@@ -45,13 +55,6 @@ export default class OrderBundleDetailComponent implements OnInit {
   ];
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
-
-
-  constructor(private api: DefaultService, private route: ActivatedRoute, private router: Router, private authService: AuthStateService,
-              private file: FileService, private email: EmailService,
-              public dialog: MatDialog, private locker: LockService, private snackBar: MatSnackBar) {
-
-  }
 
   private static instanceOfSupplier(object: any): object is Supplier {
     return object.type === OrderableType.Supplier;

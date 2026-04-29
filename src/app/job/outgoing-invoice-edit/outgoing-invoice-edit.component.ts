@@ -1,59 +1,40 @@
-import { Component, DEFAULT_CURRENCY_CODE, Inject, LOCALE_ID, OnDestroy, OnInit } from "@angular/core";
-import { Location, AsyncPipe } from "@angular/common";
+import { Component, DEFAULT_CURRENCY_CODE, inject, LOCALE_ID, OnDestroy, OnInit } from "@angular/core";
+import { AsyncPipe, CurrencyPipe, Location } from "@angular/common";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
-import { ActivatedRoute, Router } from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import {
+  FormsModule,
+  ReactiveFormsModule,
   UntypedFormArray,
   UntypedFormControl,
-  UntypedFormGroup,
-  FormsModule,
-  ReactiveFormsModule
+  UntypedFormGroup
 } from "@angular/forms";
 import { first, tap } from "rxjs/operators";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
-import {
-  CustomButton,
-  ToolbarComponent
-} from "../../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { AuthStateService } from "../../shared/services/auth-state.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import dayjs from "dayjs/esm";
 import { formatDateTransport } from "../../shared/date.util";
 import { FileService } from "../../shared/services/file.service";
-import { CurrencyPipe } from "@angular/common";
 import {
-  DefaultService,
-  OutgoingInvoice,
-  Vat,
   Client,
   DescriptiveArticle,
-  OutgoingInvoiceUpdate,
-  OutgoingInvoiceCreate,
   DescriptiveArticleCreate,
-  Lock, PaymentTermEnum, ScopeEnum
+  Lock,
+  OutgoingInvoice,
+  OutgoingInvoiceCreate,
+  OutgoingInvoiceUpdate,
+  PaymentTermEnum,
+  ScopeEnum,
+  Vat
 } from "../../../api/openapi";
-import {
-  DefaultLayoutDirective,
-  DefaultLayoutAlignDirective,
-  DefaultFlexDirective,
-  FlexModule
-} from "ng-flex-layout";
-import { MatIconButton, MatButton } from "@angular/material/button";
+import { DefaultFlexDirective, DefaultLayoutAlignDirective, DefaultLayoutDirective, FlexModule } from "ng-flex-layout";
+import { MatButton, MatIconButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
-import {
-  MatFormField,
-  MatLabel,
-  MatInput,
-  MatSuffix
-} from "@angular/material/input";
-import {
-  MatDatepickerInput,
-  MatDatepickerToggle,
-  MatDatepicker
-} from "@angular/material/datepicker";
-import { MatSelect, MatOption } from "@angular/material/select";
+import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
+import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular/material/datepicker";
+import { MatOption, MatSelect } from "@angular/material/select";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { AddressFormComponent } from "../../shared/components/address-form/address-form.component";
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
@@ -95,6 +76,14 @@ type PaymentTermsResolved = { label: string; daysToAdd: number };
 export default class OutgoingInvoiceEditComponent
   extends BaseEditComponent<OutgoingInvoice>
   implements OnInit, OnDestroy {
+  private currency = inject(CurrencyPipe);
+  private location = inject(Location);
+  private authService = inject(AuthStateService);
+  private snackBar = inject(MatSnackBar);
+  private file = inject(FileService);
+  private readonly currencyCode = inject(DEFAULT_CURRENCY_CODE);
+  private readonly locale = inject(LOCALE_ID);
+
   invoiceGroup: UntypedFormGroup;
   submitted = false;
   vatOptions$: Observable<Vat[]>;
@@ -106,22 +95,6 @@ export default class OutgoingInvoiceEditComponent
 
   company = false;
   readonly paymentTerms = PAYMENT_TERMS;
-
-  constructor(
-    api: DefaultService,
-    router: Router,
-    route: ActivatedRoute,
-    private currency: CurrencyPipe,
-    private location: Location,
-    private authService: AuthStateService,
-    private snackBar: MatSnackBar,
-    private file: FileService,
-    @Inject(DEFAULT_CURRENCY_CODE) private readonly currencyCode: string,
-    @Inject(LOCALE_ID) private readonly locale: string,
-    dialog: MatDialog
-  ) {
-    super(api, router, route, dialog);
-  }
 
   calcTotalPrice(formGroup: UntypedFormGroup): void {
     const totalPrice =

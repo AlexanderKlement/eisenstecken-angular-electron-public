@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import {Router} from "@angular/router";
 import {Observable} from "rxjs";
 import {first} from "rxjs/operators";
@@ -10,9 +10,10 @@ import { DefaultService, Lock } from "../../../api/openapi";
     providedIn: 'root'
 })
 export class LockService {
+    private api = inject(DefaultService);
+    private router = inject(Router);
+    dialog = inject(MatDialog);
 
-    constructor(private api: DefaultService, private router: Router, public dialog: MatDialog) {
-    }
 
     getLockAndTryNavigate(lock$: Observable<Lock>, lockObservable: Observable<boolean>,
                           unlockObservable: Observable<boolean>, navigationTarget: string): void {

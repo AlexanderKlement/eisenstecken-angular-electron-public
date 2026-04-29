@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, ViewChild} from "@angular/core";
+import { Component, OnInit, ViewChild, inject } from "@angular/core";
 import { UntypedFormArray, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
 import {HoursStepperComponent, JobEnum} from "../hours-stepper.component";
@@ -30,6 +30,9 @@ export interface HoursStepperDialogData {
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, MatButton, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatDialogActions]
 })
 export class HoursStepperJobDialogComponent implements OnInit {
+    dialogRef = inject<MatDialogRef<HoursStepperJobDialogComponent>>(MatDialogRef);
+    data = inject<HoursStepperDialogData>(MAT_DIALOG_DATA);
+
 
     showClients = false;
     showMaintenance = false;
@@ -48,10 +51,6 @@ export class HoursStepperJobDialogComponent implements OnInit {
     clientsSite = 0;
     // eslint-disable-next-line @typescript-eslint/member-ordering
     @ViewChild('stepper') private stepper: MatStepper;
-
-    constructor(public dialogRef: MatDialogRef<HoursStepperJobDialogComponent>,
-                @Inject(MAT_DIALOG_DATA) public data: HoursStepperDialogData) {
-    }
 
     ngOnInit(): void {
         this.hourFormGroup = this.data.hourFormGroup;

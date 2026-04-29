@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from "@angular/core";
+import { Component, Input, OnInit, inject } from "@angular/core";
 import {InfoDataSource} from "./info-builder.datasource";
 import {DataSourceClass} from "../../types";
 import {LockService} from "../../services/lock.service";
@@ -14,11 +14,10 @@ import { AsyncPipe } from "@angular/common";
 })
 
 export class InfoBuilderComponent<T extends DataSourceClass> implements OnInit {
+  private locker = inject(LockService);
+
 
   @Input() dataSource: InfoDataSource<T>;
-
-  constructor(private locker: LockService) {
-  }
 
   ngOnInit(): void {
   }

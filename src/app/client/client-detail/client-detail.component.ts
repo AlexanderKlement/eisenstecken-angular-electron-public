@@ -1,4 +1,4 @@
-import { Component, ComponentRef, OnInit, ViewChild } from "@angular/core";
+import { Component, ComponentRef, OnInit, ViewChild, inject } from "@angular/core";
 import { InfoDataSource } from "../../shared/components/info-builder/info-builder.datasource";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
@@ -20,6 +20,13 @@ import { TableBuilderComponent } from "../../shared/components/table-builder/tab
   imports: [ToolbarComponent, InfoBuilderComponent, TableBuilderComponent]
 })
 export default class ClientDetailComponent implements OnInit {
+  private api = inject(DefaultService);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private authService = inject(AuthStateService);
+
 
   @ViewChild(InfoBuilderComponent) child: InfoBuilderComponent<Client>;
   public infoDataSource: InfoDataSource<Client>;
@@ -30,11 +37,6 @@ export default class ClientDetailComponent implements OnInit {
 
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
-
-  constructor(private api: DefaultService, private dialog: MatDialog,
-              private snackBar: MatSnackBar, private router: Router, private route: ActivatedRoute,
-              private authService: AuthStateService) {
-  }
 
   initRefreshObservables(): void {
     this.$refresh = new Observable<void>((subscriber => {

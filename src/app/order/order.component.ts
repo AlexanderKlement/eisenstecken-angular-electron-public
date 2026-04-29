@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { Observable, Subscriber, combineLatest } from "rxjs";
 import {
   isJob,
@@ -43,6 +43,10 @@ import { ProductsListComponent } from "./available-products-list/products-list.c
   ]
 })
 export default class OrderComponent implements OnInit {
+  private api = inject(DefaultService);
+  private articleService = inject(ArticleService);
+  private router = inject(Router);
+
   toListName = "Bestelle für Aufträge oder Lager";
   toList$: Observable<ListItem[]>; //Here go stocks and suppliers
   toListSubscriber: Subscriber<ListItem[]>;
@@ -66,13 +70,6 @@ export default class OrderComponent implements OnInit {
   buttons: CustomButton[] = [];
   private availableArticleFilter = "";
   private orderedArticleFilter = "";
-
-  constructor(
-    private api: DefaultService,
-    private articleService: ArticleService,
-    private router: Router
-  ) {
-  }
 
   private static addSpaceAfter4(input: string): string {
     if (!input) return input;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { Row, TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
 import { Router } from "@angular/router";
 import { Observable, Subscriber } from "rxjs";
@@ -32,6 +32,10 @@ import { AsyncPipe } from "@angular/common";
   ]
 })
 export default class JobComponent implements OnInit {
+  private api = inject(DefaultService);
+  private router = inject(Router);
+  private file = inject(FileService);
+
   createdJobDataSource: TableDataSource<Job, DefaultService>;
   acceptedJobDataSource: TableDataSource<Job, DefaultService>;
   finishedJobDataSource: TableDataSource<Job, DefaultService>;
@@ -54,13 +58,6 @@ export default class JobComponent implements OnInit {
   ];
 
   private $refreshSubscriber: Subscriber<void>;
-
-  constructor(
-    private api: DefaultService,
-    private router: Router,
-    private file: FileService
-  ) {
-  }
 
   ngOnInit(): void {
     this.initJobTables();

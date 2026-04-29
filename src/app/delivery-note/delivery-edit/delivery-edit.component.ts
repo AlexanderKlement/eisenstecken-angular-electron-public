@@ -1,57 +1,38 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
-import { ActivatedRoute, Router } from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { first, map } from "rxjs/operators";
 import {
+  FormsModule,
+  ReactiveFormsModule,
   UntypedFormArray,
   UntypedFormControl,
   UntypedFormGroup,
-  Validators,
-  FormsModule,
-  ReactiveFormsModule
+  Validators
 } from "@angular/forms";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { AuthStateService } from "../../shared/services/auth-state.service";
-import {
-  CustomButton,
-  ToolbarComponent
-} from "../../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { formatDateTransport } from "../../shared/date.util";
 import { FileService } from "../../shared/services/file.service";
 import {
-  DeliveryNoteCreate,
   DeliveryNote,
-  DeliveryNoteUpdate,
+  DeliveryNoteCreate,
   DeliveryNoteReason,
-  Lock,
-  DefaultService,
+  DeliveryNoteUpdate,
   DescriptiveArticle,
-  DescriptiveArticleCreate, ScopeEnum
+  DescriptiveArticleCreate,
+  Lock,
+  ScopeEnum
 } from "../../../api/openapi";
-import {
-  DefaultLayoutDirective,
-  DefaultLayoutAlignDirective,
-  DefaultFlexDirective,
-  FlexModule
-} from "ng-flex-layout";
-import { MatIconButton, MatButton } from "@angular/material/button";
+import { DefaultFlexDirective, DefaultLayoutAlignDirective, DefaultLayoutDirective, FlexModule } from "ng-flex-layout";
+import { MatButton, MatIconButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
-import {
-  MatFormField,
-  MatLabel,
-  MatInput,
-  MatSuffix
-} from "@angular/material/input";
+import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
-import { MatSelect, MatOption } from "@angular/material/select";
-import {
-  MatDatepickerInput,
-  MatDatepickerToggle,
-  MatDatepicker
-} from "@angular/material/datepicker";
+import { MatOption, MatSelect } from "@angular/material/select";
+import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular/material/datepicker";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { AsyncPipe } from "@angular/common";
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
@@ -94,6 +75,10 @@ export interface JobMinimal {
 export default class DeliveryEditComponent
   extends BaseEditComponent<DeliveryNote>
   implements OnInit {
+  private authService = inject(AuthStateService);
+  private snackBar = inject(MatSnackBar);
+  private file = inject(FileService);
+
   deliveryNoteGroup: UntypedFormGroup;
   submitted = false;
   navigationTarget = "delivery_note";
@@ -102,17 +87,6 @@ export default class DeliveryEditComponent
   buttons: CustomButton[] = [];
   title = "Lieferschein: Bearbeiten";
 
-  constructor(
-    api: DefaultService,
-    router: Router,
-    route: ActivatedRoute,
-    private authService: AuthStateService,
-    private snackBar: MatSnackBar,
-    private file: FileService,
-    dialog: MatDialog
-  ) {
-    super(api, router, route, dialog);
-  }
 
   lockFunction = (id: number): Observable<Lock> =>
     this.api.islockedDeliveryNoteDeliveryNoteIslockedDeliveryNoteIdGet(id);

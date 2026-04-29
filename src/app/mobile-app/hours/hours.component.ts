@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { Subject } from "rxjs";
 import { first } from "rxjs/operators";
@@ -20,15 +20,14 @@ import { MatButton } from "@angular/material/button";
   ]
 })
 export default class HoursComponent implements OnInit {
+  private api = inject(DefaultService);
+
 
   loading = true;
   buttons: CustomButton[] = [];
   stepBackSubject$: Subject<void> = new Subject<void>();
   todaysWorkDayFinished = false;
   workDay$: Subject<WorkDay>;
-
-  constructor(private api: DefaultService) {
-  }
 
 
   ngOnInit(): void {

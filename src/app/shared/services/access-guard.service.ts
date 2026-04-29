@@ -1,4 +1,4 @@
-import { Injectable, Inject, PLATFORM_ID } from "@angular/core";
+import { Injectable, PLATFORM_ID, inject } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
 import { AuthStateService } from "./auth-state.service";
 import { ElectronService } from "../../core/services";
@@ -6,20 +6,17 @@ import { isPlatformBrowser } from "@angular/common";
 
 @Injectable({ providedIn: 'root' })
 export class AccessGuard implements CanActivate {
+  private authService = inject(AuthStateService);
+  private router = inject(Router);
+  private electron = inject(ElectronService);
+  private platformId = inject<Object>(PLATFORM_ID);
+
 
   private readonly limitAccessHosts: string[] = [
     "stunden.eisenstecken.kivi.bz.it",
     "timedev.app.eisenstecken.it",
     "time.app.eisenstecken.it",
   ];
-
-  constructor(
-    private authService: AuthStateService,
-    private router: Router,
-    private electron: ElectronService,
-    @Inject(PLATFORM_ID) private platformId: Object,
-  ) {
-  }
 
   canActivate(
     route: ActivatedRouteSnapshot,

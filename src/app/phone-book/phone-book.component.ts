@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
 import { Router } from "@angular/router";
 import { first } from "rxjs/operators";
@@ -19,6 +19,12 @@ import { MatTabGroup, MatTab } from "@angular/material/tabs";
   imports: [ToolbarComponent, MatTabGroup, MatTab, TableBuilderComponent]
 })
 export default class PhoneBookComponent implements OnInit {
+  private api = inject(DefaultService);
+  private router = inject(Router);
+  private dialog = inject(MatDialog);
+  private phoneService = inject(PhoneService);
+  private snackBar = inject(MatSnackBar);
+
 
   allContactsDataSource: TableDataSource<Contact, DefaultService>;
   clientContactsDataSource: TableDataSource<Contact, DefaultService>;
@@ -43,11 +49,6 @@ export default class PhoneBookComponent implements OnInit {
       selectedField: "id"
     }
   ];
-
-  constructor(private api: DefaultService, private router: Router, private dialog: MatDialog,
-              private phoneService: PhoneService, private snackBar: MatSnackBar) {
-
-  }
 
   callClicked($event: any, id: number) {
     console.log(id);

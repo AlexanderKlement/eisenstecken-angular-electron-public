@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { Router } from "@angular/router";
 
 @Component({
@@ -7,9 +7,8 @@ import { Router } from "@angular/router";
   styleUrls: ["./redirect.component.scss"]
 })
 export default class RedirectComponent implements OnInit {
+  private router = inject(Router);
 
-  constructor(private router: Router) {
-  }
 
   ngOnInit(): void {
     this.router.navigateByUrl("/mobile/hours", { replaceUrl: true });

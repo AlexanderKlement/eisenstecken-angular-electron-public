@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit} from "@angular/core";
+import { Component, OnDestroy, OnInit, inject } from "@angular/core";
 import { Observable } from "rxjs";
 import { first, tap } from "rxjs/operators";
 import { DefaultService, Calendar } from "../../../api/openapi";
@@ -25,13 +25,11 @@ import { AsyncPipe } from "@angular/common";
   ],
 })
 export class CalendarsChatFrameComponent implements OnInit, OnDestroy {
+  private api = inject(DefaultService);
+
 
   calendars$: Observable<Calendar[]>;
   loading = true;
-
-  constructor(
-    private api: DefaultService,
-  ) {}
 
   ngOnInit(): void {
     this.calendars$ = this.api.readCalendarsCalendarGet().pipe(

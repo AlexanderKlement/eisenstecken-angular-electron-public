@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { UntypedFormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
@@ -14,14 +14,14 @@ import { HoursStepperComponent } from "../../mobile-app/hours/hours-stepper/hour
   imports: [ToolbarComponent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatDatepickerInput, FormsModule, ReactiveFormsModule, MatDatepickerToggle, MatSuffix, MatDatepicker, HoursStepperComponent]
 })
 export default class WorkDayNewComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
   newWorkday: any;
   loading = true;
   userId: number;
   selectedDate: Date;
   dateFormControl: UntypedFormControl;
-
-  constructor(private route: ActivatedRoute, private router: Router) {
-  }
 
   ngOnInit(): void {
     this.dateFormControl = new UntypedFormControl(new Date());

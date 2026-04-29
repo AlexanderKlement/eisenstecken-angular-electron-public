@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, inject } from "@angular/core";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { LockService } from "../../shared/services/lock.service";
 import dayjs from "dayjs/esm";
@@ -22,6 +22,11 @@ import { MatTabGroup, MatTab } from "@angular/material/tabs";
     imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatSelect, MatOption, MatTabGroup, MatTab, TableBuilderComponent, AsyncPipe]
 })
 export class IngoingComponent implements OnInit {
+  private api = inject(DefaultService);
+  private locker = inject(LockService);
+  private dialog = inject(MatDialog);
+  private router = inject(Router);
+
 
   @Input() updateTables$: Observable<void>;
   @Input() $refresh: Observable<void>;
@@ -53,9 +58,6 @@ export class IngoingComponent implements OnInit {
     },
   ];
   private subscription: Subscription;
-
-  constructor(private api: DefaultService, private locker: LockService, private dialog: MatDialog, private router: Router) {
-  }
 
   ngOnInit(): void {
     this.initDataSources();

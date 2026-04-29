@@ -1,13 +1,12 @@
-import {Injectable} from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import {ElectronService} from "../../core/services";
 
 @Injectable({
     providedIn: 'root'
 })
 export class TrayService {
+    private electronService = inject(ElectronService);
 
-    constructor(private electronService: ElectronService) {
-    }
 
     showBalloon(title: string, content: string): Promise<boolean> {
         if (!this.electronService.isElectron) {

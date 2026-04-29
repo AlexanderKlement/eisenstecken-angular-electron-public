@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
 import { Router, RouterOutlet } from "@angular/router";
 import { LockService } from "../shared/services/lock.service";
@@ -21,17 +21,14 @@ import { UserNotesComponent } from "./user-notes/user-notes.component";
   imports: [ToolbarComponent, TableBuilderComponent, MatTabGroup, MatTab, UserNotesComponent, RouterOutlet]
 })
 export default class UserComponent implements OnInit {
+  private api = inject(DefaultService);
+  private locker = inject(LockService);
+  private router = inject(Router);
+  private authService = inject(AuthStateService);
+  private electronService = inject(ElectronService);
+
   userDataSource: TableDataSource<User, DefaultService>;
   public buttons: CustomButton[] = [];
-
-  constructor(
-    private api: DefaultService,
-    private locker: LockService,
-    private router: Router,
-    private authService: AuthStateService,
-    private electronService: ElectronService
-  ) {
-  }
 
   ngOnInit(): void {
     this.userDataSource = new TableDataSource(

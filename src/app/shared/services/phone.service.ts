@@ -1,5 +1,5 @@
 /* eslint-disable no-bitwise */
-import {Injectable} from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import {AuthStateService} from "./auth-state.service";
 import {first} from "rxjs/operators";
 
@@ -12,6 +12,8 @@ const userAgent = "myApps (Chrome)";
   providedIn: 'root'
 })
 export class PhoneService {
+  private authService = inject(AuthStateService);
+
 
   initialized = false;
   private log: string[] = [];
@@ -35,9 +37,6 @@ export class PhoneService {
   private callid = -100;
   private callResolver: (value: (PromiseLike<void> | void)) => void;
   private callRejector: (reason?: any) => void;
-
-  constructor(private authService: AuthStateService) {
-  }
 
   call(cellNumber: string): Promise<void> {
     let callTimeout;

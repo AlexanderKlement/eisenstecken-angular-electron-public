@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
 import {AuthStateService} from "../../../shared/services/auth-state.service";
 import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -37,6 +37,11 @@ export function getEventTranslation(companyEvent: CompanyEventEnum): string {
 
 
 export class EventCalendarDialogComponent implements OnInit {
+  dialogRef = inject<MatDialogRef<EventCalendarDialogComponent>>(MatDialogRef);
+  data = inject<EventCalendarDialogData>(MAT_DIALOG_DATA);
+  private api = inject(DefaultService);
+  private authService = inject(AuthStateService);
+
   title = "Eintrag erstellen";
 
   availableEventTypes: CompanyEventEnum[] = [
@@ -46,11 +51,6 @@ export class EventCalendarDialogComponent implements OnInit {
 
   dialogFormGroup: UntypedFormGroup;
   showDescription = false;
-
-  constructor(public dialogRef: MatDialogRef<EventCalendarDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: EventCalendarDialogData,
-              private api: DefaultService, private authService: AuthStateService) {
-  }
 
 
   ngOnInit(): void {

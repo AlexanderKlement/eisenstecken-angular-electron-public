@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {first} from "rxjs/operators";
 import {MatSnackBar} from "@angular/material/snack-bar";
@@ -17,15 +17,14 @@ import { MatIcon } from "@angular/material/icon";
     imports: [MatTabGroup, MatTab, FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatFabButton, MatIcon, MatButton]
 })
 export class InfoSettingsComponent implements OnInit {
+    private api = inject(DefaultService);
+    private snackBar = inject(MatSnackBar);
+
 
     credentialGroup: UntypedFormGroup;
     priceGroup: UntypedFormGroup;
     technicalDataGroup: UntypedFormGroup;
     submitted = false;
-
-
-    constructor(private api: DefaultService, private snackBar: MatSnackBar) {
-    }
 
     ngOnInit(): void {
         this.initCredentials();

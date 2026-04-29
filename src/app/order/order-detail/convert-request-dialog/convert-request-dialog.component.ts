@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
 import { MatSelectionList, MatListOption } from "@angular/material/list";
 import { Observable } from "rxjs";
@@ -20,6 +20,11 @@ export interface ConvertOrderedArticleReturnDialogData {
     imports: [MatDialogTitle, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatSelectionList, MatListOption, MatDialogActions, MatButton, AsyncPipe]
 })
 export class ConvertRequestDialogComponent implements OnInit {
+  dialogRef = inject<MatDialogRef<ConvertRequestDialogComponent>>(MatDialogRef);
+  data = inject<ConvertOrderedArticleReturnDialogData>(MAT_DIALOG_DATA);
+  private api = inject(DefaultService);
+  private orderedArticleService = inject(OrderedArticleService);
+
 
   @ViewChild('articles') articlesSelected: MatSelectionList;
   orderedArticles$: Observable<OrderedArticle[]>;
@@ -27,11 +32,6 @@ export class ConvertRequestDialogComponent implements OnInit {
   atLeastOneArticleSelected = false;
 
   error = false;
-
-  constructor(public dialogRef: MatDialogRef<ConvertRequestDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: ConvertOrderedArticleReturnDialogData,
-              private api: DefaultService, private orderedArticleService: OrderedArticleService,) {
-  }
 
 
   checkSelections(): void {

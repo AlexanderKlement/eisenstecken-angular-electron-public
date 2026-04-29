@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { VietJobList, VietLog, VietService } from "../../api/openapi";
 import { BehaviorSubject } from "rxjs";
 import { first } from "rxjs/operators";
@@ -21,9 +21,9 @@ import { Industry40CreateDialogComponent } from "./industry-4-0-create-dialog/in
   styleUrl: './industry-4-0.component.scss',
 })
 export class Industry40Component implements OnInit {
+  private viet = inject(VietService);
+  private dialog = inject(MatDialog);
 
-  constructor(private viet: VietService, private dialog: MatDialog) {
-  }
 
   public jobSubject = new BehaviorSubject<VietJobList>({
     pending: [],

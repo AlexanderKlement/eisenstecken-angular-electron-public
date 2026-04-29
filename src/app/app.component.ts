@@ -1,4 +1,4 @@
-import { Component, HostListener } from "@angular/core";
+import { Component, HostListener, inject } from "@angular/core";
 import { Location } from "@angular/common";
 import { ElectronService } from "./core/services";
 import { TranslateService } from "@ngx-translate/core";
@@ -13,12 +13,14 @@ import { AppRouterOutletDirective } from "./router-outlet";
     imports: [AppRouterOutletDirective],
 })
 export class AppComponent {
-  constructor(
-    private electronService: ElectronService,
-    private translate: TranslateService,
-    private location: Location,
-    private dialog: MatDialog,
-  ) {
+  private electronService = inject(ElectronService);
+  private translate = inject(TranslateService);
+  private location = inject(Location);
+  private dialog = inject(MatDialog);
+
+  constructor() {
+    const electronService = this.electronService;
+
     this.translate.setDefaultLang("de");
     // eslint-disable-next-line no-console
     console.info("APP_CONFIG", APP_CONFIG);

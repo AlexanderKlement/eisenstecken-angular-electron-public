@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { BaseSettingsComponent } from '../base-settings.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DefaultService } from '../../../api/openapi';
@@ -14,6 +14,9 @@ import { MatButton } from '@angular/material/button';
     imports: [FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatButton]
 })
 export class InvoiceSettingsComponent extends BaseSettingsComponent implements OnInit {
+  protected api: DefaultService;
+  protected snackBar: MatSnackBar;
+
 
   keyList = [
     'invoice_bank_1_name',
@@ -27,8 +30,14 @@ export class InvoiceSettingsComponent extends BaseSettingsComponent implements O
     'invoice_number',
   ];
 
-  constructor(protected api: DefaultService, protected snackBar: MatSnackBar) {
+  constructor() {
+    const api = inject(DefaultService);
+    const snackBar = inject(MatSnackBar);
+
     super(api, snackBar);
+  
+    this.api = api;
+    this.snackBar = snackBar;
   }
 
   ngOnInit(): void {

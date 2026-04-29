@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, inject } from "@angular/core";
 import { Observable, ReplaySubject, Subject } from "rxjs";
 import { first, map } from "rxjs/operators";
 import { ConfirmDialogComponent } from "../../../shared/components/confirm-dialog/confirm-dialog.component";
@@ -15,6 +15,9 @@ import { AsyncPipe } from "@angular/common";
     imports: [MatToolbar, MatButton, AsyncPipe]
 })
 export class JobStatusBarComponent implements OnInit {
+  private api = inject(DefaultService);
+  private dialog = inject(MatDialog);
+
 
   @Input() jobId: number;
   public jobStatusList: ReplaySubject<JobStatus[]>;
@@ -29,9 +32,6 @@ export class JobStatusBarComponent implements OnInit {
     [JobStatusType.JobstatusCompleted, "completed"],
     [JobStatusType.JobstatusDeclined, "declined"],
   ];
-
-  constructor(private api: DefaultService, private dialog: MatDialog) {
-  }
 
 
   ngOnInit(): void {

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, inject } from "@angular/core";
 import { Observable, ReplaySubject, Subscription } from "rxjs";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { first } from "rxjs/operators";
@@ -15,6 +15,11 @@ import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.compone
   styleUrls: ["./base-edit.component.scss"]
 })
 export class BaseEditComponent<T> implements OnInit, OnDestroy, ReusableRoute, DirtyAware {
+  protected api = inject(DefaultService);
+  protected router = inject(Router);
+  protected route = inject(ActivatedRoute);
+  protected dialog = inject(MatDialog);
+
 
   // to be provided by derived class:
   navigationTarget: string;
@@ -35,12 +40,7 @@ export class BaseEditComponent<T> implements OnInit, OnDestroy, ReusableRoute, D
   protected controlsBeforeBack: AbstractControl[] = [];
   private controlsSub?: Subscription;
 
-  constructor(
-    protected api: DefaultService,
-    protected router: Router,
-    protected route: ActivatedRoute,
-    protected dialog: MatDialog
-  ) {
+  constructor() {
     this.subscription.add(this.route.params.subscribe((p) => this.routeParams.next(p)));
   }
 

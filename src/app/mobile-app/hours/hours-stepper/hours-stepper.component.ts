@@ -1,9 +1,4 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  ViewChild,
-} from "@angular/core";
+import { Component, Input, OnInit, ViewChild, inject } from "@angular/core";
 import { CustomButton } from "../../../shared/components/toolbar/toolbar.component";
 import { AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { Observable, Subject, Subscriber } from "rxjs";
@@ -92,6 +87,11 @@ export enum JobEnum {
     ],
 })
 export class HoursStepperComponent implements OnInit {
+  private api = inject(DefaultService);
+  private dialog = inject(MatDialog);
+  private authService = inject(AuthStateService);
+  private router = inject(Router);
+
 
   @Input() workDay$: Subject<WorkDay>;
   @Input() userId: number = undefined;
@@ -116,10 +116,6 @@ export class HoursStepperComponent implements OnInit {
   mobile = false;
   // eslint-disable-next-line @typescript-eslint/member-ordering
   @ViewChild('stepper') private stepper: MatStepper;
-
-  constructor(private api: DefaultService, private dialog: MatDialog,
-              private authService: AuthStateService, private router: Router) {
-  }
 
   static generateHourString(hours: number, minutes: number, mobile = false): string {
     let workedHoursString = (mobile ? "<br />" : "") + hours.toString();

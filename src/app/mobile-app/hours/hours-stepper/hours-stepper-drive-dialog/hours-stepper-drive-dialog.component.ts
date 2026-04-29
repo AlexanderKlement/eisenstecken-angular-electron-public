@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import {JobEnum} from "../hours-stepper.component";
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
 import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -22,13 +22,12 @@ export interface HoursStepperDriveDialogData {
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatDialogActions, MatButton]
 })
 export class HoursStepperDriveDialogComponent implements OnInit {
+    dialogRef = inject<MatDialogRef<HoursStepperDriveDialogComponent>>(MatDialogRef);
+    data = inject<HoursStepperDriveDialogData>(MAT_DIALOG_DATA);
+
     confirmDisabled: true;
     jobFormGroup: UntypedFormGroup;
     reasonGroup: UntypedFormGroup;
-
-    constructor(public dialogRef: MatDialogRef<HoursStepperDriveDialogComponent>,
-                @Inject(MAT_DIALOG_DATA) public data: HoursStepperDriveDialogData) {
-    }
 
     ngOnInit(): void {
         this.jobFormGroup = this.data.jobFormGroup;

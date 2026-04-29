@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
@@ -7,9 +7,9 @@ import { ActivatedRoute, Router } from "@angular/router";
   styleUrls: ["./employee-redirect.component.scss"]
 })
 export default class EmployeeRedirectComponent implements OnInit {
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
-  constructor(private router: Router, private route: ActivatedRoute) {
-  }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {

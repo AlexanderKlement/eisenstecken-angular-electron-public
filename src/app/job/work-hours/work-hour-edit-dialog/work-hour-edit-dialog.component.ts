@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { first, map } from "rxjs/operators";
@@ -24,6 +24,10 @@ export interface WorkHourEditDialogData {
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatSelect, FormsModule, ReactiveFormsModule, MatOption, MinuteHourComponent, MatButton, AsyncPipe]
 })
 export class WorkHourEditDialogComponent implements OnInit {
+  dialogRef = inject<MatDialogRef<WorkHourEditDialogComponent>>(MatDialogRef);
+  private api = inject(DefaultService);
+  data = inject<WorkHourEditDialogData>(MAT_DIALOG_DATA);
+
 
   create: boolean;
   userId: number;
@@ -33,11 +37,6 @@ export class WorkHourEditDialogComponent implements OnInit {
   selectedUserName$: Observable<string>;
   workHourGroup: UntypedFormGroup;
   loading = true;
-
-  constructor(
-    public dialogRef: MatDialogRef<WorkHourEditDialogComponent>, private api: DefaultService,
-    @Inject(MAT_DIALOG_DATA) public data: WorkHourEditDialogData) {
-  }
 
   ngOnInit(): void {
     this.create = this.data.userId <= 0;

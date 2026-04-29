@@ -1,16 +1,13 @@
-import { Component, forwardRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
-import { ActivatedRoute, Router } from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
 import {
-  AbstractControl,
   FormArray,
   FormControl,
   FormGroup,
-  FormsModule, NG_VALIDATORS,
+  FormsModule,
   ReactiveFormsModule,
   UntypedFormControl,
-  UntypedFormGroup, ValidationErrors, ValidatorFn, Validators
+  UntypedFormGroup
 } from "@angular/forms";
 import { Observable } from "rxjs";
 import { first, tap } from "rxjs/operators";
@@ -20,26 +17,29 @@ import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { AuthStateService } from "../../shared/services/auth-state.service";
 import {
-  DefaultService, GenderEnum,
+  GenderEnum,
   Lock,
   ScopeEnum,
   User,
   UserCreate,
   UserPassword,
-  UserUpdateBase, UserUpdateDress, UserUpdateEmployment, UserUpdateRights
+  UserUpdateBase,
+  UserUpdateDress,
+  UserUpdateEmployment,
+  UserUpdateRights
 } from "../../../api/openapi";
 import { MatTab, MatTabGroup } from "@angular/material/tabs";
 import { DefaultLayoutAlignDirective, DefaultLayoutDirective, DefaultLayoutGapDirective } from "ng-flex-layout";
-import { MatError, MatFormField, MatInput, MatLabel, MatPrefix, MatSuffix } from "@angular/material/input";
+import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
 import { MatOption, MatSelect } from "@angular/material/select";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { CircleIconButtonComponent } from "../../shared/components/circle-icon-button/circle-icon-button.component";
 import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular/material/datepicker";
 import { MatIcon } from "@angular/material/icon";
-import dayjs from "dayjs/esm";
 import {
-  EmploymentRelationshipControl, EmploymentValidatorDirective,
+  EmploymentRelationshipControl,
+  EmploymentValidatorDirective,
   HourlyControl,
   HourlyValidatorDirective,
   WorkmodelValidatorDirective
@@ -78,6 +78,9 @@ import {
   ]
 })
 export default class UserEditComponent extends BaseEditComponent<User> implements OnInit, OnDestroy {
+  private snackBar = inject(MatSnackBar);
+  private authService = inject(AuthStateService);
+
 
   @ViewChild("rights") rightsSelected: MatSelectionList;
   userGroup: UntypedFormGroup;
@@ -101,9 +104,6 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
   grantRightsAvailable = false;
   title = "Benutzer: Bearbeiten";
 
-  constructor(private snackBar: MatSnackBar, private authService: AuthStateService, api: DefaultService, router: Router, route: ActivatedRoute, dialog: MatDialog) {
-    super(api, router, route, dialog);
-  }
 
   lockFunction = (id: number): Observable<Lock> => this.api.islockedUserUsersIslockedUserIdGet(id);
 
@@ -283,7 +283,7 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
         });
         this.api.getHourlyRatesUsersHourlyRatesUserIdGet(user.id).pipe(
           tap(hourlyRates => {
-            hourlyRates.sort(this.sortDate).forEach((hr, index) => {
+            hourlyRates.sort(this.sortDate).forEach((hr) => {
               let hourly = new FormGroup({
                 cost: new FormControl(hr.rate),
                 end_date: new FormControl(hr.end_date),

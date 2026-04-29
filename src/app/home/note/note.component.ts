@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild, inject } from "@angular/core";
 import {first} from "rxjs/operators";
 import { DefaultService, Note, NoteCreate } from "../../../api/openapi";
 import { FlexModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective } from "ng-flex-layout";
@@ -13,15 +13,13 @@ import { MatIcon } from "@angular/material/icon";
     imports: [FlexModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective, SingleNoteComponent, MatFabButton, MatIcon]
 })
 export class NoteComponent implements OnInit {
+    private api = inject(DefaultService);
+
 
     @ViewChild("noteBox") noteBox: ElementRef;
 
     notes: Note[] = [];
     maxNotes = 2;
-
-    constructor(private api: DefaultService) {
-
-    }
 
     ngOnInit(): void {
         this.api.readNoteEntriesNoteGet().pipe(first()).subscribe((notes) => {

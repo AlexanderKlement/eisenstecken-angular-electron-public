@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
 import {ConfirmDialogComponent,} from "../../../shared/components/confirm-dialog/confirm-dialog.component";
 import {first} from "rxjs/operators";
@@ -21,17 +21,17 @@ export interface ServiceDialogData {
     imports: [MatDialogTitle, CdkScrollable, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatButton, MinuteHourComponent, MatDialogActions]
 })
 export class ServiceDialogComponent implements OnInit {
+    dialogRef = inject<MatDialogRef<ServiceDialogComponent>>(MatDialogRef);
+    data = inject<ServiceDialogData>(MAT_DIALOG_DATA);
+    private api = inject(DefaultService);
+    private snackBar = inject(MatSnackBar);
+    private dialog = inject(MatDialog);
+
 
     service: Service;
     minutes: number;
     loading = true;
     serviceGroup: UntypedFormGroup;
-
-    constructor(public dialogRef: MatDialogRef<ServiceDialogComponent>,
-                @Inject(MAT_DIALOG_DATA) public data: ServiceDialogData,
-                private api: DefaultService, private snackBar: MatSnackBar,
-                private dialog: MatDialog) {
-    }
 
     ngOnInit(): void {
         this.api.readServiceServiceServiceIdGet(this.data.id).pipe(first()).subscribe((service) => {

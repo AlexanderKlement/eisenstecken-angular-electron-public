@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
@@ -19,14 +19,13 @@ export interface ChangePathDialogData {
     imports: [MatDialogTitle,  MatDialogContent, FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatButton, MatDialogActions]
 })
 export class ChangePathDialogComponent implements OnInit {
+  private api = inject(DefaultService);
+  private file = inject(FileService);
+  dialogRef = inject<MatDialogRef<ChangePathDialogComponent>>(MatDialogRef);
+  data = inject<ChangePathDialogData>(MAT_DIALOG_DATA);
+
   title = 'Pfad ändern';
   changePathFormGroup: UntypedFormGroup;
-
-
-  constructor(private api: DefaultService, private file: FileService,
-              public dialogRef: MatDialogRef<ChangePathDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: ChangePathDialogData) {
-  }
 
   ngOnInit(): void {
     this.changePathFormGroup = new UntypedFormGroup({

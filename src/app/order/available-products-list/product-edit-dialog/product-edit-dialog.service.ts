@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { first } from "rxjs/operators";
@@ -7,12 +7,11 @@ import { OrderDialogCreateData, OrderDialogReturnData, ProductEditDialogComponen
 
 @Injectable({ providedIn: "root" })
 export class OrderedArticleEditDialogService {
-  constructor(
-    private dialog: MatDialog,
-    private api: DefaultService,
-    private orderedArticlesService: OrderedArticleService,
-    private snackBar: MatSnackBar,
-  ) {}
+  private dialog = inject(MatDialog);
+  private api = inject(DefaultService);
+  private orderedArticlesService = inject(OrderedArticleService);
+  private snackBar = inject(MatSnackBar);
+
 
   openEditDialog(
     orderedArticle: OrderedArticle,

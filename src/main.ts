@@ -1,44 +1,44 @@
 import "zone.js";
 import {
+  DEFAULT_CURRENCY_CODE,
   enableProdMode,
   ErrorHandler,
-  provideAppInitializer,
-  LOCALE_ID,
-  Injectable,
-  ApplicationConfig,
   importProvidersFrom,
-  DEFAULT_CURRENCY_CODE
+  Injectable,
+  LOCALE_ID,
+  provideAppInitializer,
+  provideZoneChangeDetection
 } from "@angular/core";
 import * as Sentry from "@sentry/angular";
 import { apiConfigFactory } from "./app/app.module";
 import { APP_CONFIG } from "./environments/environment";
 import { LocalConfigRenderer } from "./app/LocalConfigRenderer";
 import { provideRouter, RouteReuseStrategy } from "@angular/router";
-import { Configuration, ApiModule } from "./api/openapi";
+import { ApiModule, Configuration } from "./api/openapi";
 import { AccessGuard } from "./app/shared/services/access-guard.service";
 import { ChatService } from "./app/home/chat/chat.service";
-import { CurrencyPipe, DatePipe, CommonModule } from "@angular/common";
+import { CommonModule, CurrencyPipe, DatePipe } from "@angular/common";
 import { MAT_DATE_LOCALE, MatNativeDateModule } from "@angular/material/core";
 import { MatPaginatorIntl, MatPaginatorModule } from "@angular/material/paginator";
 import { getGermanPaginatorIntl } from "./app/shared/components/table-builder/table-builder.datasource";
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi, HttpClient } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { GlobalHttpInterceptorService } from "./app/global-http-inceptor.service";
 import { CustomReuseStrategy } from "./app/reuse-strategy";
 import {
   CalendarDateFormatter,
-  CalendarNativeDateFormatter,
-  DateFormatterParams,
   CalendarModule,
-  DateAdapter
+  CalendarNativeDateFormatter,
+  DateAdapter,
+  DateFormatterParams
 } from "angular-calendar";
-import { BrowserModule, bootstrapApplication } from "@angular/platform-browser";
+import { bootstrapApplication, BrowserModule } from "@angular/platform-browser";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SharedModule } from "./app/shared/shared.module";
 import { MatBottomSheetModule } from "@angular/material/bottom-sheet";
 import { FlexLayoutModule } from "ng-flex-layout";
-import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
+import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatInputModule } from "@angular/material/input";
@@ -101,6 +101,7 @@ if (typeof window !== "undefined" &&
 
 bootstrapApplication(AppComponent, {
   providers: [
+    provideZoneChangeDetection(),
     importProvidersFrom(CommonModule, BrowserModule, CalendarModule.forRoot({
         provide: DateAdapter,
         useFactory: adapterFactory

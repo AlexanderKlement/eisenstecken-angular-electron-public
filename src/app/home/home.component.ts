@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { AuthStateService } from "../shared/services/auth-state.service";
 import { InfoDialogComponent } from "./info-dialog/info-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
@@ -32,12 +32,10 @@ import { NgOptimizedImage } from "@angular/common";
   ]
 })
 export class HomeComponent implements OnInit {
-  constructor(
-    private authService: AuthStateService,
-    private dialog: MatDialog,
-    private api: DefaultService
-  ) {
-  }
+  private authService = inject(AuthStateService);
+  private dialog = inject(MatDialog);
+  private api = inject(DefaultService);
+
 
   userScope: ScopeEnum[] = [];
 

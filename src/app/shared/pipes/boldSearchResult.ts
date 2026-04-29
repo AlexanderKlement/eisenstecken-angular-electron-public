@@ -1,14 +1,11 @@
 
-  import { Pipe, PipeTransform, SecurityContext } from "@angular/core";
+  import { Pipe, PipeTransform, SecurityContext, inject } from "@angular/core";
 import {DomSanitizer} from "@angular/platform-browser";
 
   @Pipe({ name: 'boldSpan' })
 export class BoldSpanPipe implements PipeTransform {
+  protected sanitizer = inject(DomSanitizer);
 
-  constructor(
-    protected sanitizer: DomSanitizer
-  ) {
-  }
 
   transform(value: string, regex): any {
     return this.sanitize(this.replace(value, regex));
