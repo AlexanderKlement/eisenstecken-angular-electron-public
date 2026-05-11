@@ -1,24 +1,17 @@
-import { Component, Input, OnDestroy, OnInit, inject } from "@angular/core";
+import { Component, inject, Input, OnDestroy, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 import { first, tap } from "rxjs/operators";
 import { Router } from "@angular/router";
 import dayjs from "dayjs/esm";
 import { CalendarService } from "../calendar.service";
-import {
-  CalendarData,
-  CalendarEditComponent,
-} from "../calendar-edit/calendar-edit.component";
+import { CalendarData, CalendarEditComponent } from "../calendar-edit/calendar-edit.component";
 import { MatDialog } from "@angular/material/dialog";
-import { DefaultService, CalendarEntry } from "../../../../../api/openapi";
+import { CalendarEntry, DefaultService } from "../../../../../api/openapi";
 import { LoadingComponent } from "../../loading/loading.component";
 import { MatCard, MatCardContent } from "@angular/material/card";
-import { NgClass, AsyncPipe } from "@angular/common";
+import { AsyncPipe, NgClass } from "@angular/common";
 import { DefaultClassDirective } from "ng-flex-layout/extended";
-import {
-  DefaultLayoutDirective,
-  DefaultLayoutAlignDirective,
-  DefaultFlexDirective,
-} from "ng-flex-layout";
+import { DefaultFlexDirective, DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
 
 @Component({
   selector: "app-calendar-day",
@@ -33,8 +26,8 @@ import {
     DefaultLayoutDirective,
     DefaultLayoutAlignDirective,
     DefaultFlexDirective,
-    AsyncPipe,
-  ],
+    AsyncPipe
+  ]
 })
 export class CalendarDayComponent implements OnInit, OnDestroy {
   private api = inject(DefaultService);
@@ -68,16 +61,18 @@ export class CalendarDayComponent implements OnInit, OnDestroy {
     this.setTitle();
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+
+  }
 
   onCalendarEntryClicked(id: number): void {
     const data: CalendarData = {
       calendarId: this.calendarId,
-      calendarEntryId: id,
+      calendarEntryId: id
     };
     const dialogRef = this.dialog.open(CalendarEditComponent, {
       width: "700px",
-      data,
+      data
     });
     dialogRef
       .afterClosed()
