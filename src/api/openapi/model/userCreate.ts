@@ -16,20 +16,20 @@ export interface UserCreate {
     birthplace?: string | null;
     city?: string | null;
     country?: string | null;
-    dial: string;
+    dial?: string | null;
     email: string;
     email_private?: string | null;
     firstname: string;
     gender?: GenderEnum | null;
-    handy: string;
-    innovaphone_pass: string;
-    innovaphone_user: string;
-    notifications: boolean;
+    handy?: string | null;
+    innovaphone_pass?: string | null;
+    innovaphone_user?: string | null;
+    notifications?: boolean | null;
     password: string;
-    position: string;
+    position?: string | null;
     postal_code?: string | null;
     secondname: string;
-    tel: string;
+    tel?: string | null;
     vat_number?: string | null;
 }
 export namespace UserCreate {
