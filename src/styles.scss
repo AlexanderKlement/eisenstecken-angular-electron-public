@@ -1,5 +1,6 @@
 @use "sass:map";
 @use 'theme' as theme;
+@use '@angular/material' as mat;
 
 body,
 html {
@@ -73,4 +74,27 @@ html {
 
 .mat-mdc-input-element, .mat-mdc-select {
   color: black !important;
+}
+
+.new-form-element {
+  @include mat.form-field-overrides((
+    container-height: 38px,
+    container-vertical-padding: 7px,
+    outlined-focus-label-text-color: --mat-sys-on-surface,
+    outlined-focus-outline-color: --mat-sys-on-surface,
+  ));
+}
+
+.mat-form-field-appearance-fill {
+  margin-bottom: 16px;
+}
+
+.new-form-element {
+  .mat-form-field-appearance-fill {
+    margin-bottom: unset;
+  }
+}
+
+.my-shadow {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 10%), 0 2px 4px -2px rgb(0 0 0 / 10%);
 }

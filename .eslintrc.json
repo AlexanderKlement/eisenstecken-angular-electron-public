@@ -34,7 +34,8 @@
       ],
       "rules": {
         "prefer-template": "off",
-        "prefer-arrow/prefer-arrow-functions": "off"
+        "prefer-arrow/prefer-arrow-functions": "off",
+
       }
     },
     {

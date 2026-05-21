@@ -17,6 +17,7 @@ import employeeRoutes from "./employee/employee-routes";
 import deliveryNotesRoutes from "./delivery-note/delivery-note-routes";
 import serviceRoutes from "./service/service-routes";
 import phoneBookRoutes from "./phone-book/phone-book-routes";
+import testRoutes from "./test/test-routes";
 
 
 export const routes: Routes = [
@@ -38,11 +39,7 @@ export const routes: Routes = [
     },
     canActivate: [AccessGuard]
   },
-  {
-    path: "login",
-    loadComponent: () => import("./login/login.component"),
-    data: { requiresLogin: false }
-  },
+  ...testRoutes,
   ...userRoutes,
   ...jobRoutes,
   ...supplierRoutes,

@@ -1,0 +1,12 @@
+<app-toolbar [title]="title" [buttonList]="buttons"></app-toolbar>
+<div class="container">
+  <mat-tab-group>
+    <mat-tab label="Angebote">
+      <app-table-builder title="{{ offerTitle }}" [dataSource]="offerDataSource" [headerButtons]="offerHeaderButtons"
+                         [buttons]="offerButtons" />
+    </mat-tab>
+    <mat-tab label="Aufstellungen">
+
+    </mat-tab>
+  </mat-tab-group>
+</div>
