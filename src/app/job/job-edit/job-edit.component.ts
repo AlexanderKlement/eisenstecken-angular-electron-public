@@ -2,10 +2,10 @@ import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { BaseEditComponent } from "../../shared/components/base-edit/base-edit.component";
-import { first, tap } from "rxjs/operators";
+import { first, map, tap } from "rxjs/operators";
 import { AuthStateService } from "../../shared/services/auth-state.service";
 import dayjs from "dayjs/esm";
-import { Job, JobCreate, JobUpdate, Lock, SubJobCreate, User } from "../../../api/openapi";
+import { Job, JobCreate, JobUpdate, Lock, ScopeEnum, SubJobCreate, User } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { DefaultLayoutAlignDirective, DefaultLayoutDirective, FlexModule } from "ng-flex-layout";
 import { MatCheckbox } from "@angular/material/checkbox";
@@ -64,7 +64,9 @@ export default class JobEditComponent extends BaseEditComponent<Job> implements 
   ngOnInit(): void {
     super.ngOnInit();
     this.initJobGroup();
-    this.users$ = this.api.readUsersUsersGet(0, "", 100);
+    this.users$ = this.api.readUsersUsersGet(0, "", 100).pipe(
+      map(users => users.filter(u => u.scopes.includes(ScopeEnum.Office) || u.scopes.includes(ScopeEnum.Admin)))
+    );
     if (this.createMode) {
       this.routeParams.subscribe((params) => {
         if (params.sub !== undefined && params.sub === "sub") {

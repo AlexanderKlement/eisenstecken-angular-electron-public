@@ -1,4 +1,4 @@
-import { Component, ComponentRef, OnInit, ViewChild, inject } from "@angular/core";
+import { Component, ComponentRef, inject, OnInit, ViewChild } from "@angular/core";
 import { InfoDataSource } from "../../shared/components/info-builder/info-builder.datasource";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
@@ -67,10 +67,6 @@ export default class ClientDetailComponent implements OnInit {
             this.child.editButtonClicked();
           }
         });
-      }
-    });
-    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
-      if (allowed) {
         this.buttons.push({
             name: "Neuer Auftrag",
             navigate: (): void => {
@@ -78,13 +74,7 @@ export default class ClientDetailComponent implements OnInit {
             }
           }
         );
-      }
-    });
-    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
-      this.jobsAvailable = allowed;
-    });
-    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
-      if (allowed) {
+        this.jobsAvailable = allowed;
         this.buttons.push({
             name: "Kunde löschen",
             navigate: (): void => {
