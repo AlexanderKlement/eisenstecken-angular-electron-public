@@ -30,6 +30,7 @@ import {
   TechnicalData,
   TemplatePaint,
   TikTakEmployee,
+  TikTakTimeEntryByJob,
   User,
   UserContact,
   WoodList,
@@ -72,6 +73,7 @@ export type DataSourceClass =
   | TemplatePaint
   | OrderedArticleSmall
   | RecalculationSmall
+  | TikTakTimeEntryByJob
   | Journey;
 
 export type RecursiveKeyOf<T, Prefix extends string = never> =

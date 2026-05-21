@@ -7,11 +7,43 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ScopeEnum } from './scopeEnum';
+import { GenderEnum } from './genderEnum';
+import { TikTakEmployeeRelationship } from './tikTakEmployeeRelationship';
+import { TikTakEmployeeHourlyRate } from './tikTakEmployeeHourlyRate';
 
 
 export interface TikTakEmployee { 
+    address?: string | null;
+    birthday?: string | null;
+    birthplace?: string | null;
+    city?: string | null;
+    country?: string | null;
+    email: string;
+    email_privat?: string | null;
+    employment: Array<TikTakEmployeeRelationship>;
     firstname: string;
+    gender?: GenderEnum | null;
+    hourly_rates: Array<TikTakEmployeeHourlyRate>;
+    hours_friday?: number | null;
+    hours_monday?: number | null;
+    hours_saturday?: number | null;
+    hours_sunday?: number | null;
+    hours_thursday?: number | null;
+    hours_tuesday?: number | null;
+    hours_wednesday?: number | null;
     id: number;
+    internal_cost?: number | null;
+    position?: string | null;
+    postal_code?: string | null;
+    scopes: Array<ScopeEnum>;
     secondname: string;
+    tag_uid?: string | null;
+    tel?: string | null;
+    tel_privat?: string | null;
+    vat_number?: string | null;
 }
+export namespace TikTakEmployee {
+}
+
 

@@ -26,7 +26,9 @@ import {
   OutgoingInvoice,
   RecalculationService,
   RecalculationSmall,
-  ScopeEnum
+  ScopeEnum,
+  TikTakService,
+  TikTakTimeEntryByJob
 } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { JobStatusBarComponent } from "./job-status-bar/job-status-bar.component";
@@ -34,6 +36,7 @@ import { TableBuilderComponent } from "../../shared/components/table-builder/tab
 import {
   CreateRecalculationDialogComponent
 } from "./create-recalculation-dialog/create-recalculation-dialog.component";
+import { TimeEntryEditDialogComponent } from "./time-entry-edit-dialog/time-entry-edit-dialog.component";
 
 @Component({
   selector: "app-job-detail",
@@ -49,6 +52,7 @@ import {
 export default class JobDetailComponent implements OnInit {
   private api = inject(DefaultService);
   private recalculationService = inject(RecalculationService);
+  private tikTakService = inject(TikTakService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private snackBar = inject(MatSnackBar);
@@ -74,11 +78,13 @@ export default class JobDetailComponent implements OnInit {
   orderDataSource: TableDataSource<OrderSmall, DefaultService>;
   deliveryNoteDataSource: TableDataSource<DeliveryNote, DefaultService>;
   recalculationDataSource: TableDataSource<RecalculationSmall, RecalculationService>;
+  timeEntriesDataSource: TableDataSource<TikTakTimeEntryByJob, TikTakService>;
   outgoingInvoicesAllowed = false;
   offersAllowed = false;
   deliveryNoteAllowed = true;
   recalculationAllowed = true;
   title = "";
+  editTimeEntry: TikTakTimeEntryByJob | undefined = undefined;
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
 
@@ -411,6 +417,57 @@ export default class JobDetailComponent implements OnInit {
     this.recalculationDataSource.loadData();
   }
 
+  private initTimeEntriesTable(): void {
+    this.timeEntriesDataSource = new TableDataSource(
+      this.tikTakService,
+      (tikTakService, filter, sortDirection, skip, limit) =>
+        tikTakService.getTiktakTimeEntriesByJobTiktakTimeEntriesJobJobIdGet(
+          this.jobId,
+          skip,
+          filter,
+          limit,
+          null
+        ),
+      (dataSourceClasses) => {
+        const rows = [];
+        dataSourceClasses.forEach((dataSource) => {
+          const hours = Math.floor(dataSource.minutes / 60);
+          const minutes = dataSource.minutes % 60;
+          const hourlyRate = dataSource.hourlyRate;
+          const sum = hourlyRate ? hourlyRate * (dataSource.minutes / 60) : undefined;
+          rows.push({
+            values: {
+              sync: new Date(dataSource.lastSync).toLocaleString(),
+              user: dataSource.user.fullname,
+              hours: `${hours}:${minutes.toString(10).padStart(2, "0")}`,
+              hourly_rate: hourlyRate ? `${hourlyRate.toFixed(2)} €` : " - ",
+              "sum": sum ? `${sum.toFixed(2)} €` : " - "
+            },
+            route: () => {
+              const dialogRef = this.dialog.open(TimeEntryEditDialogComponent, {
+                width: "1000px",
+                data: { timeEntry: dataSource }
+              });
+              dialogRef.afterClosed().subscribe(() => {
+                this.timeEntriesDataSource.loadData();
+              });
+            }
+          });
+        });
+        return rows;
+      },
+      [
+        { name: "sync", headerName: "Letzte Synchronisierung" },
+        { name: "user", headerName: "Mitarbeiter" },
+        { name: "hours", headerName: "Stunden" },
+        { name: "hourly_rate", headerName: "Stundensatz" },
+        { name: "sum", headerName: "Summe" }
+      ],
+      (api) => api.countTiktakTimeEntriesByJobTiktakTimeEntriesJobCountJobIdGet(this.jobId)
+    );
+    this.timeEntriesDataSource.loadData();
+  }
+
   private initAccessRights() {
 
     this.buttonsMain.push({
@@ -598,6 +655,7 @@ export default class JobDetailComponent implements OnInit {
     this.initOrderTable();
     this.initDeliveryNoteTable();
     this.initRecalculationTable();
+    this.initTimeEntriesTable();
   }
 
   private newInvoiceClicked() {
@@ -720,4 +778,5 @@ export default class JobDetailComponent implements OnInit {
       }
     });
   }
+
 }
