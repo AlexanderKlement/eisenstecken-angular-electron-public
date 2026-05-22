@@ -26,7 +26,6 @@
     "electron:deploy": "npm run build:prod && electron-builder build --publish=always",
     "electron:dev": "npm run build:dev && electron-builder build --publish=never",
     "electron:beta": "npm run build:prod && electron-builder -c electron-builder.beta.json --publish=never",
-    "electron:mac": "npm run build:prod && electron-builder --mac",
     "test": "ng test --watch=false",
     "test:watch": "ng test",
     "e2e": "npm run build:prod && playwright test -c e2e/playwright.config.ts e2e/",
