@@ -36,6 +36,7 @@ import {
   WoodList,
   Workload
 } from "../../api/openapi";
+import { OfferElementType, OfferField } from "../../api/openapi/api/offer.service";
 
 
 export type DataSourceClass =
@@ -55,6 +56,8 @@ export type DataSourceClass =
   | Supplier
   | Contact
   | Price
+  | OfferField
+  | OfferElementType
   | OrderSmall
   | TechnicalData
   | Credential

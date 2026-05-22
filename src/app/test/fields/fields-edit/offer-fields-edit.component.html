@@ -1,0 +1,90 @@
+<app-toolbar [title]="title" [buttonList]="buttons"></app-toolbar>
+<div class="center-container">
+  <div class="my-1" fxLayout="row" fxLayoutAlign="start center">
+    <h2>{{ title2 }}</h2>
+    <div fxFlex></div>
+    @if (loading$ | async) {
+      <div class="spinner-container">
+        <mat-spinner></mat-spinner>
+      </div>
+    } @else {
+      @if (fieldId) {
+        <button mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
+      }
+      <button mat-raised-button color="primary" (click)="onSubmit()">Speichern</button>
+    }
+  </div>
+  <div fxLayout="column" fxLayoutAlign="stretch" fxFill>
+    <form [formGroup]="fieldsGroup" (ngSubmit)="onSubmit()">
+      <div fxLayout="row" fxLayoutGap="16">
+        <mat-form-field fxFlex>
+          <mat-label>Name</mat-label>
+          <input class="form-control" formControlName="label" matInput>
+        </mat-form-field>
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Beschreibung (intern als Tooltip)</mat-label>
+          <input class="form-control" formControlName="description" matInput>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayoutGap="16">
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Datentyp</mat-label>
+          <mat-select class="form-control" formControlName="type">
+            <mat-option value="{{ OfferFieldEnum.Alphanumeric }}">{{ fieldTypeToString(OfferFieldEnum.Alphanumeric) }}
+            </mat-option>
+            <mat-option value="{{ OfferFieldEnum.Numeric }}">{{ fieldTypeToString(OfferFieldEnum.Numeric) }}
+            </mat-option>
+            <mat-option value="{{ OfferFieldEnum.Calculation }}">{{ fieldTypeToString(OfferFieldEnum.Calculation) }}
+            </mat-option>
+            <mat-option value="{{ OfferFieldEnum.Dropdown }}">{{ fieldTypeToString(OfferFieldEnum.Dropdown) }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        @if (fieldsGroup.get("type").value == OfferFieldEnum.Numeric || fieldsGroup.get("type").value == OfferFieldEnum.Calculation) {
+          <mat-form-field fxFlex>
+            <mat-label>Einheit</mat-label>
+            <mat-select class="form-control" formControlName="unitId">
+              <mat-option value="-1">Auswählen</mat-option>
+              @for (unit of units | async; track unit) {
+                <mat-option value="{{unit.id}}">{{ unit.short.translation_de }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        } @else {
+          <div fxFlex></div>
+        }
+      </div>
+      @if (fieldsGroup.get("type").value == OfferFieldEnum.Calculation) {
+        <div fxLayout="row" fxLayoutGap="16" class="my-1">
+          <mat-form-field appearance="fill" fxFlex>
+            <mat-label>Berechnung</mat-label>
+            <input type="text" matInput formControlName="calculation" />
+            <mat-hint>
+              <code>&#64;Feldname</code> tippen um ein anderes Feld zu referenzieren. Operatoren: + (plus), - (minus), *
+              (mal), /
+              (geteilt)<br />
+              Es können alle Felder im System referenziert werden. Ein Element welches dieses Feld enthält, muss die
+              referenzieren Felder auch haben<br />
+              Weitere Referenzierungen: <code>&#64;parent.Feldname</code>,
+              <code>&#64;child.Elementname.Feldname</code><br />
+              Beispiele:
+              <ul>
+                <li>mit <code>&#64;child.Schrank.Höhe</code> wird das "Höhe" feld des Unterelement "Schrank"
+                  referenziert
+                </li>
+                <li>mit <code>&#64;parent.Breite</code> wird das "Breite" feld des darüberligenden Element referenziert
+                </li>
+                <li>Volumen Kegel = <code>3.14 * &#64;Radius * &#64;Radius * &#64;Höhe * 1/3</code></li>
+              </ul>
+            </mat-hint>
+          </mat-form-field>
+        </div>
+      }
+      @if (fieldsGroup.get("type").value == OfferFieldEnum.Dropdown) {
+        <div class="infobox">
+          Die Quelle dieses Auswahl-Felds (Bibliothek bzw. manuelle Optionen) wird pro Element festgelegt.
+        </div>
+      }
+    </form>
+  </div>
+</div>

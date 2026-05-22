@@ -44,6 +44,7 @@ export default class OfferTemplatesComponent implements OnInit {
       }
     }, {
       name: "Templates",
+      active: true,
       navigate: () => {
         this.router.navigateByUrl("/test/templates").then();
       }

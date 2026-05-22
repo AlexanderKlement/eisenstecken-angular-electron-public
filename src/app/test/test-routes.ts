@@ -23,6 +23,13 @@ const testRoutes: Routes = [{
   },
   canActivate: [AccessGuard]
 }, {
+  path: "test/fields/:id",
+  loadComponent: () => import("./fields/fields-edit/offer-fields-edit.component"),
+  data: {
+    requiresLogin: true
+  },
+  canActivate: [AccessGuard]
+}, {
   path: "test/element_types",
   loadComponent: () => import("./element_types/offer-element-types.component"),
   data: {

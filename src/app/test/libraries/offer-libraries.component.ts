@@ -39,6 +39,7 @@ export default class OfferLibrariesComponent implements OnInit {
       }
     }, {
       name: "Bibliotheken",
+      active: true,
       navigate: () => {
         this.router.navigateByUrl("/test/libraries").then();
       }

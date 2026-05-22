@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from "@angular/core";
+import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { Observable, ReplaySubject, Subscription } from "rxjs";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { first } from "rxjs/operators";
@@ -23,9 +23,9 @@ export class BaseEditComponent<T> implements OnInit, OnDestroy, ReusableRoute, D
 
   // to be provided by derived class:
   navigationTarget: string;
-  lockFunction!: (id: number) => Observable<Lock>;
-  unlockFunction!: (id: number) => Observable<boolean>;
-  dataFunction!: (id: number) => Observable<T>;
+  lockFunction: (id: number) => Observable<Lock>;
+  unlockFunction: (id: number) => Observable<boolean>;
+  dataFunction: (id: number) => Observable<T>;
 
   // shared:
   me$!: Observable<User>;
@@ -76,22 +76,27 @@ export class BaseEditComponent<T> implements OnInit, OnDestroy, ReusableRoute, D
       }
 
       if (!this.createMode) {
-        this.lockFunction(this.id).pipe(first()).subscribe((lock) => {
-          if (!lock.locked) {
-            console.error("BaseEditComponent: Expected resource to be locked.");
-            this.goBack();
-            return;
-          }
-          this.me$.pipe(first()).subscribe((user) => {
-            if (user.id !== lock.user.id) {
-              console.error("BaseEditComponent: Resource is locked by another user.");
+        if (this.lockFunction) {
+          this.lockFunction(this.id).pipe(first()).subscribe((lock) => {
+            if (!lock.locked) {
+              console.error("BaseEditComponent: Expected resource to be locked.");
               this.goBack();
               return;
             }
-            this.data$ = this.dataFunction(this.id);
-            this.observableReady();
+            this.me$.pipe(first()).subscribe((user) => {
+              if (user.id !== lock.user.id) {
+                console.error("BaseEditComponent: Resource is locked by another user.");
+                this.goBack();
+                return;
+              }
+              this.data$ = this.dataFunction(this.id);
+              this.observableReady();
+            });
           });
-        });
+        } else {
+          this.data$ = this.dataFunction(this.id);
+          this.observableReady();
+        }
       } else {
         this.observableReady();
       }
@@ -105,7 +110,7 @@ export class BaseEditComponent<T> implements OnInit, OnDestroy, ReusableRoute, D
     this.subscription.unsubscribe();
     this.controlsSub?.unsubscribe();
 
-    if (!this.createMode) {
+    if (!this.createMode && this.unlockFunction) {
       this.unlockFunction(this.id).pipe(first()).subscribe((success) => {
         if (success) {
           console.info("BaseEdit: SUCCESS: unlocked object with id:", this.id);

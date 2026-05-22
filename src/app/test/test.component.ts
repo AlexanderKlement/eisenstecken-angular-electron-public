@@ -59,6 +59,7 @@ export default class TestComponent implements OnInit {
     });
     this.buttons.push({
       name: "Angebote",
+      active: true,
       navigate: () => {
         this.router.navigateByUrl("/test").then();
       }
