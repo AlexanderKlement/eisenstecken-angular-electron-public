@@ -1,14 +1,15 @@
 import {
-  AfterViewInit, booleanAttribute,
+  AfterViewInit,
+  booleanAttribute,
   Component,
-  ElementRef, inject,
+  ElementRef,
   Input,
   OnDestroy,
   OnInit,
   SimpleChanges,
-  ViewChild
+  ViewChild, OnChanges
 } from "@angular/core";
-import { SortFunction, TableDataSource } from "./table-builder.datasource";
+import { TableDataSource } from "./table-builder.datasource";
 import { MatPaginator } from "@angular/material/paginator";
 import { debounceTime, distinctUntilChanged, tap } from "rxjs/operators";
 import { fromEvent, Observable, Subscription } from "rxjs";
@@ -17,21 +18,12 @@ import { ThemePalette } from "@angular/material/core";
 import { DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
 import { MatFormField, MatInput } from "@angular/material/input";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
-import {
-  MatCell, MatCellDef,
-  MatColumnDef,
-  MatHeaderCell, MatHeaderCellDef,
-  MatHeaderRow,
-  MatHeaderRowDef,
-  MatRow, MatRowDef,
-  MatTable
-} from "@angular/material/table";
+import { MatCell, MatColumnDef, MatHeaderCell, MatHeaderRow, MatRow, MatTable } from "@angular/material/table";
 import { MatButton } from "@angular/material/button";
 import { MatTooltip } from "@angular/material/tooltip";
 import { AsyncPipe, NgClass } from "@angular/common";
-import { DefaultService, OrderService, RecalculationService } from "../../../../api/openapi";
-import { MatSort, MatSortHeader, Sort } from "@angular/material/sort";
-import { LiveAnnouncer } from "@angular/cdk/a11y";
+import { DefaultService, OrderService, RecalculationService, TikTakService } from "../../../../api/openapi";
+import { MatSort, MatSortHeader } from "@angular/material/sort";
 
 export interface TableButton {
   name: (values: any) => string;
@@ -41,7 +33,7 @@ export interface TableButton {
   selectedField: string;
 }
 
-type AnyApi = DefaultService | RecalculationService | OrderService;
+type AnyApi = DefaultService | RecalculationService | OrderService | TikTakService;
 
 @Component({
   selector: "app-table-builder",
@@ -58,23 +50,19 @@ type AnyApi = DefaultService | RecalculationService | OrderService;
     MatHeaderCell,
     MatCell,
     MatButton,
-    MatHeaderRowDef,
     MatHeaderRow,
     MatRow,
     MatTooltip,
     MatPaginator,
     AsyncPipe,
     NgClass,
-    MatRowDef,
-    MatCellDef,
-    MatHeaderCellDef,
     MatSortHeader,
     MatSort
   ]
 })
 
 export class TableBuilderComponent<T extends DataSourceClass, A extends AnyApi = AnyApi>
-  implements OnInit, AfterViewInit, OnDestroy {
+  implements OnInit, AfterViewInit, OnDestroy, OnChanges {
   @Input() dataSource!: TableDataSource<T, A>;
   @Input() title?: string;
   @Input({ transform: booleanAttribute }) noSearch?: boolean = false;
