@@ -120,10 +120,6 @@
         "dmg",
         "zip"
       ],
-      "arch": [
-        "x64",
-        "arm64"
-      ],
       "notarize": true,
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
