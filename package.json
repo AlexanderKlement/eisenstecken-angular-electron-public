@@ -113,5 +113,33 @@
   },
   "engines": {
     "node": ">=14.0.0"
+  },
+  "build": {
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "arch": [
+        "x64",
+        "arm64"
+      ],
+      "notarize": true,
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist"
+    },
+    "afterSign": null,
+    "files": [
+      "**/*"
+    ],
+    "extraResources": [],
+    "asarUnpack": [],
+    "signIgnore": [
+      "LICENSE",
+      "\\.txt$",
+      "\\.md$"
+    ]
   }
 }
