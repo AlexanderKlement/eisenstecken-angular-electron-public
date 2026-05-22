@@ -130,11 +130,6 @@
       "**/*"
     ],
     "extraResources": [],
-    "asarUnpack": [],
-    "signIgnore": [
-      "LICENSE",
-      "\\.txt$",
-      "\\.md$"
-    ]
+    "asarUnpack": []
   }
 }
