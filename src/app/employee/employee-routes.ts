@@ -1,42 +1,48 @@
 import { Routes } from "@angular/router";
+import EmployeeComponent from "./employee.component";
+import EmployeeDetailComponent from "./employee-detail/employee-detail.component";
+import EmployeeRedirectComponent from "./employee-redirect/employee-redirect.component";
+import WorkDayNewComponent from "./work-day-new/work-day-new.component";
+import MealComponent from "./meal/meal.component";
+import EmployeeServiceComponent from "./service/employee-service.component";
 
 const employeeRoutes: Routes = [
   {
     path: "employee",
-    loadComponent: () => import("./employee.component"),
+    component: EmployeeComponent,
     data: {
       requiresLogin: true
     }
   },
   {
     path: "employee/:id",
-    loadComponent: () => import("./employee-detail/employee-detail.component"),
+    component: EmployeeDetailComponent,
     data: {
       requiresLogin: true
     }
   },
   {
     path: "employee/redirect/:id",
-    loadComponent: () => import("./employee-redirect/employee-redirect.component"),
+    component: EmployeeRedirectComponent,
     data: {
       requiresLogin: true
     }
   },
   {
     path: "work_day/new/:id",
-    loadComponent: () => import("./work-day-new/work-day-new.component"),
+    component: WorkDayNewComponent,
     data: { requiresLogin: true }
   },
   {
     path: "meal/:id",
-    loadComponent: () => import("./meal/meal.component"),
+    component: MealComponent,
     data: {
       requiresLogin: true
     }
   },
   {
     path: "service/:id",
-    loadComponent: () => import("./service/employee-service.component"),
+    component: EmployeeServiceComponent,
     data: {
       requiresLogin: true
     }

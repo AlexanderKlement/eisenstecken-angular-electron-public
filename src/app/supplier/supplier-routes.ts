@@ -1,9 +1,15 @@
 import { Routes } from "@angular/router";
+import SupplierComponent from "./supplier.component";
+import SupplierDetailComponent from "./supplier-detail/supplier-detail.component";
+import SupplierEditComponent from "./supplier-edit/supplier-edit.component";
+import StockDetailComponent from "./stock-detail/stock-detail.component";
+import StockEditComponent from "./stock-edit/stock-edit.component";
+import ArticleSupplierComponent from "./article-supplier/article-supplier.component";
 
 const supplierRoutes: Routes = [
   {
     path: "supplier",
-    loadComponent: () => import("./supplier.component"),
+    component: SupplierComponent,
     data: {
       requiresLogin: true,
       shouldDetach: true
@@ -11,7 +17,7 @@ const supplierRoutes: Routes = [
   },
   {
     path: "supplier/:id",
-    loadComponent: () => import("./supplier-detail/supplier-detail.component"),
+    component: SupplierDetailComponent,
     data: {
       requiresLogin: true,
       shouldDetach: true
@@ -19,12 +25,12 @@ const supplierRoutes: Routes = [
   },
   {
     path: "supplier/edit/:id",
-    loadComponent: () => import("./supplier-edit/supplier-edit.component"),
+    component: SupplierEditComponent,
     data: { requiresLogin: true }
   },
   {
     path: "stock/:id",
-    loadComponent: () => import("./stock-detail/stock-detail.component"),
+    component: StockDetailComponent,
     data: {
       requiresLogin: true,
       shouldDetach: true
@@ -32,12 +38,12 @@ const supplierRoutes: Routes = [
   },
   {
     path: "stock/edit/:id",
-    loadComponent: () => import("./stock-edit/stock-edit.component"),
+    component: StockEditComponent,
     data: { requiresLogin: true }
   },
   {
     path: "supplier/articles/:supplier_id",
-    loadComponent: () => import("./article-supplier/article-supplier.component"),
+    component: ArticleSupplierComponent,
     data: {
       requiresLogin: true,
       type: "supplier"
@@ -45,7 +51,7 @@ const supplierRoutes: Routes = [
   },
   {
     path: "stock/articles/:supplier_id",
-    loadComponent: () => import("./article-supplier/article-supplier.component"),
+    component: ArticleSupplierComponent,
     data: {
       requiresLogin: true,
       type: "stock"

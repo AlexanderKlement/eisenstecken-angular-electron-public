@@ -1,9 +1,10 @@
 import { Routes } from "@angular/router";
+import EventCalendarComponent from "./event-calendar.component";
 
 const eventCalendarRoutes: Routes = [
   {
     path: "calendar",
-    loadComponent: () => import("./event-calendar.component"),
+    component: EventCalendarComponent,
     data: {
       requiresLogin: true,
       shouldDetach: true

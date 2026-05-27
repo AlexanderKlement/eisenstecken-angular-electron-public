@@ -17,6 +17,8 @@ import employeeRoutes from "./employee/employee-routes";
 import deliveryNotesRoutes from "./delivery-note/delivery-note-routes";
 import serviceRoutes from "./service/service-routes";
 import phoneBookRoutes from "./phone-book/phone-book-routes";
+import LoginComponent from "./login/login.component";
+import { PageNotFoundComponent } from "./shared/components";
 
 
 export const routes: Routes = [
@@ -40,7 +42,7 @@ export const routes: Routes = [
   },
   {
     path: "login",
-    loadComponent: () => import("./login/login.component"),
+    component: LoginComponent,
     data: { requiresLogin: false }
   },
   ...userRoutes,
@@ -60,6 +62,6 @@ export const routes: Routes = [
   ...phoneBookRoutes,
   {
     path: "**",
-    loadComponent: () => import("./shared/components/page-not-found/page-not-found.component")
+    component: PageNotFoundComponent
   }
 ];

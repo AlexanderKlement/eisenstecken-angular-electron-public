@@ -1,10 +1,11 @@
 import { Routes } from "@angular/router";
+import PhoneBookComponent from "./phone-book.component";
 
 
 const phoneBookRoutes: Routes = [
   {
     path: "phone_book",
-    loadComponent: () => import("./phone-book.component"),
+    component: PhoneBookComponent,
     data: {
       requiresLogin: true,
       shouldDetach: true

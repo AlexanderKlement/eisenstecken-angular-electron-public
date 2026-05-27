@@ -1,10 +1,13 @@
 import { Routes } from "@angular/router";
 import { AccessGuard } from "../shared/services/access-guard.service";
+import ClientComponent from "./client.component";
+import ClientDetailComponent from "./client-detail/client-detail.component";
+import ClientEditComponent from "./client-edit/client-edit.component";
 
 const clientRoutes: Routes = [
   {
     path: "client",
-    loadComponent: () => import("./client.component"),
+    component: ClientComponent,
     data: {
       requiresLogin: true,
       shouldDetach: true
@@ -13,7 +16,7 @@ const clientRoutes: Routes = [
   },
   {
     path: "client/:id",
-    loadComponent: () => import("./client-detail/client-detail.component"),
+    component: ClientDetailComponent,
     data: {
       requiresLogin: true,
       shouldDetach: true
@@ -22,7 +25,7 @@ const clientRoutes: Routes = [
   },
   {
     path: "client/edit/:id",
-    loadComponent: () => import("./client-edit/client-edit.component"),
+    component: ClientEditComponent,
     data: { requiresLogin: true },
     canActivate: [AccessGuard]
   }
