@@ -123,12 +123,12 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
       this.firstTabLabel = "Erstellen";
     }
     this.userGroup = new FormGroup<GeneralControl>({
-      firstname: new FormControl("", this.createMode ? Validators.required : undefined),
-      secondname: new FormControl("", this.createMode ? Validators.required : undefined),
+      firstname: new FormControl("", Validators.required),
+      secondname: new FormControl("", Validators.required),
       gender: new FormControl(""),
       birthday: new FormControl(""),
       birthplace: new FormControl(""),
-      email: new FormControl("", this.createMode ? Validators.required : undefined),
+      email: new FormControl("", Validators.required),
       email_private: new FormControl(""),
       vat_number: new FormControl(""),
       address: new FormControl(""),

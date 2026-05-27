@@ -32,7 +32,7 @@ import {
 } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { JobStatusBarComponent } from "./job-status-bar/job-status-bar.component";
-import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
+import { TableBuilderComponent, TableButton } from "../../shared/components/table-builder/table-builder.component";
 import {
   CreateRecalculationDialogComponent
 } from "./create-recalculation-dialog/create-recalculation-dialog.component";
@@ -82,9 +82,16 @@ export default class JobDetailComponent implements OnInit {
   outgoingInvoicesAllowed = false;
   offersAllowed = false;
   deliveryNoteAllowed = true;
-  recalculationAllowed = true;
   title = "";
-  editTimeEntry: TikTakTimeEntryByJob | undefined = undefined;
+  timeEntryTableButton: TableButton[] = [{
+    name: () => "Erstellen",
+    color: () => "primary",
+    class: () => "",
+    navigate: $event => {
+      this.onCreateTimeEntryClicked();
+    },
+    selectedField: ""
+  }];
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
 
@@ -438,7 +445,7 @@ export default class JobDetailComponent implements OnInit {
             route: () => {
               const dialogRef = this.dialog.open(TimeEntryEditDialogComponent, {
                 width: "1000px",
-                data: { timeEntry: dataSource }
+                data: { timeEntry: dataSource, jobId: this.jobId }
               });
               dialogRef.afterClosed().subscribe(() => {
                 this.timeEntriesDataSource.loadData();
@@ -458,6 +465,16 @@ export default class JobDetailComponent implements OnInit {
       (api) => api.countTiktakTimeEntriesByJobTiktakTimeEntriesJobCountJobIdGet(this.jobId)
     );
     this.timeEntriesDataSource.loadData();
+  }
+
+  private onCreateTimeEntryClicked() {
+    const dialogRef = this.dialog.open(TimeEntryEditDialogComponent, {
+      width: "1000px",
+      data: { timeEntry: undefined, jobId: this.jobId }
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      this.timeEntriesDataSource.loadData();
+    });
   }
 
   private initAccessRights() {
