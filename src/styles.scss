@@ -78,8 +78,8 @@ html {
 
 .new-form-element {
   @include mat.form-field-overrides((
-    container-height: 40px,
-    container-vertical-padding: 7px,
+    container-height: 37px,
+    container-vertical-padding: 6.5px,
     outlined-focus-label-text-color: --mat-sys-on-surface,
     outlined-focus-outline-color: --mat-sys-on-surface,
   ));

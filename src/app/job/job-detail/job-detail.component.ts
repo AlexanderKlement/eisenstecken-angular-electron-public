@@ -32,7 +32,7 @@ import {
 } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { JobStatusBarComponent } from "./job-status-bar/job-status-bar.component";
-import { TableBuilderComponent, TableButton } from "../../shared/components/table-builder/table-builder.component";
+import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 import {
   CreateRecalculationDialogComponent
 } from "./create-recalculation-dialog/create-recalculation-dialog.component";
@@ -83,15 +83,6 @@ export default class JobDetailComponent implements OnInit {
   offersAllowed = false;
   deliveryNoteAllowed = true;
   title = "";
-  timeEntryTableButton: TableButton[] = [{
-    name: () => "Erstellen",
-    color: () => "primary",
-    class: () => "",
-    navigate: $event => {
-      this.onCreateTimeEntryClicked();
-    },
-    selectedField: ""
-  }];
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
 
@@ -611,6 +602,12 @@ export default class JobDetailComponent implements OnInit {
               this.router.navigateByUrl(
                 "/offer/edit/new/" + this.jobId.toString()
               );
+            }
+          });
+          this.buttonsMain[0].dropdown.push({
+            name: "Neue Arbeitszeit",
+            navigate: (): void => {
+              this.onCreateTimeEntryClicked();
             }
           });
 
