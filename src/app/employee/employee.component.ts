@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
 import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
 import { LockService } from "../shared/services/lock.service";
@@ -10,8 +10,8 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { minutesToDisplayableString } from "../shared/date.util";
 import { Observable, Subscriber } from "rxjs";
-import { User, Fee, Journey, MealSum, Maintenance, AdditionalWorkload, DefaultService } from "../../api/openapi";
-import { MatTabGroup, MatTab } from "@angular/material/tabs";
+import { AdditionalWorkload, DefaultService, Fee, Journey, Maintenance, MealSum, User } from "../../api/openapi";
+import { MatTab, MatTabGroup } from "@angular/material/tabs";
 import { TableBuilderComponent } from "../shared/components/table-builder/table-builder.component";
 
 @Component({
@@ -142,7 +142,6 @@ export default class EmployeeComponent implements OnInit {
                 "user.fullname": dataSource.user.fullname,
                 "car.name": dataSource.car.name,
                 date: dayjs(dataSource.date).format("L"),
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 distance_km: dataSource.distance_km
               },
               route: () => {
@@ -175,7 +174,6 @@ export default class EmployeeComponent implements OnInit {
             {
               values: {
                 date: dayjs(dataSource.date).format("MMMM YYYY"),
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 "eating_place.name": dataSource.eating_place.name,
                 sum: dataSource.sum
               },
@@ -255,7 +253,6 @@ export default class EmployeeComponent implements OnInit {
             {
               values: {
                 month: dayjs(dataSource.month).format("MMMM YYYY"),
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 "user.fullname": dataSource.user.fullname,
                 minutes: minutesToDisplayableString(dataSource.minutes)
               },
@@ -293,7 +290,6 @@ export default class EmployeeComponent implements OnInit {
             {
               values: {
                 date: dayjs(dataSource.date).format("dddd, DD.MM.YYYY"),
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 "user.fullname": dataSource.user.fullname,
                 minutes: minutesToDisplayableString(dataSource.minutes),
                 description: dataSource.description

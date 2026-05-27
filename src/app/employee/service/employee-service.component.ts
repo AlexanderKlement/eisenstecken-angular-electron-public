@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -75,7 +75,6 @@ export default class EmployeeServiceComponent implements OnInit {
             {
               values: {
                 date: dayjs(dataSource.date).format("dddd, DD.MM.YYYY"),
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 "user.fullname": dataSource.user.fullname,
                 minutes: minutesToDisplayableString(dataSource.minutes)
               },

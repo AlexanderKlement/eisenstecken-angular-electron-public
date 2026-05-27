@@ -1,13 +1,12 @@
-import { Component, OnInit, inject } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent } from "@angular/material/dialog";
+import { Component, inject, OnInit } from "@angular/core";
+import { MAT_DIALOG_DATA, MatDialogContent, MatDialogRef, MatDialogTitle } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { first, map } from "rxjs/operators";
-import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { DefaultService, Workload, WorkloadUpdate, WorkloadCreate, User } from "../../../../api/openapi";
-import { CdkScrollable } from "@angular/cdk/scrolling";
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { DefaultService, User, Workload, WorkloadCreate, WorkloadUpdate } from "../../../../api/openapi";
+import { DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
 import { MatFormField, MatLabel } from "@angular/material/input";
-import { MatSelect, MatOption } from "@angular/material/select";
+import { MatOption, MatSelect } from "@angular/material/select";
 import { MinuteHourComponent } from "../../../shared/components/minute-hour/minute-hour.component";
 import { MatButton } from "@angular/material/button";
 import { AsyncPipe } from "@angular/common";
@@ -18,10 +17,10 @@ export interface WorkHourEditDialogData {
 }
 
 @Component({
-    selector: 'app-work-hour-edit-dialog',
-    templateUrl: './work-hour-edit-dialog.component.html',
-    styleUrls: ['./work-hour-edit-dialog.component.scss'],
-    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatSelect, FormsModule, ReactiveFormsModule, MatOption, MinuteHourComponent, MatButton, AsyncPipe]
+  selector: "app-work-hour-edit-dialog",
+  templateUrl: "./work-hour-edit-dialog.component.html",
+  styleUrls: ["./work-hour-edit-dialog.component.scss"],
+  imports: [MatDialogTitle, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatSelect, FormsModule, ReactiveFormsModule, MatOption, MinuteHourComponent, MatButton, AsyncPipe]
 })
 export class WorkHourEditDialogComponent implements OnInit {
   dialogRef = inject<MatDialogRef<WorkHourEditDialogComponent>>(MatDialogRef);
@@ -45,7 +44,7 @@ export class WorkHourEditDialogComponent implements OnInit {
     this.jobId = this.data.jobId;
     if (!this.create) {
       this.selectedUserName$ = this.api.readUserUsersUserIdGet(this.userId).pipe(map(
-        user => user.fullname,
+        user => user.fullname
       ));
       this.api.readWorkloadByUserAndJobWorkloadUserJobUserIdJobIdGet(this.userId, this.jobId).pipe(first()).subscribe((workload) => {
         this.initWorkHourGroup(workload);
@@ -67,10 +66,8 @@ export class WorkHourEditDialogComponent implements OnInit {
     }
     this.workHourGroup = new UntypedFormGroup({
       minutes: new UntypedFormControl(minutes),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       minutes_direction: new UntypedFormControl(minutesDirection),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      selected_user_id: new UntypedFormControl(this.create ? 1 : this.userId),
+      selected_user_id: new UntypedFormControl(this.create ? 1 : this.userId)
     });
   }
 
@@ -94,13 +91,10 @@ export class WorkHourEditDialogComponent implements OnInit {
   onSubmitClick() {
     if (this.create) {
       const workloadCreate: WorkloadCreate = {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         user_id: parseInt(this.workHourGroup.get("selected_user_id").value, 10),
         minutes: parseInt(this.getMinuteControl().value, 10),
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         minutes_direction: parseInt(this.getMinuteDirectionControl().value, 10),
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        job_id: this.data.jobId,
+        job_id: this.data.jobId
       };
       this.api.createWorkloadWorkloadPost(workloadCreate).pipe(first()).subscribe(() => {
         this.closeDialog(true);
@@ -108,9 +102,7 @@ export class WorkHourEditDialogComponent implements OnInit {
     } else {
       const workloadUpdate: WorkloadUpdate = {
         minutes: parseInt(this.getMinuteControl().value, 10),
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        minutes_direction: parseInt(this.getMinuteDirectionControl().value, 10),
-        // eslint-disable-next-line @typescript-eslint/naming-convention
+        minutes_direction: parseInt(this.getMinuteDirectionControl().value, 10)
       };
       this.api.updateWorkloadWorkloadWorkloadIdPut(this.workloadId, workloadUpdate).pipe(first()).subscribe(() => {
         this.closeDialog(true);

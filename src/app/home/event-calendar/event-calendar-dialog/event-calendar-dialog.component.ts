@@ -1,11 +1,16 @@
-import { Component, OnInit, inject } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
-import {AuthStateService} from "../../../shared/services/auth-state.service";
-import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
-import {CompanyEventCreate, CompanyEventEnum, CompanyEventUpdate, DefaultService} from "../../../../api/openapi";
-import { CdkScrollable } from "@angular/cdk/scrolling";
-import { MatSelectionList, MatListOption } from "@angular/material/list";
-import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { Component, inject, OnInit } from "@angular/core";
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle
+} from "@angular/material/dialog";
+import { AuthStateService } from "../../../shared/services/auth-state.service";
+import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { CompanyEventCreate, CompanyEventEnum, CompanyEventUpdate, DefaultService } from "../../../../api/openapi";
+import { MatListOption, MatSelectionList } from "@angular/material/list";
+import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
 import { JsonPipe } from "@angular/common";
 
@@ -29,10 +34,10 @@ export function getEventTranslation(companyEvent: CompanyEventEnum): string {
 }
 
 @Component({
-    selector: 'app-event-calendar-dialog',
-    templateUrl: './event-calendar-dialog.component.html',
-    styleUrls: ['./event-calendar-dialog.component.scss'],
-    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, FormsModule, ReactiveFormsModule, MatSelectionList, MatListOption, MatFormField, MatLabel, MatInput, MatDialogActions, MatButton, JsonPipe]
+  selector: "app-event-calendar-dialog",
+  templateUrl: "./event-calendar-dialog.component.html",
+  styleUrls: ["./event-calendar-dialog.component.scss"],
+  imports: [MatDialogTitle, MatDialogContent, FormsModule, ReactiveFormsModule, MatSelectionList, MatListOption, MatFormField, MatLabel, MatInput, MatDialogActions, MatButton, JsonPipe]
 })
 
 
@@ -46,7 +51,7 @@ export class EventCalendarDialogComponent implements OnInit {
 
   availableEventTypes: CompanyEventEnum[] = [
     CompanyEventEnum.Holiday,
-    CompanyEventEnum.Illness,
+    CompanyEventEnum.Illness
   ];
 
   dialogFormGroup: UntypedFormGroup;
@@ -92,8 +97,7 @@ export class EventCalendarDialogComponent implements OnInit {
       const companyUpdate: CompanyEventUpdate = {
         title: this.dialogFormGroup.get("title").value,
         date: this.data.date,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        event_type: this.dialogFormGroup.get("eventType").value[0],
+        event_type: this.dialogFormGroup.get("eventType").value[0]
       };
       this.api.updateCompanyEventCompanyEventCompanyEventIdPut(this.data.id, companyUpdate).subscribe(() => {
         this.dialogRef.close(true);
@@ -102,8 +106,7 @@ export class EventCalendarDialogComponent implements OnInit {
       const companyCreate: CompanyEventCreate = {
         title: this.dialogFormGroup.get("title").value,
         date: this.data.date,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        event_type: this.dialogFormGroup.get("eventType").value[0],
+        event_type: this.dialogFormGroup.get("eventType").value[0]
       };
       this.api.createCompanyEventCompanyEventPost(companyCreate).subscribe(() => {
         console.log("created");

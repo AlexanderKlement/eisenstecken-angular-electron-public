@@ -116,7 +116,6 @@ export default class DeliveryEditComponent
         map((jobs) => {
           const minimalJobs: JobMinimal[] = jobs;
           minimalJobs.splice(0, 0, {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             displayable_name: "Selbst eintragen",
             id: 0
           });

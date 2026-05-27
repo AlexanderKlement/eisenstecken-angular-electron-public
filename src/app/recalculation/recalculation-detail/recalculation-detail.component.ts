@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import dayjs from "dayjs/esm";
@@ -9,17 +9,21 @@ import { LockService } from "../../shared/services/lock.service";
 import { AuthStateService } from "../../shared/services/auth-state.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { minutesToDisplayableString } from "../../shared/date.util";
-import { formatCurrency, DecimalPipe, CurrencyPipe } from "@angular/common";
+import { CurrencyPipe, DecimalPipe, formatCurrency } from "@angular/common";
 import {
-  Paint,
-  Workload,
-  Expense,
   DefaultService,
+  Expense,
+  OrderService,
+  OrderSmall,
+  Paint,
+  RecalculationService,
+  RecalculationV2,
+  ScopeEnum,
   WoodList,
-  OrderSmall, RecalculationService, OrderService, RecalculationV2, ScopeEnum
+  Workload
 } from "../../../api/openapi";
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
-import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
+import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
@@ -96,7 +100,7 @@ export default class RecalculationDetailComponent implements OnInit {
         this.loading = false;
       });
     });
-    
+
     this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
       if (allowed) {
         this.buttons.push({
@@ -146,7 +150,6 @@ export default class RecalculationDetailComponent implements OnInit {
         dataSourceClasses.forEach((dataSource) => {
           rows.push({
             values: {
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               "order_to.displayable_name": dataSource.order_to.displayable_name,
               // eslint-disable-next-line @typescript-eslint/naming-convention
               "order_from.displayable_name":

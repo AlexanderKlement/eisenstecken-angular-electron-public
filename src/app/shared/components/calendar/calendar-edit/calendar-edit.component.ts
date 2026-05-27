@@ -1,23 +1,23 @@
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { first } from "rxjs/operators";
 import dayjs from "dayjs/esm";
 import {
   AbstractControl,
+  FormsModule,
+  ReactiveFormsModule,
   UntypedFormControl,
   UntypedFormGroup,
   ValidationErrors,
   ValidatorFn,
-  Validators,
-  FormsModule,
-  ReactiveFormsModule,
+  Validators
 } from "@angular/forms";
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogContent, MatDialogRef, MatDialogTitle } from "@angular/material/dialog";
 import { timepickerTheme } from "../../../themes/timepicker.theme";
-import { DefaultService, CalendarEntry, CalendarEntryCreate } from "../../../../../api/openapi";
+import { CalendarEntry, CalendarEntryCreate, DefaultService } from "../../../../../api/openapi";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
-import { MatFormField, MatLabel, MatInput, MatSuffix } from "@angular/material/input";
-import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from "@angular/material/datepicker";
+import { DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
+import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
+import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular/material/datepicker";
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
 import { MatButton } from "@angular/material/button";
 
@@ -43,10 +43,10 @@ export interface CalendarData {
 }
 
 @Component({
-  selector: 'app-calendar-edit',
-  templateUrl: './calendar-edit.component.html',
-  styleUrls: ['./calendar-edit.component.scss'],
-  imports: [MatDialogTitle, MatDialogContent, MatProgressSpinner, FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatDatepickerInput, MatDatepickerToggle, MatSuffix, MatDatepicker, NgxMaterialTimepickerModule, MatButton],
+  selector: "app-calendar-edit",
+  templateUrl: "./calendar-edit.component.html",
+  styleUrls: ["./calendar-edit.component.scss"],
+  imports: [MatDialogTitle, MatDialogContent, MatProgressSpinner, FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatDatepickerInput, MatDatepickerToggle, MatSuffix, MatDatepicker, NgxMaterialTimepickerModule, MatButton]
 })
 export class CalendarEditComponent implements OnInit {
   private api = inject(DefaultService);
@@ -100,12 +100,9 @@ export class CalendarEditComponent implements OnInit {
     this.calendarGroup = new UntypedFormGroup({
       title: new UntypedFormControl(title, Validators.required),
       description: new UntypedFormControl(description),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       date: new UntypedFormControl(date, Validators.required),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       start_time: new UntypedFormControl(startTime, Validators.pattern("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$")),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      end_time: new UntypedFormControl(endTime, Validators.pattern("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$")),
+      end_time: new UntypedFormControl(endTime, Validators.pattern("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$"))
     }, { validators: timeValidator });
 
   }
@@ -121,10 +118,8 @@ export class CalendarEditComponent implements OnInit {
     const calendarEntryCreate: CalendarEntryCreate = {
       title: this.calendarGroup.get("title").value,
       description: this.calendarGroup.get("description").value,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       start_time: startDate.format(),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      end_time: endDate.format(),
+      end_time: endDate.format()
     };
     if (this.createMode) {
       this.api.createCalendarEntryCalendarCalendarIdPost(this.calendarId, calendarEntryCreate)
@@ -132,14 +127,14 @@ export class CalendarEditComponent implements OnInit {
         .subscribe({
           next: (calendarEntry) => this.createUpdateSuccess(calendarEntry),
           error: (error) => this.createUpdateError(error),
-          complete: () => this.createUpdateComplete(),
+          complete: () => this.createUpdateComplete()
         });
     } else {
       this.api.updateCalendarEntryCalendarCalendarEntryIdPut(this.calendarEntryId, calendarEntryCreate).pipe(first()).subscribe({
           next: (calendarEntry) => this.createUpdateSuccess(calendarEntry),
           error: (error) => this.createUpdateError(error),
-          complete: () => this.createUpdateComplete(),
-        },
+          complete: () => this.createUpdateComplete()
+        }
       );
     }
   }

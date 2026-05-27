@@ -144,12 +144,10 @@ export default class OfferEditComponent
             name: "",
             amount: subDescriptiveArticleControl.get("amount").value,
             description: subDescriptiveArticleControl.get("description").value,
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             single_price:
             subDescriptiveArticleControl.get("single_price").value,
             discount: 0,
             alternative: subDescriptiveArticleControl.get("alternative").value,
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             vat_id: 1
           };
           subDescriptiveArticleArray.push(subDescriptiveArticle);
@@ -158,13 +156,10 @@ export default class OfferEditComponent
           name: "",
           amount: 0,
           description: descriptiveArticleControl.get("description").value,
-          // eslint-disable-next-line @typescript-eslint/naming-convention
           single_price: 0,
           discount: 0,
           alternative: false,
-          // eslint-disable-next-line @typescript-eslint/naming-convention
           descriptive_articles: subDescriptiveArticleArray,
-          // eslint-disable-next-line @typescript-eslint/naming-convention
           vat_id: 1
         };
         descriptiveArticles.push(descriptiveArticle);
@@ -174,24 +169,16 @@ export default class OfferEditComponent
     if (this.createMode) {
       const offerCreate: OfferCreate = {
         date: formatDateTransport(this.offerGroup.get("date").value),
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         in_price_included: this.offerGroup.get("in_price_included").value,
         validity: this.offerGroup.get("validity").value,
         payment: this.offerGroup.get("payment").value,
         delivery: this.offerGroup.get("delivery").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         job_id: this.jobId,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         vat_id: this.offerGroup.get("vat_id").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         descriptive_articles: descriptiveArticles,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         discount_amount: this.offerGroup.get("discount_amount").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         discount_percentage: this.offerGroup.get("discount_percentage").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         material_description: this.offerGroup.get("material_description").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         material_description_title: this.offerGroup.get(
           "material_description_title"
         ).value
@@ -213,22 +200,15 @@ export default class OfferEditComponent
     } else {
       const offerUpdate: OfferUpdate = {
         date: formatDateTransport(this.offerGroup.get("date").value),
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         in_price_included: this.offerGroup.get("in_price_included").value,
         validity: this.offerGroup.get("validity").value,
         payment: this.offerGroup.get("payment").value,
         delivery: this.offerGroup.get("delivery").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         descriptive_articles: descriptiveArticles,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         vat_id: this.offerGroup.get("vat_id").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         discount_amount: this.offerGroup.get("discount_amount").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         discount_percentage: this.offerGroup.get("discount_percentage").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         material_description: this.offerGroup.get("material_description").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         material_description_title: this.offerGroup.get(
           "material_description_title"
         ).value
@@ -274,21 +254,15 @@ export default class OfferEditComponent
           });
           this.offerGroup.patchValue(
             {
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               in_price_included: offer.in_price_included,
               validity: offer.validity,
               payment: offer.payment,
               delivery: offer.delivery,
               //date: offer.date, //remove this line if always today's date should be shown -> and vice versa
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               discount_amount: offer.discount_amount,
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               discount_percentage: offer.discount_percentage,
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               vat_id: offer.vat.id,
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               material_description: offer.material_description,
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               material_description_title: offer.material_description_title
             },
             { emitEvent: false }
@@ -460,7 +434,6 @@ export default class OfferEditComponent
     if (descriptiveArticle === undefined) {
       return new UntypedFormGroup({
         description: new UntypedFormControl(""),
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         sub_descriptive_articles: new UntypedFormArray([
           this.initSubDescriptiveArticles()
         ])
@@ -476,7 +449,6 @@ export default class OfferEditComponent
       );
       return new UntypedFormGroup({
         description: new UntypedFormControl(descriptiveArticle.description),
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         sub_descriptive_articles: new UntypedFormArray(subDescriptiveArticles)
       });
     }
@@ -490,7 +462,6 @@ export default class OfferEditComponent
       subDescriptiveArticleGroup = new UntypedFormGroup({
         description: new UntypedFormControl(""),
         amount: new UntypedFormControl(1),
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         single_price: new UntypedFormControl(0.0),
         singlePriceFormatted: new UntypedFormControl("0,00 €"),
         alternative: new UntypedFormControl(false)
@@ -499,7 +470,6 @@ export default class OfferEditComponent
       subDescriptiveArticleGroup = new UntypedFormGroup({
         description: new UntypedFormControl(subDescriptiveArticle.description),
         amount: new UntypedFormControl(subDescriptiveArticle.amount),
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         single_price: new UntypedFormControl(
           subDescriptiveArticle.single_price
         ),
@@ -595,29 +565,21 @@ export default class OfferEditComponent
 
   private initOfferGroup() {
     this.offerGroup = new UntypedFormGroup({
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       in_price_included: new UntypedFormControl(""),
       validity: new UntypedFormControl(""),
       payment: new UntypedFormControl(""),
       delivery: new UntypedFormControl(""),
       date: new UntypedFormControl(new Date().toISOString()),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       vat_id: new UntypedFormControl(3),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       discount_amount: new UntypedFormControl(0),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       discount_percentage: new UntypedFormControl(0.0),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       material_description: new UntypedFormControl(""),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       material_description_title: new UntypedFormControl(
         "Allgemeine Materialbeschreibung"
       ),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       descriptive_articles: new UntypedFormArray([
         this.initDescriptiveArticles()
       ]),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       offer_price: new UntypedFormControl("")
     });
   }

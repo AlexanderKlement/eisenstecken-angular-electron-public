@@ -4,10 +4,11 @@ import {
   Component,
   ElementRef,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   SimpleChanges,
-  ViewChild, OnChanges
+  ViewChild
 } from "@angular/core";
 import { TableDataSource } from "./table-builder.datasource";
 import { MatPaginator } from "@angular/material/paginator";
@@ -15,18 +16,35 @@ import { debounceTime, distinctUntilChanged, tap } from "rxjs/operators";
 import { fromEvent, Observable, Subscription } from "rxjs";
 import { DataSourceClass } from "../../types";
 import { ThemePalette } from "@angular/material/core";
-import { DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
-import { MatFormField, MatInput } from "@angular/material/input";
+import { DefaultFlexDirective, DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
+import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
-import { MatCell, MatColumnDef, MatHeaderCell, MatHeaderRow, MatRow, MatTable } from "@angular/material/table";
-import { MatButton } from "@angular/material/button";
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable
+} from "@angular/material/table";
+import { MatButton, MatIconButton } from "@angular/material/button";
 import { MatTooltip } from "@angular/material/tooltip";
 import { AsyncPipe, NgClass } from "@angular/common";
 import { DefaultService, OrderService, RecalculationService, TikTakService } from "../../../../api/openapi";
 import { MatSort, MatSortHeader } from "@angular/material/sort";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatIcon } from "@angular/material/icon";
+
+export interface TableButtonIcon {
+  icon: string;
+}
 
 export interface TableButton {
-  name: (values: any) => string;
+  name: (values: any) => string | TableButtonIcon;
   class: (values: any) => string;
   color: (values: any) => ThemePalette;
   navigate: ($event: any, id: number) => void;
@@ -43,7 +61,9 @@ type AnyApi = DefaultService | RecalculationService | OrderService | TikTakServi
     DefaultLayoutDirective,
     DefaultLayoutAlignDirective,
     MatFormField,
+    FormsModule,
     MatInput,
+    MatIcon,
     MatProgressSpinner,
     MatTable,
     MatColumnDef,
@@ -51,13 +71,21 @@ type AnyApi = DefaultService | RecalculationService | OrderService | TikTakServi
     MatCell,
     MatButton,
     MatHeaderRow,
+    MatLabel,
     MatRow,
     MatTooltip,
     MatPaginator,
     AsyncPipe,
     NgClass,
     MatSortHeader,
-    MatSort
+    MatSort,
+    DefaultFlexDirective,
+    MatHeaderCellDef,
+    MatCellDef,
+    MatHeaderRowDef,
+    MatRowDef,
+    ReactiveFormsModule,
+    MatIconButton
   ]
 })
 
@@ -67,6 +95,7 @@ export class TableBuilderComponent<T extends DataSourceClass, A extends AnyApi =
   @Input() title?: string;
   @Input({ transform: booleanAttribute }) noSearch?: boolean = false;
   @Input() buttons?: TableButton[] = [];
+  @Input() headerButtons?: TableButton[] = [];
   @Input() $refresh?: Observable<void>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild("input") input: ElementRef;
@@ -74,6 +103,7 @@ export class TableBuilderComponent<T extends DataSourceClass, A extends AnyApi =
   subscription: Subscription;
   refreshInterval: NodeJS.Timeout;
   refreshRateSeconds = 60;
+  noInspectUnusedImports = false;
 
   constructor() {
   }

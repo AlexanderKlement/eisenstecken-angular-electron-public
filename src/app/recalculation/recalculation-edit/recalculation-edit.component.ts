@@ -128,7 +128,6 @@ export default class RecalculationEditComponent
   initRecalculationsGroup(): void {
     this.recalculationGroup = new UntypedFormGroup({
       name: new UntypedFormControl(),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       expenses: new UntypedFormArray([]),
       paints: new UntypedFormArray([]),
       // eslint-disable-next-line @typescript-eslint/naming-convention

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
 import { Router } from "@angular/router";
 import { DefaultService, ServiceSum } from "../../api/openapi";
@@ -34,7 +34,6 @@ export default class ServiceComponent implements OnInit {
             {
               values: {
                 //month: dayjs(dataSource.month).format('MMMM YYYY'),
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 "user.fullname": dataSource.user.fullname
                 //internal: minutesToDisplayableString(dataSource.internal),
                 //external: minutesToDisplayableString(dataSource.external),

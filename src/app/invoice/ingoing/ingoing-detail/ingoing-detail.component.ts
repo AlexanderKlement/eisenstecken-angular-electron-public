@@ -1,4 +1,4 @@
-import { Component, ComponentRef, OnInit, inject } from "@angular/core";
+import { Component, ComponentRef, inject, OnInit } from "@angular/core";
 import { InfoDataSource } from "../../../shared/components/info-builder/info-builder.datasource";
 import { ActivatedRoute } from "@angular/router";
 import { TableDataSource } from "../../../shared/components/table-builder/table-builder.datasource";
@@ -90,17 +90,14 @@ export default class IngoingDetailComponent implements OnInit {
               values: {
                 name: dataSource.name,
                 description: dataSource.description,
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 single_price: formatCurrency(dataSource.single_price, "de-DE", "EUR"),
                 amount: formatNumber(dataSource.amount, "de-DE", ".2"),
                 unit: dataSource.unit.name.translation,
                 discount: formatNumber(dataSource.discount, "de-DE", ".2") + " %",
                 vat: dataSource.vat.name,
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 total_with: formatCurrency(dataSource.single_price * dataSource.amount * (1 -
                   dataSource.discount / 100) * (1 + dataSource.vat.amount / 100),
                   "de-DE", "EUR"),
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 total_without: formatCurrency(dataSource.single_price * dataSource.amount * (1 -
                   dataSource.discount / 100),
                   "de-DE", "EUR")

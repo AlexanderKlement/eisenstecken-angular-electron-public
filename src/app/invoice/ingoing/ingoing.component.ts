@@ -1,25 +1,25 @@
-import { Component, Input, OnInit, inject } from "@angular/core";
+import { Component, inject, Input, OnInit } from "@angular/core";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { LockService } from "../../shared/services/lock.service";
 import dayjs from "dayjs/esm";
-import { TableButton, TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
+import { TableBuilderComponent, TableButton } from "../../shared/components/table-builder/table-builder.component";
 import { first } from "rxjs/operators";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { Observable, Subscription } from "rxjs";
 import { Router } from "@angular/router";
-import { formatCurrency, AsyncPipe } from "@angular/common";
+import { AsyncPipe, formatCurrency } from "@angular/common";
 import { DefaultService, IngoingInvoice } from "../../../api/openapi";
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
 import { MatFormField, MatLabel } from "@angular/material/input";
-import { MatSelect, MatOption } from "@angular/material/select";
-import { MatTabGroup, MatTab } from "@angular/material/tabs";
+import { MatOption, MatSelect } from "@angular/material/select";
+import { MatTab, MatTabGroup } from "@angular/material/tabs";
 
 @Component({
-    selector: 'app-ingoing',
-    templateUrl: './ingoing.component.html',
-    styleUrls: ['./ingoing.component.scss'],
-    imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatSelect, MatOption, MatTabGroup, MatTab, TableBuilderComponent, AsyncPipe]
+  selector: "app-ingoing",
+  templateUrl: "./ingoing.component.html",
+  styleUrls: ["./ingoing.component.scss"],
+  imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatSelect, MatOption, MatTabGroup, MatTab, TableBuilderComponent, AsyncPipe]
 })
 export class IngoingComponent implements OnInit {
   private api = inject(DefaultService);
@@ -45,7 +45,7 @@ export class IngoingComponent implements OnInit {
         this.paidClicked($event, id);
       },
       color: (_) => "primary",
-      selectedField: "id",
+      selectedField: "id"
     },
     {
       name: (_) => "Löschen",
@@ -54,8 +54,8 @@ export class IngoingComponent implements OnInit {
         this.deleteClicked($event, id);
       },
       color: (_) => "primary",
-      selectedField: "id",
-    },
+      selectedField: "id"
+    }
   ];
   private subscription: Subscription;
 
@@ -120,8 +120,8 @@ export class IngoingComponent implements OnInit {
         width: "400px",
         data: {
           title,
-          text,
-        },
+          text
+        }
       });
 
       dialogRef.afterClosed().subscribe(result => {
@@ -149,16 +149,15 @@ export class IngoingComponent implements OnInit {
                 rgNum: dataSource.number,
                 name: dataSource.name,
                 date: dayjs(dataSource.date).format("L"),
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 payment_date: dayjs(dataSource.payment_date).format("L"),
                 id: dataSource.id,
                 total: formatCurrency(dataSource.total, "de-DE", "EUR"),
                 paid: dataSource.paid ? "Ja" : "Nein",
-                condition: dataSource.paid,
+                condition: dataSource.paid
               },
               route: () => {
                 this.router.navigateByUrl("/invoice/ingoing/" + dataSource.id.toString());
-              },
+              }
             });
         });
         return rows;
@@ -168,9 +167,9 @@ export class IngoingComponent implements OnInit {
         { name: "rgNum", headerName: "Nummer" },
         { name: "date", headerName: "Rechnungsdatum" },
         { name: "payment_date", headerName: "Fälligkeitsdatum" },
-        { name: "total", headerName: "Gesamtpreis [mit MwSt.]" },
+        { name: "total", headerName: "Gesamtpreis [mit MwSt.]" }
       ],
-      (api) => api.countIngoingInvoicesIngoingInvoiceCountGet(undefined, this.selectedYear),
+      (api) => api.countIngoingInvoicesIngoingInvoiceCountGet(undefined, this.selectedYear)
     );
     this.allIngoingInvoiceDataSource.loadData();
   }
@@ -193,11 +192,11 @@ export class IngoingComponent implements OnInit {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 payment_date: dayjs(dataSource.payment_date).format("L"),
                 total: formatCurrency(dataSource.total, "de-DE", "EUR"),
-                condition: dataSource.paid,
+                condition: dataSource.paid
               },
               route: () => {
                 this.router.navigateByUrl("/invoice/ingoing/" + dataSource.id.toString());
-              },
+              }
             });
         });
         return rows;
@@ -207,9 +206,9 @@ export class IngoingComponent implements OnInit {
         { name: "rgNum", headerName: "Nummer" },
         { name: "date", headerName: "Rechnungsdatum" },
         { name: "payment_date", headerName: "Fälligkeitsdatum" },
-        { name: "total", headerName: "Gesamtpreis [mit MwSt.]" },
+        { name: "total", headerName: "Gesamtpreis [mit MwSt.]" }
       ],
-      (api) => api.countIngoingInvoicesIngoingInvoiceCountGet(true, this.selectedYear),
+      (api) => api.countIngoingInvoicesIngoingInvoiceCountGet(true, this.selectedYear)
     );
     this.paidIngoingInvoiceDataSource.loadData();
   }
@@ -232,11 +231,11 @@ export class IngoingComponent implements OnInit {
                 id: dataSource.id,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 payment_date: dayjs(dataSource.payment_date).format("L"),
-                condition: dataSource.paid,
+                condition: dataSource.paid
               },
               route: () => {
                 this.router.navigateByUrl("/invoice/ingoing/" + dataSource.id.toString());
-              },
+              }
             });
         });
         return rows;
@@ -246,9 +245,9 @@ export class IngoingComponent implements OnInit {
         { name: "rgNum", headerName: "Nummer" },
         { name: "date", headerName: "Rechnungsdatum" },
         { name: "payment_date", headerName: "Fälligkeitsdatum" },
-        { name: "total", headerName: "Gesamtpreis [mit MwSt.]" },
+        { name: "total", headerName: "Gesamtpreis [mit MwSt.]" }
       ],
-      (api) => api.countIngoingInvoicesIngoingInvoiceCountGet(false, this.selectedYear),
+      (api) => api.countIngoingInvoicesIngoingInvoiceCountGet(false, this.selectedYear)
     );
     this.unPaidIngoingInvoiceDataSource.loadData();
   }
@@ -274,8 +273,8 @@ export class IngoingComponent implements OnInit {
         width: "400px",
         data: {
           title,
-          text,
-        },
+          text
+        }
       });
 
       dialogRef.afterClosed().subscribe(result => {

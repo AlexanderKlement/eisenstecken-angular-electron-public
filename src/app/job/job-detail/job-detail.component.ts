@@ -158,7 +158,6 @@ export default class JobDetailComponent implements OnInit {
             values: {
               id: dataSource.id,
               date: dayjs(dataSource.date).format("L"),
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               full_price_without_vat: formatCurrency(
                 dataSource.full_price_without_vat,
                 "de-DE",
@@ -211,7 +210,6 @@ export default class JobDetailComponent implements OnInit {
         dataSourceClasses.forEach((dataSource) => {
           rows.push({
             values: {
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               client_name: dataSource.client_name,
               date: dayjs(dataSource.date, "YYYY-MM-DD").format("L"),
               id: dataSource.number
@@ -297,14 +295,10 @@ export default class JobDetailComponent implements OnInit {
         dataSourceClasses.forEach((dataSource) => {
           rows.push({
             values: {
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               "order_to.displayable_name": dataSource.order_to.displayable_name,
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               "order_from.displayable_name":
               dataSource.order_from.displayable_name,
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               create_date: dayjs(dataSource.create_date).format("L"),
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               delivery_date:
                 dataSource.delivery_date === null
                   ? ""
@@ -352,9 +346,7 @@ export default class JobDetailComponent implements OnInit {
           rows.push({
             values: {
               amount_articles: dataSource.articles.length,
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               create_date: dayjs(dataSource.timestamp).format("L")
-              // eslint-disable-next-line @typescript-eslint/naming-convention
             },
             route: () => {
               this.router.navigateByUrl("/delivery_note/" + dataSource.id.toString());

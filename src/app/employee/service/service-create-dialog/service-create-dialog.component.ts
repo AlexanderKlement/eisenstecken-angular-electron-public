@@ -1,13 +1,18 @@
-import { Component, OnInit, inject } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from "@angular/material/dialog";
+import { Component, inject, OnInit } from "@angular/core";
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle
+} from "@angular/material/dialog";
 import { first } from "rxjs/operators";
-import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { formatDateTransport } from "../../../shared/date.util";
 import { DefaultService, ServiceCreate, User } from "../../../../api/openapi";
-import { CdkScrollable } from "@angular/cdk/scrolling";
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
-import { MatFormField, MatLabel, MatInput, MatSuffix } from "@angular/material/input";
-import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from "@angular/material/datepicker";
+import { DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
+import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
+import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular/material/datepicker";
 import { MinuteHourComponent } from "../../../shared/components/minute-hour/minute-hour.component";
 import { MatButton } from "@angular/material/button";
 
@@ -16,10 +21,10 @@ export interface ServiceCreateDialogData {
 }
 
 @Component({
-    selector: 'app-service-create-dialog',
-    templateUrl: './service-create-dialog.component.html',
-    styleUrls: ['./service-create-dialog.component.scss'],
-    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, FormsModule, MatDatepickerInput, ReactiveFormsModule, MatDatepickerToggle, MatSuffix, MatDatepicker, MinuteHourComponent, MatDialogActions, MatButton]
+  selector: "app-service-create-dialog",
+  templateUrl: "./service-create-dialog.component.html",
+  styleUrls: ["./service-create-dialog.component.scss"],
+  imports: [MatDialogTitle, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, FormsModule, MatDatepickerInput, ReactiveFormsModule, MatDatepickerToggle, MatSuffix, MatDatepicker, MinuteHourComponent, MatDialogActions, MatButton]
 })
 export class ServiceCreateDialogComponent implements OnInit {
   dialogRef = inject<MatDialogRef<ServiceCreateDialogComponent>>(MatDialogRef);
@@ -36,7 +41,7 @@ export class ServiceCreateDialogComponent implements OnInit {
       this.user = user;
       this.serviceGroup = new UntypedFormGroup({
         minutes: new UntypedFormControl(0),
-        date: new UntypedFormControl(new Date().toISOString()),
+        date: new UntypedFormControl(new Date().toISOString())
       });
       this.loading = false;
     });
@@ -58,8 +63,7 @@ export class ServiceCreateDialogComponent implements OnInit {
     const serviceCreate: ServiceCreate = {
       minutes: parseInt(this.getMinuteControl().value, 10),
       date: formatDateTransport(this.getDateControl().value),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      user_id: this.user.id,
+      user_id: this.user.id
     };
     this.api.createServiceServicePost(serviceCreate).pipe(first()).subscribe(() => {
       this.dialogRef.close(true);

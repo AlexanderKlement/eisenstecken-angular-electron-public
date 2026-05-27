@@ -3,10 +3,32 @@
     @if (title) {
       <h3>{{ title }}</h3>
     }
+    <div fxFlex></div>
+    @if (headerButtons) {
+      @for (button of headerButtons; track button) {
+        @if (typeof button.name(true) === "string") {
+          <button
+            (click)="button.navigate($event, -1)"
+            [color]="button.color(true)"
+            [class]="button.class(true)"
+            mat-raised-button>{{ button.name(true) }}
+          </button>
+        } @else {
+          <button
+            (click)="button.navigate($event, -1)"
+            [color]="button.color(true)"
+            [class]="button.class(true)"
+            mat-icon-button>
+            <mat-icon>{{ $any(button.name(true)).icon }}</mat-icon>
+          </button>
+        }
+      }
+    }
     @if (!noSearch) {
-      <div class="search-input-wrapper">
-        <mat-form-field>
-          <input matInput placeholder="Suchen" #input>
+      <div class="new-form-element">
+        <mat-form-field appearance="outline">
+          <mat-label>Suchen</mat-label>
+          <input matInput #input>
         </mat-form-field>
       </div>
     }
@@ -38,12 +60,22 @@
       <ng-container matColumnDef="actions">
         <mat-header-cell *matHeaderCellDef>Aktionen</mat-header-cell>
         <mat-cell *matCellDef="let element">
-          @for (button of buttons; track button) {
-            <button [color]="button.color(element.values['condition'])"
-                    [class]="button.class(element.values['condition'])"
-                    (click)="button.navigate($event, element.values['id'])"
-                    mat-raised-button>{{ button.name(element.values['condition']) }}
-            </button>
+          @for (button of buttons; track button; ) {
+            @if (typeof button.name(element.values['condition']) === "string") {
+              <button [color]="button.color(element.values['condition'])"
+                      [class]="button.class(element.values['condition'])"
+                      (click)="button.navigate($event, element.values['id'])"
+                      mat-raised-button>
+                {{ button.name(element.values['condition']) }}
+              </button>
+            } @else {
+              <button [color]="button.color(element.values['condition'])"
+                      [class]="button.class(element.values['condition'])"
+                      (click)="button.navigate($event, element.values['id'])"
+                      matIconButton>
+                <mat-icon>{{ $any(button.name(element.values['condition'])).icon }}</mat-icon>
+              </button>
+            }
           }
         </mat-cell>
       </ng-container>
@@ -58,4 +90,7 @@
   </mat-table>
   <mat-paginator [length]="(dataSource.amount$ | async)" [pageSize]="dataSource.pageSize"
                  [pageSizeOptions]="dataSource.pageSizeOptions" [pageIndex]="dataSource.pageIndex"></mat-paginator>
+  @if (noInspectUnusedImports) {
+    <ng-container matCellDef matHeaderCellDef matHeaderRowDef="{{ dataSource.columnIdentifiers }}" matRowDef />
+  }
 </div>

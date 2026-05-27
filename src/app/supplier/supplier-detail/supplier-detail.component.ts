@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from "@angular/core";
+import { Component, inject, OnInit, ViewChild } from "@angular/core";
 import { InfoDataSource } from "../../shared/components/info-builder/info-builder.datasource";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
@@ -13,22 +13,24 @@ import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/c
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { FileService } from "../../shared/services/file.service";
 import { EmailService } from "../../shared/services/email.service";
-import { combineLatest, Observable, Subject, merge, of } from "rxjs";
+import { combineLatest, merge, Observable, of, Subject } from "rxjs";
 import {
-  OrderBundleCreate,
-  Supplier,
-  OrderBundle,
   DefaultService,
+  OrderBundle,
+  OrderBundleCreate,
+  OrderBundleService,
   OrderSmall,
-  OrderBundleService, ScopeEnum
+  ScopeEnum,
+  Supplier
 } from "../../../api/openapi";
-import { MatTabGroup, MatTab } from "@angular/material/tabs";
+import { MatTab, MatTabGroup } from "@angular/material/tabs";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 import {
   DefaultFlexDirective,
   DefaultLayoutAlignDirective,
   DefaultLayoutDirective,
-  DefaultLayoutGapDirective, FlexModule
+  DefaultLayoutGapDirective,
+  FlexModule
 } from "ng-flex-layout";
 import { AsyncPipe } from "@angular/common";
 import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
@@ -200,9 +202,7 @@ export default class SupplierDetailComponent implements OnInit {
             {
               values: {
                 id: dataSource.id,
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 "order_to.displayable_name": dataSource.order_to.displayable_name,
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 description: dataSource.description,
                 "user.fullname": dataSource.user.fullname
 
@@ -232,9 +232,7 @@ export default class SupplierDetailComponent implements OnInit {
           rows.push(
             {
               values: {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 create_date: dayjs(dataSource.create_date).format("L"),
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 delivery_date: dayjs(dataSource.delivery_date).format("L"),
                 "user.fullname": dataSource.user.fullname
               },
@@ -262,7 +260,6 @@ export default class SupplierDetailComponent implements OnInit {
           rows.push(
             {
               values: {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 create_date: dayjs(dataSource.create_date).format("L"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 delivery_date: dayjs(dataSource.delivery_date).format("L"),

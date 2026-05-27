@@ -1,4 +1,4 @@
-import { Component, ComponentRef, OnInit, inject } from "@angular/core";
+import { Component, ComponentRef, inject, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { InfoDataSource } from "../../shared/components/info-builder/info-builder.datasource";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
@@ -11,12 +11,7 @@ import { OrderedArticleMoveDialogComponent } from "./ordered-article-move-dialog
 import { formatCurrency } from "@angular/common";
 import { Observable, Subscriber } from "rxjs";
 import { ConvertRequestDialogComponent } from "./convert-request-dialog/convert-request-dialog.component";
-import {
-  DefaultService,
-  OrderedArticle,
-  Order,
-  OrderableType, OrderSmall
-} from "../../../api/openapi";
+import { DefaultService, Order, OrderableType, OrderedArticle, OrderSmall } from "../../../api/openapi";
 import { InfoBuilderComponent } from "../../shared/components/info-builder/info-builder.component";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 import {
@@ -146,11 +141,9 @@ export default class OrderDetailComponent implements OnInit {
         dataSourceClasses.forEach((dataSource) => {
           rows.push({
             values: {
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               "article.name.translation_de": dataSource.name.translation_de,
               position: dataSource.position,
               amount: dataSource.amount,
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               "ordered_unit.name.translation_de":
               dataSource.ordered_unit.name.translation_de,
               price: formatCurrency(dataSource.price, "de-DE", "EUR")

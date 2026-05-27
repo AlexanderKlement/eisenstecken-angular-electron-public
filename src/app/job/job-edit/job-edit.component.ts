@@ -106,11 +106,9 @@ export default class JobEditComponent extends BaseEditComponent<Job> implements 
         name: new UntypedFormControl(""),
         description: new UntypedFormControl(""),
         minijob: new UntypedFormControl(false),
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         responsible_id: new UntypedFormControl(1),
         year: new UntypedFormControl(dayjs().year()),
         address: new UntypedFormGroup({
-          // eslint-disable-next-line @typescript-eslint/naming-convention
           street_number: new UntypedFormControl(""),
           city: new UntypedFormControl(""),
           cap: new UntypedFormControl(""),
@@ -124,7 +122,6 @@ export default class JobEditComponent extends BaseEditComponent<Job> implements 
         description: new UntypedFormControl(""),
         minijob: new UntypedFormControl(false),
         address: new UntypedFormGroup({
-          // eslint-disable-next-line @typescript-eslint/naming-convention
           street_number: new UntypedFormControl(""),
           city: new UntypedFormControl(""),
           cap: new UntypedFormControl(""),
@@ -168,7 +165,6 @@ export default class JobEditComponent extends BaseEditComponent<Job> implements 
         this.jobGroup.patchValue({
           name: job.name,
           minijob: job.is_mini,
-          // eslint-disable-next-line @typescript-eslint/naming-convention
           responsible_id: job.responsible.id,
           address: {
             country: job.address.country.code
@@ -187,18 +183,14 @@ export default class JobEditComponent extends BaseEditComponent<Job> implements 
     const jobCreate: JobCreate = {
       description: this.jobGroup.get("description").value,
       name: this.jobGroup.get("name").value,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       client_id: this.clientId,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       responsible_id: parseInt(this.jobGroup.get("responsible_id").value, 10),
       year: parseInt(this.jobGroup.get("year").value, 10),
       address: {
         name: this.jobGroup.get("name").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         street_number: this.jobGroup.get("address.street_number").value,
         city: this.jobGroup.get("address.city").value,
         cap: this.jobGroup.get("address.cap").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         country_code: this.jobGroup.get("address.country").value
       },
       type: this.jobGroup.get("minijob").value ? "JOBYTPE_MINI" : "JOBTYPE_MAIN",
@@ -232,15 +224,12 @@ export default class JobEditComponent extends BaseEditComponent<Job> implements 
     const jobUpdate: JobUpdate = {
       description: this.jobGroup.get("description").value,
       name: this.jobGroup.get("name").value,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       responsible_id: parseInt(this.jobGroup.get("responsible_id").value, 10),
       address: {
         name: this.jobGroup.get("name").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         street_number: this.jobGroup.get("address.street_number").value,
         city: this.jobGroup.get("address.city").value,
         cap: this.jobGroup.get("address.cap").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         country_code: this.jobGroup.get("address.country").value
       },
       completion: this.jobGroup.get("completion").value

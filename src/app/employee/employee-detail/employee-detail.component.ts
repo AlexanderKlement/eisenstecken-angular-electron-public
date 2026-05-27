@@ -1,10 +1,10 @@
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { Observable, Subject, Subscriber } from "rxjs";
-import { MatSelectChange, MatSelect, MatOption } from "@angular/material/select";
+import { MatOption, MatSelect, MatSelectChange } from "@angular/material/select";
 import dayjs from "dayjs/esm";
 import { ServiceDialogComponent } from "../service/service-dialog/service-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
@@ -12,9 +12,9 @@ import { ServiceCreateDialogComponent } from "../service/service-create-dialog/s
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { minutesToDisplayableString } from "../../shared/date.util";
-import { Journey, AdditionalWorkload, Meal, Service, Fee, DefaultService, WorkDay } from "../../../api/openapi";
-import { MatTabGroup, MatTab } from "@angular/material/tabs";
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { AdditionalWorkload, DefaultService, Fee, Journey, Meal, Service, WorkDay } from "../../../api/openapi";
+import { MatTab, MatTabGroup } from "@angular/material/tabs";
+import { DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
 import { MatFormField, MatLabel } from "@angular/material/input";
 import { HoursStepperComponent } from "../../mobile-app/hours/hours-stepper/hours-stepper.component";
 import { MatButton } from "@angular/material/button";
@@ -186,7 +186,6 @@ export default class EmployeeDetailComponent implements OnInit {
             {
               values: {
                 date: dayjs(dataSource.date).format("dddd, DD.MM.YYYY"),
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 "user.fullname": dataSource.user.fullname,
                 minutes: minutesToDisplayableString(dataSource.minutes)
               },
@@ -232,7 +231,6 @@ export default class EmployeeDetailComponent implements OnInit {
               values: {
                 date: dataSource.date,
                 "car.name": dataSource.car.name,
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 distance_km: dataSource.distance_km
               },
               route: () => {
@@ -263,7 +261,6 @@ export default class EmployeeDetailComponent implements OnInit {
           rows.push(
             {
               values: {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 "eating_place.name": dataSource.eating_place.name,
                 date: dataSource.date
               },
@@ -307,7 +304,6 @@ export default class EmployeeDetailComponent implements OnInit {
             {
               values: {
                 date: dayjs(dataSource.date).format("dddd, DD.MM.YYYY"),
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 minutes: minutesToDisplayableString(dataSource.minutes),
                 description: dataSource.description
               },

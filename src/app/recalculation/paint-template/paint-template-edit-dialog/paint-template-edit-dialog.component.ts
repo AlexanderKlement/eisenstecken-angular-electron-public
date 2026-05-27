@@ -1,25 +1,24 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent } from '@angular/material/dialog';
-import { first } from 'rxjs/operators';
-import { DefaultService, TemplatePaintCreate, TemplatePaintUpdate, Unit } from '../../../../api/openapi';
-import { CdkScrollable } from '@angular/cdk/scrolling';
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from 'ng-flex-layout';
-import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
-import { MatSelect, MatOption } from '@angular/material/select';
-import { MatButton } from '@angular/material/button';
-import { AsyncPipe } from '@angular/common';
+import { Component, inject, OnInit } from "@angular/core";
+import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { Observable } from "rxjs";
+import { MAT_DIALOG_DATA, MatDialogContent, MatDialogRef, MatDialogTitle } from "@angular/material/dialog";
+import { first } from "rxjs/operators";
+import { DefaultService, TemplatePaintCreate, TemplatePaintUpdate, Unit } from "../../../../api/openapi";
+import { DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
+import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
+import { MatOption, MatSelect } from "@angular/material/select";
+import { MatButton } from "@angular/material/button";
+import { AsyncPipe } from "@angular/common";
 
 export interface PaintTemplateEditDialogData {
   id: number;
 }
 
 @Component({
-    selector: 'app-paint-template-edit-dialog',
-    templateUrl: './paint-template-edit-dialog.component.html',
-    styleUrls: ['./paint-template-edit-dialog.component.scss'],
-    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatSelect, MatOption, MatButton, AsyncPipe]
+  selector: "app-paint-template-edit-dialog",
+  templateUrl: "./paint-template-edit-dialog.component.html",
+  styleUrls: ["./paint-template-edit-dialog.component.scss"],
+  imports: [MatDialogTitle, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatSelect, MatOption, MatButton, AsyncPipe]
 })
 export class PaintTemplateEditDialogComponent implements OnInit {
   dialogRef = inject<MatDialogRef<PaintTemplateEditDialogData>>(MatDialogRef);
@@ -27,7 +26,7 @@ export class PaintTemplateEditDialogComponent implements OnInit {
   private api = inject(DefaultService);
 
 
-  title = 'Oberflächen-Vorlage bearbeiten';
+  title = "Oberflächen-Vorlage bearbeiten";
   templatePaintEditGroup: UntypedFormGroup;
   createMode = false;
   unitOptions$: Observable<Unit[]>;
@@ -35,7 +34,7 @@ export class PaintTemplateEditDialogComponent implements OnInit {
   ngOnInit(): void {
     if (this.data.id <= 0) {
       this.createMode = true;
-      this.title = 'Oberflächen-Vorlage erstellen';
+      this.title = "Oberflächen-Vorlage erstellen";
     }
     this.initTemplatePaintEditGroup();
     this.fillTemplateEditGroup();
@@ -46,11 +45,10 @@ export class PaintTemplateEditDialogComponent implements OnInit {
   onSaveClick() {
     if (this.createMode) {
       const templatePaintCreate: TemplatePaintCreate = {
-        price: this.templatePaintEditGroup.get('price').value,
+        price: this.templatePaintEditGroup.get("price").value,
+        unit_id: this.templatePaintEditGroup.get("unit_id").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        unit_id: this.templatePaintEditGroup.get('unit_id').value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        name: this.templatePaintEditGroup.get('name').value,
+        name: this.templatePaintEditGroup.get("name").value
         // eslint-disable-next-line @typescript-eslint/naming-convention
       };
       this.api.createTemplatePaintTemplatePaintPost(templatePaintCreate).pipe(first()).subscribe(() => {
@@ -58,11 +56,11 @@ export class PaintTemplateEditDialogComponent implements OnInit {
       });
     } else {
       const templatePaintUpdate: TemplatePaintUpdate = {
-        price: this.templatePaintEditGroup.get('price').value,
+        price: this.templatePaintEditGroup.get("price").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        unit_id: this.templatePaintEditGroup.get('unit_id').value,
+        unit_id: this.templatePaintEditGroup.get("unit_id").value,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        name: this.templatePaintEditGroup.get('name').value,
+        name: this.templatePaintEditGroup.get("name").value
       };
       this.api.updateTemplatePaintTemplatePaintTemplatePaintIdPut(this.data.id, templatePaintUpdate).pipe(first()).subscribe(() => {
         this.dialogRef.close(true);
@@ -82,18 +80,18 @@ export class PaintTemplateEditDialogComponent implements OnInit {
 
   private initTemplatePaintEditGroup() {
     this.templatePaintEditGroup = new UntypedFormGroup({
-      name: new UntypedFormControl(''),
+      name: new UntypedFormControl(""),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       unit_id: new UntypedFormControl(4),
-      price: new UntypedFormControl(0),
+      price: new UntypedFormControl(0)
     });
   }
 
   private fillTemplateEditGroup() {
     this.api.readTemplatePaintTemplatePaintTemplatePaintIdGet(this.data.id).pipe(first()).subscribe((templatePaint => {
-      this.templatePaintEditGroup.get('name').setValue(templatePaint.name);
-      this.templatePaintEditGroup.get('unit_id').setValue(templatePaint.unit.id);
-      this.templatePaintEditGroup.get('price').setValue(templatePaint.price.toFixed(2));
+      this.templatePaintEditGroup.get("name").setValue(templatePaint.name);
+      this.templatePaintEditGroup.get("unit_id").setValue(templatePaint.unit.id);
+      this.templatePaintEditGroup.get("price").setValue(templatePaint.price.toFixed(2));
     }));
   }
 

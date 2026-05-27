@@ -1,18 +1,11 @@
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
-import {
-  Column,
-  TableDataSource
-} from "../../shared/components/table-builder/table-builder.datasource";
+import { Column, TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Observable } from "rxjs";
-import {
-  ArticleEditDialogComponent,
-  ArticleEditDialogData
-} from "./article-edit-dialog/article-edit-dialog.component";
+import { ArticleEditDialogComponent, ArticleEditDialogData } from "./article-edit-dialog/article-edit-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { first } from "rxjs/operators";
-import { DefaultService, Article } from "../../../api/openapi";
+import { Article, DefaultService } from "../../../api/openapi";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
 @Component({
@@ -52,7 +45,6 @@ export default class ArticleSupplierComponent implements OnInit {
           unit: dataSource.unit.name.translation,
           price: dataSource.price.toFixed(2).replace(".", ",") + " €",
           // vat: dataSource.vat.name,
-          // eslint-disable-next-line @typescript-eslint/naming-convention
           mod_number: dataSource.mod_number,
           favorite: dataSource.favorite ? "Ja" : "Nein",
           last_order_date: dataSource.last_order_date

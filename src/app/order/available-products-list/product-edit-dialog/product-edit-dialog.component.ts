@@ -150,7 +150,6 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
         this.data.amount,
         Validators.min(0.0000001)
       ),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       unit_id: new UntypedFormControl(
         this.data.unitId !== null ? this.data.unitId : 3
       ),
@@ -161,12 +160,9 @@ export class ProductEditDialogComponent implements OnInit, OnDestroy {
           this.currencyCode, "symbol", "1.4-4", this.locale
         )
       ),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       mod_number: new UntypedFormControl(this.data.modNumber),
       request: new UntypedFormControl(this.data.request),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       total_price: new UntypedFormControl(0),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       single_price_insert: new UntypedFormControl(true),
       comment: new UntypedFormControl(this.data.comment),
       position: new UntypedFormControl(this.data.position),

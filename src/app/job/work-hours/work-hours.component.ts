@@ -1,4 +1,4 @@
-import { Component, ComponentRef, OnInit, inject } from "@angular/core";
+import { Component, ComponentRef, inject, OnInit } from "@angular/core";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
@@ -8,7 +8,7 @@ import { AuthStateService } from "../../shared/services/auth-state.service";
 import { first } from "rxjs/operators";
 import { minutesToDisplayableString } from "../../shared/date.util";
 import { Observable, Subscriber } from "rxjs";
-import { Workload, DefaultService, ScopeEnum } from "../../../api/openapi";
+import { DefaultService, ScopeEnum, Workload } from "../../../api/openapi";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
 @Component({
@@ -93,7 +93,6 @@ export default class WorkHoursComponent implements OnInit {
               values: {
                 "user.fullname": dataSource.user.fullname,
                 minutes: minutesToDisplayableString(dataSource.minutes),
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 minutes_direction: minutesToDisplayableString(dataSource.minutes_direction),
                 cost: dataSource.cost
               },

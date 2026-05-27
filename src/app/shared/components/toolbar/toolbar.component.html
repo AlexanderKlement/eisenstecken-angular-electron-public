@@ -18,7 +18,11 @@
           }
         </mat-menu>
       } @else {
-        <button (click)="buttonClicked(button)" mat-button>{{ button.name }}</button>
+        <button
+          [color]="button.active ? 'primary' : undefined"
+          (click)="buttonClicked(button)"
+          mat-button>{{ button.name }}
+        </button>
       }
     }
     @if (showBackButton) {

@@ -1,6 +1,6 @@
-import { Component, Input, inject } from "@angular/core";
+import { Component, inject, Input } from "@angular/core";
 import { Location } from "@angular/common";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { AuthStateService } from "../../services/auth-state.service";
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
@@ -18,6 +18,7 @@ export interface CustomButtonWithoutDropdown {
 
 export interface CustomButton {
   name: string;
+  active?: boolean;
   navigate?: VoidFunction;
   dropdown?: CustomButtonWithoutDropdown[];
 }
@@ -30,6 +31,7 @@ export interface CustomButton {
 })
 export class ToolbarComponent {
   private router = inject(Router);
+  route = inject(ActivatedRoute);
   private location = inject(Location);
   private dialog = inject(MatDialog);
   private authService = inject(AuthStateService);
