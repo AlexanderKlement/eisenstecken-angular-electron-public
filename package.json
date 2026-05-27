@@ -113,23 +113,5 @@
   },
   "engines": {
     "node": ">=14.0.0"
-  },
-  "build": {
-    "mac": {
-      "target": [
-        "dmg",
-        "zip"
-      ],
-      "notarize": true,
-      "hardenedRuntime": true,
-      "gatekeeperAssess": false,
-      "entitlements": "build/entitlements.mac.plist",
-      "entitlementsInherit": "build/entitlements.mac.plist"
-    },
-    "files": [
-      "**/*"
-    ],
-    "extraResources": [],
-    "asarUnpack": []
   }
 }

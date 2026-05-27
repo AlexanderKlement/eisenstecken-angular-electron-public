@@ -34,6 +34,11 @@
       "dmg",
       "zip"
     ],
+    "notarize": true,
+    "hardenedRuntime": true,
+    "gatekeeperAssess": false,
+    "entitlements": "build/entitlements.mac.plist",
+    "entitlementsInherit": "build/entitlements.mac.plist",
     "category": "public.app-category.productivity"
   },
   "linux": {

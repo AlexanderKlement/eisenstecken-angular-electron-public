@@ -181,7 +181,7 @@ export class BaseEditComponent<T> implements OnInit, OnDestroy, ReusableRoute, D
   }
 
   protected goBack(): void {
-    this.router.navigateByUrl(this.navigationTarget);
+    this.router.navigateByUrl(this.navigationTarget, { replaceUrl: true }).then();
   }
 
   protected observableReady(): void {
