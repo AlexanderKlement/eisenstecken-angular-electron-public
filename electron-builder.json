@@ -1,5 +1,6 @@
 {
   "asar": false,
+  "afterPack": "./scripts/afterPack.js",
   "productName": "Eisenstecken - Eibel",
   "artifactName": "eisenstecken-eibel-${version}.${ext}",
   "generateUpdatesFilesForAllChannels": true,
