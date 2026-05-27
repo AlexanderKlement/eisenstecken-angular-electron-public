@@ -52,6 +52,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatIconModule } from "@angular/material/icon";
 import { AppComponent } from "./app/app.component";
 import { routes } from "./app/app.routes";
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from "@angular/material/form-field";
 
 console.log("APP_CONFIG.production =", APP_CONFIG.production);
 console.log("APP_CONFIG.apiBasePath =", APP_CONFIG.apiBasePath);
@@ -142,6 +143,10 @@ bootstrapApplication(AppComponent, {
     {
       provide: MAT_DATE_LOCALE,
       useValue: "de-DE"
+    },
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: { subscriptSizing: "dynamic" }
     },
     {
       provide: LOCALE_ID,
