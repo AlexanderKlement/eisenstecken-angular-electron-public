@@ -4,9 +4,13 @@
   <div fxLayout="row wrap">
     @for (info of dataSource.mapping; track info; let i = $index) {
       <div fxFlex="25">
-        <mat-form-field>
-          <mat-label> {{ info.name}}</mat-label>
-          <input matInput value="{{ getPropertyOfObject(data, info.property)}}" readonly>
+        <mat-form-field class="readonly">
+          <mat-label> {{ info.name }}</mat-label>
+          @if (info.textarea) {
+            <textarea matInput readonly>{{ getPropertyOfObject(data, info.property) }}</textarea>
+          } @else {
+            <input matInput value="{{ getPropertyOfObject(data, info.property)}}" readonly>
+          }
         </mat-form-field>
       </div>
     }

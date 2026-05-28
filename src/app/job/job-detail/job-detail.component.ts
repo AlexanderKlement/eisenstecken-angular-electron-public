@@ -37,6 +37,7 @@ import {
   CreateRecalculationDialogComponent
 } from "./create-recalculation-dialog/create-recalculation-dialog.component";
 import { TimeEntryEditDialogComponent } from "./time-entry-edit-dialog/time-entry-edit-dialog.component";
+import { FlexModule } from "ng-flex-layout";
 
 @Component({
   selector: "app-job-detail",
@@ -46,7 +47,8 @@ import { TimeEntryEditDialogComponent } from "./time-entry-edit-dialog/time-entr
     ToolbarComponent,
     JobStatusBarComponent,
     InfoBuilderComponent,
-    TableBuilderComponent
+    TableBuilderComponent,
+    FlexModule
   ]
 })
 export default class JobDetailComponent implements OnInit {
@@ -83,6 +85,7 @@ export default class JobDetailComponent implements OnInit {
   offersAllowed = false;
   deliveryNoteAllowed = true;
   title = "";
+  note = "";
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
 
@@ -269,6 +272,11 @@ export default class JobDetailComponent implements OnInit {
         {
           property: "responsible.fullname",
           name: "Zuständig"
+        },
+        {
+          property: "note",
+          name: "Notiz",
+          textarea: true
         }
       ],
       "/job/edit/" + this.jobId.toString(),
@@ -653,6 +661,7 @@ export default class JobDetailComponent implements OnInit {
         this.isMainJob = job.is_main;
         this.title = job.code;
         this.clientId = job.client.id;
+        this.note = job.note;
       });
     this.initOfferTable();
     this.initSubJobTable();

@@ -8,7 +8,6 @@ import { CustomButton, ToolbarComponent } from "../../shared/components/toolbar/
 import { LockService } from "../../shared/services/lock.service";
 import { AuthStateService } from "../../shared/services/auth-state.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { minutesToDisplayableString } from "../../shared/date.util";
 import { CurrencyPipe, DecimalPipe, formatCurrency } from "@angular/common";
 import {
   DefaultService,
@@ -19,14 +18,18 @@ import {
   RecalculationService,
   RecalculationV2,
   ScopeEnum,
-  WoodList,
-  Workload
+  TikTakTimeEntryByJob,
+  TimeEntryService,
+  WoodList
 } from "../../../api/openapi";
 import { DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
 import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
+import {
+  TimeEntryEditDialogComponent
+} from "../../job/job-detail/time-entry-edit-dialog/time-entry-edit-dialog.component";
 
 @Component({
   selector: "app-recalculation-detail",
@@ -46,6 +49,7 @@ import { MatDialog } from "@angular/material/dialog";
 })
 export default class RecalculationDetailComponent implements OnInit {
   private api = inject(DefaultService);
+  private timeEntryService = inject(TimeEntryService);
   private orderService = inject(OrderService);
   private recalculationService = inject(RecalculationService);
   private router = inject(Router);
@@ -61,7 +65,7 @@ export default class RecalculationDetailComponent implements OnInit {
   recalculation: RecalculationV2;
 
   orderDataSource: TableDataSource<OrderSmall, OrderService>;
-  workloadDataSource: TableDataSource<Workload, DefaultService>;
+  workloadDataSource: TableDataSource<TikTakTimeEntryByJob, TimeEntryService>;
   expenseDataSource: TableDataSource<Expense, DefaultService>;
   paintDataSource: TableDataSource<Paint, DefaultService>;
   woodListDataSource: TableDataSource<WoodList, DefaultService>;
@@ -184,32 +188,45 @@ export default class RecalculationDetailComponent implements OnInit {
 
   private initWorkloadTable() {
     this.workloadDataSource = new TableDataSource(
-      this.api,
+      this.timeEntryService,
       (api, filter, sortDirection, skip, limit) =>
-        api.readWorkloadsWorkloadGet(skip, limit, filter, undefined, this.recalculationId),
+        api.getTiktakTimeEntriesByRecalculationTimeEntryRecalculationRecalculationIdGet(this.recalculationId, skip, filter, limit),
       (dataSourceClasses) => {
         const rows = [];
         dataSourceClasses.forEach((dataSource) => {
-          rows.push(
-            {
-              values: {
-                "user.fullname": dataSource.user.fullname,
-                minutes: minutesToDisplayableString(dataSource.minutes),
-                cost: formatCurrency(dataSource.cost, "de-DE", "EUR")
-              },
-              route: () => {
-                //this.router.navigateByUrl('/order/' + dataSource.id.toString());
-              }
-            });
+          const hours = Math.floor(dataSource.minutes / 60);
+          const minutes = dataSource.minutes % 60;
+          const hourlyRate = dataSource.hourlyRate;
+          const sum = hourlyRate ? hourlyRate * (dataSource.minutes / 60) : undefined;
+          rows.push({
+            values: {
+              sync: new Date(dataSource.lastSync).toLocaleString(),
+              user: dataSource.user.fullname,
+              hours: `${hours}:${minutes.toString(10).padStart(2, "0")}`,
+              hourly_rate: hourlyRate ? `${hourlyRate.toFixed(2)} €` : " - ",
+              "sum": sum ? `${sum.toFixed(2)} €` : " - "
+            },
+            route: () => {
+              const dialogRef = this.dialog.open(TimeEntryEditDialogComponent, {
+                width: "1000px",
+                data: { timeEntry: dataSource, jobId: this.recalculationId }
+              });
+              dialogRef.afterClosed().subscribe(() => {
+                this.workloadDataSource.loadData();
+              });
+            }
+          });
         });
         return rows;
       },
       [
-        { name: "user.fullname", headerName: "Name" },
-        { name: "minutes", headerName: "Zeit" },
-        { name: "cost", headerName: "Kosten" }
+        { name: "sync", headerName: "Letzte Synchronisierung" },
+        { name: "user", headerName: "Mitarbeiter" },
+        { name: "hours", headerName: "Stunden" },
+        { name: "hourly_rate", headerName: "Stundensatz" },
+        { name: "sum", headerName: "Summe" }
       ],
-      (api) => api.readWorkloadCountWorkloadCountGet(undefined, this.recalculationId)
+      (api) => api.countTiktakTimeEntriesByRecalculationTimeEntryRecalculationCountRecalculationIdGet(this.recalculationId)
     );
     this.workloadDataSource.loadData();
   }
