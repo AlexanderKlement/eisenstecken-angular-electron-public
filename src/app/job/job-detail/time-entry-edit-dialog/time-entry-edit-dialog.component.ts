@@ -6,7 +6,7 @@ import {
   MatDialogRef,
   MatDialogTitle
 } from "@angular/material/dialog";
-import { DefaultService, TikTakService, TikTakTimeEntryByJob, User } from "../../../../api/openapi";
+import { DefaultService, TikTakTimeEntryByJob, TimeEntryService, User } from "../../../../api/openapi";
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { DefaultLayoutAlignDirective, DefaultLayoutDirective, FlexModule } from "ng-flex-layout";
 import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
@@ -55,7 +55,7 @@ type TimeEntryControl = {
 export class TimeEntryEditDialogComponent implements OnInit {
   dialogRef = inject<MatDialogRef<TimeEntryEditDialogComponent>>(MatDialogRef);
   data = inject<TimeEntryEditData>(MAT_DIALOG_DATA);
-  tikTakService = inject(TikTakService);
+  timeEntryService = inject(TimeEntryService);
   api = inject(DefaultService);
   dataGroup: FormGroup<TimeEntryControl>;
   createMode: boolean = false;
@@ -134,7 +134,7 @@ export class TimeEntryEditDialogComponent implements OnInit {
       const user = parseInt(this.dataGroup.get("user").value, 10);
       const jobId = this.data.jobId;
       if (newMinutes !== 0 && user !== -1 && jobId) {
-        this.tikTakService.createTimeEntryTiktakTimeEntryPut({
+        this.timeEntryService.createTimeEntryTimeEntryPut({
           minutes: newMinutes,
           lastSync: new Date().toISOString(),
           jobId,
@@ -146,7 +146,7 @@ export class TimeEntryEditDialogComponent implements OnInit {
     } else {
       const oldMinutes = this.data.timeEntry.minutes;
       if (newMinutes != oldMinutes) {
-        this.tikTakService.updateTimeEntryTiktakTimeEntryTimeEntryIdPost(this.data.timeEntry.id, {
+        this.timeEntryService.updateTimeEntryTimeEntryTimeEntryIdPost(this.data.timeEntry.id, {
           minutes: newMinutes,
           lastSync: null
         })

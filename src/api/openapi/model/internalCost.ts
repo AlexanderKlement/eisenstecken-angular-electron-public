@@ -9,8 +9,6 @@
  */
 
 
-export interface XmlFileBytes { 
-    content: string;
-    filename: string;
+export interface InternalCost { 
 }
 

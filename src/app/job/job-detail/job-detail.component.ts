@@ -27,8 +27,8 @@ import {
   RecalculationService,
   RecalculationSmall,
   ScopeEnum,
-  TikTakService,
-  TikTakTimeEntryByJob
+  TikTakTimeEntryByJob,
+  TimeEntryService
 } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { JobStatusBarComponent } from "./job-status-bar/job-status-bar.component";
@@ -52,7 +52,7 @@ import { TimeEntryEditDialogComponent } from "./time-entry-edit-dialog/time-entr
 export default class JobDetailComponent implements OnInit {
   private api = inject(DefaultService);
   private recalculationService = inject(RecalculationService);
-  private tikTakService = inject(TikTakService);
+  private timeEntryService = inject(TimeEntryService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private snackBar = inject(MatSnackBar);
@@ -78,7 +78,7 @@ export default class JobDetailComponent implements OnInit {
   orderDataSource: TableDataSource<OrderSmall, DefaultService>;
   deliveryNoteDataSource: TableDataSource<DeliveryNote, DefaultService>;
   recalculationDataSource: TableDataSource<RecalculationSmall, RecalculationService>;
-  timeEntriesDataSource: TableDataSource<TikTakTimeEntryByJob, TikTakService>;
+  timeEntriesDataSource: TableDataSource<TikTakTimeEntryByJob, TimeEntryService>;
   outgoingInvoicesAllowed = false;
   offersAllowed = false;
   deliveryNoteAllowed = true;
@@ -409,9 +409,9 @@ export default class JobDetailComponent implements OnInit {
 
   private initTimeEntriesTable(): void {
     this.timeEntriesDataSource = new TableDataSource(
-      this.tikTakService,
-      (tikTakService, filter, sortDirection, skip, limit) =>
-        tikTakService.getTiktakTimeEntriesByJobTiktakTimeEntriesJobJobIdGet(
+      this.timeEntryService,
+      (timeEntryService, filter, sortDirection, skip, limit) =>
+        timeEntryService.getTiktakTimeEntriesByJobTimeEntryJobJobIdGet(
           this.jobId,
           skip,
           filter,
@@ -453,7 +453,7 @@ export default class JobDetailComponent implements OnInit {
         { name: "hourly_rate", headerName: "Stundensatz" },
         { name: "sum", headerName: "Summe" }
       ],
-      (api) => api.countTiktakTimeEntriesByJobTiktakTimeEntriesJobCountJobIdGet(this.jobId)
+      (api) => api.countTiktakTimeEntriesByJobTimeEntryJobCountJobIdGet(this.jobId)
     );
     this.timeEntriesDataSource.loadData();
   }
