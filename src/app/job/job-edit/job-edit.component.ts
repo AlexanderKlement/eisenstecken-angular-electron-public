@@ -114,7 +114,8 @@ export default class JobEditComponent extends BaseEditComponent<Job> implements 
           cap: new UntypedFormControl(""),
           country: new UntypedFormControl("IT")
         }),
-        completion: new UntypedFormControl("")
+        completion: new UntypedFormControl(""),
+        note: new UntypedFormControl("")
       });
     } else {
       this.jobGroup = new UntypedFormGroup({
@@ -166,6 +167,7 @@ export default class JobEditComponent extends BaseEditComponent<Job> implements 
           name: job.name,
           minijob: job.is_mini,
           responsible_id: job.responsible.id,
+          note: job.note,
           address: {
             country: job.address.country.code
           },
@@ -194,7 +196,8 @@ export default class JobEditComponent extends BaseEditComponent<Job> implements 
         country_code: this.jobGroup.get("address.country").value
       },
       type: this.jobGroup.get("minijob").value ? "JOBYTPE_MINI" : "JOBTYPE_MAIN",
-      completion: this.jobGroup.get("completion").value
+      completion: this.jobGroup.get("completion").value,
+      note: this.jobGroup.get("note").value
     };
     this.api.createJobJobPost(jobCreate).subscribe((job) => {
       this.createUpdateSuccess(job);
@@ -232,7 +235,8 @@ export default class JobEditComponent extends BaseEditComponent<Job> implements 
         cap: this.jobGroup.get("address.cap").value,
         country_code: this.jobGroup.get("address.country").value
       },
-      completion: this.jobGroup.get("completion").value
+      completion: this.jobGroup.get("completion").value,
+      note: this.jobGroup.get("note").value
     };
     this.api.updateJobJobJobIdPut(this.id, jobUpdate).subscribe((job) => {
       this.createUpdateSuccess(job);

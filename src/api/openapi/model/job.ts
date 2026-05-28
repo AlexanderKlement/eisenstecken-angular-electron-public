@@ -30,6 +30,7 @@ export interface Job {
     lock: Lock;
     main_job_id?: number | null;
     name: string;
+    note?: string | null;
     path: string;
     responsible: UserEssential;
     status: JobStatus;

@@ -2,6 +2,7 @@
   "asar": false,
   "afterPack": "./scripts/afterPack.js",
   "productName": "Eisenstecken - Eibel",
+  "appId": "it.eisenstecken.app",
   "artifactName": "eisenstecken-eibel-${version}.${ext}",
   "generateUpdatesFilesForAllChannels": true,
   "directories": {
@@ -48,7 +49,6 @@
       "AppImage"
     ]
   },
-  "appId": "it.eisenstecken.app",
   "publish": {
     "provider": "github"
   }

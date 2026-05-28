@@ -54,6 +54,12 @@ try {
       console.info("Using beta userData folder:", betaUserData);
     }
 
+    const checkForUpdateLoop = () => {
+      console.info("[main] triggering update check");
+      void checkForUpdatesWhenReady();
+      setTimeout(checkForUpdateLoop, 300000); // 5 minutes
+    };
+
     app.whenReady().then(async () => {
       registerAllIpc();
       await createWindow(serve);
@@ -63,10 +69,7 @@ try {
       void initTray();
 
       if (!serve) {
-        console.info("[main] triggering update check");
-        setTimeout(() => {
-          void checkForUpdatesWhenReady();
-        }, 15000);
+        setTimeout(checkForUpdateLoop, 15000); // 15 seconds after start
       }
     });
 

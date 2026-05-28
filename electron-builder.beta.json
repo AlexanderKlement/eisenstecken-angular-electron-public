@@ -1,14 +1,19 @@
 {
+  "asar": false,
   "extends": "electron-builder.json",
-
   "productName": "Eisenstecken - Eibel Beta",
   "appId": "it.eisenstecken.app.beta",
   "artifactName": "eisenstecken-eibel-beta-${version}.${ext}",
-
   "directories": {
     "output": "release-beta/"
   },
-
+  "files": [
+    "**/*",
+    "!**/*.ts",
+    "!*.map",
+    "!package.json",
+    "!package-lock.json"
+  ],
   "extraMetadata": {
     "name": "eisenstecken-eibel-beta"
   },
