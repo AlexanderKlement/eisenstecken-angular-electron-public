@@ -1,16 +1,16 @@
-import { Component, Input, OnInit, inject } from "@angular/core";
-import {InfoDataSource} from "./info-builder.datasource";
-import {DataSourceClass} from "../../types";
-import {LockService} from "../../services/lock.service";
-import { DefaultLayoutDirective, DefaultFlexDirective } from "ng-flex-layout";
-import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { Component, inject, Input, OnInit } from "@angular/core";
+import { InfoDataSource } from "./info-builder.datasource";
+import { DataSourceClass } from "../../types";
+import { LockService } from "../../services/lock.service";
+import { DefaultFlexDirective, DefaultLayoutDirective } from "ng-flex-layout";
+import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
 import { AsyncPipe } from "@angular/common";
 
 @Component({
-    selector: 'app-info-builder',
-    templateUrl: './info-builder.component.html',
-    styleUrls: ['./info-builder.component.scss'],
-    imports: [DefaultLayoutDirective, DefaultFlexDirective, MatFormField, MatLabel, MatInput, AsyncPipe]
+  selector: "app-info-builder",
+  templateUrl: "./info-builder.component.html",
+  styleUrls: ["./info-builder.component.scss"],
+  imports: [DefaultLayoutDirective, DefaultFlexDirective, MatFormField, MatLabel, MatInput, AsyncPipe]
 })
 
 export class InfoBuilderComponent<T extends DataSourceClass> implements OnInit {
@@ -37,7 +37,7 @@ export class InfoBuilderComponent<T extends DataSourceClass> implements OnInit {
         data = data[singleProperty];
       }
     }
-    return data.toString();
+    return data?.toString() ?? "";
   }
 
   editButtonClicked(): void {
