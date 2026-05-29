@@ -29,17 +29,11 @@
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Start</mat-label>
-          <input formControlName="start_time" matInput [format]=24 autocomplete="disabled"
-            [ngxTimepicker]="start_time_picker">
-          <ngx-material-timepicker [minutesGap]="5" [theme]="primaryTheme"
-          #start_time_picker></ngx-material-timepicker>
+          <input formControlName="start_time" matInput autocomplete="disabled" type="time">
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Ende</mat-label>
-          <input formControlName="end_time" matInput [format]=24 autocomplete="disabled"
-            [ngxTimepicker]="end_time_picker">
-          <ngx-material-timepicker [minutesGap]="5" [theme]="primaryTheme"
-          #end_time_picker></ngx-material-timepicker>
+          <input formControlName="end_time" matInput autocomplete="disabled" type="time">
         </mat-form-field>
         @if (calendarGroup.errors) {
           <div
@@ -48,7 +42,7 @@
           </div>
         }
         <div fxLayout="row" fxLayoutAlign="space-between center">
-          <button  type="button" mat-button (click)="onCancel()">Abbrechen</button>
+          <button type="button" mat-button (click)="onCancel()">Abbrechen</button>
           @if (!createMode) {
             <button type="button" mat-button (click)="onDelete()">Löschen</button>
           }

@@ -7,42 +7,44 @@
 
   @if (isMainJob) {
     <div class="table-section">
-      <app-table-builder [$refresh]="$refresh" [dataSource]="subJobDataSource"
+      <app-table-builder [$refresh]="$refresh" [dataSource]="subJobDataSource" noSearch noPagination
                          title="Unteraufträge"></app-table-builder>
     </div>
   }
 
   @if (isMainJob && offersAllowed) {
     <div class="table-section">
-      <app-table-builder [$refresh]="$refresh" [dataSource]="offerDataSource" title="Angebote"></app-table-builder>
+      <app-table-builder [$refresh]="$refresh" [dataSource]="offerDataSource" noSearch noPagination
+                         title="Angebote"></app-table-builder>
     </div>
   }
 
   @if (isMainJob && outgoingInvoicesAllowed) {
     <div class="table-section">
-      <app-table-builder [$refresh]="$refresh" [dataSource]="outgoingInvoiceDataSource"
+      <app-table-builder [$refresh]="$refresh" [dataSource]="outgoingInvoiceDataSource" noSearch noPagination
                          title="Rechnungen"></app-table-builder>
     </div>
   }
 
   <div class="table-section">
-    <app-table-builder [$refresh]="$refresh" [dataSource]="orderDataSource" title="Bestellungen"></app-table-builder>
+    <app-table-builder [$refresh]="$refresh" [dataSource]="orderDataSource"
+                       title="Bestellungen"></app-table-builder>
   </div>
 
 
   @if (deliveryNoteAllowed) {
     <div class="table-section">
-      <app-table-builder [$refresh]="$refresh" [dataSource]="deliveryNoteDataSource"
+      <app-table-builder [$refresh]="$refresh" [dataSource]="deliveryNoteDataSource" noSearch noPagination
                          title="Lieferscheine"></app-table-builder>
     </div>
   }
   <div class="table-section">
-    <app-table-builder [$refresh]="$refresh" [dataSource]="recalculationDataSource"
+    <app-table-builder [$refresh]="$refresh" [dataSource]="recalculationDataSource" noSearch noPagination
                        title="Nachkalkulation"></app-table-builder>
   </div>
 
   <div class="table-section">
-    <app-table-builder [$refresh]="$refresh" [dataSource]="timeEntriesDataSource"
+    <app-table-builder [$refresh]="$refresh" [dataSource]="timeEntriesDataSource" noSearch noPagination
                        title="Arbeitszeit"></app-table-builder>
   </div>
 

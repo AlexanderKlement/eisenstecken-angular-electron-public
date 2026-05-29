@@ -261,11 +261,13 @@ export default class OutgoingInvoiceEditComponent
 
   transformAmount(i: number) {
     const descriptiveArticle = this.getDescriptiveArticles().at(i);
-    // eslint-disable-next-line max-len
+
+    const singleP = descriptiveArticle
+      .get("singlePriceFormatted").value ?? "";
+
     const singlePrice = parseFloat(
-      descriptiveArticle
-        .get("singlePriceFormatted")
-        .value.replace("€", "")
+      singleP
+        .replace("€", "")
         .replace(".", "")
         .replace(",", ".")
     );

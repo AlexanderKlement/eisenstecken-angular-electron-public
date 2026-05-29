@@ -90,8 +90,10 @@
       [ngClass]="row.rowClass ? ['table-row', row.rowClass] : 'table-row'">
     </mat-row>
   </mat-table>
-  <mat-paginator [length]="(dataSource.amount$ | async)" [pageSize]="dataSource.pageSize"
-                 [pageSizeOptions]="dataSource.pageSizeOptions" [pageIndex]="dataSource.pageIndex"></mat-paginator>
+  @if (!noPagination) {
+    <mat-paginator [length]="(dataSource.amount$ | async)" [pageSize]="dataSource.pageSize"
+                   [pageSizeOptions]="dataSource.pageSizeOptions" [pageIndex]="dataSource.pageIndex"></mat-paginator>
+  }
   @if (noInspectUnusedImports) {
     <ng-container matCellDef matHeaderCellDef matHeaderRowDef="{{ dataSource.columnIdentifiers }}" matRowDef />
   }

@@ -94,6 +94,7 @@ export class TableBuilderComponent<T extends DataSourceClass, A extends AnyApi =
   @Input() dataSource!: TableDataSource<T, A>;
   @Input() title?: string;
   @Input({ transform: booleanAttribute }) noSearch?: boolean = false;
+  @Input({ transform: booleanAttribute }) noPagination?: boolean = false;
   @Input() buttons?: TableButton[] = [];
   @Input() headerButtons?: TableButton[] = [];
   @Input() $refresh?: Observable<void>;
@@ -147,16 +148,20 @@ export class TableBuilderComponent<T extends DataSourceClass, A extends AnyApi =
             debounceTime(150),
             distinctUntilChanged(),
             tap(() => {
-              this.paginator.pageIndex = 0;
-              this.loadDataPage();
+              if (!this.noPagination) {
+                this.paginator.pageIndex = 0;
+                this.loadDataPage();
+              }
             })
           )
           .subscribe()
       );
     }
-    this.subscription.add(
-      this.paginator.page.pipe(tap(() => this.loadDataPage())).subscribe()
-    );
+    if (!this.noPagination) {
+      this.subscription.add(
+        this.paginator.page.pipe(tap(() => this.loadDataPage())).subscribe()
+      );
+    }
     this.sort.sortChange.subscribe((s) => {
       this.dataSource.onSort(s);
     });
@@ -175,8 +180,8 @@ export class TableBuilderComponent<T extends DataSourceClass, A extends AnyApi =
     this.dataSource.loadData(
       !this.noSearch ? this.input.nativeElement.value : undefined,
       "",
-      this.paginator.pageIndex,
-      this.paginator.pageSize,
+      !this.noPagination ? this.paginator.pageIndex : 0,
+      !this.noPagination ? this.paginator.pageSize : 1000,
       enableLoading
     );
   }
