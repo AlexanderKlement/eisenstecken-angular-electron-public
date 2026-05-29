@@ -73,7 +73,9 @@ const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>
 Sentry.init({
   dsn: "https://739b39d0b92749a485e48a80da87816e@sentry.kivi.bz.it/26",
   integrations: [],
-  tracesSampleRate: 0.3
+  tracesSampleRate: 0.3,
+  environment: APP_CONFIG.environment,
+  release: "2.2.3"
 });
 
 if (APP_CONFIG.production) {

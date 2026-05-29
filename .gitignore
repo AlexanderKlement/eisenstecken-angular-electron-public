@@ -58,3 +58,6 @@ Thumbs.db
 .yarn
 dist_electron
 release-beta
+
+# Sentry Config File
+.sentryclirc

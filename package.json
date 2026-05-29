@@ -32,10 +32,15 @@
     "test:watch": "ng test",
     "e2e": "npm run build:prod && playwright test -c e2e/playwright.config.ts e2e/",
     "e2e:show-trace": "playwright show-trace e2e/tracing/trace.zip",
-    "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
     "lint": "ng lint",
     "package:msi": "node build_installer_msi.js",
-    "generate": "openapi-generator-cli generate -g typescript-angular -i https://api.app.eisenstecken.it/beta/openapi.yaml -o src/api/openapi --additional-properties=supportsES6=true,withSeparateModelsAndApi=true,ngVersion=20.2.0"
+    "generate": "openapi-generator-cli generate -g typescript-angular -i https://api.app.eisenstecken.it/beta/openapi.yaml -o src/api/openapi --additional-properties=supportsES6=true,withSeparateModelsAndApi=true,ngVersion=20.2.0",
+    "version:patch": "npm version patch --git-tag-version false -f",
+    "version:minor": "npm version minor --git-tag-version false -f",
+    "version:mayor": "npm version mayor --git-tag-version false -f",
+    "preversion": "node scripts/preversion.js",
+    "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
+    "postversion": "npm run build:prod && node scripts/postversion.js"
   },
   "dependencies": {
     "@angular-eslint/eslint-plugin": "21.3.1",
@@ -75,6 +80,7 @@
   },
   "devDependencies": {
     "@angular-builders/custom-webpack": "21.0.3",
+    "@sentry/cli": "2.58.6",
     "@angular-devkit/core": "21.2.8",
     "@angular/build": "^21.2.8",
     "@angular/cli": "21.2.8",
