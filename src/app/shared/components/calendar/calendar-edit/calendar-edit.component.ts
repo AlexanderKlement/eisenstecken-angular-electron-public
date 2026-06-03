@@ -20,7 +20,6 @@ import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/i
 import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular/material/datepicker";
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
 import { MatButton } from "@angular/material/button";
-import { MatTimepicker, MatTimepickerInput, MatTimepickerToggle } from "@angular/material/timepicker";
 
 export const timeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const exampleDate = "07.07.1993";
@@ -47,7 +46,23 @@ export interface CalendarData {
   selector: "app-calendar-edit",
   templateUrl: "./calendar-edit.component.html",
   styleUrls: ["./calendar-edit.component.scss"],
-  imports: [MatDialogTitle, MatDialogContent, MatProgressSpinner, FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatDatepickerInput, MatDatepickerToggle, MatSuffix, MatDatepicker, NgxMaterialTimepickerModule, MatButton, MatTimepicker, MatTimepickerToggle, MatTimepickerInput]
+  imports: [
+    MatDialogTitle,
+    MatDialogContent,
+    MatProgressSpinner,
+    FormsModule,
+    ReactiveFormsModule,
+    DefaultLayoutDirective,
+    DefaultLayoutAlignDirective,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+    NgxMaterialTimepickerModule,
+    MatButton]
 })
 export class CalendarEditComponent implements OnInit {
   private api = inject(DefaultService);

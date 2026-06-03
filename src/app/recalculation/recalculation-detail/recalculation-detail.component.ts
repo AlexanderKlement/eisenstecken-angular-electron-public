@@ -155,12 +155,9 @@ export default class RecalculationDetailComponent implements OnInit {
           rows.push({
             values: {
               "order_to.displayable_name": dataSource.order_to.displayable_name,
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               "order_from.displayable_name":
               dataSource.order_from.displayable_name,
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               create_date: dayjs(dataSource.create_date).format("L"),
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               delivery_date:
                 dataSource.delivery_date === null
                   ? ""
@@ -200,7 +197,7 @@ export default class RecalculationDetailComponent implements OnInit {
           const sum = hourlyRate ? hourlyRate * (dataSource.minutes / 60) : undefined;
           rows.push({
             values: {
-              sync: new Date(dataSource.lastSync).toLocaleString(),
+              sync: dayjs(dataSource.lastSync).tz("UTC", true).tz("Europe/Berlin").format("LLL"),
               user: dataSource.user.fullname,
               hours: `${hours}:${minutes.toString(10).padStart(2, "0")}`,
               hourly_rate: hourlyRate ? `${hourlyRate.toFixed(2)} €` : " - ",

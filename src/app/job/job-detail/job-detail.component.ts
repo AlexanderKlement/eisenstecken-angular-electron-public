@@ -5,7 +5,6 @@ import { InfoBuilderComponent } from "../../shared/components/info-builder/info-
 import { first, map } from "rxjs/operators";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { LockService } from "../../shared/services/lock.service";
-import dayjs from "dayjs/esm";
 import { AuthStateService } from "../../shared/services/auth-state.service";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
@@ -38,6 +37,7 @@ import {
 } from "./create-recalculation-dialog/create-recalculation-dialog.component";
 import { TimeEntryEditDialogComponent } from "./time-entry-edit-dialog/time-entry-edit-dialog.component";
 import { FlexModule } from "ng-flex-layout";
+import dayjs from "../../dayjs-setup";
 
 @Component({
   selector: "app-job-detail",
@@ -435,7 +435,7 @@ export default class JobDetailComponent implements OnInit {
           const sum = hourlyRate ? hourlyRate * (dataSource.minutes / 60) : undefined;
           rows.push({
             values: {
-              sync: new Date(dataSource.lastSync).toLocaleString(),
+              sync: dayjs(dataSource.lastSync).tz("UTC", true).tz("Europe/Berlin").format("LLL"),
               user: dataSource.user.fullname,
               hours: `${hours}:${minutes.toString(10).padStart(2, "0")}`,
               hourly_rate: hourlyRate ? `${hourlyRate.toFixed(2)} €` : " - ",
