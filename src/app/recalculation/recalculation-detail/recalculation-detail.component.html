@@ -3,33 +3,35 @@
   @if (!loading) {
     <div>
       <div fxLayout="column" fxLayoutAlign="space-around center">
-        <h3>{{recalculation.name}}</h3>
+        <h3>{{ recalculation.name }}</h3>
         <mat-form-field appearance="fill">
           <mat-label>Gesamtpreis</mat-label>
           <input class="form-control" readonly [value]="recalculation.totalSum | currency:'EUR'"
-            matInput>
+                 matInput>
         </mat-form-field>
       </div>
-      <app-table-builder [$refresh]="$refresh" [dataSource]="woodListDataSource"
-      title="Preise Holzlisten"></app-table-builder>
-      <app-table-builder [$refresh]="$refresh" [dataSource]="paintDataSource" title="Oberflächen"></app-table-builder>
-      <app-table-builder [$refresh]="$refresh" [dataSource]="expenseDataSource" title="Ausgaben"></app-table-builder>
+      <app-table-builder [$refresh]="$refresh" [dataSource]="woodListDataSource" noPagination noSearch
+                         title="Preise Holzlisten"></app-table-builder>
+      <app-table-builder [$refresh]="$refresh" [dataSource]="paintDataSource" title="Oberflächen" noPagination
+                         noSearch></app-table-builder>
+      <app-table-builder [$refresh]="$refresh" [dataSource]="expenseDataSource" title="Ausgaben" noPagination
+                         noSearch></app-table-builder>
       <app-table-builder [$refresh]="$refresh" [dataSource]="orderDataSource"
-      title="Bestellungen"></app-table-builder>
+                         title="Bestellungen"></app-table-builder>
       <app-table-builder [$refresh]="$refresh" [dataSource]="workloadDataSource"
-      title="Arbeitszeit"></app-table-builder>
+                         title="Arbeitszeit" noPagination noSearch></app-table-builder>
       <div fxLayout="column" fxLayoutAlign="space-around center">
         <h3>Fahrten</h3>
         <div fxLayout="row" fxLayoutAlign="space-around center">
           <mat-form-field appearance="fill">
             <mat-label>Kilometer</mat-label>
             <input class="form-control" readonly [value]="recalculation.km | number: '0.2-2'"
-              matInput>
+                   matInput>
           </mat-form-field>
           <mat-form-field appearance="fill">
             <mat-label>Kosten / Kilometer</mat-label>
             <input class="form-control" readonly [value]="recalculation.cost | currency:'EUR'"
-              matInput>
+                   matInput>
           </mat-form-field>
         </div>
       </div>
