@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ArticleEditDialogComponent, ArticleEditDialogData } from "./article-edit-dialog/article-edit-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { first } from "rxjs/operators";
-import { Article, DefaultService } from "../../../api/openapi";
+import { Article, ArticleService, DefaultService } from "../../../api/openapi";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
 @Component({
@@ -17,12 +17,13 @@ import { TableBuilderComponent } from "../../shared/components/table-builder/tab
 export default class ArticleSupplierComponent implements OnInit {
   private dialog = inject(MatDialog);
   private api = inject(DefaultService);
+  private newApi = inject(ArticleService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
   buttons: CustomButton[] = [];
-  articleTableSource: TableDataSource<Article, DefaultService>;
-  supplierId: number;
+  articleTableSource: TableDataSource<Article, DefaultService | ArticleService>;
+  supplierOrStockId: number;
   title = "Artikel";
   type: string;
 
@@ -61,11 +62,11 @@ export default class ArticleSupplierComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
-      this.supplierId = parseInt(params.supplier_id, 10);
-      console.log(this.supplierId);
-      if (isNaN(this.supplierId)) {
+      this.supplierOrStockId = parseInt(params.supplier_id, 10);
+      console.log(this.supplierOrStockId);
+      if (isNaN(this.supplierOrStockId)) {
         console.error("RecalculationDetail: Cannot parse jobId");
-        this.router.navigateByUrl("supplier");
+        this.router.navigateByUrl("supplier").then();
         return;
       }
       this.route.data.subscribe((data) => {
@@ -73,7 +74,7 @@ export default class ArticleSupplierComponent implements OnInit {
         if (data.type === "supplier") {
           this.initArticleSupplierTable();
           this.api
-            .readSupplierSupplierSupplierIdGet(this.supplierId)
+            .readSupplierSupplierSupplierIdGet(this.supplierOrStockId)
             .pipe(first())
             .subscribe((supplier) => {
               this.title += ": " + supplier.name;
@@ -81,7 +82,7 @@ export default class ArticleSupplierComponent implements OnInit {
         } else {
           this.initArticleStockTable();
           this.api
-            .readStockStockStockIdGet(this.supplierId)
+            .readStockStockStockIdGet(this.supplierOrStockId)
             .pipe(first())
             .subscribe((stock) => {
               this.title += ": " + stock.name;
@@ -92,7 +93,7 @@ export default class ArticleSupplierComponent implements OnInit {
     this.buttons.push({
       name: "Neuer Artikel",
       navigate: () => {
-        this.openArticleDialog(-1, this.supplierId, this.type);
+        this.openArticleDialog(-1, this.supplierOrStockId, this.type);
       }
     });
   }
@@ -102,7 +103,7 @@ export default class ArticleSupplierComponent implements OnInit {
       this.api,
       (api, filter, sortDirection, skip, limit) =>
         api.readArticlesBySupplierArticleSupplierSupplierIdGet(
-          this.supplierId,
+          this.supplierOrStockId,
           skip,
           limit,
           filter
@@ -111,7 +112,7 @@ export default class ArticleSupplierComponent implements OnInit {
       this.columns,
       (api) =>
         api.readArticleCountBySupplierArticleSupplierCountSupplierIdGet(
-          this.supplierId
+          this.supplierOrStockId
         )
     );
     this.articleTableSource.loadData();
@@ -119,10 +120,10 @@ export default class ArticleSupplierComponent implements OnInit {
 
   private initArticleStockTable() {
     this.articleTableSource = new TableDataSource(
-      this.api,
+      this.newApi,
       (api, filter, sortDirection, skip, limit) =>
-        api.readArticlesByStockArticleStockStockIdGet(
-          this.supplierId,
+        api.getArticlesByStock(
+          this.supplierOrStockId,
           skip,
           limit,
           filter
@@ -130,8 +131,8 @@ export default class ArticleSupplierComponent implements OnInit {
       this.parseFunction,
       this.columns,
       (api) =>
-        api.readArticleCountBySupplierArticleSupplierCountSupplierIdGet(
-          this.supplierId
+        api.countArticlesByStock(
+          this.supplierOrStockId
         )
     );
     this.articleTableSource.loadData();

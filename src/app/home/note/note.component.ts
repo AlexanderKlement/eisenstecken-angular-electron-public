@@ -1,53 +1,53 @@
-import { Component, ElementRef, OnInit, ViewChild, inject } from "@angular/core";
-import {first} from "rxjs/operators";
+import { Component, ElementRef, inject, OnInit, ViewChild } from "@angular/core";
+import { first } from "rxjs/operators";
 import { DefaultService, Note, NoteCreate } from "../../../api/openapi";
-import { FlexModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective } from "ng-flex-layout";
+import { DefaultFlexDirective, DefaultLayoutAlignDirective, DefaultLayoutDirective, FlexModule } from "ng-flex-layout";
 import { SingleNoteComponent } from "./single-note/single-note.component";
 import { MatFabButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
 
 @Component({
-    selector: 'app-note',
-    templateUrl: './note.component.html',
-    styleUrls: ['./note.component.scss'],
-    imports: [FlexModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective, SingleNoteComponent, MatFabButton, MatIcon]
+  selector: "app-note",
+  templateUrl: "./note.component.html",
+  styleUrls: ["./note.component.scss"],
+  imports: [FlexModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, DefaultFlexDirective, SingleNoteComponent, MatFabButton, MatIcon]
 })
 export class NoteComponent implements OnInit {
-    private api = inject(DefaultService);
+  private api = inject(DefaultService);
 
 
-    @ViewChild("noteBox") noteBox: ElementRef;
+  @ViewChild("noteBox") noteBox: ElementRef;
 
-    notes: Note[] = [];
-    maxNotes = 2;
+  notes: Note[] = [];
+  maxNotes = 2;
 
-    ngOnInit(): void {
-        this.api.readNoteEntriesNoteGet().pipe(first()).subscribe((notes) => {
-            this.notes = notes;
-            if (this.notes.length === 0) {
-                this.newNoteClicked();
-            }
-        });
-    }
+  ngOnInit(): void {
+    this.api.readNoteEntriesNoteGet().pipe(first(null, [])).subscribe((notes) => {
+      this.notes = notes;
+      if (this.notes.length === 0) {
+        this.newNoteClicked();
+      }
+    });
+  }
 
-    public newNoteClicked(): void {
-        const noteCreate: NoteCreate = {text: ""};
-        const newNoteObservable = this.api.createNoteEntryNotePost(noteCreate);
-        newNoteObservable.pipe(first()).subscribe((note) => {
-            this.notes.push(note);
-        });
-    }
+  public newNoteClicked(): void {
+    const noteCreate: NoteCreate = { text: "" };
+    const newNoteObservable = this.api.createNoteEntryNotePost(noteCreate);
+    newNoteObservable.pipe(first()).subscribe((note) => {
+      this.notes.push(note);
+    });
+  }
 
-    public addNoteAvailable(): boolean {
-        return this.notes.length < this.maxNotes;
-    }
+  public addNoteAvailable(): boolean {
+    return this.notes.length < this.maxNotes;
+  }
 
-    deleteNote(note: Note) {
-        this.notes.forEach((element, index) => {
-            if (element.id === note.id) {
-                this.notes.splice(index, 1);
-            }
-        });
-    }
+  deleteNote(note: Note) {
+    this.notes.forEach((element, index) => {
+      if (element.id === note.id) {
+        this.notes.splice(index, 1);
+      }
+    });
+  }
 }
 
