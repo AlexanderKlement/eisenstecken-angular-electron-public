@@ -34,7 +34,13 @@ import {
 import { MatButton, MatIconButton } from "@angular/material/button";
 import { MatTooltip } from "@angular/material/tooltip";
 import { AsyncPipe, NgClass } from "@angular/common";
-import { DefaultService, OrderService, RecalculationService, TimeEntryService } from "../../../../api/openapi";
+import {
+  ArticleService,
+  DefaultService,
+  OrderService,
+  RecalculationService,
+  TimeEntryService
+} from "../../../../api/openapi";
 import { MatSort, MatSortHeader } from "@angular/material/sort";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatIcon } from "@angular/material/icon";
@@ -51,7 +57,7 @@ export interface TableButton {
   selectedField: string;
 }
 
-type AnyApi = DefaultService | RecalculationService | OrderService | TimeEntryService;
+type AnyApi = DefaultService | RecalculationService | ArticleService | OrderService | TimeEntryService;
 
 @Component({
   selector: "app-table-builder",
