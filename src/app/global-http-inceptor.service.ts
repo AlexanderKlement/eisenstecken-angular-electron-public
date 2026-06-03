@@ -56,7 +56,7 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
         switchMap((token: string) => next.handle(this.addAuthHeader(req, token)))
       );
     }
-
+    console.log("Trying to refresh token");
     this.isDoingRefresh = true;
     // Emit null to block any queued requests while refreshing
     this.refreshTokenSubject.next(null);
@@ -72,10 +72,12 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
         this.isDoingRefresh = false;
         this.tokenService.setToken(response);
         this.refreshTokenSubject.next(response.accessToken);
+        console.log("Refresh success", response);
         // Retry the original request with the new token
         return next.handle(this.addAuthHeader(req, response.accessToken));
       }),
       catchError((refreshError: unknown) => {
+        console.log("Refresh error: ", refreshError);
         this.isDoingRefresh = false;
         this.refreshTokenSubject.next(null);
         if (!this.isLoggingOut) {
@@ -94,8 +96,7 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
     }
     return next.handle(req).pipe(
       catchError((error: unknown) => {
-        console.error("Intercepting error");
-        console.error(error);
+        console.error("Intercepting error", error);
 
         if (!(error instanceof HttpErrorResponse)) {
           return throwError(() => error);
@@ -109,7 +110,7 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
         const isRefreshEndpoint = lowerUrl.includes("/auth/refresh");
 
         if (error.status === 401) {
-          console.warn("Not authorized for " + lowerUrl);
+          console.warn("Not authorized for " + lowerUrl, { isRefreshEndpoint, isLoggingOut: this.isLoggingOut });
 
           if (isRefreshEndpoint || this.isLoggingOut) {
             if (!this.isLoggingOut) {
