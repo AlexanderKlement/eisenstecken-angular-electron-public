@@ -1,4 +1,4 @@
-import { Injectable, inject } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import {
   HttpBackend,
   HttpClient,
@@ -105,43 +105,13 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
           console.warn("Not sending error message");
           return EMPTY;
         }
-        const base = LocalConfigRenderer.getInstance().getApi().replace(/\/+$/, "");
 
-        const doRefresh = () => {
-          this.isDoingRefresh = true;
-          const refreshToken = this.tokenService.getRefreshToken();
-          const headers = refreshToken
-            ? new HttpHeaders({ Authorization: `Bearer ${refreshToken}` })
-            : new HttpHeaders();
-          this.rawHttp.post(`${base}/auth/refresh`, undefined, { headers }).subscribe({
-            next: (data: AuthResponse) => {
-              this.isDoingRefresh = false;
-              if (data.accessToken?.length > 0) {
-                this.tokenService.setToken(data);
-              } else {
-                this.doLogout();
-              }
-            },
-            error: (refreshErr: unknown) => {
-              this.isDoingRefresh = false;
-              if (refreshErr instanceof HttpErrorResponse && refreshErr.status === 401 && !this.isLoggingOut) {
-                this.doLogout();
-
-              }
-            }
-          });
-        };
-
-        const isUsersMe =
-          lowerUrl.endsWith("/users/me") ||
-          lowerUrl.endsWith("/users/me/") ||
-          lowerUrl.includes("/users/me?");
         const isRefreshEndpoint = lowerUrl.includes("/auth/refresh");
 
         if (error.status === 401) {
           console.warn("Not authorized for " + lowerUrl);
 
-          if (isRefreshEndpoint || this.isLoggingOut || isUsersMe) {
+          if (isRefreshEndpoint || this.isLoggingOut) {
             if (!this.isLoggingOut) {
               this.doLogout();
             }
