@@ -11,7 +11,7 @@ state.app = app;
 Sentry.init({
   dsn: "https://60ac4754e4be476a82b10b0e597dfaa6@sentry.kivi.bz.it/25",
   environment: app.getName().toLowerCase().includes("beta") ? "beta" : "production",
-  release: "2.2.4"
+  release: "2.2.3"
 
 });
 const args = process.argv.slice(1);
