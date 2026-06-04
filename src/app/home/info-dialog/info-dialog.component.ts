@@ -52,6 +52,12 @@ export class InfoDialogComponent implements OnInit {
       ]
     },
     {
+      versionName: "2.2.4",
+      changes: [
+        "Einige kleine Fehler wurden behoben"
+      ]
+    },
+    {
       versionName: "2.2.3",
       changes: [
         "Notizfeld bei Auftrag hinzugefügt",

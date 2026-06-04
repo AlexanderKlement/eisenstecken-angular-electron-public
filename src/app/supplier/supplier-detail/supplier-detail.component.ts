@@ -329,33 +329,35 @@ export default class SupplierDetailComponent implements OnInit {
     });
   }
 
-  private ordersToOrderSelected(orderDateReturnData: OrderDateReturnData, request: boolean): void {
-    this.supplier$.pipe(
-      first(),
-      map((supplier) => ({
-        supplier,
-        payload: {
-          description: "",
-          orders: orderDateReturnData.orders,
-          delivery_date: orderDateReturnData.date,
-          order_from_id: supplier.id,
-          request
-        } satisfies OrderBundleCreate
-      })),
-      switchMap(({ supplier, payload }) =>
-        this.orderBundleService.createOrderBundle(payload).pipe(
-          first(),
-          tap((newOrderBundle) => {
-            this.deliveredOrderDataSource.loadData();
-            this.orderedOrderDataSource.loadData();
-            this.createdOrderDataSource.loadData();
-            SupplierDetailComponent.sendAndDisplayOrderBundlePdf(
-              this.api, this.authService, this.email, this.file, newOrderBundle, supplier, request
-            );
-          })
+  private ordersToOrderSelected(orderDateReturnData: OrderDateReturnData | undefined, request: boolean): void {
+    if (orderDateReturnData) {
+      this.supplier$.pipe(
+        first(),
+        map((supplier) => ({
+          supplier,
+          payload: {
+            description: "",
+            orders: orderDateReturnData.orders,
+            delivery_date: orderDateReturnData.date,
+            order_from_id: supplier.id,
+            request
+          } satisfies OrderBundleCreate
+        })),
+        switchMap(({ supplier, payload }) =>
+          this.orderBundleService.createOrderBundle(payload).pipe(
+            first(),
+            tap((newOrderBundle) => {
+              this.deliveredOrderDataSource.loadData();
+              this.orderedOrderDataSource.loadData();
+              this.createdOrderDataSource.loadData();
+              SupplierDetailComponent.sendAndDisplayOrderBundlePdf(
+                this.api, this.authService, this.email, this.file, newOrderBundle, supplier, request
+              );
+            })
+          )
         )
-      )
-    ).subscribe();
+      ).subscribe();
+    }
   }
 
   private supplierDeleteClicked() {

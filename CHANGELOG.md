@@ -1,36 +1,41 @@
-## <small>2.2.3 (2026-05-29)</small>
+## <small>2.2.3 (2026-06-03)</small>
 
 * Add Note To Job ([f01b519](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f01b519))
 * afterpack for macbuild ([c63c71c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c63c71c))
 * author and description here for electron builder warning ([9c749b2](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/9c749b2))
+* Bugfix notiz ([5ee5812](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/5ee5812))
+* Bugfixes ([f60d276](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f60d276))
+* Bugfixes ([c5c2b7e](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c5c2b7e))
 * Build for ios fix ([253732d](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/253732d))
 * Build for iso ([f91a264](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f91a264))
 * Build for iso fix ([b142b4b](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/b142b4b))
 * Build for iso fix ([05cfda3](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/05cfda3))
 * display job note ([eda832e](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/eda832e))
 * do not lazy load components since states are not preserved ([1a55e38](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/1a55e38))
+* Fix article by stock, we may move everything to article_router_v2 in the future ([c852b01](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c852b01))
 * Fix eisen issue 21.05.2026 Whatsapp ([9b022c9](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/9b022c9))
 * Fix naming convention eslint command ([d77afe3](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/d77afe3))
+* fix Table builder AnyApi ([036801d](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/036801d))
 * Fix this shiet ([8e2099c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/8e2099c))
 * Fixed a bug if a resource not accessible wouldn't kill routing ([3a18552](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/3a18552))
 * Fixed some bugs and added a Create Time Entry Button ([9d47bfd](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/9d47bfd))
 * Is this all i need for mac? ([7f663be](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/7f663be))
 * it builds on ios now but doesn't show tables ([3db5d9f](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/3db5d9f))
 * Lets see if this action works ([b57ff67](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/b57ff67))
+* Logging ([c78d269](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c78d269))
 * mac build ([d50dfd1](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/d50dfd1))
 * Mac package.json build script ([c984b91](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c984b91))
 * new input fields ([6f339e4](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/6f339e4))
 * new TimeEntries Endpoint ([83b9db5](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/83b9db5))
+* Remove pagination & search in recalculation tables ([2dfa437](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/2dfa437))
+* Remove the users/me filter on the refresh logic, idk why i put that there ([fbab85f](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/fbab85f))
 * remove yarn from package.json ([d1a5ba7](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/d1a5ba7))
 * Small Bugfix ([a598bc2](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/a598bc2))
 * Small fixes ([9cc8af8](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/9cc8af8))
+* these just use up a log of github actions but don't work atm ([f9c9574](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f9c9574))
 * TikTak Time Entries ([1b86867](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/1b86867))
+* Version 2.2.3 ([3db1467](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/3db1467))
 * Version bumb for release ([465f77c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/465f77c))
-
-
-
-## <small>2.2.2 (2026-05-12)</small>
-
 * adding missing services ([ecf16a9](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/ecf16a9))
 * Automatic background refresh token ([5b1a685](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/5b1a685))
 * bugfix to build ([8bbc860](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/8bbc860))
@@ -48,16 +53,12 @@
 * user note and user edit bugfix ([99dbe02](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/99dbe02))
 * userfields optional ([f4f3ac0](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f4f3ac0))
 
-
-
 ## <small>2.2.1 (2026-04-10)</small>
 
 * adding missing stuff from the api ([9c7f30f](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/9c7f30f))
 * changed a lot of the right stuff. Now we can build again ([bb708f1](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/bb708f1))
 * Fix eslint version to be compatible with other deps ([6def063](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/6def063))
 * fixed the auth service. It works not quite yet. But we are at least booting up ([0e5ea1f](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/0e5ea1f))
-
-
 
 ## 2.2.0 (2026-03-17)
 
@@ -73,39 +74,27 @@
 * trying out the new move job dialog ([223aa8f](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/223aa8f))
 * was able to cleanup the mess ([aabb76c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/aabb76c))
 
-
-
 ## <small>2.1.9 (2026-03-10)</small>
 
 * removing unused stuff from the user ([6e7119c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/6e7119c))
 * this made the startup alot faster ([f3b9928](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f3b9928))
 * updated some openapi stuff ([c7847e7](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c7847e7))
 
-
-
 ## <small>2.1.8 (2026-03-09)</small>
 
 * fixing the ordering for stocks which was strange in some cases ([55ab341](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/55ab341))
-
-
 
 ## <small>2.1.7 (2026-03-06)</small>
 
 * this should make the search better ([ec847b8](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/ec847b8))
 
-
-
 ## <small>2.1.6 (2026-03-04)</small>
 
 * fixed a few little things after the bigger update ([d355478](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/d355478))
 
-
-
 ## <small>2.1.5 (2026-03-04)</small>
 
 * reactivated the edit dialog in the order detail component ([cf50bfe](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/cf50bfe))
-
-
 
 ## <small>2.1.4 (2026-03-03)</small>
 
@@ -114,27 +103,19 @@
 * fixed all the stuff for the new order windows. ([f03bbf9](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f03bbf9))
 * removed old not supported stuff ([931f6d5](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/931f6d5))
 
-
-
 ## <small>2.1.3 (2026-02-23)</small>
 
 * fixed the orders not being displayed correctly in the recalculation ([f006140](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f006140))
 
-
-
 ## <small>2.1.2 (2026-02-23)</small>
 
 * this should fix the issue where we were not able to create new articles in orders ([8b47ea9](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/8b47ea9))
-
-
 
 ## <small>2.1.1 (2026-02-20)</small>
 
 * bumping version number ([1ae1083](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/1ae1083))
 * bumping version number ([fb86fa9](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/fb86fa9))
 * fixed the recalculation edit stuff ([f929232](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f929232))
-
-
 
 ## 2.1.0 (2026-02-18)
 
@@ -149,8 +130,6 @@
 * ordered articles now keep their names on order creation ([04f3bd3](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/04f3bd3))
 * you are now able to create recalculations without all jobs included ([5ec277c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/5ec277c))
 
-
-
 ## <small>2.0.8 (2026-01-22)</small>
 
 * bumping version numbers for the new update ([3b64af3](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/3b64af3))
@@ -161,20 +140,14 @@
 * removed the tooltip from the order list ([f31aee3](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f31aee3))
 * this should fix the window not opening correctly sometimes ([afa6272](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/afa6272))
 
-
-
 ## <small>2.0.7 (2026-01-21)</small>
 
 * changed the things that were required (separate items in the list when creating an order, align all  ([af3932a](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/af3932a))
-
-
 
 ## <small>2.0.6 (2026-01-16)</small>
 
 * added a margin under the + sign in the client edit component ([1cab11f](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/1cab11f))
 * adding some spaces and some stylings to the ap ([bd35566](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/bd35566))
-
-
 
 ## <small>2.0.5 (2026-01-15)</small>
 
@@ -183,21 +156,15 @@
 * adding the new order method so that we dont create duplicates on the server ([071d2f5](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/071d2f5))
 * made the supplier detail component loose some information that is no longer used ([e046a4a](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/e046a4a))
 
-
-
 ## <small>2.0.4 (2026-01-14)</small>
 
 * bumped version number ([b58dd5d](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/b58dd5d))
 * fixed an issue where currency was not formatted correctly ([ef0ae60](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/ef0ae60))
 * fixing the issue where it was not possible to send mails ([e6687c1](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/e6687c1))
 
-
-
 ## <small>2.0.3 (2026-01-09)</small>
 
 * fixed the updater and changed the environment to have the correct stuff ([803b455](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/803b455))
-
-
 
 ## <small>2.0.1 (2026-01-09)</small>
 
@@ -222,7 +189,7 @@
 * did some things i hate this omg ([d3e3359](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/d3e3359))
 * doesnt work ([7c85fce](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/7c85fce))
 * doesnt work ([861d725](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/861d725))
-* doing some tasks for  the final release ([c27eb42](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c27eb42))
+* doing some tasks for the final release ([c27eb42](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c27eb42))
 * everything is now working. Committing before adding the log ([0a375f1](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/0a375f1))
 * finished the reuse strategy and things ([fe0a87e](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/fe0a87e))
 * fixed a lot of errors by using the angular styles ([adfea15](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/adfea15))
@@ -289,27 +256,19 @@
 * version change of deps ([09f0831](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/09f0831))
 * yoyoyo ([212d842](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/212d842))
 
-
-
 ## <small>1.1.17 (2024-01-10)</small>
 
 * this should fix the token logout and the buttons disappearing on the invoices ([4d2a3ef](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/4d2a3ef))
 
-
-
 ## <small>1.1.16 (2023-12-19)</small>
 
 * adding the order move thing ([b4687cf](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/b4687cf))
-
-
 
 ## <small>1.1.15 (2023-09-14)</small>
 
 * added the same € sign for invoices ([6ff9b4d](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/6ff9b4d))
 * disabled the whole online order thing, now we should only work on importing them ([bf93f77](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/bf93f77))
 * this should enable the € sign in inputs, with a little workaround ([aa856ad](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/aa856ad))
-
-
 
 ## <small>1.1.14 (2023-09-07)</small>
 
@@ -324,13 +283,9 @@
 * little fix to make company closed reset as well ([26b9cef](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/26b9cef))
 * made the improvements for the recalculation edit. I hope this is what is expected ([3fa14e1](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/3fa14e1))
 
-
-
 ## <small>1.1.13 (2023-04-04)</small>
 
 * little 1.13 release with a bugfix and a pdf modification ([ce116be](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/ce116be))
-
-
 
 ## <small>1.1.12 (2023-04-03)</small>
 
@@ -338,13 +293,9 @@
 * some minor changes for the update ([59ed635](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/59ed635))
 * This are the changes for showing the correct invoice number ([02c18b3](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/02c18b3))
 
-
-
 ## <small>1.1.9 (2023-03-15)</small>
 
 * converting requests now finally working ([319ead4](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/319ead4))
-
-
 
 ## <small>1.1.8 (2023-03-12)</small>
 
@@ -357,16 +308,12 @@
 * now we have eisenstecken working again ([6abd87d](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/6abd87d))
 * This are 99% of the changes for the next update ([0f69191](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/0f69191))
 
-
-
 ## <small>1.1.6 (2022-11-30)</small>
 
 * added the notification tag to user mail ([57ce254](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/57ce254))
 * Fixed phone.service.ts ([f802f69](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f802f69))
 * fixed restart button, it was missing ipcrenderer ([0c35a86](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/0c35a86))
 * phone.service.ts Beautify ([54f44af](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/54f44af))
-
-
 
 ## <small>1.1.5 (2022-11-20)</small>
 
@@ -390,13 +337,9 @@
 * updated all the phone stuff, that was requested ([e571446](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/e571446))
 * updated version information ([02aa281](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/02aa281))
 
-
-
 ## <small>1.1.4 (2022-06-11)</small>
 
 * adding all the stuff i forgot to commit the last time ([821139f](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/821139f))
-
-
 
 ## <small>1.0.3 (2022-05-26)</small>
 
@@ -407,8 +350,6 @@
 * reworked the whole employee/workhours/service situation. Maybe we got it right this time ([e2c7e7a](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/e2c7e7a))
 * tried to mess everything up, but was able to fix it again ([6f3740a](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/6f3740a))
 
-
-
 ## <small>1.0.1 (2022-05-12)</small>
 
 * access guard wors as intended, now only buttons and stuff missing ([28b8137](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/28b8137))
@@ -417,8 +358,6 @@
 * finished styling the hours thingy and moved all the angular settings to match the electron ones ([4288a36](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/4288a36))
 * finished the rework of the work hours stepper ([ed44f95](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/ed44f95))
 * initial migration to a dialog went well. Committing the progress in the meantime ([3d1aafc](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/3d1aafc))
-
-
 
 ## <small>0.9.9 (2022-05-02)</small>
 
@@ -429,15 +368,11 @@
 * finished first prototype of new stepper module ([bca7692](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/bca7692))
 * got the mat stepper to work properly ([680943a](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/680943a))
 
-
-
 ## <small>0.9.7 (2022-03-31)</small>
 
 * calendar finished, now only styling is missing ([bf7b5c9](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/bf7b5c9))
 * finally got the calendar module to work, renamed it a bit to not cause confusion ([c350456](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c350456))
 * nearly finished, i think i have to fuck everything up to switch to 24 hour format though ([e0e337a](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/e0e337a))
-
-
 
 ## <small>0.9.5 (2022-03-18)</small>
 
@@ -445,26 +380,18 @@
 * jobs are now ordered by their year id ([d57cf5c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/d57cf5c))
 * order list is now finally collapsable ([3736905](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/3736905))
 
-
-
 ## <small>0.9.4 (2022-03-13)</small>
 
 * added the onAttach method to all the components which detach, to refresh tables on reAttach ([cca2b82](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/cca2b82))
-
-
 
 ## <small>0.9.3 (2022-03-10)</small>
 
 * added RouterReuseStrategy to cache sites who are open. ([3841855](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/3841855))
 
-
-
 ## <small>0.9.1 (2022-03-08)</small>
 
 * forgot to add local config ([2b513b4](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/2b513b4))
 * table columns now have a 4px distance, to make it more leggible ([15b62cc](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/15b62cc))
-
-
 
 ## 0.9.0 (2022-03-04)
 
@@ -475,27 +402,19 @@
 * todays day is now colored correctely ([1473eb9](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/1473eb9))
 * Applause: Here comes the hotfix for the web environment, for non hardware related testing ([a40b451](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/a40b451))
 
-
-
 ## <small>0.8.20 (2022-03-01)</small>
 
 * added tooltips to tables ([e768fd9](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/e768fd9))
 * calendar weeks do now always start on mondays ([63907a6](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/63907a6))
 
-
-
 ## <small>0.8.19 (2022-02-17)</small>
 
 * added info dialog detail windows ([45d508e](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/45d508e))
-
-
 
 ## <small>0.8.18-beta (2022-02-17)</small>
 
 * comitting before messing the table builder up ([eb5d370](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/eb5d370))
 * electron is now able to open a windows file dialog, to let the user select files using a filter. Thi ([4c1c9b3](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/4c1c9b3))
-
-
 
 ## <small>0.8.17 (2022-02-10)</small>
 
@@ -505,20 +424,14 @@
 * recalculation update to have ([9319450](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/9319450))
 * searchbar longer order component ([185fe52](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/185fe52))
 
-
-
 ## <small>0.8.16 (2022-02-08)</small>
 
 * added contact person to client ([7932c2f](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/7932c2f))
 * added new font ([1be1a68](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/1be1a68))
 
-
-
 ## <small>0.8.15 (2022-02-04)</small>
 
 * delivery edit component now has proper styling ([fa83aa1](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/fa83aa1))
-
-
 
 ## <small>0.8.14-beta (2022-02-03)</small>
 
@@ -526,13 +439,9 @@
 * new article page added ([8563ff2](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/8563ff2))
 * updated mail. which supports html now ([dda601a](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/dda601a))
 
-
-
 ## <small>0.8.13 (2022-02-01)</small>
 
 * chnaged font of offer edit header to Roboto Bold, since Roboto Black does not seem officialy support ([2eade78](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/2eade78))
-
-
 
 ## <small>0.8.13-beta (2022-02-01)</small>
 
@@ -545,14 +454,10 @@
 * recalulation should now work ([a8da072](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/a8da072))
 * Text slice on product list component ([f21bd03](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f21bd03))
 
-
-
 ## <small>0.8.12-beta (2022-01-27)</small>
 
 * changed the internal external pdf stuff ([5b8dc7d](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/5b8dc7d))
 * raised api level like usual ([161c490](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/161c490))
-
-
 
 ## <small>0.8.11 (2022-01-26)</small>
 
@@ -560,19 +465,13 @@
 * menu tiles fix ([bee75f3](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/bee75f3))
 * small css fixes ([d6586f7](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/d6586f7))
 
-
-
 ## <small>0.8.10-beta (2022-01-25)</small>
 
 * mail schreiben sollte nuin funktionieren ([434bdc6](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/434bdc6))
 
-
-
 ## <small>0.8.9-beta (2022-01-20)</small>
 
 * order and order bundles are now deletable -> the deleted orders are not recoverable ([eb8cfd1](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/eb8cfd1))
-
-
 
 ## <small>0.8.6 (2022-01-20)</small>
 
@@ -581,13 +480,9 @@
 * remade the entire product edit dialog for the (second) last time to fit new requirements ([7f4267f](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/7f4267f))
 * yellow hover effect ([27edf8c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/27edf8c))
 
-
-
 ## <small>0.8.5 (2022-01-19)</small>
 
 * committing before messing everything up with regedit ([2e860e1](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/2e860e1))
-
-
 
 ## <small>0.8.3 (2022-01-19)</small>
 
