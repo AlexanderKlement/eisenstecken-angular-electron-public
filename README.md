@@ -46,10 +46,12 @@ windows:
 IMPORTANT: Restart Terminal/IDE to reload environment variables.
 
 The build and deploy with:
+`npm run postversion` or `npm run version:[patch|minor|mayor]`
+`npm run electron:deploy`
 
-`electron:deploy`
+Go to GitHub open the release and release it
 
-Go to GitHub open the release and
+Note: please look at [Updating](#updating)
 
 ### Hour register Website (with Serviceworker)
 
@@ -111,9 +113,18 @@ the time not accessible by others, which makes regular uploads a real struggle.
 
 ## Updating
 
-First we have to change the version numbers in `package.json` in the root and root/app folder
+To increase the Version please use the `version:[patch|minor|mayor]` scripts, this runs the preversion & version & postversion hooks:
 
-The build the update exe and publish the release on GitHub
+These do:
+
+- `preversion`: replace the version in `app/main.ts`, `src/main.ts` and `app/package.json` and checks if there are patch-notes in the `src/app/home/info-dialog/info-dialog.component.ts`
+- `postversion`: builds the project with the new version, inject sentry DEBUG ID's and uploads the sourcemaps to sentry
+
+If you make code changes after you increase the version, you can still run the `npm run postversion` script to regenerate the sentry sourcemaps.
+
+IMPORTANT: This have to run before a `npm run electron:deploy`
+
+Manual version change in `package.json` has been disabled via husky hook to prevent releasing with wrong version numbers or without release notes
 
 ## Fixed the import not being possible for openapi-generate-client:
 
