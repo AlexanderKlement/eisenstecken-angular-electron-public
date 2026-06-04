@@ -7,6 +7,14 @@ const oldVersion = process.env.npm_old_version;
 const newVersion = process.env.npm_new_version;
 
 console.log(`[preversion] Bumping ${oldVersion} → ${newVersion}`);
+const dialogFile = path.join(projectDir, "src/app/home/info-dialog/info-dialog.component.ts");
+const content = fs.readFileSync(dialogFile, "utf8");
+
+if (!content.includes(newVersion)) {
+  console.error(`\n[preversion] ❌ Aborting: no patch notes found for v${newVersion} in info-dialog.component.ts`);
+  console.error(`  Please add release notes for v${newVersion} before bumping.\n`);
+  process.exit(1); // <-- aborts the version bump
+}
 
 function replaceVersion(filePath) {
   const abs = path.resolve(filePath);
