@@ -116,7 +116,6 @@ export default class DeliveryEditComponent
         map((jobs) => {
           const minimalJobs: JobMinimal[] = jobs;
           minimalJobs.splice(0, 0, {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             displayable_name: "Selbst eintragen",
             id: 0
           });
@@ -318,23 +317,25 @@ export default class DeliveryEditComponent
 
   protected observableReady() {
     super.observableReady();
-    this.data$.pipe(first()).subscribe((deliveryNote) => {
-      this.deliveryNoteGroup.patchValue(deliveryNote);
-      this.deliveryNoteGroup
-        .get("delivery_note_number")
-        .setValue(deliveryNote.number);
-      for (const article of deliveryNote.articles) {
-        this.getDescriptiveArticles().push(
-          this.initDescriptiveArticles(article)
-        );
-      }
-      if (this.getDescriptiveArticles().controls.length === 0) {
-        this.getDescriptiveArticles().push(this.initDescriptiveArticles());
-      }
-      this.deliveryNoteGroup
-        .get("delivery_note_reason_id")
-        .setValue(deliveryNote.delivery_note_reason.id);
-    });
+    if (!this.createMode) {
+      this.data$.pipe(first()).subscribe((deliveryNote) => {
+        this.deliveryNoteGroup.patchValue(deliveryNote);
+        this.deliveryNoteGroup
+          .get("delivery_note_number")
+          .setValue(deliveryNote.number);
+        for (const article of deliveryNote.articles) {
+          this.getDescriptiveArticles().push(
+            this.initDescriptiveArticles(article)
+          );
+        }
+        if (this.getDescriptiveArticles().controls.length === 0) {
+          this.getDescriptiveArticles().push(this.initDescriptiveArticles());
+        }
+        this.deliveryNoteGroup
+          .get("delivery_note_reason_id")
+          .setValue(deliveryNote.delivery_note_reason.id);
+      });
+    }
   }
 
   protected initDescriptiveArticles(

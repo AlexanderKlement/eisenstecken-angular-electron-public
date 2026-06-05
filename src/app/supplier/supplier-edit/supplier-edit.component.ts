@@ -106,24 +106,17 @@ export default class SupplierEditComponent
       mail2: this.supplierGroup.get("mail2").value,
       tel1: this.supplierGroup.get("tel1").value,
       tel2: this.supplierGroup.get("tel2").value,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       contact_person: this.supplierGroup.get("contact_person").value,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       send_order_to: this.supplierGroup.get("send_order_to").value,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       destination_code: this.supplierGroup.get("destination_code").value,
       address: {
         name: this.supplierGroup.get("name").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         street_number: this.supplierGroup.get("address.street_number").value,
         city: this.supplierGroup.get("address.city").value,
         cap: this.supplierGroup.get("address.cap").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         country_code: this.supplierGroup.get("address.country").value
       },
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       language_code: this.supplierGroup.get("language").value,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       show_in_orders: this.showInOrders
     };
 
@@ -243,15 +236,11 @@ export default class SupplierEditComponent
       tel1: new UntypedFormControl(""),
       tel2: new UntypedFormControl(""),
       language: new UntypedFormControl("DE"),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       contact_person: new UntypedFormControl(""),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       send_order_to: new UntypedFormControl(""),
       contacts: new UntypedFormArray([]),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       destination_code: new UntypedFormControl(""),
       address: new UntypedFormGroup({
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         street_number: new UntypedFormControl(""),
         city: new UntypedFormControl(""),
         cap: new UntypedFormControl(""),

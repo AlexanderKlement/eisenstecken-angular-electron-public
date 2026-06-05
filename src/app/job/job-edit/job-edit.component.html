@@ -8,41 +8,47 @@
         </mat-checkbox>
       }
       <br>
-        <br>
-          <mat-form-field appearance="fill">
-            <mat-label>Name</mat-label>
-            <input class="form-control" formControlName="name" matInput>
-          </mat-form-field>
-          @if (!subMode) {
-            <mat-form-field appearance="fill">
-              <mat-label>Zuständig</mat-label>
-              <mat-select formControlName="responsible_id">
-                @for (user of users$ | async; track user) {
-                  <mat-option [value]="user.id">
-                    {{user.fullname}}
-                  </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-          }
-          @if (!subMode) {
-            <mat-form-field appearance="fill">
-              <mat-label>Jahr</mat-label>
-              <input class="form-control" [readonly]="!createMode" formControlName="year" type="number" matInput>
-            </mat-form-field>
-          }
-          @if (!subMode) {
-            <mat-form-field appearance="fill">
-              <mat-label>Fertigstellung</mat-label>
-              <input class="form-control" formControlName="completion" matInput>
-            </mat-form-field>
-          }
+      <br>
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input class="form-control" formControlName="name" matInput>
+      </mat-form-field>
+      @if (!subMode) {
+        <mat-form-field appearance="fill">
+          <mat-label>Zuständig</mat-label>
+          <mat-select formControlName="responsible_id">
+            @for (user of users$ | async; track user) {
+              <mat-option [value]="user.id">
+                {{ user.fullname }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
+      @if (!subMode) {
+        <mat-form-field appearance="fill">
+          <mat-label>Jahr</mat-label>
+          <input class="form-control" [readonly]="!createMode" formControlName="year" type="number" matInput>
+        </mat-form-field>
+      }
+      @if (!subMode) {
+        <mat-form-field appearance="fill">
+          <mat-label>Fertigstellung</mat-label>
+          <input class="form-control" formControlName="completion" matInput>
+        </mat-form-field>
+      }
+      @if (!subMode) {
+        <mat-form-field appearance="fill">
+          <mat-label>Notiz</mat-label>
+          <textarea class="form-control" formControlName="note" matInput rows="7"></textarea>
+        </mat-form-field>
+      }
 
-          @if (!subMode && !addressDeactivated) {
-            <app-address-form [address]="getAddressGroup()"
-            fxFlexFill></app-address-form>
-          }
-          <button [disabled]="submitted" mat-raised-button type="submit">Speichern</button>
-        </div>
-      </form>
+      @if (!subMode && !addressDeactivated) {
+        <app-address-form [address]="getAddressGroup()"
+                          fxFlexFill></app-address-form>
+      }
+      <button [disabled]="submitted" mat-raised-button type="submit">Speichern</button>
     </div>
+  </form>
+</div>

@@ -1,4 +1,4 @@
-import { Component, ComponentRef, OnInit, inject } from "@angular/core";
+import { Component, ComponentRef, inject, OnInit } from "@angular/core";
 import { InfoDataSource } from "../../shared/components/info-builder/info-builder.datasource";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -14,7 +14,7 @@ import SupplierDetailComponent from "../../supplier/supplier-detail/supplier-det
 import { AuthStateService } from "../../shared/services/auth-state.service";
 import OrderDetailComponent from "../order-detail/order-detail.component";
 import { Observable, Subscriber } from "rxjs";
-import { DefaultService, OrderBundle, Supplier, Order, OrderableType } from "../../../api/openapi";
+import { DefaultService, Order, OrderableType, OrderBundle, Supplier } from "../../../api/openapi";
 import { InfoBuilderComponent } from "../../shared/components/info-builder/info-builder.component";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
@@ -148,7 +148,6 @@ export default class OrderBundleDetailComponent implements OnInit {
           rows.push(
             {
               values: {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 "order_to.name": dataSource.order_to.name
               },
               route: () => {

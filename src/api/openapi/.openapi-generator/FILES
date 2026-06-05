@@ -15,6 +15,7 @@ api/orderedArticle.service.ts
 api/recalculation.service.ts
 api/scheduler.service.ts
 api/tikTak.service.ts
+api/timeEntry.service.ts
 api/viet.service.ts
 configuration.ts
 encoder.ts
@@ -80,6 +81,7 @@ model/infoPageCreate.ts
 model/infoPageUpdate.ts
 model/ingoingInvoice.ts
 model/ingoingInvoiceCreate.ts
+model/internalCost.ts
 model/job.ts
 model/jobCreate.ts
 model/jobForRecalculation.ts

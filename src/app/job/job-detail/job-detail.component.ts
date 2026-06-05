@@ -5,7 +5,6 @@ import { InfoBuilderComponent } from "../../shared/components/info-builder/info-
 import { first, map } from "rxjs/operators";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { LockService } from "../../shared/services/lock.service";
-import dayjs from "dayjs/esm";
 import { AuthStateService } from "../../shared/services/auth-state.service";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
@@ -27,8 +26,8 @@ import {
   RecalculationService,
   RecalculationSmall,
   ScopeEnum,
-  TikTakService,
-  TikTakTimeEntryByJob
+  TikTakTimeEntryByJob,
+  TimeEntryService
 } from "../../../api/openapi";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
 import { JobStatusBarComponent } from "./job-status-bar/job-status-bar.component";
@@ -37,6 +36,8 @@ import {
   CreateRecalculationDialogComponent
 } from "./create-recalculation-dialog/create-recalculation-dialog.component";
 import { TimeEntryEditDialogComponent } from "./time-entry-edit-dialog/time-entry-edit-dialog.component";
+import { FlexModule } from "ng-flex-layout";
+import dayjs from "../../dayjs-setup";
 
 @Component({
   selector: "app-job-detail",
@@ -46,13 +47,14 @@ import { TimeEntryEditDialogComponent } from "./time-entry-edit-dialog/time-entr
     ToolbarComponent,
     JobStatusBarComponent,
     InfoBuilderComponent,
-    TableBuilderComponent
+    TableBuilderComponent,
+    FlexModule
   ]
 })
 export default class JobDetailComponent implements OnInit {
   private api = inject(DefaultService);
   private recalculationService = inject(RecalculationService);
-  private tikTakService = inject(TikTakService);
+  private timeEntryService = inject(TimeEntryService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private snackBar = inject(MatSnackBar);
@@ -78,13 +80,12 @@ export default class JobDetailComponent implements OnInit {
   orderDataSource: TableDataSource<OrderSmall, DefaultService>;
   deliveryNoteDataSource: TableDataSource<DeliveryNote, DefaultService>;
   recalculationDataSource: TableDataSource<RecalculationSmall, RecalculationService>;
-  timeEntriesDataSource: TableDataSource<TikTakTimeEntryByJob, TikTakService>;
+  timeEntriesDataSource: TableDataSource<TikTakTimeEntryByJob, TimeEntryService>;
   outgoingInvoicesAllowed = false;
   offersAllowed = false;
   deliveryNoteAllowed = true;
-  recalculationAllowed = true;
   title = "";
-  editTimeEntry: TikTakTimeEntryByJob | undefined = undefined;
+  note = "";
   public $refresh: Observable<void>;
   private $refreshSubscriber: Subscriber<void>;
 
@@ -158,7 +159,6 @@ export default class JobDetailComponent implements OnInit {
             values: {
               id: dataSource.id,
               date: dayjs(dataSource.date).format("L"),
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               full_price_without_vat: formatCurrency(
                 dataSource.full_price_without_vat,
                 "de-DE",
@@ -211,7 +211,6 @@ export default class JobDetailComponent implements OnInit {
         dataSourceClasses.forEach((dataSource) => {
           rows.push({
             values: {
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               client_name: dataSource.client_name,
               date: dayjs(dataSource.date, "YYYY-MM-DD").format("L"),
               id: dataSource.number
@@ -273,6 +272,11 @@ export default class JobDetailComponent implements OnInit {
         {
           property: "responsible.fullname",
           name: "Zuständig"
+        },
+        {
+          property: "note",
+          name: "Notiz",
+          textarea: true
         }
       ],
       "/job/edit/" + this.jobId.toString(),
@@ -297,14 +301,10 @@ export default class JobDetailComponent implements OnInit {
         dataSourceClasses.forEach((dataSource) => {
           rows.push({
             values: {
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               "order_to.displayable_name": dataSource.order_to.displayable_name,
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               "order_from.displayable_name":
               dataSource.order_from.displayable_name,
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               create_date: dayjs(dataSource.create_date).format("L"),
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               delivery_date:
                 dataSource.delivery_date === null
                   ? ""
@@ -352,9 +352,7 @@ export default class JobDetailComponent implements OnInit {
           rows.push({
             values: {
               amount_articles: dataSource.articles.length,
-              // eslint-disable-next-line @typescript-eslint/naming-convention
               create_date: dayjs(dataSource.timestamp).format("L")
-              // eslint-disable-next-line @typescript-eslint/naming-convention
             },
             route: () => {
               this.router.navigateByUrl("/delivery_note/" + dataSource.id.toString());
@@ -419,9 +417,9 @@ export default class JobDetailComponent implements OnInit {
 
   private initTimeEntriesTable(): void {
     this.timeEntriesDataSource = new TableDataSource(
-      this.tikTakService,
-      (tikTakService, filter, sortDirection, skip, limit) =>
-        tikTakService.getTiktakTimeEntriesByJobTiktakTimeEntriesJobJobIdGet(
+      this.timeEntryService,
+      (timeEntryService, filter, sortDirection, skip, limit) =>
+        timeEntryService.getTiktakTimeEntriesByJobTimeEntryJobJobIdGet(
           this.jobId,
           skip,
           filter,
@@ -437,7 +435,7 @@ export default class JobDetailComponent implements OnInit {
           const sum = hourlyRate ? hourlyRate * (dataSource.minutes / 60) : undefined;
           rows.push({
             values: {
-              sync: new Date(dataSource.lastSync).toLocaleString(),
+              sync: dayjs(dataSource.lastSync).tz("UTC", true).tz("Europe/Berlin").format("LLL"),
               user: dataSource.user.fullname,
               hours: `${hours}:${minutes.toString(10).padStart(2, "0")}`,
               hourly_rate: hourlyRate ? `${hourlyRate.toFixed(2)} €` : " - ",
@@ -446,7 +444,7 @@ export default class JobDetailComponent implements OnInit {
             route: () => {
               const dialogRef = this.dialog.open(TimeEntryEditDialogComponent, {
                 width: "1000px",
-                data: { timeEntry: dataSource }
+                data: { timeEntry: dataSource, jobId: this.jobId }
               });
               dialogRef.afterClosed().subscribe(() => {
                 this.timeEntriesDataSource.loadData();
@@ -463,9 +461,19 @@ export default class JobDetailComponent implements OnInit {
         { name: "hourly_rate", headerName: "Stundensatz" },
         { name: "sum", headerName: "Summe" }
       ],
-      (api) => api.countTiktakTimeEntriesByJobTiktakTimeEntriesJobCountJobIdGet(this.jobId)
+      (api) => api.countTiktakTimeEntriesByJobTimeEntryJobCountJobIdGet(this.jobId)
     );
     this.timeEntriesDataSource.loadData();
+  }
+
+  private onCreateTimeEntryClicked() {
+    const dialogRef = this.dialog.open(TimeEntryEditDialogComponent, {
+      width: "1000px",
+      data: { timeEntry: undefined, jobId: this.jobId }
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      this.timeEntriesDataSource.loadData();
+    });
   }
 
   private initAccessRights() {
@@ -604,6 +612,12 @@ export default class JobDetailComponent implements OnInit {
               );
             }
           });
+          this.buttonsMain[0].dropdown.push({
+            name: "Neue Arbeitszeit",
+            navigate: (): void => {
+              this.onCreateTimeEntryClicked();
+            }
+          });
 
         }
       });
@@ -647,6 +661,7 @@ export default class JobDetailComponent implements OnInit {
         this.isMainJob = job.is_main;
         this.title = job.code;
         this.clientId = job.client.id;
+        this.note = job.note;
       });
     this.initOfferTable();
     this.initSubJobTable();

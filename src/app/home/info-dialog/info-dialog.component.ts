@@ -48,10 +48,40 @@ export class InfoDialogComponent implements OnInit {
     {
       versionName: "In Bearbeitung:",
       changes: [
-        "Die Möglichkeit einbauen, die Kosten aller Autos zu verändern",
-        "Zeitzonen von Chat-Nachrichten anpassen",
-        "Chat sollte anzeigen ob neue Nachrichten vorhanden sind",
-        "Navigation funktioniert nicht richtig: Änderungen verwerden Dialog kann nicht geschlossen werden"
+        "Neues Angebots-Tool"
+      ]
+    },
+    {
+      versionName: "2.2.4",
+      changes: [
+        "Einige kleine Fehler wurden behoben"
+      ]
+    },
+    {
+      versionName: "2.2.3",
+      changes: [
+        "Notizfeld bei Auftrag hinzugefügt",
+        "Arbeitszeiten aus TikTak werden nun im Auftrag angezeigt und können bearbeitet werden",
+        "Arbeitszeiten werden nun in der Nachkalkulation angezeigt",
+        "Fehler behoben: Nachkalkulation wird mit dem Auftrag gelöscht",
+        "Fehler behoben: Suche bleibt beim Zurücknavigieren erhalten",
+        "Fehler behoben: Zuständiger für Auftrag kann nur mehr Benutzer mit Recht Admin oder Büro sein",
+        "Fehler behoben: Wenn man auf eine bereits gelöschte Bestellung geht kann man nicht mehr zurück navigieren",
+        "Kleinere Optimierungen der Eingabefelder"
+
+      ]
+    },
+    {
+      versionName: "2.2.2",
+      changes: [
+        "Rechtesystem überarbeitet: Es gibt nur noch die Rollen Admin, Büro und Werkstatt",
+        "Benutzerverwaltung überarbeitet und erweitert:",
+        "  Zusätzliche Felder in den Stammdaten",
+        "  Neuer Tab Arbeitsverhältnis",
+        "  Neuer Tab Arbeitskleidung",
+        "Export von Arbeitskleidungsdaten als CSV-Datei",
+        "Integration mit TikTak implementiert",
+        "Kleinere Optimierungen der Benutzerfreundlichkeit"
       ]
     },
     {

@@ -94,7 +94,6 @@ export default class OrderBundleEditComponent extends BaseEditComponent<OrderBun
         id: new UntypedFormControl(article.id),
         name: new UntypedFormControl(article.name.translation_de),
         amount: new UntypedFormControl(article.amount),
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         mod_number: new UntypedFormControl(article.article.mod_number),
         unit: new UntypedFormControl(article.ordered_unit.name.translation_de),
         price: new UntypedFormControl(article.price)
@@ -102,9 +101,7 @@ export default class OrderBundleEditComponent extends BaseEditComponent<OrderBun
     }
 
     return new UntypedFormGroup({
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       order_from: new UntypedFormControl(order.order_from.displayable_name),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       order_to: new UntypedFormControl(order.order_to.displayable_name),
       articles: articleFormArray
     });

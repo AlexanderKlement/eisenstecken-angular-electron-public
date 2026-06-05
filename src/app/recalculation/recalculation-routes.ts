@@ -1,9 +1,13 @@
 import { Routes } from "@angular/router";
+import RecalculationComponent from "./recalculation.component";
+import RecalculationDetailComponent from "./recalculation-detail/recalculation-detail.component";
+import RecalculationEditComponent from "./recalculation-edit/recalculation-edit.component";
+import PaintTemplateComponent from "./paint-template/paint-template.component";
 
 const recalculationRoutes: Routes = [
   {
     path: "recalculation",
-    loadComponent: () => import("./recalculation.component"),
+    component: RecalculationComponent,
     data: {
       requiresLogin: true,
       shouldDetach: true
@@ -11,19 +15,19 @@ const recalculationRoutes: Routes = [
   },
   {
     path: "recalculation/:id",
-    loadComponent: () => import("./recalculation-detail/recalculation-detail.component"),
+    component: RecalculationDetailComponent,
     data: {
       requiresLogin: true
     }
   },
   {
     path: "recalculation/edit/:id",
-    loadComponent: () => import("./recalculation-edit/recalculation-edit.component"),
+    component: RecalculationEditComponent,
     data: { requiresLogin: true }
   },
   {
     path: "paint-template",
-    loadComponent: () => import("./paint-template/paint-template.component"),
+    component: PaintTemplateComponent,
     data: { requiresLogin: true }
   }
 ];

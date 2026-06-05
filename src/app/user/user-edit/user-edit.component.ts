@@ -123,12 +123,12 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
       this.firstTabLabel = "Erstellen";
     }
     this.userGroup = new FormGroup<GeneralControl>({
-      firstname: new FormControl("", this.createMode ? Validators.required : undefined),
-      secondname: new FormControl("", this.createMode ? Validators.required : undefined),
+      firstname: new FormControl("", Validators.required),
+      secondname: new FormControl("", Validators.required),
       gender: new FormControl(""),
       birthday: new FormControl(""),
       birthplace: new FormControl(""),
-      email: new FormControl("", this.createMode ? Validators.required : undefined),
+      email: new FormControl("", Validators.required),
       email_private: new FormControl(""),
       vat_number: new FormControl(""),
       address: new FormControl(""),
@@ -242,7 +242,7 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
         if (result) {
           this.api.deleteUserUsersUserIdDelete(this.id).pipe(first()).subscribe(
             () => {
-              this.router.navigateByUrl(this.navigationTarget);
+              this.router.navigateByUrl(this.navigationTarget).then();
             });
         }
       });
@@ -397,12 +397,16 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
         email_private: this.userGroup.get("email_private").value,
         birthplace: this.userGroup.get("birthplace").value
       };
-      this.api.createUserUsersPost(userCreate).pipe(first()).subscribe((user) => {
-        this.createUpdateSuccess(user);
-      }, (error) => {
-        this.createUpdateError(error);
-      }, () => {
-        this.createUpdateComplete();
+      this.api.createUserUsersPost(userCreate).pipe(first()).subscribe({
+        next: (user) => {
+          this.createUpdateSuccess(user);
+        },
+        error: error => {
+          this.createUpdateError(error);
+        },
+        complete: () => {
+          this.createUpdateComplete();
+        }
       });
     } else {
       let gender: GenderEnum | null = null;
@@ -432,12 +436,16 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
         vat_number: this.userGroup.get("vat_number").value,
         postal_code: this.userGroup.get("postal_code").value
       };
-      this.api.updateUserBaseUsersBaseUserIdPut(this.id, userUpdate).pipe(first()).subscribe((user) => {
-        this.createUpdateSuccess(user);
-      }, (error) => {
-        this.createUpdateError(error);
-      }, () => {
-        this.createUpdateComplete();
+      this.api.updateUserBaseUsersBaseUserIdPut(this.id, userUpdate).pipe(first()).subscribe({
+        next: (user) => {
+          this.createUpdateSuccess(user);
+        },
+        error: error => {
+          this.createUpdateError(error);
+        },
+        complete: () => {
+          this.createUpdateComplete();
+        }
       });
     }
   }
@@ -455,12 +463,16 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
       pants: this.dressGroup.get("pants").value,
       ear_protection: this.dressGroup.get("ear_protection").value
     };
-    this.api.updateUserDressUsersDressUserIdPut(this.id, userUpdate).pipe(first()).subscribe((user) => {
-      this.createUpdateSuccess(user);
-    }, (error) => {
-      this.createUpdateError(error);
-    }, () => {
-      this.createUpdateComplete();
+    this.api.updateUserDressUsersDressUserIdPut(this.id, userUpdate).pipe(first()).subscribe({
+      next: (user) => {
+        this.createUpdateSuccess(user);
+      },
+      error: error => {
+        this.createUpdateError(error);
+      },
+      complete: () => {
+        this.createUpdateComplete();
+      }
     });
   }
 
@@ -500,12 +512,16 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
         rate: hourly.cost
       }))
     };
-    this.api.updateUserEmploymentUsersEmploymentUserIdPut(this.id, userUpdate).pipe(first()).subscribe((user) => {
-      this.createUpdateSuccess(user);
-    }, (error) => {
-      this.createUpdateError(error);
-    }, () => {
-      this.createUpdateComplete();
+    this.api.updateUserEmploymentUsersEmploymentUserIdPut(this.id, userUpdate).pipe(first()).subscribe({
+      next: (user) => {
+        this.createUpdateSuccess(user);
+      },
+      error: error => {
+        this.createUpdateError(error);
+      },
+      complete: () => {
+        this.createUpdateComplete();
+      }
     });
   }
 
@@ -520,12 +536,16 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
       innovaphone_user: this.rightsGroup.get("innovaphone_user").value,
       innovaphone_pass: this.rightsGroup.get("innovaphone_pass").value
     };
-    this.api.updateUserRightsUsersRightsUserIdPut(this.id, userUpdate).pipe(first()).subscribe((user) => {
-      this.createUpdateSuccess(user);
-    }, (error) => {
-      this.createUpdateError(error);
-    }, () => {
-      this.createUpdateComplete();
+    this.api.updateUserRightsUsersRightsUserIdPut(this.id, userUpdate).pipe(first()).subscribe({
+      next: (user) => {
+        this.createUpdateSuccess(user);
+      },
+      error: error => {
+        this.createUpdateError(error);
+      },
+      complete: () => {
+        this.createUpdateComplete();
+      }
     });
   }
 
@@ -543,12 +563,16 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
     const userPassword: UserPassword = {
       password
     };
-    this.api.updateUserPasswordUsersPasswordUserIdPut(this.id, userPassword).pipe(first()).subscribe((user) => {
-      this.createUpdateSuccess(user);
-    }, (error) => {
-      this.createUpdateError(error);
-    }, () => {
-      this.createUpdateComplete();
+    this.api.updateUserPasswordUsersPasswordUserIdPut(this.id, userPassword).pipe(first()).subscribe({
+      next: (user) => {
+        this.createUpdateSuccess(user);
+      },
+      error: error => {
+        this.createUpdateError(error);
+      },
+      complete: () => {
+        this.createUpdateComplete();
+      }
     });
   }
 

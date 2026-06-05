@@ -72,19 +72,14 @@ export default class ClientEditComponent
       tel1: new UntypedFormControl("+39"),
       tel2: new UntypedFormControl("+39"),
       contacts: new UntypedFormArray([]),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       contact_person: new UntypedFormControl(""),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       vat_number: new UntypedFormControl("IT"),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       fiscal_code: new UntypedFormControl(""),
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       codice_destinatario: new UntypedFormControl("0000000"),
       pec: new UntypedFormControl(""),
       gender: new UntypedFormControl("M"),
       language: new UntypedFormControl("DE"),
       address: new UntypedFormGroup({
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         street_number: new UntypedFormControl(""),
         city: new UntypedFormControl(""),
         cap: new UntypedFormControl(""),
@@ -153,33 +148,23 @@ export default class ClientEditComponent
       mail2: this.clientGroup.get("mail2").value,
       tel1: this.clientGroup.get("tel1").value,
       tel2: this.clientGroup.get("tel2").value,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       vat_number: this.clientGroup.get("vat_number").value,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       fiscal_code: this.clientGroup.get("fiscal_code").value,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       codice_destinatario: this.clientGroup.get("codice_destinatario").value,
       pec: this.clientGroup.get("pec").value,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       esigibilita_iva: "", //this.clientGroup.get("esigibilita_iva").value,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       publica_amministrazione: false, //this.clientGroup.get("publica_amministrazione").value,
       cup: "", //this.clientGroup.get("cup").value,
       cig: "", //this.clientGroup.get("cig").value,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       contact_person: this.clientGroup.get("contact_person").value,
       address: {
         name: fullName,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         street_number: this.clientGroup.get("address.street_number").value,
         city: this.clientGroup.get("address.city").value,
         cap: this.clientGroup.get("address.cap").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         country_code: this.clientGroup.get("address.country").value
       },
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       gender_code: this.clientGroup.get("gender").value,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       language_code: this.clientGroup.get("language").value
     };
 

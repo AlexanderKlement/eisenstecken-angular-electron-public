@@ -1,10 +1,13 @@
 import { Routes } from "@angular/router";
 import { AccessGuard } from "../shared/services/access-guard.service";
+import MobileAppComponent from "./mobile-app.component";
+import HoursComponent from "./hours/hours.component";
+import RedirectComponent from "./hours/redirect/redirect.component";
 
 const mobileAppRoutes: Routes = [
   {
     path: "mobile",
-    loadComponent: () => import("./mobile-app.component"),
+    component: MobileAppComponent,
     data: {
       requiresLogin: true
     },
@@ -12,7 +15,7 @@ const mobileAppRoutes: Routes = [
   },
   {
     path: "mobile/hours",
-    loadComponent: () => import("./hours/hours.component"),
+    component: HoursComponent,
     data: {
       requiresLogin: true
     },
@@ -20,7 +23,7 @@ const mobileAppRoutes: Routes = [
   },
   {
     path: "mobile/hours/redirect",
-    loadComponent: () => import("./hours/redirect/redirect.component"),
+    component: RedirectComponent,
     data: {
       requiresLogin: true
     },

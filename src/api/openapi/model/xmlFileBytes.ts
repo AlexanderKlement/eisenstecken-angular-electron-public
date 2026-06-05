@@ -10,7 +10,7 @@
 
 
 export interface XmlFileBytes { 
-    content: Blob;
+    content: string;
     filename: string;
 }
 

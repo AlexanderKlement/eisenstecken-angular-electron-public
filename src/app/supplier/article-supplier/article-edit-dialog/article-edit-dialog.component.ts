@@ -1,20 +1,13 @@
-import { Component, OnInit, inject } from "@angular/core";
-import { UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogContent } from "@angular/material/dialog";
+import { Component, inject, OnInit } from "@angular/core";
+import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { MAT_DIALOG_DATA, MatDialog, MatDialogContent, MatDialogRef, MatDialogTitle } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { first } from "rxjs/operators";
 import { ConfirmDialogComponent } from "../../../shared/components/confirm-dialog/confirm-dialog.component";
-import {
-  DefaultService,
-  ArticleUpdateFull,
-  ArticleCreate,
-  Unit,
-  Vat,
-} from "../../../../api/openapi";
-import { CdkScrollable } from "@angular/cdk/scrolling";
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule } from "ng-flex-layout";
-import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
-import { MatSelect, MatOption } from "@angular/material/select";
+import { ArticleCreate, ArticleUpdateFull, DefaultService, Unit } from "../../../../api/openapi";
+import { DefaultLayoutAlignDirective, DefaultLayoutDirective, FlexModule } from "ng-flex-layout";
+import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
+import { MatOption, MatSelect } from "@angular/material/select";
 import { MatButton } from "@angular/material/button";
 import { AsyncPipe } from "@angular/common";
 
@@ -25,26 +18,25 @@ export interface ArticleEditDialogData {
 }
 
 @Component({
-    selector: "app-article-edit-dialog",
-    templateUrl: "./article-edit-dialog.component.html",
-    styleUrls: ["./article-edit-dialog.component.scss"],
-    imports: [
-        MatDialogTitle,
-        CdkScrollable,
-        MatDialogContent,
-        DefaultLayoutDirective,
-        DefaultLayoutAlignDirective,
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        FlexModule,
-        MatSelect,
-        MatOption,
-        MatButton,
-        AsyncPipe,
-    ],
+  selector: "app-article-edit-dialog",
+  templateUrl: "./article-edit-dialog.component.html",
+  styleUrls: ["./article-edit-dialog.component.scss"],
+  imports: [
+    MatDialogTitle,
+    MatDialogContent,
+    DefaultLayoutDirective,
+    DefaultLayoutAlignDirective,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    FlexModule,
+    MatSelect,
+    MatOption,
+    MatButton,
+    AsyncPipe
+  ]
 })
 export class ArticleEditDialogComponent implements OnInit {
   dialogRef = inject<MatDialogRef<ArticleEditDialogData>>(MatDialogRef);
@@ -70,18 +62,13 @@ export class ArticleEditDialogComponent implements OnInit {
   onSaveClick() {
     if (this.createMode) {
       const articleCreate: ArticleCreate = {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         mod_number: this.articleEditGroup.get("mod_number").value,
         price: this.articleEditGroup.get("price").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         unit_id: this.articleEditGroup.get("unit_id").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         name_de: this.articleEditGroup.get("name").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         name_it: this.articleEditGroup.get("name").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         supplier_id: this.data.supplierId,
-        favorite: this.articleEditGroup.get("favorite").value,
+        favorite: this.articleEditGroup.get("favorite").value
       };
       this.api
         .createArticleArticlePost(articleCreate)
@@ -91,16 +78,12 @@ export class ArticleEditDialogComponent implements OnInit {
         });
     } else {
       const articleUpdateFull: ArticleUpdateFull = {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         mod_number: this.articleEditGroup.get("mod_number").value,
         price: this.articleEditGroup.get("price").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         unit_id: this.articleEditGroup.get("unit_id").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         name_de: this.articleEditGroup.get("name").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         name_it: this.articleEditGroup.get("name").value,
-        favorite: this.articleEditGroup.get("favorite").value,
+        favorite: this.articleEditGroup.get("favorite").value
       };
       this.api
         .updateArticleArticleArticleIdPut(this.data.id, articleUpdateFull)
@@ -116,8 +99,8 @@ export class ArticleEditDialogComponent implements OnInit {
       width: "400px",
       data: {
         title: "Artikel löschen?",
-        text: "Dieser Schritt kann nicht rückgängig gemacht werden.",
-      },
+        text: "Dieser Schritt kann nicht rückgängig gemacht werden."
+      }
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -143,7 +126,7 @@ export class ArticleEditDialogComponent implements OnInit {
       price: new UntypedFormControl(0),
       // eslint-disable-next-line @typescript-eslint/naming-convention
       mod_number: new UntypedFormControl(""),
-      favorite: new UntypedFormControl(false),
+      favorite: new UntypedFormControl(false)
     });
   }
 

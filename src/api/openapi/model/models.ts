@@ -58,6 +58,7 @@ export * from './infoPageCreate';
 export * from './infoPageUpdate';
 export * from './ingoingInvoice';
 export * from './ingoingInvoiceCreate';
+export * from './internalCost';
 export * from './job';
 export * from './jobCreate';
 export * from './jobForRecalculation';

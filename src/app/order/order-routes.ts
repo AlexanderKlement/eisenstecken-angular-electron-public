@@ -1,10 +1,14 @@
 import { Routes } from "@angular/router";
 import { AccessGuard } from "../shared/services/access-guard.service";
+import OrderComponent from "./order.component";
+import OrderDetailComponent from "./order-detail/order-detail.component";
+import OrderBundleDetailComponent from "./order-bundle-detail/order-bundle-detail.component";
+import OrderBundleEditComponent from "./order-bundle-edit/order-bundle-edit.component";
 
 const orderRoutes: Routes = [
   {
     path: "order",
-    loadComponent: () => import("./order.component"),
+    component: OrderComponent,
     data: {
       requiresLogin: true
     },
@@ -12,7 +16,7 @@ const orderRoutes: Routes = [
   },
   {
     path: "order/:id",
-    loadComponent: () => import("./order-detail/order-detail.component"),
+    component: OrderDetailComponent,
     data: {
       requiresLogin: true,
       shouldDetach: true
@@ -21,7 +25,7 @@ const orderRoutes: Routes = [
   },
   {
     path: "order_bundle/:id",
-    loadComponent: () => import("./order-bundle-detail/order-bundle-detail.component"),
+    component: OrderBundleDetailComponent,
     data: {
       requiresLogin: true,
       shouldDetach: true
@@ -30,7 +34,7 @@ const orderRoutes: Routes = [
   },
   {
     path: "order_bundle/edit/:id",
-    loadComponent: () => import("./order-bundle-edit/order-bundle-edit.component"),
+    component: OrderBundleEditComponent,
     data: { requiresLogin: true },
     canActivate: [AccessGuard]
   }

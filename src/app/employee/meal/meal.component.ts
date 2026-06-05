@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import dayjs from "dayjs/esm";
 import { MatDialog } from "@angular/material/dialog";
@@ -65,7 +65,6 @@ export default class MealComponent implements OnInit {
             {
               values: {
                 date: dayjs(dataSource.date).format("DD.MM.YYYY"),
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 "user.fullname": dataSource.user.fullname
               },
               route: () => {

@@ -1,11 +1,27 @@
-<h1 mat-dialog-title>{{ data.timeEntry.user.fullname }} Stunden</h1>
+<h1 mat-dialog-title>{{ title }}</h1>
 <div mat-dialog-content>
   <form (ngSubmit)="onSubmitClick()" [formGroup]="dataGroup">
     <div fxLayout="column" fxLayoutAlign="space-around stretch">
-      <mat-form-field appearance="fill" class="readonly">
-        <mat-label>Mitarbeiter</mat-label>
-        <input class="form-control" formControlName="user" matInput readonly>
-      </mat-form-field>
+      @if (!createMode) {
+        <mat-form-field appearance="fill" class="readonly">
+          <mat-label>Mitarbeiter</mat-label>
+          <input class="form-control" formControlName="user" matInput readonly>
+        </mat-form-field>
+      } @else {
+        <mat-form-field appearance="fill">
+          <mat-label>Mitarbeiter</mat-label>
+          <mat-select formControlName="user" (selectionChange)="onSelectUser()">
+            <mat-option value="-1">
+              Bitte wählen
+            </mat-option>
+            @for (user of users$ | async; track user) {
+              <mat-option [value]="user.id">
+                {{ user.fullname }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
       <div fxLayout="row" fxLayoutGap="16" fxFlexFill fxLayoutAlign="start">
         <mat-form-field appearance="fill" fxFlex>
           <mat-label>Minuten</mat-label>

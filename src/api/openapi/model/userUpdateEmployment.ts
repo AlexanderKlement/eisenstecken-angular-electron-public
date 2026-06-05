@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { EmploymentRelationshipUpdateCreate } from './employmentRelationshipUpdateCreate';
+import { InternalCost } from './internalCost';
 import { HourlyRateUpdateCreate } from './hourlyRateUpdateCreate';
 
 
@@ -21,7 +22,7 @@ export interface UserUpdateEmployment {
     hours_thursday?: number | null;
     hours_tuesday?: number | null;
     hours_wednesday?: number | null;
-    internal_cost?: number | null;
+    internal_cost?: InternalCost | null;
     tag_uid?: string | null;
 }
 

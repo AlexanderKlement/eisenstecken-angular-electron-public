@@ -1,6 +1,8 @@
 {
   "asar": false,
+  "afterPack": "./scripts/afterPack.js",
   "productName": "Eisenstecken - Eibel",
+  "appId": "it.eisenstecken.app",
   "artifactName": "eisenstecken-eibel-${version}.${ext}",
   "generateUpdatesFilesForAllChannels": true,
   "directories": {
@@ -31,8 +33,15 @@
   "mac": {
     "icon": "dist/assets/icons",
     "target": [
-      "dmg"
-    ]
+      "dmg",
+      "zip"
+    ],
+    "notarize": true,
+    "hardenedRuntime": true,
+    "gatekeeperAssess": false,
+    "entitlements": "build/entitlements.mac.plist",
+    "entitlementsInherit": "build/entitlements.mac.plist",
+    "category": "public.app-category.productivity"
   },
   "linux": {
     "icon": "dist/assets/icons",
@@ -40,8 +49,7 @@
       "AppImage"
     ]
   },
-  "appId": "it.eisenstecken.app",
-  "publish":  {
+  "publish": {
     "provider": "github"
   }
 }

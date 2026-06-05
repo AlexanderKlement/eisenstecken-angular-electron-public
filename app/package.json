@@ -1,6 +1,12 @@
 {
   "name": "eisenstecken",
   "version": "2.2.3",
+  "description": "Eisenstecken internal administration software",
+  "homepage": "https://kivi.bz.it",
+  "author": {
+    "name": "Kivi",
+    "email": "info@kivi.bz.it"
+  },
   "main": "main.js",
   "private": true,
   "dependencies": {

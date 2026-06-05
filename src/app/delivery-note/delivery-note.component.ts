@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
 import dayjs from "dayjs/esm";
 import { Router } from "@angular/router";
@@ -7,13 +7,13 @@ import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/too
 import { AuthStateService } from "../shared/services/auth-state.service";
 import { first } from "rxjs/operators";
 import { Observable, Subscriber } from "rxjs";
-import { DeliveryNote, DefaultService, ScopeEnum } from "../../api/openapi";
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { DefaultService, DeliveryNote, ScopeEnum } from "../../api/openapi";
+import { DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
 import { MatFormField, MatLabel } from "@angular/material/input";
-import { MatSelect, MatOption } from "@angular/material/select";
+import { MatOption, MatSelect } from "@angular/material/select";
 import { TableBuilderComponent } from "../shared/components/table-builder/table-builder.component";
 import { AsyncPipe } from "@angular/common";
- 
+
 @Component({
   selector: "app-delivery-note",
   templateUrl: "./delivery-note.component.html",
@@ -80,7 +80,6 @@ export default class DeliveryNoteComponent implements OnInit {
                 free: dataSource.number,
                 date: dayjs(dataSource.date).format("L"),
                 name: dataSource.name,
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 delivery_address: dataSource.delivery_address,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 "job.displayable_name": dataSource.job ? dataSource.job.code + " - " + dataSource.job.displayable_name : ""

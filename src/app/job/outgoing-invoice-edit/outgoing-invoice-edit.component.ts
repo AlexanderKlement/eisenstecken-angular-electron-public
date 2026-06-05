@@ -261,11 +261,13 @@ export default class OutgoingInvoiceEditComponent
 
   transformAmount(i: number) {
     const descriptiveArticle = this.getDescriptiveArticles().at(i);
-    // eslint-disable-next-line max-len
+
+    const singleP = descriptiveArticle
+      .get("singlePriceFormatted").value ?? "";
+
     const singlePrice = parseFloat(
-      descriptiveArticle
-        .get("singlePriceFormatted")
-        .value.replace("€", "")
+      singleP
+        .replace("€", "")
         .replace(".", "")
         .replace(",", ".")
     );
@@ -289,13 +291,10 @@ export default class OutgoingInvoiceEditComponent
           name: "",
           amount: descriptiveArticleControl.get("amount").value,
           description: descriptiveArticleControl.get("description").value,
-          // eslint-disable-next-line @typescript-eslint/naming-convention
           single_price: descriptiveArticleControl.get("single_price").value,
           discount: 0,
           alternative: false,
-          // eslint-disable-next-line @typescript-eslint/naming-convention
           descriptive_articles: [],
-          // eslint-disable-next-line @typescript-eslint/naming-convention
           vat_id: this.invoiceGroup.get("vat_id").value
         };
         descriptiveArticles.push(descriptiveArticle);
@@ -309,9 +308,7 @@ export default class OutgoingInvoiceEditComponent
         // eslint-disable-next-line id-blacklist
         number: this.invoiceGroup.get("number").value,
         date: formatDateTransport(this.invoiceGroup.get("date").value),
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         payment_condition: this.invoiceGroup.get("payment_condition").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         payment_date: formatDateTransport(
           this.invoiceGroup.get("payment_date").value
         ),

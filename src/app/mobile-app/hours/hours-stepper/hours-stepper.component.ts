@@ -1,43 +1,65 @@
-import { Component, Input, OnInit, ViewChild, inject } from "@angular/core";
+import { Component, inject, Input, OnInit, ViewChild } from "@angular/core";
 import { CustomButton } from "../../../shared/components/toolbar/toolbar.component";
-import { AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import {
+  AbstractControl,
+  FormsModule,
+  ReactiveFormsModule,
+  UntypedFormArray,
+  UntypedFormControl,
+  UntypedFormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from "@angular/forms";
 import { Observable, Subject, Subscriber } from "rxjs";
 import { AuthStateService } from "../../../shared/services/auth-state.service";
 import { first } from "rxjs/operators";
 import { Router } from "@angular/router";
-import { MatStepper, StepperOrientation, MatStep, MatStepLabel, MatStepperNext, MatStepperPrevious } from "@angular/material/stepper";
+import {
+  MatStep,
+  MatStepLabel,
+  MatStepper,
+  MatStepperNext,
+  MatStepperPrevious,
+  StepperOrientation
+} from "@angular/material/stepper";
 import { MatDialog } from "@angular/material/dialog";
 import {
   HoursStepperJobDialogComponent,
-  HoursStepperVariantEnum,
+  HoursStepperVariantEnum
 } from "./hours-stepper-job-dialog/hours-stepper-job-dialog.component";
 import { formatDateTransport } from "../../../shared/date.util";
 import {
   HoursStepperDriveDialogComponent,
-  HoursStepperDriveDialogData,
+  HoursStepperDriveDialogData
 } from "./hours-stepper-drive-dialog/hours-stepper-drive-dialog.component";
 import {
-  DefaultService,
-  Expense,
-  User,
-  WorkDay,
-  ExpenseCreate,
+  AdditionalWorkloadCreate,
   Car,
-  Job,
-  EatingPlace,
+  DefaultService,
   Drive,
   DriveCreate,
-  AdditionalWorkloadCreate,
+  EatingPlace,
+  Expense,
+  ExpenseCreate,
+  Job,
   JobSectionCreate,
-  WorkDayCreate,
+  User,
+  WorkDay,
+  WorkDayCreate
 } from "../../../../api/openapi";
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective, FlexModule, DefaultFlexAlignDirective } from "ng-flex-layout";
+import {
+  DefaultFlexAlignDirective,
+  DefaultLayoutAlignDirective,
+  DefaultLayoutDirective,
+  FlexModule
+} from "ng-flex-layout";
 import { MatButton } from "@angular/material/button";
-import { NgClass, AsyncPipe } from "@angular/common";
-import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
-import { MatActionList, MatSelectionList, MatListOption } from "@angular/material/list";
+import { AsyncPipe, NgClass } from "@angular/common";
+import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
+import { MatActionList, MatListOption, MatSelectionList } from "@angular/material/list";
 import { MatIcon } from "@angular/material/icon";
-import { MatSelect, MatOption } from "@angular/material/select";
+import { MatOption, MatSelect } from "@angular/material/select";
 import { HoursSummaryComponent } from "../hours-summary/hours-summary.component";
 
 function greaterThanValidator(value: number): ValidatorFn {
@@ -56,35 +78,35 @@ export enum JobEnum {
 
 
 @Component({
-    selector: 'app-hours-stepper',
-    templateUrl: './hours-stepper.component.html',
-    styleUrls: ['./hours-stepper.component.scss'],
-    imports: [
-        DefaultLayoutDirective,
-        DefaultLayoutAlignDirective,
-        MatStepper,
-        MatStep,
-        MatStepLabel,
-        FormsModule,
-        ReactiveFormsModule,
-        FlexModule,
-        MatButton,
-        NgClass,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        MatStepperNext,
-        DefaultFlexAlignDirective,
-        MatActionList,
-        MatStepperPrevious,
-        MatSelectionList,
-        MatListOption,
-        MatIcon,
-        MatSelect,
-        MatOption,
-        HoursSummaryComponent,
-        AsyncPipe,
-    ],
+  selector: "app-hours-stepper",
+  templateUrl: "./hours-stepper.component.html",
+  styleUrls: ["./hours-stepper.component.scss"],
+  imports: [
+    DefaultLayoutDirective,
+    DefaultLayoutAlignDirective,
+    MatStepper,
+    MatStep,
+    MatStepLabel,
+    FormsModule,
+    ReactiveFormsModule,
+    FlexModule,
+    MatButton,
+    NgClass,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatStepperNext,
+    DefaultFlexAlignDirective,
+    MatActionList,
+    MatStepperPrevious,
+    MatSelectionList,
+    MatListOption,
+    MatIcon,
+    MatSelect,
+    MatOption,
+    HoursSummaryComponent,
+    AsyncPipe
+  ]
 })
 export class HoursStepperComponent implements OnInit {
   private api = inject(DefaultService);
@@ -115,7 +137,7 @@ export class HoursStepperComponent implements OnInit {
   jobsReadySubscriber$: Subscriber<void>;
   mobile = false;
   // eslint-disable-next-line @typescript-eslint/member-ordering
-  @ViewChild('stepper') private stepper: MatStepper;
+  @ViewChild("stepper") private stepper: MatStepper;
 
   static generateHourString(hours: number, minutes: number, mobile = false): string {
     let workedHoursString = (mobile ? "<br />" : "") + hours.toString();
@@ -135,7 +157,7 @@ export class HoursStepperComponent implements OnInit {
       minutesDirection: new UntypedFormControl(minutesDirection),
       jobId: new UntypedFormControl(job.id),
       name: new UntypedFormControl(name),
-      job: new UntypedFormControl(job),
+      job: new UntypedFormControl(job)
     });
   }
 
@@ -219,7 +241,7 @@ export class HoursStepperComponent implements OnInit {
   getAllJobs(): UntypedFormArray[] {
     return [
       this.getJobs(JobEnum.accepted),
-      this.getJobs(JobEnum.created),
+      this.getJobs(JobEnum.created)
     ];
   }
 
@@ -247,12 +269,12 @@ export class HoursStepperComponent implements OnInit {
     if (expense === undefined) {
       return new UntypedFormGroup({
         name: new UntypedFormControl(""),
-        amount: new UntypedFormControl(""),
+        amount: new UntypedFormControl("")
       });
     } else {
       return new UntypedFormGroup({
         name: new UntypedFormControl(expense.name),
-        amount: new UntypedFormControl(expense.amount),
+        amount: new UntypedFormControl(expense.amount)
       });
     }
   }
@@ -261,11 +283,10 @@ export class HoursStepperComponent implements OnInit {
     if (drive === undefined) {
       return new UntypedFormGroup({
         km: new UntypedFormControl(0.0),
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         car_id: new UntypedFormControl(1),
         // eslint-disable-next-line @typescript-eslint/naming-convention
         job_id: new UntypedFormControl(jobId),
-        reasonString: new UntypedFormControl(reasonString),
+        reasonString: new UntypedFormControl(reasonString)
       });
     } else {
       let reason = "";
@@ -286,7 +307,7 @@ export class HoursStepperComponent implements OnInit {
         job_id: new UntypedFormControl(job_id),
         // eslint-disable-next-line @typescript-eslint/naming-convention
         car_id: new UntypedFormControl(drive.car.id),
-        reasonString: new UntypedFormControl(reason),
+        reasonString: new UntypedFormControl(reason)
 
       });
     }
@@ -308,12 +329,12 @@ export class HoursStepperComponent implements OnInit {
     const jobEnums = [JobEnum.accepted];
     const data: HoursStepperDriveDialogData = {
       jobEnums,
-      jobFormGroup: this.jobFormGroup,
+      jobFormGroup: this.jobFormGroup
     };
     const dialogRef = this.dialog.open(HoursStepperDriveDialogComponent, {
       width: "100vw",
       maxWidth: "1400px",
-      data,
+      data
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -361,7 +382,7 @@ export class HoursStepperComponent implements OnInit {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             minutes_direction: parseInt(jobSection.get("minutesDirection").value, 10),
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            job_id: jobSection.get("jobId").value,
+            job_id: jobSection.get("jobId").value
           });
         }
       }
@@ -375,7 +396,7 @@ export class HoursStepperComponent implements OnInit {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         minutes_direction: 0,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        job_id: 0,
+        job_id: 0
       });
 
     }
@@ -385,7 +406,7 @@ export class HoursStepperComponent implements OnInit {
       if (parseFloat(expense.get("amount").value) > 0) {
         expensesCreates.push({
           name: expense.get("name").value,
-          amount: parseFloat(expense.get("amount").value),
+          amount: parseFloat(expense.get("amount").value)
         });
       }
     }
@@ -396,7 +417,7 @@ export class HoursStepperComponent implements OnInit {
         const driveCreate: DriveCreate = {
           km: parseFloat(drive.get("km").value),
           // eslint-disable-next-line @typescript-eslint/naming-convention
-          car_id: parseInt(drive.get("car_id").value, 10),
+          car_id: parseInt(drive.get("car_id").value, 10)
         };
         const driveJobId = parseInt(drive.get("job_id").value, 10);
         if (driveJobId > 0) {
@@ -412,7 +433,7 @@ export class HoursStepperComponent implements OnInit {
     if (parseInt(this.jobFormGroup.get("additionalJob").get("minutes").value, 10) > 0) {
       additionalWorkloadCreates.push({
         minutes: parseInt(this.jobFormGroup.get("additionalJob").get("minutes").value, 10),
-        description: this.jobFormGroup.get("additionalJob").get("description").value,
+        description: this.jobFormGroup.get("additionalJob").get("description").value
       });
     }
 
@@ -425,7 +446,7 @@ export class HoursStepperComponent implements OnInit {
       // eslint-disable-next-line @typescript-eslint/naming-convention
       eating_place_id: parseInt(this.mealFormGroup.get("eatingPlaceId").value, 10),
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      additional_workloads: additionalWorkloadCreates,
+      additional_workloads: additionalWorkloadCreates
     };
   }
 
@@ -491,7 +512,7 @@ export class HoursStepperComponent implements OnInit {
       variant,
       hourFormGroup: this.hourFormGroup,
       selectedJobList: -1,
-      selectedJobIndex: -1,
+      selectedJobIndex: -1
     };
     if (selectedJobIndex !== undefined && selectedJobList !== undefined) {
       data.selectedJobList = selectedJobList;
@@ -500,7 +521,7 @@ export class HoursStepperComponent implements OnInit {
     const dialogRef = this.dialog.open(HoursStepperJobDialogComponent, {
       width: "100vw",
       maxWidth: "1400px",
-      data,
+      data
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -530,7 +551,7 @@ export class HoursStepperComponent implements OnInit {
     this.hourFormGroup = new UntypedFormGroup({
       minutes: new UntypedFormControl(0, [greaterThanValidator(0)]),
       showingHours: new UntypedFormControl(0),
-      showingMinutes: new UntypedFormControl(0),
+      showingMinutes: new UntypedFormControl(0)
     });
     this.jobFormGroup = new UntypedFormGroup({
       spendableMinutes: new UntypedFormControl(0),
@@ -539,15 +560,15 @@ export class HoursStepperComponent implements OnInit {
       jobsCreated: new UntypedFormArray([]),
       additionalJob: new UntypedFormGroup({
         minutes: new UntypedFormControl(0),
-        description: new UntypedFormControl(""),
-      }),
+        description: new UntypedFormControl("")
+      })
     });
     this.mealFormGroup = new UntypedFormGroup({
-      eatingPlaceId: new UntypedFormControl(0, [Validators.required]),
+      eatingPlaceId: new UntypedFormControl(0, [Validators.required])
     });
     this.expensesJourneyGroup = new UntypedFormGroup({
       expenses: new UntypedFormArray([]),
-      drives: new UntypedFormArray([]),
+      drives: new UntypedFormArray([])
     });
   }
 

@@ -15,6 +15,7 @@ export interface JobUpdate {
     completion: string;
     description: string;
     name: string;
+    note?: string | null;
     responsible_id: number;
 }
 

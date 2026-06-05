@@ -17,6 +17,8 @@ import employeeRoutes from "./employee/employee-routes";
 import deliveryNotesRoutes from "./delivery-note/delivery-note-routes";
 import serviceRoutes from "./service/service-routes";
 import phoneBookRoutes from "./phone-book/phone-book-routes";
+import LoginComponent from "./login/login.component";
+import { PageNotFoundComponent } from "./shared/components";
 import testRoutes from "./test/test-routes";
 
 
@@ -39,6 +41,11 @@ export const routes: Routes = [
     },
     canActivate: [AccessGuard]
   },
+  {
+    path: "login",
+    component: LoginComponent,
+    data: { requiresLogin: false }
+  },
   ...testRoutes,
   ...userRoutes,
   ...jobRoutes,
@@ -57,6 +64,6 @@ export const routes: Routes = [
   ...phoneBookRoutes,
   {
     path: "**",
-    loadComponent: () => import("./shared/components/page-not-found/page-not-found.component")
+    component: PageNotFoundComponent
   }
 ];

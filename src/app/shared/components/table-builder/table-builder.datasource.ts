@@ -3,9 +3,14 @@ import { BehaviorSubject, Observable, of } from "rxjs";
 import { catchError, finalize, map } from "rxjs/operators";
 import { DataSourceClass } from "../../types";
 import { MatPaginatorIntl } from "@angular/material/paginator";
-import { DefaultService, OrderService, RecalculationService, TikTakService } from "../../../../api/openapi";
+import {
+  ArticleService,
+  DefaultService,
+  OrderService,
+  RecalculationService,
+  TimeEntryService
+} from "../../../../api/openapi";
 import { Sort } from "@angular/material/sort";
-import { OfferService } from "../../../../api/openapi/api/offer.service";
 
 export interface Column<T> {
   name: string; // RecursiveKeyOf<T>; Maybe this is better this way
@@ -89,7 +94,7 @@ function sortFunction<T>(sort: Sort, a: Row<T>, b: Row<T>) {
   return 0;
 }
 
-export class TableDataSource<T extends DataSourceClass, A extends DefaultService | OfferService | RecalculationService | OrderService | TikTakService> extends DataSource<Row<T>> {
+export class TableDataSource<T extends DataSourceClass, A extends DefaultService | ArticleService | RecalculationService | OrderService | TimeEntryService> extends DataSource<Row<T>> {
   public columns: Column<T>[];
   public readonly columnIdentifiers: string[];
   public amount$: Observable<number>;

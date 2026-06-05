@@ -1,9 +1,11 @@
 import { Routes } from "@angular/router";
+import DeliveryNoteComponent from "./delivery-note.component";
+import DeliveryEditComponent from "./delivery-edit/delivery-edit.component";
 
 const deliveryNotesRoutes: Routes = [
   {
     path: "delivery_note",
-    loadComponent: () => import("./delivery-note.component"),
+    component: DeliveryNoteComponent,
     data: {
       requiresLogin: true,
       shouldDetach: true
@@ -11,7 +13,7 @@ const deliveryNotesRoutes: Routes = [
   },
   {
     path: "delivery_note/:id",
-    loadComponent: () => import("./delivery-edit/delivery-edit.component"),
+    component: DeliveryEditComponent,
     data: { requiresLogin: true }
   }
 ];

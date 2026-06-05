@@ -1,10 +1,12 @@
 import { Routes } from "@angular/router";
 import { AccessGuard } from "../shared/services/access-guard.service";
+import InvoiceComponent from "./invoice.component";
+import IngoingDetailComponent from "./ingoing/ingoing-detail/ingoing-detail.component";
 
 const invoiceRoutes: Routes = [
   {
     path: "invoice",
-    loadComponent: () => import("./invoice.component"),
+    component: InvoiceComponent,
     data: {
       requiresLogin: true,
       shouldDetach: true
@@ -12,7 +14,7 @@ const invoiceRoutes: Routes = [
   },
   {
     path: "invoice/ingoing/:id",
-    loadComponent: () => import("./ingoing/ingoing-detail/ingoing-detail.component"),
+    component: IngoingDetailComponent,
     data: {
       requiresLogin: true,
       shouldDetach: true

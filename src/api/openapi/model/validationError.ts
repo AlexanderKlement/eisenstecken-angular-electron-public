@@ -11,6 +11,8 @@ import { ValidationErrorLocInner } from './validationErrorLocInner';
 
 
 export interface ValidationError { 
+    ctx?: object;
+    input?: any | null;
     loc: Array<ValidationErrorLocInner>;
     msg: string;
     type: string;

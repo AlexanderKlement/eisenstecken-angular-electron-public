@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from "@angular/core";
+import { Component, inject, OnInit, ViewChild } from "@angular/core";
 import { InfoBuilderComponent } from "../../shared/components/info-builder/info-builder.component";
 
 import { InfoDataSource } from "../../shared/components/info-builder/info-builder.datasource";
@@ -13,8 +13,8 @@ import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/c
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { OrderDateReturnData, OrderDialogComponent } from "../supplier-detail/order-dialog/order-dialog.component";
 import { Observable, Subscriber } from "rxjs";
-import { DefaultService, Stock, Supplier, OrderBundleCreate, OrderSmall, ScopeEnum } from "../../../api/openapi";
-import { MatTabGroup, MatTab } from "@angular/material/tabs";
+import { DefaultService, OrderBundleCreate, OrderSmall, ScopeEnum, Stock, Supplier } from "../../../api/openapi";
+import { MatTab, MatTabGroup } from "@angular/material/tabs";
 import { TableBuilderComponent } from "../../shared/components/table-builder/table-builder.component";
 
 @Component({
@@ -134,7 +134,6 @@ export default class StockDetailComponent implements OnInit {
           rows.push(
             {
               values: {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 "order_from.displayable_name": dataSource.order_from.displayable_name,
                 articles: dataSource.articles[0].name.translation,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
