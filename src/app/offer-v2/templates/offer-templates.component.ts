@@ -5,19 +5,19 @@ import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.compon
 
 
 @Component({
-  selector: "app-offer-libraries",
-  templateUrl: "./offer-libraries.component.html",
-  styleUrls: ["./offer-libraries.component.scss"],
+  selector: "app-offer-templates",
+  templateUrl: "./offer-templates.component.html",
+  styleUrls: ["./offer-templates.component.scss"],
   imports: [
-    ToolbarComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ToolbarComponent
   ]
 })
-export default class OfferLibrariesComponent implements OnInit {
+export default class OfferTemplatesComponent implements OnInit {
 
   private router = inject(Router);
 
-  title = "Bibliotheken";
+  title = "Templates";
   buttons = [];
 
   ngOnInit(): void {
@@ -25,28 +25,28 @@ export default class OfferLibrariesComponent implements OnInit {
     this.buttons.push({
       name: "Angebote",
       navigate: () => {
-        this.router.navigateByUrl("/test").then();
+        this.router.navigateByUrl("/offer_v2").then();
       }
     }, {
       name: "Felder",
       navigate: () => {
-        this.router.navigateByUrl("/test/fields").then();
+        this.router.navigateByUrl("/offer_v2/fields").then();
       }
     }, {
       name: "Elementtypen",
       navigate: () => {
-        this.router.navigateByUrl("/test/element_types").then();
+        this.router.navigateByUrl("/offer_v2/element_types").then();
       }
     }, {
       name: "Bibliotheken",
-      active: true,
       navigate: () => {
-        this.router.navigateByUrl("/test/libraries").then();
+        this.router.navigateByUrl("/offer_v2/libraries").then();
       }
     }, {
       name: "Templates",
+      active: true,
       navigate: () => {
-        this.router.navigateByUrl("/test/templates").then();
+        this.router.navigateByUrl("/offer_v2/templates").then();
       }
     });
   }

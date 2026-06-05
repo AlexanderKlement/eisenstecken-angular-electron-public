@@ -1,21 +1,7 @@
-<app-toolbar [title]="title" [buttonList]="buttons"></app-toolbar>
-<div class="center-container">
-  <div class="my-1" fxLayout="row" fxLayoutAlign="start center">
-    <h2>{{ title2 }}</h2>
-    <div fxFlex></div>
-    @if (loading$ | async) {
-      <div class="spinner-container">
-        <mat-spinner></mat-spinner>
-      </div>
-    } @else {
-      @if (fieldId) {
-        <button mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
-      }
-      <button mat-raised-button color="primary" (click)="onSubmit()">Speichern</button>
-    }
-  </div>
-  <div fxLayout="column" fxLayoutAlign="stretch" fxFill>
-    <form [formGroup]="fieldsGroup" (ngSubmit)="onSubmit()">
+<h1 mat-dialog-title>{{ title }}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="fieldsGroup">
+    <div fxLayout="column" fxLayoutAlign="space-around stretch">
       <div fxLayout="row" fxLayoutGap="16">
         <mat-form-field fxFlex>
           <mat-label>Name</mat-label>
@@ -30,13 +16,15 @@
         <mat-form-field appearance="fill" fxFlex>
           <mat-label>Datentyp</mat-label>
           <mat-select class="form-control" formControlName="type">
-            <mat-option value="{{ OfferFieldEnum.Alphanumeric }}">{{ fieldTypeToString(OfferFieldEnum.Alphanumeric) }}
+            <mat-option value="{{ OfferFieldEnum.String }}">{{ fieldTypeToString(OfferFieldEnum.String) }}
+            </mat-option>
+            <mat-option value="{{ OfferFieldEnum.Text }}">{{ fieldTypeToString(OfferFieldEnum.Text) }}
             </mat-option>
             <mat-option value="{{ OfferFieldEnum.Numeric }}">{{ fieldTypeToString(OfferFieldEnum.Numeric) }}
             </mat-option>
             <mat-option value="{{ OfferFieldEnum.Calculation }}">{{ fieldTypeToString(OfferFieldEnum.Calculation) }}
             </mat-option>
-            <mat-option value="{{ OfferFieldEnum.Dropdown }}">{{ fieldTypeToString(OfferFieldEnum.Dropdown) }}
+            <mat-option value="{{ OfferFieldEnum.Select }}">{{ fieldTypeToString(OfferFieldEnum.Select) }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -45,8 +33,10 @@
             <mat-label>Einheit</mat-label>
             <mat-select class="form-control" formControlName="unitId">
               <mat-option value="-1">Auswählen</mat-option>
-              @for (unit of units | async; track unit) {
-                <mat-option value="{{unit.id}}">{{ unit.short.translation_de }}</mat-option>
+              @if (units$ | async; as units) {
+                @for (unit of units; track unit.id) {
+                  <mat-option value="{{unit.id}}">{{ unit.short }}</mat-option>
+                }
               }
             </mat-select>
           </mat-form-field>
@@ -55,10 +45,11 @@
         }
       </div>
       @if (fieldsGroup.get("type").value == OfferFieldEnum.Calculation) {
-        <div fxLayout="row" fxLayoutGap="16" class="my-1">
+        <div fxLayout="column" fxLayoutGap="16" class="my-1">
           <mat-form-field appearance="fill" fxFlex>
             <mat-label>Berechnung</mat-label>
-            <input type="text" matInput formControlName="calculation" />
+            <input type="text" #calculationInput matInput (keyup)="onCalculationKeyUp()"
+                   formControlName="calculation" />
             <mat-hint>
               <code>&#64;Feldname</code> tippen um ein anderes Feld zu referenzieren. Operatoren: + (plus), - (minus), *
               (mal), /
@@ -78,13 +69,36 @@
               </ul>
             </mat-hint>
           </mat-form-field>
+          @if (displayFields) {
+            <div fxLayout="row" fxLayoutGap="8" class="my-1">
+              @for (field of displayFields; track field.id) {
+                <button (click)="onFieldClick(displayFields[$index])" value="{{field.label}}" mat-stroked-button
+                        class="autocomplete-button">{{ field.label }}
+                </button>
+              }
+            </div>
+          }
         </div>
       }
-      @if (fieldsGroup.get("type").value == OfferFieldEnum.Dropdown) {
+      @if (fieldsGroup.get("type").value == OfferFieldEnum.Select) {
         <div class="infobox">
           Die Quelle dieses Auswahl-Felds (Bibliothek bzw. manuelle Optionen) wird pro Element festgelegt.
         </div>
       }
-    </form>
-  </div>
+    </div>
+  </form>
 </div>
+<mat-dialog-actions>
+
+  @if (loading$ | async) {
+    <div class="spinner-container">
+      <mat-spinner></mat-spinner>
+    </div>
+  } @else {
+    <div fxLayout="row" fxFlexFill fxLayoutAlign="space-between center">
+      <button mat-button (click)="onCancelClick()">Abbrechen</button>
+      <button (click)="onDelete()" mat-stroked-button color="warn">Löschen</button>
+      <button mat-button type="submit" (click)="onSubmitClick()">Speichern</button>
+    </div>
+  }
+</mat-dialog-actions>

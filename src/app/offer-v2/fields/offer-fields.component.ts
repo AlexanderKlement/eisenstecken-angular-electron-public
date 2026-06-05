@@ -2,10 +2,13 @@ import { Component, inject, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ToolbarComponent } from "../../shared/components/toolbar/toolbar.component";
-import { OfferField, OfferService } from "../../../api/openapi/api/offer.service";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { TableBuilderComponent, TableButton } from "../../shared/components/table-builder/table-builder.component";
 import { fieldTypeToString } from "../offer.util";
+import { OfferField, OfferV2Service } from "../../../api/openapi";
+import { MatDialog } from "@angular/material/dialog";
+import OfferFieldsEditDialogComponent from "./fields-edit-dialog/offer-fields-edit-dialog.component";
+import { take } from "rxjs/operators";
 
 
 @Component({
@@ -21,24 +24,38 @@ import { fieldTypeToString } from "../offer.util";
 export default class OfferFieldsComponent implements OnInit {
 
   private router = inject(Router);
-  private offerService = inject(OfferService);
+  private offerService = inject(OfferV2Service);
 
+  private dialog = inject(MatDialog);
 
   fieldsTitle = "Alle Felder";
   fieldsButtons: TableButton[] = [];
   fieldsHeaderButtons: TableButton[] = [];
-  fieldsDataSource: TableDataSource<OfferField, OfferService>;
-
+  fieldsDataSource: TableDataSource<OfferField, OfferV2Service>;
+  private fieldsVar: OfferField[] = [];
   title = "Felder";
   buttons = [];
 
   ngOnInit(): void {
     this.fieldsButtons.push({
+      name: () => ({ icon: "edit" }),
+      color: () => "accent",
+      selectedField: "",
+      navigate: (_, id) => {
+        const f = this.fieldsVar.find((f) => f.id === id);
+        if (f)
+          this.openEditDialog(f);
+      },
+      class: () => ""
+    });
+    this.fieldsButtons.push({
       name: () => ({ icon: "delete" }),
       color: () => "accent",
       selectedField: "",
       navigate: (_, id) => {
-        // TODO
+        this.offerService.deleteOfferFieldOfferV2FieldFieldIdDelete(id).pipe(take(1)).subscribe(() => {
+          this.fieldsDataSource.loadData();
+        });
       },
       class: () => ""
     });
@@ -46,54 +63,57 @@ export default class OfferFieldsComponent implements OnInit {
       name: () => "Neues Feld erstellen",
       color: () => "primary",
       selectedField: "",
-      navigate: (_, id) => {
-        this.router.navigateByUrl("/test/fields/new").then();
+      navigate: () => {
+        this.openEditDialog();
       },
       class: () => ""
     });
     this.buttons.push({
       name: "Angebote",
       navigate: () => {
-        this.router.navigateByUrl("/test").then();
+        this.router.navigateByUrl("/offer_v2").then();
       }
     }, {
       name: "Felder",
       active: true,
       navigate: () => {
-        this.router.navigateByUrl("/test/fields").then();
+        this.router.navigateByUrl("/offer_v2/fields").then();
       }
     }, {
       name: "Elementtypen",
       navigate: () => {
-        this.router.navigateByUrl("/test/element_types").then();
+        this.router.navigateByUrl("/offer_v2/element_types").then();
       }
     }, {
       name: "Bibliotheken",
       navigate: () => {
-        this.router.navigateByUrl("/test/libraries").then();
+        this.router.navigateByUrl("/offer_v2/libraries").then();
       }
     }, {
       name: "Templates",
       navigate: () => {
-        this.router.navigateByUrl("/test/templates").then();
+        this.router.navigateByUrl("/offer_v2/templates").then();
       }
     });
     this.fieldsDataSource = new TableDataSource(
       this.offerService,
-      () => this.offerService.getFields(),
+      (api, filter, sortDirection, skip, limit) =>
+        api.getOfferFieldsOfferV2FieldsGet(skip, filter, limit),
       (fields) => {
         const rows = [];
+        this.fieldsVar = fields;
         fields.forEach((field) => {
           if (field.visible)
             rows.push({
               values: {
+                id: field.id,
                 name: field.label,
                 description: field.description,
-                type: fieldTypeToString(field.type),
-                unit: field.unitId ? field.unitId : " - "
+                type: fieldTypeToString(field.fieldType),
+                unit: field.unit ? field.unit.short : " - "
               },
               route: () => {
-                this.router.navigateByUrl("/test/fields/" + field.id).then();
+                // noop
               }
             });
         });
@@ -118,7 +138,20 @@ export default class OfferFieldsComponent implements OnInit {
           headerName: "Einheit",
           sortable: true
         }
-      ], () => this.offerService.countFields());
+      ],
+      (api) => api.countOfferFieldsOfferV2CountFieldsGet()
+    );
+    this.fieldsDataSource.loadData();
+  }
+
+  openEditDialog(field?: OfferField) {
+    const dialogRef = this.dialog.open(OfferFieldsEditDialogComponent, {
+      width: "1000px",
+      data: { field }
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      this.fieldsDataSource.loadData();
+    });
   }
 
 }

@@ -32,7 +32,7 @@ export const availableMenuTiles: MenuTileDetail[] = [
   { title: "Benutzer", icon: "person", link: "/user", requiredScope: ScopeEnum.Admin },
   { title: "Einstellungen", icon: "settings", link: "/settings", requiredScope: ScopeEnum.Admin },
   { title: "Kontakte", icon: "phone", link: "/phone_book", requiredScope: ScopeEnum.Office },
-  { title: "Test", icon: "settings", link: "/test", requiredScope: ScopeEnum.Office }
+  { title: "Angebotscalculation", icon: "edit_document", link: "/offer_v2", requiredScope: ScopeEnum.Office }
 ];
 
 export function matchScopesToMenuTiles(scopes: ScopeEnum[]): MenuTileDetail[] {

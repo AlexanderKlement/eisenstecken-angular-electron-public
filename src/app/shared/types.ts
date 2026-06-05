@@ -15,6 +15,15 @@ import {
   Meal,
   MealSum,
   Offer,
+  OfferElement,
+  OfferElementField,
+  OfferElementType,
+  OfferField,
+  OfferLibrary,
+  OfferLibraryEntry,
+  OfferLibraryListElement,
+  OfferV2,
+  OfferV2Version,
   Order,
   OrderBundle,
   OrderedArticle,
@@ -36,7 +45,6 @@ import {
   WoodList,
   Workload
 } from "../../api/openapi";
-import { OfferElementType, OfferField } from "../../api/openapi/api/offer.service";
 
 
 export type DataSourceClass =
@@ -56,8 +64,15 @@ export type DataSourceClass =
   | Supplier
   | Contact
   | Price
+  | OfferV2
+  | OfferV2Version
   | OfferField
   | OfferElementType
+  | OfferElement
+  | OfferElementField
+  | OfferLibraryListElement
+  | OfferLibrary
+  | OfferLibraryEntry
   | OrderSmall
   | TechnicalData
   | Credential

@@ -19,7 +19,7 @@ import serviceRoutes from "./service/service-routes";
 import phoneBookRoutes from "./phone-book/phone-book-routes";
 import LoginComponent from "./login/login.component";
 import { PageNotFoundComponent } from "./shared/components";
-import testRoutes from "./test/test-routes";
+import offerV2Routes from "./offer-v2/offer-v2-routes";
 
 
 export const routes: Routes = [
@@ -46,7 +46,7 @@ export const routes: Routes = [
     component: LoginComponent,
     data: { requiresLogin: false }
   },
-  ...testRoutes,
+  ...offerV2Routes,
   ...userRoutes,
   ...jobRoutes,
   ...supplierRoutes,
