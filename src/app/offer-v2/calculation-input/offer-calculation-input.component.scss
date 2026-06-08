@@ -1,0 +1,36 @@
+.container {
+  margin: 0 1rem;
+}
+
+.highlight-backdrop {
+  position: absolute;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.highlights {
+  padding: 0;
+  color: transparent;
+  letter-spacing: 1px;
+
+  span {
+    //padding: 0 2px;
+  }
+}
+
+.mark {
+  position: relative;
+}
+
+.mark::after {
+  position: absolute;
+  content: " ";
+  inset: -1px;
+  background: rgb(20 204 22 / 0.35);
+  border-radius: 4px;
+  box-shadow: 0 0.5px 1px 0 rgb(20, 204, 22);
+}
+
+.calculation-textarea {
+  letter-spacing: 1px;
+}

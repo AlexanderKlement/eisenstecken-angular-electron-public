@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import OfferFieldsEditDialogComponent from "./offer-fields-edit-dialog.component";
 
-describe("OfferFieldsEditComponent", () => {
+describe("OfferFieldsEditDialogComponent", () => {
   let component: OfferFieldsEditDialogComponent;
   let fixture: ComponentFixture<OfferFieldsEditDialogComponent>;
 

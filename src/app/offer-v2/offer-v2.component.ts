@@ -74,6 +74,11 @@ export default class OfferV2Component implements OnInit {
         this.router.navigateByUrl("/offer_v2/libraries").then();
       }
     }, {
+      name: "Einheiten",
+      navigate: () => {
+        this.router.navigateByUrl("/offer_v2/units").then();
+      }
+    }, {
       name: "Templates",
       navigate: () => {
         this.router.navigateByUrl("/offer_v2/templates").then();

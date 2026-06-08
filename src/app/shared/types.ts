@@ -22,6 +22,7 @@ import {
   OfferLibrary,
   OfferLibraryEntry,
   OfferLibraryListElement,
+  OfferUnit,
   OfferV2,
   OfferV2Version,
   Order,
@@ -67,6 +68,7 @@ export type DataSourceClass =
   | OfferV2
   | OfferV2Version
   | OfferField
+  | OfferUnit
   | OfferElementType
   | OfferElement
   | OfferElementField

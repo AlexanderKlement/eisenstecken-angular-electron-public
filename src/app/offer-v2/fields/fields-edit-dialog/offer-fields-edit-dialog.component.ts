@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, OnInit, ViewChild } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {
   DefaultLayoutAlignDirective,
@@ -6,7 +6,7 @@ import {
   DefaultLayoutGapDirective,
   FlexModule
 } from "ng-flex-layout";
-import { MatFormField, MatHint, MatInput, MatLabel } from "@angular/material/input";
+import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
 import { OfferField, OfferFieldEnum, OfferUnit, OfferV2Service, ScopeEnum } from "../../../../api/openapi";
 import { MatOption } from "@angular/material/core";
 import { MatSelect } from "@angular/material/select";
@@ -23,6 +23,8 @@ import {
   MatDialogTitle
 } from "@angular/material/dialog";
 import { take } from "rxjs/operators";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import OfferCalculationInputComponent from "../../calculation-input/offer-calculation-input.component";
 
 export interface OfferFieldsEditData {
   field?: OfferField;
@@ -48,7 +50,6 @@ type OfferFieldGroup = {
     DefaultLayoutGapDirective,
     MatFormField,
     MatInput,
-    MatHint,
     MatLabel,
     MatOption,
     MatSelect,
@@ -58,7 +59,8 @@ type OfferFieldGroup = {
     MatProgressSpinner,
     MatDialogTitle,
     MatDialogContent,
-    MatDialogActions
+    MatDialogActions,
+    OfferCalculationInputComponent
   ]
 })
 export default class OfferFieldsEditDialogComponent implements OnInit {
@@ -69,11 +71,9 @@ export default class OfferFieldsEditDialogComponent implements OnInit {
   fieldId: number;
   title = "Felder";
   units$: Observable<OfferUnit[]>;
-  private fields: OfferField[];
-  displayFields: OfferField[] | null;
   private loadingSubject = new BehaviorSubject<boolean>(false);
   public loading$ = this.loadingSubject.asObservable();
-  @ViewChild("calculationInput") calculationInput: ElementRef<HTMLInputElement>;
+  private snackBar = inject(MatSnackBar);
 
 
   ngOnInit(): void {
@@ -85,9 +85,6 @@ export default class OfferFieldsEditDialogComponent implements OnInit {
     }
     this.initData();
     this.units$ = this.offerService.getOfferUnitsOfferV2UnitsGet();
-    this.offerService.getOfferFieldsOfferV2FieldsGet().pipe(take(1)).subscribe((data) => {
-      this.fields = data;
-    });
   }
 
   initData(): void {
@@ -114,61 +111,47 @@ export default class OfferFieldsEditDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  subscription = {
+    next: () => {
+      this.dialogRef.close();
+    },
+    error: (error: any) => {
+      this.snackBar.open("Löschen fehlgeschlagen: " + error, "Ok", { duration: 8000 });
+    }
+  };
+
   onSubmitClick() {
     const uid = parseInt(this.fieldsGroup.get("unitId").value);
-    this.loadingSubject.next(true);
-    if (this.fieldId) {
-      this.offerService.patchOfferFieldOfferV2FieldFieldIdPost(this.fieldId, {
-        unitId: uid === -1 ? undefined : uid,
-        label: this.fieldsGroup.get("label").value,
-        calculation: this.fieldsGroup.get("calculation").value,
-        description: this.fieldsGroup.get("description").value,
-        fieldType: this.fieldsGroup.get("type").value as OfferFieldEnum
-      }).subscribe((_) => {
-        this.dialogRef.close();
-      });
-    } else {
-      this.offerService.createOfferFieldOfferV2FieldPut({
-        unitId: uid === -1 ? undefined : uid,
-        label: this.fieldsGroup.get("label").value,
-        calculation: this.fieldsGroup.get("calculation").value,
-        description: this.fieldsGroup.get("description").value,
-        fieldType: this.fieldsGroup.get("type").value as OfferFieldEnum
-      }).subscribe((_) => {
-        this.dialogRef.close();
-      });
+    if (this.fieldsGroup.valid) {
+      this.loadingSubject.next(true);
+      if (this.fieldId) {
+        this.offerService.patchOfferFieldOfferV2FieldFieldIdPost(this.fieldId, {
+          unitId: uid === -1 ? undefined : uid,
+          label: this.fieldsGroup.get("label").value,
+          calculation: this.fieldsGroup.get("calculation").value,
+          description: this.fieldsGroup.get("description").value,
+          fieldType: this.fieldsGroup.get("type").value as OfferFieldEnum
+        }).pipe(take(1)).subscribe(this.subscription);
+      } else {
+        this.offerService.createOfferFieldOfferV2FieldPut({
+          unitId: uid === -1 ? undefined : uid,
+          label: this.fieldsGroup.get("label").value,
+          calculation: this.fieldsGroup.get("calculation").value,
+          description: this.fieldsGroup.get("description").value,
+          fieldType: this.fieldsGroup.get("type").value as OfferFieldEnum
+        }).pipe(take(1)).subscribe(this.subscription);
+      }
     }
-  }
-
-  onCalculationKeyUp() {
-    const val = this.fieldsGroup.get("calculation").value;
-    if (!val)
-      return;
-    const lastPart = val.split(/[ ,+*\/-]/g).at(-1);
-    if (!lastPart)
-      return;
-    const key = lastPart.replace("@", "").toLowerCase();
-    if (key.length !== 0 && this.fields) {
-      this.displayFields = this.fields.filter(field => field.label.toLowerCase().includes(key) || field.description.toLowerCase().includes(key));
-    } else {
-      this.displayFields = null;
-    }
-  }
-
-  onFieldClick(field: OfferField) {
-    const val = this.fieldsGroup.get("calculation").value;
-    if (!val)
-      return;
-    const lastPart = val.split(/[ ,+*\/-]/g).at(-1);
-    if (!lastPart)
-      return;
-
-    this.fieldsGroup.patchValue({ calculation: val.replace(lastPart, `@${field.label}`) });
-    this.calculationInput.nativeElement.focus();
   }
 
   onDelete() {
-    // TODO
+    if (this.fieldId) {
+      this.offerService.deleteOfferFieldOfferV2FieldFieldIdDelete(this.fieldId).pipe(take(1)).subscribe(this.subscription);
+    }
+  }
+
+  setCalculation(val: string) {
+    this.fieldsGroup.patchValue({ calculation: val });
   }
 
   protected readonly ScopeEnum = ScopeEnum;

@@ -5,7 +5,7 @@
       <div fxLayout="row" fxLayoutGap="16">
         <mat-form-field fxFlex>
           <mat-label>Name</mat-label>
-          <input class="form-control" formControlName="label" matInput>
+          <input class="form-control" formControlName="label" matInput pattern="[a-zA-Z]+">
         </mat-form-field>
         <mat-form-field appearance="fill" fxFlex>
           <mat-label>Beschreibung (intern als Tooltip)</mat-label>
@@ -45,40 +45,8 @@
         }
       </div>
       @if (fieldsGroup.get("type").value == OfferFieldEnum.Calculation) {
-        <div fxLayout="column" fxLayoutGap="16" class="my-1">
-          <mat-form-field appearance="fill" fxFlex>
-            <mat-label>Berechnung</mat-label>
-            <input type="text" #calculationInput matInput (keyup)="onCalculationKeyUp()"
-                   formControlName="calculation" />
-            <mat-hint>
-              <code>&#64;Feldname</code> tippen um ein anderes Feld zu referenzieren. Operatoren: + (plus), - (minus), *
-              (mal), /
-              (geteilt)<br />
-              Es können alle Felder im System referenziert werden. Ein Element welches dieses Feld enthält, muss die
-              referenzieren Felder auch haben<br />
-              Weitere Referenzierungen: <code>&#64;parent.Feldname</code>,
-              <code>&#64;child.Elementname.Feldname</code><br />
-              Beispiele:
-              <ul>
-                <li>mit <code>&#64;child.Schrank.Höhe</code> wird das "Höhe" feld des Unterelement "Schrank"
-                  referenziert
-                </li>
-                <li>mit <code>&#64;parent.Breite</code> wird das "Breite" feld des darüberligenden Element referenziert
-                </li>
-                <li>Volumen Kegel = <code>3.14 * &#64;Radius * &#64;Radius * &#64;Höhe * 1/3</code></li>
-              </ul>
-            </mat-hint>
-          </mat-form-field>
-          @if (displayFields) {
-            <div fxLayout="row" fxLayoutGap="8" class="my-1">
-              @for (field of displayFields; track field.id) {
-                <button (click)="onFieldClick(displayFields[$index])" value="{{field.label}}" mat-stroked-button
-                        class="autocomplete-button">{{ field.label }}
-                </button>
-              }
-            </div>
-          }
-        </div>
+        <app-offer-calculation-input [value]="fieldsGroup.get('calculation').value" label="Berechnung"
+                                     [setValue]="setCalculation.bind(this)"></app-offer-calculation-input>
       }
       @if (fieldsGroup.get("type").value == OfferFieldEnum.Select) {
         <div class="infobox">
@@ -97,8 +65,10 @@
   } @else {
     <div fxLayout="row" fxFlexFill fxLayoutAlign="space-between center">
       <button mat-button (click)="onCancelClick()">Abbrechen</button>
-      <button (click)="onDelete()" mat-stroked-button color="warn">Löschen</button>
-      <button mat-button type="submit" (click)="onSubmitClick()">Speichern</button>
+      @if (fieldId) {
+        <button (click)="onDelete()" mat-stroked-button color="warn">Löschen</button>
+      }
+      <button mat-button type="submit" [disabled]="!fieldsGroup.valid" (click)="onSubmitClick()">Speichern</button>
     </div>
   }
 </mat-dialog-actions>

@@ -1,0 +1,33 @@
+<h1 mat-dialog-title>{{ title }}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="unitsGroup">
+    <div fxLayout="column" fxLayoutAlign="space-around stretch">
+      <div fxLayout="row" fxLayoutGap="16">
+        <mat-form-field fxFlex>
+          <mat-label>Kürzel</mat-label>
+          <input class="form-control" formControlName="short" matInput placeholder="m²">
+        </mat-form-field>
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Name</mat-label>
+          <input class="form-control" formControlName="name" matInput placeholder="Quadratmeter">
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+<mat-dialog-actions>
+
+  @if (loading$ | async) {
+    <div class="spinner-container">
+      <mat-spinner></mat-spinner>
+    </div>
+  } @else {
+    <div fxLayout="row" fxFlexFill fxLayoutAlign="space-between center">
+      <button mat-button (click)="onCancelClick()">Abbrechen</button>
+      @if (unitId) {
+        <button (click)="onDelete()" mat-stroked-button color="warn">Löschen</button>
+      }
+      <button mat-button type="submit" (click)="onSubmitClick()">Speichern</button>
+    </div>
+  }
+</mat-dialog-actions>

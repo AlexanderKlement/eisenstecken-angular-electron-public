@@ -1,9 +1,11 @@
 <div>
   <mat-grid-list gutterSize="15px" cols="3" class="menu-tile-grid-layout">
-    @for (menuTile of menuTiles$ | async; track menuTile) {
-      <mat-grid-tile class="menu-tiles-container">
-        <app-single-menu-tile [tile]="menuTile" fxFlexFill></app-single-menu-tile>
-      </mat-grid-tile>
+    @if (menuTiles$ | async; as menuTiles) {
+      @for (menuTile of menuTiles; track menuTile) {
+        <mat-grid-tile class="menu-tiles-container">
+          <app-single-menu-tile [tile]="menuTile" fxFlexFill></app-single-menu-tile>
+        </mat-grid-tile>
+      }
     }
   </mat-grid-list>
 </div>

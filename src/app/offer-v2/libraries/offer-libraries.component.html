@@ -1,4 +1,5 @@
-<app-toolbar [title]="title" [buttonList]="buttons"></app-toolbar>
-<div class="center-container">
-  <span>coming soon</span>
-</div>
+<app-offer-container title="Bibliotheken">
+  <app-table-builder title="Alle Bibliotheken" [dataSource]="librariesDataSource"
+                     [headerButtons]="librariesHeaderButtons"
+                     [buttons]="librariesButtons"></app-table-builder>
+</app-offer-container>

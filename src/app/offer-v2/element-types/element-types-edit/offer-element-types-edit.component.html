@@ -1,0 +1,64 @@
+<app-offer-container title="Elementtypen">
+  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16">
+    <h3>{{ subTitle }}</h3>
+    <div fxFlex></div>
+    @if (!!elementTypeId) {
+      <button mat-button color="warn" (click)="onDelete()">Löschen</button>
+    }
+    <button mat-button color="primary" (click)="onSave()">Speichern</button>
+  </div>
+
+  <form [formGroup]="elementTypeGroup">
+    <div fxLayout="column" fxLayoutAlign="space-around stretch">
+      <div fxLayout="row" fxLayoutGap="16">
+        <mat-form-field fxFlex>
+          <mat-label>Name</mat-label>
+          <input class="form-control" formControlName="name" matInput>
+        </mat-form-field>
+      </div>
+      <div class="field">
+        <mat-icon class="sort-icon">lock</mat-icon>
+        <div class="label-extra">
+          <span class="field-label">Beschreibung</span>
+          <span class="field-extra">Systemfeld</span>
+        </div>
+        <div fxFlex></div>
+        <span class="field-type"
+              [style]="`background-color: ${fieldTypeToColor(OfferFieldEnum.Text)}; color: ${fieldTypeToTextColor(OfferFieldEnum.Text)}`">{{ fieldTypeToString(OfferFieldEnum.Text) }}</span>
+        <mat-icon class="delete-icon">lock</mat-icon>
+      </div>
+
+      @for (field of selectedFields; track field.id) {
+        <div class="field">
+          <mat-icon class="sort-icon">drag_handle</mat-icon>
+          <div class="label-extra">
+            <span class="field-label">{{ field.label }}</span>
+            <span class="field-extra">{{ field.unit?.short }}</span>
+          </div>
+          <div fxFlex></div>
+          <span class="field-type"
+                [style]="`background-color: ${fieldTypeToColor(field.fieldType)}; color: ${fieldTypeToTextColor(field.fieldType)}`">{{ fieldTypeToString(field.fieldType) }}</span>
+          <mat-icon class="delete-icon">delete</mat-icon>
+        </div>
+      }
+      <button class="field new" (click)="openFieldsDialog()">
+        <mat-icon class="sort-icon">add</mat-icon>
+        <span>Feld hinzufügen</span>
+      </button>
+    </div>
+  </form>
+  <div [class]="dialogOpen ? 'overlay visible' : 'overlay'"></div>
+  <div [class]="dialogOpen ? 'fields-dialog open' : 'fields-dialog'">
+    <div class="content">
+      <h4>Felder</h4>
+      <mat-form-field>
+        <mat-label>Suchen</mat-label>
+        <input matInput #search>
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      @for (field of fields; track field.id) {
+        <button (click)="onAddField(field)" class="add-field">{{ field.label }}</button>
+      }
+    </div>
+  </div>
+</app-offer-container>
