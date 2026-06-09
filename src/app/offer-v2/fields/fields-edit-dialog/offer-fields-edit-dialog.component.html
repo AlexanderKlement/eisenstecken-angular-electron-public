@@ -35,7 +35,7 @@
               <mat-option value="-1">Auswählen</mat-option>
               @if (units$ | async; as units) {
                 @for (unit of units; track unit.id) {
-                  <mat-option value="{{unit.id}}">{{ unit.short }}</mat-option>
+                  <mat-option value="{{unit.id}}">{{ unit.name }} [{{ unit.short }}]</mat-option>
                 }
               }
             </mat-select>

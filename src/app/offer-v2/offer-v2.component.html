@@ -1,12 +1,13 @@
-<app-toolbar [title]="title" [buttonList]="buttons"></app-toolbar>
-<div class="center-container">
-  <mat-tab-group>
-    <mat-tab label="Angebote">
-      <app-table-builder title="{{ offerTitle }}" [dataSource]="offerDataSource" [headerButtons]="offerHeaderButtons"
-                         [buttons]="offerButtons" />
-    </mat-tab>
-    <mat-tab label="Aufstellungen">
+<app-offer-container title="Angebote">
+  <div class="center-container">
+    <mat-tab-group>
+      <mat-tab label="Angebote">
+        <app-table-builder title="{{ offerTitle }}" [dataSource]="offerDataSource" [headerButtons]="offerHeaderButtons"
+                           [buttons]="offerButtons" />
+      </mat-tab>
+      <mat-tab label="Aufstellungen">
 
-    </mat-tab>
-  </mat-tab-group>
-</div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</app-offer-container>

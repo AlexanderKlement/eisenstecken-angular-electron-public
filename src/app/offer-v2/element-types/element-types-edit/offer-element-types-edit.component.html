@@ -2,10 +2,16 @@
   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16">
     <h3>{{ subTitle }}</h3>
     <div fxFlex></div>
-    @if (!!elementTypeId) {
-      <button mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
+    @if (loading$ | async) {
+      <div class="spinner-container">
+        <mat-spinner></mat-spinner>
+      </div>
+    } @else {
+      @if (!!elementTypeId) {
+        <button mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
+      }
+      <button mat-raised-button color="primary" (click)="onSave()">Speichern</button>
     }
-    <button mat-raised-button color="primary" (click)="onSave()">Speichern</button>
   </div>
 
   <form [formGroup]="elementTypeGroup">

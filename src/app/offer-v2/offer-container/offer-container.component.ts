@@ -28,16 +28,22 @@ export default class OfferContainerComponent implements OnInit {
         this.router.navigateByUrl("/offer_v2").then();
       }
     }, {
-      name: "Felder",
-      active: this.title === "Felder",
+      name: "Elemente",
+      active: this.title === "Elemente",
       navigate: () => {
-        this.router.navigateByUrl("/offer_v2/fields").then();
+        this.router.navigateByUrl("/offer_v2/elements").then();
       }
     }, {
       name: "Elementtypen",
       active: this.title === "Elementtypen",
       navigate: () => {
         this.router.navigateByUrl("/offer_v2/element_types").then();
+      }
+    }, {
+      name: "Felder",
+      active: this.title === "Felder",
+      navigate: () => {
+        this.router.navigateByUrl("/offer_v2/fields").then();
       }
     }, {
       name: "Bibliotheken",

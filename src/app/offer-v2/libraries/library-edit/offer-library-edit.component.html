@@ -1,0 +1,68 @@
+<app-offer-container title="Bibliotheken">
+  <div fxLayout="row" fxFlexFill fxLayoutAlign="start center">
+    <h3>{{ subTitle }}</h3>
+    <div fxFlex></div>
+    @if (loading$ | async) {
+      <div class="spinner-container">
+        <mat-spinner></mat-spinner>
+      </div>
+    } @else {
+      @if (libraryId) {
+        <button (click)="onDelete()" mat-stroked-button color="warn">Löschen</button>
+      }
+      <button mat-button type="submit" (click)="onSubmitClick()">Speichern</button>
+    }
+  </div>
+  <form [formGroup]="libraryGroup">
+    <div fxLayout="column" fxLayoutAlign="space-around stretch">
+      <div fxLayout="row" fxLayoutGap="16">
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Name</mat-label>
+          <input class="form-control" formControlName="name" matInput>
+        </mat-form-field>
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Beschreibung</mat-label>
+          <input class="form-control" formControlName="description" matInput>
+        </mat-form-field>
+      </div>
+      @if (libraryId) {
+        <ng-container formArrayName="entries">
+          <h3>Einträge</h3>
+          @for (control of libraryGroup.controls.entries.controls; track control.controls.id; let idx = $index; ) {
+            <ng-container [formGroupName]="idx">
+              <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start center" class="my-1">
+                <mat-form-field fxFlex appearance="outline">
+                  <mat-label>Name</mat-label>
+                  <input class="form-control" matInput formControlName="name">
+                </mat-form-field>
+                <mat-form-field fxFlex appearance="outline">
+                  <mat-label>Einheit</mat-label>
+                  <mat-select class="form-control" formControlName="unit">
+                    <mat-option value="-1">Auswählen</mat-option>
+                    @if (units$ | async; as units) {
+                      @for (unit of units; track unit.id) {
+                        <mat-option value="{{unit.id}}">{{ unit.name }} [{{ unit.short }}]</mat-option>
+                      }
+                    }
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex appearance="outline">
+                  <mat-label>Preis</mat-label>
+                  <input class="form-control" matInput formControlName="price">
+                </mat-form-field>
+                <app-circle-icon-button class="del-button" icon="delete"
+                                        (click)="onDeleteEntry(control.get('id').value,idx)"></app-circle-icon-button>
+              </div>
+            </ng-container>
+          }
+        </ng-container>
+        <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="center" class="my-1">
+          <button mat-raised-button type="button" (click)="onAddEntry()"
+                  class="save-btn">
+            Neuer Eintrag
+          </button>
+        </div>
+      }
+    </div>
+  </form>
+</app-offer-container>

@@ -5,6 +5,9 @@ import { TableBuilderComponent, TableButton } from "../../shared/components/tabl
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { OfferElementType, OfferV2Service } from "../../../api/openapi";
 import OfferContainerComponent from "../offer-container/offer-container.component";
+import { headerNewButton, listDeleteButton, listEditButton } from "../offer.util";
+import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 
 @Component({
@@ -21,21 +24,18 @@ export default class OfferElementTypesComponent implements OnInit {
 
   private router = inject(Router);
   private offerService = inject(OfferV2Service);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
 
   tableButtons: TableButton[] = [];
   headerButtons: TableButton[] = [];
   elementTypesDataSource: TableDataSource<OfferElementType, OfferV2Service>;
 
   ngOnInit(): void {
-    this.tableButtons.push({
-      name: () => ({ icon: "delete" }),
-      color: () => "accent",
-      selectedField: "",
-      navigate: (_, id) => {
-        this.router.navigateByUrl(`/offer_v2/element_types/${id}/delete`).then();
-      },
-      class: () => ""
-    });
+    this.tableButtons.push(listEditButton((id) => {
+      this.router.navigateByUrl(`/offer_v2/element_types/${id}`).then();
+    }));
+    this.tableButtons.push(listDeleteButton(this.dialog, "Elementtyp", this.offerService.deleteOfferElementTypeOfferV2ElementTypeElementTypeIdDelete, this.elementTypesDataSource, this.snackBar));
     this.tableButtons.push({
       name: () => ({ icon: "content_copy" }),
       color: () => "accent",
@@ -45,15 +45,10 @@ export default class OfferElementTypesComponent implements OnInit {
       },
       class: () => ""
     });
-    this.headerButtons.push({
-      name: () => "Neuen Typ erstellen",
-      color: () => "primary",
-      selectedField: "",
-      navigate: (_, id) => {
-        this.router.navigateByUrl("/offer_v2/element_types/new").then();
-      },
-      class: () => ""
-    });
+    this.headerButtons.push(headerNewButton("Neuen Typ erstellen", () => {
+      this.router.navigateByUrl("/offer_v2/element_types/new").then();
+    }));
+
     this.elementTypesDataSource = new TableDataSource(
       this.offerService,
       (api, filter, sortDirection, skip, limit) =>
@@ -73,7 +68,7 @@ export default class OfferElementTypesComponent implements OnInit {
               extraFields: type.fields.length > 3 ? `+${type.fields.length - 3}` : " - "
             },
             route: () => {
-              this.router.navigateByUrl(`/offer_v2/element_types/${type.id}`).then();
+              // noop
             }
           });
         });

@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import OfferLibraryEditDialogComponent from "./offer-library-edit-dialog.component";
+import OfferLibraryEditComponent from "./offer-library-edit.component";
 
 describe("OfferLibraryEditDialogComponent", () => {
-  let component: OfferLibraryEditDialogComponent;
-  let fixture: ComponentFixture<OfferLibraryEditDialogComponent>;
+  let component: OfferLibraryEditComponent;
+  let fixture: ComponentFixture<OfferLibraryEditComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OfferLibraryEditDialogComponent]
+      imports: [OfferLibraryEditComponent]
     })
       .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OfferLibraryEditDialogComponent);
+    fixture = TestBed.createComponent(OfferLibraryEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

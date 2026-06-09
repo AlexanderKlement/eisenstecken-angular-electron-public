@@ -19,8 +19,11 @@ import { ListElementComponent } from "../../../shared/components/list-element/li
 import { OfferFieldTypePillComponent } from "../../offer-field-type-pill/offer-field-type-pill.component";
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from "@angular/cdk/drag-drop";
 import OfferCalculationInputComponent from "../../calculation-input/offer-calculation-input.component";
-import { ConfirmDialogComponent } from "../../../shared/components/confirm-dialog/confirm-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
+import { AsyncPipe } from "@angular/common";
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { BehaviorSubject } from "rxjs";
+import { confirmDeleteDialog } from "../../offer.util";
 
 type ElementTypeGroup = {
   name: FormControl<string>;
@@ -49,7 +52,9 @@ type ElementTypeGroup = {
     OfferFieldTypePillComponent,
     CdkDropList,
     CdkDrag,
-    OfferCalculationInputComponent
+    OfferCalculationInputComponent,
+    AsyncPipe,
+    MatProgressSpinner
   ]
 })
 export default class OfferElementTypesEditComponent implements OnInit {
@@ -57,7 +62,7 @@ export default class OfferElementTypesEditComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private offerService = inject(OfferV2Service);
-  subTitle = "";
+  subTitle = "Elementtyp erstellen";
   elementTypeId: number;
   private snackBar = inject(MatSnackBar);
   elementTypeGroup: FormGroup<ElementTypeGroup> = new FormGroup({
@@ -69,6 +74,8 @@ export default class OfferElementTypesEditComponent implements OnInit {
   displayFields: OfferField[] = [];
   selectedFields: OfferField[] = [];
   dialogOpen = false;
+  private loadingSubject = new BehaviorSubject<boolean>(false);
+  public loading$ = this.loadingSubject.asObservable();
   @ViewChild("search") searchInput: ElementRef<HTMLInputElement>;
   private dialog = inject(MatDialog);
 
@@ -147,25 +154,16 @@ export default class OfferElementTypesEditComponent implements OnInit {
 
   onDelete() {
     if (this.elementTypeId) {
-      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-        width: "400px",
-        data: {
-          title: "Elementtyp löschen?",
-          text: "Elementtyp wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden!"
-        }
-      });
-      dialogRef.afterClosed().subscribe((result) => {
-        if (result) {
-          this.offerService
-            .deleteOfferElementTypeOfferV2ElementTypeElementTypeIdDelete(this.elementTypeId)
-            .pipe(take(1))
-            .subscribe(this.subscription);
-        }
-      });
+      this.loadingSubject.next(true);
+      confirmDeleteDialog(this.elementTypeId, this.dialog, "Elementtyp", this.offerService.deleteOfferElementTypeOfferV2ElementTypeElementTypeIdDelete,
+        {
+          loadData: this.subscription.next
+        }, this.snackBar);
     }
   }
 
   onSave() {
+    this.loadingSubject.next(true);
     if (this.elementTypeId) {
       this.offerService.patchOfferElementTypeOfferV2ElementTypeElementTypeIdPost(this.elementTypeId, {
         name: this.elementTypeGroup.get("name").value,
@@ -185,9 +183,11 @@ export default class OfferElementTypesEditComponent implements OnInit {
 
   subscription = {
     next: () => {
+      this.loadingSubject.next(false);
       this.router.navigateByUrl("/offer_v2/element_types").then();
     },
     error: (error: any) => {
+      this.loadingSubject.next(false);
       this.snackBar.open("Etwas ist schief gelaufen: " + error, "Ok", { duration: 8000 });
     }
   };

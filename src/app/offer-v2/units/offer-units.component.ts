@@ -8,6 +8,7 @@ import { take } from "rxjs/operators";
 import OfferUnitsEditDialogComponent from "./units-edit-dialog/offer-units-edit-dialog.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import OfferContainerComponent from "../offer-container/offer-container.component";
+import { headerNewButton, listDeleteButton, listEditButton } from "../offer.util";
 
 
 @Component({
@@ -40,40 +41,11 @@ export default class OfferUnitsComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.unitsButtons.push({
-      name: () => ({ icon: "edit" }),
-      color: () => "accent",
-      selectedField: "",
-      navigate: (_, id) => {
-        this.offerService.getOfferUnitOfferV2UnitUnitIdGet(id).pipe(take(1)).subscribe(this.editSubscription);
-      },
-      class: () => ""
-    });
-    this.unitsButtons.push({
-      name: () => ({ icon: "delete" }),
-      color: () => "accent",
-      selectedField: "",
-      navigate: (_, id) => {
-        this.offerService.deleteOfferUnitOfferV2UnitUnitIdDelete(id).pipe(take(1)).subscribe({
-          next: () => {
-            this.unitsDatasource.loadData();
-          },
-          error: (error) => {
-            this.snackBar.open("Löschen fehlgeschlagen: " + error, "Ok", { duration: 8000 });
-          }
-        });
-      },
-      class: () => ""
-    });
-    this.unitsHeaderButtons.push({
-      name: () => "Neue Einheit erstellen",
-      color: () => "primary",
-      selectedField: "",
-      navigate: () => {
-        this.openEditDialog();
-      },
-      class: () => ""
-    });
+    this.unitsButtons.push(listEditButton((id) => {
+      this.offerService.getOfferUnitOfferV2UnitUnitIdGet(id).pipe(take(1)).subscribe(this.editSubscription);
+    }));
+    this.unitsButtons.push(listDeleteButton(this.dialog, "Einheit", this.offerService.deleteOfferUnitOfferV2UnitUnitIdDelete, this.unitsDatasource, this.snackBar));
+    this.unitsHeaderButtons.push(headerNewButton("Neue Einheit erstellen", this.openEditDialog));
     this.unitsDatasource = new TableDataSource(
       this.offerService,
       (api, filter, sortDirection, skip, limit) =>

@@ -1,0 +1,96 @@
+<app-offer-container title="Elemente">
+  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16">
+    <h3>{{ subTitle }}</h3>
+    <div fxFlex></div>
+    @if (loading$ | async) {
+      <div class="spinner-container">
+        <mat-spinner></mat-spinner>
+      </div>
+    } @else {
+      @if (!!elementId) {
+        <button mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
+      }
+      <button mat-raised-button color="primary" (click)="onSave()">Speichern</button>
+    }
+  </div>
+
+  <form [formGroup]="elementGroup">
+    <div fxLayout="column" fxLayoutAlign="space-around stretch">
+      <div fxLayout="row" fxLayoutGap="16">
+        <mat-form-field fxFlex>
+          <mat-label>Name</mat-label>
+          <input class="form-control" formControlName="name" matInput>
+        </mat-form-field>
+        <mat-form-field fxFlex>
+          <mat-label>Elementtyp</mat-label>
+          <mat-select class="form-control" formControlName="elementType" (selectionChange)="onChangeType()">
+            <mat-option value="-1">Auswählen</mat-option>
+            @if (elementTypes$ | async; as elementTypes) {
+              @for (elementType of elementTypes; track elementType.id) {
+                <mat-option value="{{elementType.id}}">{{ elementType.name }}</mat-option>
+              }
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      @if (elementGroup.controls.elementType.value !== -1) {
+        <h3>Felder</h3>
+        <div fxLayout="row" fxFill fxLayoutAlign="space-between center">
+          <span>Die Felder werden über den Elementtyp definiert</span>
+          <button mat-stroked-button color="primary" (click)="onNavElementType()"
+                  [disabled]="elementGroup.get('elementType').value === -1">
+            Elementtyp bearbeiten
+          </button>
+        </div>
+        <ng-container formArrayName="fields">
+          @for (control of elementGroup.controls.fields.controls; track control.controls.id; let idx = $index) {
+            <ng-container [formGroupName]="idx">
+              <div class="element-field">
+                <div class="element-field-header">
+                  <strong>{{ control.controls.label.value }}</strong>
+                  <span>{{ fieldTypeToString(control.controls.fieldType.value) }}
+                    @if (control.controls.fieldType.value === OfferFieldEnum.Calculation || control.controls.fieldType.value === OfferFieldEnum.Numeric) {
+                      &bullet;
+                      {{ control.controls.unit.value }}
+                    }
+              </span>
+                </div>
+                <div class="element-field-content">
+
+                  @if (control.controls.fieldType.value === OfferFieldEnum.Calculation || control.controls.fieldType.value === OfferFieldEnum.Offertext) {
+                    <app-offer-calculation-input [value]="control.controls.value.value"
+                                                 [setValue]="setDefaultVal.bind(this,idx)" label="Standartwert"
+                                                 hintStyle="small"></app-offer-calculation-input>
+                  } @else {
+                    <mat-checkbox formControlName="mandatory" class="form-control">Pflichtfeld</mat-checkbox>
+                    <mat-checkbox formControlName="inherits" class="form-control">Vom übergeordneten Element erben
+                    </mat-checkbox>
+                    <div class="my-1"></div>
+                    @if (control.controls.fieldType.value === OfferFieldEnum.Select) {
+                      <label id="radio-group-label">Bibliothek wählen</label>
+                      <mat-radio-group aria-labelledby="radio-group-label" formControlName="library"
+                                       class="vertical-radio">
+                        @if (libraries$|async; as libraries) {
+                          @for (library of libraries; track library.id) {
+                            <mat-radio-button [value]="library.id">{{ library.name }}</mat-radio-button>
+                          }
+                        }
+                      </mat-radio-group>
+                    } @else {
+                      <mat-form-field fxFill appearance="fill">
+                        <mat-label>Standartwert</mat-label>
+                        <input class="form-control" matInput formControlName="value">
+                      </mat-form-field>
+                    }
+                  }
+                </div>
+              </div>
+            </ng-container>
+          }
+        </ng-container>
+      }
+    </div>
+  </form>
+
+</app-offer-container>

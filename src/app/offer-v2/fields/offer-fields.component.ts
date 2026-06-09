@@ -1,9 +1,8 @@
 import { Component, inject, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { TableBuilderComponent, TableButton } from "../../shared/components/table-builder/table-builder.component";
-import { fieldTypeToString } from "../offer.util";
+import { fieldTypeToString, headerNewButton, listDeleteButton, listEditButton } from "../offer.util";
 import { OfferField, OfferV2Service } from "../../../api/openapi";
 import { MatDialog } from "@angular/material/dialog";
 import OfferFieldsEditDialogComponent from "./fields-edit-dialog/offer-fields-edit-dialog.component";
@@ -24,7 +23,6 @@ import OfferContainerComponent from "../offer-container/offer-container.componen
 })
 export default class OfferFieldsComponent implements OnInit {
 
-  private router = inject(Router);
   private offerService = inject(OfferV2Service);
 
   private dialog = inject(MatDialog);
@@ -43,31 +41,19 @@ export default class OfferFieldsComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.fieldsButtons.push({
-      name: () => ({ icon: "delete" }),
-      color: () => "accent",
-      selectedField: "",
-      navigate: (_, id) => {
-        this.offerService.deleteOfferFieldOfferV2FieldFieldIdDelete(id).pipe(take(1)).subscribe({
-          next: () => {
-            this.fieldsDataSource.loadData();
-          },
-          error: (error) => {
-            this.snackBar.open("Löschen fehlgeschlagen: " + error, "Ok", { duration: 8000 });
-          }
-        });
-      },
-      class: () => ""
-    });
-    this.fieldsHeaderButtons.push({
-      name: () => "Neues Feld erstellen",
-      color: () => "primary",
-      selectedField: "",
-      navigate: () => {
-        this.openEditDialog();
-      },
-      class: () => ""
-    });
+    this.fieldsButtons.push(listEditButton((id) => {
+      this.offerService.getOfferFieldOfferV2FieldFieldIdGet(id).pipe(take(1)).subscribe(this.editSubscription);
+    }));
+    this.fieldsButtons.push(
+      listDeleteButton(
+        this.dialog,
+        "Feld",
+        this.offerService.deleteOfferFieldOfferV2FieldFieldIdDelete,
+        this.fieldsDataSource,
+        this.snackBar)
+    );
+
+    this.fieldsHeaderButtons.push(headerNewButton("Neues Feld erstellen", this.openEditDialog));
     this.fieldsDataSource = new TableDataSource(
       this.offerService,
       (api, filter, sortDirection, skip, limit) =>
@@ -85,7 +71,7 @@ export default class OfferFieldsComponent implements OnInit {
                 unit: field.unit ? field.unit.short : " - "
               },
               route: () => {
-                this.offerService.getOfferFieldOfferV2FieldFieldIdGet(field.id).pipe(take(1)).subscribe(this.editSubscription);
+                // noop
               }
             });
         });

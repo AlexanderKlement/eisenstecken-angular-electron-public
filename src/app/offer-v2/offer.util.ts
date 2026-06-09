@@ -1,4 +1,10 @@
 import { OfferFieldEnum } from "../../api/openapi";
+import { TableButton } from "../shared/components/table-builder/table-builder.component";
+import { MatDialog } from "@angular/material/dialog";
+import { ConfirmDialogComponent } from "../shared/components/confirm-dialog/confirm-dialog.component";
+import { Observable } from "rxjs";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { take } from "rxjs/operators";
 
 export function fieldTypeToString(type: OfferFieldEnum) {
   switch (type) {
@@ -49,4 +55,73 @@ export function fieldTypeToTextColor(type: OfferFieldEnum) {
     case OfferFieldEnum.Offertext:
       return "#000000";
   }
+}
+
+export function listEditButton(navigate: (id: number) => void): TableButton {
+  return {
+    name: () => ({ icon: "edit" }),
+    color: () => "accent",
+    selectedField: "",
+    class: () => "",
+    navigate: (_, id) => {
+      navigate(id);
+    }
+  };
+}
+
+export function listDeleteButton<T extends { loadData: () => void }>(
+  dialog: MatDialog,
+  name: string,
+  deleteFunc: (id: number) => Observable<boolean>,
+  dataSourceOrCallback: T,
+  snackBar: MatSnackBar): TableButton {
+  return {
+    name: () => ({ icon: "delete" }),
+    color: () => "warn",
+    selectedField: "",
+    class: () => "",
+    navigate: (_, id) => {
+      confirmDeleteDialog(id, dialog, name, deleteFunc, dataSourceOrCallback, snackBar);
+    }
+  };
+}
+
+export function confirmDeleteDialog<T extends { loadData: () => void }>(id: number,
+                                                                        dialog: MatDialog,
+                                                                        name: string,
+                                                                        deleteFunc: (id: number) => Observable<boolean>,
+                                                                        dataSourceOrCallback: T,
+                                                                        snackBar: MatSnackBar) {
+  const dialogRef = dialog.open(ConfirmDialogComponent, {
+    width: "400px",
+    data: {
+      title: `${name} löschen?`,
+      text: `${name} wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden!`
+    }
+  });
+  dialogRef.afterClosed().subscribe((result) => {
+    if (result) {
+      deleteFunc(id).pipe(take(1))
+        .subscribe({
+          next: () => {
+            dataSourceOrCallback.loadData();
+          },
+          error: (error) => {
+            snackBar.open("Löschen fehlgeschlagen: " + error, "Ok", { duration: 8000 });
+          }
+        });
+    }
+  });
+}
+
+export function headerNewButton(name: string, onPress: () => void): TableButton {
+  return {
+    name: () => name,
+    color: () => "primary",
+    selectedField: "",
+    navigate: () => {
+      onPress();
+    },
+    class: () => ""
+  };
 }
