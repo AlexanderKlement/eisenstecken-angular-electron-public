@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
 import { TableBuilderComponent, TableButton } from "../../shared/components/table-builder/table-builder.component";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
-import { OfferElement, OfferV2Service } from "../../../api/openapi";
+import { OfferElementListElement, OfferV2Service } from "../../../api/openapi";
 import OfferContainerComponent from "../offer-container/offer-container.component";
 import { headerNewButton, listDeleteButton, listEditButton } from "../offer.util";
 import { MatDialog } from "@angular/material/dialog";
@@ -29,7 +29,7 @@ export default class OfferElementsComponent implements OnInit {
 
   tableButtons: TableButton[] = [];
   headerButtons: TableButton[] = [];
-  elementsDataSource: TableDataSource<OfferElement, OfferV2Service>;
+  elementsDataSource: TableDataSource<OfferElementListElement, OfferV2Service>;
 
   ngOnInit(): void {
     this.tableButtons.push(listEditButton((id) => {

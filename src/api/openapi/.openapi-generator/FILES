@@ -109,8 +109,8 @@ model/noteUpdate.ts
 model/offer.ts
 model/offerCreate.ts
 model/offerElement.ts
-model/offerElementCreatePatch.ts
 model/offerElementField.ts
+model/offerElementListElement.ts
 model/offerElementType.ts
 model/offerElementTypeCreatePatch.ts
 model/offerField.ts
@@ -164,6 +164,8 @@ model/recalculationV2.ts
 model/reminder.ts
 model/reminderCreate.ts
 model/reminderLevel.ts
+model/schemasOfferV2OfferElementFieldSchemaOfferElementCreatePatch.ts
+model/schemasOfferV2OfferElementSchemaOfferElementCreatePatch.ts
 model/scopeEnum.ts
 model/service.ts
 model/serviceCreate.ts

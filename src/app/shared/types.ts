@@ -17,6 +17,7 @@ import {
   Offer,
   OfferElement,
   OfferElementField,
+  OfferElementListElement,
   OfferElementType,
   OfferField,
   OfferLibrary,
@@ -71,6 +72,7 @@ export type DataSourceClass =
   | OfferUnit
   | OfferElementType
   | OfferElement
+  | OfferElementListElement
   | OfferElementField
   | OfferLibraryListElement
   | OfferLibrary

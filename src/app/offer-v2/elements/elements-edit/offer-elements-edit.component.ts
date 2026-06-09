@@ -168,12 +168,14 @@ export default class OfferElementsEditComponent implements OnInit {
     if (this.elementId) {
       this.offerService.patchOfferElementOfferV2ElementElementIdPost(this.elementId, {
         name: this.elementGroup.get("name").value,
-        elementTypeId: this.elementGroup.get("elementType").value
+        elementTypeId: this.elementGroup.get("elementType").value,
+        fields: [] // TODO
       }).pipe(take(1)).subscribe(this.subscription);
     } else {
       this.offerService.createOfferElementOfferV2ElementPut({
         name: this.elementGroup.get("name").value,
-        elementTypeId: this.elementGroup.get("elementType").value
+        elementTypeId: this.elementGroup.get("elementType").value,
+        fields: []
       }).pipe(take(1)).subscribe(this.subscription);
     }
   }

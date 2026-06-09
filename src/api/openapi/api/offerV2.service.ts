@@ -21,7 +21,7 @@ import { HTTPValidationError } from '../model/hTTPValidationError';
 // @ts-ignore
 import { OfferElement } from '../model/offerElement';
 // @ts-ignore
-import { OfferElementCreatePatch } from '../model/offerElementCreatePatch';
+import { OfferElementListElement } from '../model/offerElementListElement';
 // @ts-ignore
 import { OfferElementType } from '../model/offerElementType';
 // @ts-ignore
@@ -46,6 +46,8 @@ import { OfferUnitCreatePatch } from '../model/offerUnitCreatePatch';
 import { OfferV2 } from '../model/offerV2';
 // @ts-ignore
 import { OfferV2Version } from '../model/offerV2Version';
+// @ts-ignore
+import { SchemasOfferV2OfferElementSchemaOfferElementCreatePatch } from '../model/schemasOfferV2OfferElementSchemaOfferElementCreatePatch';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -446,16 +448,16 @@ export class OfferV2Service extends BaseService {
 
     /**
      * Create Offer Element
-     * @param offerElementCreatePatch 
+     * @param schemasOfferV2OfferElementSchemaOfferElementCreatePatch 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createOfferElementOfferV2ElementPut(offerElementCreatePatch: OfferElementCreatePatch, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OfferElement>;
-    public createOfferElementOfferV2ElementPut(offerElementCreatePatch: OfferElementCreatePatch, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OfferElement>>;
-    public createOfferElementOfferV2ElementPut(offerElementCreatePatch: OfferElementCreatePatch, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OfferElement>>;
-    public createOfferElementOfferV2ElementPut(offerElementCreatePatch: OfferElementCreatePatch, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (offerElementCreatePatch === null || offerElementCreatePatch === undefined) {
-            throw new Error('Required parameter offerElementCreatePatch was null or undefined when calling createOfferElementOfferV2ElementPut.');
+    public createOfferElementOfferV2ElementPut(schemasOfferV2OfferElementSchemaOfferElementCreatePatch: SchemasOfferV2OfferElementSchemaOfferElementCreatePatch, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OfferElement>;
+    public createOfferElementOfferV2ElementPut(schemasOfferV2OfferElementSchemaOfferElementCreatePatch: SchemasOfferV2OfferElementSchemaOfferElementCreatePatch, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OfferElement>>;
+    public createOfferElementOfferV2ElementPut(schemasOfferV2OfferElementSchemaOfferElementCreatePatch: SchemasOfferV2OfferElementSchemaOfferElementCreatePatch, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OfferElement>>;
+    public createOfferElementOfferV2ElementPut(schemasOfferV2OfferElementSchemaOfferElementCreatePatch: SchemasOfferV2OfferElementSchemaOfferElementCreatePatch, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (schemasOfferV2OfferElementSchemaOfferElementCreatePatch === null || schemasOfferV2OfferElementSchemaOfferElementCreatePatch === undefined) {
+            throw new Error('Required parameter schemasOfferV2OfferElementSchemaOfferElementCreatePatch was null or undefined when calling createOfferElementOfferV2ElementPut.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -500,7 +502,7 @@ export class OfferV2Service extends BaseService {
         return this.httpClient.request<OfferElement>('put', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: offerElementCreatePatch,
+                body: schemasOfferV2OfferElementSchemaOfferElementCreatePatch,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -1393,9 +1395,9 @@ export class OfferV2Service extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getOfferElementsOfferV2ElementsGet(skip?: number, filterString?: string, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OfferElement>>;
-    public getOfferElementsOfferV2ElementsGet(skip?: number, filterString?: string, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OfferElement>>>;
-    public getOfferElementsOfferV2ElementsGet(skip?: number, filterString?: string, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OfferElement>>>;
+    public getOfferElementsOfferV2ElementsGet(skip?: number, filterString?: string, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OfferElementListElement>>;
+    public getOfferElementsOfferV2ElementsGet(skip?: number, filterString?: string, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OfferElementListElement>>>;
+    public getOfferElementsOfferV2ElementsGet(skip?: number, filterString?: string, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OfferElementListElement>>>;
     public getOfferElementsOfferV2ElementsGet(skip?: number, filterString?: string, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -1436,7 +1438,7 @@ export class OfferV2Service extends BaseService {
 
         let localVarPath = `/offer/v2/elements`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<OfferElement>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<OfferElementListElement>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -1956,19 +1958,19 @@ export class OfferV2Service extends BaseService {
     /**
      * Patch Offer Element
      * @param elementId 
-     * @param offerElementCreatePatch 
+     * @param schemasOfferV2OfferElementSchemaOfferElementCreatePatch 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public patchOfferElementOfferV2ElementElementIdPost(elementId: number, offerElementCreatePatch: OfferElementCreatePatch, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OfferElement>;
-    public patchOfferElementOfferV2ElementElementIdPost(elementId: number, offerElementCreatePatch: OfferElementCreatePatch, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OfferElement>>;
-    public patchOfferElementOfferV2ElementElementIdPost(elementId: number, offerElementCreatePatch: OfferElementCreatePatch, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OfferElement>>;
-    public patchOfferElementOfferV2ElementElementIdPost(elementId: number, offerElementCreatePatch: OfferElementCreatePatch, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public patchOfferElementOfferV2ElementElementIdPost(elementId: number, schemasOfferV2OfferElementSchemaOfferElementCreatePatch: SchemasOfferV2OfferElementSchemaOfferElementCreatePatch, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OfferElement>;
+    public patchOfferElementOfferV2ElementElementIdPost(elementId: number, schemasOfferV2OfferElementSchemaOfferElementCreatePatch: SchemasOfferV2OfferElementSchemaOfferElementCreatePatch, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OfferElement>>;
+    public patchOfferElementOfferV2ElementElementIdPost(elementId: number, schemasOfferV2OfferElementSchemaOfferElementCreatePatch: SchemasOfferV2OfferElementSchemaOfferElementCreatePatch, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OfferElement>>;
+    public patchOfferElementOfferV2ElementElementIdPost(elementId: number, schemasOfferV2OfferElementSchemaOfferElementCreatePatch: SchemasOfferV2OfferElementSchemaOfferElementCreatePatch, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (elementId === null || elementId === undefined) {
             throw new Error('Required parameter elementId was null or undefined when calling patchOfferElementOfferV2ElementElementIdPost.');
         }
-        if (offerElementCreatePatch === null || offerElementCreatePatch === undefined) {
-            throw new Error('Required parameter offerElementCreatePatch was null or undefined when calling patchOfferElementOfferV2ElementElementIdPost.');
+        if (schemasOfferV2OfferElementSchemaOfferElementCreatePatch === null || schemasOfferV2OfferElementSchemaOfferElementCreatePatch === undefined) {
+            throw new Error('Required parameter schemasOfferV2OfferElementSchemaOfferElementCreatePatch was null or undefined when calling patchOfferElementOfferV2ElementElementIdPost.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2013,7 +2015,7 @@ export class OfferV2Service extends BaseService {
         return this.httpClient.request<OfferElement>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: offerElementCreatePatch,
+                body: schemasOfferV2OfferElementSchemaOfferElementCreatePatch,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
