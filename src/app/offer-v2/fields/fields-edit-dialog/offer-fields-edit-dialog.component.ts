@@ -108,15 +108,15 @@ export default class OfferFieldsEditDialogComponent implements OnInit {
   }
 
   onCancelClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 
   subscription = {
     next: () => {
-      this.dialogRef.close();
+      this.dialogRef.close(true);
     },
     error: (error: any) => {
-      this.snackBar.open("Löschen fehlgeschlagen: " + error, "Ok", { duration: 8000 });
+      this.snackBar.open("Etwas ist schief gelaufen: " + error, "Ok", { duration: 8000 });
     }
   };
 

@@ -44,15 +44,6 @@ export default class OfferFieldsComponent implements OnInit {
 
   ngOnInit(): void {
     this.fieldsButtons.push({
-      name: () => ({ icon: "edit" }),
-      color: () => "accent",
-      selectedField: "",
-      navigate: (_, id) => {
-        this.offerService.getOfferFieldOfferV2FieldFieldIdGet(id).pipe(take(1)).subscribe(this.editSubscription);
-      },
-      class: () => ""
-    });
-    this.fieldsButtons.push({
       name: () => ({ icon: "delete" }),
       color: () => "accent",
       selectedField: "",
@@ -94,7 +85,7 @@ export default class OfferFieldsComponent implements OnInit {
                 unit: field.unit ? field.unit.short : " - "
               },
               route: () => {
-                // noop
+                this.offerService.getOfferFieldOfferV2FieldFieldIdGet(field.id).pipe(take(1)).subscribe(this.editSubscription);
               }
             });
         });
@@ -130,8 +121,10 @@ export default class OfferFieldsComponent implements OnInit {
       width: "1000px",
       data: { field }
     });
-    dialogRef.afterClosed().subscribe(() => {
-      this.fieldsDataSource.loadData();
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.fieldsDataSource.loadData();
+      }
     });
   }
 

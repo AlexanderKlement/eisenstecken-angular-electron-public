@@ -2,7 +2,7 @@ import { Component, ElementRef, inject, Input, OnInit, ViewChild } from "@angula
 import { ReactiveFormsModule } from "@angular/forms";
 import { DefaultFlexDirective, DefaultLayoutDirective, DefaultLayoutGapDirective } from "ng-flex-layout";
 import { MatButton } from "@angular/material/button";
-import { OfferV2Service } from "../../../api/openapi";
+import { OfferField, OfferV2Service } from "../../../api/openapi";
 import { take } from "rxjs/operators";
 import { MatFormField, MatHint, MatInput, MatLabel } from "@angular/material/input";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
@@ -10,7 +10,8 @@ import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 type HighlightedText = {
   key: string;
   value: string;
-  highlighted: boolean
+  highlighted: boolean;
+  warn: boolean;
 }
 
 type SearchTerm = {
@@ -46,6 +47,8 @@ export default class OfferCalculationInputComponent implements OnInit {
   @Input() value: string;
   @Input() label: string;
   @Input() setValue: (val: string) => void;
+  @Input() hintStyle: "big" | "small" | "offertext";
+  @Input() filterFields: OfferField[];
   parts: HighlightedText[] = [];
   private fields: string[];
   private maxLength = 0;
@@ -65,7 +68,7 @@ export default class OfferCalculationInputComponent implements OnInit {
       return this.getSearchTerm(value, cursorPos, count - 1);
     }
     const substr = value.substring(cursorPos - count, cursorPos);
-    if (/[^a-zA-Z@]/.test(substr)) {
+    if (/[^a-zA-ZäöüÄÖÜß@]/.test(substr)) {
       return this.getSearchTerm(value, cursorPos, count - 1);
     }
     const key = substr.replace("@", "");
@@ -89,8 +92,9 @@ export default class OfferCalculationInputComponent implements OnInit {
         return;
       }
       const searchTerm = this.getSearchTerm(val, cursorPos, this.maxLength);
+      const key = searchTerm.key.toLowerCase();
       if (searchTerm.valid) {
-        this.displayFields = this.fields.filter(field => field.toLowerCase().startsWith(searchTerm.key));
+        this.displayFields = this.fields.filter(field => field.toLowerCase().startsWith(key));
       } else {
         this.displayFields = null;
       }
@@ -105,7 +109,7 @@ export default class OfferCalculationInputComponent implements OnInit {
     const searchTerm = this.getSearchTerm(val, cursorPos, this.maxLength);
     const firstPart = val.substring(0, searchTerm.pos);
     const secondPart = val.substring(searchTerm.pos + searchTerm.original.length);
-    const newVal = firstPart + `${firstPart.at(-1) === " " ? "" : " "}@${field}${secondPart.startsWith(" ") ? "" : " "}` + secondPart;
+    const newVal = firstPart + `${firstPart.at(-1) === " " || searchTerm.pos === 0 ? "" : " "}@${field}${secondPart.startsWith(" ") ? "" : " "}` + secondPart;
     this.setValue(newVal);
     this.calculationInput.nativeElement.value = newVal;
     this.calculationInput.nativeElement.focus();
@@ -119,13 +123,17 @@ export default class OfferCalculationInputComponent implements OnInit {
     this.highlightsContainer.nativeElement.style.height = this.calculationInput.nativeElement.clientHeight + "px";
     this.highlightsContainer.nativeElement.style.width = this.calculationInput.nativeElement.clientWidth + "px";
     const parts = text.split(" ").reduce((prev, cur) => [...prev, cur, " "], []);
-    this.parts = parts.map((txt, index) => {
-      const highlighted = !!this.fields.find(field => `@${field}` === txt);
-      return {
-        key: `${txt}-${index}`,
-        value: txt,
-        highlighted
-      };
-    });
+    console.log({ text, parts });
+    if (this.fields) {
+      this.parts = parts.map((txt, index) => {
+        const highlighted = !!this.fields.find(field => `@${field}` === txt);
+        return {
+          key: `${txt}-${index}`,
+          value: txt,
+          highlighted,
+          warn: this.filterFields ? !this.filterFields.find(f => `@${f.label}` === txt) : false
+        };
+      });
+    }
   }
 }

@@ -32,16 +32,16 @@ export default class OfferElementTypesComponent implements OnInit {
       color: () => "accent",
       selectedField: "",
       navigate: (_, id) => {
-        // TODO
+        this.router.navigateByUrl(`/offer_v2/element_types/${id}/delete`).then();
       },
       class: () => ""
     });
     this.tableButtons.push({
-      name: () => ({ icon: "copy" }),
+      name: () => ({ icon: "content_copy" }),
       color: () => "accent",
       selectedField: "",
       navigate: (_, id) => {
-        // TODO
+        this.router.navigateByUrl(`/offer_v2/element_types/${id}/copy`).then();
       },
       class: () => ""
     });
@@ -65,12 +65,15 @@ export default class OfferElementTypesComponent implements OnInit {
             values: {
               id: type.id,
               name: type.name,
-              offertext: type.offertext.label,
-              price: type.price.label,
-              fields: type.fields.length + " Felder: " + type.fields.slice(0, 3).map(field => field.label).join(", ") + (type.fields.length > 3 ? "..." : "")
+              price: type.price,
+              offertext: type.offertext,
+              field1: type.fields.at(0)?.label ?? " - ",
+              field2: type.fields.at(1)?.label ?? " - ",
+              field3: type.fields.at(2)?.label ?? " - ",
+              extraFields: type.fields.length > 3 ? `+${type.fields.length - 3}` : " - "
             },
             route: () => {
-              // TODO
+              this.router.navigateByUrl(`/offer_v2/element_types/${type.id}`).then();
             }
           });
         });
@@ -81,18 +84,26 @@ export default class OfferElementTypesComponent implements OnInit {
           headerName: "Bezeichnung",
           sortable: true
         }, {
-          name: "offertext",
-          headerName: "Angebotstext",
-          sortable: true
-        }, {
           name: "price",
-          headerName: "Preisberechnung",
-          sortable: true
+          headerName: "Preisberechnung"
         }, {
-          name: "fields",
-          headerName: "Felder",
-          sortable: true
+          name: "offertext",
+          headerName: "Angebotstext"
+        }, {
+          name: "field1",
+          headerName: "Feld 1"
+        }, {
+          name: "field2",
+          headerName: "Feld 2"
+        }, {
+          name: "field3",
+          headerName: "Feld 3"
+        },
+        {
+          name: "extraFields",
+          headerName: "Felder"
         }
+
       ],
       (api) => api.countOfferElementTypesOfferV2CountElementTypesGet());
     this.elementTypesDataSource.loadData();

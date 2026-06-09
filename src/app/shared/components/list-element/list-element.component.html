@@ -1,0 +1,24 @@
+<div class="list-element" [class.dotted-accent]="dottedAccent"
+     [class.cursor-pointer]="pointer" (click)="clicked.emit()">
+  @if (isDraggable) {
+    <mat-icon class="left-icon cursor-drag" cdkDragHandle>drag_handle</mat-icon>
+  } @else if (leftIcon) {
+    <mat-icon [class.left-icon]="!centered">{{ leftIcon }}</mat-icon>
+  }
+  <div class="texts">
+    <span class="main">{{ mainText }}</span>
+    @if (subText) {
+      <span class="sub">{{ subText }}</span>
+    }
+  </div>
+  @if (!centered) {
+    <div fxFlex></div>
+
+    <ng-content></ng-content>
+    @if (rightIcon) {
+      <mat-icon class="right-icon" [class.cursor-pointer]="pointerRightIcon"
+                (click)="clickedRightIcon.emit()">{{ rightIcon }}
+      </mat-icon>
+    }
+  }
+</div>

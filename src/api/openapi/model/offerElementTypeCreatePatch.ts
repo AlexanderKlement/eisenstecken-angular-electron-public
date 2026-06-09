@@ -12,5 +12,7 @@
 export interface OfferElementTypeCreatePatch { 
     fieldIds: Array<number>;
     name: string;
+    offertext: string;
+    price: string;
 }
 

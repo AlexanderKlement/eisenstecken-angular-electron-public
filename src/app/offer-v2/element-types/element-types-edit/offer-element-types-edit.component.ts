@@ -14,11 +14,18 @@ import {
 import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
-import { fieldTypeToColor, fieldTypeToString, fieldTypeToTextColor } from "../../offer.util";
 import OfferFieldsComponent from "../../fields/offer-fields.component";
+import { ListElementComponent } from "../../../shared/components/list-element/list-element.component";
+import { OfferFieldTypePillComponent } from "../../offer-field-type-pill/offer-field-type-pill.component";
+import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from "@angular/cdk/drag-drop";
+import OfferCalculationInputComponent from "../../calculation-input/offer-calculation-input.component";
+import { ConfirmDialogComponent } from "../../../shared/components/confirm-dialog/confirm-dialog.component";
+import { MatDialog } from "@angular/material/dialog";
 
 type ElementTypeGroup = {
   name: FormControl<string>;
+  price: FormControl<string>;
+  offertext: FormControl<string>;
 }
 
 @Component({
@@ -37,7 +44,12 @@ type ElementTypeGroup = {
     MatLabel,
     MatButton,
     MatIcon,
-    MatSuffix
+    MatSuffix,
+    ListElementComponent,
+    OfferFieldTypePillComponent,
+    CdkDropList,
+    CdkDrag,
+    OfferCalculationInputComponent
   ]
 })
 export default class OfferElementTypesEditComponent implements OnInit {
@@ -48,13 +60,17 @@ export default class OfferElementTypesEditComponent implements OnInit {
   subTitle = "";
   elementTypeId: number;
   private snackBar = inject(MatSnackBar);
-  elementTypeGroup: FormGroup<ElementTypeGroup>;
-  fields: OfferField[];
-  selectedFields: OfferField[];
-  descField: OfferField;
-  offertextField: OfferField;
+  elementTypeGroup: FormGroup<ElementTypeGroup> = new FormGroup({
+    name: new FormControl(""),
+    price: new FormControl(""),
+    offertext: new FormControl("")
+  });
+  fields: OfferField[] = [];
+  displayFields: OfferField[] = [];
+  selectedFields: OfferField[] = [];
   dialogOpen = false;
   @ViewChild("search") searchInput: ElementRef<HTMLInputElement>;
+  private dialog = inject(MatDialog);
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -63,13 +79,12 @@ export default class OfferElementTypesEditComponent implements OnInit {
       } catch {
         // is createMode
       }
-      this.initData();
+      this.initData(params.method);
     });
     this.offerService.getOfferFieldsOfferV2FieldsGet().pipe(take(1)).subscribe({
       next: (result) => {
         this.fields = result;
-        this.descField = result.find(f => f.id === 1);
-        this.offertextField = result.find(f => f.id === 2);
+        this.displayFields = result.filter(this.fieldsFilter.bind(this));
       },
       error: error => {
         this.snackBar.open("Ein unerwarteter Fehler ist Aufgetreten: " + error, "Ok", { duration: 8000 });
@@ -78,13 +93,15 @@ export default class OfferElementTypesEditComponent implements OnInit {
     });
   }
 
-  initData() {
+  initData(method?: string) {
     if (this.elementTypeId) {
       this.offerService.getOfferElementTypeOfferV2ElementTypeElementTypeIdGet(this.elementTypeId).pipe(take(1)).subscribe(
         {
           next: data => {
             this.elementTypeGroup = new FormGroup({
-              name: new FormControl(data.name)
+              name: new FormControl(data.name),
+              price: new FormControl(data.price ?? ""),
+              offertext: new FormControl(data.offertext ?? "")
             });
             this.selectedFields = data.fields;
           },
@@ -96,12 +113,27 @@ export default class OfferElementTypesEditComponent implements OnInit {
         }
       );
       this.subTitle = "Elementtyp bearbeiten";
+      if (method === "copy") {
+        this.elementTypeId = undefined;
+        this.subTitle = "Elementtyp erstellen";
+      } else if (method === "delete") {
+        this.onDelete();
+      }
     } else {
       this.subTitle = "Elementtyp erstellen";
-      this.elementTypeGroup = new FormGroup({
-        name: new FormControl("")
-      });
-      this.selectedFields = [];
+    }
+  }
+
+  fieldsFilter(f: OfferField) {
+    return f.visible && !this.selectedFields.find(selF => selF.id === f.id);
+  }
+
+  onSearchField() {
+    const key = this.searchInput.nativeElement.value.toLowerCase();
+    if (key.length > 0) {
+      this.displayFields = this.fields.filter(f => this.fieldsFilter(f) && (f.label.toLowerCase().includes(key) || f.description.toLowerCase().includes(key)));
+    } else {
+      this.displayFields = this.fields.filter(this.fieldsFilter.bind(this));
     }
   }
 
@@ -114,11 +146,66 @@ export default class OfferElementTypesEditComponent implements OnInit {
   }
 
   onDelete() {
-    // TODO
+    if (this.elementTypeId) {
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        width: "400px",
+        data: {
+          title: "Elementtyp löschen?",
+          text: "Elementtyp wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden!"
+        }
+      });
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.offerService
+            .deleteOfferElementTypeOfferV2ElementTypeElementTypeIdDelete(this.elementTypeId)
+            .pipe(take(1))
+            .subscribe(this.subscription);
+        }
+      });
+    }
   }
 
   onSave() {
-    // TODO
+    if (this.elementTypeId) {
+      this.offerService.patchOfferElementTypeOfferV2ElementTypeElementTypeIdPost(this.elementTypeId, {
+        name: this.elementTypeGroup.get("name").value,
+        fieldIds: this.selectedFields.map(f => f.id),
+        offertext: this.elementTypeGroup.get("offertext").value ?? "",
+        price: this.elementTypeGroup.get("price").value ?? ""
+      }).pipe(take(1)).subscribe(this.subscription);
+    } else {
+      this.offerService.createOfferElementTypeOfferV2ElementTypePut({
+        name: this.elementTypeGroup.get("name").value,
+        fieldIds: this.selectedFields.map(f => f.id),
+        offertext: this.elementTypeGroup.get("offertext").value ?? "",
+        price: this.elementTypeGroup.get("price").value ?? ""
+      }).pipe(take(1)).subscribe(this.subscription);
+    }
+  }
+
+  subscription = {
+    next: () => {
+      this.router.navigateByUrl("/offer_v2/element_types").then();
+    },
+    error: (error: any) => {
+      this.snackBar.open("Etwas ist schief gelaufen: " + error, "Ok", { duration: 8000 });
+    }
+  };
+
+  onSetPrice(val: string) {
+    this.elementTypeGroup.patchValue({ price: val });
+  }
+
+  onSetOffertext(val: string) {
+    this.elementTypeGroup.patchValue({ offertext: val });
+  }
+
+  onNavCreateField() {
+    this.router.navigateByUrl("/offer_v2/fields").then();
+  }
+
+  onRemoveField(field: OfferField) {
+    this.selectedFields = this.selectedFields.filter(f => f.id !== field.id);
   }
 
   protected onAddField(field: OfferField) {
@@ -126,10 +213,13 @@ export default class OfferElementTypesEditComponent implements OnInit {
     this.closeFieldsDialog();
   }
 
-  protected readonly fieldTypeToString = fieldTypeToString;
+  protected onDrop($event: CdkDragDrop<any, any>) {
+    moveItemInArray(this.selectedFields, $event.previousIndex, $event.currentIndex);
+  }
+
   protected readonly OfferFieldsComponent = OfferFieldsComponent;
   protected readonly OfferFieldEnum = OfferFieldEnum;
-  protected readonly fieldTypeToColor = fieldTypeToColor;
-  protected readonly fieldTypeToTextColor = fieldTypeToTextColor;
+
+  protected readonly OfferFieldTypePillComponent = OfferFieldTypePillComponent;
 
 }

@@ -4,7 +4,7 @@
     <div class="highlight-backdrop" #highlightsContainer>
       <div class="highlights">
         @for (part of parts; track part.key) {
-          <span [class.mark]="part.highlighted">{{ part.value }}</span>
+          <span [class.mark]="part.highlighted" [class.warn]="part.warn">{{ part.value }}</span>
         }
       </div>
     </div>
@@ -12,31 +12,38 @@
               cdkAutosizeMinRows="3" #calculationInput matInput
               (input)="onCalculationKeyUp()" (mouseup)="onCalculationKeyUp()">{{ value }}</textarea>
     <mat-hint>
-      <code>&#64;Feldname</code> tippen um ein anderes Feld zu referenzieren. Operatoren: + (plus), - (minus), *
-      (mal), /
-      (geteilt)<br />
-      Es können alle Felder im System referenziert werden. Ein Element welches dieses Feld enthält, muss die
-      referenzieren Felder auch haben<br />
-      Weitere Referenzierungen: <code>&#64;parent.Feldname</code>,
-      <code>&#64;child.Elementname.Feldname</code><br />
-      Beispiele:
-      <ul>
-        <li>mit <code>&#64;child.Schrank.Höhe</code> wird das "Höhe" feld des Unterelement "Schrank"
-          referenziert
-        </li>
-        <li>mit <code>&#64;parent.Breite</code> wird das "Breite" feld des darüberligenden Element referenziert
-        </li>
-        <li>Volumen Kegel = <code>3.14 * &#64;Radius * &#64;Radius * &#64;Höhe * 1/3</code></li>
-      </ul>
+      @if (hintStyle !== 'offertext') {
+        <code>&#64;Feldname</code> tippen um ein anderes Feld zu referenzieren. Operatoren: + (plus), - (minus), *
+          (mal), /
+          (geteilt)<br />
+        @if (hintStyle !== "small") {
+          Es können alle Felder im System referenziert werden. Ein Element welches dieses Feld enthält, muss die
+            referenzieren Felder auch haben<br />
+          Weitere Referenzierungen: <code>&#64;parent.Feldname</code>,
+          <code>&#64;child.Elementname.Feldname</code><br />
+          Beispiele:
+          <ul>
+            <li>mit <code>&#64;child.Schrank.Höhe</code> wird das "Höhe" feld des Unterelement "Schrank"
+              referenziert
+            </li>
+            <li>mit <code>&#64;parent.Breite</code> wird das "Breite" feld des darüberligenden Element referenziert
+            </li>
+            <li>Volumen Kegel = <code>3.14 * &#64;Radius * &#64;Radius * &#64;Höhe * 1/3</code></li>
+          </ul>
+        }
+      } @else {
+        Definiere wie sich der Angebotstext zusammengesätzt.<br />
+        Mit
+        <code>&#64;children.angebotstext</code> werden die Angebotstexte aller sichtbaren Kinder eingefügt (jeweils auf einer neuen Zeile). Die Kinder werden dann im Angebot nicht separat nummeriert.
+      }
+
     </mat-hint>
   </mat-form-field>
-  @if (displayFields) {
-    <div fxLayout="row" fxLayoutGap="8" class="my-1">
-      @for (field of displayFields; track field) {
-        <button (click)="onFieldClick(displayFields[$index])" mat-stroked-button
-                class="autocomplete-button">{{ field }}
-        </button>
-      }
-    </div>
-  }
+  <div fxLayout="row" fxLayoutGap="8" class="my-1 autocomlete-buttons">
+    @for (field of displayFields; track field) {
+      <button (click)="onFieldClick(displayFields[$index])" mat-stroked-button
+              class="autocomplete-button">{{ field }}
+      </button>
+    }
+  </div>
 </div>

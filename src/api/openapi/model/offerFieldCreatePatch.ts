@@ -16,6 +16,7 @@ export interface OfferFieldCreatePatch {
     fieldType: OfferFieldEnum;
     label: string;
     unitId?: number | null;
+    visible?: boolean | null;
 }
 export namespace OfferFieldCreatePatch {
 }

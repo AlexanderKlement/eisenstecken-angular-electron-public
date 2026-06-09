@@ -119,8 +119,10 @@ export default class OfferLibrariesComponent implements OnInit {
       width: "1000px",
       data: { library }
     });
-    dialogRef.afterClosed().subscribe(() => {
-      this.librariesDataSource.loadData();
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.librariesDataSource.loadData();
+      }
     });
   }
 

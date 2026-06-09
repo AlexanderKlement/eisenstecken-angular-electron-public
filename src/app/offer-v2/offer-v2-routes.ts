@@ -44,6 +44,13 @@ const offerV2Routes: Routes = [{
   },
   canActivate: [AccessGuard]
 }, {
+  path: "offer_v2/element_types/:id/:method",
+  component: OfferElementTypesEditComponent,
+  data: {
+    requiresLogin: true
+  },
+  canActivate: [AccessGuard]
+}, {
   path: "offer_v2/libraries",
   component: OfferLibrariesComponent,
   data: {

@@ -114,8 +114,9 @@ export default class OfferUnitsComponent implements OnInit {
       width: "1000px",
       data: { unit }
     });
-    dialogRef.afterClosed().subscribe(() => {
-      this.unitsDatasource.loadData();
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result)
+        this.unitsDatasource.loadData();
     });
   }
 

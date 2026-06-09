@@ -15,7 +15,7 @@ export interface OfferElementType {
     fields: Array<OfferField>;
     id: number;
     name: string;
-    offertext: OfferField;
-    price: OfferField;
+    offertext: string;
+    price: string;
 }
 

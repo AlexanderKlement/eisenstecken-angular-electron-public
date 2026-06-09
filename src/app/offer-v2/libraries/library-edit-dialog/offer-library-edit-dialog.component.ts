@@ -107,12 +107,12 @@ export default class OfferLibraryEditDialogComponent implements OnInit {
   }
 
   onCancelClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 
   subscription = {
     next: () => {
-      this.dialogRef.close();
+      this.dialogRef.close(true);
     },
     error: (error: any) => {
       this.snackBar.open("Löschen fehlgeschlagen: " + error, "Ok", { duration: 8000 });
