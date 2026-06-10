@@ -61,7 +61,7 @@ export default class OfferCalculationInputComponent implements OnInit {
 
   ngOnInit(): void {
     this.offerService.getOfferFieldsOfferV2FieldsGet().pipe(take(1)).subscribe((data) => {
-      this.fields = globalKeywords.concat(data.map(d => d.label));
+      this.fields = globalKeywords.concat(data.map(d => d.label)).filter((k, idx, arr) => arr.indexOf(k) === idx);
       this.maxLength = Math.max(...this.fields.map(f => f.length));
       this.sync();
     });

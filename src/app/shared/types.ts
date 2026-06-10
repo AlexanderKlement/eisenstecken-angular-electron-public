@@ -23,6 +23,8 @@ import {
   OfferLibrary,
   OfferLibraryEntry,
   OfferLibraryListElement,
+  OfferTemplate,
+  OfferTemplateListElement,
   OfferUnit,
   OfferV2,
   OfferV2Version,
@@ -77,6 +79,8 @@ export type DataSourceClass =
   | OfferLibraryListElement
   | OfferLibrary
   | OfferLibraryEntry
+  | OfferTemplate
+  | OfferTemplateListElement
   | OrderSmall
   | TechnicalData
   | Credential

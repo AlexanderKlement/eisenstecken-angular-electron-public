@@ -121,6 +121,11 @@ model/offerLibraryCreatePatch.ts
 model/offerLibraryEntry.ts
 model/offerLibraryEntryCreatePatch.ts
 model/offerLibraryListElement.ts
+model/offerTemplate.ts
+model/offerTemplateCreatePatch.ts
+model/offerTemplateEntry.ts
+model/offerTemplateEntryCreatePatch.ts
+model/offerTemplateListElement.ts
 model/offerUnit.ts
 model/offerUnitCreatePatch.ts
 model/offerUpdate.ts
