@@ -1,10 +1,13 @@
 <div fxLayout="column" fxLayoutGap="16" class="my-1">
-  <mat-form-field appearance="fill" fxFlex>
+  <mat-form-field [appearance]="outline ? 'outline' : 'fill'" fxFlex>
     <mat-label>{{ label }}</mat-label>
     <div class="highlight-backdrop" #highlightsContainer>
       <div class="highlights">
         @for (part of parts; track part.key) {
           <span [class.mark]="part.highlighted" [class.warn]="part.warn">{{ part.value }}</span>
+          @if (part.hasNewline) {
+            <br />
+          }
         }
       </div>
     </div>

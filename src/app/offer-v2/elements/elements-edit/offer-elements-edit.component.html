@@ -14,7 +14,7 @@
     }
   </div>
 
-  <form [formGroup]="elementGroup">
+  <form [formGroup]="elementGroup" class="pb-3">
     <div fxLayout="column" fxLayoutAlign="space-around stretch">
       <div fxLayout="row" fxLayoutGap="16">
         <mat-form-field fxFlex>
@@ -49,7 +49,7 @@
               <div class="element-field">
                 <div class="element-field-header">
                   <strong>{{ control.controls.label.value }}</strong>
-                  <span>{{ fieldTypeToString(control.controls.fieldType.value) }}
+                  <span class="sub-header">{{ fieldTypeToString(control.controls.fieldType.value) }}
                     @if (control.controls.fieldType.value === OfferFieldEnum.Calculation || control.controls.fieldType.value === OfferFieldEnum.Numeric) {
                       &bullet;
                       {{ control.controls.unit.value }}
@@ -61,24 +61,40 @@
                   @if (control.controls.fieldType.value === OfferFieldEnum.Calculation || control.controls.fieldType.value === OfferFieldEnum.Offertext) {
                     <app-offer-calculation-input [value]="control.controls.value.value"
                                                  [setValue]="setDefaultVal.bind(this,idx)" label="Standartwert"
-                                                 hintStyle="small"></app-offer-calculation-input>
+                                                 hintStyle="small" outline></app-offer-calculation-input>
                   } @else {
                     <mat-checkbox formControlName="mandatory" class="form-control">Pflichtfeld</mat-checkbox>
                     <mat-checkbox formControlName="inherits" class="form-control">Vom übergeordneten Element erben
                     </mat-checkbox>
                     <div class="my-1"></div>
                     @if (control.controls.fieldType.value === OfferFieldEnum.Select) {
-                      <label id="radio-group-label">Bibliothek wählen</label>
-                      <mat-radio-group aria-labelledby="radio-group-label" formControlName="library"
-                                       class="vertical-radio">
-                        @if (libraries$|async; as libraries) {
-                          @for (library of libraries; track library.id) {
-                            <mat-radio-button [value]="library.id">{{ library.name }}</mat-radio-button>
-                          }
-                        }
+                      <mat-radio-group formControlName="useManualList">
+                        <mat-radio-button [value]="false">Aus Bibliothek</mat-radio-button>
+                        <mat-radio-button [value]="true">Manuelle Liste</mat-radio-button>
                       </mat-radio-group>
+                      @if (control.controls.useManualList.value) {
+                        <ng-container formArrayName="manualList">
+                          @for (mLControl of control.controls.manualList.controls; track mLControl.value; let mLIdx = $index) {
+                            <ng-container [formGroupName]="mLIdx">
+                              <mat-form-field appearance="outline" class="new-form-element">
+                                <input matInput formControlName="">
+                              </mat-form-field>
+                            </ng-container>
+                          }
+                        </ng-container>
+                      } @else {
+                        <label id="radio-group-label">Bibliothek wählen</label>
+                        <mat-radio-group aria-labelledby="radio-group-label" formControlName="library"
+                                         class="vertical-radio">
+                          @if (libraries$|async; as libraries) {
+                            @for (library of libraries; track library.id) {
+                              <mat-radio-button [value]="library.id">{{ library.name }}</mat-radio-button>
+                            }
+                          }
+                        </mat-radio-group>
+                      }
                     } @else {
-                      <mat-form-field fxFill appearance="fill">
+                      <mat-form-field fxFill appearance="outline">
                         <mat-label>Standartwert</mat-label>
                         <input class="form-control" matInput formControlName="value">
                       </mat-form-field>

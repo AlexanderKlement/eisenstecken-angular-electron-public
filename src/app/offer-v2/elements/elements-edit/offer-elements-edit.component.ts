@@ -8,7 +8,8 @@ import {
   OfferField,
   OfferFieldEnum,
   OfferLibraryListElement,
-  OfferV2Service
+  OfferV2Service,
+  SchemasOfferV2OfferElementFieldSchemaOfferElementCreatePatch
 } from "../../../../api/openapi";
 import { take } from "rxjs/operators";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -33,6 +34,7 @@ import { createConsolaReporter } from "@sentry/angular";
 import { MatCheckbox } from "@angular/material/checkbox";
 import OfferCalculationInputComponent from "../../calculation-input/offer-calculation-input.component";
 import { MatRadioButton, MatRadioGroup } from "@angular/material/radio";
+import { selectRequires } from "../../../shared/custom-validators";
 
 type ElementFieldGroup = {
   value: FormControl<string>,
@@ -40,6 +42,8 @@ type ElementFieldGroup = {
   fieldId: FormControl<number>,
   label: FormControl<string>,
   fieldType: FormControl<OfferFieldEnum>,
+  useManualList: FormControl<boolean>,
+  manualList: FormArray<FormControl<string>>,
   unit: FormControl<string>,
   inherits: FormControl<boolean>,
   mandatory: FormControl<boolean>,
@@ -126,10 +130,12 @@ export default class OfferElementsEditComponent implements OnInit {
                 inherits: new FormControl(field.inherits),
                 fieldId: new FormControl(field.field.id),
                 label: new FormControl(field.field.label),
+                useManualList: new FormControl(field.library?.name?.startsWith(`Manuelle Liste: ${data.name}`) ?? false),
+                manualList: new FormArray(field.library?.name?.startsWith(`Manuelle Liste: ${data.name}`) ? field.library.entries.map<FormControl<string>>(entry => new FormControl(entry.name)) : []),
                 unit: new FormControl(field.field.unit?.short ?? ""),
                 fieldType: new FormControl(field.field.fieldType),
                 id: new FormControl(field.id),
-                library: new FormControl(field.library?.id ?? -1)
+                library: new FormControl(field.library?.id ?? -1, field.field.fieldType === OfferFieldEnum.Select ? selectRequires : null)
               })))
             });
             this.selectedFields = data.fields;
@@ -165,17 +171,41 @@ export default class OfferElementsEditComponent implements OnInit {
 
   onSave() {
     this.loadingSubject.next(true);
+    let missingLibrary = false;
+    const fields = this.elementGroup.controls.fields.controls.map<SchemasOfferV2OfferElementFieldSchemaOfferElementCreatePatch>(grp => {
+      const library = grp.get("library").value;
+      if (grp.get("fieldType").value === OfferFieldEnum.Select && library === -1) {
+        missingLibrary = true;
+      }
+      return {
+        defaultValue: grp.get("value").value ?? "",
+        fieldId: grp.get("fieldId").value,
+        inherits: grp.get("inherits").value ?? false,
+        mandatory: grp.get("mandatory").value ?? false,
+        libraryId: library === -1 ? undefined : library
+      };
+    });
+    if (missingLibrary) {
+      this.snackBar.open("Eine Bibliothek muss ausgewählt werden für Auswahl Felder: ", "Ok", { duration: 8000 });
+      this.loadingSubject.next(false);
+      return;
+    }
+    if (!this.elementGroup.valid) {
+      this.snackBar.open("Bitte alle Felder kontrollieren: ", "Ok", { duration: 8000 });
+      this.loadingSubject.next(false);
+      return;
+    }
     if (this.elementId) {
       this.offerService.patchOfferElementOfferV2ElementElementIdPost(this.elementId, {
         name: this.elementGroup.get("name").value,
         elementTypeId: this.elementGroup.get("elementType").value,
-        fields: [] // TODO
+        fields
       }).pipe(take(1)).subscribe(this.subscription);
     } else {
       this.offerService.createOfferElementOfferV2ElementPut({
         name: this.elementGroup.get("name").value,
         elementTypeId: this.elementGroup.get("elementType").value,
-        fields: []
+        fields
       }).pipe(take(1)).subscribe(this.subscription);
     }
   }
@@ -194,10 +224,12 @@ export default class OfferElementsEditComponent implements OnInit {
           id: new FormControl(-1),
           inherits: new FormControl(false),
           value: new FormControl(f.fieldType === OfferFieldEnum.Calculation ? f.calculation : f.fieldType === OfferFieldEnum.Offertext ? f.calculation : ""),
-          library: new FormControl(-1),
+          library: new FormControl(-1, f.fieldType === OfferFieldEnum.Select ? selectRequires : null),
           label: new FormControl(f.label),
           unit: new FormControl(f.unit?.short ?? ""),
-          fieldType: new FormControl(f.fieldType)
+          fieldType: new FormControl(f.fieldType),
+          useManualList: new FormControl(false),
+          manualList: new FormArray([])
         }));
     });
   }

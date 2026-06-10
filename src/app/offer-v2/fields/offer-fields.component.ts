@@ -53,7 +53,7 @@ export default class OfferFieldsComponent implements OnInit {
         this.snackBar)
     );
 
-    this.fieldsHeaderButtons.push(headerNewButton("Neues Feld erstellen", this.openEditDialog));
+    this.fieldsHeaderButtons.push(headerNewButton("Neues Feld erstellen", this.openEditDialog.bind(this)));
     this.fieldsDataSource = new TableDataSource(
       this.offerService,
       (api, filter, sortDirection, skip, limit) =>
