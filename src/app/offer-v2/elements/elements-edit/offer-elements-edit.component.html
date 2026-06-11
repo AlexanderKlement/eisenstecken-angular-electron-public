@@ -59,8 +59,8 @@
                 <div class="element-field-content">
 
                   @if (control.controls.fieldType.value === OfferFieldEnum.Calculation || control.controls.fieldType.value === OfferFieldEnum.Offertext) {
-                    <app-offer-calculation-input [value]="control.controls.value.value"
-                                                 [setValue]="setDefaultVal.bind(this,idx)" label="Standartwert"
+                    <app-offer-calculation-input [value]="control.controls.value.value" readonly
+                                                 [setValue]="setDefaultVal.bind(this,idx)" label="Berechnung"
                                                  hintStyle="small" outline></app-offer-calculation-input>
                   } @else {
                     <mat-checkbox formControlName="mandatory" class="form-control">Pflichtfeld</mat-checkbox>

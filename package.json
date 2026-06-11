@@ -70,6 +70,7 @@
     "material-design-icons": "3.0.1",
     "ng-flex-layout": "21.2.9",
     "ngx-material-timepicker": "13.1.1",
+    "@ng-matero/extensions": "^21.2.1",
     "rxjs": "^7.4.0",
     "tslib": "^2.1.0",
     "yaml": "2.8.3",

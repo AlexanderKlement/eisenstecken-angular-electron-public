@@ -1,0 +1,56 @@
+<ng-container [formGroup]="entryGroup">
+  <div class="entry">
+    <div class="entry-header">
+      <div class="entry-header-row">
+        <mat-icon (click)="toggleOpen()" class="neutral">keyboard_arrow_down</mat-icon>
+        <span class="neutral">{{ prefix }}{{ index + 1 }}</span>
+        <app-offer-field-element-type-pill
+          [fieldType]="entryGroup.get('elementType').value"></app-offer-field-element-type-pill>
+        <app-offer-element-selector outline [setValue]="onSetElement.bind(this)"
+                                    [value]="entryGroup.get('elementId').value"
+                                    [valueName]="entryGroup.get('name').value"></app-offer-element-selector>
+        <div fxFlex></div>
+        <mat-icon class="neutral cursor-pointer" (click)="onAddChild()" title="Kind hinzufügen (Tab)">
+          subdirectory_arrow_right
+        </mat-icon>
+        <mat-icon class="neutral cursor-pointer" (click)="onAddNeighbour(index)" title="Nachbar hinzufügen (Enter)">add
+        </mat-icon>
+        <mat-icon class="neutral cursor-pointer" (click)="onDeleteElem(index)" title="Löschen (Entf)">delete</mat-icon>
+
+        <mat-icon class="neutral cursor-pointer" (click)="onCopyElem(index)" title="Dublizieren">content_copy
+        </mat-icon>
+        <mat-icon class="neutral cursor-pointer" (click)="toggleAlternative()" title="Als Alternative markieren">
+          compare_arrows
+        </mat-icon>
+        <mat-icon class="neutral cursor-pointer" (click)="togglePercent()"
+                  title="Sconto/Aufschlag für diese Posizionsetzen">
+          percent
+        </mat-icon>
+        <mat-icon class="neutral cursor-pointer" (click)="toggleVisibility()" title="Sichtbar im Angebot">
+          visibility
+        </mat-icon>
+        <strong>0,00 €</strong>
+      </div>
+      <mat-form-field>
+        <mat-label>Beschreibung</mat-label>
+        <input matInput>
+      </mat-form-field>
+      <div class="entry-fields" formArrayName="fields">
+        @for (field of entryGroup.controls.fields.controls; track field.controls; let idx = $index) {
+          <app-entry-field-edit></app-entry-field-edit>
+        }
+      </div>
+    </div>
+    <div class="entry-content" [class.close]="!open">
+      <ng-container formArrayName="children">
+        @for (control of entryGroup.controls.children.controls; track control.controls.id; let idx = $index) {
+          <app-offer-v2-entry-edit [entryGroup]="control"
+                                   [prefix]="prefix+(index + 1)+'.'" [index]="idx"
+                                   [onAddNeighbour]="onAddNeighbourHere.bind(this)"
+                                   [onDeleteElem]="onDeleteElemHere.bind(this)"
+          ></app-offer-v2-entry-edit>
+        }
+      </ng-container>
+    </div>
+  </div>
+</ng-container>

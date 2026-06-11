@@ -53,6 +53,7 @@ export default class OfferCalculationInputComponent implements OnInit {
   @Input() setValue: (val: string) => void;
   @Input() hintStyle: "big" | "small" | "offertext";
   @Input({ transform: booleanAttribute }) outline: boolean;
+  @Input({ transform: booleanAttribute }) readonly: boolean;
   @Input() filterFields: OfferField[];
   parts: HighlightedText[] = [];
   private fields: string[] = globalKeywords;

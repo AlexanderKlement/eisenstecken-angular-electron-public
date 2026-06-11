@@ -1,0 +1,49 @@
+<app-offer-container title="Templates">
+  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16">
+    <h3>{{ subTitle }}</h3>
+    <div fxFlex></div>
+    @if (loading$ | async) {
+      <div class="spinner-container">
+        <mat-spinner></mat-spinner>
+      </div>
+    } @else {
+      @if (!!templateId) {
+        <button mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
+      }
+      <button mat-raised-button color="primary" (click)="onSave()">Speichern</button>
+    }
+  </div>
+
+  <form [formGroup]="templateGroup" class="pb-3">
+    <div fxLayout="column" fxLayoutAlign="space-around stretch">
+      <div fxLayout="row" fxLayoutGap="16">
+        <mat-form-field fxFlex>
+          <mat-label>Name</mat-label>
+          <input class="form-control" formControlName="name" matInput>
+        </mat-form-field>
+        <mat-form-field fxFlex>
+          <mat-label>Beschreibung</mat-label>
+          <input class="form-control" formControlName="description" matInput>
+        </mat-form-field>
+      </div>
+
+      <h3>Struktur</h3>
+      <ng-container formArrayName="structure">
+        @for (conrol of templateGroup.controls.structure.controls; track conrol.controls.id; let idx = $index) {
+          <app-template-entry-edit [entryFormGroup]="conrol" [index]="idx"
+                                   [prefix]="''" [onAddNeighbour]="onAddNeighbour.bind(this)"
+                                   [onDeleteElem]="onDeleteElem.bind(this)"></app-template-entry-edit>
+        }
+      </ng-container>
+
+      @if (templateGroup.controls.structure.length === 0) {
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <button mat-raised-button (click)="onAddStructure()">
+            Neue Struktur
+          </button>
+        </div>
+      }
+    </div>
+  </form>
+
+</app-offer-container>

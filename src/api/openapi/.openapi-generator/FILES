@@ -130,9 +130,13 @@ model/offerUnit.ts
 model/offerUnitCreatePatch.ts
 model/offerUpdate.ts
 model/offerV2.ts
-model/offerV2Entry.ts
+model/offerV2Create.ts
 model/offerV2EntryField.ts
+model/offerV2EntryInput.ts
+model/offerV2EntryOutput.ts
+model/offerV2Patch.ts
 model/offerV2Version.ts
+model/offerV2WithVersion.ts
 model/order.ts
 model/orderArticleCreateV2.ts
 model/orderBundle.ts

@@ -8,14 +8,15 @@
  * Do not edit the class manually.
  */
 import { OfferV2EntryOutput } from './offerV2EntryOutput';
-import { OfferV2 } from './offerV2';
 
 
-export interface OfferV2Version { 
-    content: Array<OfferV2EntryOutput>;
+export interface OfferV2WithVersion { 
+    content?: Array<OfferV2EntryOutput>;
+    globalAddPercent: number;
+    globalPriceDiff: number;
+    globalSubPercent: number;
     id: number;
+    lastChanged: string;
     name: string;
-    offerV2: OfferV2;
-    timestamp: string;
 }
 

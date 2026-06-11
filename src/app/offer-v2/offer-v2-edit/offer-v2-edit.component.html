@@ -1,0 +1,93 @@
+<app-offer-container title="Angebote">
+  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16">
+    <h3>{{ subTitle }}</h3>
+    <div fxFlex></div>
+    @if (loading$ | async) {
+      <div class="spinner-container">
+        <mat-spinner></mat-spinner>
+      </div>
+    } @else {
+      @if (!!offerV2Id) {
+        <button mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
+      }
+      <button mat-raised-button color="primary" (click)="onSave()">Speichern</button>
+    }
+  </div>
+  <form [formGroup]="offerGroup">
+    @if (offerV2Id) {
+      <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="16">
+        <div fxLayout="column" fxLayoutAlign="space-around stretch" fxFlex fxLayoutGap="8">
+          <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start center">
+            <mat-form-field appearance="outline" class="new-form-element">
+              <mat-label>Name</mat-label>
+              <input class="form-control" formControlName="name" matInput>
+            </mat-form-field>
+            <div fxFlex></div>
+            <mat-form-field appearance="outline" class="new-form-element">
+              <mat-label>Aufschlag</mat-label>
+              <input matInput formControlName="globalAddPercent">
+              <mat-icon matSuffix>percent</mat-icon>
+            </mat-form-field>
+            <strong class="total">0,00 €</strong>
+          </div>
+          <ng-container formArrayName="content">
+            @for (group of offerGroup.controls.content.controls; track group.controls.id; let idx = $index) {
+              <app-offer-v2-entry-edit
+                [entryGroup]="group"
+                [index]="idx"
+                prefix=""
+                [onDeleteElem]="onDeleteContent.bind(this)"
+                [onAddNeighbour]="onAddContent.bind(this)"
+              ></app-offer-v2-entry-edit>
+            }
+            @if (offerGroup.controls.content.length === 0) {
+              <app-list-element leftIcon="add" mainText="Erstes Element hinzufügen" (clicked)="onAddContent(0)"
+                                dottedAccent centered pointer>
+              </app-list-element>
+            }
+          </ng-container>
+        </div>
+        <div class="preview">
+          <div class="preview-header">
+            <strong>Vorschau</strong>
+          </div>
+          <div class="preview-content no-preview">
+            <span class="neutral">Keine Sichtbaren Posizionen</span>
+          </div>
+          <div class="preview-footer">
+            <strong>Gesamt:</strong>
+            <strong>0,00 €</strong>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <div fxLayout="column" fxLayoutAlign="space-around stretch">
+        <div fxLayout="row" fxLayoutGap="16">
+          <mat-form-field fxFlex appearance="fill">
+            <mat-label>Name</mat-label>
+            <input class="form-control" formControlName="name" matInput>
+          </mat-form-field>
+          <mat-form-field appearance="fill" fxFlex>
+            <mat-label>Auftrag</mat-label>
+            <mtx-select
+              bindValue="id"
+              bindLabel="displayable_name"
+              panelClass="mtx-select-panel-container"
+              notFoundText="Kein element gefunden"
+              typeToSearchText="Tippen um Element zu suchen"
+              [minTermLength]="2"
+              [typeahead]="jobsInput$"
+              formControlName="jobId"
+              [clearable]="false"
+              [addTag]="false"
+              [editableSearchTerm]="true"
+              [trackByFn]="trackByFn"
+              [loading]="jobsLoading"
+              [items]="jobs$|async"
+            ></mtx-select>
+          </mat-form-field>
+        </div>
+      </div>
+    }
+  </form>
+</app-offer-container>

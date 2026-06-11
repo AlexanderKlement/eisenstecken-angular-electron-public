@@ -10,6 +10,7 @@ html {
 
 :root {
   font-family: Roboto, serif;
+  --mat-sys-on-surface: #000;
 }
 
 ::-webkit-scrollbar {
@@ -85,6 +86,13 @@ html {
   .mat-form-field-appearance-outline {
     margin-top: 6px;
   }
+}
+
+
+.mtx-select-panel-container {
+  background-color: #fff !important;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 10%) !important;
+  border-radius: 4px !important;
 }
 
 .my-shadow {

@@ -16,7 +16,9 @@ import { MatButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
 import OfferFieldsComponent from "../../fields/offer-fields.component";
 import { ListElementComponent } from "../../../shared/components/list-element/list-element.component";
-import { OfferFieldTypePillComponent } from "../../offer-field-type-pill/offer-field-type-pill.component";
+import {
+  OfferFieldElementTypePillComponent
+} from "../../offer-field-element-type-pill/offer-field-element-type-pill.component";
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from "@angular/cdk/drag-drop";
 import OfferCalculationInputComponent from "../../calculation-input/offer-calculation-input.component";
 import { MatDialog } from "@angular/material/dialog";
@@ -49,7 +51,7 @@ type ElementTypeGroup = {
     MatIcon,
     MatSuffix,
     ListElementComponent,
-    OfferFieldTypePillComponent,
+    OfferFieldElementTypePillComponent,
     CdkDropList,
     CdkDrag,
     OfferCalculationInputComponent,
@@ -220,6 +222,6 @@ export default class OfferElementTypesEditComponent implements OnInit {
   protected readonly OfferFieldsComponent = OfferFieldsComponent;
   protected readonly OfferFieldEnum = OfferFieldEnum;
 
-  protected readonly OfferFieldTypePillComponent = OfferFieldTypePillComponent;
+  protected readonly OfferFieldTypePillComponent = OfferFieldElementTypePillComponent;
 
 }

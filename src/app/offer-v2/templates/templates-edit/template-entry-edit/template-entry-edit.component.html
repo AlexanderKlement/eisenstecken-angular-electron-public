@@ -1,0 +1,32 @@
+<ng-container [formGroup]="entryFormGroup">
+  <div class="entry" [class.base]="prefix === ''">
+    <div class="entry-header">
+      <mat-icon (click)="toggleOpen()" class="neutral">keyboard_arrow_down</mat-icon>
+      <span class="neutral">{{ prefix }}{{ index + 1 }}</span>
+      <app-offer-field-element-type-pill
+        [fieldType]="entryFormGroup.get('elementType').value"></app-offer-field-element-type-pill>
+
+      <app-offer-element-selector outline [setValue]="onSetElement.bind(this)"
+                                  [value]="entryFormGroup.get('elementId').value"
+                                  [valueName]="entryFormGroup.get('elementName').value"></app-offer-element-selector>
+      <div fxFlex></div>
+      <mat-icon class="neutral cursor-pointer" (click)="onAddChild()" title="Kind hinzufügen (Tab)">
+        subdirectory_arrow_right
+      </mat-icon>
+      <mat-icon class="neutral cursor-pointer" (click)="onAddNeighbour(index)" title="Nachbar hinzufügen (Enter)">add
+      </mat-icon>
+      <mat-icon class="neutral cursor-pointer" (click)="onDeleteElem(index)" title="Löschen (Entf)">delete</mat-icon>
+    </div>
+    <div class="entry-content" [class.close]="!open">
+      <ng-container formArrayName="children">
+        @for (control of entryFormGroup.controls.children.controls; track control.controls.id; let idx = $index) {
+          <app-template-entry-edit [entryFormGroup]="control"
+                                   [prefix]="prefix+(index + 1)+'.'" [index]="idx"
+                                   [onAddNeighbour]="onAddNeighbourHere.bind(this)"
+                                   [onDeleteElem]="onDeleteElemHere.bind(this)"
+          ></app-template-entry-edit>
+        }
+      </ng-container>
+    </div>
+  </div>
+</ng-container>

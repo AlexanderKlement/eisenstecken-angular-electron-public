@@ -6,7 +6,7 @@ import { Observable } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { take } from "rxjs/operators";
 
-export function fieldTypeToString(type: OfferFieldEnum) {
+export function fieldTypeToString(type: OfferFieldEnum | string) {
   switch (type) {
     case OfferFieldEnum.String:
       return "Text";
@@ -20,10 +20,12 @@ export function fieldTypeToString(type: OfferFieldEnum) {
       return "Auswahl";
     case OfferFieldEnum.Offertext:
       return "Angebotstext";
+    default:
+      return type;
   }
 }
 
-export function fieldTypeToColor(type: OfferFieldEnum) {
+export function fieldTypeToColor(type: OfferFieldEnum | string) {
   switch (type) {
     case OfferFieldEnum.String:
       return "#E6E6E6";
@@ -36,6 +38,8 @@ export function fieldTypeToColor(type: OfferFieldEnum) {
     case OfferFieldEnum.Select:
       return "#FCDCCF";
     case OfferFieldEnum.Offertext:
+      return "#E6E6E6";
+    default:
       return "#E6E6E6";
   }
 }

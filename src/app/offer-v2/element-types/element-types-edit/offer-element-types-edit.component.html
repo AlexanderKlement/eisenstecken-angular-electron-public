@@ -25,7 +25,7 @@
       <h3>Felder</h3>
       <app-list-element leftIcon="lock" rightIcon="lock" mainText="Beschreibung"
                         subText="Systemfeld">
-        <app-offer-field-type-pill fieldType="TEXT"></app-offer-field-type-pill>
+        <app-offer-field-element-type-pill fieldType="TEXT"></app-offer-field-element-type-pill>
       </app-list-element>
       <div cdkDropList (cdkDropListDropped)="onDrop($event)" class="draggable-list">
         @for (field of selectedFields; track field.id) {
@@ -33,7 +33,7 @@
                             cdkDragBoundary=".draggable-list"
                             (clickedRightIcon)="onRemoveField(field)" [mainText]="field.label"
                             [subText]="field.fieldType === OfferFieldEnum.Calculation ? field.calculation : field.unit?.short">
-            <app-offer-field-type-pill [fieldType]="field.fieldType"></app-offer-field-type-pill>
+            <app-offer-field-element-type-pill [fieldType]="field.fieldType"></app-offer-field-element-type-pill>
           </app-list-element>
         }
       </div>
@@ -66,7 +66,7 @@
       </mat-form-field>
       @for (field of displayFields; track field.id) {
         <app-list-element [mainText]="field.label" pointer [subText]="field.unit?.short" (clicked)="onAddField(field)">
-          <app-offer-field-type-pill [fieldType]="field.fieldType"></app-offer-field-type-pill>
+          <app-offer-field-element-type-pill [fieldType]="field.fieldType"></app-offer-field-element-type-pill>
         </app-list-element>
       }
       <button mat-stroked-button color="primary" class="my-2" (click)="onNavCreateField()">Neues Feld erstellen</button>

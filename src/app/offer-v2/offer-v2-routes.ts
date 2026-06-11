@@ -10,6 +10,8 @@ import OfferElementTypesEditComponent from "./element-types/element-types-edit/o
 import OfferLibraryEditComponent from "./libraries/library-edit/offer-library-edit.component";
 import OfferElementsComponent from "./elements/offer-elements.component";
 import OfferElementsEditComponent from "./elements/elements-edit/offer-elements-edit.component";
+import OfferTemplatesEditComponent from "./templates/templates-edit/offer-templates-edit.component";
+import { OfferV2EditComponent } from "./offer-v2-edit/offer-v2-edit.component";
 
 const offerV2Routes: Routes = [
   {
@@ -21,8 +23,24 @@ const offerV2Routes: Routes = [
     canActivate: [AccessGuard]
   },
   {
-    path: "offer_v2/offer/:job_id",
+    path: "offer_v2/job/:job_id",
     component: OfferV2Component,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/offer/:id",
+    component: OfferV2EditComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/offer/:id/:method",
+    component: OfferV2EditComponent,
     data: {
       requiresLogin: true
     },
@@ -110,6 +128,22 @@ const offerV2Routes: Routes = [
   {
     path: "offer_v2/templates",
     component: OfferTemplatesComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/templates/:id",
+    component: OfferTemplatesEditComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/templates/:id/:method",
+    component: OfferTemplatesEditComponent,
     data: {
       requiresLogin: true
     },

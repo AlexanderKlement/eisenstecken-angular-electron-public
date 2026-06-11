@@ -23,7 +23,9 @@ import {
 import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
 import OfferFieldsComponent from "../../fields/offer-fields.component";
-import { OfferFieldTypePillComponent } from "../../offer-field-type-pill/offer-field-type-pill.component";
+import {
+  OfferFieldElementTypePillComponent
+} from "../../offer-field-element-type-pill/offer-field-element-type-pill.component";
 import { MatDialog } from "@angular/material/dialog";
 import { AsyncPipe } from "@angular/common";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
@@ -270,7 +272,7 @@ export default class OfferElementsEditComponent implements OnInit {
   protected readonly OfferFieldsComponent = OfferFieldsComponent;
   protected readonly OfferFieldEnum = OfferFieldEnum;
 
-  protected readonly OfferFieldTypePillComponent = OfferFieldTypePillComponent;
+  protected readonly OfferFieldTypePillComponent = OfferFieldElementTypePillComponent;
 
   protected readonly fieldTypeToString = fieldTypeToString;
   protected readonly createConsolaReporter = createConsolaReporter;

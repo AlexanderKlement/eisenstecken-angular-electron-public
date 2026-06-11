@@ -1,0 +1,27 @@
+<mat-form-field
+  [appearance]="outline ? 'outline' : 'fill'"
+  [class.new-form-element]="outline"
+  class="select-container">
+  @if (label) {
+    <mat-label>{{ label }}</mat-label>
+  }
+  <mtx-select
+    class="select-container"
+    [items]="elements$|async"
+    bindValue="id"
+    bindLabel="name"
+    [loading]="elementsLoading"
+    [trackByFn]="trackByFn"
+    [minTermLength]="2"
+    [typeahead]="elementsInput$"
+    [value]="value"
+    [clearable]="false"
+    [addTag]="false"
+    [editableSearchTerm]="true"
+    panelClass="mtx-select-panel-container"
+    notFoundText="Kein element gefunden"
+    typeToSearchText="Tippen um Element zu suchen"
+    (change)="onChange($event)"
+  >
+  </mtx-select>
+</mat-form-field>
