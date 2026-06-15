@@ -6,14 +6,17 @@ import {
 } from "../../offer-field-element-type-pill/offer-field-element-type-pill.component";
 import { DefaultFlexDirective } from "ng-flex-layout";
 import OfferElementSelectorComponent from "../../element-selector/offer-element-selector.component";
-import { OfferElementListElement, OfferV2Service } from "../../../../api/openapi";
+import { OfferElementListElement, OfferV2EntryOutput, OfferV2Service } from "../../../../api/openapi";
 import { take } from "rxjs/operators";
 import {
   EntryFieldEditComponent,
+  mapEntryToEntryFieldGroup,
   newOfferEntryFieldGroupFormField,
   OfferEntryFieldGroup
 } from "./entry-field-edit/entry-field-edit.component";
 import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
+import { priceEvaluationElementGroup } from "../../calculation-input/offer-calculation-utils";
+import { formatCurrency } from "@angular/common";
 
 export declare type OfferEntryGroup = {
   alternative: FormControl<boolean>;
@@ -25,11 +28,16 @@ export declare type OfferEntryGroup = {
   priceChangePercent: FormControl<number>;
   visibleOffer: FormControl<boolean>;
   children: FormArray<FormGroup<OfferEntryGroup>>;
-  fields: FormArray<FormGroup<OfferEntryFieldGroup>>; //TODO i think i need description here
+  fields: FormArray<FormGroup<OfferEntryFieldGroup>>;
+  description: FormControl<string>;
+  price: FormControl<string>;
+  offertext: FormControl<string>;
+  priceCalculated: FormControl<number>;
+  priceFormula: FormControl<string>;
 }
 
 export function newEmptyOfferEntryGroup() {
-  return new FormGroup({
+  const grp = new FormGroup<OfferEntryGroup>({
     name: new FormControl(""),
     id: new FormControl(""),
     elementId: new FormControl(-1),
@@ -39,8 +47,42 @@ export function newEmptyOfferEntryGroup() {
     visibleOffer: new FormControl(true),
     alternative: new FormControl(false),
     priceChangePercent: new FormControl(0),
-    fields: new FormArray([])
+    fields: new FormArray([]),
+    description: new FormControl(""),
+    price: new FormControl(""),
+    offertext: new FormControl(""),
+    priceCalculated: new FormControl(0),
+    priceFormula: new FormControl("")
   });
+  grp.valueChanges.subscribe(() => {
+    priceEvaluationElementGroup(grp);
+  });
+  return grp;
+}
+
+export function mapEntryOfferEntryGroup(entry: OfferV2EntryOutput) {
+
+  const grp = new FormGroup<OfferEntryGroup>({
+    name: new FormControl(entry.name),
+    id: new FormControl(entry.id),
+    elementId: new FormControl(-1),
+    elementType: new FormControl(entry.elementType),
+    children: new FormArray(entry.children.map(c => mapEntryOfferEntryGroup(c))),
+    amount: new FormControl(entry.amount),
+    visibleOffer: new FormControl(entry.visibleOffer),
+    alternative: new FormControl(entry.alternative),
+    priceChangePercent: new FormControl(entry.priceChangePercent),
+    fields: new FormArray(entry.fields.map(mapEntryToEntryFieldGroup)),
+    description: new FormControl(entry.description),
+    price: new FormControl(entry.price),
+    offertext: new FormControl(entry.offertext),
+    priceCalculated: new FormControl(0),
+    priceFormula: new FormControl("")
+  });
+  grp.valueChanges.subscribe(() => {
+    priceEvaluationElementGroup(grp);
+  });
+  return grp;
 }
 
 @Component({
@@ -64,6 +106,7 @@ export class OfferV2EntryEditComponent {
   @Input() entryGroup: FormGroup<OfferEntryGroup>;
   @Input() prefix: string;
   @Input() index: number;
+  @Input() depth: number;
   @Input() onDeleteElem: (index: number) => void;
   @Input() onCopyElem: (index: number) => void;
   @Input() onAddNeighbour: (index: number) => void;
@@ -91,6 +134,8 @@ export class OfferV2EntryEditComponent {
     this.entryGroup.patchValue({
       elementId: val.id,
       elementType: val.elementType.name,
+      price: val.elementType.price,
+      offertext: val.elementType.offertext,
       name: val.name
     });
     this.offerService.getOfferElementOfferV2ElementElementIdGet(val.id).pipe(take(1)).subscribe((elem) => {
@@ -113,4 +158,5 @@ export class OfferV2EntryEditComponent {
     this.entryGroup.controls.children.removeAt(index);
   }
 
+  protected readonly formatCurrency = formatCurrency;
 }

@@ -60,10 +60,11 @@ export default class OfferV2Component implements OnInit {
         dataSourceClasses.forEach((dataSource) => {
           rows.push({
             values: {
-              name: dataSource.id.toString(10),
-              client: "Job",
-              lastChanged: new Date(dataSource.lastChanged).toLocaleString(),
-              actions: " - "
+              id: dataSource.id,
+              name: dataSource.name,
+              job: dataSource.job.name,
+              client: dataSource.job.client.fullname,
+              lastChanged: new Date(dataSource.lastChanged).toLocaleString()
             },
             route: () => {
               // noop
@@ -74,6 +75,7 @@ export default class OfferV2Component implements OnInit {
       },
       [
         { name: "name", headerName: "Bezeichnung" },
+        { name: "job", headerName: "Auftrag" },
         { name: "client", headerName: "Kunde" },
         { name: "lastChanged", headerName: "Zuletzt geändert" }
       ],

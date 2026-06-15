@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { JobSmall } from './jobSmall';
 import { OfferV2EntryOutput } from './offerV2EntryOutput';
 
 
@@ -16,7 +17,8 @@ export interface OfferV2WithVersion {
     globalPriceDiff: number;
     globalSubPercent: number;
     id: number;
-    lastChanged: string;
+    job: JobSmall;
+    lastChanged: string | null;
     name: string;
 }
 

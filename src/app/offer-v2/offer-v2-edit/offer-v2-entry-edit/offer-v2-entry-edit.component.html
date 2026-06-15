@@ -6,7 +6,7 @@
         <span class="neutral">{{ prefix }}{{ index + 1 }}</span>
         <app-offer-field-element-type-pill
           [fieldType]="entryGroup.get('elementType').value"></app-offer-field-element-type-pill>
-        <app-offer-element-selector outline [setValue]="onSetElement.bind(this)"
+        <app-offer-element-selector label="Element" outline [setValue]="onSetElement.bind(this)"
                                     [value]="entryGroup.get('elementId').value"
                                     [valueName]="entryGroup.get('name').value"></app-offer-element-selector>
         <div fxFlex></div>
@@ -29,22 +29,36 @@
         <mat-icon class="neutral cursor-pointer" (click)="toggleVisibility()" title="Sichtbar im Angebot">
           visibility
         </mat-icon>
-        <strong>0,00 €</strong>
+        <strong
+          [title]="entryGroup.get('priceFormula').value">{{ formatCurrency(this.entryGroup.get("priceCalculated").value, "de-DE", "EUR") }}</strong>
       </div>
-      <mat-form-field>
-        <mat-label>Beschreibung</mat-label>
-        <input matInput>
-      </mat-form-field>
-      <div class="entry-fields" formArrayName="fields">
-        @for (field of entryGroup.controls.fields.controls; track field.controls; let idx = $index) {
-          <app-entry-field-edit></app-entry-field-edit>
-        }
+
+      @if (percent) {
+        <mat-form-field appearance="outline" class="new-form-element">
+          <mat-label>Skonto/Aufschlag</mat-label>
+          <input matInput formControlName="priceChangePercent">
+        </mat-form-field>
+      }
+      @if (entryGroup.get('elementId').value !== -1) {
+        <mat-form-field appearance="outline" class="new-form-element">
+          <mat-label>Beschreibung</mat-label>
+          <textarea matInput formControlName="description"></textarea>
+        </mat-form-field>
+      }
+      <div class="entry-fields">
+
+        <ng-container formArrayName="fields">
+          @for (field of entryGroup.controls.fields.controls; track field.controls; let idx = $index) {
+            <app-entry-field-edit [entryFormGroup]="field"></app-entry-field-edit>
+          }
+        </ng-container>
       </div>
     </div>
     <div class="entry-content" [class.close]="!open">
       <ng-container formArrayName="children">
         @for (control of entryGroup.controls.children.controls; track control.controls.id; let idx = $index) {
           <app-offer-v2-entry-edit [entryGroup]="control"
+                                   [depth]="depth+1"
                                    [prefix]="prefix+(index + 1)+'.'" [index]="idx"
                                    [onAddNeighbour]="onAddNeighbourHere.bind(this)"
                                    [onDeleteElem]="onDeleteElemHere.bind(this)"

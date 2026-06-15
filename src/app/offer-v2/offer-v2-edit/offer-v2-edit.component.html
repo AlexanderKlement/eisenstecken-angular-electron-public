@@ -28,13 +28,14 @@
               <input matInput formControlName="globalAddPercent">
               <mat-icon matSuffix>percent</mat-icon>
             </mat-form-field>
-            <strong class="total">0,00 €</strong>
+            <strong class="total" [title]="formula">{{ priceAsCurrency }}</strong>
           </div>
           <ng-container formArrayName="content">
             @for (group of offerGroup.controls.content.controls; track group.controls.id; let idx = $index) {
               <app-offer-v2-entry-edit
                 [entryGroup]="group"
                 [index]="idx"
+                [depth]="0"
                 prefix=""
                 [onDeleteElem]="onDeleteContent.bind(this)"
                 [onAddNeighbour]="onAddContent.bind(this)"
@@ -52,11 +53,11 @@
             <strong>Vorschau</strong>
           </div>
           <div class="preview-content no-preview">
-            <span class="neutral">Keine Sichtbaren Posizionen</span>
+            <span class="neutral">{{ offertext }}</span>
           </div>
           <div class="preview-footer">
             <strong>Gesamt:</strong>
-            <strong>0,00 €</strong>
+            <strong>{{ priceAsCurrency }}</strong>
           </div>
         </div>
       </div>

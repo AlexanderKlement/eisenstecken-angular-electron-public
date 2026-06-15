@@ -11,7 +11,6 @@ import { OfferField } from './offerField';
 
 
 export interface OfferElementType { 
-    description: OfferField;
     fields: Array<OfferField>;
     id: number;
     name: string;

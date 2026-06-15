@@ -14,8 +14,11 @@
     <textarea type="text" [readonly]="readonly" class="calculation-textarea" cdkTextareaAutosize
               cdkAutosizeMinRows="3" #calculationInput matInput
               (input)="onCalculationKeyUp()" (mouseup)="onCalculationKeyUp()">{{ value }}</textarea>
+    <mat-icon matSuffix class="neutral" (click)="fieldSuffix?.onClick()">{{ fieldSuffix?.icon }}</mat-icon>
     <mat-hint>
-      @if (hintStyle !== 'offertext') {
+      @if (hintStyle === "none") {
+
+      } @else if (hintStyle !== 'offertext') {
         <code>&#64;Feldname</code> tippen um ein anderes Feld zu referenzieren. Operatoren: + (plus), - (minus), *
           (mal), /
           (geteilt)<br />

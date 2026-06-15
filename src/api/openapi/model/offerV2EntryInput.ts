@@ -14,10 +14,13 @@ export interface OfferV2EntryInput {
     alternative: boolean;
     amount?: number;
     children?: Array<OfferV2EntryInput>;
+    description: string;
     elementType: string;
     fields?: Array<OfferV2EntryField>;
     id: string;
     name: string;
+    offertext: string;
+    price: string;
     priceChangePercent?: number | null;
     visibleOffer?: boolean;
 }

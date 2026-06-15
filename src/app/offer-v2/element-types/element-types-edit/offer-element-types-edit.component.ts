@@ -221,7 +221,5 @@ export default class OfferElementTypesEditComponent implements OnInit {
 
   protected readonly OfferFieldsComponent = OfferFieldsComponent;
   protected readonly OfferFieldEnum = OfferFieldEnum;
-
-  protected readonly OfferFieldTypePillComponent = OfferFieldElementTypePillComponent;
-
+  
 }

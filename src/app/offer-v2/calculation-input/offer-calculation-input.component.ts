@@ -4,8 +4,10 @@ import { DefaultFlexDirective, DefaultLayoutDirective, DefaultLayoutGapDirective
 import { MatButton } from "@angular/material/button";
 import { OfferField, OfferV2Service } from "../../../api/openapi";
 import { take } from "rxjs/operators";
-import { MatFormField, MatHint, MatInput, MatLabel } from "@angular/material/input";
+import { MatFormField, MatHint, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
+import { MatIcon } from "@angular/material/icon";
+import { globalKeywords, KeywordRegExp, nestingKeywords } from "./offer-calculation-utils";
 
 type HighlightedText = {
   key: string;
@@ -14,7 +16,10 @@ type HighlightedText = {
   warn: boolean;
   hasNewline: boolean;
 }
-
+type Suffix = {
+  icon: string;
+  onClick?: () => void;
+}
 type SearchTerm = {
   pos: number;
   hasAt: boolean;
@@ -22,10 +27,6 @@ type SearchTerm = {
   valid: boolean;
   original: string;
 }
-const nestingKeywords = ["children", "parent"];
-// Matches @Feldname, @children.Feldname, @parent.Feldname
-const KeywordRegExp = new RegExp(`@(?:(?:${nestingKeywords.join("|")})\\.)?[a-zA-ZäöüÄÖÜß]+`, "g");
-const globalKeywords = ["Beschreibung", "Angebotstext", ...nestingKeywords];
 @Component({
   selector: "app-offer-calculation-input",
   templateUrl: "./offer-calculation-input.component.html",
@@ -40,7 +41,9 @@ const globalKeywords = ["Beschreibung", "Angebotstext", ...nestingKeywords];
     MatLabel,
     MatHint,
     MatInput,
-    CdkTextareaAutosize
+    CdkTextareaAutosize,
+    MatIcon,
+    MatSuffix
   ]
 })
 export default class OfferCalculationInputComponent implements OnInit {
@@ -51,10 +54,11 @@ export default class OfferCalculationInputComponent implements OnInit {
   @Input() value: string;
   @Input() label: string;
   @Input() setValue: (val: string) => void;
-  @Input() hintStyle: "big" | "small" | "offertext";
+  @Input() hintStyle: "big" | "small" | "offertext" | "none";
   @Input({ transform: booleanAttribute }) outline: boolean;
   @Input({ transform: booleanAttribute }) readonly: boolean;
   @Input() filterFields: OfferField[];
+  @Input() fieldSuffix?: Suffix;
   parts: HighlightedText[] = [];
   private fields: string[] = globalKeywords;
   private maxLength = Math.max(...globalKeywords.map(f => f.length));

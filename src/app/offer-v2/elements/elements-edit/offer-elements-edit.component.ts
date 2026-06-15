@@ -55,7 +55,9 @@ type ElementFieldGroup = {
 type ElementGroup = {
   name: FormControl<string>;
   elementType: FormControl<number>;
-  fields: FormArray<FormGroup<ElementFieldGroup>>
+  fields: FormArray<FormGroup<ElementFieldGroup>>;
+  offertext: FormControl<string>;
+  price: FormControl<string>;
 }
 
 @Component({
@@ -95,7 +97,9 @@ export default class OfferElementsEditComponent implements OnInit {
   elementGroup: FormGroup<ElementGroup> = new FormGroup({
     name: new FormControl(""),
     elementType: new FormControl(-1),
-    fields: new FormArray([])
+    fields: new FormArray([]),
+    offertext: new FormControl(""),
+    price: new FormControl("")
   });
   elementTypes$: Observable<OfferElementType[]>;
   libraries$: Observable<OfferLibraryListElement[]>;
@@ -126,6 +130,8 @@ export default class OfferElementsEditComponent implements OnInit {
             this.elementGroup = new FormGroup({
               name: new FormControl(data.name),
               elementType: new FormControl(data.elementType.id),
+              price: new FormControl(data.elementType.price),
+              offertext: new FormControl(data.elementType.offertext),
               fields: new FormArray(data.fields.map(field => new FormGroup<ElementFieldGroup>({
                 value: new FormControl(field.defaultValue),
                 mandatory: new FormControl(field.mandatory),

@@ -1,1 +1,31 @@
-<p>entry-field-edit works!</p>
+<ng-container [formGroup]="entryFormGroup">
+  @if (entryFormGroup.get("type").value === OfferFieldEnum.String || entryFormGroup.get("type").value === OfferFieldEnum.Calculation || entryFormGroup.get("type").value === OfferFieldEnum.Numeric) {
+    <mat-form-field appearance="outline" class="new-form-element">
+      <mat-label>{{ entryFormGroup.get("label").value }}</mat-label>
+      <input matInput [readonly]="entryFormGroup.get('type').value === OfferFieldEnum.Calculation"
+             formControlName="value">
+      <mat-icon class="neutral" matSuffix
+                (click)="onReset()">{{ entryFormGroup.get('type').value === OfferFieldEnum.Calculation ? '' : 'rotate_left' }}
+      </mat-icon>
+    </mat-form-field>
+  } @else if (entryFormGroup.get("type").value === OfferFieldEnum.Text) {
+    <mat-form-field appearance="outline" class="new-form-element">
+      <mat-label>{{ entryFormGroup.get("label").value }}</mat-label>
+      <textarea matInput formControlName="value"></textarea>
+      <mat-icon class="neutral" matSuffix (click)="onReset()">rotate_left</mat-icon>
+    </mat-form-field>
+  } @else if (entryFormGroup.get("type").value === OfferFieldEnum.Select) {
+    @if (library$|async; as library) {
+      <mat-form-field appearance="outline" class="new-form-element">
+        <mat-label>{{ library.name }} auswählen</mat-label>
+        <mat-select formControlName="value" (selectionChange)="onSelectionChanged()">
+          @for (entry of library.entries; track entry.id) {
+            <mat-option [value]="entry.id">{{ entry.name }}</mat-option>
+          }
+        </mat-select>
+        <mat-icon class="neutral" matSuffix (click)="onReset()">rotate_left</mat-icon>
+      </mat-form-field>
+    }
+  }
+
+</ng-container>

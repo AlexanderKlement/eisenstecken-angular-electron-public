@@ -43,6 +43,29 @@
             Elementtyp bearbeiten
           </button>
         </div>
+
+        <div class="element-field">
+          <div class="element-field-header">
+            <strong>Beschreibung</strong>
+            <span class="sub-header"></span>
+          </div>
+        </div>
+        @if (elementGroup.get("price").value !== "") {
+          <div class="element-field">
+            <div class="element-field-header">
+              <strong>Preisberechnung</strong>
+              <span class="sub-header">{{ elementGroup.get("price").value }}</span>
+            </div>
+          </div>
+        }
+        @if (elementGroup.get("offertext").value !== "") {
+          <div class="element-field">
+            <div class="element-field-header">
+              <strong>Angebotstext</strong>
+              <span class="sub-header">{{ elementGroup.get("offertext").value }}</span>
+            </div>
+          </div>
+        }
         <ng-container formArrayName="fields">
           @for (control of elementGroup.controls.fields.controls; track control.controls.id; let idx = $index) {
             <ng-container [formGroupName]="idx">

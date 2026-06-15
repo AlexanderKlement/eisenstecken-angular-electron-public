@@ -7,19 +7,17 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { OfferUnit } from './offerUnit';
 import { OfferFieldEnum } from './offerFieldEnum';
 
 
 export interface OfferV2EntryField { 
-    calculation?: string | null;
+    calculation: string;
     default_value: string;
-    description: string;
+    inherits: boolean;
     label: string;
     libraryId?: number | null;
     mandatory: boolean;
     type: OfferFieldEnum;
-    unit?: OfferUnit | null;
     value: any | null;
 }
 export namespace OfferV2EntryField {
