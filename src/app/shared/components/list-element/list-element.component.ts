@@ -1,15 +1,14 @@
 import { booleanAttribute, Component, EventEmitter, Input, Output } from "@angular/core";
 import { MatIcon } from "@angular/material/icon";
 import { DefaultFlexDirective } from "ng-flex-layout";
-import { CdkDragHandle, CdkDragPlaceholder } from "@angular/cdk/drag-drop";
+import { CdkDragHandle } from "@angular/cdk/drag-drop";
 
 @Component({
   selector: "app-list-element",
   imports: [
     MatIcon,
     DefaultFlexDirective,
-    CdkDragHandle,
-    CdkDragPlaceholder
+    CdkDragHandle
   ],
   templateUrl: "./list-element.component.html",
   styleUrl: "./list-element.component.scss"

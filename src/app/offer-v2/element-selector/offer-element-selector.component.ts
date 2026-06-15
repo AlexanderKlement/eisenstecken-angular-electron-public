@@ -3,7 +3,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { OfferElementListElement, OfferV2Service } from "../../../api/openapi";
 import { MatFormField, MatLabel } from "@angular/material/input";
 import { AsyncPipe } from "@angular/common";
-import { MtxSelect, MtxSelectOptionTemplate } from "@ng-matero/extensions/select";
+import { MtxSelect } from "@ng-matero/extensions/select";
 import { concat, of, Subject } from "rxjs";
 import { catchError, distinctUntilChanged, switchMap, tap } from "rxjs/operators";
 
@@ -16,8 +16,7 @@ import { catchError, distinctUntilChanged, switchMap, tap } from "rxjs/operators
     MatFormField,
     MatLabel,
     AsyncPipe,
-    MtxSelect,
-    MtxSelectOptionTemplate
+    MtxSelect
   ]
 })
 export default class OfferElementSelectorComponent implements OnInit {

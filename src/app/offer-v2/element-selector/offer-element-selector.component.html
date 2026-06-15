@@ -2,9 +2,9 @@
   [appearance]="outline ? 'outline' : 'fill'"
   [class.new-form-element]="outline"
   class="select-container">
-  @if (label) {
-    <mat-label>{{ label }}</mat-label>
-  }
+
+  <mat-label>{{ label ?? "" }}</mat-label>
+
   <mtx-select
     class="select-container"
     [items]="elements$|async"

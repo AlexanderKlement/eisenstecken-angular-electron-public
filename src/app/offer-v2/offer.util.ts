@@ -44,7 +44,7 @@ export function fieldTypeToColor(type: OfferFieldEnum | string) {
   }
 }
 
-export function fieldTypeToTextColor(type: OfferFieldEnum) {
+export function fieldTypeToTextColor(type: OfferFieldEnum | string) {
   switch (type) {
     case OfferFieldEnum.String:
       return "#000000";
@@ -57,6 +57,8 @@ export function fieldTypeToTextColor(type: OfferFieldEnum) {
     case OfferFieldEnum.Select:
       return "#C2410C";
     case OfferFieldEnum.Offertext:
+      return "#000000";
+    default:
       return "#000000";
   }
 }
