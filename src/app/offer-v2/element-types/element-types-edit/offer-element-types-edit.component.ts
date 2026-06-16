@@ -157,10 +157,14 @@ export default class OfferElementTypesEditComponent implements OnInit {
   onDelete() {
     if (this.elementTypeId) {
       this.loadingSubject.next(true);
-      confirmDeleteDialog(this.elementTypeId, this.dialog, "Elementtyp", this.offerService.deleteOfferElementTypeOfferV2ElementTypeElementTypeIdDelete,
-        {
-          loadData: this.subscription.next
-        }, this.snackBar);
+      confirmDeleteDialog(this.elementTypeId,
+        this.dialog,
+        "Elementtyp",
+        (id) => this.offerService.deleteOfferElementTypeOfferV2ElementTypeElementTypeIdDelete(id),
+        () => {
+          this.subscription.next();
+        },
+        this.snackBar);
     }
   }
 
@@ -221,5 +225,5 @@ export default class OfferElementTypesEditComponent implements OnInit {
 
   protected readonly OfferFieldsComponent = OfferFieldsComponent;
   protected readonly OfferFieldEnum = OfferFieldEnum;
-  
+
 }

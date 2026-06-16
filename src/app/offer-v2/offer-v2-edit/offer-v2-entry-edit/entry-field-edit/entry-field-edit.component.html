@@ -17,8 +17,9 @@
   } @else if (entryFormGroup.get("type").value === OfferFieldEnum.Select) {
     @if (library$|async; as library) {
       <mat-form-field appearance="outline" class="new-form-element">
-        <mat-label>{{ library.name }} auswählen</mat-label>
-        <mat-select formControlName="value" (selectionChange)="onSelectionChanged()">
+        <mat-label>{{ entryFormGroup.get("label").value }}</mat-label>
+        <mat-select formControlName="value" (selectionChange)="onSelectionChanged()"
+                    [placeholder]="library.name + 'auswählen'">
           @for (entry of library.entries; track entry.id) {
             <mat-option [value]="entry.id">{{ entry.name }}</mat-option>
           }

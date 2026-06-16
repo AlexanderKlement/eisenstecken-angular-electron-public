@@ -210,13 +210,14 @@ export default class OfferLibraryEditComponent implements OnInit {
 
   onDelete() {
     if (this.libraryId) {
-      confirmDeleteDialog(this.libraryId, this.dialog, "Bibliothek", this.offerService
-        .deleteOfferLibraryOfferV2LibraryLibraryIdDelete, {
-        loadData: () => {
+      confirmDeleteDialog(this.libraryId,
+        this.dialog,
+        "Bibliothek",
+        (id) => this.offerService.deleteOfferLibraryOfferV2LibraryLibraryIdDelete(id), () => {
           this.loadingSubject.next(false);
           this.router.navigateByUrl("/offer_v2/libraries").then();
-        }
-      }, this.snackBar);
+        },
+        this.snackBar);
     }
   }
 }

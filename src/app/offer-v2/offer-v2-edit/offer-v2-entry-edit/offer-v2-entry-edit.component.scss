@@ -1,5 +1,10 @@
 .entry {
   margin: 8px 0;
+  --level-1: oklch(72% .14 85);
+  --level-2: oklch(65% .12 150);
+  --level-3: oklch(65% .15 45);
+  --level-4: oklch(65% .1 240);
+  --level-5: oklch(60% .12 330);
 
   > .entry-header {
     display: flex;
@@ -11,6 +16,27 @@
 
     border: solid 1px #E5E5E5;
     border-radius: 8px;
+    border-left-width: 4px;
+
+    &.level-1 {
+      border-left-color: var(--level-1);
+    }
+
+    &.level-2 {
+      border-left-color: var(--level-2);
+    }
+
+    &.level-3 {
+      border-left-color: var(--level-3);
+    }
+
+    &.level-4 {
+      border-left-color: var(--level-4);
+    }
+
+    &.level-5 {
+      border-left-color: var(--level-5);
+    }
 
     > .entry-header-row {
 
@@ -19,6 +45,22 @@
       align-items: center;
       justify-content: start;
       gap: 16px;
+
+      > .icon-btn {
+        padding: 2px;
+        margin: 0 -2px;
+        color: #797971;
+        cursor: pointer;
+        border-radius: 6px;
+
+        &:hover {
+          background-color: #E5E5E5;
+        }
+
+        &.active {
+          background-color: var(--primary-lighter-color);
+        }
+      }
     }
 
     > .entry-fields {
@@ -53,6 +95,8 @@
 
 }
 
+
 .neutral {
   color: #797971;
 }
+

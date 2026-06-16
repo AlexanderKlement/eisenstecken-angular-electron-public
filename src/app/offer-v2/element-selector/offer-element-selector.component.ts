@@ -5,7 +5,7 @@ import { MatFormField, MatLabel } from "@angular/material/input";
 import { AsyncPipe } from "@angular/common";
 import { MtxSelect } from "@ng-matero/extensions/select";
 import { concat, of, Subject } from "rxjs";
-import { catchError, distinctUntilChanged, switchMap, tap } from "rxjs/operators";
+import { catchError, debounceTime, distinctUntilChanged, switchMap, tap } from "rxjs/operators";
 
 @Component({
   selector: "app-offer-element-selector",
@@ -43,6 +43,7 @@ export default class OfferElementSelectorComponent implements OnInit {
       this.elementsInput$.pipe(
         distinctUntilChanged(),
         tap(() => (this.elementsLoading = true)),
+        debounceTime(200),
         switchMap(term =>
           this.offerService.getOfferElementsOfferV2ElementsGet(0, term, 20).pipe(
             catchError(() => of(this.value ? [{ name: this.valueName, id: this.value }] : [])), // empty list on error

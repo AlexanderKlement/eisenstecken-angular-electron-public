@@ -25,16 +25,25 @@
         @if (hintStyle !== "small") {
           Es können alle Felder im System referenziert werden. Ein Element welches dieses Feld enthält, muss die
             referenzieren Felder auch haben<br />
-          Weitere Referenzierungen: <code>&#64;parent.Feldname</code>,
-          <code>&#64;child.Elementname.Feldname</code><br />
           Beispiele:
           <ul>
-            <li>mit <code>&#64;child.Schrank.Höhe</code> wird das "Höhe" feld des Unterelement "Schrank"
-              referenziert
+            <li>Volumen = <code>&#64;Höhe * &#64;Breite * &#64;Tiefe</code></li>
+            <li>Wenn z.B. Breite und Tiefe in mm angegeben wird, kann man: Fläche(m³) = <code>&#64;Breite / 1000 *
+              &#64;Tiefe
+              /
+              1000</code>
             </li>
-            <li>mit <code>&#64;parent.Breite</code> wird das "Breite" feld des darüberligenden Element referenziert
+            <li>Mit <code>max(a,b)</code> kann ein maximalwert definiert werden: z.B.: <code>max(&#64;Höhe
+              *
+              &#64;Breite, 20)</code> ergibt 20 wenn höhe * breite größer als
+              20 ist
             </li>
-            <li>Volumen Kegel = <code>3.14 * &#64;Radius * &#64;Radius * &#64;Höhe * 1/3</code></li>
+            <li>Mit <code>min(a,b)</code> kann ein mindestwert definiert werden: z.B.: <code>min(&#64;Höhe
+              *
+              &#64;Breite, 20)</code> ergibt 20 wenn höhe * breite kleiner als
+              20 ist
+            </li>
+
           </ul>
         }
       } @else {

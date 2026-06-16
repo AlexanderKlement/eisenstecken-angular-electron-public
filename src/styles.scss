@@ -70,7 +70,9 @@ html {
     container-height: 37px,
     container-vertical-padding: 6.5px,
     outlined-focus-label-text-color: --mat-sys-on-surface,
-    outlined-focus-outline-color: --mat-sys-on-surface,
+    outlined-outline-color: #eeeeee,
+    outlined-hover-outline-color: #cccccc,
+    outlined-focus-outline-color: #cccccc
   ));
 }
 

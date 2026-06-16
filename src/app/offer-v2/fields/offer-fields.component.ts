@@ -48,8 +48,10 @@ export default class OfferFieldsComponent implements OnInit {
       listDeleteButton(
         this.dialog,
         "Feld",
-        this.offerService.deleteOfferFieldOfferV2FieldFieldIdDelete,
-        this.fieldsDataSource,
+        (id) => this.offerService.deleteOfferFieldOfferV2FieldFieldIdDelete(id),
+        () => {
+          this.fieldsDataSource.loadData();
+        },
         this.snackBar)
     );
 

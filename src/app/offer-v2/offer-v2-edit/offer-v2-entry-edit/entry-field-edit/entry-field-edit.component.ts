@@ -42,6 +42,26 @@ export function newOfferEntryFieldGroupFormField(field: OfferElementField) {
   });
 }
 
+export function mapOfferEntryFieldToInput(grp: FormGroup<OfferEntryFieldGroup>): OfferV2EntryField {
+  const type = grp.get("type").value as OfferFieldEnum;
+  return {
+    calculation: grp.get("calculation").value,
+    type,
+    value: type === OfferFieldEnum.Select ? JSON.stringify(
+      {
+        id: grp.get("value").value,
+        name: grp.get("valueString").value,
+        price: grp.get("valuePrice").value
+      }
+    ) : grp.get("value").value,
+    default_value: grp.get("defaultValue").value,
+    mandatory: grp.get("mandatory").value,
+    inherits: grp.get("inherits").value,
+    libraryId: grp.get("libraryId").value,
+    label: grp.get("label").value
+  };
+}
+
 export function mapEntryToEntryFieldGroup(field: OfferV2EntryField) {
   return new FormGroup<OfferEntryFieldGroup>({
     calculation: new FormControl(field.calculation),
@@ -52,8 +72,8 @@ export function mapEntryToEntryFieldGroup(field: OfferV2EntryField) {
     inherits: new FormControl(field.inherits),
     type: new FormControl(field.type),
     value: new FormControl(field.type === OfferFieldEnum.Select ? JSON.parse(field.value).id : field.value),
-    valuePrice: new FormControl(field.type === OfferFieldEnum.Select ? JSON.parse(field.value).name : 0),
-    valueString: new FormControl(field.type === OfferFieldEnum.Select ? JSON.parse(field.value).price : "")
+    valueString: new FormControl(field.type === OfferFieldEnum.Select ? JSON.parse(field.value).name : ""),
+    valuePrice: new FormControl(field.type === OfferFieldEnum.Select ? parseFloat(JSON.parse(field.value).price) : 0)
   });
 }
 

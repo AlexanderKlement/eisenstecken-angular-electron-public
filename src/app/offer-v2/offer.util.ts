@@ -75,19 +75,19 @@ export function listEditButton(navigate: (id: number) => void): TableButton {
   };
 }
 
-export function listDeleteButton<T extends { loadData: () => void }>(
+export function listDeleteButton(
   dialog: MatDialog,
   name: string,
   deleteFunc: (id: number) => Observable<boolean>,
-  dataSourceOrCallback: T,
-  snackBar: MatSnackBar): TableButton {
+  callback: () => void,
+  snackBar?: MatSnackBar): TableButton {
   return {
     name: () => ({ icon: "delete" }),
     color: () => "warn",
     selectedField: "",
     class: () => "",
     navigate: (_, id) => {
-      confirmDeleteDialog(id, dialog, name, deleteFunc, dataSourceOrCallback, snackBar);
+      confirmDeleteDialog(id, dialog, name, deleteFunc, callback, snackBar);
     }
   };
 }
@@ -96,8 +96,8 @@ export function confirmDeleteDialog<T extends { loadData: () => void }>(id: numb
                                                                         dialog: MatDialog,
                                                                         name: string,
                                                                         deleteFunc: (id: number) => Observable<boolean>,
-                                                                        dataSourceOrCallback: T,
-                                                                        snackBar: MatSnackBar) {
+                                                                        callback: () => void,
+                                                                        snackBar?: MatSnackBar) {
   const dialogRef = dialog.open(ConfirmDialogComponent, {
     width: "400px",
     data: {
@@ -110,10 +110,10 @@ export function confirmDeleteDialog<T extends { loadData: () => void }>(id: numb
       deleteFunc(id).pipe(take(1))
         .subscribe({
           next: () => {
-            dataSourceOrCallback.loadData();
+            callback();
           },
           error: (error) => {
-            snackBar.open("Löschen fehlgeschlagen: " + error, "Ok", { duration: 8000 });
+            snackBar?.open("Löschen fehlgeschlagen: " + error, "Ok", { duration: 8000 });
           }
         });
     }

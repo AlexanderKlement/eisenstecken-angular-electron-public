@@ -35,7 +35,15 @@ export default class OfferElementTypesComponent implements OnInit {
     this.tableButtons.push(listEditButton((id) => {
       this.router.navigateByUrl(`/offer_v2/element_types/${id}`).then();
     }));
-    this.tableButtons.push(listDeleteButton(this.dialog, "Elementtyp", this.offerService.deleteOfferElementTypeOfferV2ElementTypeElementTypeIdDelete, this.elementTypesDataSource, this.snackBar));
+    this.tableButtons.push(
+      listDeleteButton(
+        this.dialog,
+        "Elementtyp",
+        (id) => this.offerService.deleteOfferElementTypeOfferV2ElementTypeElementTypeIdDelete(id),
+        () => {
+          this.elementTypesDataSource.loadData();
+        },
+        this.snackBar));
     this.tableButtons.push({
       name: () => ({ icon: "content_copy" }),
       color: () => "accent",

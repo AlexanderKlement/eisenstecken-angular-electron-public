@@ -7,7 +7,7 @@ import { take } from "rxjs/operators";
 import { MatFormField, MatHint, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { MatIcon } from "@angular/material/icon";
-import { globalKeywords, KeywordRegExp, nestingKeywords } from "./offer-calculation-utils";
+import { globalKeywords, KeywordRegExp, nestingKeywords } from "../offer-calculation-utils";
 
 type HighlightedText = {
   key: string;

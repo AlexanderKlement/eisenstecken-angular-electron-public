@@ -1,8 +1,8 @@
 <ng-container [formGroup]="entryGroup">
   <div class="entry">
-    <div class="entry-header">
+    <div [className]="`entry-header level-${depth+1}`">
       <div class="entry-header-row">
-        <mat-icon (click)="toggleOpen()" class="neutral">keyboard_arrow_down</mat-icon>
+        <mat-icon (click)="toggleOpen()" class="icon-btn">keyboard_arrow_down</mat-icon>
         <span class="neutral">{{ prefix }}{{ index + 1 }}</span>
         <app-offer-field-element-type-pill
           [fieldType]="entryGroup.get('elementType').value"></app-offer-field-element-type-pill>
@@ -10,36 +10,58 @@
                                     [value]="entryGroup.get('elementId').value"
                                     [valueName]="entryGroup.get('name').value"></app-offer-element-selector>
         <div fxFlex></div>
-        <mat-icon class="neutral cursor-pointer" (click)="onAddChild()" title="Kind hinzufügen (Tab)">
+        <mat-icon class="icon-btn" (click)="onAddChild()" title="Kind hinzufügen (Tab)">
           subdirectory_arrow_right
         </mat-icon>
-        <mat-icon class="neutral cursor-pointer" (click)="onAddNeighbour(index)" title="Nachbar hinzufügen (Enter)">add
+        <mat-icon class="icon-btn" (click)="onAddNeighbour(index)" title="Nachbar hinzufügen (Enter)">add
         </mat-icon>
-        <mat-icon class="neutral cursor-pointer" (click)="onDeleteElem(index)" title="Löschen (Entf)">delete</mat-icon>
+        <mat-icon class="icon-btn" (click)="onDeleteElem(index)" title="Löschen (Entf)">delete</mat-icon>
 
-        <mat-icon class="neutral cursor-pointer" (click)="onCopyElem(index)" title="Dublizieren">content_copy
+        <mat-icon class="icon-btn" (click)="onCopyElem(index)" title="Dublizieren">content_copy
         </mat-icon>
-        <mat-icon class="neutral cursor-pointer" (click)="toggleAlternative()" title="Als Alternative markieren">
+        <mat-icon class="icon-btn"
+                  [class.active]="entryGroup.get('alternative').value"
+                  (click)="toggleAlternative()" title="Als Alternative markieren">
           compare_arrows
         </mat-icon>
-        <mat-icon class="neutral cursor-pointer" (click)="togglePercent()"
+        <mat-icon class="icon-btn" (click)="togglePercent()"
+                  [class.active]="percent"
                   title="Sconto/Aufschlag für diese Posizionsetzen">
           percent
         </mat-icon>
-        <mat-icon class="neutral cursor-pointer" (click)="toggleVisibility()" title="Sichtbar im Angebot">
-          visibility
+        <mat-icon class="icon-btn"
+                  [class.active]="!entryGroup.get('visibleOffer').value"
+                  (click)="toggleVisibility()" title="Sichtbar im Angebot">
+          @if (entryGroup.controls.visibleOffer.value) {
+            visibility
+          } @else {
+            visibility_off
+          }
         </mat-icon>
         <strong
           [title]="entryGroup.get('priceFormula').value">{{ formatCurrency(this.entryGroup.get("priceCalculated").value, "de-DE", "EUR") }}</strong>
       </div>
 
       @if (percent) {
-        <mat-form-field appearance="outline" class="new-form-element">
-          <mat-label>Skonto/Aufschlag</mat-label>
-          <input matInput formControlName="priceChangePercent">
-        </mat-form-field>
+
+        <div class="entry-fields">
+          <mat-form-field appearance="outline" class="new-form-element">
+            <mat-label>Aufschlag</mat-label>
+            <input matInput formControlName="priceAddPercent">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="new-form-element">
+            <mat-label>Skonto</mat-label>
+            <input matInput formControlName="priceSubPercent">
+          </mat-form-field>
+        </div>
       }
-      @if (entryGroup.get('elementId').value !== -1) {
+      @if (entryGroup.get('elementType').value !== "") {
+        @if (depth === 1) {
+          <mat-form-field appearance="outline" class="new-form-element">
+            <mat-label>Menge Spalte 2</mat-label>
+            <input matInput formControlName="amount">
+          </mat-form-field>
+        }
         <mat-form-field appearance="outline" class="new-form-element">
           <mat-label>Beschreibung</mat-label>
           <textarea matInput formControlName="description"></textarea>
@@ -57,11 +79,14 @@
     <div class="entry-content" [class.close]="!open">
       <ng-container formArrayName="children">
         @for (control of entryGroup.controls.children.controls; track control.controls.id; let idx = $index) {
-          <app-offer-v2-entry-edit [entryGroup]="control"
-                                   [depth]="depth+1"
-                                   [prefix]="prefix+(index + 1)+'.'" [index]="idx"
-                                   [onAddNeighbour]="onAddNeighbourHere.bind(this)"
-                                   [onDeleteElem]="onDeleteElemHere.bind(this)"
+          <app-offer-v2-entry-edit
+            (priceEvaluated)="childrenEvaluated()"
+            [entryGroup]="control"
+            [depth]="depth+1"
+            [prefix]="prefix+(index + 1)+'.'" [index]="idx"
+            [onAddNeighbour]="onAddNeighbourHere.bind(this)"
+            [onCopyElem]="onCopyElemHere.bind(this)"
+            [onDeleteElem]="onDeleteElemHere.bind(this)"
           ></app-offer-v2-entry-edit>
         }
       </ng-container>

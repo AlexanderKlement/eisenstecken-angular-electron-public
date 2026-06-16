@@ -12,10 +12,19 @@ import { OfferV2EntryInput } from './offerV2EntryInput';
 
 export interface OfferV2Patch { 
     content: Array<OfferV2EntryInput>;
+    date?: string | null;
+    delivery: string;
     globalAddPercent: number;
     globalPriceDiff: number;
     globalSubPercent: number;
+    inPriceIncluded: string;
+    materialDescription: string;
+    materialDescriptionTitle: string;
     name: string;
+    number: number;
+    payment: string;
+    validity: string;
+    vatId: number;
     versionName: string;
 }
 

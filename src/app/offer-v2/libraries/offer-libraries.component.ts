@@ -39,8 +39,10 @@ export default class OfferLibrariesComponent implements OnInit {
       listDeleteButton(
         this.dialog,
         "Bibliothek",
-        this.offerService.deleteOfferLibraryOfferV2LibraryLibraryIdDelete,
-        this.librariesDataSource,
+        (id) => this.offerService.deleteOfferLibraryOfferV2LibraryLibraryIdDelete(id),
+        () => {
+          this.librariesDataSource.loadData();
+        },
         this.snackBar)
     );
     this.librariesHeaderButtons.push(headerNewButton("Neue Bibliothek erstellen", () => {

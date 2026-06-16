@@ -12,5 +12,6 @@
 export interface OfferV2Create { 
     jobId: number;
     name: string;
+    number: number;
 }
 

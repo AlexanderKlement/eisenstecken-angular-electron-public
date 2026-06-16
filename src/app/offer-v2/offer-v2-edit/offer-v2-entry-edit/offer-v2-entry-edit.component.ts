@@ -1,4 +1,4 @@
-import { Component, inject, Input } from "@angular/core";
+import { AfterViewInit, Component, EventEmitter, inject, Input, Output } from "@angular/core";
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { MatIcon } from "@angular/material/icon";
 import {
@@ -6,16 +6,22 @@ import {
 } from "../../offer-field-element-type-pill/offer-field-element-type-pill.component";
 import { DefaultFlexDirective } from "ng-flex-layout";
 import OfferElementSelectorComponent from "../../element-selector/offer-element-selector.component";
-import { OfferElementListElement, OfferV2EntryOutput, OfferV2Service } from "../../../../api/openapi";
+import {
+  OfferElementListElement,
+  OfferV2EntryInput,
+  OfferV2EntryOutput,
+  OfferV2Service
+} from "../../../../api/openapi";
 import { take } from "rxjs/operators";
 import {
   EntryFieldEditComponent,
   mapEntryToEntryFieldGroup,
+  mapOfferEntryFieldToInput,
   newOfferEntryFieldGroupFormField,
   OfferEntryFieldGroup
 } from "./entry-field-edit/entry-field-edit.component";
 import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
-import { priceEvaluationElementGroup } from "../../calculation-input/offer-calculation-utils";
+import { priceEvaluationElementGroup } from "../../offer-calculation-utils";
 import { formatCurrency } from "@angular/common";
 
 export declare type OfferEntryGroup = {
@@ -25,7 +31,9 @@ export declare type OfferEntryGroup = {
   elementId: FormControl<number>;
   elementType: FormControl<string>;
   amount: FormControl<number>;
-  priceChangePercent: FormControl<number>;
+  priceSubPercent: FormControl<number>;
+  priceAddPercent: FormControl<number>;
+  globalAddPercent: FormControl<number>;
   visibleOffer: FormControl<boolean>;
   children: FormArray<FormGroup<OfferEntryGroup>>;
   fields: FormArray<FormGroup<OfferEntryFieldGroup>>;
@@ -36,17 +44,41 @@ export declare type OfferEntryGroup = {
   priceFormula: FormControl<string>;
 }
 
-export function newEmptyOfferEntryGroup() {
+export function mapOfferEntryToInput(grp: FormGroup<OfferEntryGroup>): OfferV2EntryInput {
+  return {
+    alternative: grp.get("alternative").value,
+    id: grp.get("id").value,
+    description: grp.get("description").value,
+    elementType: grp.get("elementType").value,
+    name: grp.get("name").value,
+    children: grp.controls.children.controls.map(mapOfferEntryToInput),
+    offertext: grp.get("offertext").value,
+    price: grp.get("price").value,
+    amount: grp.get("amount").value,
+    fields: grp.controls.fields.controls.map(mapOfferEntryFieldToInput),
+    priceSubPercent: grp.get("priceSubPercent").value,
+    priceAddPercent: grp.get("priceAddPercent").value,
+    visibleOffer: grp.get("visibleOffer").value
+  };
+}
+
+function randomUUID(): string {
+  return (globalThis.crypto ?? require("crypto")).randomUUID();
+}
+
+export function newEmptyOfferEntryGroup(globalAddPercent = 0) {
   const grp = new FormGroup<OfferEntryGroup>({
     name: new FormControl(""),
-    id: new FormControl(""),
+    id: new FormControl(randomUUID()),
     elementId: new FormControl(-1),
     elementType: new FormControl(""),
     children: new FormArray([]),
     amount: new FormControl(1),
     visibleOffer: new FormControl(true),
     alternative: new FormControl(false),
-    priceChangePercent: new FormControl(0),
+    priceSubPercent: new FormControl(0),
+    priceAddPercent: new FormControl(globalAddPercent),
+    globalAddPercent: new FormControl(globalAddPercent),
     fields: new FormArray([]),
     description: new FormControl(""),
     price: new FormControl(""),
@@ -60,8 +92,7 @@ export function newEmptyOfferEntryGroup() {
   return grp;
 }
 
-export function mapEntryOfferEntryGroup(entry: OfferV2EntryOutput) {
-
+export function mapEntryOfferEntryGroup(entry: OfferV2EntryOutput, globalAddPercent = 0): FormGroup<OfferEntryGroup> {
   const grp = new FormGroup<OfferEntryGroup>({
     name: new FormControl(entry.name),
     id: new FormControl(entry.id),
@@ -71,7 +102,9 @@ export function mapEntryOfferEntryGroup(entry: OfferV2EntryOutput) {
     amount: new FormControl(entry.amount),
     visibleOffer: new FormControl(entry.visibleOffer),
     alternative: new FormControl(entry.alternative),
-    priceChangePercent: new FormControl(entry.priceChangePercent),
+    priceSubPercent: new FormControl(entry.priceSubPercent),
+    priceAddPercent: new FormControl(entry.priceAddPercent),
+    globalAddPercent: new FormControl(globalAddPercent),
     fields: new FormArray(entry.fields.map(mapEntryToEntryFieldGroup)),
     description: new FormControl(entry.description),
     price: new FormControl(entry.price),
@@ -101,7 +134,7 @@ export function mapEntryOfferEntryGroup(entry: OfferV2EntryOutput) {
   templateUrl: "./offer-v2-entry-edit.component.html",
   styleUrl: "./offer-v2-entry-edit.component.scss"
 })
-export class OfferV2EntryEditComponent {
+export class OfferV2EntryEditComponent implements AfterViewInit {
   private offerService = inject(OfferV2Service);
   @Input() entryGroup: FormGroup<OfferEntryGroup>;
   @Input() prefix: string;
@@ -111,6 +144,29 @@ export class OfferV2EntryEditComponent {
   @Input() onCopyElem: (index: number) => void;
   @Input() onAddNeighbour: (index: number) => void;
   open = true;
+  @Output() priceEvaluated = new EventEmitter<void>();
+  private waitForChildren: number = 0;
+
+  ngAfterViewInit() {
+    if (this.entryGroup) {
+      if (this.entryGroup.controls.children.length === 0) {
+        priceEvaluationElementGroup(this.entryGroup);
+        this.priceEvaluated.emit();
+      } else {
+        this.waitForChildren = this.entryGroup.controls.children.length;
+      }
+    }
+
+  }
+
+  childrenEvaluated() {
+    console.log(`Children evaluated ${this.waitForChildren}`);
+    this.waitForChildren--;
+    if (this.waitForChildren <= 0) {
+      priceEvaluationElementGroup(this.entryGroup);
+      this.priceEvaluated.emit();
+    }
+  }
 
   toggleOpen() {
     this.open = !this.open;
@@ -120,6 +176,10 @@ export class OfferV2EntryEditComponent {
 
   togglePercent() {
     this.percent = !this.percent;
+    this.entryGroup.patchValue({
+      priceSubPercent: 0,
+      priceAddPercent: this.entryGroup.get("globalAddPercent").value
+    });
   }
 
   toggleAlternative() {
@@ -152,6 +212,10 @@ export class OfferV2EntryEditComponent {
 
   onAddNeighbourHere(index: number) {
     this.entryGroup.controls.children.insert(index + 1, newEmptyOfferEntryGroup());
+  }
+
+  onCopyElemHere(index: number) {
+    this.entryGroup.controls.children.insert(index + 1, this.entryGroup.controls.children.at(index));
   }
 
   onDeleteElemHere(index: number) {

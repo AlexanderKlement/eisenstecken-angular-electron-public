@@ -1,72 +1,221 @@
 <app-offer-container title="Angebote">
-  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16">
-    <h3>{{ subTitle }}</h3>
-    <div fxFlex></div>
-    @if (loading$ | async) {
-      <div class="spinner-container">
-        <mat-spinner></mat-spinner>
-      </div>
-    } @else {
-      @if (!!offerV2Id) {
-        <button mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
-      }
-      <button mat-raised-button color="primary" (click)="onSave()">Speichern</button>
-    }
-  </div>
-  <form [formGroup]="offerGroup">
-    @if (offerV2Id) {
-      <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="16">
-        <div fxLayout="column" fxLayoutAlign="space-around stretch" fxFlex fxLayoutGap="8">
-          <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start center">
-            <mat-form-field appearance="outline" class="new-form-element">
-              <mat-label>Name</mat-label>
-              <input class="form-control" formControlName="name" matInput>
-            </mat-form-field>
+
+  @if (offerV2Id) {
+    <mat-tab-group>
+      <mat-tab label="Berechnung">
+        <form [formGroup]="offerGroup">
+          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16">
+            <h3>{{ subTitle }}</h3>
             <div fxFlex></div>
-            <mat-form-field appearance="outline" class="new-form-element">
-              <mat-label>Aufschlag</mat-label>
-              <input matInput formControlName="globalAddPercent">
-              <mat-icon matSuffix>percent</mat-icon>
+            @if (loading$ | async) {
+              <div class="spinner-container">
+                <mat-spinner></mat-spinner>
+              </div>
+            } @else {
+              @if (!!offerV2Id) {
+                <button mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
+              }
+              <button mat-raised-button color="primary" (click)="onSave()">Speichern</button>
+            }
+          </div>
+          <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="16">
+            <div fxLayout="column" fxLayoutAlign="space-around stretch" fxFlex fxLayoutGap="8" class="main-content">
+              <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start center">
+                <mat-form-field appearance="outline" class="new-form-element">
+                  <mat-label>Name</mat-label>
+                  <input class="form-control" formControlName="name" matInput>
+                </mat-form-field>
+                <div fxFlex></div>
+                <mat-form-field appearance="outline" class="new-form-element">
+                  <mat-label>Aufschlag</mat-label>
+                  <input matInput formControlName="globalAddPercent" (change)="changeGlobalAdd()">
+                  <mat-icon matSuffix>percent</mat-icon>
+                </mat-form-field>
+                <strong class="total" [title]="formula">{{ priceAsCurrency }}</strong>
+              </div>
+              <ng-container formArrayName="content">
+                @for (group of offerGroup.controls.content.controls; track group.controls.id; let idx = $index) {
+                  <app-offer-v2-entry-edit
+                    (priceEvaluated)="contentEvaluated()"
+                    [entryGroup]="group"
+                    [index]="idx"
+                    [depth]="0"
+                    prefix=""
+                    [onDeleteElem]="onDeleteContent.bind(this)"
+                    [onAddNeighbour]="onAddContent.bind(this)"
+                    [onCopyElem]="onCopyContent.bind(this)"
+                  ></app-offer-v2-entry-edit>
+                }
+                @if (offerGroup.controls.content.length === 0) {
+                  <app-list-element leftIcon="add" mainText="Erstes Element hinzufügen" (clicked)="onAddContent(0)"
+                                    dottedAccent centered pointer>
+                  </app-list-element>
+                }
+              </ng-container>
+            </div>
+            <div class="preview">
+              <div class="preview-header">
+                <strong>Vorschau</strong>
+              </div>
+              <div class="preview-content" [class.no-preview]="offertext.length === 0">
+                @if (offertext.length === 0) {
+                  <span class="neutral">Keine Sichtbaren Posizionen</span>
+                } @else {
+                  @for (txt of offertext; track txt.prefix) {
+                    <div class="preview-line">
+                      <span class="prefix">{{ txt.prefix }}</span>
+
+                      <div class="offertext">
+                        @for (line of txt.lines; track line) {
+                          <span class="offertext-line" [class.neutral]="line.trim() === 'Alternative:'">
+                        {{ line }}
+                      </span>
+                        }
+                      </div>
+                      <span class="amount">{{ txt.amount }}</span>
+                      <div class="price">
+                        @for (p of txt.price; track p) {
+                          <span class="price-line">{{ p }}</span>
+                        }
+                      </div>
+                    </div>
+                    @for (subTxt of txt.children; track subTxt.prefix) {
+                      <div class="preview-line inner">
+                        <span class="prefix">{{ subTxt.prefix }}</span>
+
+                        <div class="offertext">
+                          @for (line of subTxt.lines; track line) {
+                            <span class="offertext-line" [class.neutral]="line.trim() === 'Alternative:'">
+                        {{ line }}
+                      </span>
+                          }
+                        </div>
+                        <span class="amount">{{ subTxt.amount }}</span>
+                        <div class="price">
+                          @for (p of subTxt.price; track p) {
+                            <span class="price-line">{{ p }}</span>
+                          }
+                        </div>
+                      </div>
+                    }
+                  }
+                }
+              </div>
+              <div class="preview-footer">
+                <strong>Gesamt:</strong>
+                <strong>{{ priceAsCurrency }}</strong>
+              </div>
+            </div>
+          </div>
+        </form>
+      </mat-tab>
+      <mat-tab label="Sonstige Angebotsinfos">
+        <form [formGroup]="offerGroup" class="others">
+          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16">
+            <h3>Sonstige Angebotsinfos</h3>
+            <div fxFlex></div>
+            @if (loading$ | async) {
+              <div class="spinner-container">
+                <mat-spinner></mat-spinner>
+              </div>
+            } @else {
+              <button mat-raised-button color="primary" (click)="onSave()">Speichern</button>
+            }
+          </div>
+          <mat-form-field appearance="fill">
+            <mat-label>Allg. Materialbeschreibung - Titel</mat-label>
+            <input formControlName="materialDescriptionTitle" matInput>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Allg. Materialbeschreibung</mat-label>
+            <textarea formControlName="materialDescription" matInput></textarea>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Im Preis einbegriffen</mat-label>
+            <textarea formControlName="inPriceIncluded" matInput></textarea>
+          </mat-form-field>
+          <div fxLayout="row" fxLayoutGap="12">
+            <mat-form-field appearance="fill" fxFlex>
+              <mat-label>Gültigkeit</mat-label>
+              <input formControlName="validity" matInput>
             </mat-form-field>
-            <strong class="total" [title]="formula">{{ priceAsCurrency }}</strong>
+            <mat-form-field appearance="fill" fxFlex>
+              <mat-label>Datum</mat-label>
+              <input formControlName="date" matInput [matDatepicker]="date_picker">
+              <mat-datepicker-toggle matSuffix [for]="date_picker"></mat-datepicker-toggle>
+              <mat-datepicker #date_picker></mat-datepicker>
+            </mat-form-field>
           </div>
-          <ng-container formArrayName="content">
-            @for (group of offerGroup.controls.content.controls; track group.controls.id; let idx = $index) {
-              <app-offer-v2-entry-edit
-                [entryGroup]="group"
-                [index]="idx"
-                [depth]="0"
-                prefix=""
-                [onDeleteElem]="onDeleteContent.bind(this)"
-                [onAddNeighbour]="onAddContent.bind(this)"
-              ></app-offer-v2-entry-edit>
-            }
-            @if (offerGroup.controls.content.length === 0) {
-              <app-list-element leftIcon="add" mainText="Erstes Element hinzufügen" (clicked)="onAddContent(0)"
-                                dottedAccent centered pointer>
-              </app-list-element>
-            }
-          </ng-container>
-        </div>
-        <div class="preview">
-          <div class="preview-header">
-            <strong>Vorschau</strong>
-          </div>
-          <div class="preview-content no-preview">
-            <span class="neutral">{{ offertext }}</span>
-          </div>
-          <div class="preview-footer">
-            <strong>Gesamt:</strong>
+          <mat-form-field appearance="fill">
+            <mat-label>Bezahlung</mat-label>
+            <textarea formControlName="payment" matInput></textarea>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Lieferung</mat-label>
+            <textarea formControlName="delivery" matInput></textarea>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Mehrwertsteuer</mat-label>
+            <mat-select formControlName="vatId">
+              <mat-option [value]="offerGroup.get('vatId').value">{{ offerGroup.get('vatName').value }}</mat-option>
+              @if (vats$|async; as vats) {
+                @for (vat of vats; track vat.id) {
+                  <mat-option [value]="vat.id">{{ vat.name }}</mat-option>
+                }
+              }
+            </mat-select>
+          </mat-form-field>
+          <div class="line"></div>
+          <div fxLayout="row" fxLayoutGap="12" fxLayoutAlign="space-between center">
+            <span>Gesamtpreis (Angebot)</span>
             <strong>{{ priceAsCurrency }}</strong>
           </div>
-        </div>
+          <div fxLayout="row" fxLayoutGap="12">
+            <mat-form-field appearance="fill" fxFlex>
+              <mat-label>Rabatt</mat-label>
+              <input formControlName="globalSubPercent" matInput>
+              <mat-icon matSuffix>percent</mat-icon>
+            </mat-form-field>
+            <mat-form-field appearance="fill" fxFlex>
+              <mat-label>Preisanpassung</mat-label>
+              <input formControlName="globalPriceDiff" matInput>
+              <mat-icon matSuffix>euro</mat-icon>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" fxLayoutGap="12" fxLayoutAlign="space-between center">
+            <span>Endpreis</span>
+            <strong>{{ priceAsCurrencySconted }}</strong>
+          </div>
+
+        </form>
+      </mat-tab>
+    </mat-tab-group>
+  } @else {
+    <form [formGroup]="offerGroup">
+
+      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16">
+        <h3>{{ subTitle }}</h3>
+        <div fxFlex></div>
+        @if (loading$ | async) {
+          <div class="spinner-container">
+            <mat-spinner></mat-spinner>
+          </div>
+        } @else {
+          @if (!!offerV2Id) {
+            <button mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
+          }
+          <button mat-raised-button color="primary" (click)="onSave()">Speichern</button>
+        }
       </div>
-    } @else {
       <div fxLayout="column" fxLayoutAlign="space-around stretch">
         <div fxLayout="row" fxLayoutGap="16">
           <mat-form-field fxFlex appearance="fill">
             <mat-label>Name</mat-label>
             <input class="form-control" formControlName="name" matInput>
+          </mat-form-field>
+          <mat-form-field fxFlex appearance="fill">
+            <mat-label>Nummer</mat-label>
+            <input class="form-control" formControlName="number" matInput>
           </mat-form-field>
           <mat-form-field appearance="fill" fxFlex>
             <mat-label>Auftrag</mat-label>
@@ -89,6 +238,6 @@
           </mat-form-field>
         </div>
       </div>
-    }
-  </form>
+    </form>
+  }
 </app-offer-container>

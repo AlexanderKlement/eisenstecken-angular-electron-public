@@ -128,9 +128,12 @@ export default class OfferTemplatesEditComponent implements OnInit {
   onDelete() {
     if (this.templateId) {
       this.loadingSubject.next(true);
-      confirmDeleteDialog(this.templateId, this.dialog, "Template", this.offerService.deleteOfferTemplateOfferV2TemplateTemplateIdDelete,
-        {
-          loadData: this.subscription.next
+      confirmDeleteDialog(this.templateId,
+        this.dialog,
+        "Template",
+        (id) => this.offerService.deleteOfferTemplateOfferV2TemplateTemplateIdDelete(id),
+        () => {
+          this.subscription.next();
         }, this.snackBar);
     }
   }

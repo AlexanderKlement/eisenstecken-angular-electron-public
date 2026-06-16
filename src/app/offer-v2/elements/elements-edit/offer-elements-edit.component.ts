@@ -23,16 +23,12 @@ import {
 import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
 import OfferFieldsComponent from "../../fields/offer-fields.component";
-import {
-  OfferFieldElementTypePillComponent
-} from "../../offer-field-element-type-pill/offer-field-element-type-pill.component";
 import { MatDialog } from "@angular/material/dialog";
 import { AsyncPipe } from "@angular/common";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { BehaviorSubject, Observable } from "rxjs";
 import { confirmDeleteDialog, fieldTypeToString } from "../../offer.util";
 import { MatOption, MatSelect } from "@angular/material/select";
-import { createConsolaReporter } from "@sentry/angular";
 import { MatCheckbox } from "@angular/material/checkbox";
 import OfferCalculationInputComponent from "../../calculation-input/offer-calculation-input.component";
 import { MatRadioButton, MatRadioGroup } from "@angular/material/radio";
@@ -170,10 +166,12 @@ export default class OfferElementsEditComponent implements OnInit {
   onDelete() {
     if (this.elementId) {
       this.loadingSubject.next(true);
-      confirmDeleteDialog(this.elementId, this.dialog, "Element", this.offerService.deleteOfferElementOfferV2ElementElementIdDelete,
-        {
-          loadData: this.subscription.next
-        }, this.snackBar);
+      confirmDeleteDialog(this.elementId, this.dialog, "Element",
+        (id) => this.offerService.deleteOfferElementOfferV2ElementElementIdDelete(id),
+        () => {
+          this.subscription.next();
+        },
+        this.snackBar);
     }
   }
 
@@ -251,6 +249,10 @@ export default class OfferElementsEditComponent implements OnInit {
     if (id !== -1) {
       this.offerService.getOfferElementTypeOfferV2ElementTypeElementTypeIdGet(id).pipe(take(1)).subscribe({
         next: data => {
+          this.elementGroup.patchValue({
+            offertext: data.offertext,
+            price: data.price
+          });
           this.mapFieldsToGroup(data.fields);
         }
       });
@@ -278,8 +280,6 @@ export default class OfferElementsEditComponent implements OnInit {
   protected readonly OfferFieldsComponent = OfferFieldsComponent;
   protected readonly OfferFieldEnum = OfferFieldEnum;
 
-  protected readonly OfferFieldTypePillComponent = OfferFieldElementTypePillComponent;
 
   protected readonly fieldTypeToString = fieldTypeToString;
-  protected readonly createConsolaReporter = createConsolaReporter;
 }

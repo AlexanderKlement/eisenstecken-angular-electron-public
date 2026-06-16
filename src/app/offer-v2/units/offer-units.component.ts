@@ -44,7 +44,14 @@ export default class OfferUnitsComponent implements OnInit {
     this.unitsButtons.push(listEditButton((id) => {
       this.offerService.getOfferUnitOfferV2UnitUnitIdGet(id).pipe(take(1)).subscribe(this.editSubscription);
     }));
-    this.unitsButtons.push(listDeleteButton(this.dialog, "Einheit", this.offerService.deleteOfferUnitOfferV2UnitUnitIdDelete, this.unitsDatasource, this.snackBar));
+    this.unitsButtons.push(listDeleteButton(
+      this.dialog,
+      "Einheit",
+      (id) => this.offerService.deleteOfferUnitOfferV2UnitUnitIdDelete(id),
+      () => {
+        this.unitsDatasource.loadData();
+      },
+      this.snackBar));
     this.unitsHeaderButtons.push(headerNewButton("Neue Einheit erstellen", this.openEditDialog.bind(this)));
     this.unitsDatasource = new TableDataSource(
       this.offerService,

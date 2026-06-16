@@ -9,16 +9,27 @@
  */
 import { JobSmall } from './jobSmall';
 import { OfferV2EntryOutput } from './offerV2EntryOutput';
+import { Vat } from './vat';
 
 
 export interface OfferV2WithVersion { 
     content?: Array<OfferV2EntryOutput>;
+    date: string;
+    delivery: string;
     globalAddPercent: number;
     globalPriceDiff: number;
     globalSubPercent: number;
     id: number;
+    inPriceIncluded: string;
     job: JobSmall;
     lastChanged: string | null;
+    materialDescription: string;
+    materialDescriptionTitle: string;
     name: string;
+    number: number;
+    payment: string;
+    pdf: string;
+    validity: string;
+    vat: Vat;
 }
 
