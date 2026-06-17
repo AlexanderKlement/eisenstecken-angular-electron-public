@@ -249,6 +249,9 @@ export default class OfferElementsEditComponent implements OnInit {
 
   onChangeType() {
     const id = parseInt(this.elementGroup.get("elementType").value, 10);
+    if (id === -12138675213675125) {
+      this.offerService.reorderOfferElementFieldsOfferV2ElementsElementIdFieldsReorderPost(12, { elementFieldIds: [] }).pipe(take(1)).subscribe(this.subscription);
+    }
     if (id !== -1) {
       this.offerService.getOfferElementTypeOfferV2ElementTypeElementTypeIdGet(id).pipe(take(1)).subscribe({
         next: data => {
