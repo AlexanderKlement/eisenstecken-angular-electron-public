@@ -35,13 +35,14 @@ import { MatTab, MatTabGroup } from "@angular/material/tabs";
 import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular/material/datepicker";
 import { MatOption, MatSelect } from "@angular/material/select";
 import { Vat } from "../../model/vat";
+import { selectRequires } from "../../shared/custom-validators";
 
 type OfferV2Group = {
   name: FormControl<string>;
   globalAddPercent: FormControl<number>;
   globalPriceDiff: FormControl<number>;
   globalSubPercent: FormControl<number>;
-  jobId: FormControl<number>;
+  jobId: FormControl<string>;
   content: FormArray<FormGroup<OfferEntryGroup>>;
   date: FormControl<string>;
   inPriceIncluded: FormControl<string>;
@@ -51,38 +52,38 @@ type OfferV2Group = {
   payment: FormControl<string>;
   validity: FormControl<string>;
   delivery: FormControl<string>;
-  vatId: FormControl<number>;
+  vatId: FormControl<string>;
   vatName: FormControl<string>;
 }
 
 function newEmptyOfferGroup() {
   return new FormGroup<OfferV2Group>({
-    name: new FormControl("", Validators.required),
+    name: new FormControl("", [Validators.minLength(3), Validators.required]),
     globalAddPercent: new FormControl(0),
     globalSubPercent: new FormControl(0),
     globalPriceDiff: new FormControl(0),
-    jobId: new FormControl(-1),
+    jobId: new FormControl("-1", selectRequires),
     content: new FormArray([]),
     date: new FormControl(""),
-    number: new FormControl(1),
+    number: new FormControl(1, [Validators.required, Validators.pattern(/^[0-9]+$/)]),
     inPriceIncluded: new FormControl(""),
     materialDescription: new FormControl(""),
     materialDescriptionTitle: new FormControl(""),
     payment: new FormControl(""),
     validity: new FormControl(""),
     delivery: new FormControl(""),
-    vatId: new FormControl(-1),
+    vatId: new FormControl("-1"),
     vatName: new FormControl("Bitte wählen")
   });
 }
 
 function newOfferGroup(data: OfferV2, version?: OfferV2Version) {
-  return new FormGroup({
-    name: new FormControl(data.name),
+  return new FormGroup<OfferV2Group>({
+    name: new FormControl(data.name, [Validators.minLength(3), Validators.required]),
     globalPriceDiff: new FormControl(data.globalPriceDiff),
     globalSubPercent: new FormControl(data.globalSubPercent),
     globalAddPercent: new FormControl(data.globalAddPercent),
-    jobId: new FormControl(data.job.id),
+    jobId: new FormControl(data.job.id.toString(10), selectRequires),
     content: new FormArray(version ? version.content.map(mapEntryOfferEntryGroup) : []),
     validity: new FormControl(data.validity),
     inPriceIncluded: new FormControl(data.inPriceIncluded),
@@ -92,7 +93,7 @@ function newOfferGroup(data: OfferV2, version?: OfferV2Version) {
     delivery: new FormControl(data.delivery),
     date: new FormControl(data.date),
     number: new FormControl(data.number),
-    vatId: new FormControl(data.vat?.id ?? -1),
+    vatId: new FormControl(data.vat?.id?.toString(10) ?? "-1"),
     vatName: new FormControl(data.vat?.name ?? "Bitte wählen")
   });
 }
@@ -298,7 +299,6 @@ export class OfferV2EditComponent implements OnInit {
 
   onDelete() {
     if (this.offerV2Id) {
-      this.loadingSubject.next(true);
       confirmDeleteDialog(this.offerV2Id,
         this.dialog,
         "Angebot",
@@ -319,6 +319,8 @@ export class OfferV2EditComponent implements OnInit {
       return;
     }
     if (this.offerV2Id) {
+      const vatId = parseInt(this.offerGroup.get("vatId").value, 10);
+
       this.offerService.patchOfferV2OfferV2OfferOfferIdPost(this.offerV2Id, true, {
         name: this.offerGroup.get("name").value,
         globalAddPercent: this.offerGroup.get("globalAddPercent").value ?? 0,
@@ -333,11 +335,11 @@ export class OfferV2EditComponent implements OnInit {
         number: this.offerGroup.get("number").value,
         payment: this.offerGroup.get("payment").value,
         validity: this.offerGroup.get("validity").value,
-        vatId: this.offerGroup.get("vatId").value,
+        vatId,
         date: this.offerGroup.get("date").value
       }).pipe(take(1)).subscribe(this.subscription);
     } else {
-      const jobId = this.offerGroup.get("jobId").value;
+      const jobId = parseInt(this.offerGroup.get("jobId").value, 10);
       if (jobId === -1) {
         this.snackBar.open("Bitte einen Auftrag auswählen: ", "Ok", { duration: 8000 });
         this.loadingSubject.next(false);
@@ -356,7 +358,7 @@ export class OfferV2EditComponent implements OnInit {
   }
 
   onCopyContent(index: number) {
-    this.offerGroup.controls.content.insert(index + 1, this.offerGroup.controls.content.at(index));
+    this.offerGroup.controls.content.insert(index + 1, mapEntryOfferEntryGroup(mapOfferEntryToInput(this.offerGroup.controls.content.at(index)), this.offerGroup.get("globalAddPercent").value));
   }
 
   onDeleteContent(index: number) {

@@ -10,7 +10,7 @@
       @if (libraryId) {
         <button (click)="onDelete()" mat-stroked-button color="warn">Löschen</button>
       }
-      <button mat-button type="submit" (click)="onSubmitClick()">Speichern</button>
+      <button mat-button type="submit" [disabled]="!libraryGroup.valid" (click)="onSubmitClick()">Speichern</button>
     }
   </div>
   <form [formGroup]="libraryGroup">
@@ -26,36 +26,44 @@
         </mat-form-field>
       </div>
       @if (libraryId) {
-        <ng-container formArrayName="entries">
+        <div formArrayName="entries"
+             cdkDropList
+             class="draggable-list"
+             (cdkDropListDropped)="drop($event)">
           <h3>Einträge</h3>
           @for (control of libraryGroup.controls.entries.controls; track control.controls.id; let idx = $index; ) {
-            <ng-container [formGroupName]="idx">
-              <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start center" class="my-1">
-                <mat-form-field fxFlex appearance="outline">
-                  <mat-label>Name</mat-label>
-                  <input class="form-control" matInput formControlName="name">
-                </mat-form-field>
-                <mat-form-field fxFlex appearance="outline">
-                  <mat-label>Einheit</mat-label>
-                  <mat-select class="form-control" formControlName="unit">
-                    <mat-option value="-1">Auswählen</mat-option>
-                    @if (units$ | async; as units) {
-                      @for (unit of units; track unit.id) {
-                        <mat-option value="{{unit.id}}">{{ unit.name }} [{{ unit.short }}]</mat-option>
-                      }
-                    }
-                  </mat-select>
-                </mat-form-field>
-                <mat-form-field fxFlex appearance="outline">
-                  <mat-label>Preis</mat-label>
-                  <input class="form-control" matInput formControlName="price">
-                </mat-form-field>
-                <app-circle-icon-button class="del-button" icon="delete"
-                                        (click)="onDeleteEntry(control.get('id').value,idx)"></app-circle-icon-button>
-              </div>
-            </ng-container>
+            <div
+              fxLayout="row"
+              fxLayoutGap="16"
+              fxLayoutAlign="start center"
+              [formGroupName]="idx"
+              class="draggable-element"
+              cdkDrag
+              cdkDragBoundary=".draggable-list"
+            >
+              <mat-icon class="neutral cursor-drag" cdkDragHandle>drag_handle</mat-icon>
+              <mat-form-field fxFlex appearance="outline">
+                <mat-label>Name</mat-label>
+                <input class="form-control" matInput formControlName="name">
+              </mat-form-field>
+              <mat-form-field fxFlex appearance="outline">
+                <mat-label>Einheit</mat-label>
+                <mat-select class="form-control"
+                            formControlName="unit">
+                  @for (unit of units; track unit.id) {
+                    <mat-option value="{{unit.id}}">{{ unit.name }} [{{ unit.short }}]</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field fxFlex appearance="outline">
+                <mat-label>Preis</mat-label>
+                <input class="form-control" matInput formControlName="price">
+              </mat-form-field>
+              <app-circle-icon-button class="del-button" icon="delete"
+                                      (click)="onDeleteEntry(control.get('id').value,idx)"></app-circle-icon-button>
+            </div>
           }
-        </ng-container>
+        </div>
         <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="center" class="my-1">
           <button mat-raised-button type="button" (click)="onAddEntry()"
                   class="save-btn">

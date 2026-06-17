@@ -12,6 +12,7 @@ import {
   TimeEntryService
 } from "../../../../api/openapi";
 import { Sort } from "@angular/material/sort";
+import { moveItemInArray } from "@angular/cdk/drag-drop";
 
 export interface Column<T> {
   name: string; // RecursiveKeyOf<T>; Maybe this is better this way
@@ -208,5 +209,11 @@ export class TableDataSource<T extends DataSourceClass, A extends DefaultService
     pageSize: number
   ): Observable<T[]> {
     return this.loadFunction(this.api, filter, sortDirection, pageSize * pageIndex, pageSize);
+  }
+
+  public moveItemInArray(prevIndex: number, newIndex: number) {
+    const rows = [...(this.dataSubject.getValue())];
+    moveItemInArray(rows, prevIndex, newIndex);
+    this.dataSubject.next(rows);
   }
 }

@@ -18,6 +18,14 @@
     border-radius: 8px;
     border-left-width: 4px;
 
+    max-height: 1000px;
+    transition: max-height 0.25s ease-in-out;
+    overflow: hidden;
+
+    &.close {
+      max-height: 42px;
+    }
+
     &.level-1 {
       border-left-color: var(--level-1);
     }
@@ -46,10 +54,14 @@
       justify-content: start;
       gap: 16px;
 
+      > .fill-width {
+        flex-grow: 1;
+      }
+
       > .icon-btn {
         padding: 2px;
         margin: 0 -2px;
-        color: #797971;
+        color: #B3B3B3;
         cursor: pointer;
         border-radius: 6px;
 
@@ -74,9 +86,11 @@
   > .entry-content {
     width: calc(100% - 32px);
     margin-left: 32px;
-    max-height: 1000px;
-    transition: max-height 0.5s ease-in-out;
+
     position: relative;
+    max-height: 1000px;
+    transition: max-height 0.25s ease-in-out;
+    overflow: hidden;
 
     &::after {
       content: " ";

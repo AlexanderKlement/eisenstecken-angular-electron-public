@@ -9,6 +9,7 @@ import OfferUnitsEditDialogComponent from "./units-edit-dialog/offer-units-edit-
 import { MatSnackBar } from "@angular/material/snack-bar";
 import OfferContainerComponent from "../offer-container/offer-container.component";
 import { headerNewButton, listDeleteButton, listEditButton } from "../offer.util";
+import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 
 
 @Component({
@@ -26,6 +27,7 @@ export default class OfferUnitsComponent implements OnInit {
   private offerService = inject(OfferV2Service);
 
   private dialog = inject(MatDialog);
+  private ids: number[] = [];
 
   unitsButtons: TableButton[] = [];
   unitsHeaderButtons: TableButton[] = [];
@@ -59,7 +61,9 @@ export default class OfferUnitsComponent implements OnInit {
         api.getOfferUnitsOfferV2UnitsGet(skip, filter, limit),
       (units) => {
         const rows = [];
+        this.ids = [];
         units.forEach((unit) => {
+          this.ids.push(unit.id);
           rows.push({
             values: {
               id: unit.id,
@@ -99,4 +103,13 @@ export default class OfferUnitsComponent implements OnInit {
     });
   }
 
+  protected drop(event: CdkDragDrop<any>) {
+    moveItemInArray(this.ids, event.previousIndex, event.currentIndex);
+  }
+
+  saveOrder() {
+    this.offerService.reorderOfferUnitsOfferV2UnitsReorderPost({ unitIds: this.ids }).pipe(take(1)).subscribe(() => {
+      this.unitsDatasource.loadData();
+    });
+  }
 }

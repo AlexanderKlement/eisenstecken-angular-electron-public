@@ -1,45 +1,60 @@
 <ng-container [formGroup]="entryGroup">
   <div class="entry">
-    <div [className]="`entry-header level-${depth+1}`">
-      <div class="entry-header-row">
-        <mat-icon (click)="toggleOpen()" class="icon-btn">keyboard_arrow_down</mat-icon>
+    <div [className]="`entry-header level-${depth+1} ${open ? '' : 'close'}`">
+      <div class="entry-header-row" #headerRow>
+        <mat-icon (click)="toggleOpen()" class="icon-btn">
+          @if (open) {
+            keyboard_arrow_down
+          } @else {
+            keyboard_arrow_up
+          }
+        </mat-icon>
         <span class="neutral">{{ prefix }}{{ index + 1 }}</span>
         <app-offer-field-element-type-pill
           [fieldType]="entryGroup.get('elementType').value"></app-offer-field-element-type-pill>
-        <app-offer-element-selector label="Element" outline [setValue]="onSetElement.bind(this)"
-                                    [value]="entryGroup.get('elementId').value"
-                                    [valueName]="entryGroup.get('name').value"></app-offer-element-selector>
-        <div fxFlex></div>
-        <mat-icon class="icon-btn" (click)="onAddChild()" title="Kind hinzufügen (Tab)">
-          subdirectory_arrow_right
-        </mat-icon>
-        <mat-icon class="icon-btn" (click)="onAddNeighbour(index)" title="Nachbar hinzufügen (Enter)">add
-        </mat-icon>
-        <mat-icon class="icon-btn" (click)="onDeleteElem(index)" title="Löschen (Entf)">delete</mat-icon>
+        <app-offer-element-selector
+          outline
+          [setValue]="onSetElement.bind(this)"
+          [value]="entryGroup.get('elementId').value"
+          [valueName]="entryGroup.get('name').value"
+          [fillWidth]="entryGroup.get('elementType').value === ''"
+          [class.fill-width]="entryGroup.get('elementType').value === ''"
+          (keyClicked)="onSearchKeyClicked($event)">
+        </app-offer-element-selector>
+        @if (entryGroup.get('elementType').value !== "") {
+          <div fxFlex></div>
+          <mat-icon class="icon-btn" (click)="onAddChild()" title="Kind hinzufügen (Tab)">
+            subdirectory_arrow_right
+          </mat-icon>
+          <mat-icon class="icon-btn" (click)="onAddNeighbour(index)" title="Nachbar hinzufügen (Enter)">add
+          </mat-icon>
+          <mat-icon class="icon-btn" (click)="onDeleteElem(index)" title="Löschen (Entf)">delete
+          </mat-icon>
 
-        <mat-icon class="icon-btn" (click)="onCopyElem(index)" title="Dublizieren">content_copy
-        </mat-icon>
-        <mat-icon class="icon-btn"
-                  [class.active]="entryGroup.get('alternative').value"
-                  (click)="toggleAlternative()" title="Als Alternative markieren">
-          compare_arrows
-        </mat-icon>
-        <mat-icon class="icon-btn" (click)="togglePercent()"
-                  [class.active]="percent"
-                  title="Sconto/Aufschlag für diese Posizionsetzen">
-          percent
-        </mat-icon>
-        <mat-icon class="icon-btn"
-                  [class.active]="!entryGroup.get('visibleOffer').value"
-                  (click)="toggleVisibility()" title="Sichtbar im Angebot">
-          @if (entryGroup.controls.visibleOffer.value) {
-            visibility
-          } @else {
-            visibility_off
-          }
-        </mat-icon>
-        <strong
-          [title]="entryGroup.get('priceFormula').value">{{ formatCurrency(this.entryGroup.get("priceCalculated").value, "de-DE", "EUR") }}</strong>
+          <mat-icon class="icon-btn" (click)="onCopyElem(index)" title="Dublizieren">content_copy
+          </mat-icon>
+          <mat-icon class="icon-btn"
+                    [class.active]="entryGroup.get('alternative').value"
+                    (click)="toggleAlternative()" title="Als Alternative markieren">
+            compare_arrows
+          </mat-icon>
+          <mat-icon class="icon-btn" (click)="togglePercent()"
+                    [class.active]="percent"
+                    title="Sconto/Aufschlag für diese Posizionsetzen">
+            percent
+          </mat-icon>
+          <mat-icon class="icon-btn"
+                    [class.active]="!entryGroup.get('visibleOffer').value"
+                    (click)="toggleVisibility()" title="Sichtbar im Angebot">
+            @if (entryGroup.controls.visibleOffer.value) {
+              visibility
+            } @else {
+              visibility_off
+            }
+          </mat-icon>
+          <strong
+            [title]="entryGroup.get('priceFormula').value">{{ formatCurrency(this.entryGroup.get("priceCalculated").value, "de-DE", "EUR") }}</strong>
+        }
       </div>
 
       @if (percent) {
@@ -64,14 +79,23 @@
         }
         <mat-form-field appearance="outline" class="new-form-element">
           <mat-label>Beschreibung</mat-label>
-          <textarea matInput formControlName="description"></textarea>
+          <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="3" formControlName="description"></textarea>
         </mat-form-field>
+        <ng-container formArrayName="fields">
+          @for (field of entryGroup.controls.fields.controls; track field.controls; let idx = $index) {
+            @if (field.controls.type.value === OfferFieldEnum.Text) {
+              <app-entry-field-edit [entryFormGroup]="field"></app-entry-field-edit>
+            }
+          }
+        </ng-container>
       }
       <div class="entry-fields">
 
         <ng-container formArrayName="fields">
           @for (field of entryGroup.controls.fields.controls; track field.controls; let idx = $index) {
-            <app-entry-field-edit [entryFormGroup]="field"></app-entry-field-edit>
+            @if (field.controls.type.value !== OfferFieldEnum.Text) {
+              <app-entry-field-edit [entryFormGroup]="field"></app-entry-field-edit>
+            }
           }
         </ng-container>
       </div>

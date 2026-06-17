@@ -9,6 +9,8 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { headerNewButton, listDeleteButton, listEditButton } from "../offer.util";
 import { Router } from "@angular/router";
+import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
+import { take } from "rxjs/operators";
 
 
 @Component({
@@ -27,6 +29,7 @@ export default class OfferLibrariesComponent implements OnInit {
   librariesHeaderButtons: TableButton[] = [];
   librariesButtons: TableButton[] = [];
   librariesDataSource: TableDataSource<OfferLibraryListElement, OfferV2Service>;
+  private ids: number[] = [];
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
 
@@ -54,7 +57,9 @@ export default class OfferLibrariesComponent implements OnInit {
         api.getOfferLibrariesOfferV2LibrariesGet(skip, filter, limit),
       (libraries) => {
         const rows = [];
+        this.ids = [];
         libraries.forEach((library) => {
+          this.ids.push(library.id);
           rows.push({
             values: {
               id: library.id,
@@ -87,4 +92,13 @@ export default class OfferLibrariesComponent implements OnInit {
     this.librariesDataSource.loadData();
   }
 
+  protected drop(event: CdkDragDrop<any>) {
+    moveItemInArray(this.ids, event.previousIndex, event.currentIndex);
+  }
+
+  saveOrder() {
+    this.offerService.reorderOfferLibrariesOfferV2LibrariesReorderPost({ libraryIds: this.ids }).pipe(take(1)).subscribe(() => {
+      this.librariesDataSource.loadData();
+    });
+  }
 }

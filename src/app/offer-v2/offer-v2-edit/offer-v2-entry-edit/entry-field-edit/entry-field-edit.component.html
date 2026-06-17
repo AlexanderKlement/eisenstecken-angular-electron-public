@@ -1,5 +1,5 @@
 <ng-container [formGroup]="entryFormGroup">
-  @if (entryFormGroup.get("type").value === OfferFieldEnum.String || entryFormGroup.get("type").value === OfferFieldEnum.Calculation || entryFormGroup.get("type").value === OfferFieldEnum.Numeric) {
+  @if (entryFormGroup.get("type").value === OfferFieldEnum.String || entryFormGroup.get("type").value === OfferFieldEnum.Calculation) {
     <mat-form-field appearance="outline" class="new-form-element">
       <mat-label>{{ entryFormGroup.get("label").value }}</mat-label>
       <input matInput [readonly]="entryFormGroup.get('type').value === OfferFieldEnum.Calculation"
@@ -8,10 +8,18 @@
                 (click)="onReset()">{{ entryFormGroup.get('type').value === OfferFieldEnum.Calculation ? '' : 'rotate_left' }}
       </mat-icon>
     </mat-form-field>
+  } @else if (entryFormGroup.get("type").value === OfferFieldEnum.Numeric) {
+    <mat-form-field appearance="outline" class="new-form-element">
+      <mat-label>{{ entryFormGroup.get("label").value }}</mat-label>
+      <input matInput formControlName="value">
+      <mat-icon class="neutral" matSuffix
+                (click)="onReset()">{{ entryFormGroup.get('type').value === OfferFieldEnum.Calculation ? '' : 'rotate_left' }}
+      </mat-icon>
+    </mat-form-field>
   } @else if (entryFormGroup.get("type").value === OfferFieldEnum.Text) {
     <mat-form-field appearance="outline" class="new-form-element">
       <mat-label>{{ entryFormGroup.get("label").value }}</mat-label>
-      <textarea matInput formControlName="value"></textarea>
+      <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="3" formControlName="value"></textarea>
       <mat-icon class="neutral" matSuffix (click)="onReset()">rotate_left</mat-icon>
     </mat-form-field>
   } @else if (entryFormGroup.get("type").value === OfferFieldEnum.Select) {

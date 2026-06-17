@@ -15,6 +15,7 @@ export interface OfferV2EntryInput {
     amount?: number;
     children?: Array<OfferV2EntryInput>;
     description: string;
+    elementId: number;
     elementType: string;
     fields?: Array<OfferV2EntryField>;
     id: string;

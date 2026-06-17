@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, inject, Input, Output } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from "@angular/core";
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { MatIcon } from "@angular/material/icon";
 import {
@@ -8,6 +8,7 @@ import { DefaultFlexDirective } from "ng-flex-layout";
 import OfferElementSelectorComponent from "../../element-selector/offer-element-selector.component";
 import {
   OfferElementListElement,
+  OfferFieldEnum,
   OfferV2EntryInput,
   OfferV2EntryOutput,
   OfferV2Service
@@ -23,6 +24,7 @@ import {
 import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
 import { priceEvaluationElementGroup } from "../../offer-calculation-utils";
 import { formatCurrency } from "@angular/common";
+import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 
 export declare type OfferEntryGroup = {
   alternative: FormControl<boolean>;
@@ -49,6 +51,7 @@ export function mapOfferEntryToInput(grp: FormGroup<OfferEntryGroup>): OfferV2En
     alternative: grp.get("alternative").value,
     id: grp.get("id").value,
     description: grp.get("description").value,
+    elementId: grp.get("elementId").value,
     elementType: grp.get("elementType").value,
     name: grp.get("name").value,
     children: grp.controls.children.controls.map(mapOfferEntryToInput),
@@ -96,7 +99,7 @@ export function mapEntryOfferEntryGroup(entry: OfferV2EntryOutput, globalAddPerc
   const grp = new FormGroup<OfferEntryGroup>({
     name: new FormControl(entry.name),
     id: new FormControl(entry.id),
-    elementId: new FormControl(-1),
+    elementId: new FormControl(entry.elementId),
     elementType: new FormControl(entry.elementType),
     children: new FormArray(entry.children.map(c => mapEntryOfferEntryGroup(c))),
     amount: new FormControl(entry.amount),
@@ -129,7 +132,8 @@ export function mapEntryOfferEntryGroup(entry: OfferV2EntryOutput, globalAddPerc
     EntryFieldEditComponent,
     MatFormField,
     MatLabel,
-    MatInput
+    MatInput,
+    CdkTextareaAutosize
   ],
   templateUrl: "./offer-v2-entry-edit.component.html",
   styleUrl: "./offer-v2-entry-edit.component.scss"
@@ -146,6 +150,7 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
   open = true;
   @Output() priceEvaluated = new EventEmitter<void>();
   private waitForChildren: number = 0;
+  @ViewChild("headerRow") headerRow: ElementRef<HTMLDivElement>;
 
   ngAfterViewInit() {
     if (this.entryGroup) {
@@ -156,7 +161,18 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
         this.waitForChildren = this.entryGroup.controls.children.length;
       }
     }
+    if (this.entryGroup.controls.elementType.value === "") {
+      const input = this.headerRow.nativeElement.getElementsByTagName("input");
+      if (input.length !== 0) {
+        input[0].click();
+      }
+    }
+  }
 
+  onSearchKeyClicked(event: KeyboardEvent) {
+    if (event.key === "Escape") {
+      this.onDeleteElem(this.index);
+    }
   }
 
   childrenEvaluated() {
@@ -215,7 +231,7 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
   }
 
   onCopyElemHere(index: number) {
-    this.entryGroup.controls.children.insert(index + 1, this.entryGroup.controls.children.at(index));
+    this.entryGroup.controls.children.insert(index + 1, mapEntryOfferEntryGroup(mapOfferEntryToInput(this.entryGroup.controls.children.at(index)), this.entryGroup.get("globalAddPercent").value));
   }
 
   onDeleteElemHere(index: number) {
@@ -223,4 +239,5 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
   }
 
   protected readonly formatCurrency = formatCurrency;
+  protected readonly OfferFieldEnum = OfferFieldEnum;
 }

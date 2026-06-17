@@ -17,6 +17,7 @@ export interface OfferField {
     fieldType: OfferFieldEnum;
     id: number;
     label: string;
+    sortIndex: number;
     unit?: OfferUnit | null;
     visible?: boolean | null;
 }

@@ -1,5 +1,5 @@
 .preview {
-  width: 500px;
+  width: 600px;
   border: solid 1px #E5E5E5;
   border-radius: 8px;
 
@@ -29,7 +29,6 @@
       border-bottom: 1px solid #E5E5E5;
       padding: 8px 12px;
       gap: 8px;
-      font-size: 75%;
 
       > .offertext {
         flex: 1;
@@ -38,10 +37,14 @@
         flex-direction: column;
         align-items: flex-start;
         justify-content: flex-start;
+
+        > .offertext-line {
+          word-break: break-word;
+        }
       }
 
       > .price {
-        width: 100px;
+        width: 110px;
         display: flex;
         flex-direction: column;
         align-items: flex-end;

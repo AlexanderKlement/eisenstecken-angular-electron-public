@@ -1,6 +1,6 @@
 import { Component, ElementRef, inject, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import OfferContainerComponent from "../../offer-container/offer-container.component";
 import { OfferField, OfferFieldEnum, OfferV2Service } from "../../../../api/openapi";
 import { take } from "rxjs/operators";
@@ -68,7 +68,7 @@ export default class OfferElementTypesEditComponent implements OnInit {
   elementTypeId: number;
   private snackBar = inject(MatSnackBar);
   elementTypeGroup: FormGroup<ElementTypeGroup> = new FormGroup({
-    name: new FormControl(""),
+    name: new FormControl("", [Validators.minLength(3), Validators.required]),
     price: new FormControl(""),
     offertext: new FormControl("")
   });
@@ -108,7 +108,7 @@ export default class OfferElementTypesEditComponent implements OnInit {
         {
           next: data => {
             this.elementTypeGroup = new FormGroup({
-              name: new FormControl(data.name),
+              name: new FormControl(data.name, [Validators.minLength(3), Validators.required]),
               price: new FormControl(data.price ?? ""),
               offertext: new FormControl(data.offertext ?? "")
             });
@@ -156,7 +156,6 @@ export default class OfferElementTypesEditComponent implements OnInit {
 
   onDelete() {
     if (this.elementTypeId) {
-      this.loadingSubject.next(true);
       confirmDeleteDialog(this.elementTypeId,
         this.dialog,
         "Elementtyp",
@@ -169,21 +168,23 @@ export default class OfferElementTypesEditComponent implements OnInit {
   }
 
   onSave() {
-    this.loadingSubject.next(true);
-    if (this.elementTypeId) {
-      this.offerService.patchOfferElementTypeOfferV2ElementTypeElementTypeIdPost(this.elementTypeId, {
-        name: this.elementTypeGroup.get("name").value,
-        fieldIds: this.selectedFields.map(f => f.id),
-        offertext: this.elementTypeGroup.get("offertext").value ?? "",
-        price: this.elementTypeGroup.get("price").value ?? ""
-      }).pipe(take(1)).subscribe(this.subscription);
-    } else {
-      this.offerService.createOfferElementTypeOfferV2ElementTypePut({
-        name: this.elementTypeGroup.get("name").value,
-        fieldIds: this.selectedFields.map(f => f.id),
-        offertext: this.elementTypeGroup.get("offertext").value ?? "",
-        price: this.elementTypeGroup.get("price").value ?? ""
-      }).pipe(take(1)).subscribe(this.subscription);
+    if (this.elementTypeGroup.valid) {
+      this.loadingSubject.next(true);
+      if (this.elementTypeId) {
+        this.offerService.patchOfferElementTypeOfferV2ElementTypeElementTypeIdPost(this.elementTypeId, {
+          name: this.elementTypeGroup.get("name").value,
+          fieldIds: this.selectedFields.map(f => f.id),
+          offertext: this.elementTypeGroup.get("offertext").value ?? "",
+          price: this.elementTypeGroup.get("price").value ?? ""
+        }).pipe(take(1)).subscribe(this.subscription);
+      } else {
+        this.offerService.createOfferElementTypeOfferV2ElementTypePut({
+          name: this.elementTypeGroup.get("name").value,
+          fieldIds: this.selectedFields.map(f => f.id),
+          offertext: this.elementTypeGroup.get("offertext").value ?? "",
+          price: this.elementTypeGroup.get("price").value ?? ""
+        }).pipe(take(1)).subscribe(this.subscription);
+      }
     }
   }
 

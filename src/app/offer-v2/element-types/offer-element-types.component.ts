@@ -8,6 +8,8 @@ import OfferContainerComponent from "../offer-container/offer-container.componen
 import { headerNewButton, listDeleteButton, listEditButton } from "../offer.util";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
+import { take } from "rxjs/operators";
 
 
 @Component({
@@ -26,6 +28,7 @@ export default class OfferElementTypesComponent implements OnInit {
   private offerService = inject(OfferV2Service);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
+  private ids: number[] = [];
 
   tableButtons: TableButton[] = [];
   headerButtons: TableButton[] = [];
@@ -63,7 +66,9 @@ export default class OfferElementTypesComponent implements OnInit {
         api.getOfferElementTypesOfferV2ElementTypesGet(skip, filter, limit),
       (types) => {
         const rows = [];
+        this.ids = [];
         types.forEach((type) => {
+          this.ids.push(type.id);
           rows.push({
             values: {
               id: type.id,
@@ -112,4 +117,13 @@ export default class OfferElementTypesComponent implements OnInit {
     this.elementTypesDataSource.loadData();
   }
 
+  protected drop(event: CdkDragDrop<any>) {
+    moveItemInArray(this.ids, event.previousIndex, event.currentIndex);
+  }
+
+  saveOrder() {
+    this.offerService.reorderOfferElementTypesOfferV2ElementTypesReorderPost({ elementTypeIds: this.ids }).pipe(take(1)).subscribe(() => {
+      this.elementTypesDataSource.loadData();
+    });
+  }
 }

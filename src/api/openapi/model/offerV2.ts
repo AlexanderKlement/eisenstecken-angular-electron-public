@@ -28,6 +28,6 @@ export interface OfferV2 {
     payment: string;
     pdf: string;
     validity: string;
-    vat: Vat;
+    vat?: Vat | null;
 }
 

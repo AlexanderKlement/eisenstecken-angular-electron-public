@@ -70,7 +70,7 @@ html {
     container-height: 37px,
     container-vertical-padding: 6.5px,
     outlined-focus-label-text-color: --mat-sys-on-surface,
-    outlined-outline-color: #eeeeee,
+    outlined-outline-color: #f5f5f5,
     outlined-hover-outline-color: #cccccc,
     outlined-focus-outline-color: #cccccc
   ));
@@ -81,12 +81,17 @@ html {
 }
 
 .new-form-element {
-  .mat-form-field-appearance-fill {
+  &.mat-form-field-appearance-fill {
     margin-bottom: unset;
   }
 
-  .mat-form-field-appearance-outline {
+  &.mat-form-field-appearance-outline {
     margin-top: 6px;
+
+    .mdc-text-field {
+      background-color: #f5f5f5;
+      border-radius: var(--mat-form-field-outlined-container-shape) !important;
+    }
   }
 }
 

@@ -13,6 +13,7 @@ import { AsyncPipe } from "@angular/common";
 import { MatOption, MatSelect } from "@angular/material/select";
 import { MatIcon } from "@angular/material/icon";
 import { take } from "rxjs/operators";
+import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 
 export declare type OfferEntryFieldGroup = {
   calculation: FormControl<string>,
@@ -88,7 +89,8 @@ export function mapEntryToEntryFieldGroup(field: OfferV2EntryField) {
     MatSelect,
     MatOption,
     MatIcon,
-    MatSuffix
+    MatSuffix,
+    CdkTextareaAutosize
   ],
   templateUrl: "./entry-field-edit.component.html",
   styleUrl: "./entry-field-edit.component.scss"

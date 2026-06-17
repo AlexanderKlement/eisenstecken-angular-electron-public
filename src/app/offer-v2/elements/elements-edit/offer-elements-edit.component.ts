@@ -1,6 +1,6 @@
 import { Component, ElementRef, inject, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import OfferContainerComponent from "../../offer-container/offer-container.component";
 import {
   OfferElementField,
@@ -45,12 +45,12 @@ type ElementFieldGroup = {
   unit: FormControl<string>,
   inherits: FormControl<boolean>,
   mandatory: FormControl<boolean>,
-  library: FormControl<number>,
+  library: FormControl<string>,
 }
 
 type ElementGroup = {
   name: FormControl<string>;
-  elementType: FormControl<number>;
+  elementType: FormControl<string>;
   fields: FormArray<FormGroup<ElementFieldGroup>>;
   offertext: FormControl<string>;
   price: FormControl<string>;
@@ -91,8 +91,8 @@ export default class OfferElementsEditComponent implements OnInit {
   elementId: number;
   private snackBar = inject(MatSnackBar);
   elementGroup: FormGroup<ElementGroup> = new FormGroup({
-    name: new FormControl(""),
-    elementType: new FormControl(-1),
+    name: new FormControl("", [Validators.minLength(3), Validators.required]),
+    elementType: new FormControl("-1", selectRequires),
     fields: new FormArray([]),
     offertext: new FormControl(""),
     price: new FormControl("")
@@ -124,8 +124,8 @@ export default class OfferElementsEditComponent implements OnInit {
         {
           next: data => {
             this.elementGroup = new FormGroup({
-              name: new FormControl(data.name),
-              elementType: new FormControl(data.elementType.id),
+              name: new FormControl(data.name, [Validators.minLength(3), Validators.required]),
+              elementType: new FormControl(data.elementType.id.toString(10), selectRequires),
               price: new FormControl(data.elementType.price),
               offertext: new FormControl(data.elementType.offertext),
               fields: new FormArray(data.fields.map(field => new FormGroup<ElementFieldGroup>({
@@ -139,7 +139,7 @@ export default class OfferElementsEditComponent implements OnInit {
                 unit: new FormControl(field.field.unit?.short ?? ""),
                 fieldType: new FormControl(field.field.fieldType),
                 id: new FormControl(field.id),
-                library: new FormControl(field.library?.id ?? -1, field.field.fieldType === OfferFieldEnum.Select ? selectRequires : null)
+                library: new FormControl(field.library?.id?.toString(10) ?? "-1", field.field.fieldType === OfferFieldEnum.Select ? selectRequires : null)
               })))
             });
             this.selectedFields = data.fields;
@@ -165,7 +165,6 @@ export default class OfferElementsEditComponent implements OnInit {
 
   onDelete() {
     if (this.elementId) {
-      this.loadingSubject.next(true);
       confirmDeleteDialog(this.elementId, this.dialog, "Element",
         (id) => this.offerService.deleteOfferElementOfferV2ElementElementIdDelete(id),
         () => {
@@ -179,7 +178,7 @@ export default class OfferElementsEditComponent implements OnInit {
     this.loadingSubject.next(true);
     let missingLibrary = false;
     const fields = this.elementGroup.controls.fields.controls.map<SchemasOfferV2OfferElementFieldSchemaOfferElementCreatePatch>(grp => {
-      const library = grp.get("library").value;
+      const library = parseInt(grp.get("library").value, 10);
       if (grp.get("fieldType").value === OfferFieldEnum.Select && library === -1) {
         missingLibrary = true;
       }
@@ -201,16 +200,21 @@ export default class OfferElementsEditComponent implements OnInit {
       this.loadingSubject.next(false);
       return;
     }
+    const elementTypeId = parseInt(this.elementGroup.get("elementType").value, 10);
+    if (elementTypeId == -1) {
+      this.loadingSubject.next(false);
+      return;
+    }
     if (this.elementId) {
       this.offerService.patchOfferElementOfferV2ElementElementIdPost(this.elementId, {
         name: this.elementGroup.get("name").value,
-        elementTypeId: this.elementGroup.get("elementType").value,
+        elementTypeId,
         fields
       }).pipe(take(1)).subscribe(this.subscription);
     } else {
       this.offerService.createOfferElementOfferV2ElementPut({
         name: this.elementGroup.get("name").value,
-        elementTypeId: this.elementGroup.get("elementType").value,
+        elementTypeId,
         fields
       }).pipe(take(1)).subscribe(this.subscription);
     }
@@ -230,7 +234,7 @@ export default class OfferElementsEditComponent implements OnInit {
           id: new FormControl(-1),
           inherits: new FormControl(false),
           value: new FormControl(f.fieldType === OfferFieldEnum.Calculation ? f.calculation : f.fieldType === OfferFieldEnum.Offertext ? f.calculation : ""),
-          library: new FormControl(-1, f.fieldType === OfferFieldEnum.Select ? selectRequires : null),
+          library: new FormControl("-1", f.fieldType === OfferFieldEnum.Select ? selectRequires : null),
           label: new FormControl(f.label),
           unit: new FormControl(f.unit?.short ?? ""),
           fieldType: new FormControl(f.fieldType),
@@ -245,7 +249,7 @@ export default class OfferElementsEditComponent implements OnInit {
   }
 
   onChangeType() {
-    const id = this.elementGroup.get("elementType").value;
+    const id = parseInt(this.elementGroup.get("elementType").value, 10);
     if (id !== -1) {
       this.offerService.getOfferElementTypeOfferV2ElementTypeElementTypeIdGet(id).pipe(take(1)).subscribe({
         next: data => {
@@ -271,7 +275,7 @@ export default class OfferElementsEditComponent implements OnInit {
   };
 
   onNavElementType() {
-    const id = this.elementGroup.get("elementType").value;
+    const id = parseInt(this.elementGroup.get("elementType").value, 10);
     if (id !== -1) {
       this.router.navigateByUrl(`/offer_v2/element_types/${id}`).then();
     }

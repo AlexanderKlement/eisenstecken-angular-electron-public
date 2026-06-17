@@ -1,4 +1,11 @@
 <app-offer-container title="Felder">
-  <app-table-builder title="Alle Felder" [headerButtons]="fieldsHeaderButtons" [dataSource]="fieldsDataSource"
-                     [buttons]="fieldsButtons"></app-table-builder>
+  <app-table-builder
+    title="Alle Felder"
+    [headerButtons]="fieldsHeaderButtons"
+    [dataSource]="fieldsDataSource"
+    [buttons]="fieldsButtons"
+    dragNDrop
+    (dragNDropDropped)="drop($event)"
+    (dragNDropSaved)="saveOrder()"
+  ></app-table-builder>
 </app-offer-container>

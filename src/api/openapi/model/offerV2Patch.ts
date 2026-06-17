@@ -12,7 +12,7 @@ import { OfferV2EntryInput } from './offerV2EntryInput';
 
 export interface OfferV2Patch { 
     content: Array<OfferV2EntryInput>;
-    date?: string | null;
+    date: string;
     delivery: string;
     globalAddPercent: number;
     globalPriceDiff: number;

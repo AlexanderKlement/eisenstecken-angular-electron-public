@@ -27,7 +27,7 @@
       @if (unitId) {
         <button (click)="onDelete()" mat-stroked-button color="warn">Löschen</button>
       }
-      <button mat-button type="submit" (click)="onSubmitClick()">Speichern</button>
+      <button mat-button type="submit" [disabled]="!unitsGroup.valid" (click)="onSubmitClick()">Speichern</button>
     </div>
   }
 </mat-dialog-actions>

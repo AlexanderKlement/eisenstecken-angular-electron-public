@@ -9,6 +9,7 @@ import OfferFieldsEditDialogComponent from "./fields-edit-dialog/offer-fields-ed
 import { take } from "rxjs/operators";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import OfferContainerComponent from "../offer-container/offer-container.component";
+import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 
 
 @Component({
@@ -29,6 +30,7 @@ export default class OfferFieldsComponent implements OnInit {
 
   fieldsButtons: TableButton[] = [];
   fieldsHeaderButtons: TableButton[] = [];
+  private ids: number[] = [];
   fieldsDataSource: TableDataSource<OfferField, OfferV2Service>;
   private snackBar = inject(MatSnackBar);
   editSubscription = {
@@ -62,7 +64,9 @@ export default class OfferFieldsComponent implements OnInit {
         api.getOfferFieldsOfferV2FieldsGet(skip, filter, limit),
       (fields) => {
         const rows = [];
+        this.ids = [];
         fields.forEach((field) => {
+          this.ids.push(field.id);
           if (field.visible)
             rows.push({
               values: {
@@ -116,4 +120,13 @@ export default class OfferFieldsComponent implements OnInit {
     });
   }
 
+  protected drop(event: CdkDragDrop<any>) {
+    moveItemInArray(this.ids, event.previousIndex, event.currentIndex);
+  }
+
+  saveOrder() {
+    this.offerService.reorderOfferFieldsOfferV2FieldsReorderPost({ fieldIds: this.ids }).pipe(take(1)).subscribe(() => {
+      this.fieldsDataSource.loadData();
+    });
+  }
 }

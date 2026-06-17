@@ -10,7 +10,8 @@
       @if (!!elementTypeId) {
         <button mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
       }
-      <button mat-raised-button color="primary" (click)="onSave()">Speichern</button>
+      <button mat-raised-button [disabled]="!elementTypeGroup.valid" color="primary" (click)="onSave()">Speichern
+      </button>
     }
   </div>
 

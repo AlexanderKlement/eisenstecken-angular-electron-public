@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from "@angular/core";
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import {
   DefaultLayoutAlignDirective,
   DefaultLayoutDirective,
@@ -77,12 +77,12 @@ export default class OfferUnitsEditDialogComponent implements OnInit {
   initData(): void {
     if (this.data.unit) {
       this.unitsGroup = new FormGroup<OfferUnitGroup>({
-        short: new FormControl(this.data.unit.short),
+        short: new FormControl(this.data.unit.short, [Validators.minLength(1), Validators.required]),
         name: new FormControl(this.data.unit.name)
       });
     } else {
       this.unitsGroup = new FormGroup<OfferUnitGroup>({
-        short: new FormControl(""),
+        short: new FormControl("", [Validators.minLength(1), Validators.required]),
         name: new FormControl("")
       });
     }
@@ -97,7 +97,12 @@ export default class OfferUnitsEditDialogComponent implements OnInit {
       this.dialogRef.close(true);
     },
     error: (error: any) => {
-      this.snackBar.open("Löschen fehlgeschlagen: " + error, "Ok", { duration: 8000 });
+      this.loadingSubject.next(false);
+      if (this.unitId) {
+        this.snackBar.open("Löschen fehlgeschlagen: " + error, "Ok", { duration: 8000 });
+      } else {
+        this.snackBar.open("Etwas ist schief gelaufen: " + error, "Ok", { duration: 8000 });
+      }
     }
   };
 

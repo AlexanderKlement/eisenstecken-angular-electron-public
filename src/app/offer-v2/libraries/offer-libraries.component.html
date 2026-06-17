@@ -1,5 +1,10 @@
 <app-offer-container title="Bibliotheken">
-  <app-table-builder title="Alle Bibliotheken" [dataSource]="librariesDataSource"
+  <app-table-builder title="Alle Bibliotheken"
+                     [dataSource]="librariesDataSource"
                      [headerButtons]="librariesHeaderButtons"
-                     [buttons]="librariesButtons"></app-table-builder>
+                     [buttons]="librariesButtons"
+                     dragNDrop
+                     (dragNDropDropped)="drop($event)"
+                     (dragNDropSaved)="saveOrder()"
+  ></app-table-builder>
 </app-offer-container>

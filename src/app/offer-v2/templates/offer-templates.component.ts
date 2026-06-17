@@ -8,6 +8,8 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { TableBuilderComponent, TableButton } from "../../shared/components/table-builder/table-builder.component";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { headerNewButton, listDeleteButton, listEditButton } from "../offer.util";
+import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
+import { take } from "rxjs/operators";
 
 
 @Component({
@@ -26,6 +28,7 @@ export default class OfferTemplatesComponent implements OnInit {
   private offerService = inject(OfferV2Service);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
+  private ids: number[] = [];
 
   tableButtons: TableButton[] = [];
   headerButtons: TableButton[] = [];
@@ -62,7 +65,9 @@ export default class OfferTemplatesComponent implements OnInit {
         api.getOfferTemplatesOfferV2TemplatesGet(skip, filter, limit),
       (templates) => {
         const rows = [];
+        this.ids = [];
         templates.forEach((template) => {
+          this.ids.push(template.id);
           rows.push({
             values: {
               id: template.id,
@@ -94,4 +99,13 @@ export default class OfferTemplatesComponent implements OnInit {
     this.templateDataSource.loadData();
   }
 
+  protected drop(event: CdkDragDrop<any>) {
+    moveItemInArray(this.ids, event.previousIndex, event.currentIndex);
+  }
+
+  saveOrder() {
+    this.offerService.reorderOfferTemplatesOfferV2TemplatesReorderPost({ templateIds: this.ids }).pipe(take(1)).subscribe(() => {
+      this.templateDataSource.loadData();
+    });
+  }
 }

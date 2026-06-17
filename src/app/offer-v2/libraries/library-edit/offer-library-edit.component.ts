@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from "@angular/core";
-import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import {
   DefaultLayoutAlignDirective,
   DefaultLayoutDirective,
@@ -16,18 +16,21 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { take } from "rxjs/operators";
 import { MatOption } from "@angular/material/core";
-import { MatSelect } from "@angular/material/select";
+import { MatSelect, MatSelectModule } from "@angular/material/select";
 import { CircleIconButtonComponent } from "../../../shared/components/circle-icon-button/circle-icon-button.component";
 import OfferContainerComponent from "../../offer-container/offer-container.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { confirmDeleteDialog } from "../../offer.util";
+import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray } from "@angular/cdk/drag-drop";
+import { MatIcon } from "@angular/material/icon";
+import { selectRequires } from "../../../shared/custom-validators";
 
 
 type OfferLibraryEntryGroup = {
   id: FormControl<number>;
   name: FormControl<string>;
   price: FormControl<number>;
-  unit: FormControl<number>;
+  unit: FormControl<string>;
 }
 
 type OfferLibraryGroup = {
@@ -55,8 +58,13 @@ type OfferLibraryGroup = {
     MatProgressSpinner,
     MatOption,
     MatSelect,
+    MatSelectModule,
     CircleIconButtonComponent,
-    OfferContainerComponent
+    OfferContainerComponent,
+    CdkDropList,
+    CdkDrag,
+    MatIcon,
+    CdkDragHandle
   ]
 })
 export default class OfferLibraryEditComponent implements OnInit {
@@ -65,16 +73,17 @@ export default class OfferLibraryEditComponent implements OnInit {
   private router = inject(Router);
   private offerService = inject(OfferV2Service);
   libraryGroup: FormGroup<OfferLibraryGroup> = new FormGroup<OfferLibraryGroup>({
-    name: new FormControl(""),
+    name: new FormControl("", [Validators.minLength(3), Validators.required]),
     description: new FormControl(""),
     entries: new FormArray([])
   });
   libraryId: number;
   subTitle = "Neue Bibliothek erstellen";
-  units$: Observable<OfferUnit[]>;
+  units: OfferUnit[] = [];
   private loadingSubject = new BehaviorSubject<boolean>(false);
   public loading$ = this.loadingSubject.asObservable();
   private snackBar = inject(MatSnackBar);
+  private orderChanged = false;
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -87,7 +96,9 @@ export default class OfferLibraryEditComponent implements OnInit {
     });
     this.initData();
 
-    this.units$ = this.offerService.getOfferUnitsOfferV2UnitsGet();
+    this.offerService.getOfferUnitsOfferV2UnitsGet().pipe(take(1)).subscribe((data) => {
+      this.units = data;
+    });
   }
 
   initData(): void {
@@ -97,13 +108,13 @@ export default class OfferLibraryEditComponent implements OnInit {
         {
           next: data => {
             this.libraryGroup = new FormGroup<OfferLibraryGroup>({
-              name: new FormControl(data.name),
+              name: new FormControl(data.name, [Validators.minLength(3), Validators.required]),
               description: new FormControl(data.description),
               entries: new FormArray(data.entries.map<FormGroup<OfferLibraryEntryGroup>>(entry => new FormGroup({
                 id: new FormControl(entry.id),
                 name: new FormControl(entry.name),
                 price: new FormControl(entry.price),
-                unit: new FormControl(entry.unit.id)
+                unit: new FormControl(entry.unit.id.toString(10), selectRequires)
               })))
             });
           },
@@ -122,7 +133,7 @@ export default class OfferLibraryEditComponent implements OnInit {
     next: (l: any) => {
       this.loadingSubject.next(false);
       if (!this.libraryId) {
-        this.libraryId = (l as OfferLibrary).id;
+        this.router.navigateByUrl(`/offer_v2/libraries/${(l as OfferLibrary).id}`).then();
       } else {
         this.router.navigateByUrl("/offer_v2/libraries").then();
       }
@@ -142,13 +153,15 @@ export default class OfferLibraryEditComponent implements OnInit {
       }).pipe(take(1)).subscribe({
         next: data => {
           const observables: Observable<any>[] = [];
+          let ids: number[] = [];
           for (let i = 0; i < this.libraryGroup.controls.entries.length; i++) {
             const grp = this.libraryGroup.controls.entries.at(i);
             const id = grp.get("id").value;
-            const unitId = grp.get("unit").value;
+            const unitId = parseInt(grp.get("unit").value, 10);
             const price = grp.get("price").value;
             const name = grp.get("name").value;
             if (id === -1) {
+              ids.push(-i);
               observables.push(this.offerService.createOfferLibraryEntryOfferV2LibraryEntryPut({
                 name,
                 libraryId: this.libraryId,
@@ -156,6 +169,7 @@ export default class OfferLibraryEditComponent implements OnInit {
                 unitId
               }));
             } else {
+              ids.push(id);
               const entry = data.entries.find(e => e.id === id);
               if (entry && (entry.name !== name || entry.price !== price || entry.unit.id !== unitId)) {
                 observables.push(this.offerService.patchOfferLibraryEntryOfferV2LibraryEntryLibraryEntryIdPost(id, {
@@ -168,11 +182,55 @@ export default class OfferLibraryEditComponent implements OnInit {
             }
           }
           if (observables.length === 0) {
-            this.loadingSubject.next(false);
-            this.router.navigateByUrl("/offer_v2/libraries").then();
-            return;
+            if (this.orderChanged) {
+              this.offerService.reorderOfferLibraryEntriesOfferV2LibraryLibraryIdEntriesReorderPost(this.libraryId, { libraryEntryIds: ids }).pipe(take(1)).subscribe(this.subscription);
+            } else {
+              this.loadingSubject.next(false);
+              this.router.navigateByUrl("/offer_v2/libraries").then();
+              return;
+            }
+          } else {
+            forkJoin(observables).pipe(take(1)).subscribe(
+              {
+                next: () => {
+                  if (this.orderChanged) {
+                    this.offerService.getOfferLibraryOfferV2LibraryLibraryIdGet(this.libraryId).pipe(take(1)).subscribe((library) => {
+                      const realIds = ids.map(id => {
+                        if (id < 0) {
+                          const grp = this.libraryGroup.controls.entries.at(Math.abs(id));
+                          const name = grp.get("name").value;
+                          const foundEntry = library.entries.find(e => e.name.trim() === name.trim());
+                          if (foundEntry) {
+                            return foundEntry.id;
+                          }
+                          return -1;
+                        } else {
+                          return id;
+                        }
+                      });
+                      if (realIds.includes(-1)) {
+                        console.warn("This should not happen");
+                        this.loadingSubject.next(false);
+                        this.router.navigateByUrl("/offer_v2/libraries").then();
+                        return;
+                      } else {
+                        this.offerService.reorderOfferLibraryEntriesOfferV2LibraryLibraryIdEntriesReorderPost(library.id, { libraryEntryIds: realIds }).pipe(take(1)).subscribe(() => {
+                          this.loadingSubject.next(false);
+                          this.router.navigateByUrl("/offer_v2/libraries").then();
+                          return;
+                        });
+                      }
+                    });
+                  } else {
+                    this.loadingSubject.next(false);
+                    this.router.navigateByUrl("/offer_v2/libraries").then();
+                    return;
+                  }
+                },
+                error: () => {
+                }
+              });
           }
-          forkJoin(observables).pipe(take(1)).subscribe(this.subscription);
         },
         error: this.subscription.error
       });
@@ -202,7 +260,7 @@ export default class OfferLibraryEditComponent implements OnInit {
     const entry = new FormGroup<OfferLibraryEntryGroup>({
       id: new FormControl(-1),
       name: new FormControl(""),
-      unit: new FormControl(-1),
+      unit: new FormControl("-1", selectRequires),
       price: new FormControl(0)
     });
     this.libraryGroup.controls.entries.push(entry);
@@ -219,5 +277,12 @@ export default class OfferLibraryEditComponent implements OnInit {
         },
         this.snackBar);
     }
+  }
+
+  protected drop(event: CdkDragDrop<any, any>) {
+    const entries = this.libraryGroup.controls.entries.controls.map(grp => grp);
+    moveItemInArray(entries, event.previousIndex, event.currentIndex);
+    this.libraryGroup.controls.entries = new FormArray(entries);
+    this.orderChanged = true;
   }
 }

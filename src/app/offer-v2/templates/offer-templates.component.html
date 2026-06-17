@@ -1,4 +1,11 @@
 <app-offer-container title="Templates">
-  <app-table-builder title="Deine Templates" [headerButtons]="headerButtons" [dataSource]="templateDataSource"
-                     [buttons]="tableButtons"></app-table-builder>
+  <app-table-builder
+    title="Deine Templates"
+    [headerButtons]="headerButtons"
+    [dataSource]="templateDataSource"
+    [buttons]="tableButtons"
+    dragNDrop
+    (dragNDropDropped)="drop($event)"
+    (dragNDropSaved)="saveOrder()"
+  ></app-table-builder>
 </app-offer-container>

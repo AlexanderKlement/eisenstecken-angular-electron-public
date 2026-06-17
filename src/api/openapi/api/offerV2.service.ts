@@ -21,15 +21,25 @@ import { HTTPValidationError } from '../model/hTTPValidationError';
 // @ts-ignore
 import { OfferElement } from '../model/offerElement';
 // @ts-ignore
+import { OfferElementFieldsReorder } from '../model/offerElementFieldsReorder';
+// @ts-ignore
 import { OfferElementListElement } from '../model/offerElementListElement';
+// @ts-ignore
+import { OfferElementReorder } from '../model/offerElementReorder';
 // @ts-ignore
 import { OfferElementType } from '../model/offerElementType';
 // @ts-ignore
 import { OfferElementTypeCreatePatch } from '../model/offerElementTypeCreatePatch';
 // @ts-ignore
+import { OfferElementTypeFieldReorder } from '../model/offerElementTypeFieldReorder';
+// @ts-ignore
+import { OfferElementTypeReorder } from '../model/offerElementTypeReorder';
+// @ts-ignore
 import { OfferField } from '../model/offerField';
 // @ts-ignore
 import { OfferFieldCreatePatch } from '../model/offerFieldCreatePatch';
+// @ts-ignore
+import { OfferFieldReorder } from '../model/offerFieldReorder';
 // @ts-ignore
 import { OfferLibrary } from '../model/offerLibrary';
 // @ts-ignore
@@ -37,7 +47,11 @@ import { OfferLibraryCreatePatch } from '../model/offerLibraryCreatePatch';
 // @ts-ignore
 import { OfferLibraryEntryCreatePatch } from '../model/offerLibraryEntryCreatePatch';
 // @ts-ignore
+import { OfferLibraryEntryReorder } from '../model/offerLibraryEntryReorder';
+// @ts-ignore
 import { OfferLibraryListElement } from '../model/offerLibraryListElement';
+// @ts-ignore
+import { OfferLibraryReorder } from '../model/offerLibraryReorder';
 // @ts-ignore
 import { OfferTemplate } from '../model/offerTemplate';
 // @ts-ignore
@@ -45,9 +59,13 @@ import { OfferTemplateCreatePatch } from '../model/offerTemplateCreatePatch';
 // @ts-ignore
 import { OfferTemplateListElement } from '../model/offerTemplateListElement';
 // @ts-ignore
+import { OfferTemplateReorder } from '../model/offerTemplateReorder';
+// @ts-ignore
 import { OfferUnit } from '../model/offerUnit';
 // @ts-ignore
 import { OfferUnitCreatePatch } from '../model/offerUnitCreatePatch';
+// @ts-ignore
+import { OfferUnitReorder } from '../model/offerUnitReorder';
 // @ts-ignore
 import { OfferV2 } from '../model/offerV2';
 // @ts-ignore
@@ -3014,6 +3032,621 @@ export class OfferV2Service extends BaseService {
                 context: localVarHttpContext,
                 body: offerV2Patch,
                 params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Reorder Offer Element Fields
+     * @param elementId 
+     * @param offerElementFieldsReorder 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public reorderOfferElementFieldsOfferV2ElementsElementIdFieldsReorderPost(elementId: number, offerElementFieldsReorder: OfferElementFieldsReorder, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OfferElement>;
+    public reorderOfferElementFieldsOfferV2ElementsElementIdFieldsReorderPost(elementId: number, offerElementFieldsReorder: OfferElementFieldsReorder, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OfferElement>>;
+    public reorderOfferElementFieldsOfferV2ElementsElementIdFieldsReorderPost(elementId: number, offerElementFieldsReorder: OfferElementFieldsReorder, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OfferElement>>;
+    public reorderOfferElementFieldsOfferV2ElementsElementIdFieldsReorderPost(elementId: number, offerElementFieldsReorder: OfferElementFieldsReorder, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (elementId === null || elementId === undefined) {
+            throw new Error('Required parameter elementId was null or undefined when calling reorderOfferElementFieldsOfferV2ElementsElementIdFieldsReorderPost.');
+        }
+        if (offerElementFieldsReorder === null || offerElementFieldsReorder === undefined) {
+            throw new Error('Required parameter offerElementFieldsReorder was null or undefined when calling reorderOfferElementFieldsOfferV2ElementsElementIdFieldsReorderPost.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (OAuth2PasswordBearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/offer/v2/elements/${this.configuration.encodeParam({name: "elementId", value: elementId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}/fields/reorder`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<OfferElement>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: offerElementFieldsReorder,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Reorder Offer Element Type Fields
+     * @param elementTypeId 
+     * @param offerElementTypeFieldReorder 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public reorderOfferElementTypeFieldsOfferV2ElementTypeElementTypeIdFieldsReorderPost(elementTypeId: number, offerElementTypeFieldReorder: OfferElementTypeFieldReorder, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OfferElementType>;
+    public reorderOfferElementTypeFieldsOfferV2ElementTypeElementTypeIdFieldsReorderPost(elementTypeId: number, offerElementTypeFieldReorder: OfferElementTypeFieldReorder, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OfferElementType>>;
+    public reorderOfferElementTypeFieldsOfferV2ElementTypeElementTypeIdFieldsReorderPost(elementTypeId: number, offerElementTypeFieldReorder: OfferElementTypeFieldReorder, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OfferElementType>>;
+    public reorderOfferElementTypeFieldsOfferV2ElementTypeElementTypeIdFieldsReorderPost(elementTypeId: number, offerElementTypeFieldReorder: OfferElementTypeFieldReorder, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (elementTypeId === null || elementTypeId === undefined) {
+            throw new Error('Required parameter elementTypeId was null or undefined when calling reorderOfferElementTypeFieldsOfferV2ElementTypeElementTypeIdFieldsReorderPost.');
+        }
+        if (offerElementTypeFieldReorder === null || offerElementTypeFieldReorder === undefined) {
+            throw new Error('Required parameter offerElementTypeFieldReorder was null or undefined when calling reorderOfferElementTypeFieldsOfferV2ElementTypeElementTypeIdFieldsReorderPost.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (OAuth2PasswordBearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/offer/v2/element_type/${this.configuration.encodeParam({name: "elementTypeId", value: elementTypeId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}/fields/reorder`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<OfferElementType>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: offerElementTypeFieldReorder,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Reorder Offer Element Types
+     * @param offerElementTypeReorder 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public reorderOfferElementTypesOfferV2ElementTypesReorderPost(offerElementTypeReorder: OfferElementTypeReorder, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OfferElementType>>;
+    public reorderOfferElementTypesOfferV2ElementTypesReorderPost(offerElementTypeReorder: OfferElementTypeReorder, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OfferElementType>>>;
+    public reorderOfferElementTypesOfferV2ElementTypesReorderPost(offerElementTypeReorder: OfferElementTypeReorder, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OfferElementType>>>;
+    public reorderOfferElementTypesOfferV2ElementTypesReorderPost(offerElementTypeReorder: OfferElementTypeReorder, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (offerElementTypeReorder === null || offerElementTypeReorder === undefined) {
+            throw new Error('Required parameter offerElementTypeReorder was null or undefined when calling reorderOfferElementTypesOfferV2ElementTypesReorderPost.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (OAuth2PasswordBearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/offer/v2/element_types/reorder`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<OfferElementType>>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: offerElementTypeReorder,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Reorder Offer Elements
+     * @param offerElementReorder 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public reorderOfferElementsOfferV2ElementsReorderPost(offerElementReorder: OfferElementReorder, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OfferElementListElement>>;
+    public reorderOfferElementsOfferV2ElementsReorderPost(offerElementReorder: OfferElementReorder, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OfferElementListElement>>>;
+    public reorderOfferElementsOfferV2ElementsReorderPost(offerElementReorder: OfferElementReorder, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OfferElementListElement>>>;
+    public reorderOfferElementsOfferV2ElementsReorderPost(offerElementReorder: OfferElementReorder, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (offerElementReorder === null || offerElementReorder === undefined) {
+            throw new Error('Required parameter offerElementReorder was null or undefined when calling reorderOfferElementsOfferV2ElementsReorderPost.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (OAuth2PasswordBearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/offer/v2/elements/reorder`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<OfferElementListElement>>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: offerElementReorder,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Reorder Offer Fields
+     * @param offerFieldReorder 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public reorderOfferFieldsOfferV2FieldsReorderPost(offerFieldReorder: OfferFieldReorder, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OfferField>>;
+    public reorderOfferFieldsOfferV2FieldsReorderPost(offerFieldReorder: OfferFieldReorder, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OfferField>>>;
+    public reorderOfferFieldsOfferV2FieldsReorderPost(offerFieldReorder: OfferFieldReorder, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OfferField>>>;
+    public reorderOfferFieldsOfferV2FieldsReorderPost(offerFieldReorder: OfferFieldReorder, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (offerFieldReorder === null || offerFieldReorder === undefined) {
+            throw new Error('Required parameter offerFieldReorder was null or undefined when calling reorderOfferFieldsOfferV2FieldsReorderPost.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (OAuth2PasswordBearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/offer/v2/fields/reorder`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<OfferField>>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: offerFieldReorder,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Reorder Offer Libraries
+     * @param offerLibraryReorder 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public reorderOfferLibrariesOfferV2LibrariesReorderPost(offerLibraryReorder: OfferLibraryReorder, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OfferLibraryListElement>>;
+    public reorderOfferLibrariesOfferV2LibrariesReorderPost(offerLibraryReorder: OfferLibraryReorder, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OfferLibraryListElement>>>;
+    public reorderOfferLibrariesOfferV2LibrariesReorderPost(offerLibraryReorder: OfferLibraryReorder, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OfferLibraryListElement>>>;
+    public reorderOfferLibrariesOfferV2LibrariesReorderPost(offerLibraryReorder: OfferLibraryReorder, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (offerLibraryReorder === null || offerLibraryReorder === undefined) {
+            throw new Error('Required parameter offerLibraryReorder was null or undefined when calling reorderOfferLibrariesOfferV2LibrariesReorderPost.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (OAuth2PasswordBearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/offer/v2/libraries/reorder`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<OfferLibraryListElement>>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: offerLibraryReorder,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Reorder Offer Library Entries
+     * @param libraryId 
+     * @param offerLibraryEntryReorder 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public reorderOfferLibraryEntriesOfferV2LibraryLibraryIdEntriesReorderPost(libraryId: number, offerLibraryEntryReorder: OfferLibraryEntryReorder, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OfferLibrary>;
+    public reorderOfferLibraryEntriesOfferV2LibraryLibraryIdEntriesReorderPost(libraryId: number, offerLibraryEntryReorder: OfferLibraryEntryReorder, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OfferLibrary>>;
+    public reorderOfferLibraryEntriesOfferV2LibraryLibraryIdEntriesReorderPost(libraryId: number, offerLibraryEntryReorder: OfferLibraryEntryReorder, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OfferLibrary>>;
+    public reorderOfferLibraryEntriesOfferV2LibraryLibraryIdEntriesReorderPost(libraryId: number, offerLibraryEntryReorder: OfferLibraryEntryReorder, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (libraryId === null || libraryId === undefined) {
+            throw new Error('Required parameter libraryId was null or undefined when calling reorderOfferLibraryEntriesOfferV2LibraryLibraryIdEntriesReorderPost.');
+        }
+        if (offerLibraryEntryReorder === null || offerLibraryEntryReorder === undefined) {
+            throw new Error('Required parameter offerLibraryEntryReorder was null or undefined when calling reorderOfferLibraryEntriesOfferV2LibraryLibraryIdEntriesReorderPost.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (OAuth2PasswordBearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/offer/v2/library/${this.configuration.encodeParam({name: "libraryId", value: libraryId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}/entries/reorder`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<OfferLibrary>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: offerLibraryEntryReorder,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Reorder Offer Templates
+     * @param offerTemplateReorder 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public reorderOfferTemplatesOfferV2TemplatesReorderPost(offerTemplateReorder: OfferTemplateReorder, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OfferTemplateListElement>>;
+    public reorderOfferTemplatesOfferV2TemplatesReorderPost(offerTemplateReorder: OfferTemplateReorder, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OfferTemplateListElement>>>;
+    public reorderOfferTemplatesOfferV2TemplatesReorderPost(offerTemplateReorder: OfferTemplateReorder, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OfferTemplateListElement>>>;
+    public reorderOfferTemplatesOfferV2TemplatesReorderPost(offerTemplateReorder: OfferTemplateReorder, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (offerTemplateReorder === null || offerTemplateReorder === undefined) {
+            throw new Error('Required parameter offerTemplateReorder was null or undefined when calling reorderOfferTemplatesOfferV2TemplatesReorderPost.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (OAuth2PasswordBearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/offer/v2/templates/reorder`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<OfferTemplateListElement>>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: offerTemplateReorder,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Reorder Offer Units
+     * @param offerUnitReorder 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public reorderOfferUnitsOfferV2UnitsReorderPost(offerUnitReorder: OfferUnitReorder, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OfferUnit>>;
+    public reorderOfferUnitsOfferV2UnitsReorderPost(offerUnitReorder: OfferUnitReorder, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OfferUnit>>>;
+    public reorderOfferUnitsOfferV2UnitsReorderPost(offerUnitReorder: OfferUnitReorder, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OfferUnit>>>;
+    public reorderOfferUnitsOfferV2UnitsReorderPost(offerUnitReorder: OfferUnitReorder, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (offerUnitReorder === null || offerUnitReorder === undefined) {
+            throw new Error('Required parameter offerUnitReorder was null or undefined when calling reorderOfferUnitsOfferV2UnitsReorderPost.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (OAuth2PasswordBearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/offer/v2/units/reorder`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<OfferUnit>>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: offerUnitReorder,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from "@angular/core";
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import {
   DefaultLayoutAlignDirective,
   DefaultLayoutDirective,
@@ -90,7 +90,7 @@ export default class OfferFieldsEditDialogComponent implements OnInit {
   initData(): void {
     if (this.data.field) {
       this.fieldsGroup = new FormGroup<OfferFieldGroup>({
-        label: new FormControl(this.data.field.label),
+        label: new FormControl(this.data.field.label, [Validators.minLength(3), Validators.required]),
         type: new FormControl(this.data.field.fieldType),
         calculation: new FormControl(this.data.field.calculation),
         description: new FormControl(this.data.field.description),
@@ -98,7 +98,7 @@ export default class OfferFieldsEditDialogComponent implements OnInit {
       });
     } else {
       this.fieldsGroup = new FormGroup<OfferFieldGroup>({
-        label: new FormControl(""),
+        label: new FormControl("", [Validators.minLength(3), Validators.required]),
         type: new FormControl(OfferFieldEnum.String),
         calculation: new FormControl(""),
         description: new FormControl(""),
