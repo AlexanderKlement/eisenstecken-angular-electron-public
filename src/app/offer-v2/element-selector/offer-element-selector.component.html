@@ -4,7 +4,9 @@
   class="select-container"
   [fxFlex]="fillWidth">
   @if (label) {
-    <mat-label>{{ label }}</mat-label>
+    <ng-container>
+      <mat-label>{{ label }}</mat-label>
+    </ng-container>
   }
   <mtx-select
     class="select-container"

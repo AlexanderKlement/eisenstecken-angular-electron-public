@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, OnInit, ViewChild } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import OfferContainerComponent from "../../offer-container/offer-container.component";
@@ -102,7 +102,6 @@ export default class OfferElementsEditComponent implements OnInit {
   selectedFields: OfferElementField[] = [];
   private loadingSubject = new BehaviorSubject<boolean>(false);
   public loading$ = this.loadingSubject.asObservable();
-  @ViewChild("search") searchInput: ElementRef<HTMLInputElement>;
   private dialog = inject(MatDialog);
 
   ngOnInit(): void {

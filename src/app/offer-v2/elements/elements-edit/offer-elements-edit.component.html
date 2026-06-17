@@ -34,12 +34,11 @@
         </mat-form-field>
       </div>
 
-      @if (elementGroup.controls.elementType.value !== -1) {
+      @if (elementGroup.get('elementType').value !== "-1") {
         <h3>Felder</h3>
         <div fxLayout="row" fxFill fxLayoutAlign="space-between center">
           <span>Die Felder werden über den Elementtyp definiert</span>
-          <button mat-stroked-button color="primary" (click)="onNavElementType()"
-                  [disabled]="elementGroup.get('elementType').value === -1">
+          <button mat-stroked-button color="primary" (click)="onNavElementType()">
             Elementtyp bearbeiten
           </button>
         </div>
