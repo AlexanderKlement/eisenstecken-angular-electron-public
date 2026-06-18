@@ -33,25 +33,42 @@
                 </mat-form-field>
                 <strong class="total" [title]="formula">{{ priceAsCurrency }}</strong>
               </div>
-              <ng-container formArrayName="content">
-                @for (group of offerGroup.controls.content.controls; track group.controls.id; let idx = $index) {
-                  <app-offer-v2-entry-edit
-                    (priceEvaluated)="contentEvaluated()"
-                    [entryGroup]="group"
-                    [index]="idx"
-                    [depth]="0"
-                    prefix=""
-                    [onDeleteElem]="onDeleteContent.bind(this)"
-                    [onAddNeighbour]="onAddContent.bind(this)"
-                    [onCopyElem]="onCopyContent.bind(this)"
-                  ></app-offer-v2-entry-edit>
-                }
-                @if (offerGroup.controls.content.length === 0) {
-                  <app-list-element leftIcon="add" mainText="Erstes Element hinzufügen" (clicked)="onAddContent(0)"
-                                    dottedAccent centered pointer>
-                  </app-list-element>
-                }
-              </ng-container>
+              @if (offerGroup.controls.content.length !== 0) {
+                <div formArrayName="content"
+                     class="draggable-list"
+                     id="root-list"
+                >
+                  <!--
+                     (cdkDropListDropped)="drop($event)"
+                  cdkDropList
+                     cdkDropListElementContainer=".entry-content"
+                     [cdkDropListConnectedTo]="connectedLists"
+
+                                   -->
+                  @for (group of offerGroup.controls.content.controls; track group.controls.id; let idx = $index) {
+                    <app-offer-v2-entry-edit
+                      (priceEvaluated)="contentEvaluated()"
+                      [entryGroup]="group"
+                      [index]="idx"
+                      [depth]="0"
+                      prefix=""
+                      [onDeleteElem]="onDeleteContent.bind(this)"
+                      [onAddNeighbour]="onAddContent.bind(this)"
+                      [onCopyElem]="onCopyContent.bind(this)"
+                      [allLibraries]="allLibraries"
+                      [allElementTypes]="allElementTypes"
+                      [draggedObject]="draggedObject"
+                      (dragStart)="dragStart($event)"
+                      [parentDragging]="false"
+                    ></app-offer-v2-entry-edit>
+                  }
+
+                </div>
+              } @else {
+                <app-list-element leftIcon="add" mainText="Erstes Element hinzufügen" (clicked)="onAddContent(0)"
+                                  dottedAccent centered pointer>
+                </app-list-element>
+              }
             </div>
             <div class="preview">
               <div class="preview-header">

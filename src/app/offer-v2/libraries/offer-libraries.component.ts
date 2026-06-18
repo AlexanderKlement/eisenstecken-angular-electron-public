@@ -93,6 +93,7 @@ export default class OfferLibrariesComponent implements OnInit {
   }
 
   protected drop(event: CdkDragDrop<any>) {
+    console.log(`drop`, event);
     moveItemInArray(this.ids, event.previousIndex, event.currentIndex);
   }
 

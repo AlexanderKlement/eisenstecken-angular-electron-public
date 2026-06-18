@@ -1,7 +1,7 @@
 <div class="list-element" [class.dotted-accent]="dottedAccent"
      [class.cursor-pointer]="pointer" (click)="clicked.emit()">
   @if (isDraggable) {
-    <mat-icon class="left-icon cursor-drag" cdkDragHandle>drag_handle</mat-icon>
+    <mat-icon class="left-icon cursor-drag" cdkDragHandle>drag_indicator</mat-icon>
   } @else if (leftIcon) {
     <mat-icon [class.left-icon]="!centered">{{ leftIcon }}</mat-icon>
   }

@@ -139,7 +139,6 @@ export class TableBuilderComponent<T extends DataSourceClass, A extends AnyApi =
       );
     }
     if (this.dragNDrop) {
-      console.log("Add DragNDrop");
       this.dataSource.columnIdentifiers.unshift("drag_handler");
       this.dataSource.columns.unshift({
         name: "drag_handler",

@@ -10,7 +10,15 @@ import {
 import { MatButton } from "@angular/material/button";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { ActivatedRoute, Router } from "@angular/router";
-import { DefaultService, OfferElementListElement, OfferV2, OfferV2Service, OfferV2Version } from "../../../api/openapi";
+import {
+  DefaultService,
+  OfferElementListElement,
+  OfferElementType,
+  OfferLibrary,
+  OfferV2,
+  OfferV2Service,
+  OfferV2Version
+} from "../../../api/openapi";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatDialog } from "@angular/material/dialog";
 import { BehaviorSubject, concat, Observable, of, Subject } from "rxjs";
@@ -142,7 +150,10 @@ export class OfferV2EditComponent implements OnInit {
   private loadingSubject = new BehaviorSubject<boolean>(false);
   public loading$ = this.loadingSubject.asObservable();
   offerGroup = newEmptyOfferGroup();
+  draggedObject: Node | null = null;
   versions: OfferV2Version[] = [];
+  allLibraries: OfferLibrary[] = [];
+  allElementTypes: OfferElementType[] = [];
   lastVersion: OfferV2Version;
   offertext: Offertext[] = [];
   priceAsCurrency: string = "0,00 €";
@@ -170,6 +181,12 @@ export class OfferV2EditComponent implements OnInit {
 
   ngOnInit(): void {
     this.vats$ = this.api.readVatsVatGet();
+    this.offerService.getAllOfferLibrariesWithEntriesOfferV2LibrariesEntriesGet().pipe(take(1)).subscribe((libs) => {
+      this.allLibraries = libs;
+    });
+    this.offerService.getOfferElementTypesOfferV2ElementTypesGet().pipe(take(1)).subscribe((elementTypes) => {
+      this.allElementTypes = elementTypes;
+    });
     this.route.params.subscribe((params) => {
       try {
         this.offerV2Id = parseInt(params.id, 10);
@@ -192,7 +209,6 @@ export class OfferV2EditComponent implements OnInit {
                   return (new Date(b.timestamp)).getTime() - (new Date(a.timestamp)).getTime();
                 })[0] : undefined;
                 this.offerGroup = newOfferGroup(data, this.lastVersion);
-
                 this.offerGroup.valueChanges.subscribe(() => {
                   this.offerGroupValidator();
                 });
@@ -365,6 +381,11 @@ export class OfferV2EditComponent implements OnInit {
     this.offerGroup.controls.content.removeAt(index);
   }
 
+  dragStart(e: Node | null) {
+
+    this.draggedObject = e;
+  }
+
   subscription = {
     next: () => {
       this.loadingSubject.next(false);
@@ -375,4 +396,5 @@ export class OfferV2EditComponent implements OnInit {
       this.snackBar.open("Etwas ist schief gelaufen: " + error, "Ok", { duration: 8000 });
     }
   };
+
 }

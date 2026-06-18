@@ -4,9 +4,7 @@
   class="select-container"
   [fxFlex]="fillWidth">
   @if (label) {
-    <ng-container>
-      <mat-label>{{ label }}</mat-label>
-    </ng-container>
+    <mat-label>{{ label }}</mat-label>
   }
   <mtx-select
     class="select-container"
@@ -19,7 +17,7 @@
     [typeahead]="elementsInput$"
     [value]="value"
     [clearable]="false"
-    [addTag]="false"
+    [addTag]="addingEnabled"
     [editableSearchTerm]="true"
     panelClass="mtx-select-panel-container"
     notFoundText="Kein element gefunden"
@@ -27,5 +25,25 @@
     (change)="onChange($event)"
     (keyup)="onKeyUp($event)"
   >
+
+    <ng-template ng-tag-tmp class="select-element-types">
+      <strong>Neues Element "{{ searchString }}" erstellen</strong>
+      <div style="  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+margin-top: 8px">
+        @for (elementType of allElementTypes; track elementType.id) {
+          <app-offer-field-element-type-pill
+            [fieldType]="`+${elementType.name}`"
+            (click)="onAddType(elementType)">
+
+          </app-offer-field-element-type-pill>
+        }
+      </div>
+    </ng-template>
+
   </mtx-select>
 </mat-form-field>

@@ -1,19 +1,12 @@
-import { Component, inject, Input, OnInit } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
-import {
-  OfferElementField,
-  OfferFieldEnum,
-  OfferLibrary,
-  OfferV2EntryField,
-  OfferV2Service
-} from "../../../../../api/openapi";
+import { OfferElementField, OfferFieldEnum, OfferLibrary, OfferV2EntryField } from "../../../../../api/openapi";
 import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
-import { Observable } from "rxjs";
-import { AsyncPipe } from "@angular/common";
-import { MatOption, MatSelect } from "@angular/material/select";
 import { MatIcon } from "@angular/material/icon";
-import { take } from "rxjs/operators";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
+import OfferLibraryEntrySelectorComponent, {
+  LibraryEntryDropDownItem
+} from "../../../library-entry-selector/offer-library-entry-selector.component";
 
 export declare type OfferEntryFieldGroup = {
   calculation: FormControl<string>,
@@ -85,32 +78,19 @@ export function mapEntryToEntryFieldGroup(field: OfferV2EntryField) {
     MatFormField,
     MatLabel,
     MatInput,
-    AsyncPipe,
-    MatSelect,
-    MatOption,
     MatIcon,
     MatSuffix,
-    CdkTextareaAutosize
+    CdkTextareaAutosize,
+    OfferLibraryEntrySelectorComponent,
+    OfferLibraryEntrySelectorComponent
   ],
   templateUrl: "./entry-field-edit.component.html",
   styleUrl: "./entry-field-edit.component.scss"
 })
-export class EntryFieldEditComponent implements OnInit {
+export class EntryFieldEditComponent {
   @Input() entryFormGroup: FormGroup<OfferEntryFieldGroup>;
+  @Input() allLibraries: OfferLibrary[];
 
-  private service = inject(OfferV2Service);
-
-  library$: Observable<OfferLibrary>;
-
-  ngOnInit() {
-    if (this.entryFormGroup.get("type").value === OfferFieldEnum.Select) {
-      this.library$ = this.service.getOfferLibraryOfferV2LibraryLibraryIdGet(this.entryFormGroup.get("libraryId").value);
-    }
-  }
-
-  onSetValue(value: string): void {
-    this.entryFormGroup.patchValue({ value });
-  }
 
   onReset(): void {
     if (this.entryFormGroup.get("type").value === OfferFieldEnum.Calculation)
@@ -118,20 +98,14 @@ export class EntryFieldEditComponent implements OnInit {
     this.entryFormGroup.patchValue({ value: this.entryFormGroup.get("defaultValue").value });
   }
 
-  onSelectionChanged() {
-    const id = parseInt(this.entryFormGroup.get("value").value, 10);
-    if (id !== -1 && !Number.isNaN(id)) {
-      this.library$.pipe(take(1)).subscribe((library) => {
-        const entry = library.entries.find(entry => entry.id === id);
-        if (entry) {
-          this.entryFormGroup.patchValue({
-            valueString: entry.name,
-            valuePrice: entry.price
-          });
-        }
-      });
-    }
+  onSelectionChanged(event: LibraryEntryDropDownItem) {
+    this.entryFormGroup.patchValue({
+      value: event.id.toString(10),
+      valueString: event.name,
+      valuePrice: event.price
+    });
   }
 
   protected readonly OfferFieldEnum = OfferFieldEnum;
+  protected readonly parseInt = parseInt;
 }

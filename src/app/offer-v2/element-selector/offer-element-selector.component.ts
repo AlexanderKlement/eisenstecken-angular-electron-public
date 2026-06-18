@@ -1,12 +1,20 @@
 import { booleanAttribute, Component, EventEmitter, inject, Input, OnInit, Output } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
-import { OfferElementListElement, OfferV2Service } from "../../../api/openapi";
+import {
+  OfferElementListElement,
+  OfferElementType,
+  OfferV2Service,
+  SchemasOfferV2OfferElementFieldSchemaOfferElementCreatePatch
+} from "../../../api/openapi";
 import { MatFormField, MatLabel } from "@angular/material/input";
 import { AsyncPipe } from "@angular/common";
-import { MtxSelect } from "@ng-matero/extensions/select";
+import { MtxSelect, MtxSelectTagTemplate } from "@ng-matero/extensions/select";
 import { concat, Observable, of, Subject } from "rxjs";
-import { catchError, debounceTime, distinctUntilChanged, switchMap, tap } from "rxjs/operators";
+import { catchError, debounceTime, distinctUntilChanged, switchMap, take, tap } from "rxjs/operators";
 import { DefaultFlexDirective } from "ng-flex-layout";
+import {
+  OfferFieldElementTypePillComponent
+} from "../offer-field-element-type-pill/offer-field-element-type-pill.component";
 
 @Component({
   selector: "app-offer-element-selector",
@@ -18,22 +26,27 @@ import { DefaultFlexDirective } from "ng-flex-layout";
     MatLabel,
     AsyncPipe,
     MtxSelect,
-    DefaultFlexDirective
+    DefaultFlexDirective,
+    OfferFieldElementTypePillComponent,
+    MtxSelectTagTemplate
   ]
 })
 export default class OfferElementSelectorComponent implements OnInit {
 
   private offerService = inject(OfferV2Service);
+  @Input() allElementTypes: OfferElementType[];
   @Input() value?: number;
   @Input() valueName?: string;
   @Input() label?: string;
-  @Input() setValue: (val: OfferElementListElement) => void;
   @Input({ transform: booleanAttribute }) outline: boolean;
   @Input({ transform: booleanAttribute }) readonly: boolean;
   @Input({ transform: booleanAttribute }) fillWidth: boolean;
+  @Input({ transform: booleanAttribute }) addingEnabled: boolean;
+  @Output() setValue: EventEmitter<OfferElementListElement> = new EventEmitter();
   @Output() keyClicked: EventEmitter<KeyboardEvent> = new EventEmitter();
-
+  private selectedElementType?: OfferElementType;
   elementsInput$ = new Subject<string>();
+  searchString = "";
 
   elementsLoading = false;
 
@@ -48,22 +61,49 @@ export default class OfferElementSelectorComponent implements OnInit {
         distinctUntilChanged(),
         tap(() => (this.elementsLoading = true)),
         debounceTime(200),
-        switchMap(term =>
-          this.offerService.getOfferElementsOfferV2ElementsGet(0, term, 20).pipe(
-            catchError(() => of([])), // empty list on error
-            tap(() => (this.elementsLoading = false))
-          )
+        switchMap(term => {
+            this.searchString = term;
+            return this.offerService.getOfferElementsOfferV2ElementsGet(0, term, 20).pipe(
+              catchError(() => of([])), // empty list on error
+              tap(() => (this.elementsLoading = false))
+            );
+          }
         )
       )
     );
   }
 
 
-  onChange(event: OfferElementListElement) {
-    this.setValue(event);
+  onChange(event: OfferElementListElement | { name: string }) {
+    if ("id" in event) {
+      this.setValue.emit(event);
+    } else if (this.selectedElementType) {
+
+      this.offerService.createOfferElementOfferV2ElementPut({
+        name: event.name,
+        elementTypeId: this.selectedElementType.id,
+        fields: this.selectedElementType.fields.map<SchemasOfferV2OfferElementFieldSchemaOfferElementCreatePatch>(field => {
+          return {
+            defaultValue: "",
+            mandatory: false,
+            fieldId: field.id,
+            inherits: false,
+            libraryId: null
+          };
+        })
+      }).pipe(take(1)).subscribe((element) => {
+        this.selectedElementType = null;
+        this.elements$ = of([element]);
+        this.setValue.emit(element);
+      });
+    }
   }
 
   protected onKeyUp(event: KeyboardEvent) {
     this.keyClicked.emit(event);
+  }
+
+  protected onAddType(type: OfferElementType) {
+    this.selectedElementType = type;
   }
 }

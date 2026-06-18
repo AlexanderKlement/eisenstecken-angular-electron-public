@@ -1,4 +1,14 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from "@angular/core";
+import {
+  AfterViewInit,
+  booleanAttribute,
+  Component,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  ViewChild
+} from "@angular/core";
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { MatIcon } from "@angular/material/icon";
 import {
@@ -8,7 +18,9 @@ import { DefaultFlexDirective } from "ng-flex-layout";
 import OfferElementSelectorComponent from "../../element-selector/offer-element-selector.component";
 import {
   OfferElementListElement,
+  OfferElementType,
   OfferFieldEnum,
+  OfferLibrary,
   OfferV2EntryInput,
   OfferV2EntryOutput,
   OfferV2Service
@@ -133,7 +145,8 @@ export function mapEntryOfferEntryGroup(entry: OfferV2EntryOutput, globalAddPerc
     MatFormField,
     MatLabel,
     MatInput,
-    CdkTextareaAutosize
+    CdkTextareaAutosize,
+    OfferElementSelectorComponent
   ],
   templateUrl: "./offer-v2-entry-edit.component.html",
   styleUrl: "./offer-v2-entry-edit.component.scss"
@@ -144,15 +157,30 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
   @Input() prefix: string;
   @Input() index: number;
   @Input() depth: number;
+  @Input({ transform: booleanAttribute }) parentDragging: boolean;
+  @Input() draggedObject: Node | null;
+  @Input() allElementTypes: OfferElementType[];
+  @Input() allLibraries: OfferLibrary[];
   @Input() onDeleteElem: (index: number) => void;
   @Input() onCopyElem: (index: number) => void;
   @Input() onAddNeighbour: (index: number) => void;
-  open = true;
+  open = false;
   @Output() priceEvaluated = new EventEmitter<void>();
+  @Output() dragStart = new EventEmitter<Node | null>();
   private waitForChildren: number = 0;
   @ViewChild("headerRow") headerRow: ElementRef<HTMLDivElement>;
+  @ViewChild("header") header: ElementRef<HTMLDivElement>;
+  @ViewChild("placeholder") placeholder: ElementRef<HTMLDivElement>;
+  @ViewChild("placeholderContainer") placeholderContainer: ElementRef<HTMLDivElement>;
+  @ViewChild("droppableArea") droppableArea: ElementRef<HTMLDivElement>;
+  dragEnabled: boolean;
+  private mousedownCoords = { x: 0, y: 0 };
+
 
   ngAfterViewInit() {
+    document.addEventListener("mousemove", this.mouseMove.bind(this));
+    document.addEventListener("click", this.dragCancel.bind(this));
+
     if (this.entryGroup) {
       if (this.entryGroup.controls.children.length === 0) {
         priceEvaluationElementGroup(this.entryGroup);
@@ -162,6 +190,7 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
       }
     }
     if (this.entryGroup.controls.elementType.value === "") {
+      this.open = true;
       const input = this.headerRow.nativeElement.getElementsByTagName("input");
       if (input.length !== 0) {
         input[0].click();
@@ -170,7 +199,7 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
   }
 
   onSearchKeyClicked(event: KeyboardEvent) {
-    if (event.key === "Escape") {
+    if (event.key === "Escape" && this.entryGroup.get("elementType").value === "") {
       this.onDeleteElem(this.index);
     }
   }
@@ -240,4 +269,63 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
 
   protected readonly formatCurrency = formatCurrency;
   protected readonly OfferFieldEnum = OfferFieldEnum;
+
+  private addedNode: Node | null = null;
+
+  protected mouseEnter() {
+    if (this.draggedObject && !this.dragEnabled) {
+      this.droppableArea.nativeElement.attributeStyleMap.set("display", "flex");
+      if (this.parentDragging) {
+        this.droppableArea.nativeElement.attributeStyleMap.set("border-top-color", "#f00");
+        this.droppableArea.nativeElement.attributeStyleMap.set("border-right-color", "#f00");
+        this.droppableArea.nativeElement.attributeStyleMap.set("border-bottom-color", "#f00");
+      } else {
+        this.droppableArea.nativeElement.attributeStyleMap.set("border-top-color", "#0f0");
+        this.droppableArea.nativeElement.attributeStyleMap.set("border-right-color", "#0f0");
+        this.droppableArea.nativeElement.attributeStyleMap.set("border-bottom-color", "#0f0");
+      }
+      this.addedNode = this.draggedObject.cloneNode(true);
+      this.droppableArea.nativeElement.append(this.addedNode);
+    }
+  }
+
+  protected mouseLeave() {
+    if (this.addedNode) {
+      this.droppableArea.nativeElement.removeChild(this.addedNode);
+      this.addedNode = null;
+      this.droppableArea.nativeElement.attributeStyleMap.set("display", "none");
+    }
+  }
+
+  protected mouseMove(event: MouseEvent): void {
+    if (this.dragEnabled) {
+      this.placeholderContainer.nativeElement.attributeStyleMap.set("left", `${event.clientX - this.mousedownCoords.x}px`);
+      this.placeholderContainer.nativeElement.attributeStyleMap.set("top", `${event.clientY - this.mousedownCoords.y}px`);
+    }
+  }
+
+
+  protected dragCancel(): void {
+    if (this.dragEnabled) {
+      this.dragEnabled = false;
+      this.placeholderContainer.nativeElement.attributeStyleMap.set("display", "none");
+      this.dragStart.emit(null);
+    }
+  }
+
+  protected mouseDown(event: PointerEvent): void {
+    event.stopPropagation();
+    console.log(event);
+    this.mousedownCoords = { x: event.offsetX + 16, y: event.offsetY + 16 };
+    this.dragEnabled = true;
+    const node = this.headerRow.nativeElement.cloneNode(true);
+    this.dragStart.emit(node);
+    this.placeholder.nativeElement.append(node);
+    this.placeholder.nativeElement.attributeStyleMap.set("width", `${this.headerRow.nativeElement.clientWidth}px`);
+    this.placeholder.nativeElement.attributeStyleMap.set("height", `${this.headerRow.nativeElement.clientHeight}px`);
+    this.placeholderContainer.nativeElement.attributeStyleMap.set("display", "block");
+    this.placeholderContainer.nativeElement.attributeStyleMap.set("left", `${event.clientX - this.mousedownCoords.x}px`);
+    this.placeholderContainer.nativeElement.attributeStyleMap.set("top", `${event.clientY - this.mousedownCoords.y}px`);
+  }
+
 }

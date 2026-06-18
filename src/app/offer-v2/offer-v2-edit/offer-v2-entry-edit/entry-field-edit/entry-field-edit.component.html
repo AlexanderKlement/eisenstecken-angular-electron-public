@@ -23,18 +23,16 @@
       <mat-icon class="neutral" matSuffix (click)="onReset()">rotate_left</mat-icon>
     </mat-form-field>
   } @else if (entryFormGroup.get("type").value === OfferFieldEnum.Select) {
-    @if (library$|async; as library) {
-      <mat-form-field appearance="outline" class="new-form-element">
-        <mat-label>{{ entryFormGroup.get("label").value }}</mat-label>
-        <mat-select formControlName="value" (selectionChange)="onSelectionChanged()"
-                    [placeholder]="library.name + 'auswählen'">
-          @for (entry of library.entries; track entry.id) {
-            <mat-option [value]="entry.id">{{ entry.name }}</mat-option>
-          }
-        </mat-select>
-        <mat-icon class="neutral" matSuffix (click)="onReset()">rotate_left</mat-icon>
-      </mat-form-field>
-    }
+    <app-offer-library-entry-selector
+      [allLibraries]="allLibraries"
+      [firstLibraryId]="entryFormGroup.get('libraryId').value"
+      [value]="parseInt(entryFormGroup.get('value').value,10)"
+      [label]="entryFormGroup.get('label').value"
+      (setValue)="onSelectionChanged($event)"
+      fillWidth
+      outline
+    ></app-offer-library-entry-selector>
+
   }
 
 </ng-container>

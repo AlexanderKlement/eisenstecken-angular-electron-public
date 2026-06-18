@@ -6,7 +6,7 @@
       <app-offer-field-element-type-pill
         [fieldType]="entryFormGroup.get('elementType').value"></app-offer-field-element-type-pill>
 
-      <app-offer-element-selector outline [setValue]="onSetElement.bind(this)"
+      <app-offer-element-selector outline (setValue)="onSetElement($event)" [addingEnabled]="false"
                                   [value]="entryFormGroup.get('elementId').value"
                                   [valueName]="entryFormGroup.get('elementName').value"></app-offer-element-selector>
       <div fxFlex></div>

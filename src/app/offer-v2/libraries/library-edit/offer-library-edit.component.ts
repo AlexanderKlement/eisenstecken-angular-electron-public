@@ -140,7 +140,7 @@ export default class OfferLibraryEditComponent implements OnInit {
     },
     error: (error: any) => {
       this.loadingSubject.next(false);
-      this.snackBar.open("Löschen fehlgeschlagen: " + error, "Ok", { duration: 8000 });
+      this.snackBar.open("Etwas ist schief gelaufen: " + error, "Ok", { duration: 8000 });
     }
   };
 
@@ -236,7 +236,7 @@ export default class OfferLibraryEditComponent implements OnInit {
       });
     } else {
       this.offerService.createOfferLibraryOfferV2LibraryPut({
-        description: this.libraryGroup.get("description").value,
+        description: this.libraryGroup.get("description").value ?? "",
         name: this.libraryGroup.get("name").value
       }).pipe(take(1)).subscribe(this.subscription);
     }

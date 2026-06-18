@@ -1,7 +1,17 @@
-<ng-container [formGroup]="entryGroup">
-  <div class="entry">
-    <div [className]="`entry-header level-${depth+1} ${open ? '' : 'close'}`">
+<div class="entry placeholder" #placeholderContainer>
+  <div class="entry-header-container">
+    <div [className]="`entry-header level-${depth+1} smaller`" #placeholder></div>
+  </div>
+</div>
+<div [formGroup]="entryGroup" class="entry">
+  <div class="entry-header-container" (mouseenter)="mouseEnter()"
+       (mouseleave)="mouseLeave()">
+    <div [className]="`entry-header level-${depth+1} droppable-area`" #droppableArea>
+
+    </div>
+    <div [className]="`entry-header level-${depth+1}`" #header>
       <div class="entry-header-row" #headerRow>
+        <mat-icon class="drag-handle" (click)="mouseDown($event)">drag_indicator</mat-icon>
         <mat-icon (click)="toggleOpen()" class="icon-btn">
           @if (open) {
             keyboard_arrow_down
@@ -14,12 +24,15 @@
           [fieldType]="entryGroup.get('elementType').value"></app-offer-field-element-type-pill>
         <app-offer-element-selector
           outline
-          [setValue]="onSetElement.bind(this)"
+          (setValue)="onSetElement($event)"
           [value]="entryGroup.get('elementId').value"
           [valueName]="entryGroup.get('name').value"
           [fillWidth]="entryGroup.get('elementType').value === ''"
           [class.fill-width]="entryGroup.get('elementType').value === ''"
-          (keyClicked)="onSearchKeyClicked($event)">
+          (keyClicked)="onSearchKeyClicked($event)"
+          [allElementTypes]="allElementTypes"
+          addingEnabled
+        >
         </app-offer-element-selector>
         @if (entryGroup.get('elementType').value !== "") {
           <div fxFlex></div>
@@ -54,66 +67,82 @@
           </mat-icon>
           <strong
             [title]="entryGroup.get('priceFormula').value">{{ formatCurrency(this.entryGroup.get("priceCalculated").value, "de-DE", "EUR") }}</strong>
+        } @else {
+          <span class="icon-btn smaller" (click)="onDeleteElem(this.index)">Esc</span>
         }
       </div>
+      <div class="entry-header-content" [class.close]="!open">
+        @if (percent) {
 
-      @if (percent) {
-
-        <div class="entry-fields">
-          <mat-form-field appearance="outline" class="new-form-element">
-            <mat-label>Aufschlag</mat-label>
-            <input matInput formControlName="priceAddPercent">
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="new-form-element">
-            <mat-label>Skonto</mat-label>
-            <input matInput formControlName="priceSubPercent">
-          </mat-form-field>
-        </div>
-      }
-      @if (entryGroup.get('elementType').value !== "") {
-        @if (depth === 1) {
-          <mat-form-field appearance="outline" class="new-form-element">
-            <mat-label>Menge Spalte 2</mat-label>
-            <input matInput formControlName="amount">
-          </mat-form-field>
+          <div class="entry-fields">
+            <mat-form-field appearance="outline" class="new-form-element">
+              <mat-label>Aufschlag</mat-label>
+              <input matInput formControlName="priceAddPercent">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="new-form-element">
+              <mat-label>Skonto</mat-label>
+              <input matInput formControlName="priceSubPercent">
+            </mat-form-field>
+          </div>
         }
-        <mat-form-field appearance="outline" class="new-form-element">
-          <mat-label>Beschreibung</mat-label>
-          <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="3" formControlName="description"></textarea>
-        </mat-form-field>
-        <ng-container formArrayName="fields">
-          @for (field of entryGroup.controls.fields.controls; track field.controls; let idx = $index) {
-            @if (field.controls.type.value === OfferFieldEnum.Text) {
-              <app-entry-field-edit [entryFormGroup]="field"></app-entry-field-edit>
-            }
+        @if (entryGroup.get('elementType').value !== "") {
+          @if (depth === 1) {
+            <mat-form-field appearance="outline" class="new-form-element">
+              <mat-label>Menge Spalte 2</mat-label>
+              <input matInput formControlName="amount">
+            </mat-form-field>
           }
-        </ng-container>
-      }
-      <div class="entry-fields">
-
-        <ng-container formArrayName="fields">
-          @for (field of entryGroup.controls.fields.controls; track field.controls; let idx = $index) {
+          <mat-form-field appearance="outline" class="new-form-element">
+            <mat-label>Beschreibung</mat-label>
+            <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="3" formControlName="description"></textarea>
+          </mat-form-field>
+          <ng-container formArrayName="fields">
+            @for (field of entryGroup.controls.fields.controls; track field.controls) {
+              @if (field.controls.type.value === OfferFieldEnum.Text) {
+                <app-entry-field-edit [entryFormGroup]="field"></app-entry-field-edit>
+              }
+            }
+          </ng-container>
+        }
+        <div class="entry-fields" formArrayName="fields">
+          @for (field of entryGroup.controls.fields.controls; track field.controls) {
             @if (field.controls.type.value !== OfferFieldEnum.Text) {
-              <app-entry-field-edit [entryFormGroup]="field"></app-entry-field-edit>
+              <app-entry-field-edit
+                [entryFormGroup]="field"
+                [allLibraries]="allLibraries"
+              ></app-entry-field-edit>
             }
           }
-        </ng-container>
+        </div>
       </div>
-    </div>
-    <div class="entry-content" [class.close]="!open">
-      <ng-container formArrayName="children">
-        @for (control of entryGroup.controls.children.controls; track control.controls.id; let idx = $index) {
-          <app-offer-v2-entry-edit
-            (priceEvaluated)="childrenEvaluated()"
-            [entryGroup]="control"
-            [depth]="depth+1"
-            [prefix]="prefix+(index + 1)+'.'" [index]="idx"
-            [onAddNeighbour]="onAddNeighbourHere.bind(this)"
-            [onCopyElem]="onCopyElemHere.bind(this)"
-            [onDeleteElem]="onDeleteElemHere.bind(this)"
-          ></app-offer-v2-entry-edit>
-        }
-      </ng-container>
     </div>
   </div>
-</ng-container>
+  @if (entryGroup.controls.children.length !== 0) {
+    <div class="entry-content"
+         formArrayName="children"
+    >
+      <!--
+         [cdkDropListConnectedTo]="myConnectedLists"
+         cdkDropList
+         (cdkDropListDropped)="drop($event)"
+
+           -->
+      @for (control of entryGroup.controls.children.controls; track control.controls.id; let idx = $index) {
+        <app-offer-v2-entry-edit
+          (priceEvaluated)="childrenEvaluated()"
+          [entryGroup]="control"
+          [depth]="depth+1"
+          [prefix]="prefix+(index + 1)+'.'" [index]="idx"
+          [onAddNeighbour]="onAddNeighbourHere.bind(this)"
+          [onCopyElem]="onCopyElemHere.bind(this)"
+          [onDeleteElem]="onDeleteElemHere.bind(this)"
+          [allLibraries]="allLibraries"
+          [allElementTypes]="allElementTypes"
+          [draggedObject]="draggedObject"
+          (dragStart)="dragStart.emit($event)"
+          [parentDragging]="dragEnabled || parentDragging"
+        ></app-offer-v2-entry-edit>
+      }
+    </div>
+  }
+</div>
