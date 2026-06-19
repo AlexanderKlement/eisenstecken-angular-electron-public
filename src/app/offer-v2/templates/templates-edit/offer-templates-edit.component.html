@@ -29,10 +29,22 @@
 
       <h3>Struktur</h3>
       <ng-container formArrayName="structure">
-        @for (conrol of templateGroup.controls.structure.controls; track conrol.controls.id; let idx = $index) {
-          <app-template-entry-edit [entryFormGroup]="conrol" [index]="idx"
-                                   [prefix]="''" [onAddNeighbour]="onAddNeighbour.bind(this)"
-                                   [onDeleteElem]="onDeleteElem.bind(this)"></app-template-entry-edit>
+        @for (control of templateGroup.controls.structure.controls; track control.controls.id; let idx = $index) {
+          <app-template-entry-edit [entryFormGroup]="control"
+                                   [index]="idx"
+                                   [prefix]="''"
+                                   [depth]="0"
+                                   [onAddNeighbour]="onAddNeighbour.bind(this)"
+                                   [onDeleteElem]="onDeleteElem.bind(this)"
+                                   [draggedObject]="draggedObject"
+                                   (dragStart)="dragStart($event)"
+                                   [parentDragging]="false"
+                                   (droppedBeforeMe)="contentDroppedBefore($index)"
+                                   (unDroppedBeforeMe)="contentUndroppedAddedBefore()"
+                                   (elementDropped)="this.elementDropped($event)"
+                                   (elementInserted)="this.elementInserted($event)"
+                                   (elementUnInserted)="this.elementUninserted()"
+          ></app-template-entry-edit>
         }
       </ng-container>
 

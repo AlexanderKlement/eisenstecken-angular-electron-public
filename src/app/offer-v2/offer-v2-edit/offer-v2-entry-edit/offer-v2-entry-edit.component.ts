@@ -37,6 +37,7 @@ import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
 import { priceEvaluationElementGroup } from "../../offer-calculation-utils";
 import { formatCurrency } from "@angular/common";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
+import { randomUUID } from "../../offer.util";
 
 export declare type OfferEntryGroup = {
   alternative: FormControl<boolean>;
@@ -77,9 +78,6 @@ export function mapOfferEntryToInput(grp: FormGroup<OfferEntryGroup>): OfferV2En
   };
 }
 
-function randomUUID(): string {
-  return (globalThis.crypto ?? require("crypto")).randomUUID();
-}
 
 export function newEmptyOfferEntryGroup(globalAddPercent = 0) {
   const grp = new FormGroup<OfferEntryGroup>({
@@ -167,19 +165,25 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
   open = false;
   @Output() priceEvaluated = new EventEmitter<void>();
   @Output() dragStart = new EventEmitter<Node | null>();
+  @Output() droppedBeforeMe = new EventEmitter<number>();
+  @Output() unDroppedBeforeMe = new EventEmitter<number>();
+  @Output() elementDropped = new EventEmitter<FormGroup<OfferEntryGroup>>();
+  @Output() elementInserted = new EventEmitter<string>();
+  @Output() elementUnInserted = new EventEmitter<void>();
   private waitForChildren: number = 0;
   @ViewChild("headerRow") headerRow: ElementRef<HTMLDivElement>;
   @ViewChild("header") header: ElementRef<HTMLDivElement>;
   @ViewChild("placeholder") placeholder: ElementRef<HTMLDivElement>;
   @ViewChild("placeholderContainer") placeholderContainer: ElementRef<HTMLDivElement>;
   @ViewChild("droppableArea") droppableArea: ElementRef<HTMLDivElement>;
+  @ViewChild("droppableAreaChild") droppableAreaChild: ElementRef<HTMLDivElement>;
   dragEnabled: boolean;
   private mousedownCoords = { x: 0, y: 0 };
 
 
   ngAfterViewInit() {
     document.addEventListener("mousemove", this.mouseMove.bind(this));
-    document.addEventListener("click", this.dragCancel.bind(this));
+    document.addEventListener("mouseup", this.dragStop.bind(this));
 
     if (this.entryGroup) {
       if (this.entryGroup.controls.children.length === 0) {
@@ -205,7 +209,6 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
   }
 
   childrenEvaluated() {
-    console.log(`Children evaluated ${this.waitForChildren}`);
     this.waitForChildren--;
     if (this.waitForChildren <= 0) {
       priceEvaluationElementGroup(this.entryGroup);
@@ -272,28 +275,44 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
 
   private addedNode: Node | null = null;
 
-  protected mouseEnter() {
-    if (this.draggedObject && !this.dragEnabled) {
-      this.droppableArea.nativeElement.attributeStyleMap.set("display", "flex");
-      if (this.parentDragging) {
-        this.droppableArea.nativeElement.attributeStyleMap.set("border-top-color", "#f00");
-        this.droppableArea.nativeElement.attributeStyleMap.set("border-right-color", "#f00");
-        this.droppableArea.nativeElement.attributeStyleMap.set("border-bottom-color", "#f00");
-      } else {
-        this.droppableArea.nativeElement.attributeStyleMap.set("border-top-color", "#0f0");
-        this.droppableArea.nativeElement.attributeStyleMap.set("border-right-color", "#0f0");
-        this.droppableArea.nativeElement.attributeStyleMap.set("border-bottom-color", "#0f0");
-      }
+  protected mouseEnter(inChild?: boolean) {
+    if (this.draggedObject && !this.dragEnabled && !this.parentDragging) {
       this.addedNode = this.draggedObject.cloneNode(true);
-      this.droppableArea.nativeElement.append(this.addedNode);
+
+      if (inChild) {
+        ((this.addedNode as HTMLDivElement).childNodes[2] as HTMLSpanElement).innerText = `${this.prefix}${this.index + 1}.1`;
+        this.droppableAreaChild.nativeElement.append(this.addedNode);
+        this.elementInserted.emit(`${this.prefix}${this.index + 1}.1`);
+      } else {
+        this.droppableArea.nativeElement.attributeStyleMap.set("display", "flex");
+        if (this.parentDragging) {
+          this.droppableArea.nativeElement.attributeStyleMap.set("border-top-color", "#f00");
+          this.droppableArea.nativeElement.attributeStyleMap.set("border-right-color", "#f00");
+          this.droppableArea.nativeElement.attributeStyleMap.set("border-bottom-color", "#f00");
+        } else {
+          this.droppableArea.nativeElement.attributeStyleMap.set("border-top-color", "#0f0");
+          this.droppableArea.nativeElement.attributeStyleMap.set("border-right-color", "#0f0");
+          this.droppableArea.nativeElement.attributeStyleMap.set("border-bottom-color", "#0f0");
+        }
+        ((this.addedNode as HTMLDivElement).childNodes[2] as HTMLSpanElement).innerText = `${this.prefix}${this.index + 1}`;
+        this.droppableArea.nativeElement.append(this.addedNode);
+        this.elementInserted.emit(`${this.prefix}${this.index + 1}`);
+        this.droppedBeforeMe.emit(this.index);
+      }
     }
   }
 
-  protected mouseLeave() {
-    if (this.addedNode) {
-      this.droppableArea.nativeElement.removeChild(this.addedNode);
+  protected mouseLeave(inChild?: boolean) {
+    if (this.addedNode && (this.droppableAreaChild || this.droppableArea)) {
+      if (inChild) {
+        this.droppableAreaChild.nativeElement.removeChild(this.addedNode);
+      } else {
+        this.unDroppedBeforeMe.emit(this.index);
+        this.droppableArea.nativeElement.removeChild(this.addedNode);
+        this.droppableArea.nativeElement.attributeStyleMap.set("display", "none");
+      }
+      this.elementUnInserted.emit();
       this.addedNode = null;
-      this.droppableArea.nativeElement.attributeStyleMap.set("display", "none");
     }
   }
 
@@ -305,18 +324,18 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
   }
 
 
-  protected dragCancel(): void {
+  protected dragStop(): void {
     if (this.dragEnabled) {
       this.dragEnabled = false;
       this.placeholderContainer.nativeElement.attributeStyleMap.set("display", "none");
       this.dragStart.emit(null);
+      this.elementDropped.emit(this.entryGroup);
     }
   }
 
-  protected mouseDown(event: PointerEvent): void {
+  protected mouseDown(event: MouseEvent): void {
     event.stopPropagation();
-    console.log(event);
-    this.mousedownCoords = { x: event.offsetX + 16, y: event.offsetY + 16 };
+    this.mousedownCoords = { x: event.offsetX + 46, y: event.offsetY + 16 };
     this.dragEnabled = true;
     const node = this.headerRow.nativeElement.cloneNode(true);
     this.dragStart.emit(node);
@@ -328,4 +347,13 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
     this.placeholderContainer.nativeElement.attributeStyleMap.set("top", `${event.clientY - this.mousedownCoords.y}px`);
   }
 
+  addIndex = Infinity;
+
+  protected droppedBeforeChild(event: number) {
+    this.addIndex = event;
+  }
+
+  protected unDroppedBeforeChild() {
+    this.addIndex = Infinity;
+  }
 }

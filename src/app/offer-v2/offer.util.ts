@@ -131,3 +131,8 @@ export function headerNewButton(name: string, onPress: () => void): TableButton 
     class: () => ""
   };
 }
+
+
+export function randomUUID(): string {
+  return (globalThis.crypto ?? require("crypto")).randomUUID();
+}

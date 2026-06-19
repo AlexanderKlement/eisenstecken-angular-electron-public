@@ -1,32 +1,68 @@
-<ng-container [formGroup]="entryFormGroup">
-  <div class="entry" [class.base]="prefix === ''">
-    <div class="entry-header">
-      <mat-icon (click)="toggleOpen()" class="neutral">keyboard_arrow_down</mat-icon>
-      <span class="neutral">{{ prefix }}{{ index + 1 }}</span>
-      <app-offer-field-element-type-pill
-        [fieldType]="entryFormGroup.get('elementType').value"></app-offer-field-element-type-pill>
+<div class="entry placeholder" #placeholderContainer>
+  <div class="entry-header-container">
+    <div [className]="`entry-header level-${depth+1} smaller`" #placeholder></div>
+  </div>
+</div>
 
-      <app-offer-element-selector outline (setValue)="onSetElement($event)" [addingEnabled]="false"
-                                  [value]="entryFormGroup.get('elementId').value"
-                                  [valueName]="entryFormGroup.get('elementName').value"></app-offer-element-selector>
-      <div fxFlex></div>
-      <mat-icon class="neutral cursor-pointer" (click)="onAddChild()" title="Kind hinzufügen (Tab)">
-        subdirectory_arrow_right
-      </mat-icon>
-      <mat-icon class="neutral cursor-pointer" (click)="onAddNeighbour(index)" title="Nachbar hinzufügen (Enter)">add
-      </mat-icon>
-      <mat-icon class="neutral cursor-pointer" (click)="onDeleteElem(index)" title="Löschen (Entf)">delete</mat-icon>
-    </div>
-    <div class="entry-content" [class.close]="!open">
-      <ng-container formArrayName="children">
-        @for (control of entryFormGroup.controls.children.controls; track control.controls.id; let idx = $index) {
-          <app-template-entry-edit [entryFormGroup]="control"
-                                   [prefix]="prefix+(index + 1)+'.'" [index]="idx"
-                                   [onAddNeighbour]="onAddNeighbourHere.bind(this)"
-                                   [onDeleteElem]="onDeleteElemHere.bind(this)"
-          ></app-template-entry-edit>
-        }
-      </ng-container>
+<div class="entry" [formGroup]="entryFormGroup">
+  <div class="entry-header-container" (mouseenter)="mouseEnter()"
+       (mouseleave)="mouseLeave()">
+    @if (draggedObject != null && !this.dragEnabled && !parentDragging) {
+      <div [className]="`entry-header level-${depth+1} droppable-area`" #droppableArea>
+
+      </div>
+    }
+    <div [className]="`entry-header level-${depth+1}`" #header>
+      <div class="entry-header-row" #headerRow>
+        <mat-icon class="drag-handle" (mousedown)="mouseDown($event)">drag_indicator</mat-icon>
+        <mat-icon (click)="toggleOpen()" class="icon-btn">keyboard_arrow_down</mat-icon>
+        <span class="neutral">{{ prefix }}{{ index + 1 }}</span>
+        <app-offer-field-element-type-pill
+          [fieldType]="entryFormGroup.get('elementType').value"></app-offer-field-element-type-pill>
+
+        <app-offer-element-selector outline (setValue)="onSetElement($event)" [addingEnabled]="false"
+                                    [value]="entryFormGroup.get('elementId').value"
+                                    [valueName]="entryFormGroup.get('elementName').value"></app-offer-element-selector>
+        <div fxFlex></div>
+        <mat-icon class="icon-btn" (click)="onAddChild()" title="Kind hinzufügen (Tab)">
+          subdirectory_arrow_right
+        </mat-icon>
+        <mat-icon class="icon-btn" (click)="onAddNeighbour(index)" title="Nachbar hinzufügen (Enter)">add
+        </mat-icon>
+        <mat-icon class="icon-btn" (click)="onDeleteElem(index)" title="Löschen (Entf)">delete</mat-icon>
+      </div>
     </div>
   </div>
-</ng-container>
+  @if (entryFormGroup.controls.children.controls.length !== 0) {
+    <div class="entry-content" [class.close]="!open" formArrayName="children">
+      @for (control of entryFormGroup.controls.children.controls; track control.controls.id; let idx = $index) {
+        <app-template-entry-edit [entryFormGroup]="control"
+                                 [depth]="depth+1"
+                                 [prefix]="prefix+(index + 1)+'.'"
+                                 [index]="idx"
+                                 [onAddNeighbour]="onAddNeighbourHere.bind(this)"
+                                 [onDeleteElem]="onDeleteElemHere.bind(this)"
+                                 [draggedObject]="draggedObject"
+                                 (dragStart)="dragStart.emit($event)"
+                                 [parentDragging]="dragEnabled || parentDragging"
+                                 (droppedBeforeMe)="droppedBeforeChild($event)"
+                                 (unDroppedBeforeMe)="unDroppedBeforeChild()"
+                                 (elementDropped)="this.elementDropped.emit($event)"
+                                 (elementInserted)="this.elementInserted.emit($event)"
+                                 (elementUnInserted)="this.elementUnInserted.emit($event)"
+        ></app-template-entry-edit>
+      }
+    </div>
+  } @else if (draggedObject != null && !this.dragEnabled && !parentDragging) {
+    <div class="entry-content">
+      <div class="entry">
+        <div class="entry-header-container" (mouseenter)="mouseEnter(true)"
+             (mouseleave)="mouseLeave(true)">
+          <div [className]="`entry-header level-${depth+2} droppable-area child`" #droppableAreaChild>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

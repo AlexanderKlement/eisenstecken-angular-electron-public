@@ -18,7 +18,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { AsyncPipe } from "@angular/common";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { BehaviorSubject } from "rxjs";
-import { confirmDeleteDialog } from "../../offer.util";
+import { confirmDeleteDialog, randomUUID } from "../../offer.util";
 import {
   newEmptyTemplateEntryGroup,
   TemplateEntryEditComponent,
@@ -30,6 +30,52 @@ type TemplateGroup = {
   name: FormControl<string>;
   description: FormControl<string>;
   structure: FormArray<FormGroup<TemplateEntryGroup>>
+}
+
+function moveObjectInGroup(group: FormGroup<TemplateGroup>, entry: FormGroup<TemplateEntryGroup>, insertedPrefix: string): FormGroup<TemplateGroup> {
+  function removeIdRecursively(id: string, arr: FormArray<FormGroup<TemplateEntryGroup>>, prefix: string): boolean {
+    for (let i = 0; i < arr.controls.length; i++) {
+      const innerPrefix = `${prefix}${i + 1}`;
+      const child = arr.at(i);
+      if (child.get("uid").value == id && innerPrefix !== insertedPrefix) {
+        arr.removeAt(i);
+        return true;
+      } else {
+        if (removeIdRecursively(id, child.controls.children, `${innerPrefix}.`)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  function insetAtPrefixRecursively(arr: FormArray<FormGroup<TemplateEntryGroup>>, prefix: string, toInsert: FormGroup<TemplateEntryGroup>): boolean {
+    if (arr.controls.length === 0) {
+      if (`${prefix}1` === insertedPrefix) {
+        arr.push(toInsert);
+        return true;
+      } else {
+        return false;
+      }
+    }
+    for (let i = 0; i < arr.controls.length; i++) {
+      const innerPrefix = `${prefix}${i + 1}`;
+      if (innerPrefix === insertedPrefix) {
+        arr.insert(i, toInsert);
+        arr.markAsDirty();
+        return true;
+      }
+      if (insetAtPrefixRecursively(arr.at(i).controls.children, `${innerPrefix}.`, toInsert)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+
+  insetAtPrefixRecursively(group.controls.structure, "", entry);
+  removeIdRecursively(entry.get("uid").value, group.controls.structure, "");
+  return group;
 }
 
 @Component({
@@ -92,6 +138,7 @@ export default class OfferTemplatesEditComponent implements OnInit {
               return new FormArray(
                 s.map(entry => new FormGroup<TemplateEntryGroup>({
                   id: new FormControl(entry.id),
+                  uid: new FormControl(randomUUID()),
                   elementId: new FormControl(entry.element.id),
                   elementName: new FormControl(entry.element.name),
                   elementType: new FormControl(entry.element.elementType.name),
@@ -204,4 +251,35 @@ export default class OfferTemplatesEditComponent implements OnInit {
     }
   };
 
+  addIndex: number = Infinity;
+  draggedObject: Node | null = null;
+  insertedPrefix: string | null = null;
+
+  dragStart(e: Node | null) {
+
+    this.draggedObject = e;
+  }
+
+  protected contentDroppedBefore(index: number) {
+    this.addIndex = index;
+  }
+
+  protected contentUndroppedAddedBefore() {
+    this.addIndex = Infinity;
+  }
+
+
+  protected elementDropped(entry: FormGroup<TemplateEntryGroup>) {
+    if (this.insertedPrefix) {
+      moveObjectInGroup(this.templateGroup, entry, this.insertedPrefix);
+    }
+  }
+
+  protected elementInserted(prefix: string) {
+    this.insertedPrefix = prefix;
+  }
+
+  protected elementUninserted() {
+    this.insertedPrefix = null;
+  }
 }

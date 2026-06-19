@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, EventEmitter, inject, Input, OnInit, Output } from "@angular/core";
+import { booleanAttribute, Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import {
   OfferElementListElement,
@@ -11,10 +11,11 @@ import { AsyncPipe } from "@angular/common";
 import { MtxSelect, MtxSelectTagTemplate } from "@ng-matero/extensions/select";
 import { concat, Observable, of, Subject } from "rxjs";
 import { catchError, debounceTime, distinctUntilChanged, switchMap, take, tap } from "rxjs/operators";
-import { DefaultFlexDirective } from "ng-flex-layout";
+import { DefaultFlexDirective, DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
 import {
   OfferFieldElementTypePillComponent
 } from "../offer-field-element-type-pill/offer-field-element-type-pill.component";
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: "app-offer-element-selector",
@@ -28,7 +29,10 @@ import {
     MtxSelect,
     DefaultFlexDirective,
     OfferFieldElementTypePillComponent,
-    MtxSelectTagTemplate
+    MtxSelectTagTemplate,
+    DefaultLayoutDirective,
+    DefaultLayoutAlignDirective,
+    MatIcon
   ]
 })
 export default class OfferElementSelectorComponent implements OnInit {
@@ -44,10 +48,12 @@ export default class OfferElementSelectorComponent implements OnInit {
   @Input({ transform: booleanAttribute }) addingEnabled: boolean;
   @Output() setValue: EventEmitter<OfferElementListElement> = new EventEmitter();
   @Output() keyClicked: EventEmitter<KeyboardEvent> = new EventEmitter();
+  @ViewChild("selectChild") selectChild: MtxSelect;
   private selectedElementType?: OfferElementType;
   elementsInput$ = new Subject<string>();
   searchString = "";
-
+  saveInLibrary = false;
+  keepOpen = false;
   elementsLoading = false;
 
   elements$: Observable<OfferElementListElement[]> = of([]);
@@ -56,14 +62,14 @@ export default class OfferElementSelectorComponent implements OnInit {
 
   ngOnInit() {
     this.elements$ = concat(
-      this.offerService.getOfferElementsOfferV2ElementsGet(),
+      this.offerService.getOfferElementsOfferV2ElementsGet(undefined, undefined, undefined, this.value),
       this.elementsInput$.pipe(
         distinctUntilChanged(),
         tap(() => (this.elementsLoading = true)),
         debounceTime(200),
         switchMap(term => {
             this.searchString = term;
-            return this.offerService.getOfferElementsOfferV2ElementsGet(0, term, 20).pipe(
+            return this.offerService.getOfferElementsOfferV2ElementsGet(0, term, 100).pipe(
               catchError(() => of([])), // empty list on error
               tap(() => (this.elementsLoading = false))
             );
@@ -73,14 +79,22 @@ export default class OfferElementSelectorComponent implements OnInit {
     );
   }
 
+  onClose() {
+    if (this.keepOpen) {
+      this.selectChild.open();
+    }
+  }
 
   onChange(event: OfferElementListElement | { name: string }) {
+    console.log("Change:", event);
     if ("id" in event) {
+      this.keepOpen = false;
       this.setValue.emit(event);
     } else if (this.selectedElementType) {
-
+      this.keepOpen = false;
       this.offerService.createOfferElementOfferV2ElementPut({
         name: event.name,
+        temporary: !this.saveInLibrary,
         elementTypeId: this.selectedElementType.id,
         fields: this.selectedElementType.fields.map<SchemasOfferV2OfferElementFieldSchemaOfferElementCreatePatch>(field => {
           return {
@@ -96,6 +110,8 @@ export default class OfferElementSelectorComponent implements OnInit {
         this.elements$ = of([element]);
         this.setValue.emit(element);
       });
+    } else {
+      this.keepOpen = true;
     }
   }
 
@@ -105,5 +121,9 @@ export default class OfferElementSelectorComponent implements OnInit {
 
   protected onAddType(type: OfferElementType) {
     this.selectedElementType = type;
+  }
+
+  protected onCheckSavInLibrary() {
+    this.saveInLibrary = !this.saveInLibrary;
   }
 }

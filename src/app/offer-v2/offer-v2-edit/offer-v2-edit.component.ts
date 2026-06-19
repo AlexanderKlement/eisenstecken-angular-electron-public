@@ -44,6 +44,7 @@ import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular
 import { MatOption, MatSelect } from "@angular/material/select";
 import { Vat } from "../../model/vat";
 import { selectRequires } from "../../shared/custom-validators";
+import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 
 type OfferV2Group = {
   name: FormControl<string>;
@@ -106,6 +107,52 @@ function newOfferGroup(data: OfferV2, version?: OfferV2Version) {
   });
 }
 
+function moveObjectInGroup(group: FormGroup<OfferV2Group>, entry: FormGroup<OfferEntryGroup>, insertedPrefix: string): FormGroup<OfferV2Group> {
+  function removeIdRecursively(id: string, arr: FormArray<FormGroup<OfferEntryGroup>>, prefix: string): boolean {
+    for (let i = 0; i < arr.controls.length; i++) {
+      const innerPrefix = `${prefix}${i + 1}`;
+      const child = arr.at(i);
+      if (child.get("id").value == id && innerPrefix !== insertedPrefix) {
+        arr.removeAt(i);
+        return true;
+      } else {
+        if (removeIdRecursively(id, child.controls.children, `${innerPrefix}.`)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  function insetAtPrefixRecursively(arr: FormArray<FormGroup<OfferEntryGroup>>, prefix: string, toInsert: FormGroup<OfferEntryGroup>): boolean {
+    if (arr.controls.length === 0) {
+      if (`${prefix}1` === insertedPrefix) {
+        arr.push(toInsert);
+        return true;
+      } else {
+        return false;
+      }
+    }
+    for (let i = 0; i < arr.controls.length; i++) {
+      const innerPrefix = `${prefix}${i + 1}`;
+      if (innerPrefix === insertedPrefix) {
+        arr.insert(i, toInsert);
+        arr.markAsDirty();
+        return true;
+      }
+      if (insetAtPrefixRecursively(arr.at(i).controls.children, `${innerPrefix}.`, toInsert)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+
+  insetAtPrefixRecursively(group.controls.content, "", entry);
+  removeIdRecursively(entry.get("id").value, group.controls.content, "");
+  return group;
+}
+
 @Component({
   selector: "app-offer-v2-edit",
   imports: [
@@ -150,7 +197,6 @@ export class OfferV2EditComponent implements OnInit {
   private loadingSubject = new BehaviorSubject<boolean>(false);
   public loading$ = this.loadingSubject.asObservable();
   offerGroup = newEmptyOfferGroup();
-  draggedObject: Node | null = null;
   versions: OfferV2Version[] = [];
   allLibraries: OfferLibrary[] = [];
   allElementTypes: OfferElementType[] = [];
@@ -208,9 +254,11 @@ export class OfferV2EditComponent implements OnInit {
                 this.lastVersion = versions.length !== 0 ? [...versions].sort((a, b) => {
                   return (new Date(b.timestamp)).getTime() - (new Date(a.timestamp)).getTime();
                 })[0] : undefined;
+                this.timeout = setTimeout(this.autosave.bind(this), 10000);
                 this.offerGroup = newOfferGroup(data, this.lastVersion);
                 this.offerGroup.valueChanges.subscribe(() => {
                   this.offerGroupValidator();
+                  this.unsavedChanges = true;
                 });
                 if (this.offerGroup.controls.content.length !== 0) {
                   this.waitForChildren = this.offerGroup.controls.content.length;
@@ -220,6 +268,7 @@ export class OfferV2EditComponent implements OnInit {
                 this.offerGroup = newEmptyOfferGroup();
                 this.offerGroup.valueChanges.subscribe(() => {
                   this.offerGroupValidator();
+                  this.unsavedChanges = true;
                 });
               }
 
@@ -244,6 +293,7 @@ export class OfferV2EditComponent implements OnInit {
       this.subTitle = "Angebot erstellen";
       this.offerGroup.valueChanges.subscribe(() => {
         this.offerGroupValidator();
+        this.unsavedChanges = true;
       });
     }
   }
@@ -283,7 +333,6 @@ export class OfferV2EditComponent implements OnInit {
   }
 
   contentEvaluated() {
-    console.log(`Content evaluated: ${this.waitForChildren}`);
     this.waitForChildren--;
     if (this.waitForChildren <= 0) {
       this.offerGroupValidator();
@@ -336,14 +385,16 @@ export class OfferV2EditComponent implements OnInit {
     }
     if (this.offerV2Id) {
       const vatId = parseInt(this.offerGroup.get("vatId").value, 10);
-
+      if (this.timeout) {
+        clearTimeout(this.timeout);
+      }
       this.offerService.patchOfferV2OfferV2OfferOfferIdPost(this.offerV2Id, true, {
         name: this.offerGroup.get("name").value,
         globalAddPercent: this.offerGroup.get("globalAddPercent").value ?? 0,
         globalPriceDiff: this.offerGroup.get("globalPriceDiff").value ?? 0,
         globalSubPercent: this.offerGroup.get("globalSubPercent").value ?? 0,
         content: this.offerGroup.controls.content.controls.map(mapOfferEntryToInput),
-        versionName: `Speicherung - ${dayjs().format()}`,
+        versionName: this.isCustomVersion ? `Wiederherstellung - ${this.lastVersion.name}` : `Speicherung - ${dayjs().format("DD.MM.YYYY HH:mm")}`,
         delivery: this.offerGroup.get("delivery").value,
         inPriceIncluded: this.offerGroup.get("inPriceIncluded").value,
         materialDescription: this.offerGroup.get("materialDescription").value,
@@ -381,10 +432,6 @@ export class OfferV2EditComponent implements OnInit {
     this.offerGroup.controls.content.removeAt(index);
   }
 
-  dragStart(e: Node | null) {
-
-    this.draggedObject = e;
-  }
 
   subscription = {
     next: () => {
@@ -397,4 +444,144 @@ export class OfferV2EditComponent implements OnInit {
     }
   };
 
+  timeout: NodeJS.Timeout | null = null;
+
+  unsavedChanges: boolean = false;
+  lastSave: Date | null = null;
+
+  private savingSubject = new BehaviorSubject<boolean>(false);
+  public saving$ = this.loadingSubject.asObservable();
+
+  private autosave() {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
+
+    if (this.offerGroup && this.offerGroup.valid && this.unsavedChanges && !this.isCustomVersion) {
+      const vatId = parseInt(this.offerGroup.get("vatId").value, 10);
+      this.savingSubject.next(true);
+      this.offerService.patchOfferV2OfferV2OfferOfferIdPost(this.offerV2Id, false, {
+        name: this.offerGroup.get("name").value,
+        globalAddPercent: this.offerGroup.get("globalAddPercent").value ?? 0,
+        globalPriceDiff: this.offerGroup.get("globalPriceDiff").value ?? 0,
+        globalSubPercent: this.offerGroup.get("globalSubPercent").value ?? 0,
+        content: this.offerGroup.controls.content.controls.map(mapOfferEntryToInput),
+        versionName: this.lastVersion?.name ?? `Speicherung - ${dayjs().format("DD.MM.YYYY HH:mm")}`,
+        delivery: this.offerGroup.get("delivery").value,
+        inPriceIncluded: this.offerGroup.get("inPriceIncluded").value,
+        materialDescription: this.offerGroup.get("materialDescription").value,
+        materialDescriptionTitle: this.offerGroup.get("materialDescriptionTitle").value,
+        number: this.offerGroup.get("number").value,
+        payment: this.offerGroup.get("payment").value,
+        validity: this.offerGroup.get("validity").value,
+        vatId,
+        date: this.offerGroup.get("date").value
+      }).pipe(take(1)).subscribe({
+        next: (data) => {
+          if (!this.lastVersion) {
+            this.offerService.getOfferVersionsOfferV2OfferV2IdVersionsGet(data.id).pipe(take(1)).subscribe({
+              next: versions => {
+                this.versions = versions;
+                this.lastVersion = versions.length !== 0 ? [...versions].sort((a, b) => {
+                  return (new Date(b.timestamp)).getTime() - (new Date(a.timestamp)).getTime();
+                })[0] : undefined;
+              },
+              error: () => {
+              }
+            });
+          }
+          this.unsavedChanges = false;
+          this.lastSave = new Date();
+          this.savingSubject.next(false);
+          this.timeout = setTimeout(this.autosave.bind(this), 10000);
+        },
+        error: () => {
+          this.savingSubject.next(false);
+          this.timeout = setTimeout(this.autosave.bind(this), 10000);
+        }
+      });
+    } else {
+      this.timeout = setTimeout(this.autosave.bind(this), 10000);
+    }
+  }
+
+  historyDialogOpen = false;
+  isCustomVersion = false;
+
+  protected toggleHistory() {
+    this.historyDialogOpen = !this.historyDialogOpen;
+  }
+
+  protected onShowHistory(version: OfferV2Version) {
+    this.lastVersion = version;
+    this.isCustomVersion = true;
+    this.historyDialogOpen = false;
+    this.subTitle = version.name;
+    this.offerGroup.controls.content = new FormArray(version.content.map(mapEntryOfferEntryGroup));
+  }
+
+  protected onBackToOriginal() {
+    this.lastVersion = this.versions.length !== 0 ? [...this.versions].sort((a, b) => {
+      return (new Date(b.timestamp)).getTime() - (new Date(a.timestamp)).getTime();
+    })[0] : undefined;
+    this.timeout = setTimeout(this.autosave.bind(this), 10000);
+    this.offerGroup.controls.content = new FormArray(this.lastVersion.content.map(mapEntryOfferEntryGroup));
+    this.isCustomVersion = false;
+    this.subTitle = "Angebot bearbeiten";
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
+    this.timeout = setTimeout(this.autosave.bind(this), 10000);
+  }
+
+  protected onRestoreVersion() {
+    if (this.isCustomVersion) {
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        width: "400px",
+        data: {
+          title: "Vorherige Version wiederherstellen?",
+          text: `Willst du wirklich die Version ${this.lastVersion.name} wiederherstellen?`
+        }
+      });
+      dialogRef.afterClosed().subscribe((result: boolean) => {
+        if (result) {
+          this.onSave();
+        }
+      });
+    }
+  }
+
+  addIndex: number = Infinity;
+  draggedObject: Node | null = null;
+  insertedPrefix: string | null = null;
+
+  dragStart(e: Node | null) {
+
+    this.draggedObject = e;
+  }
+
+  protected contentDroppedBefore(index: number) {
+    this.addIndex = index;
+  }
+
+  protected contentUndroppedAddedBefore() {
+    this.addIndex = Infinity;
+  }
+
+
+  protected elementDropped(entry: FormGroup<OfferEntryGroup>) {
+    if (this.insertedPrefix) {
+      moveObjectInGroup(this.offerGroup, entry, this.insertedPrefix);
+    }
+  }
+
+  protected elementInserted(prefix: string) {
+    this.insertedPrefix = prefix;
+  }
+
+  protected elementUninserted() {
+    this.insertedPrefix = null;
+  }
+
+  protected readonly dayjs = dayjs;
 }

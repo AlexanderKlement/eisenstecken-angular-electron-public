@@ -6,12 +6,14 @@
 <div [formGroup]="entryGroup" class="entry">
   <div class="entry-header-container" (mouseenter)="mouseEnter()"
        (mouseleave)="mouseLeave()">
-    <div [className]="`entry-header level-${depth+1} droppable-area`" #droppableArea>
+    @if (draggedObject != null && !this.dragEnabled && !parentDragging) {
+      <div [className]="`entry-header level-${depth+1} droppable-area`" #droppableArea>
 
-    </div>
+      </div>
+    }
     <div [className]="`entry-header level-${depth+1}`" #header>
       <div class="entry-header-row" #headerRow>
-        <mat-icon class="drag-handle" (click)="mouseDown($event)">drag_indicator</mat-icon>
+        <mat-icon class="drag-handle" (mousedown)="mouseDown($event)">drag_indicator</mat-icon>
         <mat-icon (click)="toggleOpen()" class="icon-btn">
           @if (open) {
             keyboard_arrow_down
@@ -35,7 +37,8 @@
         >
         </app-offer-element-selector>
         @if (entryGroup.get('elementType').value !== "") {
-          <div fxFlex></div>
+          <div fxFlex>
+          </div>
           <mat-icon class="icon-btn" (click)="onAddChild()" title="Kind hinzufügen (Tab)">
             subdirectory_arrow_right
           </mat-icon>
@@ -132,7 +135,7 @@
           (priceEvaluated)="childrenEvaluated()"
           [entryGroup]="control"
           [depth]="depth+1"
-          [prefix]="prefix+(index + 1)+'.'" [index]="idx"
+          [prefix]="prefix+(index + 1)+'.'" [index]="idx >= addIndex ? idx+1 : idx"
           [onAddNeighbour]="onAddNeighbourHere.bind(this)"
           [onCopyElem]="onCopyElemHere.bind(this)"
           [onDeleteElem]="onDeleteElemHere.bind(this)"
@@ -141,8 +144,24 @@
           [draggedObject]="draggedObject"
           (dragStart)="dragStart.emit($event)"
           [parentDragging]="dragEnabled || parentDragging"
+          (droppedBeforeMe)="droppedBeforeChild($event)"
+          (unDroppedBeforeMe)="unDroppedBeforeChild()"
+          (elementDropped)="this.elementDropped.emit($event)"
+          (elementInserted)="this.elementInserted.emit($event)"
+          (elementUnInserted)="this.elementUnInserted.emit($event)"
         ></app-offer-v2-entry-edit>
       }
+    </div>
+  } @else if (draggedObject != null && !this.dragEnabled && !parentDragging) {
+    <div class="entry-content">
+      <div class="entry">
+        <div class="entry-header-container" (mouseenter)="mouseEnter(true)"
+             (mouseleave)="mouseLeave(true)">
+          <div [className]="`entry-header level-${depth+2} droppable-area child`" #droppableAreaChild>
+
+          </div>
+        </div>
+      </div>
     </div>
   }
 </div>

@@ -14,5 +14,6 @@ export interface SchemasOfferV2OfferElementSchemaOfferElementCreatePatch {
     elementTypeId: number;
     fields: Array<SchemasOfferV2OfferElementFieldSchemaOfferElementCreatePatch>;
     name: string;
+    temporary?: boolean | null;
 }
 

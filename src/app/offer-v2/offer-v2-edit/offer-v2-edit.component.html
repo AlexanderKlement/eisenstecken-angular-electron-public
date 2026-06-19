@@ -11,11 +11,36 @@
               <div class="spinner-container">
                 <mat-spinner></mat-spinner>
               </div>
+            } @else if (isCustomVersion) {
+              <button mat-raised-button color="accent" (click)="onRestoreVersion()">Version wiederherstellen</button>
+              <button mat-raised-button color="primary" (click)="onBackToOriginal()">Zurück zur aktuellen Version
+              </button>
+
             } @else {
               @if (!!offerV2Id) {
                 <button mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
               }
               <button mat-raised-button color="primary" (click)="onSave()">Speichern</button>
+              @if (unsavedChanges) {
+                <mat-icon class="unsaved-changes"
+                          [title]="`Änderungen nicht gespeichert ${lastSave ? `(Letzter Auto-save: ${lastSave.toLocaleTimeString('de-DE')})` : ''}`">
+                  cloud_off
+                </mat-icon>
+              } @else if (saving$|async) {
+                <mat-icon class="changes-saving"
+                          [title]="`Änderungen werden automatisch gespeichert`">
+                  cloud_upload
+                </mat-icon>
+              } @else if (lastSave) {
+                <mat-icon class="changes-saved"
+                          [title]="`Änderungen gespeichert ${lastSave.toLocaleTimeString('de-DE')}`">
+                  cloud_done
+                </mat-icon>
+              }
+
+              <mat-icon class="show-history" title="Versionen Anzeigen" (click)="toggleHistory()">
+                history
+              </mat-icon>
             }
           </div>
           <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="16">
@@ -49,7 +74,7 @@
                     <app-offer-v2-entry-edit
                       (priceEvaluated)="contentEvaluated()"
                       [entryGroup]="group"
-                      [index]="idx"
+                      [index]="idx >= addIndex ? idx+1 : idx"
                       [depth]="0"
                       prefix=""
                       [onDeleteElem]="onDeleteContent.bind(this)"
@@ -60,6 +85,12 @@
                       [draggedObject]="draggedObject"
                       (dragStart)="dragStart($event)"
                       [parentDragging]="false"
+                      (droppedBeforeMe)="contentDroppedBefore($index)"
+                      (unDroppedBeforeMe)="contentUndroppedAddedBefore()"
+                      (elementDropped)="this.elementDropped($event)"
+                      (elementInserted)="this.elementInserted($event)"
+                      (elementUnInserted)="this.elementUninserted()"
+
                     ></app-offer-v2-entry-edit>
                   }
 
@@ -257,4 +288,26 @@
       </div>
     </form>
   }
+
+  <div [class]="historyDialogOpen ? 'overlay visible' : 'overlay'" (click)="toggleHistory()"></div>
+  <div [class]="historyDialogOpen ? 'history-dialog open' : 'history-dialog'">
+    <div class="content">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <h4>Versionen</h4>
+        <mat-icon (click)="toggleHistory()" class="cursor-pointer">close</mat-icon>
+      </div>
+      @for (version of versions; track version.id) {
+        @if (version.id === lastVersion.id) {
+          <app-list-element [mainText]="`${version.name} (Aktuelle Version)`"
+                            [subText]="`Letzter Auto-save: ${dayjs(version.timestamp).format('DD.MM.YYYY HH:mm')}`">
+          </app-list-element>
+        } @else {
+          <app-list-element rightIcon="visibility" [mainText]="version.name" pointer
+                            [subText]="`Letzter Auto-save: ${dayjs(version.timestamp).format('DD.MM.YYYY HH:mm')}`"
+                            (clicked)="onShowHistory(version)">
+          </app-list-element>
+        }
+      }
+    </div>
+  </div>
 </app-offer-container>

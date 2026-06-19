@@ -1776,13 +1776,14 @@ export class OfferV2Service extends BaseService {
      * @param skip 
      * @param filterString 
      * @param limit 
+     * @param includeTemporary 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getOfferElementsOfferV2ElementsGet(skip?: number, filterString?: string, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OfferElementListElement>>;
-    public getOfferElementsOfferV2ElementsGet(skip?: number, filterString?: string, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OfferElementListElement>>>;
-    public getOfferElementsOfferV2ElementsGet(skip?: number, filterString?: string, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OfferElementListElement>>>;
-    public getOfferElementsOfferV2ElementsGet(skip?: number, filterString?: string, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getOfferElementsOfferV2ElementsGet(skip?: number, filterString?: string, limit?: number, includeTemporary?: any, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OfferElementListElement>>;
+    public getOfferElementsOfferV2ElementsGet(skip?: number, filterString?: string, limit?: number, includeTemporary?: any, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OfferElementListElement>>>;
+    public getOfferElementsOfferV2ElementsGet(skip?: number, filterString?: string, limit?: number, includeTemporary?: any, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OfferElementListElement>>>;
+    public getOfferElementsOfferV2ElementsGet(skip?: number, filterString?: string, limit?: number, includeTemporary?: any, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
@@ -1791,6 +1792,8 @@ export class OfferV2Service extends BaseService {
           <any>filterString, 'filter_string');
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
           <any>limit, 'limit');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>includeTemporary, 'include_temporary');
 
         let localVarHeaders = this.defaultHeaders;
 
