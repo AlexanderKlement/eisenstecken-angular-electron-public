@@ -10,7 +10,7 @@
       @if (!!elementId) {
         <button mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
       }
-      <button mat-raised-button color="primary" [disabled]="!elementGroup.valid" (click)="onSave()">Speichern</button>
+      <button mat-raised-button color="primary" (click)="onSave()">Speichern</button>
     }
   </div>
 
@@ -35,25 +35,25 @@
       </div>
 
       @if (elementGroup.get('elementType').value !== "-1") {
-        <h3>Felder</h3>
-        <div fxLayout="row" fxFill fxLayoutAlign="space-between center">
-          <span>Die Felder werden über den Elementtyp definiert</span>
+
+        <div fxLayout="row" fxFill fxLayoutAlign="space-between center" class="my-1">
+          <strong class="neutral">Felder (definiert im Elementtyp)</strong>
           <button mat-stroked-button color="primary" (click)="onNavElementType()">
             Elementtyp bearbeiten
           </button>
         </div>
 
-        <div class="element-field">
+        <!--<div class="element-field">
           <div class="element-field-header">
             <strong>Beschreibung</strong>
             <span class="sub-header"></span>
           </div>
-        </div>
+        </div> -->
         @if (elementGroup.get("price").value !== "") {
           <div class="element-field">
             <div class="element-field-header">
               <strong>Preisberechnung</strong>
-              <span class="sub-header">{{ elementGroup.get("price").value }}</span>
+              <span class="sub-header font-math">{{ elementGroup.get("price").value }}</span>
             </div>
           </div>
         }
@@ -61,7 +61,7 @@
           <div class="element-field">
             <div class="element-field-header">
               <strong>Angebotstext</strong>
-              <span class="sub-header">{{ elementGroup.get("offertext").value }}</span>
+              <span class="sub-header font-math">{{ elementGroup.get("offertext").value }}</span>
             </div>
           </div>
         }
@@ -81,20 +81,22 @@
                 <div class="element-field-content">
 
                   @if (control.controls.fieldType.value === OfferFieldEnum.Calculation || control.controls.fieldType.value === OfferFieldEnum.Offertext) {
-                    <app-offer-calculation-input [value]="control.controls.value.value" readonly
-                                                 [setValue]="setDefaultVal.bind(this,idx)" label="Berechnung"
-                                                 hintStyle="none" outline></app-offer-calculation-input>
+                    <div class="padd-8">
+                      <app-offer-calculation-input [value]="control.controls.value.value" readonly
+                                                   [setValue]="setDefaultVal.bind(this,idx)" label="Berechnung"
+                                                   hintStyle="none" outline></app-offer-calculation-input>
+                    </div>
                   } @else {
-                    <mat-checkbox formControlName="mandatory" class="form-control">Pflichtfeld</mat-checkbox>
+                    <!-- <mat-checkbox formControlName="mandatory" class="form-control">Pflichtfeld</mat-checkbox> -->
                     <mat-checkbox formControlName="inherits" class="form-control">Vom übergeordneten Element erben
                     </mat-checkbox>
-                    <div class="my-1"></div>
                     @if (control.controls.fieldType.value === OfferFieldEnum.Select) {
                       <mat-radio-group formControlName="useManualList">
                         <mat-radio-button [value]="false">Aus Bibliothek</mat-radio-button>
                         <mat-radio-button [value]="true">Manuelle Liste</mat-radio-button>
                       </mat-radio-group>
                       @if (control.controls.useManualList.value) {
+                        <label id="radio-group-label">Liste erstellen</label>
                         <ng-container formArrayName="manualList">
                           @for (mLControl of control.controls.manualList.controls; track mLControl.value; let mLIdx = $index) {
                             <ng-container [formGroupName]="mLIdx">
@@ -116,10 +118,10 @@
                         </mat-radio-group>
                       }
                     } @else {
-                      <mat-form-field fxFill appearance="outline">
-                        <mat-label>Standartwert</mat-label>
-                        <input class="form-control" matInput formControlName="value">
-                      </mat-form-field>
+                      <!-- <mat-form-field fxFill appearance="outline">
+                         <mat-label>Standartwert</mat-label>
+                         <input class="form-control" matInput formControlName="value">
+                       </mat-form-field> -->
                     }
                   }
                 </div>

@@ -16,5 +16,6 @@ export interface OfferElement {
     fields: Array<OfferElementField>;
     id: number;
     name: string;
+    temporary: boolean;
 }
 

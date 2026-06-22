@@ -21,6 +21,8 @@ import {
   OfferElementType,
   OfferFieldEnum,
   OfferLibrary,
+  OfferTemplateEntry,
+  OfferTemplateListElement,
   OfferV2EntryInput,
   OfferV2EntryOutput,
   OfferV2Service
@@ -33,7 +35,7 @@ import {
   newOfferEntryFieldGroupFormField,
   OfferEntryFieldGroup
 } from "./entry-field-edit/entry-field-edit.component";
-import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
+import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
 import { priceEvaluationElementGroup } from "../../offer-calculation-utils";
 import { formatCurrency } from "@angular/common";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
@@ -111,13 +113,13 @@ export function newEmptyOfferEntryGroup(globalAddPercent = 0) {
   return grp;
 }
 
-export function mapEntryOfferEntryGroup(entry: OfferV2EntryOutput, globalAddPercent = 0): FormGroup<OfferEntryGroup> {
+export function mapEntryOfferEntryGroup(entry: OfferV2EntryOutput, globalAddPercent = 0, newId = false): FormGroup<OfferEntryGroup> {
   const grp = new FormGroup<OfferEntryGroup>({
     name: new FormControl(entry.name),
-    id: new FormControl(entry.id),
+    id: new FormControl(newId ? randomUUID() : entry.id),
     elementId: new FormControl(entry.elementId),
     elementType: new FormControl(entry.elementType),
-    children: new FormArray(entry.children.map(c => mapEntryOfferEntryGroup(c))),
+    children: new FormArray(entry.children.map(c => mapEntryOfferEntryGroup(c, globalAddPercent, newId))),
     amount: new FormControl(entry.amount),
     visibleOffer: new FormControl(entry.visibleOffer),
     alternative: new FormControl(entry.alternative),
@@ -137,6 +139,26 @@ export function mapEntryOfferEntryGroup(entry: OfferV2EntryOutput, globalAddPerc
   return grp;
 }
 
+export function mapFromTemplateEntry(elem: OfferTemplateEntry, grp: FormGroup<OfferEntryGroup>, globalAddPercent: number) {
+  grp.patchValue({
+    elementId: elem.element.id,
+    elementType: elem.element.elementType.name,
+    price: elem.element.elementType.price,
+    offertext: elem.element.elementType.offertext,
+    name: elem.element.name
+  }, { emitEvent: false });
+  grp.controls.fields.clear({ emitEvent: false });
+  elem.element.fields.forEach((field) => {
+    grp.controls.fields.push(newOfferEntryFieldGroupFormField(field), { emitEvent: false });
+  });
+  autofillInheritance(grp);
+  elem.children.forEach(child => {
+    const newGrp = newEmptyOfferEntryGroup(globalAddPercent);
+    grp.controls.children.push(newGrp);
+    mapFromTemplateEntry(child, newGrp, globalAddPercent);
+  });
+}
+
 @Component({
   selector: "app-offer-v2-entry-edit",
   imports: [
@@ -150,7 +172,8 @@ export function mapEntryOfferEntryGroup(entry: OfferV2EntryOutput, globalAddPerc
     MatLabel,
     MatInput,
     CdkTextareaAutosize,
-    OfferElementSelectorComponent
+    OfferElementSelectorComponent,
+    MatSuffix
   ],
   templateUrl: "./offer-v2-entry-edit.component.html",
   styleUrl: "./offer-v2-entry-edit.component.scss"
@@ -165,30 +188,28 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
   @Input() selectedElements: string[];
   @Input({ transform: booleanAttribute }) parentDragging: boolean;
   @Input({ transform: booleanAttribute }) parentInvisible: boolean;
-  @Input() draggedObject: Node | null;
+  @Input() draggedObject: FormGroup<OfferEntryGroup> | null;
   @Input() allElementTypes: OfferElementType[];
   @Input() allLibraries: OfferLibrary[];
+  @Input() allTemplates: OfferTemplateListElement[];
+  @Input() allElements: OfferElementListElement[];
   @Input() onDeleteElem: (index: number) => void;
   @Input() onCopyElem: (index: number) => void;
-  @Input() onAddNeighbour: (index: number) => void;
+  @Input() onAddNeighbour: (index: number, template?: OfferTemplateEntry) => void;
   open = false;
   @Output() priceEvaluated = new EventEmitter<void>();
-  @Output() dragStart = new EventEmitter<Node | null>();
-  @Output() droppedBeforeMe = new EventEmitter<number>();
-  @Output() unDroppedBeforeMe = new EventEmitter<number>();
-  @Output() elementDropped = new EventEmitter<FormGroup<OfferEntryGroup>>();
+  @Output() dragStart = new EventEmitter<FormGroup<OfferEntryGroup> | null>();
   @Output() elementInserted = new EventEmitter<string>();
   @Output() elementUnInserted = new EventEmitter<void>();
   @Output() selectElem = new EventEmitter<string>();
   private waitForChildren: number = 0;
+  percent = false;
 
 
   @ViewChild("headerRow") headerRow: ElementRef<HTMLDivElement>;
   @ViewChild("header") header: ElementRef<HTMLDivElement>;
   @ViewChild("placeholder") placeholder: ElementRef<HTMLDivElement>;
   @ViewChild("placeholderContainer") placeholderContainer: ElementRef<HTMLDivElement>;
-  @ViewChild("droppableArea") droppableArea: ElementRef<HTMLDivElement>;
-  @ViewChild("droppableAreaChild") droppableAreaChild: ElementRef<HTMLDivElement>;
   dragEnabled: boolean;
   private mousedownCoords = { x: 0, y: 0 };
 
@@ -207,6 +228,9 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
       } else {
         this.waitForChildren = this.entryGroup.controls.children.length;
       }
+      if (this.scontoResettable) {
+        this.percent = true;
+      }
     }
     if (this.entryGroup.controls.elementType.value === "") {
       this.open = true;
@@ -223,6 +247,14 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
     }
   }
 
+  protected get scontoResettable(): boolean {
+    return this.entryGroup.get("priceAddPercent").value !== this.entryGroup.get("globalAddPercent").value;
+  }
+
+  onResetSconto() {
+    this.entryGroup.patchValue({ priceAddPercent: this.entryGroup.get("globalAddPercent").value });
+  }
+
   childrenEvaluated() {
     this.waitForChildren--;
     if (this.waitForChildren <= 0) {
@@ -235,7 +267,6 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
     this.open = !this.open;
   }
 
-  percent = false;
 
   togglePercent() {
     this.percent = !this.percent;
@@ -253,33 +284,48 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
     this.entryGroup.patchValue({ visibleOffer: !this.entryGroup.get("visibleOffer").value });
   }
 
-  onSetElement(val: OfferElementListElement) {
-    this.entryGroup.patchValue({
-      elementId: val.id,
-      elementType: val.elementType.name,
-      price: val.elementType.price,
-      offertext: val.elementType.offertext,
-      name: val.name
-    });
-    this.offerService.getOfferElementOfferV2ElementElementIdGet(val.id).pipe(take(1)).subscribe((elem) => {
-      this.entryGroup.controls.fields.clear();
-      elem.fields.forEach(field => {
-        this.entryGroup.controls.fields.push(newOfferEntryFieldGroupFormField(field));
+  onSetElement(val: OfferElementListElement | OfferTemplateListElement) {
+    if ("entry_count" in val) {
+      this.offerService.getOfferTemplateOfferV2TemplateTemplateIdGet(val.id).pipe(take(1)).subscribe((elem) => {
+        elem.structure.forEach((entry, index) => {
+          this.onAddNeighbour(this.index, entry);
+        });
       });
-      autofillInheritance(this.entryGroup);
-    });
+      this.onDeleteElem(this.index);
+    } else {
+      this.entryGroup.patchValue({
+        elementId: val.id,
+        elementType: val.elementType.name,
+        price: val.elementType.price,
+        offertext: val.elementType.offertext,
+        name: val.name
+      });
+      this.offerService.getOfferElementOfferV2ElementElementIdGet(val.id).pipe(take(1)).subscribe((elem) => {
+        this.entryGroup.controls.fields.clear();
+        elem.fields.forEach(field => {
+          this.entryGroup.controls.fields.push(newOfferEntryFieldGroupFormField(field));
+        });
+        autofillInheritance(this.entryGroup);
+      });
+    }
   }
 
   onAddChild() {
-    this.entryGroup.controls.children.push(newEmptyOfferEntryGroup());
+    this.entryGroup.controls.children.push(newEmptyOfferEntryGroup(this.entryGroup.get("globalAddPercent").value));
   }
 
-  onAddNeighbourHere(index: number) {
-    this.entryGroup.controls.children.insert(index + 1, newEmptyOfferEntryGroup());
+  onAddNeighbourHere(index: number, template?: OfferTemplateEntry) {
+    if (template) {
+      const newGrp = newEmptyOfferEntryGroup(this.entryGroup.get("globalAddPercent").value);
+      this.entryGroup.controls.children.insert(index + 1, newGrp);
+      mapFromTemplateEntry(template, newGrp, this.entryGroup.get("globalAddPercent").value);
+    } else {
+      this.entryGroup.controls.children.insert(index + 1, newEmptyOfferEntryGroup(this.entryGroup.get("globalAddPercent").value));
+    }
   }
 
   onCopyElemHere(index: number) {
-    this.entryGroup.controls.children.insert(index + 1, mapEntryOfferEntryGroup(mapOfferEntryToInput(this.entryGroup.controls.children.at(index)), this.entryGroup.get("globalAddPercent").value));
+    this.entryGroup.controls.children.insert(index + 1, mapEntryOfferEntryGroup(mapOfferEntryToInput(this.entryGroup.controls.children.at(index)), this.entryGroup.get("globalAddPercent").value, true));
   }
 
   onDeleteElemHere(index: number) {
@@ -305,46 +351,46 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
   protected readonly formatCurrency = formatCurrency;
   protected readonly OfferFieldEnum = OfferFieldEnum;
 
-  private addedNode: Node | null = null;
+  private addedNode = false;
+  addedPosition: "before" | "after" | "child" | null = null;
 
-  protected mouseEnter(inChild?: boolean) {
-    if (this.draggedObject && !this.dragEnabled && !this.parentDragging) {
-      this.addedNode = this.draggedObject.cloneNode(true);
-
-      if (inChild) {
-        ((this.addedNode as HTMLDivElement).childNodes[2] as HTMLSpanElement).innerText = `${this.prefix}${this.index + 1}.1`;
-        this.droppableAreaChild.nativeElement.append(this.addedNode);
-        this.elementInserted.emit(`${this.prefix}${this.index + 1}.1`);
-      } else {
-        this.droppableArea.nativeElement.attributeStyleMap.set("display", "flex");
-        if (this.parentDragging) {
-          this.droppableArea.nativeElement.attributeStyleMap.set("border-top-color", "#f00");
-          this.droppableArea.nativeElement.attributeStyleMap.set("border-right-color", "#f00");
-          this.droppableArea.nativeElement.attributeStyleMap.set("border-bottom-color", "#f00");
-        } else {
-          this.droppableArea.nativeElement.attributeStyleMap.set("border-top-color", "#0f0");
-          this.droppableArea.nativeElement.attributeStyleMap.set("border-right-color", "#0f0");
-          this.droppableArea.nativeElement.attributeStyleMap.set("border-bottom-color", "#0f0");
-        }
-        ((this.addedNode as HTMLDivElement).childNodes[2] as HTMLSpanElement).innerText = `${this.prefix}${this.index + 1}`;
-        this.droppableArea.nativeElement.append(this.addedNode);
-        this.elementInserted.emit(`${this.prefix}${this.index + 1}`);
-        this.droppedBeforeMe.emit(this.index);
-      }
+  setAddedPosition(height: number, mouse: number) {
+    if (mouse < (height * 0.2)) {
+      this.elementInserted.emit(`${this.prefix}${this.index + 1}`);
+      this.addedPosition = "before";
+    } else if (mouse > (height * 0.8)) {
+      this.elementInserted.emit(`${this.prefix}${this.index + 2}`);
+      this.addedPosition = "after";
+    } else {
+      this.elementInserted.emit(`${this.prefix}${this.index + 1}.1`);
+      this.addedPosition = "child";
     }
   }
 
-  protected mouseLeave(inChild?: boolean) {
-    if (this.addedNode && (this.droppableAreaChild || this.droppableArea)) {
-      if (inChild) {
-        this.droppableAreaChild.nativeElement.removeChild(this.addedNode);
-      } else {
-        this.unDroppedBeforeMe.emit(this.index);
-        this.droppableArea.nativeElement.removeChild(this.addedNode);
-        this.droppableArea.nativeElement.attributeStyleMap.set("display", "none");
-      }
+  protected mouseMoveEntered(event: MouseEvent) {
+    if (this.addedNode) {
+      const target = event.target as HTMLDivElement;
+      const height = Math.max(target.offsetHeight, 1);
+      const mouse = Math.min(Math.max(0, event.offsetY), height);
+      this.setAddedPosition(height, mouse);
+    }
+  }
+
+  protected mouseEnter(event: MouseEvent) {
+    if (this.draggedObject && !this.dragEnabled && !this.parentDragging) {
+      this.addedNode = true;
+      const target = event.target as HTMLDivElement;
+      const height = Math.max(target.offsetHeight, 1);
+      const mouse = Math.min(Math.max(0, event.offsetY), height);
+      this.setAddedPosition(height, mouse);
+    }
+  }
+
+  protected mouseLeave() {
+    if (this.addedNode) {
       this.elementUnInserted.emit();
-      this.addedNode = null;
+      this.addedPosition = null;
+      this.addedNode = false;
     }
   }
 
@@ -361,7 +407,6 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
       this.dragEnabled = false;
       this.placeholderContainer.nativeElement.attributeStyleMap.set("display", "none");
       this.dragStart.emit(null);
-      this.elementDropped.emit(this.entryGroup);
     }
   }
 
@@ -370,23 +415,13 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
     this.mousedownCoords = { x: event.offsetX + 46, y: event.offsetY + 16 };
     this.dragEnabled = true;
     const node = this.headerRow.nativeElement.cloneNode(true);
-    this.dragStart.emit(node);
+    this.dragStart.emit(this.entryGroup);
     this.placeholder.nativeElement.append(node);
     this.placeholder.nativeElement.attributeStyleMap.set("width", `${this.headerRow.nativeElement.clientWidth}px`);
     this.placeholder.nativeElement.attributeStyleMap.set("height", `${this.headerRow.nativeElement.clientHeight}px`);
     this.placeholderContainer.nativeElement.attributeStyleMap.set("display", "block");
     this.placeholderContainer.nativeElement.attributeStyleMap.set("left", `${event.clientX - this.mousedownCoords.x}px`);
     this.placeholderContainer.nativeElement.attributeStyleMap.set("top", `${event.clientY - this.mousedownCoords.y}px`);
-  }
-
-  addIndex = Infinity;
-
-  protected droppedBeforeChild(event: number) {
-    this.addIndex = event;
-  }
-
-  protected unDroppedBeforeChild() {
-    this.addIndex = Infinity;
   }
 
   protected onSelectElem() {

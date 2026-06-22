@@ -3,19 +3,24 @@ import { ReactiveFormsModule } from "@angular/forms";
 import {
   OfferElementListElement,
   OfferElementType,
+  OfferTemplateListElement,
   OfferV2Service,
   SchemasOfferV2OfferElementFieldSchemaOfferElementCreatePatch
 } from "../../../api/openapi";
 import { MatFormField, MatLabel } from "@angular/material/input";
-import { AsyncPipe } from "@angular/common";
-import { MtxSelect, MtxSelectTagTemplate } from "@ng-matero/extensions/select";
-import { concat, Observable, of, Subject } from "rxjs";
-import { catchError, debounceTime, distinctUntilChanged, switchMap, take, tap } from "rxjs/operators";
+import { MtxSelect, MtxSelectOptionTemplate, MtxSelectTagTemplate } from "@ng-matero/extensions/select";
+import { take } from "rxjs/operators";
 import { DefaultFlexDirective, DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
 import {
   OfferFieldElementTypePillComponent
 } from "../offer-field-element-type-pill/offer-field-element-type-pill.component";
 import { MatIcon } from "@angular/material/icon";
+import { Observable, of } from "rxjs";
+import { AsyncPipe } from "@angular/common";
+
+type CustomElement = (OfferElementListElement | OfferTemplateListElement) & {
+  customId: string;
+}
 
 @Component({
   selector: "app-offer-element-selector",
@@ -25,20 +30,23 @@ import { MatIcon } from "@angular/material/icon";
     ReactiveFormsModule,
     MatFormField,
     MatLabel,
-    AsyncPipe,
     MtxSelect,
     DefaultFlexDirective,
     OfferFieldElementTypePillComponent,
     MtxSelectTagTemplate,
     DefaultLayoutDirective,
     DefaultLayoutAlignDirective,
-    MatIcon
+    MatIcon,
+    MtxSelectOptionTemplate,
+    AsyncPipe
   ]
 })
 export default class OfferElementSelectorComponent implements OnInit {
 
   private offerService = inject(OfferV2Service);
   @Input() allElementTypes: OfferElementType[];
+  @Input() allElements: OfferElementListElement[];
+  @Input() allTemplates: OfferTemplateListElement[];
   @Input() value?: number;
   @Input() valueName?: string;
   @Input() label?: string;
@@ -46,37 +54,44 @@ export default class OfferElementSelectorComponent implements OnInit {
   @Input({ transform: booleanAttribute }) readonly: boolean;
   @Input({ transform: booleanAttribute }) fillWidth: boolean;
   @Input({ transform: booleanAttribute }) addingEnabled: boolean;
-  @Output() setValue: EventEmitter<OfferElementListElement> = new EventEmitter();
+  @Input({ transform: booleanAttribute }) includeTemplates: boolean;
+
+  @Output() setValue: EventEmitter<OfferElementListElement | OfferTemplateListElement> = new EventEmitter();
   @Output() keyClicked: EventEmitter<KeyboardEvent> = new EventEmitter();
   @ViewChild("selectChild") selectChild: MtxSelect;
   private selectedElementType?: OfferElementType;
-  elementsInput$ = new Subject<string>();
   searchString = "";
   saveInLibrary = false;
   keepOpen = false;
-  elementsLoading = false;
 
-  elements$: Observable<OfferElementListElement[]> = of([]);
+  elements$: Observable<CustomElement[]> = of([]);
 
-  trackByFn = (item: OfferElementListElement) => item.id;
+  trackByFn = (item: CustomElement) => item.customId;
+
+  private createObservable(additional?: CustomElement) {
+    return of((this.allElements.filter(ele => ele.id === this.value || !ele.temporary).map<CustomElement>(ele => ({
+      ...ele,
+      customId: `element-${ele.id}`
+    }))).concat(
+      this.allTemplates.map<CustomElement>(ele => ({
+        ...ele,
+        customId: `template-${ele.id}`
+      }))
+    ).concat(additional ? [additional] : []));
+  }
 
   ngOnInit() {
-    this.elements$ = concat(
-      this.offerService.getOfferElementsOfferV2ElementsGet(undefined, undefined, undefined, this.value),
-      this.elementsInput$.pipe(
-        distinctUntilChanged(),
-        tap(() => (this.elementsLoading = true)),
-        debounceTime(200),
-        switchMap(term => {
-            this.searchString = term;
-            return this.offerService.getOfferElementsOfferV2ElementsGet(0, term, 100).pipe(
-              catchError(() => of([])), // empty list on error
-              tap(() => (this.elementsLoading = false))
-            );
-          }
-        )
-      )
-    );
+    this.elements$ = this.createObservable();
+  }
+
+  searchFun(term: string, item: OfferElementListElement | OfferTemplateListElement): boolean {
+    this.searchString = term;
+    const clearTerm = term.trim().toLowerCase();
+    if ("entry_count" in item) {
+      return item.name.toLowerCase().indexOf(clearTerm) !== -1 || item.description.toLowerCase().indexOf(clearTerm) !== -1;
+    } else {
+      return item.name.toLowerCase().indexOf(clearTerm) !== -1 || item.elementType.name.toLowerCase().indexOf(clearTerm) !== -1;
+    }
   }
 
   onClose() {
@@ -85,8 +100,7 @@ export default class OfferElementSelectorComponent implements OnInit {
     }
   }
 
-  onChange(event: OfferElementListElement | { name: string }) {
-    console.log("Change:", event);
+  onChange(event: OfferElementListElement | OfferTemplateListElement | { name: string }) {
     if ("id" in event) {
       this.keepOpen = false;
       this.setValue.emit(event);
@@ -107,7 +121,10 @@ export default class OfferElementSelectorComponent implements OnInit {
         })
       }).pipe(take(1)).subscribe((element) => {
         this.selectedElementType = null;
-        this.elements$ = of([element]);
+        this.elements$ = this.createObservable({
+          ...element,
+          customId: `element-${element.id}`
+        });
         this.setValue.emit(element);
       });
     } else {

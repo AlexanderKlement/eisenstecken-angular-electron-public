@@ -15,7 +15,9 @@ import {
   OfferElementListElement,
   OfferElementType,
   OfferLibrary,
+  OfferTemplateEntry,
   OfferTemplateEntryCreatePatch,
+  OfferTemplateListElement,
   OfferV2,
   OfferV2Service,
   OfferV2Version
@@ -32,6 +34,7 @@ import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/i
 import { MtxSelect } from "@ng-matero/extensions/select";
 import {
   mapEntryOfferEntryGroup,
+  mapFromTemplateEntry,
   mapOfferEntryToInput,
   newEmptyOfferEntryGroup,
   OfferEntryGroup,
@@ -47,6 +50,9 @@ import { Vat } from "../../model/vat";
 import { selectRequires } from "../../shared/custom-validators";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { evaluateOfferInheritance } from "../offer-inheritance-util";
+import {
+  TemplateCreateDialogComponent
+} from "../templates/template-create-dialog/template-create-dialog/template-create-dialog.component";
 
 type OfferV2Group = {
   name: FormControl<string>;
@@ -101,7 +107,7 @@ function newOfferGroup(data: OfferV2, version?: OfferV2Version) {
     hoursSconto: new FormControl(data.hoursSconto),
     hourlyRate: new FormControl(data.hourlyRate),
     jobId: new FormControl(data.job.id.toString(10), selectRequires),
-    content: new FormArray(version ? version.content.map(mapEntryOfferEntryGroup) : []),
+    content: new FormArray(version ? version.content.map(c => mapEntryOfferEntryGroup(c, data.globalAddPercent)) : []),
     validity: new FormControl(data.validity),
     inPriceIncluded: new FormControl(data.inPriceIncluded),
     materialDescriptionTitle: new FormControl(data.materialDescriptionTitle),
@@ -129,6 +135,7 @@ function moveObjectInGroup(group: FormGroup<OfferV2Group>, entry: FormGroup<Offe
         }
       }
     }
+
     return false;
   }
 
@@ -152,12 +159,19 @@ function moveObjectInGroup(group: FormGroup<OfferV2Group>, entry: FormGroup<Offe
         return true;
       }
     }
+    const lastPrefix = `${prefix}${arr.controls.length + 1}`;
+    if (lastPrefix === insertedPrefix) {
+      arr.push(toInsert);
+      arr.markAsDirty();
+      return true;
+    }
     return false;
   }
 
 
-  insetAtPrefixRecursively(group.controls.content, "", entry);
-  removeIdRecursively(entry.get("id").value, group.controls.content, "");
+  if (insetAtPrefixRecursively(group.controls.content, "", entry)) {
+    removeIdRecursively(entry.get("id").value, group.controls.content, "");
+  }
   return group;
 }
 
@@ -208,6 +222,8 @@ export class OfferV2EditComponent implements OnInit {
   versions: OfferV2Version[] = [];
   allLibraries: OfferLibrary[] = [];
   allElementTypes: OfferElementType[] = [];
+  allElements: OfferElementListElement[] = [];
+  allTemplates: OfferTemplateListElement[] = [];
   lastVersion: OfferV2Version;
   offertext: Offertext[] = [];
   selectedElements: string[] = [];
@@ -240,18 +256,26 @@ export class OfferV2EditComponent implements OnInit {
     this.vats$ = this.api.readVatsVatGet();
     this.offerService.getAllOfferLibrariesWithEntriesOfferV2LibrariesEntriesGet().pipe(take(1)).subscribe((libs) => {
       this.allLibraries = libs;
+      this.offerService.getOfferElementTypesOfferV2ElementTypesGet().pipe(take(1)).subscribe((elementTypes) => {
+        this.allElementTypes = elementTypes;
+        this.offerService.getOfferElementsOfferV2ElementsGet(0, undefined, 1000, 0).pipe(take(1)).subscribe((elements) => {
+          this.allElements = elements;
+          this.offerService.getOfferTemplatesOfferV2TemplatesGet(0, undefined, 1000).pipe(take(1)).subscribe((templates) => {
+            this.allTemplates = templates;
+            this.route.params.subscribe((params) => {
+              try {
+                this.offerV2Id = parseInt(params.id, 10);
+              } catch {
+                // is createMode
+              }
+              this.initData(params.method);
+            });
+          });
+        });
+      });
     });
-    this.offerService.getOfferElementTypesOfferV2ElementTypesGet().pipe(take(1)).subscribe((elementTypes) => {
-      this.allElementTypes = elementTypes;
-    });
-    this.route.params.subscribe((params) => {
-      try {
-        this.offerV2Id = parseInt(params.id, 10);
-      } catch {
-        // is createMode
-      }
-      this.initData(params.method);
-    });
+
+
   }
 
   initData(method?: string) {
@@ -314,6 +338,8 @@ export class OfferV2EditComponent implements OnInit {
     const grpAdd = group.get("priceAddPercent").value;
     if (grpAdd === grpGlobal) {
       group.patchValue({ priceAddPercent: globalAdd, globalAddPercent: globalAdd });
+    } else {
+      group.patchValue({ globalAddPercent: globalAdd });
     }
     group.controls.children.controls.forEach(grp => this.patchGroupGlobalAdd(globalAdd, grp));
   }
@@ -363,7 +389,10 @@ export class OfferV2EditComponent implements OnInit {
         if (!grpAlternative) {
           priceCalculated += grpPrice;
         }
-        offertext.push(offertextEvaluationElementGroup(entry, 0, i + 1, 0));
+        let txt = offertextEvaluationElementGroup(entry, 0, offertext.length + 1, 0);
+        if (txt) {
+          offertext.push(txt);
+        }
         sums.push(`${grpPrice.toFixed(2)}(${entry.get("name").value})`);
       }
       const { price, formula } = this.applySconto(priceCalculated, sums.join(" + "));
@@ -443,16 +472,38 @@ export class OfferV2EditComponent implements OnInit {
     }
   }
 
-  onAddContent(index = -1) {
-    this.offerGroup.controls.content.insert(index + 1, newEmptyOfferEntryGroup());
+  onAddContent(index = -1, template?: OfferTemplateEntry) {
+    if (template) {
+      const newGrp = newEmptyOfferEntryGroup(this.offerGroup.get("globalAddPercent").value);
+      this.offerGroup.controls.content.insert(index + 1, newGrp);
+      mapFromTemplateEntry(template, newGrp, this.offerGroup.get("globalAddPercent").value);
+    } else {
+      this.offerGroup.controls.content.insert(index + 1, newEmptyOfferEntryGroup(this.offerGroup.get("globalAddPercent").value));
+    }
   }
 
   onCopyContent(index: number) {
-    this.offerGroup.controls.content.insert(index + 1, mapEntryOfferEntryGroup(mapOfferEntryToInput(this.offerGroup.controls.content.at(index)), this.offerGroup.get("globalAddPercent").value));
+    this.offerGroup.controls.content.insert(index + 1, mapEntryOfferEntryGroup(mapOfferEntryToInput(this.offerGroup.controls.content.at(index)), this.offerGroup.get("globalAddPercent").value, true));
   }
 
   onDeleteContent(index: number) {
-    this.offerGroup.controls.content.removeAt(index);
+    const child = this.offerGroup.controls.content.at(index);
+    if (child.controls.children.length !== 0) {
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        width: "400px",
+        data: {
+          title: `Element löschen?`,
+          text: `Wenn du '${child.get("description").value}' löschst, werden auch alle Kinder dieses Elements gelöscht`
+        }
+      });
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.offerGroup.controls.content.removeAt(index);
+        }
+      });
+    } else {
+      this.offerGroup.controls.content.removeAt(index);
+    }
   }
 
 
@@ -542,7 +593,7 @@ export class OfferV2EditComponent implements OnInit {
     this.isCustomVersion = true;
     this.historyDialogOpen = false;
     this.subTitle = version.name;
-    this.offerGroup.controls.content = new FormArray(version.content.map(mapEntryOfferEntryGroup));
+    this.offerGroup.controls.content = new FormArray(version.content.map((c) => mapEntryOfferEntryGroup(c, this.offerGroup.get("globalAddPercent").value)));
   }
 
   protected onBackToOriginal() {
@@ -550,7 +601,7 @@ export class OfferV2EditComponent implements OnInit {
       return (new Date(b.timestamp)).getTime() - (new Date(a.timestamp)).getTime();
     })[0] : undefined;
     this.timeout = setTimeout(this.autosave.bind(this), 10000);
-    this.offerGroup.controls.content = new FormArray(this.lastVersion.content.map(mapEntryOfferEntryGroup));
+    this.offerGroup.controls.content = new FormArray(this.lastVersion.content.map(c => mapEntryOfferEntryGroup(c, this.offerGroup.get("globalAddPercent").value)));
     this.isCustomVersion = false;
     this.subTitle = "Angebot bearbeiten";
     if (this.timeout) {
@@ -576,28 +627,14 @@ export class OfferV2EditComponent implements OnInit {
     }
   }
 
-  addIndex: number = Infinity;
-  draggedObject: Node | null = null;
+  draggedObject: FormGroup<OfferEntryGroup> | null = null;
   insertedPrefix: string | null = null;
 
-  dragStart(e: Node | null) {
-
-    this.draggedObject = e;
-  }
-
-  protected contentDroppedBefore(index: number) {
-    this.addIndex = index;
-  }
-
-  protected contentUndroppedAddedBefore() {
-    this.addIndex = Infinity;
-  }
-
-
-  protected elementDropped(entry: FormGroup<OfferEntryGroup>) {
-    if (this.insertedPrefix) {
-      moveObjectInGroup(this.offerGroup, entry, this.insertedPrefix);
+  dragStart(e: FormGroup<OfferEntryGroup> | null) {
+    if (!e && this.draggedObject && this.insertedPrefix) {
+      moveObjectInGroup(this.offerGroup, this.draggedObject, this.insertedPrefix);
     }
+    this.draggedObject = e;
   }
 
   protected elementInserted(prefix: string) {
@@ -654,17 +691,13 @@ export class OfferV2EditComponent implements OnInit {
     }
 
     const structure = convertRecursive(rootGrps);
-    this.offerService.createOfferTemplateOfferV2TemplatePut({
-      name: `Template aus ${this.offerGroup.get("name").value} ${dayjs().format("DD.MM.YYYY HH:mm")}`,
-      description: "",
-      structure
-    }).pipe(take(1)).subscribe({
-      next: () => {
-        this.snackBar.open("Template erfolgreich erstellt.", "Ok", { duration: 8000 });
-        this.selectedElements = [];
-      },
-      error: () => {
-        this.snackBar.open("Etwas ist schief gelaufen!", "Ok", { duration: 8000 });
+    const dialogRef = this.dialog.open(TemplateCreateDialogComponent, {
+      width: "1000px",
+      data: { structure }
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.router.navigateByUrl("/offer_v2/templates").then();
       }
     });
   }

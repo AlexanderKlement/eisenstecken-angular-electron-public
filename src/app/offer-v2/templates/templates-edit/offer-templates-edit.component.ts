@@ -2,7 +2,12 @@ import { Component, inject, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import OfferContainerComponent from "../../offer-container/offer-container.component";
-import { OfferTemplateEntry, OfferTemplateEntryCreatePatch, OfferV2Service } from "../../../../api/openapi";
+import {
+  OfferElementListElement,
+  OfferTemplateEntry,
+  OfferTemplateEntryCreatePatch,
+  OfferV2Service
+} from "../../../../api/openapi";
 import { take } from "rxjs/operators";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import {
@@ -26,10 +31,22 @@ import {
 } from "./template-entry-edit/template-entry-edit.component";
 
 
-type TemplateGroup = {
+export declare type TemplateGroup = {
   name: FormControl<string>;
   description: FormControl<string>;
   structure: FormArray<FormGroup<TemplateEntryGroup>>
+}
+
+export function convertTemplateEntryRecursive(arr: FormArray<FormGroup<TemplateEntryGroup>>): OfferTemplateEntryCreatePatch[] {
+  return arr.controls.map<OfferTemplateEntryCreatePatch>(grp => {
+    const element = grp.get("elementId").value;
+    if (element === -1)
+      return null;
+    return {
+      elementId: element,
+      children: convertTemplateEntryRecursive(grp.controls.children).filter(elem => !!elem)
+    };
+  }).filter(elem => !!elem);
 }
 
 function moveObjectInGroup(group: FormGroup<TemplateGroup>, entry: FormGroup<TemplateEntryGroup>, insertedPrefix: string): FormGroup<TemplateGroup> {
@@ -69,12 +86,19 @@ function moveObjectInGroup(group: FormGroup<TemplateGroup>, entry: FormGroup<Tem
         return true;
       }
     }
+    const lastPrefix = `${prefix}${arr.controls.length + 1}`;
+    if (lastPrefix === insertedPrefix) {
+      arr.push(toInsert);
+      arr.markAsDirty();
+      return true;
+    }
     return false;
   }
 
 
-  insetAtPrefixRecursively(group.controls.structure, "", entry);
-  removeIdRecursively(entry.get("uid").value, group.controls.structure, "");
+  if (insetAtPrefixRecursively(group.controls.structure, "", entry)) {
+    removeIdRecursively(entry.get("uid").value, group.controls.structure, "");
+  }
   return group;
 }
 
@@ -106,6 +130,7 @@ export default class OfferTemplatesEditComponent implements OnInit {
   private offerService = inject(OfferV2Service);
   subTitle = "Template erstellen";
   templateId: number;
+  allElements: OfferElementListElement[] = [];
   private snackBar = inject(MatSnackBar);
   templateGroup: FormGroup<TemplateGroup> = new FormGroup({
     name: new FormControl(""),
@@ -119,14 +144,19 @@ export default class OfferTemplatesEditComponent implements OnInit {
   private dialog = inject(MatDialog);
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      try {
-        this.templateId = parseInt(params.id, 10);
-      } catch {
-        // is createMode
-      }
-      this.initData(params.method);
+
+    this.offerService.getOfferElementsOfferV2ElementsGet(0, undefined, 1000, 0).pipe(take(1)).subscribe((elements) => {
+      this.allElements = elements;
+      this.route.params.subscribe((params) => {
+        try {
+          this.templateId = parseInt(params.id, 10);
+        } catch {
+          // is createMode
+        }
+        this.initData(params.method);
+      });
     });
+
   }
 
   initData(method?: string) {
@@ -186,27 +216,10 @@ export default class OfferTemplatesEditComponent implements OnInit {
 
   onSave() {
     this.loadingSubject.next(true);
-    let missingElement = false;
 
-    function convertRecursive(arr: FormArray<FormGroup<TemplateEntryGroup>>): OfferTemplateEntryCreatePatch[] {
-      return arr.controls.map<OfferTemplateEntryCreatePatch>(grp => {
-        const element = grp.get("elementId").value;
-        if (element === -1) {
-          missingElement = true;
-        }
-        return {
-          elementId: element,
-          children: convertRecursive(grp.controls.children)
-        };
-      });
-    }
 
-    const structure = convertRecursive(this.templateGroup.controls.structure);
-    if (missingElement) {
-      this.snackBar.open("Für jeden Eintrag muss ein Element ausgewählt werden: ", "Ok", { duration: 8000 });
-      this.loadingSubject.next(false);
-      return;
-    }
+    const structure = convertTemplateEntryRecursive(this.templateGroup.controls.structure);
+
     if (!this.templateGroup.valid) {
       this.snackBar.open("Bitte alle Felder kontrollieren: ", "Ok", { duration: 8000 });
       this.loadingSubject.next(false);
@@ -251,28 +264,14 @@ export default class OfferTemplatesEditComponent implements OnInit {
     }
   };
 
-  addIndex: number = Infinity;
-  draggedObject: Node | null = null;
+  draggedObject: FormGroup<TemplateEntryGroup> | null = null;
   insertedPrefix: string | null = null;
 
-  dragStart(e: Node | null) {
-
-    this.draggedObject = e;
-  }
-
-  protected contentDroppedBefore(index: number) {
-    this.addIndex = index;
-  }
-
-  protected contentUndroppedAddedBefore() {
-    this.addIndex = Infinity;
-  }
-
-
-  protected elementDropped(entry: FormGroup<TemplateEntryGroup>) {
-    if (this.insertedPrefix) {
-      moveObjectInGroup(this.templateGroup, entry, this.insertedPrefix);
+  dragStart(e: FormGroup<TemplateEntryGroup> | null) {
+    if (!e && this.draggedObject && this.insertedPrefix) {
+      moveObjectInGroup(this.templateGroup, this.draggedObject, this.insertedPrefix);
     }
+    this.draggedObject = e;
   }
 
   protected elementInserted(prefix: string) {

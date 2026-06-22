@@ -113,9 +113,11 @@ export default class OfferFieldsEditDialogComponent implements OnInit {
 
   subscription = {
     next: () => {
+      this.loadingSubject.next(false);
       this.dialogRef.close(true);
     },
     error: (error: any) => {
+      this.loadingSubject.next(false);
       this.snackBar.open("Etwas ist schief gelaufen: " + error, "Ok", { duration: 8000 });
     }
   };

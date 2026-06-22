@@ -19,7 +19,8 @@
       @if (hintStyle === "none") {
 
       } @else if (hintStyle !== 'offertext') {
-        <code>&#64;Feldname</code> tippen um ein anderes Feld zu referenzieren. Operatoren: + (plus), - (minus), *
+        <code
+          class="font-math">&#64;Feldname</code> tippen um ein anderes Feld zu referenzieren. Operatoren: + (plus), - (minus), *
           (mal), /
           (geteilt)<br />
         @if (hintStyle !== "small") {
@@ -27,18 +28,21 @@
             referenzieren Felder auch haben<br />
           Beispiele:
           <ul>
-            <li>Volumen = <code>&#64;Höhe * &#64;Breite * &#64;Tiefe</code></li>
-            <li>Wenn z.B. Breite und Tiefe in mm angegeben wird, kann man: Fläche(m³) = <code>&#64;Breite / 1000 *
+            <li>Volumen = <code class="font-math">&#64;Höhe * &#64;Breite * &#64;Tiefe</code></li>
+            <li>Wenn z.B. Breite und Tiefe in mm angegeben wird, kann man: Fläche(m³) = <code class="font-math">&#64;Breite
+              / 1000 *
               &#64;Tiefe
               /
               1000</code>
             </li>
-            <li>Mit <code>max(a,b)</code> kann ein maximalwert definiert werden: z.B.: <code>max(&#64;Höhe
+            <li>Mit <code class="font-math">max(a,b)</code> kann ein maximalwert definiert werden: z.B.: <code
+              class="font-math">max(&#64;Höhe
               *
               &#64;Breite, 20)</code> ergibt 20 wenn höhe * breite größer als
               20 ist
             </li>
-            <li>Mit <code>min(a,b)</code> kann ein mindestwert definiert werden: z.B.: <code>min(&#64;Höhe
+            <li>Mit <code class="font-math">min(a,b)</code> kann ein mindestwert definiert werden: z.B.: <code
+              class="font-math">min(&#64;Höhe
               *
               &#64;Breite, 20)</code> ergibt 20 wenn höhe * breite kleiner als
               20 ist
@@ -49,16 +53,19 @@
       } @else {
         Definiere wie sich der Angebotstext zusammengesätzt.<br />
         Mit
-        <code>&#64;children.angebotstext</code> werden die Angebotstexte aller sichtbaren Kinder eingefügt (jeweils auf einer neuen Zeile). Die Kinder werden dann im Angebot nicht separat nummeriert.
+        <code
+          class="font-math">&#64;children</code> werden die Angebotstexte aller sichtbaren Kinder eingefügt (jeweils auf einer neuen Zeile). Die Kinder werden dann im Angebot nicht separat nummeriert.
       }
 
     </mat-hint>
   </mat-form-field>
-  <div fxLayout="row" fxLayoutGap="8" class="my-1 autocomlete-buttons">
-    @for (field of displayFields; track field) {
-      <button (click)="onFieldClick(displayFields[$index])" mat-stroked-button
-              class="autocomplete-button">{{ field }}
-      </button>
-    }
-  </div>
+  @if (!readonly) {
+    <div fxLayout="row" fxLayoutGap="8" class="my-1 autocomlete-buttons">
+      @for (field of displayFields; track field) {
+        <button (click)="onFieldClick(displayFields[$index])" mat-stroked-button
+                class="autocomplete-button">{{ field }}
+        </button>
+      }
+    </div>
+  }
 </div>

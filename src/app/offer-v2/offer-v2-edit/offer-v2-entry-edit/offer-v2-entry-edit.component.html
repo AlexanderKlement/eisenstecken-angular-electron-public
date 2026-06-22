@@ -4,10 +4,16 @@
   </div>
 </div>
 <div [formGroup]="entryGroup" class="entry">
-  <div class="entry-header-container" (mouseenter)="mouseEnter()"
+
+  <div class="entry-header-container" (mouseenter)="mouseEnter($event)" (mousemove)="mouseMoveEntered($event)"
        (mouseleave)="mouseLeave()">
     @if (draggedObject != null && !this.dragEnabled && !parentDragging) {
-      <div [className]="`entry-header level-${depth+1} droppable-area`" #droppableArea>
+      <div [className]="`droppable-area before ${addedPosition === 'before' ? 'visible' : ''}`">
+
+      </div>
+    }
+    @if (draggedObject != null && !this.dragEnabled && !parentDragging) {
+      <div [className]="`droppable-area child ${addedPosition === 'child' ? 'visible' : ''}`">
 
       </div>
     }
@@ -44,7 +50,10 @@
           [class.fill-width]="entryGroup.get('elementType').value === ''"
           (keyClicked)="onSearchKeyClicked($event)"
           [allElementTypes]="allElementTypes"
+          [allElements]="allElements"
+          [allTemplates]="allTemplates"
           addingEnabled
+          includeTemplates
         >
         </app-offer-element-selector>
         @if (entryGroup.get('elementType').value !== "") {
@@ -92,6 +101,12 @@
             <mat-form-field appearance="outline" class="new-form-element">
               <mat-label>Aufschlag</mat-label>
               <input matInput formControlName="priceAddPercent">
+
+              <mat-icon matSuffix (click)="onResetSconto()" class="neutral" title="Zurücksetzen">
+                @if (scontoResettable) {
+                  rotate_left
+                }
+              </mat-icon>
             </mat-form-field>
             <mat-form-field appearance="outline" class="new-form-element">
               <mat-label>Skonto</mat-label>
@@ -113,7 +128,8 @@
           <ng-container formArrayName="fields">
             @for (field of entryGroup.controls.fields.controls; track field.controls) {
               @if (field.controls.type.value === OfferFieldEnum.Text) {
-                <app-entry-field-edit [entryFormGroup]="field"></app-entry-field-edit>
+                <app-entry-field-edit [entryFormGroup]="field"
+                                      (fieldChanged)="fieldChanged()"></app-entry-field-edit>
               }
             }
           </ng-container>
@@ -131,52 +147,37 @@
         </div>
       </div>
     </div>
+    @if (draggedObject != null && !this.dragEnabled && !parentDragging) {
+      <div [className]="`droppable-area after ${addedPosition === 'after' ? 'visible' : ''}`">
+
+      </div>
+    }
   </div>
   @if (entryGroup.controls.children.length !== 0) {
-    <div class="entry-content"
-         formArrayName="children"
-    >
-      <!--
-         [cdkDropListConnectedTo]="myConnectedLists"
-         cdkDropList
-         (cdkDropListDropped)="drop($event)"
-
-           -->
+    <div class="entry-content" formArrayName="children">
       @for (control of entryGroup.controls.children.controls; track control.controls.id; let idx = $index) {
         <app-offer-v2-entry-edit
           (priceEvaluated)="childrenEvaluated()"
           [entryGroup]="control"
           [depth]="depth+1"
-          [prefix]="prefix+(index + 1)+'.'" [index]="idx >= addIndex ? idx+1 : idx"
+          [prefix]="prefix+(index + 1)+'.'" [index]="idx"
           [onAddNeighbour]="onAddNeighbourHere.bind(this)"
           [onCopyElem]="onCopyElemHere.bind(this)"
           [onDeleteElem]="onDeleteElemHere.bind(this)"
           [allLibraries]="allLibraries"
+          [allElements]="allElements"
+          [allTemplates]="allTemplates"
           [allElementTypes]="allElementTypes"
           [draggedObject]="draggedObject"
           [selectedElements]="selectedElements.concat(elementSelected ? [control.controls.id.value] : [])"
           (dragStart)="dragStart.emit($event)"
           [parentDragging]="dragEnabled || parentDragging"
           [parentInvisible]="parentInvisible || !entryGroup.get('visibleOffer').value"
-          (droppedBeforeMe)="droppedBeforeChild($event)"
-          (unDroppedBeforeMe)="unDroppedBeforeChild()"
-          (elementDropped)="elementDropped.emit($event)"
           (elementInserted)="elementInserted.emit($event)"
           (elementUnInserted)="elementUnInserted.emit($event)"
           (selectElem)="this.selectElem.emit($event)"
         ></app-offer-v2-entry-edit>
       }
-    </div>
-  } @else if (draggedObject != null && !this.dragEnabled && !parentDragging) {
-    <div class="entry-content">
-      <div class="entry">
-        <div class="entry-header-container" (mouseenter)="mouseEnter(true)"
-             (mouseleave)="mouseLeave(true)">
-          <div [className]="`entry-header level-${depth+2} droppable-area child`" #droppableAreaChild>
-
-          </div>
-        </div>
-      </div>
     </div>
   }
 </div>

@@ -12,6 +12,7 @@
   padding: 0;
   color: transparent;
   letter-spacing: 1px;
+  font-family: math !important;
 
   span {
     //padding: 0 2px;
@@ -42,6 +43,7 @@
 
 .calculation-textarea {
   letter-spacing: 1px;
+  font-family: math !important;
 }
 
 .autocomlete-buttons {

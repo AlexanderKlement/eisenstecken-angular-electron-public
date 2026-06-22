@@ -84,22 +84,21 @@
                     <app-offer-v2-entry-edit
                       (priceEvaluated)="contentEvaluated()"
                       [entryGroup]="group"
-                      [index]="idx >= addIndex ? idx+1 : idx"
+                      [index]="idx"
                       [depth]="0"
                       prefix=""
                       [onDeleteElem]="onDeleteContent.bind(this)"
                       [onAddNeighbour]="onAddContent.bind(this)"
                       [onCopyElem]="onCopyContent.bind(this)"
                       [allLibraries]="allLibraries"
+                      [allElements]="allElements"
+                      [allTemplates]="allTemplates"
                       [allElementTypes]="allElementTypes"
                       [draggedObject]="draggedObject"
                       [selectedElements]="selectedElements"
                       (dragStart)="dragStart($event)"
                       [parentDragging]="false"
                       [parentInvisible]="false"
-                      (droppedBeforeMe)="contentDroppedBefore($index)"
-                      (unDroppedBeforeMe)="contentUndroppedAddedBefore()"
-                      (elementDropped)="this.elementDropped($event)"
                       (elementInserted)="this.elementInserted($event)"
                       (elementUnInserted)="this.elementUninserted()"
                       (selectElem)="onSelectElem($event)"
@@ -120,7 +119,7 @@
                 </div>
                 <div class="preview-content" [class.no-preview]="offertext.length === 0">
                   @if (offertext.length === 0) {
-                    <span class="neutral">Keine Sichtbaren Posizionen</span>
+                    <span class="neutral">Keine Sichtbaren Positionen</span>
                   } @else {
                     @for (txt of offertext; track txt.prefix) {
                       <div class="preview-line">

@@ -10,6 +10,7 @@ import { fieldTypeToColor, fieldTypeToString, fieldTypeToTextColor } from "../of
 })
 export class OfferFieldElementTypePillComponent {
   @Input() fieldType: OfferFieldEnum | string;
+  @Input() color: null | string;
 
 
   protected readonly fieldTypeToColor = fieldTypeToColor;

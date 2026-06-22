@@ -5,10 +5,9 @@
   margin: 0.25rem 0;
 
   .element-field-header {
-    padding: 1rem;
+    padding: 12px 16px 8px;
     display: flex;
     flex-direction: column;
-    border-bottom: 1px solid #E5E5E5;
 
     .sub-header {
       color: #797971;
@@ -16,22 +15,31 @@
   }
 
   .element-field-content {
-    padding: 1rem;
+    padding: 0 16px;
     gap: 0.5rem;
     display: flex;
     flex-direction: column;
+
+    .padd-8 {
+      padding-top: 8px;
+    }
 
     .vertical-radio {
       display: flex;
       flex-direction: column;
     }
 
-    .my-1 {
-      margin-bottom: 0.5rem;
-    }
   }
+}
+
+.my-1 {
+  margin-bottom: 0.5rem;
 }
 
 .pb-3 {
   padding-bottom: 3rem;
+}
+
+.neutral {
+  color: #797971;
 }

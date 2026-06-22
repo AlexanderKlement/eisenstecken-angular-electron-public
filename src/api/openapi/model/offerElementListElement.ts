@@ -14,5 +14,6 @@ export interface OfferElementListElement {
     elementType: OfferElementType;
     id: number;
     name: string;
+    temporary: boolean;
 }
 

@@ -72,7 +72,7 @@ html {
     outlined-focus-label-text-color: --mat-sys-on-surface,
     outlined-outline-color: #f5f5f5,
     outlined-hover-outline-color: #cccccc,
-    outlined-focus-outline-color: #cccccc
+    outlined-focus-outline-color: var(--primary-color)
   ));
 }
 
@@ -119,4 +119,8 @@ html {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.font-math {
+  font-family: math !important;
 }

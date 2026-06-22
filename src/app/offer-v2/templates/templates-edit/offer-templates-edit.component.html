@@ -37,11 +37,9 @@
                                    [onAddNeighbour]="onAddNeighbour.bind(this)"
                                    [onDeleteElem]="onDeleteElem.bind(this)"
                                    [draggedObject]="draggedObject"
+                                   [allElements]="allElements"
                                    (dragStart)="dragStart($event)"
                                    [parentDragging]="false"
-                                   (droppedBeforeMe)="contentDroppedBefore($index)"
-                                   (unDroppedBeforeMe)="contentUndroppedAddedBefore()"
-                                   (elementDropped)="this.elementDropped($event)"
                                    (elementInserted)="this.elementInserted($event)"
                                    (elementUnInserted)="this.elementUninserted()"
           ></app-template-entry-edit>

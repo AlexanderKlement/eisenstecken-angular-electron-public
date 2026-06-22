@@ -5,10 +5,15 @@
 </div>
 
 <div class="entry" [formGroup]="entryFormGroup">
-  <div class="entry-header-container" (mouseenter)="mouseEnter()"
+  @if (draggedObject != null && !this.dragEnabled && !parentDragging) {
+    <div [className]="`droppable-area child ${addedPosition === 'child' ? 'visible' : ''}`" #droppableAreaChild>
+
+    </div>
+  }
+  <div class="entry-header-container" (mouseenter)="mouseEnter($event)" (mousemove)="mouseMoveEntered($event)"
        (mouseleave)="mouseLeave()">
     @if (draggedObject != null && !this.dragEnabled && !parentDragging) {
-      <div [className]="`entry-header level-${depth+1} droppable-area`" #droppableArea>
+      <div [className]="`droppable-area before ${addedPosition === 'before' ? 'visible' : ''}`" #droppableAreaBefore>
 
       </div>
     }
@@ -19,7 +24,8 @@
         <app-offer-field-element-type-pill
           [fieldType]="entryFormGroup.get('elementType').value"></app-offer-field-element-type-pill>
 
-        <app-offer-element-selector outline (setValue)="onSetElement($event)" [addingEnabled]="false"
+        <app-offer-element-selector outline (setValue)="onSetElement($event)" [allElements]="allElements"
+                                    [allTemplates]="[]" [addingEnabled]="false"
                                     [value]="entryFormGroup.get('elementId').value"
                                     [valueName]="entryFormGroup.get('elementName').value"></app-offer-element-selector>
         <div fxFlex></div>
@@ -31,37 +37,30 @@
         <mat-icon class="icon-btn" (click)="onDeleteElem(index)" title="Löschen (Entf)">delete</mat-icon>
       </div>
     </div>
+    @if (draggedObject != null && !this.dragEnabled && !parentDragging) {
+      <div [className]="`droppable-area after ${addedPosition === 'after' ? 'visible' : ''}`" #droppableAreaAfter>
+
+      </div>
+    }
   </div>
   @if (entryFormGroup.controls.children.controls.length !== 0) {
     <div class="entry-content" formArrayName="children">
+
       @for (control of entryFormGroup.controls.children.controls; track control.controls.id; let idx = $index) {
         <app-template-entry-edit [entryFormGroup]="control"
                                  [depth]="depth+1"
                                  [prefix]="prefix+(index + 1)+'.'"
                                  [index]="idx"
+                                 [allElements]="allElements"
                                  [onAddNeighbour]="onAddNeighbourHere.bind(this)"
                                  [onDeleteElem]="onDeleteElemHere.bind(this)"
                                  [draggedObject]="draggedObject"
                                  (dragStart)="dragStart.emit($event)"
                                  [parentDragging]="dragEnabled || parentDragging"
-                                 (droppedBeforeMe)="droppedBeforeChild($event)"
-                                 (unDroppedBeforeMe)="unDroppedBeforeChild()"
-                                 (elementDropped)="this.elementDropped.emit($event)"
                                  (elementInserted)="this.elementInserted.emit($event)"
                                  (elementUnInserted)="this.elementUnInserted.emit($event)"
         ></app-template-entry-edit>
       }
-    </div>
-  } @else if (draggedObject != null && !this.dragEnabled && !parentDragging) {
-    <div class="entry-content">
-      <div class="entry">
-        <div class="entry-header-container" (mouseenter)="mouseEnter(true)"
-             (mouseleave)="mouseLeave(true)">
-          <div [className]="`entry-header level-${depth+2} droppable-area child`" #droppableAreaChild>
-
-          </div>
-        </div>
-      </div>
     </div>
   }
 </div>
