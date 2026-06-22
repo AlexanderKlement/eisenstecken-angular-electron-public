@@ -1068,16 +1068,21 @@ export class OfferV2Service extends BaseService {
     /**
      * Delete Offer Element
      * @param elementId 
+     * @param force 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteOfferElementOfferV2ElementElementIdDelete(elementId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
-    public deleteOfferElementOfferV2ElementElementIdDelete(elementId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
-    public deleteOfferElementOfferV2ElementElementIdDelete(elementId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<boolean>>;
-    public deleteOfferElementOfferV2ElementElementIdDelete(elementId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteOfferElementOfferV2ElementElementIdDelete(elementId: number, force?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
+    public deleteOfferElementOfferV2ElementElementIdDelete(elementId: number, force?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
+    public deleteOfferElementOfferV2ElementElementIdDelete(elementId: number, force?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<boolean>>;
+    public deleteOfferElementOfferV2ElementElementIdDelete(elementId: number, force?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (elementId === null || elementId === undefined) {
             throw new Error('Required parameter elementId was null or undefined when calling deleteOfferElementOfferV2ElementElementIdDelete.');
         }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>force, 'force');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1112,6 +1117,7 @@ export class OfferV2Service extends BaseService {
         return this.httpClient.request<boolean>('delete', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

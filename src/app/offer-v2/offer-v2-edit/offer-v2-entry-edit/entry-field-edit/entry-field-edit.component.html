@@ -4,23 +4,29 @@
       <mat-label>{{ entryFormGroup.get("label").value }}</mat-label>
       <input matInput [readonly]="entryFormGroup.get('type').value === OfferFieldEnum.Calculation"
              formControlName="value">
-      <mat-icon class="neutral" matSuffix
-                (click)="onReset()">{{ entryFormGroup.get('type').value === OfferFieldEnum.Calculation ? '' : 'rotate_left' }}
-      </mat-icon>
+      @if (resettable) {
+        <mat-icon class="neutral" matSuffix title="Zurücksetzen"
+                  (click)="onReset()">rotate_left
+        </mat-icon>
+      }
     </mat-form-field>
   } @else if (entryFormGroup.get("type").value === OfferFieldEnum.Numeric) {
     <mat-form-field appearance="outline" class="new-form-element">
       <mat-label>{{ entryFormGroup.get("label").value }}</mat-label>
       <input matInput formControlName="value">
-      <mat-icon class="neutral" matSuffix
-                (click)="onReset()">{{ entryFormGroup.get('type').value === OfferFieldEnum.Calculation ? '' : 'rotate_left' }}
-      </mat-icon>
+      @if (resettable) {
+        <mat-icon class="neutral" matSuffix title="Zurücksetzen"
+                  (click)="onReset()">rotate_left
+        </mat-icon>
+      }
     </mat-form-field>
   } @else if (entryFormGroup.get("type").value === OfferFieldEnum.Text) {
     <mat-form-field appearance="outline" class="new-form-element">
       <mat-label>{{ entryFormGroup.get("label").value }}</mat-label>
       <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="3" formControlName="value"></textarea>
-      <mat-icon class="neutral" matSuffix (click)="onReset()">rotate_left</mat-icon>
+      @if (resettable) {
+        <mat-icon class="neutral" matSuffix (click)="onReset()" title="Zurücksetzen">rotate_left</mat-icon>
+      }
     </mat-form-field>
   } @else if (entryFormGroup.get("type").value === OfferFieldEnum.Select) {
     <app-offer-library-entry-selector

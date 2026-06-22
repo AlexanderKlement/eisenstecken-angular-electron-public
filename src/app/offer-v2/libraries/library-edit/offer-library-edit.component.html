@@ -8,9 +8,10 @@
       </div>
     } @else {
       @if (libraryId) {
-        <button (click)="onDelete()" mat-stroked-button color="warn">Löschen</button>
+        <button (click)="onDelete()" mat-raised-button color="warn">Löschen</button>
       }
-      <button mat-button type="submit" [disabled]="!libraryGroup.valid" (click)="onSubmitClick()">Speichern</button>
+      <button mat-raised-button color="primary" [disabled]="!libraryGroup.valid" (click)="onSubmitClick()">Speichern
+      </button>
     }
   </div>
   <form [formGroup]="libraryGroup">

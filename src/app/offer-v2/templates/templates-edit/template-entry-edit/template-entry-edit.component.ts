@@ -74,16 +74,12 @@ export class TemplateEntryEditComponent implements AfterViewInit {
   dragEnabled: boolean;
   private mousedownCoords = { x: 0, y: 0 };
 
-  open = true;
 
   ngAfterViewInit() {
     document.addEventListener("mousemove", this.mouseMove.bind(this));
     document.addEventListener("mouseup", this.dragStop.bind(this));
   }
 
-  toggleOpen() {
-    this.open = !this.open;
-  }
 
   onSetElement(val: OfferElementListElement) {
     this.entryFormGroup.patchValue({ elementId: val.id, elementType: val.elementType.name, elementName: val.name });

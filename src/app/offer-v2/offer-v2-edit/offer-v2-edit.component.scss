@@ -2,6 +2,7 @@
   width: 600px;
   border: solid 1px #E5E5E5;
   border-radius: 8px;
+  margin-bottom: 1rem;
 
   .preview-header {
     padding: 8px 16px;
@@ -63,6 +64,8 @@
         padding-left: 26px;
       }
     }
+
+
   }
 
   .preview-footer {
@@ -73,6 +76,22 @@
     align-items: center;
     justify-content: space-between;
   }
+
+  .calculation-line {
+    height: 43px;
+  }
+
+  .calculation-content {
+    padding: 8px 16px;
+  }
+}
+
+.template {
+  margin: 0.25rem;
+  border-radius: 12px;
+  border: 1px solid var(--primary-color);
+  padding: 8px 12px;
+  background-color: var(--primary-lighter-color);
 }
 
 .main-content {
@@ -174,5 +193,15 @@
     flex-direction: column;
     align-items: stretch;
     justify-content: start;
+  }
+}
+
+.new-form-element.small {
+  max-width: 96px;
+
+  .mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
   }
 }

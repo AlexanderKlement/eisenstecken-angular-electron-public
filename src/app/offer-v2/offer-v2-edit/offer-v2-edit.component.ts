@@ -15,6 +15,7 @@ import {
   OfferElementListElement,
   OfferElementType,
   OfferLibrary,
+  OfferTemplateEntryCreatePatch,
   OfferV2,
   OfferV2Service,
   OfferV2Version
@@ -45,6 +46,7 @@ import { MatOption, MatSelect } from "@angular/material/select";
 import { Vat } from "../../model/vat";
 import { selectRequires } from "../../shared/custom-validators";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
+import { evaluateOfferInheritance } from "../offer-inheritance-util";
 
 type OfferV2Group = {
   name: FormControl<string>;
@@ -58,6 +60,8 @@ type OfferV2Group = {
   materialDescription: FormControl<string>;
   materialDescriptionTitle: FormControl<string>;
   number: FormControl<number>;
+  hoursSconto: FormControl<number>;
+  hourlyRate: FormControl<number>;
   payment: FormControl<string>;
   validity: FormControl<string>;
   delivery: FormControl<string>;
@@ -71,6 +75,8 @@ function newEmptyOfferGroup() {
     globalAddPercent: new FormControl(0),
     globalSubPercent: new FormControl(0),
     globalPriceDiff: new FormControl(0),
+    hourlyRate: new FormControl(0),
+    hoursSconto: new FormControl(0),
     jobId: new FormControl("-1", selectRequires),
     content: new FormArray([]),
     date: new FormControl(""),
@@ -92,6 +98,8 @@ function newOfferGroup(data: OfferV2, version?: OfferV2Version) {
     globalPriceDiff: new FormControl(data.globalPriceDiff),
     globalSubPercent: new FormControl(data.globalSubPercent),
     globalAddPercent: new FormControl(data.globalAddPercent),
+    hoursSconto: new FormControl(data.hoursSconto),
+    hourlyRate: new FormControl(data.hourlyRate),
     jobId: new FormControl(data.job.id.toString(10), selectRequires),
     content: new FormArray(version ? version.content.map(mapEntryOfferEntryGroup) : []),
     validity: new FormControl(data.validity),
@@ -202,8 +210,11 @@ export class OfferV2EditComponent implements OnInit {
   allElementTypes: OfferElementType[] = [];
   lastVersion: OfferV2Version;
   offertext: Offertext[] = [];
+  selectedElements: string[] = [];
   priceAsCurrency: string = "0,00 €";
   priceAsCurrencySconted: string = "0,00 €";
+  priceAsCurrencyHourSconted: string = "0,00 €";
+  hours: number = 0;
   jobsInput$ = new Subject<string>();
   formula: string = "";
   jobsLoading = false;
@@ -341,6 +352,7 @@ export class OfferV2EditComponent implements OnInit {
 
   offerGroupValidator() {
     if (this.offerGroup) {
+      evaluateOfferInheritance(this.offerGroup.controls.content, []);
       let priceCalculated = 0;
       let sums: string[] = [];
       let offertext: Offertext[] = [];
@@ -356,6 +368,15 @@ export class OfferV2EditComponent implements OnInit {
       }
       const { price, formula } = this.applySconto(priceCalculated, sums.join(" + "));
       this.priceAsCurrency = formatCurrency(priceCalculated, "de-DE", "EUR");
+      const hoursSconto = price * (this.offerGroup.get("hoursSconto").value / 100);
+      const hourlySconted = price - hoursSconto;
+      this.priceAsCurrencyHourSconted = formatCurrency(hourlySconted, "de-DE", "EUR");
+      const hourlyRate = parseFloat(this.offerGroup.get("hourlyRate").value.toString(10));
+      if (hourlyRate !== 0 && !Number.isNaN(hourlyRate)) {
+        this.hours = hourlySconted / hourlyRate;
+      } else {
+        this.hours = 0;
+      }
       this.priceAsCurrencySconted = formatCurrency(price, "de-DE", "EUR");
       this.formula = formula;
       this.offertext = offertext;
@@ -393,7 +414,9 @@ export class OfferV2EditComponent implements OnInit {
         globalAddPercent: this.offerGroup.get("globalAddPercent").value ?? 0,
         globalPriceDiff: this.offerGroup.get("globalPriceDiff").value ?? 0,
         globalSubPercent: this.offerGroup.get("globalSubPercent").value ?? 0,
-        content: this.offerGroup.controls.content.controls.map(mapOfferEntryToInput),
+        hoursSconto: this.offerGroup.get("hoursSconto").value ?? 0,
+        hourlyRate: this.offerGroup.get("hourlyRate").value ?? 0,
+        content: this.offerGroup.controls.content.controls.map(mapOfferEntryToInput).filter(inp => !!inp),
         versionName: this.isCustomVersion ? `Wiederherstellung - ${this.lastVersion.name}` : `Speicherung - ${dayjs().format("DD.MM.YYYY HH:mm")}`,
         delivery: this.offerGroup.get("delivery").value,
         inPriceIncluded: this.offerGroup.get("inPriceIncluded").value,
@@ -465,7 +488,9 @@ export class OfferV2EditComponent implements OnInit {
         globalAddPercent: this.offerGroup.get("globalAddPercent").value ?? 0,
         globalPriceDiff: this.offerGroup.get("globalPriceDiff").value ?? 0,
         globalSubPercent: this.offerGroup.get("globalSubPercent").value ?? 0,
-        content: this.offerGroup.controls.content.controls.map(mapOfferEntryToInput),
+        hoursSconto: this.offerGroup.get("hoursSconto").value ?? 0,
+        hourlyRate: this.offerGroup.get("hourlyRate").value ?? 0,
+        content: this.offerGroup.controls.content.controls.map(mapOfferEntryToInput).filter(inp => !!inp),
         versionName: this.lastVersion?.name ?? `Speicherung - ${dayjs().format("DD.MM.YYYY HH:mm")}`,
         delivery: this.offerGroup.get("delivery").value,
         inPriceIncluded: this.offerGroup.get("inPriceIncluded").value,
@@ -581,6 +606,67 @@ export class OfferV2EditComponent implements OnInit {
 
   protected elementUninserted() {
     this.insertedPrefix = null;
+  }
+
+  protected onSelectElem(id: string) {
+    if (this.selectedElements.includes(id)) {
+      this.selectedElements = this.selectedElements.filter(i => i !== id);
+    } else {
+      this.selectedElements.push(id);
+    }
+  }
+
+  protected onUnselectAll() {
+    this.selectedElements = [];
+  }
+
+  protected onCreateTemplate() {
+    function findGrpRecursive(id: string, arr: FormArray<FormGroup<OfferEntryGroup>>): null | FormGroup<OfferEntryGroup> {
+      for (let i = 0; i < arr.controls.length; i++) {
+        const child = arr.at(i);
+        if (child.get("id").value == id) {
+          return child;
+        } else {
+          return findGrpRecursive(id, child.controls.children);
+        }
+      }
+      return null;
+    }
+
+    const rootGrps: (FormGroup<OfferEntryGroup> | null)[] = [];
+    this.selectedElements.forEach(id => {
+      rootGrps.push(findGrpRecursive(id, this.offerGroup.controls.content));
+    });
+
+    function convertRecursive(arr: (FormGroup<OfferEntryGroup> | null)[]): OfferTemplateEntryCreatePatch[] {
+      return arr.map<OfferTemplateEntryCreatePatch>(grp => {
+        if (!grp)
+          return null;
+        const element = grp.get("elementId").value;
+        if (element === -1) {
+          return null;
+        }
+        return {
+          elementId: element,
+          children: convertRecursive(grp.controls.children.controls).filter(elem => !!elem)
+        };
+      });
+    }
+
+    const structure = convertRecursive(rootGrps);
+    this.offerService.createOfferTemplateOfferV2TemplatePut({
+      name: `Template aus ${this.offerGroup.get("name").value} ${dayjs().format("DD.MM.YYYY HH:mm")}`,
+      description: "",
+      structure
+    }).pipe(take(1)).subscribe({
+      next: () => {
+        this.snackBar.open("Template erfolgreich erstellt.", "Ok", { duration: 8000 });
+        this.selectedElements = [];
+      },
+      error: () => {
+        this.snackBar.open("Etwas ist schief gelaufen!", "Ok", { duration: 8000 });
+      }
+    });
   }
 
   protected readonly dayjs = dayjs;

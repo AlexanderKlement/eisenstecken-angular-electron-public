@@ -43,6 +43,16 @@
               </mat-icon>
             }
           </div>
+          @if (selectedElements.length !== 0) {
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16" class="template">
+              <strong>{{ selectedElements.length }} {{ selectedElements.length === 1 ? 'Element' : 'Elemente' }}
+                ausgewählt</strong>
+              <div fxFlex></div>
+              <button mat-raised-button color="primary" (click)="onCreateTemplate()">Als Teamplate Speichern</button>
+              <button mat-raised-button color="accent" (click)="onUnselectAll()">Auswahl aufheben</button>
+
+            </div>
+          }
           <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="16">
             <div fxLayout="column" fxLayoutAlign="space-around stretch" fxFlex fxLayoutGap="8" class="main-content">
               <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start center">
@@ -83,14 +93,16 @@
                       [allLibraries]="allLibraries"
                       [allElementTypes]="allElementTypes"
                       [draggedObject]="draggedObject"
+                      [selectedElements]="selectedElements"
                       (dragStart)="dragStart($event)"
                       [parentDragging]="false"
+                      [parentInvisible]="false"
                       (droppedBeforeMe)="contentDroppedBefore($index)"
                       (unDroppedBeforeMe)="contentUndroppedAddedBefore()"
                       (elementDropped)="this.elementDropped($event)"
                       (elementInserted)="this.elementInserted($event)"
                       (elementUnInserted)="this.elementUninserted()"
-
+                      (selectElem)="onSelectElem($event)"
                     ></app-offer-v2-entry-edit>
                   }
 
@@ -101,57 +113,106 @@
                 </app-list-element>
               }
             </div>
-            <div class="preview">
-              <div class="preview-header">
-                <strong>Vorschau</strong>
-              </div>
-              <div class="preview-content" [class.no-preview]="offertext.length === 0">
-                @if (offertext.length === 0) {
-                  <span class="neutral">Keine Sichtbaren Posizionen</span>
-                } @else {
-                  @for (txt of offertext; track txt.prefix) {
-                    <div class="preview-line">
-                      <span class="prefix">{{ txt.prefix }}</span>
-
-                      <div class="offertext">
-                        @for (line of txt.lines; track line) {
-                          <span class="offertext-line" [class.neutral]="line.trim() === 'Alternative:'">
-                        {{ line }}
-                      </span>
-                        }
-                      </div>
-                      <span class="amount">{{ txt.amount }}</span>
-                      <div class="price">
-                        @for (p of txt.price; track p) {
-                          <span class="price-line">{{ p }}</span>
-                        }
-                      </div>
-                    </div>
-                    @for (subTxt of txt.children; track subTxt.prefix) {
-                      <div class="preview-line inner">
-                        <span class="prefix">{{ subTxt.prefix }}</span>
+            <div>
+              <div class="preview">
+                <div class="preview-header">
+                  <strong>Vorschau</strong>
+                </div>
+                <div class="preview-content" [class.no-preview]="offertext.length === 0">
+                  @if (offertext.length === 0) {
+                    <span class="neutral">Keine Sichtbaren Posizionen</span>
+                  } @else {
+                    @for (txt of offertext; track txt.prefix) {
+                      <div class="preview-line">
+                        <span class="prefix">{{ txt.prefix }}</span>
 
                         <div class="offertext">
-                          @for (line of subTxt.lines; track line) {
+                          @for (line of txt.lines; track line) {
                             <span class="offertext-line" [class.neutral]="line.trim() === 'Alternative:'">
                         {{ line }}
                       </span>
                           }
                         </div>
-                        <span class="amount">{{ subTxt.amount }}</span>
+                        <span class="amount">{{ txt.amount }}</span>
                         <div class="price">
-                          @for (p of subTxt.price; track p) {
+                          @for (p of txt.price; track p) {
                             <span class="price-line">{{ p }}</span>
                           }
                         </div>
                       </div>
+                      @for (subTxt of txt.children; track subTxt.prefix) {
+                        <div class="preview-line inner">
+                          <span class="prefix">{{ subTxt.prefix }}</span>
+
+                          <div class="offertext">
+                            @for (line of subTxt.lines; track line) {
+                              <span class="offertext-line" [class.neutral]="line.trim() === 'Alternative:'">
+                        {{ line }}
+                      </span>
+                            }
+                          </div>
+                          <span class="amount">{{ subTxt.amount }}</span>
+                          <div class="price">
+                            @for (p of subTxt.price; track p) {
+                              <span class="price-line">{{ p }}</span>
+                            }
+                          </div>
+                        </div>
+                      }
                     }
                   }
-                }
+                </div>
+                <div class="preview-footer">
+                  <strong>Gesamt:</strong>
+                  <strong>{{ priceAsCurrency }}</strong>
+                </div>
               </div>
-              <div class="preview-footer">
-                <strong>Gesamt:</strong>
-                <strong>{{ priceAsCurrency }}</strong>
+              <div class="preview">
+                <div class="preview-header">
+                  <strong>Stundenkalkulation</strong>
+                  <div fxLayout="row" class="calculation-line" fxLayoutAlign="space-between center">
+                    <span class="neutral">
+                      Gesamtpreis
+                    </span>
+                    <span>
+                    {{ priceAsCurrency }}
+                    </span>
+                  </div>
+                  <div fxLayout="row" class="calculation-line" fxLayoutAlign="space-between center">
+                    <span class="neutral">
+                      Abzug
+                    </span>
+                    <mat-form-field appearance="outline" class="new-form-element small">
+                      <input matInput formControlName="hoursSconto">
+                      <mat-icon class="neutral" matSuffix>percent</mat-icon>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="calculation-content">
+                  <div fxLayout="row" class="calculation-line" fxLayoutAlign="space-between center">
+                    <span class="neutral">
+                      Preis nach Abzug
+                    </span>
+                    <span>{{ priceAsCurrencyHourSconted }}</span>
+                  </div>
+                  <div fxLayout="row" class="calculation-line" fxLayoutAlign="space-between center">
+                    <span class="neutral">
+                      Stundensatz
+                    </span>
+                    <mat-form-field appearance="outline" class="new-form-element small">
+                      <input matInput formControlName="hourlyRate">
+                      <mat-icon class="neutral" matSuffix>euro</mat-icon>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="preview-footer calculation-line">
+                    <span class="neutral">
+                      Arbeitsstunden
+                    </span>
+                  <strong>
+                    &asymp; {{ hours.toFixed(1) }} h
+                  </strong>
+                </div>
               </div>
             </div>
           </div>

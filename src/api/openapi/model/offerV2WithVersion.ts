@@ -19,6 +19,8 @@ export interface OfferV2WithVersion {
     globalAddPercent: number;
     globalPriceDiff: number;
     globalSubPercent: number;
+    hourlyRate: number;
+    hoursSconto: number;
     id: number;
     inPriceIncluded: string;
     job: JobSmall;

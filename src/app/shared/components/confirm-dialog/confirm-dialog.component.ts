@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -7,6 +7,7 @@ import {
   MatDialogTitle
 } from "@angular/material/dialog";
 import { MatButton } from "@angular/material/button";
+import { DefaultFlexDirective } from "ng-flex-layout";
 
 export interface ConfirmDialogData {
   title: string;
@@ -17,16 +18,12 @@ export interface ConfirmDialogData {
   selector: "app-confirm-dialog",
   templateUrl: "./confirm-dialog.component.html",
   styleUrls: ["./confirm-dialog.component.scss"],
-  imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton]
+  imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, DefaultFlexDirective]
 })
-export class ConfirmDialogComponent implements OnInit {
+export class ConfirmDialogComponent {
   dialogRef = inject<MatDialogRef<ConfirmDialogComponent>>(MatDialogRef);
   data = inject<ConfirmDialogData>(MAT_DIALOG_DATA);
 
-
-  ngOnInit(): void {
-
-  }
 
   onNoClick() {
     this.dialogRef.close(false);

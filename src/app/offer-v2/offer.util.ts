@@ -92,12 +92,12 @@ export function listDeleteButton(
   };
 }
 
-export function confirmDeleteDialog<T extends { loadData: () => void }>(id: number,
-                                                                        dialog: MatDialog,
-                                                                        name: string,
-                                                                        deleteFunc: (id: number) => Observable<boolean>,
-                                                                        callback: () => void,
-                                                                        snackBar?: MatSnackBar) {
+export function confirmDeleteDialog(id: number,
+                                    dialog: MatDialog,
+                                    name: string,
+                                    deleteFunc: (id: number) => Observable<boolean>,
+                                    callback: () => void,
+                                    snackBar?: MatSnackBar) {
   const dialogRef = dialog.open(ConfirmDialogComponent, {
     width: "400px",
     data: {

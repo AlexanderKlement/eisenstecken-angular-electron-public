@@ -17,6 +17,8 @@ export interface OfferV2Patch {
     globalAddPercent: number;
     globalPriceDiff: number;
     globalSubPercent: number;
+    hourlyRate: number;
+    hoursSconto: number;
     inPriceIncluded: string;
     materialDescription: string;
     materialDescriptionTitle: string;

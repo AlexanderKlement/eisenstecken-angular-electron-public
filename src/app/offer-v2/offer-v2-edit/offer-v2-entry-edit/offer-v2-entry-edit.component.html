@@ -21,7 +21,18 @@
             keyboard_arrow_up
           }
         </mat-icon>
-        <span class="neutral">{{ prefix }}{{ index + 1 }}</span>
+        <div
+          [className]="`select-box-prefix ${entryGroup.get('id').value !== '' ? 'filled' : ''} ${elementSelected ? 'selected' : ''}`">
+
+          <span class="neutral prefix">{{ prefix }}{{ index + 1 }}</span>
+          <mat-icon class="select-box" [color]="elementSelected ? 'primary' : 'accent'" (click)="onSelectElem()">
+            @if (!elementSelected) {
+              check_box_outline_blank
+            } @else {
+              check_box
+            }
+          </mat-icon>
+        </div>
         <app-offer-field-element-type-pill
           [fieldType]="entryGroup.get('elementType').value"></app-offer-field-element-type-pill>
         <app-offer-element-selector
@@ -60,12 +71,12 @@
             percent
           </mat-icon>
           <mat-icon class="icon-btn"
-                    [class.active]="!entryGroup.get('visibleOffer').value"
+                    [class.active]="!entryGroup.get('visibleOffer').value || parentInvisible"
                     (click)="toggleVisibility()" title="Sichtbar im Angebot">
-            @if (entryGroup.controls.visibleOffer.value) {
-              visibility
-            } @else {
+            @if (!entryGroup.get('visibleOffer').value || parentInvisible) {
               visibility_off
+            } @else {
+              visibility
             }
           </mat-icon>
           <strong
@@ -113,6 +124,7 @@
               <app-entry-field-edit
                 [entryFormGroup]="field"
                 [allLibraries]="allLibraries"
+                (fieldChanged)="fieldChanged()"
               ></app-entry-field-edit>
             }
           }
@@ -142,13 +154,16 @@
           [allLibraries]="allLibraries"
           [allElementTypes]="allElementTypes"
           [draggedObject]="draggedObject"
+          [selectedElements]="selectedElements.concat(elementSelected ? [control.controls.id.value] : [])"
           (dragStart)="dragStart.emit($event)"
           [parentDragging]="dragEnabled || parentDragging"
+          [parentInvisible]="parentInvisible || !entryGroup.get('visibleOffer').value"
           (droppedBeforeMe)="droppedBeforeChild($event)"
           (unDroppedBeforeMe)="unDroppedBeforeChild()"
-          (elementDropped)="this.elementDropped.emit($event)"
-          (elementInserted)="this.elementInserted.emit($event)"
-          (elementUnInserted)="this.elementUnInserted.emit($event)"
+          (elementDropped)="elementDropped.emit($event)"
+          (elementInserted)="elementInserted.emit($event)"
+          (elementUnInserted)="elementUnInserted.emit($event)"
+          (selectElem)="this.selectElem.emit($event)"
         ></app-offer-v2-entry-edit>
       }
     </div>

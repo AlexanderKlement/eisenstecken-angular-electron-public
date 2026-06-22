@@ -113,6 +113,51 @@
             background-color: var(--primary-lighter-color);
           }
         }
+
+        > .select-box-prefix {
+          min-width: 48px;
+          position: relative;
+
+          > .select-box {
+            opacity: 0;
+            position: absolute;
+            left: 0;
+            transition: opacity 0.3s ease-in-out;
+            cursor: pointer;
+          }
+
+          > .prefix {
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out;
+          }
+
+          &.selected {
+            > .select-box {
+              opacity: 1;
+            }
+
+            > .prefix {
+              opacity: 0;
+            }
+          }
+
+          &.filled {
+            &:hover {
+
+              > .select-box {
+                opacity: 1;
+              }
+
+              > .prefix {
+                opacity: 0;
+              }
+            }
+          }
+        }
+
+        > .prefix, > .select-box {
+          min-width: 48px;
+        }
       }
 
       > .entry-header-content {
@@ -160,6 +205,7 @@
     }
 
   }
+
 
 }
 

@@ -118,8 +118,6 @@
   > .entry-content {
     width: calc(100% - 32px);
     margin-left: 32px;
-    max-height: 1000px;
-    transition: max-height 0.5s ease-in-out;
     position: relative;
 
     &::after {
@@ -130,10 +128,6 @@
       left: -24px;
       bottom: 0;
       width: 1px;
-    }
-
-    &.close {
-      max-height: 0;
     }
   }
 

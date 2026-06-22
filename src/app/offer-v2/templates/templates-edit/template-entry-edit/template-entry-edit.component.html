@@ -15,7 +15,6 @@
     <div [className]="`entry-header level-${depth+1}`" #header>
       <div class="entry-header-row" #headerRow>
         <mat-icon class="drag-handle" (mousedown)="mouseDown($event)">drag_indicator</mat-icon>
-        <mat-icon (click)="toggleOpen()" class="icon-btn">keyboard_arrow_down</mat-icon>
         <span class="neutral">{{ prefix }}{{ index + 1 }}</span>
         <app-offer-field-element-type-pill
           [fieldType]="entryFormGroup.get('elementType').value"></app-offer-field-element-type-pill>
@@ -34,7 +33,7 @@
     </div>
   </div>
   @if (entryFormGroup.controls.children.controls.length !== 0) {
-    <div class="entry-content" [class.close]="!open" formArrayName="children">
+    <div class="entry-content" formArrayName="children">
       @for (control of entryFormGroup.controls.children.controls; track control.controls.id; let idx = $index) {
         <app-template-entry-edit [entryFormGroup]="control"
                                  [depth]="depth+1"

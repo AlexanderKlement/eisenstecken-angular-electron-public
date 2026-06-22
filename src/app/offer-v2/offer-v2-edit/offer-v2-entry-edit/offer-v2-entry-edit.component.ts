@@ -38,6 +38,9 @@ import { priceEvaluationElementGroup } from "../../offer-calculation-utils";
 import { formatCurrency } from "@angular/common";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { randomUUID } from "../../offer.util";
+import { ConfirmDialogComponent } from "../../../shared/components/confirm-dialog/confirm-dialog.component";
+import { MatDialog } from "@angular/material/dialog";
+import { adjustInheritance, autofillInheritance } from "../../offer-inheritance-util";
 
 export declare type OfferEntryGroup = {
   alternative: FormControl<boolean>;
@@ -59,7 +62,10 @@ export declare type OfferEntryGroup = {
   priceFormula: FormControl<string>;
 }
 
-export function mapOfferEntryToInput(grp: FormGroup<OfferEntryGroup>): OfferV2EntryInput {
+export function mapOfferEntryToInput(grp: FormGroup<OfferEntryGroup>): OfferV2EntryInput | null {
+  if (grp.get("elementType").value == "") {
+    return null;
+  }
   return {
     alternative: grp.get("alternative").value,
     id: grp.get("id").value,
@@ -67,7 +73,7 @@ export function mapOfferEntryToInput(grp: FormGroup<OfferEntryGroup>): OfferV2En
     elementId: grp.get("elementId").value,
     elementType: grp.get("elementType").value,
     name: grp.get("name").value,
-    children: grp.controls.children.controls.map(mapOfferEntryToInput),
+    children: grp.controls.children.controls.map(mapOfferEntryToInput).filter(inp => !!inp),
     offertext: grp.get("offertext").value,
     price: grp.get("price").value,
     amount: grp.get("amount").value,
@@ -151,11 +157,14 @@ export function mapEntryOfferEntryGroup(entry: OfferV2EntryOutput, globalAddPerc
 })
 export class OfferV2EntryEditComponent implements AfterViewInit {
   private offerService = inject(OfferV2Service);
+  private dialog = inject(MatDialog);
   @Input() entryGroup: FormGroup<OfferEntryGroup>;
   @Input() prefix: string;
   @Input() index: number;
   @Input() depth: number;
+  @Input() selectedElements: string[];
   @Input({ transform: booleanAttribute }) parentDragging: boolean;
+  @Input({ transform: booleanAttribute }) parentInvisible: boolean;
   @Input() draggedObject: Node | null;
   @Input() allElementTypes: OfferElementType[];
   @Input() allLibraries: OfferLibrary[];
@@ -170,7 +179,10 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
   @Output() elementDropped = new EventEmitter<FormGroup<OfferEntryGroup>>();
   @Output() elementInserted = new EventEmitter<string>();
   @Output() elementUnInserted = new EventEmitter<void>();
+  @Output() selectElem = new EventEmitter<string>();
   private waitForChildren: number = 0;
+
+
   @ViewChild("headerRow") headerRow: ElementRef<HTMLDivElement>;
   @ViewChild("header") header: ElementRef<HTMLDivElement>;
   @ViewChild("placeholder") placeholder: ElementRef<HTMLDivElement>;
@@ -180,6 +192,9 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
   dragEnabled: boolean;
   private mousedownCoords = { x: 0, y: 0 };
 
+  public get elementSelected() {
+    return this.selectedElements && this.entryGroup && this.selectedElements.includes(this.entryGroup.get("id").value);
+  }
 
   ngAfterViewInit() {
     document.addEventListener("mousemove", this.mouseMove.bind(this));
@@ -251,6 +266,7 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
       elem.fields.forEach(field => {
         this.entryGroup.controls.fields.push(newOfferEntryFieldGroupFormField(field));
       });
+      autofillInheritance(this.entryGroup);
     });
   }
 
@@ -267,7 +283,23 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
   }
 
   onDeleteElemHere(index: number) {
-    this.entryGroup.controls.children.removeAt(index);
+    const child = this.entryGroup.controls.children.at(index);
+    if (child.controls.children.length !== 0) {
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        width: "400px",
+        data: {
+          title: `Element löschen?`,
+          text: `Wenn du '${child.get("description").value}' löschst, werden auch alle Kinder dieses Elements gelöscht`
+        }
+      });
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.entryGroup.controls.children.removeAt(index);
+        }
+      });
+    } else {
+      this.entryGroup.controls.children.removeAt(index);
+    }
   }
 
   protected readonly formatCurrency = formatCurrency;
@@ -355,5 +387,13 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
 
   protected unDroppedBeforeChild() {
     this.addIndex = Infinity;
+  }
+
+  protected onSelectElem() {
+    this.selectElem.emit(this.entryGroup.get("id").value);
+  }
+
+  protected fieldChanged() {
+    this.entryGroup.controls.children.controls.forEach(adjustInheritance);
   }
 }

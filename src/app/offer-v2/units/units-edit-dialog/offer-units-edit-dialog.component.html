@@ -23,11 +23,12 @@
     </div>
   } @else {
     <div fxLayout="row" fxFlexFill fxLayoutAlign="space-between center">
-      <button mat-button (click)="onCancelClick()">Abbrechen</button>
+      <button mat-raised-button color="accent" (click)="onCancelClick()">Abbrechen</button>
       @if (unitId) {
-        <button (click)="onDelete()" mat-stroked-button color="warn">Löschen</button>
+        <button (click)="onDelete()" mat-raised-button color="warn">Löschen</button>
       }
-      <button mat-button type="submit" [disabled]="!unitsGroup.valid" (click)="onSubmitClick()">Speichern</button>
+      <button mat-raised-button color="primary" [disabled]="!unitsGroup.valid" (click)="onSubmitClick()">Speichern
+      </button>
     </div>
   }
 </mat-dialog-actions>

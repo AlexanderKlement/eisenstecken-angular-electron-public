@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { OfferElementField, OfferFieldEnum, OfferLibrary, OfferV2EntryField } from "../../../../../api/openapi";
 import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
@@ -15,6 +15,7 @@ export declare type OfferEntryFieldGroup = {
   libraryId: FormControl<number>,
   mandatory: FormControl<boolean>,
   inherits: FormControl<boolean>,
+  changedFromDefault: FormControl<boolean>,
   type: FormControl<string>,
   value: FormControl<string>,
   valueString: FormControl<string>,
@@ -29,6 +30,7 @@ export function newOfferEntryFieldGroupFormField(field: OfferElementField) {
     libraryId: new FormControl(field.library?.id ?? -1),
     mandatory: new FormControl(field.mandatory),
     inherits: new FormControl(field.inherits),
+    changedFromDefault: new FormControl(false),
     type: new FormControl(field.field.fieldType),
     value: new FormControl(field.field.fieldType === OfferFieldEnum.Calculation ? "0" : field.defaultValue),
     valuePrice: new FormControl(0),
@@ -64,6 +66,7 @@ export function mapEntryToEntryFieldGroup(field: OfferV2EntryField) {
     libraryId: new FormControl(field.libraryId),
     mandatory: new FormControl(field.mandatory),
     inherits: new FormControl(field.inherits),
+    changedFromDefault: new FormControl(field.default_value !== field.value),
     type: new FormControl(field.type),
     value: new FormControl(field.type === OfferFieldEnum.Select ? JSON.parse(field.value).id : field.value),
     valueString: new FormControl(field.type === OfferFieldEnum.Select ? JSON.parse(field.value).name : ""),
@@ -87,15 +90,31 @@ export function mapEntryToEntryFieldGroup(field: OfferV2EntryField) {
   templateUrl: "./entry-field-edit.component.html",
   styleUrl: "./entry-field-edit.component.scss"
 })
-export class EntryFieldEditComponent {
+export class EntryFieldEditComponent implements OnInit {
   @Input() entryFormGroup: FormGroup<OfferEntryFieldGroup>;
   @Input() allLibraries: OfferLibrary[];
+  @Output() fieldChanged: EventEmitter<void> = new EventEmitter();
 
+
+  ngOnInit() {
+    this.entryFormGroup.valueChanges.subscribe(() => {
+      this.entryFormGroup.patchValue({ changedFromDefault: this.entryFormGroup.get("value").value !== this.entryFormGroup.get("defaultValue").value }, { emitEvent: false });
+      setTimeout(() => {
+        this.fieldChanged.emit();
+      }, 100);
+    });
+  }
+
+  protected get resettable(): boolean {
+    return this.entryFormGroup.get("type").value !== OfferFieldEnum.Calculation && this.entryFormGroup.get("inherits").value && this.entryFormGroup.get("defaultValue").value !== "" && this.entryFormGroup.get("value").value !== this.entryFormGroup.get("defaultValue").value;
+  }
 
   onReset(): void {
-    if (this.entryFormGroup.get("type").value === OfferFieldEnum.Calculation)
-      return;
-    this.entryFormGroup.patchValue({ value: this.entryFormGroup.get("defaultValue").value });
+    if (this.resettable)
+      this.entryFormGroup.patchValue({
+        value: this.entryFormGroup.get("defaultValue").value,
+        changedFromDefault: false
+      });
   }
 
   onSelectionChanged(event: LibraryEntryDropDownItem) {
