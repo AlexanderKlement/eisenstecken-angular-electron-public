@@ -21,8 +21,8 @@ import {
   OfferElementType,
   OfferFieldEnum,
   OfferLibrary,
-  OfferTemplateEntry,
-  OfferTemplateListElement,
+  OfferTemplate,
+  OfferTemplateEntryInput,
   OfferV2EntryInput,
   OfferV2EntryOutput,
   OfferV2Service
@@ -58,6 +58,7 @@ export declare type OfferEntryGroup = {
   children: FormArray<FormGroup<OfferEntryGroup>>;
   fields: FormArray<FormGroup<OfferEntryFieldGroup>>;
   description: FormControl<string>;
+  descriptionChanged: FormControl<boolean>;
   price: FormControl<string>;
   offertext: FormControl<string>;
   priceCalculated: FormControl<number>;
@@ -102,6 +103,7 @@ export function newEmptyOfferEntryGroup(globalAddPercent = 0) {
     globalAddPercent: new FormControl(globalAddPercent),
     fields: new FormArray([]),
     description: new FormControl(""),
+    descriptionChanged: new FormControl(false),
     price: new FormControl(""),
     offertext: new FormControl(""),
     priceCalculated: new FormControl(0),
@@ -128,6 +130,7 @@ export function mapEntryOfferEntryGroup(entry: OfferV2EntryOutput, globalAddPerc
     globalAddPercent: new FormControl(globalAddPercent),
     fields: new FormArray(entry.fields.map(mapEntryToEntryFieldGroup)),
     description: new FormControl(entry.description),
+    descriptionChanged: new FormControl(entry.description !== entry.name),
     price: new FormControl(entry.price),
     offertext: new FormControl(entry.offertext),
     priceCalculated: new FormControl(0),
@@ -139,24 +142,14 @@ export function mapEntryOfferEntryGroup(entry: OfferV2EntryOutput, globalAddPerc
   return grp;
 }
 
-export function mapFromTemplateEntry(elem: OfferTemplateEntry, grp: FormGroup<OfferEntryGroup>, globalAddPercent: number) {
-  grp.patchValue({
-    elementId: elem.element.id,
-    elementType: elem.element.elementType.name,
-    price: elem.element.elementType.price,
-    offertext: elem.element.elementType.offertext,
-    name: elem.element.name
-  }, { emitEvent: false });
+export function mapFromTemplateEntry(elem: OfferTemplateEntryInput, grp: FormGroup<OfferEntryGroup>, globalAddPercent: number, allElements: OfferElementListElement[]) {
+  const element = allElements.find(e => e.id === elem.elementId);
+
   grp.controls.fields.clear({ emitEvent: false });
-  elem.element.fields.forEach((field) => {
-    grp.controls.fields.push(newOfferEntryFieldGroupFormField(field), { emitEvent: false });
-  });
-  autofillInheritance(grp);
-  elem.children.forEach(child => {
-    const newGrp = newEmptyOfferEntryGroup(globalAddPercent);
-    grp.controls.children.push(newGrp);
-    mapFromTemplateEntry(child, newGrp, globalAddPercent);
-  });
+  /* elem.element.fields.forEach((field) => {
+     grp.controls.fields.push(newOfferEntryFieldGroupFormField(field), { emitEvent: false });
+   }); */
+
 }
 
 @Component({
@@ -191,11 +184,11 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
   @Input() draggedObject: FormGroup<OfferEntryGroup> | null;
   @Input() allElementTypes: OfferElementType[];
   @Input() allLibraries: OfferLibrary[];
-  @Input() allTemplates: OfferTemplateListElement[];
+  @Input() allTemplates: OfferTemplate[];
   @Input() allElements: OfferElementListElement[];
   @Input() onDeleteElem: (index: number) => void;
   @Input() onCopyElem: (index: number) => void;
-  @Input() onAddNeighbour: (index: number, template?: OfferTemplateEntry) => void;
+  @Input() onAddNeighbour: (index: number, template?: OfferTemplateEntryInput) => void;
   open = false;
   @Output() priceEvaluated = new EventEmitter<void>();
   @Output() dragStart = new EventEmitter<FormGroup<OfferEntryGroup> | null>();
@@ -251,6 +244,18 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
     return this.entryGroup.get("priceAddPercent").value !== this.entryGroup.get("globalAddPercent").value;
   }
 
+  descriptionChanged() {
+    if (this.depth === 1) {
+      this.entryGroup.patchValue({ descriptionChanged: this.entryGroup.get("description").value !== this.entryGroup.get("name").value }, { emitEvent: false });
+    }
+  }
+
+  nameChanged() {
+    if (this.depth === 1 && !this.entryGroup.get("descriptionChanged").value) {
+      this.entryGroup.patchValue({ description: this.entryGroup.get("name").value }, { emitEvent: false });
+    }
+  }
+
   onResetSconto() {
     this.entryGroup.patchValue({ priceAddPercent: this.entryGroup.get("globalAddPercent").value });
   }
@@ -284,12 +289,10 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
     this.entryGroup.patchValue({ visibleOffer: !this.entryGroup.get("visibleOffer").value });
   }
 
-  onSetElement(val: OfferElementListElement | OfferTemplateListElement) {
-    if ("entry_count" in val) {
-      this.offerService.getOfferTemplateOfferV2TemplateTemplateIdGet(val.id).pipe(take(1)).subscribe((elem) => {
-        elem.structure.forEach((entry, index) => {
-          this.onAddNeighbour(this.index, entry);
-        });
+  onSetElement(val: OfferElementListElement | OfferTemplate) {
+    if ("structure" in val) {
+      val.structure.forEach((entry) => {
+        this.onAddNeighbour(this.index, entry);
       });
       this.onDeleteElem(this.index);
     } else {
@@ -298,14 +301,15 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
         elementType: val.elementType.name,
         price: val.elementType.price,
         offertext: val.elementType.offertext,
-        name: val.name
+        name: val.name,
+        description: this.depth === 1 ? val.name : ""
       });
       this.offerService.getOfferElementOfferV2ElementElementIdGet(val.id).pipe(take(1)).subscribe((elem) => {
         this.entryGroup.controls.fields.clear();
         elem.fields.forEach(field => {
           this.entryGroup.controls.fields.push(newOfferEntryFieldGroupFormField(field));
         });
-        autofillInheritance(this.entryGroup);
+        autofillInheritance(this.entryGroup, this.depth);
       });
     }
   }
@@ -314,11 +318,30 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
     this.entryGroup.controls.children.push(newEmptyOfferEntryGroup(this.entryGroup.get("globalAddPercent").value));
   }
 
-  onAddNeighbourHere(index: number, template?: OfferTemplateEntry) {
+  onAddTemplateNeighbourRecursive(index: number, parentArray: FormArray<FormGroup<OfferEntryGroup>>, entry: OfferTemplateEntryInput, thisDepth: number) {
+    const newGrp = newEmptyOfferEntryGroup(this.entryGroup.get("globalAddPercent").value);
+    this.offerService.getOfferElementOfferV2ElementElementIdGet(entry.elementId).pipe(take(1)).subscribe((elem) => {
+      newGrp.patchValue({
+        elementId: entry.elementId,
+        elementType: entry.elementType,
+        price: elem.elementType.price,
+        offertext: elem.elementType.offertext,
+        name: entry.name
+      }, { emitEvent: false });
+      elem.fields.forEach(field => {
+        newGrp.controls.fields.push(newOfferEntryFieldGroupFormField(field));
+      });
+      autofillInheritance(newGrp, thisDepth);
+      entry.children.forEach((child, index) => {
+        this.onAddTemplateNeighbourRecursive(index, newGrp.controls.children, child, thisDepth + 1);
+      });
+      parentArray.insert(index + 1, newGrp);
+    });
+  }
+
+  onAddNeighbourHere(index: number, template?: OfferTemplateEntryInput) {
     if (template) {
-      const newGrp = newEmptyOfferEntryGroup(this.entryGroup.get("globalAddPercent").value);
-      this.entryGroup.controls.children.insert(index + 1, newGrp);
-      mapFromTemplateEntry(template, newGrp, this.entryGroup.get("globalAddPercent").value);
+      this.onAddTemplateNeighbourRecursive(index, this.entryGroup.controls.children, template, this.depth + 1);
     } else {
       this.entryGroup.controls.children.insert(index + 1, newEmptyOfferEntryGroup(this.entryGroup.get("globalAddPercent").value));
     }

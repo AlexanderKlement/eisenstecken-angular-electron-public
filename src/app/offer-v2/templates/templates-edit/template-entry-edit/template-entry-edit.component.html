@@ -21,14 +21,26 @@
       <div class="entry-header-row" #headerRow>
         <mat-icon class="drag-handle" (mousedown)="mouseDown($event)">drag_indicator</mat-icon>
         <span class="neutral">{{ prefix }}{{ index + 1 }}</span>
-        <app-offer-field-element-type-pill
-          [fieldType]="entryFormGroup.get('elementType').value"></app-offer-field-element-type-pill>
+        @if (entryFormGroup.get('elementId').value === -1) {
 
-        <app-offer-element-selector outline (setValue)="onSetElement($event)" [allElements]="allElements"
-                                    [allTemplates]="[]" [addingEnabled]="false"
-                                    [value]="entryFormGroup.get('elementId').value"
-                                    [valueName]="entryFormGroup.get('elementName').value"></app-offer-element-selector>
-        <div fxFlex></div>
+          <app-offer-element-selector
+            outline
+            (setValue)="onSetElement($event)"
+            [allElements]="allElements"
+            [allTemplates]="[]"
+            [addingEnabled]="false"
+            fillWidth
+            fxFlex
+            [value]="-1"
+          ></app-offer-element-selector>
+        } @else {
+          <app-offer-field-element-type-pill
+            [fieldType]="entryFormGroup.get('elementType').value"></app-offer-field-element-type-pill>
+
+          <mat-form-field appearance="outline" fxFlex class="new-form-element">
+            <input matInput formControlName="name">
+          </mat-form-field>
+        }
         <mat-icon class="icon-btn" (click)="onAddChild()" title="Kind hinzufügen (Tab)">
           subdirectory_arrow_right
         </mat-icon>

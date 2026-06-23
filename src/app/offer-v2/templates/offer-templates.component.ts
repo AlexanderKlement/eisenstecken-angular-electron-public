@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
 import OfferContainerComponent from "../offer-container/offer-container.component";
-import { OfferTemplateListElement, OfferV2Service } from "../../../api/openapi";
+import { OfferTemplate, OfferTemplateEntryOutput, OfferV2Service } from "../../../api/openapi";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { TableBuilderComponent, TableButton } from "../../shared/components/table-builder/table-builder.component";
@@ -11,6 +11,9 @@ import { headerNewButton, listDeleteButton, listEditButton } from "../offer.util
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { take } from "rxjs/operators";
 
+function countStructureLength(children: OfferTemplateEntryOutput[]): number {
+  return children.length + children.reduce((prev, cur) => prev + countStructureLength(cur.children), 0);
+}
 
 @Component({
   selector: "app-offer-templates",
@@ -32,7 +35,7 @@ export default class OfferTemplatesComponent implements OnInit {
 
   tableButtons: TableButton[] = [];
   headerButtons: TableButton[] = [];
-  templateDataSource: TableDataSource<OfferTemplateListElement, OfferV2Service>;
+  templateDataSource: TableDataSource<OfferTemplate, OfferV2Service>;
 
   ngOnInit(): void {
     this.tableButtons.push(listEditButton((id) => {
@@ -73,7 +76,7 @@ export default class OfferTemplatesComponent implements OnInit {
               id: template.id,
               name: template.name,
               description: template.description,
-              entry_count: template.entry_count
+              entry_count: countStructureLength(template.structure)
             },
             route: () => {
               // noop

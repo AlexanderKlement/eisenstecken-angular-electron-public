@@ -16,20 +16,26 @@
     [minTermLength]="2"
     [value]="`element-${value}`"
     [clearable]="false"
+    [closeOnSelect]="false"
+    [clearSearchOnAdd]="false"
     [addTag]="addingEnabled"
     [editableSearchTerm]="true"
     panelClass="mtx-select-panel-container"
     typeToSearchText="Tippen um Element zu suchen"
     (change)="onChange($event)"
     (keyup)="onKeyUp($event)"
-    (close)="onClose()"
-    #selectChild
+    #selectInput
   >
 
     <ng-template ng-option-tmp let-item="item">
       <div fxLayout="row" fxLayoutAlign="space-between center">
-        @if ('entry_count' in item) {
-          <span>{{ item.name }}</span>
+        @if ('structure' in item) {
+          <div fxLayout="column">
+            <span>{{ item.name }}</span>
+            @for (struct of templateString(item); track struct) {
+              <span class="neutral font-math">{{ struct }}</span>
+            }
+          </div>
           <app-offer-field-element-type-pill fieldType="Template"
                                              color="#feedb3"></app-offer-field-element-type-pill>
         } @else {
@@ -39,27 +45,34 @@
       </div>
     </ng-template>
     <ng-template ng-tag-tmp class="select-element-types">
-      <strong>Kein Treffer: Neues Element "{{ searchString }}" erstellen</strong>
-      <div
-        style="display: flex;flex-direction: row;flex-wrap: wrap;align-items: flex-start;justify-content: flex-start;gap:8px;margin-top: 8px;">
-        @for (elementType of allElementTypes; track elementType.id) {
-          <app-offer-field-element-type-pill
-            [fieldType]="`+${elementType.name}`"
-            (click)="onAddType(elementType)">
+      <div (click)="onAdd($event)">
+        <strong>Kein Treffer: Neues Element "{{ searchString }}" erstellen</strong>
+        <div
+          style="display: flex;flex-direction: row;flex-wrap: wrap;align-items: flex-start;justify-content: flex-start;gap:8px;margin-top: 8px;">
+          @for (elementType of allElementTypes; track elementType.id) {
+            <app-offer-field-element-type-pill
+              [fieldType]="`+${elementType.name}`"
+              [color]="selectedElementType?.id === elementType.id ? '#feedb3' : null"
+              (click)="onAddType(elementType)">
 
-          </app-offer-field-element-type-pill>
-        }
-      </div>
-      <div fxLayout="row" fxLayoutAlign="start center"
-           style="display:flex;flex-direction:row;align-items:flex-start;justify-content:center;margin-top:8px;">
-        <mat-icon (click)="onCheckSavInLibrary()">
-          @if (!saveInLibrary) {
-            check_box_outline_blank
-          } @else {
-            check_box
+            </app-offer-field-element-type-pill>
           }
-        </mat-icon>
-        <span is="save-in-library" (click)="onCheckSavInLibrary()">In Bibliothek speichern</span>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center"
+             style="display:flex;flex-direction:row;align-items:flex-start;justify-content:center;margin-top:8px;">
+          <mat-icon (click)="onCheckSavInLibrary()">
+            @if (!saveInLibrary) {
+              check_box_outline_blank
+            } @else {
+              check_box
+            }
+          </mat-icon>
+          <span is="save-in-library" (click)="onCheckSavInLibrary()">In Bibliothek speichern</span>
+          <div fxFlex></div>
+          <button mat-raised-button color="primary" (click)="onCreateType()" [disabled]="!selectedElementType">
+            Erstellen
+          </button>
+        </div>
       </div>
     </ng-template>
 

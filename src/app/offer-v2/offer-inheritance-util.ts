@@ -29,6 +29,7 @@ function evaluateOfferInheritanceField(field: FormGroup<OfferEntryFieldGroup>, p
 }
 
 export function evaluateOfferInheritance(groups: FormArray<FormGroup<OfferEntryGroup>>, parentFields: FieldData[]) {
+
   groups.controls.forEach(group => {
     const fields: FieldData[] = [];
     group.controls.fields.controls.forEach(fieldGroup => {
@@ -39,7 +40,10 @@ export function evaluateOfferInheritance(groups: FormArray<FormGroup<OfferEntryG
   });
 }
 
-export function autofillInheritance(group: FormGroup<OfferEntryGroup>) {
+export function autofillInheritance(group: FormGroup<OfferEntryGroup>, depth: number) {
+  if (depth === 1 && !group.controls.descriptionChanged) {
+    group.patchValue({ description: group.get("name").value }, { emitEvent: false });
+  }
   group.controls.fields.controls.forEach(fieldGroup => {
     if (fieldGroup.get("inherits").value) {
       if (fieldGroup.get("value").value === "" && fieldGroup.get("value").value !== fieldGroup.get("defaultValue").value) {

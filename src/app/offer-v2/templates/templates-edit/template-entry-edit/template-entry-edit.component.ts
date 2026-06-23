@@ -9,11 +9,7 @@ import {
   ViewChild
 } from "@angular/core";
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
-import {
-  OfferElementListElement,
-  OfferTemplateEntryCreatePatch,
-  OfferTemplateListElement
-} from "../../../../../api/openapi";
+import { OfferElementListElement, OfferTemplate, OfferTemplateEntryInput } from "../../../../../api/openapi";
 import { DefaultFlexDirective } from "ng-flex-layout";
 import { MatIcon } from "@angular/material/icon";
 import {
@@ -21,35 +17,33 @@ import {
 } from "../../../offer-field-element-type-pill/offer-field-element-type-pill.component";
 import OfferElementSelectorComponent from "../../../element-selector/offer-element-selector.component";
 import { randomUUID } from "../../../offer.util";
+import { MatFormField, MatInput } from "@angular/material/input";
 
 export declare type TemplateEntryGroup = {
-  id: FormControl<number>,
-  uid: FormControl<string>,
+  id: FormControl<string>,
   elementId: FormControl<number>,
-  elementName: FormControl<string>,
+  name: FormControl<string>,
   elementType: FormControl<string>,
   children: FormArray<FormGroup<TemplateEntryGroup>>
 }
 
 export function newEmptyTemplateEntryGroup() {
   return new FormGroup<TemplateEntryGroup>({
-    id: new FormControl(-1),
-    uid: new FormControl(randomUUID()),
-    elementName: new FormControl("Element wählen"),
+    id: new FormControl(randomUUID()),
+    name: new FormControl("Element wählen"),
     children: new FormArray([]),
-    elementId: new FormControl(null),
-    elementType: new FormControl(null)
+    elementId: new FormControl(-1),
+    elementType: new FormControl("")
   });
 }
 
-export function mapTemplateEntryGroupFromInput(input: OfferTemplateEntryCreatePatch) {
+export function mapTemplateEntryGroupFromInput(input: OfferTemplateEntryInput) {
   return new FormGroup<TemplateEntryGroup>({
-    id: new FormControl(-1),
-    uid: new FormControl(randomUUID()),
-    elementName: new FormControl(""),
+    id: new FormControl(input.id),
+    name: new FormControl(input.name),
     children: new FormArray(input.children.map(mapTemplateEntryGroupFromInput)),
     elementId: new FormControl(input.elementId),
-    elementType: new FormControl(null)
+    elementType: new FormControl(input.elementType)
   });
 }
 
@@ -60,7 +54,9 @@ export function mapTemplateEntryGroupFromInput(input: OfferTemplateEntryCreatePa
     DefaultFlexDirective,
     MatIcon,
     OfferFieldElementTypePillComponent,
-    OfferElementSelectorComponent
+    OfferElementSelectorComponent,
+    MatFormField,
+    MatInput
   ],
   templateUrl: "./template-entry-edit.component.html",
   styleUrl: "./template-entry-edit.component.scss"
@@ -93,9 +89,9 @@ export class TemplateEntryEditComponent implements AfterViewInit {
   }
 
 
-  onSetElement(val: OfferElementListElement | OfferTemplateListElement) {
+  onSetElement(val: OfferElementListElement | OfferTemplate) {
     if ("elementType" in val) {
-      this.entryFormGroup.patchValue({ elementId: val.id, elementType: val.elementType.name, elementName: val.name });
+      this.entryFormGroup.patchValue({ elementId: val.id, elementType: val.elementType.name, name: val.name });
     }
   }
 

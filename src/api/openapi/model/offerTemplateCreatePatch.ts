@@ -7,12 +7,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { OfferTemplateEntryCreatePatch } from './offerTemplateEntryCreatePatch';
+import { OfferTemplateEntryInput } from './offerTemplateEntryInput';
 
 
 export interface OfferTemplateCreatePatch { 
     description: string;
     name: string;
-    structure: Array<OfferTemplateEntryCreatePatch>;
+    structure: Array<OfferTemplateEntryInput>;
 }
 

@@ -15,9 +15,8 @@ import {
   OfferElementListElement,
   OfferElementType,
   OfferLibrary,
-  OfferTemplateEntry,
-  OfferTemplateEntryCreatePatch,
-  OfferTemplateListElement,
+  OfferTemplate,
+  OfferTemplateEntryInput,
   OfferV2,
   OfferV2Service,
   OfferV2Version
@@ -27,14 +26,13 @@ import { MatDialog } from "@angular/material/dialog";
 import { BehaviorSubject, concat, Observable, of, Subject } from "rxjs";
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { catchError, distinctUntilChanged, switchMap, take, tap } from "rxjs/operators";
-import { confirmDeleteDialog } from "../offer.util";
+import { confirmDeleteDialog, randomUUID } from "../offer.util";
 import dayjs from "dayjs/esm";
 import { SharedModule } from "../../shared/shared.module";
 import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
 import { MtxSelect } from "@ng-matero/extensions/select";
 import {
   mapEntryOfferEntryGroup,
-  mapFromTemplateEntry,
   mapOfferEntryToInput,
   newEmptyOfferEntryGroup,
   OfferEntryGroup,
@@ -49,10 +47,11 @@ import { MatOption, MatSelect } from "@angular/material/select";
 import { Vat } from "../../model/vat";
 import { selectRequires } from "../../shared/custom-validators";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
-import { evaluateOfferInheritance } from "../offer-inheritance-util";
+import { autofillInheritance, evaluateOfferInheritance } from "../offer-inheritance-util";
 import {
   TemplateCreateDialogComponent
 } from "../templates/template-create-dialog/template-create-dialog/template-create-dialog.component";
+import { newOfferEntryFieldGroupFormField } from "./offer-v2-entry-edit/entry-field-edit/entry-field-edit.component";
 
 type OfferV2Group = {
   name: FormControl<string>;
@@ -223,7 +222,7 @@ export class OfferV2EditComponent implements OnInit {
   allLibraries: OfferLibrary[] = [];
   allElementTypes: OfferElementType[] = [];
   allElements: OfferElementListElement[] = [];
-  allTemplates: OfferTemplateListElement[] = [];
+  allTemplates: OfferTemplate[] = [];
   lastVersion: OfferV2Version;
   offertext: Offertext[] = [];
   selectedElements: string[] = [];
@@ -258,7 +257,7 @@ export class OfferV2EditComponent implements OnInit {
       this.allLibraries = libs;
       this.offerService.getOfferElementTypesOfferV2ElementTypesGet().pipe(take(1)).subscribe((elementTypes) => {
         this.allElementTypes = elementTypes;
-        this.offerService.getOfferElementsOfferV2ElementsGet(0, undefined, 1000, 0).pipe(take(1)).subscribe((elements) => {
+        this.offerService.getOfferElementsOfferV2ElementsGet(0, undefined, 1000).pipe(take(1)).subscribe((elements) => {
           this.allElements = elements;
           this.offerService.getOfferTemplatesOfferV2TemplatesGet(0, undefined, 1000).pipe(take(1)).subscribe((templates) => {
             this.allTemplates = templates;
@@ -472,11 +471,30 @@ export class OfferV2EditComponent implements OnInit {
     }
   }
 
-  onAddContent(index = -1, template?: OfferTemplateEntry) {
+  onAddTemplateContentRecursive(index: number, parentArray: FormArray<FormGroup<OfferEntryGroup>>, entry: OfferTemplateEntryInput, depth: number) {
+    const newGrp = newEmptyOfferEntryGroup(this.offerGroup.get("globalAddPercent").value);
+    this.offerService.getOfferElementOfferV2ElementElementIdGet(entry.elementId).pipe(take(1)).subscribe((elem) => {
+      newGrp.patchValue({
+        elementId: entry.elementId,
+        elementType: entry.elementType,
+        price: elem.elementType.price,
+        offertext: elem.elementType.offertext,
+        name: entry.name
+      }, { emitEvent: false });
+      elem.fields.forEach(field => {
+        newGrp.controls.fields.push(newOfferEntryFieldGroupFormField(field));
+      });
+      autofillInheritance(newGrp, depth);
+      entry.children.forEach((child, index) => {
+        this.onAddTemplateContentRecursive(index, newGrp.controls.children, child, depth + 1);
+      });
+      parentArray.insert(index + 1, newGrp);
+    });
+  }
+
+  onAddContent(index = -1, template?: OfferTemplateEntryInput) {
     if (template) {
-      const newGrp = newEmptyOfferEntryGroup(this.offerGroup.get("globalAddPercent").value);
-      this.offerGroup.controls.content.insert(index + 1, newGrp);
-      mapFromTemplateEntry(template, newGrp, this.offerGroup.get("globalAddPercent").value);
+      this.onAddTemplateContentRecursive(index + 1, this.offerGroup.controls.content, template, 0);
     } else {
       this.offerGroup.controls.content.insert(index + 1, newEmptyOfferEntryGroup(this.offerGroup.get("globalAddPercent").value));
     }
@@ -664,7 +682,10 @@ export class OfferV2EditComponent implements OnInit {
         if (child.get("id").value == id) {
           return child;
         } else {
-          return findGrpRecursive(id, child.controls.children);
+          let grp = findGrpRecursive(id, child.controls.children);
+          if (grp) {
+            return grp;
+          }
         }
       }
       return null;
@@ -675,8 +696,8 @@ export class OfferV2EditComponent implements OnInit {
       rootGrps.push(findGrpRecursive(id, this.offerGroup.controls.content));
     });
 
-    function convertRecursive(arr: (FormGroup<OfferEntryGroup> | null)[]): OfferTemplateEntryCreatePatch[] {
-      return arr.map<OfferTemplateEntryCreatePatch>(grp => {
+    function convertRecursive(arr: (FormGroup<OfferEntryGroup> | null)[]): OfferTemplateEntryInput[] {
+      return arr.map<OfferTemplateEntryInput>(grp => {
         if (!grp)
           return null;
         const element = grp.get("elementId").value;
@@ -684,6 +705,9 @@ export class OfferV2EditComponent implements OnInit {
           return null;
         }
         return {
+          name: grp.get("name").value,
+          id: randomUUID(),
+          elementType: grp.get("elementType").value,
           elementId: element,
           children: convertRecursive(grp.controls.children.controls).filter(elem => !!elem)
         };

@@ -57,8 +57,6 @@ import { OfferTemplate } from '../model/offerTemplate';
 // @ts-ignore
 import { OfferTemplateCreatePatch } from '../model/offerTemplateCreatePatch';
 // @ts-ignore
-import { OfferTemplateListElement } from '../model/offerTemplateListElement';
-// @ts-ignore
 import { OfferTemplateReorder } from '../model/offerTemplateReorder';
 // @ts-ignore
 import { OfferUnit } from '../model/offerUnit';
@@ -1068,21 +1066,16 @@ export class OfferV2Service extends BaseService {
     /**
      * Delete Offer Element
      * @param elementId 
-     * @param force 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteOfferElementOfferV2ElementElementIdDelete(elementId: number, force?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
-    public deleteOfferElementOfferV2ElementElementIdDelete(elementId: number, force?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
-    public deleteOfferElementOfferV2ElementElementIdDelete(elementId: number, force?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<boolean>>;
-    public deleteOfferElementOfferV2ElementElementIdDelete(elementId: number, force?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteOfferElementOfferV2ElementElementIdDelete(elementId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
+    public deleteOfferElementOfferV2ElementElementIdDelete(elementId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
+    public deleteOfferElementOfferV2ElementElementIdDelete(elementId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<boolean>>;
+    public deleteOfferElementOfferV2ElementElementIdDelete(elementId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (elementId === null || elementId === undefined) {
             throw new Error('Required parameter elementId was null or undefined when calling deleteOfferElementOfferV2ElementElementIdDelete.');
         }
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>force, 'force');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1117,7 +1110,6 @@ export class OfferV2Service extends BaseService {
         return this.httpClient.request<boolean>('delete', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -2154,9 +2146,9 @@ export class OfferV2Service extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getOfferTemplatesOfferV2TemplatesGet(skip?: number, filterString?: string, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OfferTemplateListElement>>;
-    public getOfferTemplatesOfferV2TemplatesGet(skip?: number, filterString?: string, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OfferTemplateListElement>>>;
-    public getOfferTemplatesOfferV2TemplatesGet(skip?: number, filterString?: string, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OfferTemplateListElement>>>;
+    public getOfferTemplatesOfferV2TemplatesGet(skip?: number, filterString?: string, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OfferTemplate>>;
+    public getOfferTemplatesOfferV2TemplatesGet(skip?: number, filterString?: string, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OfferTemplate>>>;
+    public getOfferTemplatesOfferV2TemplatesGet(skip?: number, filterString?: string, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OfferTemplate>>>;
     public getOfferTemplatesOfferV2TemplatesGet(skip?: number, filterString?: string, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -2197,7 +2189,7 @@ export class OfferV2Service extends BaseService {
 
         let localVarPath = `/offer/v2/templates`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<OfferTemplateListElement>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<OfferTemplate>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -3591,9 +3583,9 @@ export class OfferV2Service extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public reorderOfferTemplatesOfferV2TemplatesReorderPost(offerTemplateReorder: OfferTemplateReorder, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OfferTemplateListElement>>;
-    public reorderOfferTemplatesOfferV2TemplatesReorderPost(offerTemplateReorder: OfferTemplateReorder, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OfferTemplateListElement>>>;
-    public reorderOfferTemplatesOfferV2TemplatesReorderPost(offerTemplateReorder: OfferTemplateReorder, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OfferTemplateListElement>>>;
+    public reorderOfferTemplatesOfferV2TemplatesReorderPost(offerTemplateReorder: OfferTemplateReorder, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OfferTemplate>>;
+    public reorderOfferTemplatesOfferV2TemplatesReorderPost(offerTemplateReorder: OfferTemplateReorder, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OfferTemplate>>>;
+    public reorderOfferTemplatesOfferV2TemplatesReorderPost(offerTemplateReorder: OfferTemplateReorder, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OfferTemplate>>>;
     public reorderOfferTemplatesOfferV2TemplatesReorderPost(offerTemplateReorder: OfferTemplateReorder, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (offerTemplateReorder === null || offerTemplateReorder === undefined) {
             throw new Error('Required parameter offerTemplateReorder was null or undefined when calling reorderOfferTemplatesOfferV2TemplatesReorderPost.');
@@ -3638,7 +3630,7 @@ export class OfferV2Service extends BaseService {
 
         let localVarPath = `/offer/v2/templates/reorder`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<OfferTemplateListElement>>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<OfferTemplate>>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: offerTemplateReorder,

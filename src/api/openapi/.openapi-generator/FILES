@@ -130,9 +130,8 @@ model/offerLibraryListElement.ts
 model/offerLibraryReorder.ts
 model/offerTemplate.ts
 model/offerTemplateCreatePatch.ts
-model/offerTemplateEntry.ts
-model/offerTemplateEntryCreatePatch.ts
-model/offerTemplateListElement.ts
+model/offerTemplateEntryInput.ts
+model/offerTemplateEntryOutput.ts
 model/offerTemplateReorder.ts
 model/offerUnit.ts
 model/offerUnitCreatePatch.ts

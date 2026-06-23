@@ -3,7 +3,8 @@ import { ReactiveFormsModule } from "@angular/forms";
 import {
   OfferElementListElement,
   OfferElementType,
-  OfferTemplateListElement,
+  OfferTemplate,
+  OfferTemplateEntryOutput,
   OfferV2Service,
   SchemasOfferV2OfferElementFieldSchemaOfferElementCreatePatch
 } from "../../../api/openapi";
@@ -17,8 +18,9 @@ import {
 import { MatIcon } from "@angular/material/icon";
 import { Observable, of } from "rxjs";
 import { AsyncPipe } from "@angular/common";
+import { MatButton } from "@angular/material/button";
 
-type CustomElement = (OfferElementListElement | OfferTemplateListElement) & {
+type CustomElement = (OfferElementListElement | OfferTemplate) & {
   customId: string;
 }
 
@@ -38,7 +40,8 @@ type CustomElement = (OfferElementListElement | OfferTemplateListElement) & {
     DefaultLayoutAlignDirective,
     MatIcon,
     MtxSelectOptionTemplate,
-    AsyncPipe
+    AsyncPipe,
+    MatButton
   ]
 })
 export default class OfferElementSelectorComponent implements OnInit {
@@ -46,23 +49,20 @@ export default class OfferElementSelectorComponent implements OnInit {
   private offerService = inject(OfferV2Service);
   @Input() allElementTypes: OfferElementType[];
   @Input() allElements: OfferElementListElement[];
-  @Input() allTemplates: OfferTemplateListElement[];
+  @Input() allTemplates: OfferTemplate[];
   @Input() value?: number;
-  @Input() valueName?: string;
   @Input() label?: string;
   @Input({ transform: booleanAttribute }) outline: boolean;
   @Input({ transform: booleanAttribute }) readonly: boolean;
   @Input({ transform: booleanAttribute }) fillWidth: boolean;
   @Input({ transform: booleanAttribute }) addingEnabled: boolean;
   @Input({ transform: booleanAttribute }) includeTemplates: boolean;
-
-  @Output() setValue: EventEmitter<OfferElementListElement | OfferTemplateListElement> = new EventEmitter();
+  @ViewChild("selectInput") selectInput: MtxSelect;
+  @Output() setValue: EventEmitter<OfferElementListElement | OfferTemplate> = new EventEmitter();
   @Output() keyClicked: EventEmitter<KeyboardEvent> = new EventEmitter();
-  @ViewChild("selectChild") selectChild: MtxSelect;
-  private selectedElementType?: OfferElementType;
+  selectedElementType?: OfferElementType;
   searchString = "";
   saveInLibrary = false;
-  keepOpen = false;
 
   elements$: Observable<CustomElement[]> = of([]);
 
@@ -84,30 +84,34 @@ export default class OfferElementSelectorComponent implements OnInit {
     this.elements$ = this.createObservable();
   }
 
-  searchFun(term: string, item: OfferElementListElement | OfferTemplateListElement): boolean {
+  templateStringRecursive(template: OfferTemplateEntryOutput): string {
+    return `↳ ${template.name} ${template.children.length ? this.templateStringRecursive(template.children[0]) : ""}`;
+  }
+
+  templateString(template: OfferTemplate): string[] {
+    return template.structure.filter((_, i) => i < 3).map(entry => this.templateStringRecursive(entry));
+  }
+
+  searchFun(term: string, item: OfferElementListElement | OfferTemplate): boolean {
     this.searchString = term;
+    console.log({ term });
     const clearTerm = term.trim().toLowerCase();
-    if ("entry_count" in item) {
+    if ("structure" in item) {
       return item.name.toLowerCase().indexOf(clearTerm) !== -1 || item.description.toLowerCase().indexOf(clearTerm) !== -1;
     } else {
       return item.name.toLowerCase().indexOf(clearTerm) !== -1 || item.elementType.name.toLowerCase().indexOf(clearTerm) !== -1;
     }
   }
 
-  onClose() {
-    if (this.keepOpen) {
-      this.selectChild.open();
-    }
+  onAdd(event: PointerEvent) {
+    event.preventDefault();
+    event.stopPropagation();
   }
 
-  onChange(event: OfferElementListElement | OfferTemplateListElement | { name: string }) {
-    if ("id" in event) {
-      this.keepOpen = false;
-      this.setValue.emit(event);
-    } else if (this.selectedElementType) {
-      this.keepOpen = false;
+  onCreateType() {
+    if (this.selectedElementType) {
       this.offerService.createOfferElementOfferV2ElementPut({
-        name: event.name,
+        name: this.searchString,
         temporary: !this.saveInLibrary,
         elementTypeId: this.selectedElementType.id,
         fields: this.selectedElementType.fields.map<SchemasOfferV2OfferElementFieldSchemaOfferElementCreatePatch>(field => {
@@ -126,9 +130,14 @@ export default class OfferElementSelectorComponent implements OnInit {
           customId: `element-${element.id}`
         });
         this.setValue.emit(element);
+        this.selectInput.close();
       });
-    } else {
-      this.keepOpen = true;
+    }
+  }
+
+  onChange(event: OfferElementListElement | OfferTemplate | { name: string }) {
+    if ("id" in event && "name" in event) {
+      this.setValue.emit(event);
     }
   }
 

@@ -9,8 +9,11 @@
  */
 
 
-export interface OfferTemplateEntryCreatePatch { 
-    children?: Array<OfferTemplateEntryCreatePatch>;
+export interface OfferTemplateEntryInput { 
+    children?: Array<OfferTemplateEntryInput>;
     elementId: number;
+    elementType: string;
+    id: string;
+    name: string;
 }
 

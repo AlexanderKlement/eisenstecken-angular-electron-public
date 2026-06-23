@@ -4,8 +4,8 @@ import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from "@angular
 import OfferContainerComponent from "../../offer-container/offer-container.component";
 import {
   OfferElementListElement,
-  OfferTemplateEntry,
-  OfferTemplateEntryCreatePatch,
+  OfferTemplateEntryInput,
+  OfferTemplateEntryOutput,
   OfferV2Service
 } from "../../../../api/openapi";
 import { take } from "rxjs/operators";
@@ -23,7 +23,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { AsyncPipe } from "@angular/common";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { BehaviorSubject } from "rxjs";
-import { confirmDeleteDialog, randomUUID } from "../../offer.util";
+import { confirmDeleteDialog } from "../../offer.util";
 import {
   newEmptyTemplateEntryGroup,
   TemplateEntryEditComponent,
@@ -37,13 +37,16 @@ export declare type TemplateGroup = {
   structure: FormArray<FormGroup<TemplateEntryGroup>>
 }
 
-export function convertTemplateEntryRecursive(arr: FormArray<FormGroup<TemplateEntryGroup>>): OfferTemplateEntryCreatePatch[] {
-  return arr.controls.map<OfferTemplateEntryCreatePatch>(grp => {
+export function convertTemplateEntryRecursive(arr: FormArray<FormGroup<TemplateEntryGroup>>): OfferTemplateEntryInput[] {
+  return arr.controls.map<OfferTemplateEntryInput>(grp => {
     const element = grp.get("elementId").value;
     if (element === -1)
       return null;
     return {
       elementId: element,
+      name: grp.get("name").value,
+      id: grp.get("id").value,
+      elementType: grp.get("elementType").value,
       children: convertTemplateEntryRecursive(grp.controls.children).filter(elem => !!elem)
     };
   }).filter(elem => !!elem);
@@ -54,7 +57,7 @@ function moveObjectInGroup(group: FormGroup<TemplateGroup>, entry: FormGroup<Tem
     for (let i = 0; i < arr.controls.length; i++) {
       const innerPrefix = `${prefix}${i + 1}`;
       const child = arr.at(i);
-      if (child.get("uid").value == id && innerPrefix !== insertedPrefix) {
+      if (child.get("id").value == id && innerPrefix !== insertedPrefix) {
         arr.removeAt(i);
         return true;
       } else {
@@ -97,7 +100,7 @@ function moveObjectInGroup(group: FormGroup<TemplateGroup>, entry: FormGroup<Tem
 
 
   if (insetAtPrefixRecursively(group.controls.structure, "", entry)) {
-    removeIdRecursively(entry.get("uid").value, group.controls.structure, "");
+    removeIdRecursively(entry.get("id").value, group.controls.structure, "");
   }
   return group;
 }
@@ -145,7 +148,7 @@ export default class OfferTemplatesEditComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.offerService.getOfferElementsOfferV2ElementsGet(0, undefined, 1000, 0).pipe(take(1)).subscribe((elements) => {
+    this.offerService.getOfferElementsOfferV2ElementsGet(0, undefined, 1000).pipe(take(1)).subscribe((elements) => {
       this.allElements = elements;
       this.route.params.subscribe((params) => {
         try {
@@ -164,14 +167,13 @@ export default class OfferTemplatesEditComponent implements OnInit {
       this.offerService.getOfferTemplateOfferV2TemplateTemplateIdGet(this.templateId).pipe(take(1)).subscribe(
         {
           next: data => {
-            function convertRecursive(s: OfferTemplateEntry[]): FormArray<FormGroup<TemplateEntryGroup>> {
+            function convertRecursive(s: OfferTemplateEntryOutput[]): FormArray<FormGroup<TemplateEntryGroup>> {
               return new FormArray(
                 s.map(entry => new FormGroup<TemplateEntryGroup>({
                   id: new FormControl(entry.id),
-                  uid: new FormControl(randomUUID()),
-                  elementId: new FormControl(entry.element.id),
-                  elementName: new FormControl(entry.element.name),
-                  elementType: new FormControl(entry.element.elementType.name),
+                  elementId: new FormControl(entry.elementId),
+                  name: new FormControl(entry.name),
+                  elementType: new FormControl(entry.elementType),
                   children: convertRecursive(entry.children)
                 }))
               );

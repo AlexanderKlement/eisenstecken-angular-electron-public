@@ -7,13 +7,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { OfferTemplateEntry } from './offerTemplateEntry';
+import { OfferTemplateEntryOutput } from './offerTemplateEntryOutput';
 
 
 export interface OfferTemplate { 
     description: string;
     id: number;
     name: string;
-    structure: Array<OfferTemplateEntry>;
+    structure: Array<OfferTemplateEntryOutput>;
 }
 

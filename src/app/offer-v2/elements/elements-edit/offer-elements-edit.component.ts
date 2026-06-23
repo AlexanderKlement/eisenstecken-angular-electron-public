@@ -165,7 +165,7 @@ export default class OfferElementsEditComponent implements OnInit {
   onDelete() {
     if (this.elementId) {
       confirmDeleteDialog(this.elementId, this.dialog, "Element",
-        (id) => this.offerService.deleteOfferElementOfferV2ElementElementIdDelete(id, false),
+        (id) => this.offerService.deleteOfferElementOfferV2ElementElementIdDelete(id),
         () => {
           this.subscription.next();
         },

@@ -39,26 +39,30 @@
             }
           </mat-icon>
         </div>
-        <app-offer-field-element-type-pill
-          [fieldType]="entryGroup.get('elementType').value"></app-offer-field-element-type-pill>
-        <app-offer-element-selector
-          outline
-          (setValue)="onSetElement($event)"
-          [value]="entryGroup.get('elementId').value"
-          [valueName]="entryGroup.get('name').value"
-          [fillWidth]="entryGroup.get('elementType').value === ''"
-          [class.fill-width]="entryGroup.get('elementType').value === ''"
-          (keyClicked)="onSearchKeyClicked($event)"
-          [allElementTypes]="allElementTypes"
-          [allElements]="allElements"
-          [allTemplates]="allTemplates"
-          addingEnabled
-          includeTemplates
-        >
-        </app-offer-element-selector>
+        @if (entryGroup.get('elementId').value !== -1) {
+          <app-offer-field-element-type-pill
+            [fieldType]="entryGroup.get('elementType').value"></app-offer-field-element-type-pill>
+          <mat-form-field appearance="outline" fxFlex class="new-form-element">
+            <input matInput formControlName="name" (keyup)="nameChanged()">
+          </mat-form-field>
+        } @else {
+
+          <app-offer-element-selector
+            outline
+            (setValue)="onSetElement($event)"
+            [value]="-1"
+            [fillWidth]="true"
+            fxFlex
+            (keyClicked)="onSearchKeyClicked($event)"
+            [allElementTypes]="allElementTypes"
+            [allElements]="allElements"
+            [allTemplates]="allTemplates"
+            addingEnabled
+            includeTemplates
+          >
+          </app-offer-element-selector>
+        }
         @if (entryGroup.get('elementType').value !== "") {
-          <div fxFlex>
-          </div>
           <mat-icon class="icon-btn" (click)="onAddChild()" title="Kind hinzufügen (Tab)">
             subdirectory_arrow_right
           </mat-icon>
@@ -123,7 +127,8 @@
           }
           <mat-form-field appearance="outline" class="new-form-element">
             <mat-label>Beschreibung</mat-label>
-            <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="3" formControlName="description"></textarea>
+            <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="3" formControlName="description"
+                      (keyup)="descriptionChanged()"></textarea>
           </mat-form-field>
           <ng-container formArrayName="fields">
             @for (field of entryGroup.controls.fields.controls; track field.controls) {

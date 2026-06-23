@@ -9,10 +9,11 @@
  */
 
 
-export interface OfferTemplateListElement { 
-    description: string;
-    entry_count: number;
-    id: number;
+export interface OfferTemplateEntryOutput { 
+    children?: Array<OfferTemplateEntryOutput>;
+    elementId: number;
+    elementType: string;
+    id: string;
     name: string;
 }
 

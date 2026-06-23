@@ -6,7 +6,7 @@ import {
   MatDialogRef,
   MatDialogTitle
 } from "@angular/material/dialog";
-import { OfferTemplateEntryCreatePatch, OfferV2Service } from "../../../../../api/openapi";
+import { OfferTemplateEntryInput, OfferV2Service } from "../../../../../api/openapi";
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { convertTemplateEntryRecursive, TemplateGroup } from "../../templates-edit/offer-templates-edit.component";
 import { mapTemplateEntryGroupFromInput } from "../../templates-edit/template-entry-edit/template-entry-edit.component";
@@ -26,7 +26,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { take } from "rxjs/operators";
 
 interface TemplateCreateData {
-  structure?: OfferTemplateEntryCreatePatch[];
+  structure?: OfferTemplateEntryInput[];
 }
 
 @Component({
