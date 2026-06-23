@@ -99,31 +99,50 @@
         }
       </div>
       <div class="entry-header-content" [class.close]="!open">
-        @if (percent) {
 
-          <div class="entry-fields">
-            <mat-form-field appearance="outline" class="new-form-element">
-              <mat-label>Aufschlag</mat-label>
-              <input matInput formControlName="priceAddPercent">
-
-              <mat-icon matSuffix (click)="onResetSconto()" class="neutral" title="Zurücksetzen">
-                @if (scontoResettable) {
-                  rotate_left
-                }
-              </mat-icon>
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="new-form-element">
-              <mat-label>Skonto</mat-label>
-              <input matInput formControlName="priceSubPercent">
-            </mat-form-field>
-          </div>
-        }
         @if (entryGroup.get('elementType').value !== "") {
           @if (depth === 1) {
-            <mat-form-field appearance="outline" class="new-form-element">
-              <mat-label>Menge Spalte 2</mat-label>
-              <input matInput formControlName="amount">
-            </mat-form-field>
+            <div class="entry-fields">
+              @if (percent) {
+                <mat-form-field appearance="outline" class="new-form-element">
+                  <mat-label>Aufschlag</mat-label>
+                  <input matInput formControlName="priceAddPercent">
+
+                  <mat-icon matSuffix (click)="onResetSconto()" class="neutral" title="Zurücksetzen">
+                    @if (scontoResettable) {
+                      rotate_left
+                    }
+                  </mat-icon>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="new-form-element">
+                  <mat-label>Skonto</mat-label>
+                  <input matInput formControlName="priceSubPercent">
+                </mat-form-field>
+              }
+              <mat-form-field appearance="outline" class="new-form-element">
+                <mat-label>Menge Spalte 2</mat-label>
+                <input matInput formControlName="amount">
+              </mat-form-field>
+
+            </div>
+          } @else if (percent) {
+            <div class="entry-fields">
+              <mat-form-field appearance="outline" class="new-form-element">
+                <mat-label>Aufschlag</mat-label>
+                <input matInput formControlName="priceAddPercent">
+
+                <mat-icon matSuffix (click)="onResetSconto()" class="neutral" title="Zurücksetzen">
+                  @if (scontoResettable) {
+                    rotate_left
+                  }
+                </mat-icon>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="new-form-element">
+                <mat-label>Skonto</mat-label>
+                <input matInput formControlName="priceSubPercent">
+              </mat-form-field>
+            </div>
+
           }
           <mat-form-field appearance="outline" class="new-form-element">
             <mat-label>Beschreibung</mat-label>

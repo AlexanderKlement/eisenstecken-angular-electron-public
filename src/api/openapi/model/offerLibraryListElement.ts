@@ -13,6 +13,7 @@ export interface OfferLibraryListElement {
     description: string;
     entry_count: number;
     id: number;
+    isManualList: boolean;
     name: string;
 }
 

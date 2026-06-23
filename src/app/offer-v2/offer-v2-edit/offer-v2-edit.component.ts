@@ -25,7 +25,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatDialog } from "@angular/material/dialog";
 import { BehaviorSubject, concat, Observable, of, Subject } from "rxjs";
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { catchError, distinctUntilChanged, switchMap, take, tap } from "rxjs/operators";
+import { catchError, distinctUntilChanged, map, switchMap, take, tap } from "rxjs/operators";
 import { confirmDeleteDialog, randomUUID } from "../offer.util";
 import dayjs from "dayjs/esm";
 import { SharedModule } from "../../shared/shared.module";
@@ -58,7 +58,7 @@ type OfferV2Group = {
   globalAddPercent: FormControl<number>;
   globalPriceDiff: FormControl<number>;
   globalSubPercent: FormControl<number>;
-  jobId: FormControl<string>;
+  jobId: FormControl<number>;
   content: FormArray<FormGroup<OfferEntryGroup>>;
   date: FormControl<string>;
   inPriceIncluded: FormControl<string>;
@@ -82,7 +82,7 @@ function newEmptyOfferGroup() {
     globalPriceDiff: new FormControl(0),
     hourlyRate: new FormControl(0),
     hoursSconto: new FormControl(0),
-    jobId: new FormControl("-1", selectRequires),
+    jobId: new FormControl(-1, selectRequires),
     content: new FormArray([]),
     date: new FormControl(""),
     number: new FormControl(1, [Validators.required, Validators.pattern(/^[0-9]+$/)]),
@@ -105,7 +105,7 @@ function newOfferGroup(data: OfferV2, version?: OfferV2Version) {
     globalAddPercent: new FormControl(data.globalAddPercent),
     hoursSconto: new FormControl(data.hoursSconto),
     hourlyRate: new FormControl(data.hourlyRate),
-    jobId: new FormControl(data.job.id.toString(10), selectRequires),
+    jobId: new FormControl(data.job.id, selectRequires),
     content: new FormArray(version ? version.content.map(c => mapEntryOfferEntryGroup(c, data.globalAddPercent)) : []),
     validity: new FormControl(data.validity),
     inPriceIncluded: new FormControl(data.inPriceIncluded),
@@ -215,6 +215,7 @@ export class OfferV2EditComponent implements OnInit {
   private dialog = inject(MatDialog);
   subTitle = "Angebot erstellen";
   offerV2Id: number;
+  jobId: number;
   private loadingSubject = new BehaviorSubject<boolean>(false);
   public loading$ = this.loadingSubject.asObservable();
   offerGroup = newEmptyOfferGroup();
@@ -228,6 +229,7 @@ export class OfferV2EditComponent implements OnInit {
   selectedElements: string[] = [];
   priceAsCurrency: string = "0,00 €";
   priceAsCurrencySconted: string = "0,00 €";
+  priceAsFloat: number = 0;
   priceAsCurrencyHourSconted: string = "0,00 €";
   hours: number = 0;
   jobsInput$ = new Subject<string>();
@@ -263,9 +265,15 @@ export class OfferV2EditComponent implements OnInit {
             this.allTemplates = templates;
             this.route.params.subscribe((params) => {
               try {
+
                 this.offerV2Id = parseInt(params.id, 10);
               } catch {
                 // is createMode
+              }
+              try {
+                this.jobId = parseInt(params.job_id, 10);
+              } catch {
+                // no JobID emitted
               }
               this.initData(params.method);
             });
@@ -325,6 +333,13 @@ export class OfferV2EditComponent implements OnInit {
       }
     } else {
       this.subTitle = "Angebot erstellen";
+      if (this.jobId) {
+        this.jobs$ = this.api.readJobJobJobIdGet(this.jobId).pipe(
+          tap(() => this.offerGroup.patchValue({
+            jobId: this.jobId
+          })), map(j => [j]));
+
+      }
       this.offerGroup.valueChanges.subscribe(() => {
         this.offerGroupValidator();
         this.unsavedChanges = true;
@@ -405,6 +420,7 @@ export class OfferV2EditComponent implements OnInit {
       } else {
         this.hours = 0;
       }
+      this.priceAsFloat = price;
       this.priceAsCurrencySconted = formatCurrency(price, "de-DE", "EUR");
       this.formula = formula;
       this.offertext = offertext;
@@ -454,10 +470,11 @@ export class OfferV2EditComponent implements OnInit {
         payment: this.offerGroup.get("payment").value,
         validity: this.offerGroup.get("validity").value,
         vatId,
-        date: this.offerGroup.get("date").value
+        date: this.offerGroup.get("date").value,
+        price: this.priceAsFloat
       }).pipe(take(1)).subscribe(this.subscription);
     } else {
-      const jobId = parseInt(this.offerGroup.get("jobId").value, 10);
+      const jobId = this.offerGroup.get("jobId").value;
       if (jobId === -1) {
         this.snackBar.open("Bitte einen Auftrag auswählen: ", "Ok", { duration: 8000 });
         this.loadingSubject.next(false);
@@ -569,7 +586,8 @@ export class OfferV2EditComponent implements OnInit {
         payment: this.offerGroup.get("payment").value,
         validity: this.offerGroup.get("validity").value,
         vatId,
-        date: this.offerGroup.get("date").value
+        date: this.offerGroup.get("date").value,
+        price: this.priceAsFloat
       }).pipe(take(1)).subscribe({
         next: (data) => {
           if (!this.lastVersion) {

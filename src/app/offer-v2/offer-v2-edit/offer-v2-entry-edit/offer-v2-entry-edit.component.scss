@@ -1,5 +1,5 @@
 .entry {
-  margin: 8px 0;
+  margin: 8px 0 0;
   --level-1: oklch(72% .14 85);
   --level-2: oklch(65% .12 150);
   --level-3: oklch(65% .15 45);
@@ -175,7 +175,6 @@
     margin-left: 32px;
 
     position: relative;
-    overflow: hidden;
 
     &::after {
       content: " ";

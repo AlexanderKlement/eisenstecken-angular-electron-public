@@ -14,6 +14,7 @@ export interface OfferLibrary {
     description: string;
     entries: Array<OfferLibraryEntry>;
     id: number;
+    isManualList: boolean;
     name: string;
 }
 

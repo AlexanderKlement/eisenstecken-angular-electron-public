@@ -25,6 +25,7 @@ export interface OfferV2Patch {
     name: string;
     number: number;
     payment: string;
+    price: number;
     validity: string;
     vatId: number;
     versionName: string;

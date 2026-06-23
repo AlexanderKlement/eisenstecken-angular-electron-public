@@ -275,6 +275,7 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
 
   togglePercent() {
     this.percent = !this.percent;
+    this.open = true;
     this.entryGroup.patchValue({
       priceSubPercent: 0,
       priceAddPercent: this.entryGroup.get("globalAddPercent").value

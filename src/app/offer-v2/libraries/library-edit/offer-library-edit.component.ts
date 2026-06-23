@@ -149,7 +149,8 @@ export default class OfferLibraryEditComponent implements OnInit {
     if (this.libraryId) {
       this.offerService.patchOfferLibraryOfferV2LibraryLibraryIdPost(this.libraryId, {
         description: this.libraryGroup.get("description").value,
-        name: this.libraryGroup.get("name").value
+        name: this.libraryGroup.get("name").value,
+        isManualList: false
       }).pipe(take(1)).subscribe({
         next: data => {
           const observables: Observable<any>[] = [];
@@ -237,7 +238,8 @@ export default class OfferLibraryEditComponent implements OnInit {
     } else {
       this.offerService.createOfferLibraryOfferV2LibraryPut({
         description: this.libraryGroup.get("description").value ?? "",
-        name: this.libraryGroup.get("name").value
+        name: this.libraryGroup.get("name").value,
+        isManualList: false
       }).pipe(take(1)).subscribe(this.subscription);
     }
   }

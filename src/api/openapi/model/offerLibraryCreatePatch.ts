@@ -11,6 +11,7 @@
 
 export interface OfferLibraryCreatePatch { 
     description: string;
+    isManualList: boolean;
     name: string;
 }
 

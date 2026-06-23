@@ -21,6 +21,8 @@ import {
   DeliveryNote,
   Job,
   Offer,
+  OfferV2,
+  OfferV2Service,
   OrderSmall,
   OutgoingInvoice,
   RecalculationService,
@@ -55,6 +57,7 @@ export default class JobDetailComponent implements OnInit {
   private api = inject(DefaultService);
   private recalculationService = inject(RecalculationService);
   private timeEntryService = inject(TimeEntryService);
+  private offerService = inject(OfferV2Service);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private snackBar = inject(MatSnackBar);
@@ -75,6 +78,7 @@ export default class JobDetailComponent implements OnInit {
   buttonsSub = [];
 
   offerDataSource: TableDataSource<Offer, DefaultService>;
+  offerV2DataSource: TableDataSource<OfferV2, OfferV2Service>;
   outgoingInvoiceDataSource: TableDataSource<OutgoingInvoice, DefaultService>;
   subJobDataSource: TableDataSource<Job, DefaultService>;
   orderDataSource: TableDataSource<OrderSmall, DefaultService>;
@@ -82,6 +86,7 @@ export default class JobDetailComponent implements OnInit {
   recalculationDataSource: TableDataSource<RecalculationSmall, RecalculationService>;
   timeEntriesDataSource: TableDataSource<TikTakTimeEntryByJob, TimeEntryService>;
   outgoingInvoicesAllowed = false;
+  hasLegacyOffer = true;
   offersAllowed = false;
   deliveryNoteAllowed = true;
   title = "";
@@ -101,6 +106,7 @@ export default class JobDetailComponent implements OnInit {
         return;
       }
       this.jobId = id;
+      this.hasLegacyOffer = id < 3800;
       this.initData();
     });
     this.initAccessRights();
@@ -148,19 +154,68 @@ export default class JobDetailComponent implements OnInit {
   }
 
   initOfferTable() {
-    this.offerDataSource = new TableDataSource(
-      this.api,
+    if (this.hasLegacyOffer) {
+      this.offerDataSource = new TableDataSource(
+        this.api,
+        (api, filter, sortDirection, skip, limit) =>
+          api.readOffersByJobOfferJobJobIdGet(this.jobId, filter, skip, limit),
+        (dataSourceClasses) => {
+          const rows = [];
+          dataSourceClasses.forEach((dataSource) => {
+            rows.push({
+              values: {
+                id: dataSource.id,
+                date: dayjs(dataSource.date).format("L"),
+                full_price_without_vat: formatCurrency(
+                  dataSource.full_price_without_vat,
+                  "de-DE",
+                  "EUR"
+                )
+              },
+              route: () => {
+                this.authService
+                  .currentUserHasScope(ScopeEnum.Office)
+                  .pipe(first())
+                  .subscribe((allowed) => {
+                    if (allowed) {
+                      this.locker.getLockAndTryNavigate(
+                        this.api.islockedOfferOfferIslockedOfferIdGet(
+                          dataSource.id
+                        ),
+                        this.api.lockOfferOfferLockOfferIdPost(dataSource.id),
+                        this.api.lockOfferOfferUnlockOfferIdPost(dataSource.id),
+                        "offer/edit/" + dataSource.id.toString()
+                      );
+                    }
+                  });
+              }
+            });
+          });
+          return rows;
+        },
+        [
+          { name: "id", headerName: "ID" },
+          { name: "date", headerName: "Datum" },
+          { name: "full_price_without_vat", headerName: "Preis" }
+        ],
+        (api) => api.countOffersByJobOfferJobCountJobIdGet(this.jobId)
+      );
+      this.offerDataSource.loadData();
+    }
+    this.offerV2DataSource = new TableDataSource(
+      this.offerService,
       (api, filter, sortDirection, skip, limit) =>
-        api.readOffersByJobOfferJobJobIdGet(this.jobId, filter, skip, limit),
+        api.getOffersOfferV2OffersGet(this.jobId, skip, filter, limit),
       (dataSourceClasses) => {
         const rows = [];
         dataSourceClasses.forEach((dataSource) => {
           rows.push({
             values: {
               id: dataSource.id,
+              name: dataSource.name,
               date: dayjs(dataSource.date).format("L"),
-              full_price_without_vat: formatCurrency(
-                dataSource.full_price_without_vat,
+              price: formatCurrency(
+                dataSource.price,
                 "de-DE",
                 "EUR"
               )
@@ -171,14 +226,7 @@ export default class JobDetailComponent implements OnInit {
                 .pipe(first())
                 .subscribe((allowed) => {
                   if (allowed) {
-                    this.locker.getLockAndTryNavigate(
-                      this.api.islockedOfferOfferIslockedOfferIdGet(
-                        dataSource.id
-                      ),
-                      this.api.lockOfferOfferLockOfferIdPost(dataSource.id),
-                      this.api.lockOfferOfferUnlockOfferIdPost(dataSource.id),
-                      "offer/edit/" + dataSource.id.toString()
-                    );
+                    this.router.navigateByUrl(`/offer_v2/offer/${dataSource.id}`).then();
                   }
                 });
             }
@@ -188,12 +236,13 @@ export default class JobDetailComponent implements OnInit {
       },
       [
         { name: "id", headerName: "ID" },
+        { name: "name", headerName: "Name" },
         { name: "date", headerName: "Datum" },
-        { name: "full_price_without_vat", headerName: "Preis" }
+        { name: "price", headerName: "Preis" }
       ],
-      (api) => api.countOffersByJobOfferJobCountJobIdGet(this.jobId)
+      (api) => api.countOffersOfferV2CountOffersGet(this.jobId)
     );
-    this.offerDataSource.loadData();
+    this.offerV2DataSource.loadData();
   }
 
   initOutgoingInvoiceTable() {
@@ -277,6 +326,10 @@ export default class JobDetailComponent implements OnInit {
           property: "note",
           name: "Notiz",
           textarea: true
+        },
+        {
+          property: "timestamp",
+          name: "Erstelldatum"
         }
       ],
       "/job/edit/" + this.jobId.toString(),
@@ -608,8 +661,8 @@ export default class JobDetailComponent implements OnInit {
             name: "Neues Angebot",
             navigate: (): void => {
               this.router.navigateByUrl(
-                "/offer/edit/new/" + this.jobId.toString()
-              );
+                "/offer_v2/offer/new/" + this.jobId.toString()
+              ).then();
             }
           });
           this.buttonsMain[0].dropdown.push({

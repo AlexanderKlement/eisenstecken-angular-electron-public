@@ -7,6 +7,7 @@ import {
   OfferElementType,
   OfferField,
   OfferFieldEnum,
+  OfferLibrary,
   OfferLibraryListElement,
   OfferV2Service,
   SchemasOfferV2OfferElementFieldSchemaOfferElementCreatePatch
@@ -20,7 +21,7 @@ import {
   DefaultLayoutGapDirective,
   FlexLayoutModule
 } from "ng-flex-layout";
-import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
+import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
 import OfferFieldsComponent from "../../fields/offer-fields.component";
 import { MatDialog } from "@angular/material/dialog";
@@ -33,6 +34,7 @@ import { MatCheckbox } from "@angular/material/checkbox";
 import OfferCalculationInputComponent from "../../calculation-input/offer-calculation-input.component";
 import { MatRadioButton, MatRadioGroup } from "@angular/material/radio";
 import { selectRequires } from "../../../shared/custom-validators";
+import { MatIcon } from "@angular/material/icon";
 
 type ElementFieldGroup = {
   value: FormControl<string>,
@@ -46,6 +48,7 @@ type ElementFieldGroup = {
   inherits: FormControl<boolean>,
   mandatory: FormControl<boolean>,
   library: FormControl<string>,
+  libraryObj: FormControl<OfferLibrary | null>,
 }
 
 type ElementGroup = {
@@ -72,6 +75,7 @@ type ElementGroup = {
     MatLabel,
     MatButton,
     AsyncPipe,
+    MatSuffix,
     MatProgressSpinner,
     MatSelect,
     MatOption,
@@ -79,7 +83,8 @@ type ElementGroup = {
     MatCheckbox,
     OfferCalculationInputComponent,
     MatRadioGroup,
-    MatRadioButton
+    MatRadioButton,
+    MatIcon
   ]
 })
 export default class OfferElementsEditComponent implements OnInit {
@@ -133,12 +138,13 @@ export default class OfferElementsEditComponent implements OnInit {
                 inherits: new FormControl(field.inherits),
                 fieldId: new FormControl(field.field.id),
                 label: new FormControl(field.field.label),
-                useManualList: new FormControl(field.library?.name?.startsWith(`Manuelle Liste: ${data.name}`) ?? false),
-                manualList: new FormArray(field.library?.name?.startsWith(`Manuelle Liste: ${data.name}`) ? field.library.entries.map<FormControl<string>>(entry => new FormControl(entry.name)) : []),
+                useManualList: new FormControl(field.library?.isManualList ?? false),
+                manualList: new FormArray(field.library?.isManualList ? field.library.entries.map<FormControl<string>>(entry => new FormControl(entry.name)) : []),
                 unit: new FormControl(field.field.unit?.short ?? ""),
                 fieldType: new FormControl(field.field.fieldType),
                 id: new FormControl(field.id),
-                library: new FormControl(field.library?.id?.toString(10) ?? "-1", field.field.fieldType === OfferFieldEnum.Select ? selectRequires : null)
+                library: new FormControl(field.library?.id?.toString(10) ?? "-1", field.field.fieldType === OfferFieldEnum.Select ? selectRequires : null),
+                libraryObj: new FormControl(field.library)
               })))
             });
             this.selectedFields = data.fields;
@@ -190,7 +196,7 @@ export default class OfferElementsEditComponent implements OnInit {
       };
     });
     if (missingLibrary) {
-      this.snackBar.open("Eine Bibliothek muss ausgewählt werden für Auswahl Felder: ", "Ok", { duration: 8000 });
+      this.snackBar.open("Eine Bibliothek muss ausgewählt werden für Auswahl Felder!", "Ok", { duration: 8000 });
       this.loadingSubject.next(false);
       return;
     }
@@ -238,7 +244,8 @@ export default class OfferElementsEditComponent implements OnInit {
           unit: new FormControl(f.unit?.short ?? ""),
           fieldType: new FormControl(f.fieldType),
           useManualList: new FormControl(false),
-          manualList: new FormArray([])
+          manualList: new FormArray([]),
+          libraryObj: new FormControl(null)
         }));
     });
   }
@@ -276,6 +283,7 @@ export default class OfferElementsEditComponent implements OnInit {
     }
   };
 
+
   onNavElementType() {
     const id = parseInt(this.elementGroup.get("elementType").value, 10);
     if (id !== -1) {
@@ -283,9 +291,77 @@ export default class OfferElementsEditComponent implements OnInit {
     }
   }
 
+  private saveManualList(grp: FormGroup<ElementFieldGroup>) {
+    console.log("save");
+    /* TODO this.offerService.createOfferLibraryOfferV2LibraryPut({
+      isManualList: true,
+      name: `${grp.get("label").value} - Manuelle Liste`,
+      description: "",
+    }).pipe(take(1)).subscribe(lib => {
+      grp.controls.manualList.controls.forEach(entry => {
+        this.offerService.createOfferLibraryEntryOfferV2LibraryEntryPut({
+          name: entry.value,
+          price: 0,
+          libraryId: lib.id,
+          unitId: 1
+        }).pipe(take(1)).subscribe(() => {
+          // nothing
+        });
+      });
+      grp.patchValue({libraryObj: lib, library: lib.id.toString(10)})
+    }) */
+  }
+
+  private updateManualList(grp: FormGroup<ElementFieldGroup>, library: OfferLibrary) {
+    console.log("update");
+  }
+
+  private checkManualList(grp: FormGroup<ElementFieldGroup>) {
+    if (grp && grp.get("useManualList").value) {
+      const libraryId = parseInt(grp.get("library").value, 10);
+      if (libraryId === -1) {
+        this.saveManualList(grp);
+      } else {
+        const library = grp.get("libraryObj").value;
+        if (library && library.id === libraryId) {
+          if (library.isManualList) {
+            this.updateManualList(grp, library);
+          } else {
+            this.saveManualList(grp);
+          }
+        } else {
+          this.saveManualList(grp);
+        }
+      }
+    }
+  }
+
+  checkTimeout: NodeJS.Timeout;
+
+
+  protected onChangeSelectType(grp: FormGroup<ElementFieldGroup>) {
+    if (this.checkTimeout) {
+      clearTimeout(this.checkTimeout);
+    }
+    this.checkTimeout = setTimeout(() => {
+      this.checkManualList(grp);
+    }, 1000);
+  }
+
+  protected onAddListElement(grp: FormGroup<ElementFieldGroup>) {
+    grp.controls.manualList.push(new FormControl(""));
+  }
+
+  protected onDeleteListElement(grp: FormGroup<ElementFieldGroup>, index: number) {
+    grp.controls.manualList.removeAt(index);
+    this.onChangeSelectType(grp);
+
+  }
+
   protected readonly OfferFieldsComponent = OfferFieldsComponent;
   protected readonly OfferFieldEnum = OfferFieldEnum;
 
 
   protected readonly fieldTypeToString = fieldTypeToString;
+
 }
