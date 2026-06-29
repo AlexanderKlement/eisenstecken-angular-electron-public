@@ -1,4 +1,4 @@
-## <small>2.2.4 (2026-06-10)</small>
+## <small>2.2.5 (2026-06-29)</small>
 
 * Add Husky and version check ([d92151e](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/d92151e))
 * Add Note To Job ([f01b519](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f01b519))
@@ -30,6 +30,7 @@
 * Mac package.json build script ([c984b91](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c984b91))
 * new input fields ([6f339e4](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/6f339e4))
 * new TimeEntries Endpoint ([83b9db5](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/83b9db5))
+* New version with email fix ([939278c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/939278c))
 * Remove pagination & search in recalculation tables ([2dfa437](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/2dfa437))
 * Remove the users/me filter on the refresh logic, idk why i put that there ([fbab85f](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/fbab85f))
 * remove yarn from package.json ([d1a5ba7](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/d1a5ba7))

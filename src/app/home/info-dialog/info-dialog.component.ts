@@ -52,6 +52,12 @@ export class InfoDialogComponent implements OnInit {
       ]
     },
     {
+      versionName: "2.2.5",
+      changes: [
+        "Sohle im Kleidergrößen export"
+      ]
+    },
+    {
       versionName: "2.2.4",
       changes: [
         "E-Mail von nun auch die Signatur an, welche bei Outlook konfiguriert wird",
