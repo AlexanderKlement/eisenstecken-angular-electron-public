@@ -1,0 +1,367 @@
+<h1 mat-dialog-title>{{ this.data.offer.name }}</h1>
+<div mat-dialog-content>
+  @if (loading$ | async) {
+    <div class="spinner-container">
+      <mat-spinner></mat-spinner>
+    </div>
+  } @else {
+    <div class="viewer-container">
+      <div class="viewer">
+
+        <section class="page page--cover">
+
+          <!-- Banner / logo -->
+          <div class="banner">
+            <img ngSrc="/assets/images/ESS-Versatz-Logo+Claim.png" fill alt="Eisenstecken">
+          </div>
+
+          <!-- Vertical legal side text -->
+          <div class="side-text">
+            MwSt.-Nr./P.IVA IT00745560219<span class="sep">|</span>St.-Nr./C.F. 00745560219<span class="sep">|</span>Eintr.-Nr
+            HK / N.iscr.reg.Imp. BZ-125676<span class="sep">|</span>Ges.Kap. / Cap.soc 120.000,00 € v.e. / i.v.<span
+            class="sep">|</span>eisenstecken&commat;pec.it<span class="sep">|</span>Empf.-Kod./Cod. Dest. SUBM70N
+          </div>
+
+          <!-- Content frame -->
+          <div class="content">
+            <div class="title-row">
+              <div class="title">Angebot</div>
+              <div class="destination">
+                <div>{{ data.offer.job.client.address.name }}</div>
+                <div>{{ data.offer.job.client.address.address_1 }}</div>
+                <div>{{ data.offer.job.client.address.address_2 }}</div>
+                <div>{{ data.offer.job.client.address.country_name }}</div>
+                <div class="place-date">Feldthurns, den {{ now }}</div>
+              </div>
+            </div>
+
+            <div class="offer-intro">{{ first_page_text }}
+            </div>
+
+            <div class="salutation">
+              <div class="sal-greeting">Mit freundlichen Grüßen</div>
+              <img ngSrc="/assets/images/signature_eisenstecken_hannes.svg" [width]="mm(45)" [height]="mm(45*(104/294))"
+                   alt="Unterschrift">
+              <div class="sal-name">{{ name }}</div>
+              <div class="sal-role">{{ position }}</div>
+              <div class="sal-contact">M&nbsp;&nbsp;+39 328 35 27 802&nbsp;&nbsp;|&nbsp;&nbsp;hannes&commat;eisenstecken.it</div>
+
+              <div class="closing-logos">
+                <img ngSrc="/assets/images/ESS-Versatz-Ergaenzungs-Logos.jpg" [height]="mm(17)"
+                     [width]="mm(17*(4913/896))" alt="">
+                <img ngSrc="/assets/images/lehrlinge2024.jpg" [height]="mm(17)" [width]="mm(17*(1240/1748))" alt="">
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="footer">
+            <div class="frow frow--first">
+              <span class="fcell">Eisenstecken GmbH/Srl</span>
+              <span class="fcell">Handwerkerzone 1</span>
+              <span class="fcell">T +39 0472 85 52 48</span>
+              <span class="fcell">info&commat;eisenstecken.it</span>
+            </div>
+            <div class="frow frow--second">
+              <span class="fcell"></span>
+              <span class="fcell">39040 Feldthurns/Velturno - Italy</span>
+              <span class="fcell">M +39 328 35 27 802</span>
+              <span class="fcell">www.eisenstecken.it</span>
+            </div>
+          </div>
+
+          <div class="fold-mark"></div>
+        </section>
+        <section class="page page--cover">
+
+          <!-- Banner / logo -->
+          <div class="banner">
+            <img ngSrc="/assets/images/ESS-Versatz-Logo+Claim.png" fill alt="Eisenstecken">
+          </div>
+
+          <!-- Vertical legal side text -->
+          <div class="side-text">
+            MwSt.-Nr./P.IVA IT00745560219<span class="sep">|</span>St.-Nr./C.F. 00745560219<span class="sep">|</span>Eintr.-Nr
+            HK / N.iscr.reg.Imp. BZ-125676<span class="sep">|</span>Ges.Kap. / Cap.soc 120.000,00 € v.e. / i.v.<span
+            class="sep">|</span>eisenstecken&commat;pec.it<span class="sep">|</span>Empf.-Kod./Cod. Dest. SUBM70N
+          </div>
+
+          <!-- Content frame -->
+          <div class="content">
+            <div class="title-row">
+              <div class="title">Angebot</div>
+              <div class="destination">
+                <div>{{ data.offer.job.client.address.name }}</div>
+                <div>{{ data.offer.job.client.address.address_1 }}</div>
+                <div>{{ data.offer.job.client.address.address_2 }}</div>
+                <div>{{ data.offer.job.client.address.country_name }}</div>
+              </div>
+            </div>
+            <div class="header-args">
+              <div class="harg">
+                <div class="label">Nummer/Numero</div>
+                <div class="value">{{ data.offer.number.toString(10).padStart(3, "0") }}</div>
+              </div>
+              <div class="harg">
+                <div class="label">Datum/Data</div>
+                <div class="value">{{ dayjs(data.offer.date).format("DD.MM.YYYY") }}</div>
+              </div>
+              <div class="harg">
+                <div class="label">Seite/Pagina</div>
+                <div class="value">01 / {{ pages.toString(10).padStart(2, '0') }}</div>
+              </div>
+              <div class="harg">
+                <div class="label">Kunde/Cliente</div>
+                <div class="value">{{ data.offer.job.client.id.toString(10).padStart(4, "0") }}</div>
+              </div>
+              <div class="harg">
+                <div class="label">MwStr-Nr/Part. IVA</div>
+                <div class="value">{{ data.offer.job.client.fiscal_code }}</div>
+              </div>
+              <div class="harg">
+                <div class="label">St.-Nr./Cod.fisc</div>
+                <div class="value">{{ data.offer.job.client.esigibilita_iva }}</div>
+              </div>
+            </div>
+            @if (material_desc_body != '') {
+              <div class="material-description">
+                <div class="md-title">{{ material_desc_title }}</div>
+                <div class="md-text">{{ material_desc_body }}
+                </div>
+              </div>
+            }
+          </div>
+
+          <div class="footer">
+            <div class="frow frow--first">
+              <span class="fcell">Eisenstecken GmbH/Srl</span>
+              <span class="fcell">Handwerkerzone 1</span>
+              <span class="fcell">T +39 0472 85 52 48</span>
+              <span class="fcell">info&commat;eisenstecken.it</span>
+            </div>
+            <div class="frow frow--second">
+              <span class="fcell"></span>
+              <span class="fcell">39040 Feldthurns/Velturno - Italy</span>
+              <span class="fcell">M +39 328 35 27 802</span>
+              <span class="fcell">www.eisenstecken.it</span>
+            </div>
+          </div>
+
+          <div class="fold-mark"></div>
+        </section>
+
+        <!-- ===================================================================
+             PAGE 2 — ITEMS TABLE
+        ==================================================================== -->
+        <section class="page page--body">
+          <div class="banner">
+            <img ngSrc="/assets/images/ESS-Versatz-Logo+Claim.png" fill alt="Eisenstecken">
+          </div>
+          <div class="side-text">
+            MwSt.-Nr./P.IVA IT00745560219<span class="sep">|</span>St.-Nr./C.F. 00745560219<span class="sep">|</span>Eintr.-Nr
+            HK / N.iscr.reg.Imp. BZ-125676<span class="sep">|</span>Ges.Kap. / Cap.soc 120.000,00 € v.e. / i.v.<span
+            class="sep">|</span>eisenstecken&commat;pec.it<span class="sep">|</span>Empf.-Kod./Cod. Dest. SUBM70N
+          </div>
+          <div class="content">
+            <div class="header-args">
+              <div class="harg">
+                <div class="label">Nummer/Numero</div>
+                <div class="value">{{ data.offer.number.toString(10).padStart(3, "0") }}</div>
+              </div>
+              <div class="harg">
+                <div class="label">Datum/Data</div>
+                <div class="value">{{ dayjs(data.offer.date).format("DD.MM.YYYY") }}</div>
+              </div>
+              <div class="harg">
+                <div class="label">Seite/Pagina</div>
+                <div class="value">01 / {{ pages.toString(10).padStart(2, '0') }}</div>
+              </div>
+              <div class="harg">
+                <div class="label">Kunde/Cliente</div>
+                <div class="value">{{ data.offer.job.client.id.toString(10).padStart(4, "0") }}</div>
+              </div>
+              <div class="harg">
+                <div class="label">MwStr-Nr/Part. IVA</div>
+                <div class="value">{{ data.offer.job.client.fiscal_code }}</div>
+              </div>
+              <div class="harg">
+                <div class="label">St.-Nr./Cod.fisc</div>
+                <div class="value">{{ data.offer.job.client.esigibilita_iva }}</div>
+              </div>
+            </div>
+            <div class="offer-table">
+              <!-- column captions -->
+              <div class="row row--head">
+                <div class="cell cell--num">Position/<br>Posizione</div>
+                <div class="cell cell--desc">Beschreibung/<br>Descrizione</div>
+                <div class="cell cell--qty">Menge/<br>Quantità</div>
+                <div class="cell cell--single">Einzelpreis/<br>Prezzo cad.</div>
+                <div class="cell cell--total">Gesamtpreis/<br>Prezzo tot.</div>
+              </div>
+              <div class="row row--spacer"></div>
+              @for (row of rows; track row.prefix) {
+                <div [className]="`row ${row.isBold ? 'row--section' : ''}`">
+                  <div class="cell cell--num">{{ row.prefix }}</div>
+                  <div class="cell cell--desc">{{ row.text }}
+                    @if (!row.isBold) {
+                      <br />
+                      {{ row.subText }}
+                    }
+                  </div>
+                  <div class="cell cell--qty">{{ row.isBold ? '' : row.amount.toString(10) }}</div>
+                  <div class="cell cell--single">{{ row.isBold ? '' : formatCurrency(row.price, "de-DE", "€") }}</div>
+                  <div class="cell cell--total">{{ formatCurrency(row.amount * row.price, "de-DE", "€") }}</div>
+                </div>
+              }
+
+            </div>
+          </div>
+
+          <div class="footer">
+            <div class="frow frow--first">
+              <span class="fcell">Eisenstecken GmbH/Srl</span>
+              <span class="fcell">Handwerkerzone 1</span>
+              <span class="fcell">T +39 0472 85 52 48</span>
+              <span class="fcell">info&commat;eisenstecken.it</span>
+            </div>
+            <div class="frow frow--second">
+              <span class="fcell"></span>
+              <span class="fcell">39040 Feldthurns/Velturno - Italy</span>
+              <span class="fcell">M +39 328 35 27 802</span>
+              <span class="fcell">www.eisenstecken.it</span>
+            </div>
+          </div>
+          <div class="fold-mark"></div>
+        </section>
+
+        <!-- ===================================================================
+             PAGE 3 — TOTALS + CLOSING
+        ==================================================================== -->
+        <section class="page page--body">
+
+          <div class="banner">
+            <img ngSrc="/assets/images/ESS-Versatz-Logo+Claim.png" fill alt="Eisenstecken">
+          </div>
+          <div class="side-text">
+            MwSt.-Nr./P.IVA IT00745560219<span class="sep">|</span>St.-Nr./C.F. 00745560219<span class="sep">|</span>Eintr.-Nr
+            HK / N.iscr.reg.Imp. BZ-125676<span class="sep">|</span>Ges.Kap. / Cap.soc 120.000,00 € v.e. / i.v.<span
+            class="sep">|</span>eisenstecken&commat;pec.it<span class="sep">|</span>Empf.-Kod./Cod. Dest. SUBM70N
+          </div>
+          <div class="content">
+            <div class="header-args">
+              <div class="harg">
+                <div class="label">Nummer/Numero</div>
+                <div class="value">{{ data.offer.number.toString(10).padStart(3, "0") }}</div>
+              </div>
+              <div class="harg">
+                <div class="label">Datum/Data</div>
+                <div class="value">{{ dayjs(data.offer.date).format("DD.MM.YYYY") }}</div>
+              </div>
+              <div class="harg">
+                <div class="label">Seite/Pagina</div>
+                <div class="value">01 / {{ pages.toString(10).padStart(2, '0') }}</div>
+              </div>
+              <div class="harg">
+                <div class="label">Kunde/Cliente</div>
+                <div class="value">{{ data.offer.job.client.id.toString(10).padStart(4, "0") }}</div>
+              </div>
+              <div class="harg">
+                <div class="label">MwStr-Nr/Part. IVA</div>
+                <div class="value">{{ data.offer.job.client.fiscal_code }}</div>
+              </div>
+              <div class="harg">
+                <div class="label">St.-Nr./Cod.fisc</div>
+                <div class="value">{{ data.offer.job.client.esigibilita_iva }}</div>
+              </div>
+            </div>
+            <!-- Bottom price box -->
+            <div class="price-box">
+              <div class="pb-head">
+                <div class="cell">Gesamtsumme ohne MwSt./<br>Totale escluso IVA</div>
+                <div class="cell">Gesamtsumme abzgl. Skonto: 3,00 %/<br>Totale escluso sconto: 3,00 %</div>
+                <div class="cell right">MwSt.-Betrag/Importo IVA<br>(22%)</div>
+                <div class="cell cell--last">Gesamtbetrag/Importo totale</div>
+              </div>
+              <div class="pb-values">
+                <div class="cell">19.300,00 €</div>
+                <div class="cell cell--bold">18.721,00 €</div>
+                <div class="cell right">4.118,62 €</div>
+                <div class="cell cell--last">22.839,62 €</div>
+              </div>
+            </div>
+
+            <!-- Includes / excludes -->
+            <div class="includes">
+              <p>Im Gesamtbetrag enthalten: Montage, Lieferung und Befestigungsmaterial</p>
+              <p>Gültigkeit des Angebotes: 30 Tage</p>
+              <p>Lieferung: ca. 8–10 Wochen nach Auftragsbestätigung</p>
+              <p>Zahlung: 30% bei Auftrag, 60% bei Lieferung, 10% nach Montage</p>
+              <div class="gap"></div>
+              <p>Wir garantieren für eine sorgfältige, präzise Ausführung</p>
+              <p>Bei Fragen und näheren Erklärungen stehen wir gerne zur Verfügung</p>
+            </div>
+
+            <!-- Closing salutation + customer signature -->
+            <div class="salutation">
+              <div class="sal-greeting">Mit freundlichen Grüßen</div>
+              <img ngSrc="/assets/images/signature_eisenstecken_hannes.svg" [width]="mm(45)" [height]="mm(45*(104/294))"
+                   alt="Unterschrift">
+              <div class="sal-name">{{ name }}</div>
+              <div class="sal-role">{{ position }}</div>
+              <div class="sal-contact">M&nbsp;&nbsp;+39 328 35 27 802&nbsp;&nbsp;|&nbsp;&nbsp;hannes&commat;eisenstecken.it</div>
+
+              <div class="customer-signature">
+                <div class="cs-title">Bei Annahme / All'accettazione</div>
+                <div class="cs-line">
+                  <div class="field field--date">
+                    <div class="rule"></div>
+                    <div class="lbl">Datum/Data</div>
+                  </div>
+                  <div class="field field--place">
+                    <div class="rule"></div>
+                    <div class="lbl">Ort/Luogo</div>
+                  </div>
+                </div>
+                <div class="cs-line">
+                  <div class="field field--place">
+                    <div class="rule"></div>
+                    <div class="lbl">Unterschrift/Firma</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="closing-logos">
+                <img ngSrc="/assets/images/ESS-Versatz-Ergaenzungs-Logos.jpg" [height]="mm(17)"
+                     [width]="mm(17*(4913/896))" alt="">
+                <img ngSrc="/assets/images/lehrlinge2024.jpg" [height]="mm(17)" [width]="mm(17*(1240/1748))" alt="">
+              </div>
+            </div>
+          </div>
+
+          <div class="footer">
+            <div class="frow frow--first">
+              <span class="fcell">Eisenstecken GmbH/Srl</span>
+              <span class="fcell">Handwerkerzone 1</span>
+              <span class="fcell">T +39 0472 85 52 48</span>
+              <span class="fcell">info&commat;eisenstecken.it</span>
+            </div>
+            <div class="frow frow--second">
+              <span class="fcell"></span>
+              <span class="fcell">39040 Feldthurns/Velturno - Italy</span>
+              <span class="fcell">M +39 328 35 27 802</span>
+              <span class="fcell">www.eisenstecken.it</span>
+            </div>
+          </div>
+
+          <div class="fold-mark"></div>
+        </section>
+
+      </div>
+    </div>
+  }
+</div>
+<mat-dialog-actions>
+  <div fxLayout="row" fxFlexFill fxLayoutAlign="space-between center">
+    <button mat-raised-button color="accent" (click)="onCloseClick()">Schließen</button>
+  </div>
+</mat-dialog-actions>

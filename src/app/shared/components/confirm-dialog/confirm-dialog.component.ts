@@ -12,6 +12,8 @@ import { DefaultFlexDirective } from "ng-flex-layout";
 export interface ConfirmDialogData {
   title: string;
   text: string;
+  confirmText?: string;
+  cancelText?: string;
 }
 
 @Component({
@@ -23,7 +25,6 @@ export interface ConfirmDialogData {
 export class ConfirmDialogComponent {
   dialogRef = inject<MatDialogRef<ConfirmDialogComponent>>(MatDialogRef);
   data = inject<ConfirmDialogData>(MAT_DIALOG_DATA);
-
 
   onNoClick() {
     this.dialogRef.close(false);

@@ -3,7 +3,7 @@
   <p>{{ data.text }}</p>
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Abbrechen</button>
+  <button mat-button (click)="onNoClick()">{{ data.cancelText ?? 'Abbrechen' }}</button>
   <div fxFlex></div>
-  <button mat-button (click)="onYesClick()">Bestätigen</button>
+  <button mat-button (click)="onYesClick()">{{ data.confirmText ?? 'Bestätigen' }}</button>
 </div>

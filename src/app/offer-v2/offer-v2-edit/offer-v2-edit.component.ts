@@ -7,11 +7,12 @@ import {
   DefaultLayoutDirective,
   DefaultLayoutGapDirective
 } from "ng-flex-layout";
-import { MatButton } from "@angular/material/button";
+import { MatButton, MatIconButton } from "@angular/material/button";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   DefaultService,
+  JobSmall,
   OfferElementListElement,
   OfferElementType,
   OfferLibrary,
@@ -19,7 +20,9 @@ import {
   OfferTemplateEntryInput,
   OfferV2,
   OfferV2Service,
-  OfferV2Version
+  OfferV2Version,
+  OfferV2WithVersion,
+  Parameter
 } from "../../../api/openapi";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatDialog } from "@angular/material/dialog";
@@ -52,6 +55,7 @@ import {
   TemplateCreateDialogComponent
 } from "../templates/template-create-dialog/template-create-dialog/template-create-dialog.component";
 import { newOfferEntryFieldGroupFormField } from "./offer-v2-entry-edit/entry-field-edit/entry-field-edit.component";
+import OfferV2PreviewDialogComponent from "./offer-v2-preview-dialog/offer-v2-preview-dialog.component";
 
 type OfferV2Group = {
   name: FormControl<string>;
@@ -70,7 +74,7 @@ type OfferV2Group = {
   payment: FormControl<string>;
   validity: FormControl<string>;
   delivery: FormControl<string>;
-  vatId: FormControl<string>;
+  vatId: FormControl<number>;
   vatName: FormControl<string>;
 }
 
@@ -92,7 +96,7 @@ function newEmptyOfferGroup() {
     payment: new FormControl(""),
     validity: new FormControl(""),
     delivery: new FormControl(""),
-    vatId: new FormControl("-1"),
+    vatId: new FormControl(-1),
     vatName: new FormControl("Bitte wählen")
   });
 }
@@ -115,7 +119,7 @@ function newOfferGroup(data: OfferV2, version?: OfferV2Version) {
     delivery: new FormControl(data.delivery),
     date: new FormControl(data.date),
     number: new FormControl(data.number),
-    vatId: new FormControl(data.vat?.id?.toString(10) ?? "-1"),
+    vatId: new FormControl(data.vat?.id ?? -1),
     vatName: new FormControl(data.vat?.name ?? "Bitte wählen")
   });
 }
@@ -201,7 +205,8 @@ function moveObjectInGroup(group: FormGroup<OfferV2Group>, entry: FormGroup<Offe
     MatDatepickerToggle,
     MatDatepickerInput,
     MatSelect,
-    MatOption
+    MatOption,
+    MatIconButton
   ],
   templateUrl: "./offer-v2-edit.component.html",
   styleUrl: "./offer-v2-edit.component.scss"
@@ -226,6 +231,7 @@ export class OfferV2EditComponent implements OnInit {
   allTemplates: OfferTemplate[] = [];
   lastVersion: OfferV2Version;
   offertext: Offertext[] = [];
+  parameters: Parameter[] = [];
   selectedElements: string[] = [];
   priceAsCurrency: string = "0,00 €";
   priceAsCurrencySconted: string = "0,00 €";
@@ -235,6 +241,7 @@ export class OfferV2EditComponent implements OnInit {
   jobsInput$ = new Subject<string>();
   formula: string = "";
   jobsLoading = false;
+  job: JobSmall | undefined = undefined;
   private waitForChildren: number = 0;
   vats$: Observable<Vat[]>;
   jobs$ = concat(
@@ -255,33 +262,36 @@ export class OfferV2EditComponent implements OnInit {
 
   ngOnInit(): void {
     this.vats$ = this.api.readVatsVatGet();
-    this.offerService.getAllOfferLibrariesWithEntriesOfferV2LibrariesEntriesGet().pipe(take(1)).subscribe((libs) => {
-      this.allLibraries = libs;
-      this.offerService.getOfferElementTypesOfferV2ElementTypesGet().pipe(take(1)).subscribe((elementTypes) => {
-        this.allElementTypes = elementTypes;
-        this.offerService.getOfferElementsOfferV2ElementsGet(0, undefined, 1000).pipe(take(1)).subscribe((elements) => {
-          this.allElements = elements;
-          this.offerService.getOfferTemplatesOfferV2TemplatesGet(0, undefined, 1000).pipe(take(1)).subscribe((templates) => {
-            this.allTemplates = templates;
-            this.route.params.subscribe((params) => {
-              try {
+    this.api.readParametersParameterGet(0, 1000).pipe(take(1)).subscribe(parameters => {
+      this.parameters = parameters;
+      this.offerService.getAllOfferLibrariesWithEntriesOfferV2LibrariesEntriesGet().pipe(take(1)).subscribe((libs) => {
+        this.allLibraries = libs;
+        this.offerService.getOfferElementTypesOfferV2ElementTypesGet().pipe(take(1)).subscribe((elementTypes) => {
+          this.allElementTypes = elementTypes;
+          this.offerService.getOfferElementsOfferV2ElementsGet(0, undefined, 1000).pipe(take(1)).subscribe((elements) => {
+            this.allElements = elements;
+            this.offerService.getOfferTemplatesOfferV2TemplatesGet(0, undefined, 1000).pipe(take(1)).subscribe((templates) => {
+              this.allTemplates = templates;
+              this.route.params.subscribe((params) => {
+                try {
 
-                this.offerV2Id = parseInt(params.id, 10);
-              } catch {
-                // is createMode
-              }
-              try {
-                this.jobId = parseInt(params.job_id, 10);
-              } catch {
-                // no JobID emitted
-              }
-              this.initData(params.method);
+                  this.offerV2Id = parseInt(params.id, 10);
+                } catch {
+                  // is createMode
+                }
+                try {
+                  this.jobId = parseInt(params.job_id, 10);
+                } catch {
+                  // no JobID emitted
+                }
+                this.initData(params.method);
+              });
             });
           });
         });
       });
-    });
 
+    });
 
   }
 
@@ -290,6 +300,7 @@ export class OfferV2EditComponent implements OnInit {
       this.offerService.getOfferV2OfferV2OfferOfferIdGet(this.offerV2Id).pipe(take(1)).subscribe(
         {
           next: data => {
+            this.job = data.job;
             this.offerService.getOfferVersionsOfferV2OfferV2IdVersionsGet(data.id).pipe(take(1)).subscribe({
               next: versions => {
                 this.versions = versions;
@@ -337,7 +348,24 @@ export class OfferV2EditComponent implements OnInit {
         this.jobs$ = this.api.readJobJobJobIdGet(this.jobId).pipe(
           tap(() => this.offerGroup.patchValue({
             jobId: this.jobId
-          })), map(j => [j]));
+          })), map(j => {
+            this.job = {
+              name: j.name,
+              description: j.description,
+              type: j.type,
+              id: j.id,
+              client: j.client,
+              code: j.code,
+              is_main: j.is_main,
+              is_mini: j.is_mini,
+              is_sub: j.is_sub,
+              lock: j.lock,
+              year: j.year,
+              displayable_name: j.displayable_name,
+              responsible: j.responsible
+            };
+            return [j];
+          }));
 
       }
       this.offerGroup.valueChanges.subscribe(() => {
@@ -393,6 +421,31 @@ export class OfferV2EditComponent implements OnInit {
   offerGroupValidator() {
     if (this.offerGroup) {
       evaluateOfferInheritance(this.offerGroup.controls.content, []);
+      if (this.job) {
+        const lang = this.job.client.language.code.toLowerCase();
+        let validity = this.offerGroup.get("validity").value;
+        if (validity === "") {
+          validity = this.parameters.find(par => par.key === `offer_validity_${lang}`)?.value ?? validity;
+        }
+        let inPriceIncluded = this.offerGroup.get("inPriceIncluded").value;
+        if (inPriceIncluded === "") {
+          inPriceIncluded = this.parameters.find(par => par.key === `offer_in_price_included_${lang}`)?.value ?? inPriceIncluded;
+        }
+        let delivery = this.offerGroup.get("delivery").value;
+        if (delivery === "") {
+          delivery = this.parameters.find(par => par.key === `offer_delivery_${lang}`)?.value ?? delivery;
+        }
+        let payment = this.offerGroup.get("payment").value;
+        if (payment === "") {
+          payment = this.parameters.find(par => par.key === `offer_payment_${lang}`)?.value ?? payment;
+        }
+        this.offerGroup.patchValue({
+          payment,
+          delivery,
+          inPriceIncluded,
+          validity
+        }, { emitEvent: false });
+      }
       let priceCalculated = 0;
       let sums: string[] = [];
       let offertext: Offertext[] = [];
@@ -449,7 +502,7 @@ export class OfferV2EditComponent implements OnInit {
       return;
     }
     if (this.offerV2Id) {
-      const vatId = parseInt(this.offerGroup.get("vatId").value, 10);
+      const vatId = this.offerGroup.get("vatId").value;
       if (this.timeout) {
         clearTimeout(this.timeout);
       }
@@ -567,7 +620,7 @@ export class OfferV2EditComponent implements OnInit {
     }
 
     if (this.offerGroup && this.offerGroup.valid && this.unsavedChanges && !this.isCustomVersion) {
-      const vatId = parseInt(this.offerGroup.get("vatId").value, 10);
+      const vatId = this.offerGroup.get("vatId").value;
       this.savingSubject.next(true);
       this.offerService.patchOfferV2OfferV2OfferOfferIdPost(this.offerV2Id, false, {
         name: this.offerGroup.get("name").value,
@@ -742,6 +795,47 @@ export class OfferV2EditComponent implements OnInit {
         this.router.navigateByUrl("/offer_v2/templates").then();
       }
     });
+  }
+
+  protected openPreview() {
+    if (this.job) {
+      this.vats$.pipe(take(1)).subscribe(vats => {
+        const vatId = this.offerGroup.get("vatId").value;
+        const vat = vats.find(v => v.id === vatId) ?? vats[0];
+        const offer: OfferV2WithVersion = {
+          name: this.offerGroup.get("name").value,
+          date: this.offerGroup.get("date").value,
+          number: this.offerGroup.get("number").value,
+          delivery: this.offerGroup.get("delivery").value,
+          inPriceIncluded: this.offerGroup.get("inPriceIncluded").value,
+          materialDescription: this.offerGroup.get("materialDescription").value,
+          materialDescriptionTitle: this.offerGroup.get("materialDescriptionTitle").value,
+          validity: this.offerGroup.get("validity").value,
+          payment: this.offerGroup.get("payment").value,
+          lastChanged: new Date().toISOString(),
+          globalAddPercent: this.offerGroup.get("globalAddPercent").value,
+          globalPriceDiff: this.offerGroup.get("globalPriceDiff").value,
+          globalSubPercent: this.offerGroup.get("globalSubPercent").value,
+          hourlyRate: 1,
+          hoursSconto: 1,
+          id: 1,
+          job: this.job,
+          pdf: "",
+          price: -1,
+          vat,
+          content: this.offerGroup.controls.content.controls.map(grp => mapOfferEntryToInput(grp)).filter(inp => !!inp)
+        };
+        const dialogRef = this.dialog.open(OfferV2PreviewDialogComponent, {
+          width: "1100px",
+          data: {
+            offer, parameters: this.parameters
+          }
+        });
+        dialogRef.afterClosed().subscribe(() => {
+          // nothing
+        });
+      });
+    }
   }
 
   protected readonly dayjs = dayjs;

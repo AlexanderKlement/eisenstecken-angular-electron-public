@@ -1,0 +1,522 @@
+$scale: 4.7619; // px per mm
+$pt: $scale * 0.352778; // px per pt (1pt = 0.352778mm)
+
+@function mm($v) {
+  @return $v * $scale * 1px;
+}
+
+@function pt($v) {
+  @return $v * $pt * 1px;
+}
+
+$grey: rgb(52, 51, 51); // color_grey
+$yellow: rgb(253, 196, 0); // color_yellow
+$light-grey-box: rgb(243, 243, 244); // color_light_grey_box
+$dark-grey-box: rgb(225, 226, 227); // color_dark_grey_box
+$grey-line: rgb(25, 25, 25); // color_grey_line
+$page-bg: #d8d8da;
+
+$fs-regular: pt(10); // FONT_SIZE
+$fs-title: pt(12.2); // title drawString uses 12.2
+$fs-small: pt(8); // FONT_SIZE_SMALL
+$fs-header: pt(6.5); // FONT_SIZE_HEADER
+$fs-footer: pt(9);
+
+$offer-cols: mm(12) mm(87) mm(19) mm(25) mm(26);
+
+
+@font-face {
+  font-family: "Roboto";
+  src: url("~assets/fonts/Roboto-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url("~assets/fonts/Roboto-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url("~assets/fonts/Roboto-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "RobotoLight";
+  src: url("~assets/fonts/Roboto-Light.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "RobotoLight";
+  src: url("~assets/fonts/Roboto-LightItalic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+}
+
+// =============================================================================
+//  Viewer chrome
+// =============================================================================
+* {
+  box-sizing: border-box;
+}
+
+.viewer-container {
+  margin: 0;
+  background: $page-bg;
+  font-family: "RobotoLight", "Roboto", Arial, sans-serif;
+  color: $grey;
+}
+
+.viewer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: mm(8);
+  padding: mm(8) 0 mm(16);
+}
+
+// =============================================================================
+//  The page (A4)
+// =============================================================================
+.page {
+  position: relative;
+  width: mm(210);
+  height: mm(297);
+  background: #fff;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, .28);
+  overflow: hidden;
+  font-size: $fs-regular;
+  line-height: 1.32;
+
+
+  .banner {
+    position: absolute;
+    top: mm(15);
+    left: mm(24);
+    width: mm(171);
+    aspect-ratio: 8079/1002;
+
+    img {
+      display: block;
+      object-fit: contain;
+      object-position: left bottom;
+    }
+  }
+
+  .side-text {
+    position: absolute;
+    left: mm(8);
+    bottom: mm(17);
+    transform-origin: left bottom;
+    transform: rotate(-90deg);
+    white-space: nowrap;
+    font-family: "RobotoLight", serif;
+    font-size: $fs-header;
+    color: $grey;
+    letter-spacing: .1px;
+
+    .sep {
+      padding: 0 mm(2.2);
+    }
+  }
+
+
+  .content {
+    position: absolute;
+    left: mm(15);
+    width: mm(180);
+
+    .title-row {
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding-right: mm(20);
+
+      .title {
+        font-family: "Roboto", serif;
+        font-weight: 700;
+        font-size: $fs-title;
+        color: $grey;
+      }
+
+      .destination {
+        font-family: "RobotoLight", serif;
+        font-size: $fs-regular;
+        line-height: 1.5;
+        color: $grey;
+
+        div {
+          white-space: nowrap;
+        }
+
+        .place-date {
+          margin-top: mm(1)
+        }
+      }
+    }
+
+    .offer-intro {
+      font-family: "RobotoLight", serif;
+      position: relative;
+      font-size: $fs-regular;
+      color: $grey;
+      white-space: pre-line;
+      margin-top: mm(8.5);
+      line-height: 1.2;
+      max-width: mm(180);
+    }
+
+    .salutation {
+      margin-top: mm(8);
+      position: relative;
+
+      .sal-greeting {
+        font-family: "RobotoLight", serif;
+        font-size: $fs-regular;
+      }
+
+      .sal-name {
+        font-family: "Roboto", serif;
+        font-weight: 700;
+        font-size: $fs-regular;
+      }
+
+      .sal-role {
+        font-family: "Roboto", serif;
+        font-weight: 400;
+        color: $yellow;
+        font-size: $fs-regular;
+      }
+
+      .sal-contact {
+        font-family: "RobotoLight", serif;
+        font-size: $fs-regular;
+        margin-top: mm(6);
+      }
+    }
+
+    .closing-logos {
+      margin-top: mm(8);
+      display: flex;
+      align-items: flex-end;
+      gap: mm(6);
+
+      img {
+        display: block;
+      }
+    }
+
+    .header-args {
+      margin-top: mm(5);
+      position: relative;
+
+      .harg {
+        position: absolute;
+        left: 0;
+
+        .label {
+          font-family: "RobotoLight", serif;
+          font-size: $fs-header;
+          color: $grey;
+        }
+
+        .value {
+          font-family: "Roboto", serif;
+          font-size: $fs-footer;
+          color: $grey;
+          margin-top: mm(1);
+          white-space: nowrap;
+        }
+      }
+
+      .harg:nth-child(2) {
+        left: mm(25);
+      }
+
+      .harg:nth-child(3) {
+        left: mm(50);
+      }
+
+      .harg:nth-child(4) {
+        left: mm(80);
+      }
+
+      .harg:nth-child(5) {
+        left: mm(100);
+      }
+
+      .harg:nth-child(6) {
+        left: mm(150);
+      }
+    }
+
+    .material-description {
+      margin-top: mm(30);
+
+      .md-title {
+        font-family: "Roboto", serif;
+        font-weight: 700;
+        font-size: $fs-regular;
+        padding-bottom: mm(1);
+        margin-bottom: mm(2);
+        border-bottom: solid 2px var(--primary-color);
+      }
+
+      .md-text {
+        font-family: "RobotoLight", serif;
+        font-size: $fs-regular;
+        white-space: pre-line;
+      }
+    }
+  }
+
+  &.page--cover .content {
+    top: mm(58);
+  }
+
+  // first-page frame
+  &.page--body .content {
+    top: mm(38);
+  }
+
+  .footer {
+    position: absolute;
+    left: mm(15);
+    right: 0;
+    bottom: mm(15);
+    font-family: "RobotoLight", serif;
+    font-size: $fs-footer;
+    color: $grey;
+
+    .frow {
+      position: relative;
+      height: mm(4.23);
+    }
+
+    .fcell {
+      position: absolute;
+      white-space: nowrap;
+      left: 0;
+
+      &:nth-child(2) {
+        left: mm(44);
+      }
+
+      &:nth-child(3) {
+        left: mm(102);
+      }
+
+      &:nth-child(4) {
+        left: mm(148);
+      }
+    }
+
+    .frow--second .fcell:nth-child(4) {
+      font-family: "Roboto", serif;
+      font-weight: 700;
+    }
+  }
+
+  .fold-mark {
+    position: absolute;
+    left: 0;
+    top: mm(297 - 197);
+    width: mm(3);
+    border-top: 1px solid $grey-line;
+  }
+}
+
+
+// Customer signature area (right column, last page)
+.customer-signature {
+  position: absolute;
+  top: mm(2);
+  left: mm(96);
+  width: mm(70);
+  font-family: "RobotoLight", serif;
+  font-size: $fs-regular;
+
+  .cs-title {
+    margin-bottom: mm(10);
+  }
+
+  .cs-line {
+    display: flex;
+    gap: mm(8);
+    margin-bottom: mm(12);
+
+    .field {
+      .rule {
+        border-bottom: .15mm solid $grey-line;
+        height: mm(8);
+      }
+
+      .lbl {
+        font-size: pt(7);
+        margin-top: mm(1);
+      }
+    }
+
+    .field--date {
+      width: mm(15);
+    }
+
+    .field--place {
+      flex: 1;
+    }
+  }
+}
+
+.offer-table {
+  margin-top: mm(10);
+  width: 100%;
+
+  .row {
+    display: grid;
+    grid-template-columns: $offer-cols;
+    column-gap: 0;
+    align-items: start;
+    padding: pt(1.5) 0;
+  }
+
+  // header row of the table (column captions), yellow underline below
+  .row--head {
+    border-bottom: .7pt solid $yellow;
+    padding-bottom: pt(4);
+
+    .cell {
+      font-family: "RobotoLight", serif;
+      font-size: $fs-header;
+      line-height: 1.05;
+    }
+  }
+
+  // spacer row that follows the header (repeated row 1 in ReportLab)
+  .row--spacer {
+    height: pt(8);
+    padding: 0;
+  }
+
+  // bold section header rows (position x.0)
+  .row--section .cell {
+    font-family: "Roboto", serif;
+    font-weight: 700;
+  }
+
+  // regular item rows
+  .cell {
+    font-family: "RobotoLight", serif;
+    font-size: $fs-regular;
+    color: $grey;
+    padding-right: mm(2);
+    white-space: pre-line;
+  }
+
+  .cell--num,
+  .cell--qty,
+  .cell--single,
+  .cell--total {
+    text-align: right;
+  }
+
+  .cell--num {
+    text-align: left;
+  }
+
+  .cell--desc {
+    text-align: left;
+  }
+
+  .row--section {
+    margin-top: mm(3);
+  }
+}
+
+// =============================================================================
+//  Bottom price box  (TABLE_STYLE_BOTTOM)
+// =============================================================================
+// alternative column widths: 35, 62, 36, 36 mm
+$bottom-cols: mm(35) mm(62) mm(36) mm(36);
+
+.price-box {
+  margin-top: mm(10);
+
+  .pb-head,
+  .pb-values {
+    display: grid;
+    grid-template-columns: $bottom-cols;
+  }
+
+  .pb-head {
+    border-bottom: .8pt solid $yellow;
+    padding-bottom: mm(2);
+
+    .cell {
+      font-family: "RobotoLight", serif;
+      font-size: $fs-header;
+      line-height: 1.1;
+
+      &.cell--last {
+        font-family: "Roboto", serif;
+        font-weight: 700;
+        text-align: right;
+      }
+
+      &.right {
+        text-align: right;
+      }
+    }
+  }
+
+  .pb-values {
+    .cell {
+      padding: mm(3) mm(2);
+      font-family: "RobotoLight", serif;
+      font-size: $fs-regular;
+      background: $light-grey-box;
+
+      &.cell--bold {
+        font-family: "Roboto", serif;
+        font-weight: 700;
+      }
+
+      &.right {
+        text-align: right;
+      }
+
+      &.cell--last {
+        background: $dark-grey-box;
+        font-family: "Roboto", serif;
+        font-weight: 700;
+        text-align: right;
+      }
+    }
+  }
+}
+
+// =============================================================================
+//  Includes / excludes list
+// =============================================================================
+.includes {
+  margin-top: mm(20);
+
+  p {
+    margin: 0 0 mm(1.5);
+    font-family: "RobotoLight", serif;
+    font-size: $fs-regular;
+  }
+
+  .gap {
+    height: mm(2);
+  }
+}
+

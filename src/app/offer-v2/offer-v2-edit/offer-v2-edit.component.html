@@ -116,6 +116,9 @@
               <div class="preview">
                 <div class="preview-header">
                   <strong>Vorschau</strong>
+                  <button matIconButton (click)="openPreview()" [disabled]="!job">
+                    <mat-icon>preview</mat-icon>
+                  </button>
                 </div>
                 <div class="preview-content" [class.no-preview]="offertext.length === 0">
                   @if (offertext.length === 0) {
@@ -265,7 +268,6 @@
           <mat-form-field appearance="fill">
             <mat-label>Mehrwertsteuer</mat-label>
             <mat-select formControlName="vatId">
-              <mat-option [value]="offerGroup.get('vatId').value">{{ offerGroup.get('vatName').value }}</mat-option>
               @if (vats$|async; as vats) {
                 @for (vat of vats; track vat.id) {
                   <mat-option [value]="vat.id">{{ vat.name }}</mat-option>
