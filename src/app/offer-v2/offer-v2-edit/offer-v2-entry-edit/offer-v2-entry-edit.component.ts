@@ -43,6 +43,7 @@ import { randomUUID } from "../../offer.util";
 import { ConfirmDialogComponent } from "../../../shared/components/confirm-dialog/confirm-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { adjustInheritance, autofillInheritance } from "../../offer-inheritance-util";
+import { createOffertext } from "../../offer-offertext-utils";
 
 export declare type OfferEntryGroup = {
   alternative: FormControl<boolean>;
@@ -65,10 +66,11 @@ export declare type OfferEntryGroup = {
   priceFormula: FormControl<string>;
 }
 
-export function mapOfferEntryToInput(grp: FormGroup<OfferEntryGroup>): OfferV2EntryInput | null {
+export function mapOfferEntryToInput(grp: FormGroup<OfferEntryGroup>, depth: number): OfferV2EntryInput | null {
   if (grp.get("elementType").value == "") {
     return null;
   }
+  priceEvaluationElementGroup(grp, depth);
   return {
     alternative: grp.get("alternative").value,
     id: grp.get("id").value,
@@ -76,19 +78,21 @@ export function mapOfferEntryToInput(grp: FormGroup<OfferEntryGroup>): OfferV2En
     elementId: grp.get("elementId").value,
     elementType: grp.get("elementType").value,
     name: grp.get("name").value,
-    children: grp.controls.children.controls.map(mapOfferEntryToInput).filter(inp => !!inp),
+    children: grp.controls.children.controls.map((elem) => mapOfferEntryToInput(elem, depth + 1)).filter(inp => !!inp),
     offertext: grp.get("offertext").value,
     price: grp.get("price").value,
     amount: grp.get("amount").value,
     fields: grp.controls.fields.controls.map(mapOfferEntryFieldToInput),
     priceSubPercent: grp.get("priceSubPercent").value,
     priceAddPercent: grp.get("priceAddPercent").value,
-    visibleOffer: grp.get("visibleOffer").value
+    visibleOffer: grp.get("visibleOffer").value,
+    singlePriceEvaluated: grp.get("priceCalculated").value / grp.get("amount").value,
+    offertextEvaluated: depth === 0 || depth === 1 ? createOffertext(grp) : []
   };
 }
 
 
-export function newEmptyOfferEntryGroup(globalAddPercent = 0) {
+export function newEmptyOfferEntryGroup(globalAddPercent = 0, depth: number) {
   const grp = new FormGroup<OfferEntryGroup>({
     name: new FormControl(""),
     id: new FormControl(randomUUID()),
@@ -110,18 +114,18 @@ export function newEmptyOfferEntryGroup(globalAddPercent = 0) {
     priceFormula: new FormControl("")
   });
   grp.valueChanges.subscribe(() => {
-    priceEvaluationElementGroup(grp);
+    priceEvaluationElementGroup(grp, depth);
   });
   return grp;
 }
 
-export function mapEntryOfferEntryGroup(entry: OfferV2EntryOutput, globalAddPercent = 0, newId = false): FormGroup<OfferEntryGroup> {
+export function mapEntryOfferEntryGroup(entry: OfferV2EntryOutput, depth: number, globalAddPercent = 0, newId = false): FormGroup<OfferEntryGroup> {
   const grp = new FormGroup<OfferEntryGroup>({
     name: new FormControl(entry.name),
     id: new FormControl(newId ? randomUUID() : entry.id),
     elementId: new FormControl(entry.elementId),
     elementType: new FormControl(entry.elementType),
-    children: new FormArray(entry.children.map(c => mapEntryOfferEntryGroup(c, globalAddPercent, newId))),
+    children: new FormArray(entry.children.map(c => mapEntryOfferEntryGroup(c, depth + 1, globalAddPercent, newId))),
     amount: new FormControl(entry.amount),
     visibleOffer: new FormControl(entry.visibleOffer),
     alternative: new FormControl(entry.alternative),
@@ -137,20 +141,11 @@ export function mapEntryOfferEntryGroup(entry: OfferV2EntryOutput, globalAddPerc
     priceFormula: new FormControl("")
   });
   grp.valueChanges.subscribe(() => {
-    priceEvaluationElementGroup(grp);
+    priceEvaluationElementGroup(grp, depth);
   });
   return grp;
 }
 
-export function mapFromTemplateEntry(elem: OfferTemplateEntryInput, grp: FormGroup<OfferEntryGroup>, globalAddPercent: number, allElements: OfferElementListElement[]) {
-  const element = allElements.find(e => e.id === elem.elementId);
-
-  grp.controls.fields.clear({ emitEvent: false });
-  /* elem.element.fields.forEach((field) => {
-     grp.controls.fields.push(newOfferEntryFieldGroupFormField(field), { emitEvent: false });
-   }); */
-
-}
 
 @Component({
   selector: "app-offer-v2-entry-edit",
@@ -216,12 +211,12 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
 
     if (this.entryGroup) {
       if (this.entryGroup.controls.children.length === 0) {
-        priceEvaluationElementGroup(this.entryGroup);
+        priceEvaluationElementGroup(this.entryGroup, this.depth);
         this.priceEvaluated.emit();
       } else {
         this.waitForChildren = this.entryGroup.controls.children.length;
       }
-      if (this.scontoResettable) {
+      if (this.scontoResettable || this.entryGroup.get("priceSubPercent").value !== 0) {
         this.percent = true;
       }
     }
@@ -263,7 +258,7 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
   childrenEvaluated() {
     this.waitForChildren--;
     if (this.waitForChildren <= 0) {
-      priceEvaluationElementGroup(this.entryGroup);
+      priceEvaluationElementGroup(this.entryGroup, this.depth);
       this.priceEvaluated.emit();
     }
   }
@@ -316,11 +311,11 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
   }
 
   onAddChild() {
-    this.entryGroup.controls.children.push(newEmptyOfferEntryGroup(this.entryGroup.get("globalAddPercent").value));
+    this.entryGroup.controls.children.push(newEmptyOfferEntryGroup(this.entryGroup.get("globalAddPercent").value, this.depth + 1));
   }
 
   onAddTemplateNeighbourRecursive(index: number, parentArray: FormArray<FormGroup<OfferEntryGroup>>, entry: OfferTemplateEntryInput, thisDepth: number) {
-    const newGrp = newEmptyOfferEntryGroup(this.entryGroup.get("globalAddPercent").value);
+    const newGrp = newEmptyOfferEntryGroup(this.entryGroup.get("globalAddPercent").value, this.depth);
     this.offerService.getOfferElementOfferV2ElementElementIdGet(entry.elementId).pipe(take(1)).subscribe((elem) => {
       newGrp.patchValue({
         elementId: entry.elementId,
@@ -344,12 +339,12 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
     if (template) {
       this.onAddTemplateNeighbourRecursive(index, this.entryGroup.controls.children, template, this.depth + 1);
     } else {
-      this.entryGroup.controls.children.insert(index + 1, newEmptyOfferEntryGroup(this.entryGroup.get("globalAddPercent").value));
+      this.entryGroup.controls.children.insert(index + 1, newEmptyOfferEntryGroup(this.entryGroup.get("globalAddPercent").value, this.depth + 1));
     }
   }
 
   onCopyElemHere(index: number) {
-    this.entryGroup.controls.children.insert(index + 1, mapEntryOfferEntryGroup(mapOfferEntryToInput(this.entryGroup.controls.children.at(index)), this.entryGroup.get("globalAddPercent").value, true));
+    this.entryGroup.controls.children.insert(index + 1, mapEntryOfferEntryGroup(mapOfferEntryToInput(this.entryGroup.controls.children.at(index), this.depth + 1), this.depth + 1, this.entryGroup.get("globalAddPercent").value, true));
   }
 
   onDeleteElemHere(index: number) {

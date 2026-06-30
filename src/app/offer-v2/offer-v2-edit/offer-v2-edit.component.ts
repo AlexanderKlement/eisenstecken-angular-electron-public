@@ -5,7 +5,8 @@ import {
   DefaultFlexDirective,
   DefaultLayoutAlignDirective,
   DefaultLayoutDirective,
-  DefaultLayoutGapDirective
+  DefaultLayoutGapDirective,
+  FlexLayoutModule
 } from "ng-flex-layout";
 import { MatButton, MatIconButton } from "@angular/material/button";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
@@ -48,7 +49,7 @@ import { MatTab, MatTabGroup } from "@angular/material/tabs";
 import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular/material/datepicker";
 import { MatOption, MatSelect } from "@angular/material/select";
 import { Vat } from "../../model/vat";
-import { selectRequires } from "../../shared/custom-validators";
+import { getNumericVal, selectRequires } from "../../shared/custom-validators";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { autofillInheritance, evaluateOfferInheritance } from "../offer-inheritance-util";
 import {
@@ -110,7 +111,7 @@ function newOfferGroup(data: OfferV2, version?: OfferV2Version) {
     hoursSconto: new FormControl(data.hoursSconto),
     hourlyRate: new FormControl(data.hourlyRate),
     jobId: new FormControl(data.job.id, selectRequires),
-    content: new FormArray(version ? version.content.map(c => mapEntryOfferEntryGroup(c, data.globalAddPercent)) : []),
+    content: new FormArray(version ? version.content.map(c => mapEntryOfferEntryGroup(c, 0, data.globalAddPercent)) : []),
     validity: new FormControl(data.validity),
     inPriceIncluded: new FormControl(data.inPriceIncluded),
     materialDescriptionTitle: new FormControl(data.materialDescriptionTitle),
@@ -206,7 +207,8 @@ function moveObjectInGroup(group: FormGroup<OfferV2Group>, entry: FormGroup<Offe
     MatDatepickerInput,
     MatSelect,
     MatOption,
-    MatIconButton
+    MatIconButton,
+    FlexLayoutModule
   ],
   templateUrl: "./offer-v2-edit.component.html",
   styleUrl: "./offer-v2-edit.component.scss"
@@ -376,8 +378,8 @@ export class OfferV2EditComponent implements OnInit {
   }
 
   patchGroupGlobalAdd(globalAdd: number, group: FormGroup<OfferEntryGroup>) {
-    const grpGlobal = group.get("globalAddPercent").value;
-    const grpAdd = group.get("priceAddPercent").value;
+    const grpGlobal = getNumericVal(group.get("globalAddPercent"));
+    const grpAdd = getNumericVal(group.get("priceAddPercent"));
     if (grpAdd === grpGlobal) {
       group.patchValue({ priceAddPercent: globalAdd, globalAddPercent: globalAdd });
     } else {
@@ -387,7 +389,7 @@ export class OfferV2EditComponent implements OnInit {
   }
 
   changeGlobalAdd() {
-    const globalAdd = this.offerGroup.get("globalAddPercent").value;
+    const globalAdd = getNumericVal(this.offerGroup.get("globalAddPercent"));
     this.offerGroup.controls.content.controls.forEach(grp => this.patchGroupGlobalAdd(globalAdd, grp));
   }
 
@@ -462,17 +464,17 @@ export class OfferV2EditComponent implements OnInit {
         }
         sums.push(`${grpPrice.toFixed(2)}(${entry.get("name").value})`);
       }
-      const { price, formula } = this.applySconto(priceCalculated, sums.join(" + "));
       this.priceAsCurrency = formatCurrency(priceCalculated, "de-DE", "EUR");
-      const hoursSconto = price * (this.offerGroup.get("hoursSconto").value / 100);
-      const hourlySconted = price - hoursSconto;
+      const hoursSconto = priceCalculated * (getNumericVal(this.offerGroup.get("hoursSconto")) / 100);
+      const hourlySconted = priceCalculated - hoursSconto;
       this.priceAsCurrencyHourSconted = formatCurrency(hourlySconted, "de-DE", "EUR");
-      const hourlyRate = parseFloat(this.offerGroup.get("hourlyRate").value.toString(10));
+      const hourlyRate = getNumericVal(this.offerGroup.get("hourlyRate"));
       if (hourlyRate !== 0 && !Number.isNaN(hourlyRate)) {
         this.hours = hourlySconted / hourlyRate;
       } else {
         this.hours = 0;
       }
+      const { price, formula } = this.applySconto(priceCalculated, sums.join(" + "));
       this.priceAsFloat = price;
       this.priceAsCurrencySconted = formatCurrency(price, "de-DE", "EUR");
       this.formula = formula;
@@ -508,18 +510,19 @@ export class OfferV2EditComponent implements OnInit {
       }
       this.offerService.patchOfferV2OfferV2OfferOfferIdPost(this.offerV2Id, true, {
         name: this.offerGroup.get("name").value,
-        globalAddPercent: this.offerGroup.get("globalAddPercent").value ?? 0,
-        globalPriceDiff: this.offerGroup.get("globalPriceDiff").value ?? 0,
-        globalSubPercent: this.offerGroup.get("globalSubPercent").value ?? 0,
-        hoursSconto: this.offerGroup.get("hoursSconto").value ?? 0,
-        hourlyRate: this.offerGroup.get("hourlyRate").value ?? 0,
-        content: this.offerGroup.controls.content.controls.map(mapOfferEntryToInput).filter(inp => !!inp),
+
+        globalAddPercent: getNumericVal(this.offerGroup.get("globalAddPercent")),
+        globalPriceDiff: getNumericVal(this.offerGroup.get("globalPriceDiff")),
+        globalSubPercent: getNumericVal(this.offerGroup.get("globalSubPercent")),
+        hoursSconto: getNumericVal(this.offerGroup.get("hoursSconto")),
+        hourlyRate: getNumericVal(this.offerGroup.get("hourlyRate")),
+        content: this.offerGroup.controls.content.controls.map(e => mapOfferEntryToInput(e, 0)).filter(inp => !!inp),
         versionName: this.isCustomVersion ? `Wiederherstellung - ${this.lastVersion.name}` : `Speicherung - ${dayjs().format("DD.MM.YYYY HH:mm")}`,
         delivery: this.offerGroup.get("delivery").value,
         inPriceIncluded: this.offerGroup.get("inPriceIncluded").value,
         materialDescription: this.offerGroup.get("materialDescription").value,
         materialDescriptionTitle: this.offerGroup.get("materialDescriptionTitle").value,
-        number: this.offerGroup.get("number").value,
+        number: getNumericVal(this.offerGroup.get("number")),
         payment: this.offerGroup.get("payment").value,
         validity: this.offerGroup.get("validity").value,
         vatId,
@@ -542,7 +545,7 @@ export class OfferV2EditComponent implements OnInit {
   }
 
   onAddTemplateContentRecursive(index: number, parentArray: FormArray<FormGroup<OfferEntryGroup>>, entry: OfferTemplateEntryInput, depth: number) {
-    const newGrp = newEmptyOfferEntryGroup(this.offerGroup.get("globalAddPercent").value);
+    const newGrp = newEmptyOfferEntryGroup(getNumericVal(this.offerGroup.get("globalAddPercent")), depth);
     this.offerService.getOfferElementOfferV2ElementElementIdGet(entry.elementId).pipe(take(1)).subscribe((elem) => {
       newGrp.patchValue({
         elementId: entry.elementId,
@@ -566,12 +569,12 @@ export class OfferV2EditComponent implements OnInit {
     if (template) {
       this.onAddTemplateContentRecursive(index + 1, this.offerGroup.controls.content, template, 0);
     } else {
-      this.offerGroup.controls.content.insert(index + 1, newEmptyOfferEntryGroup(this.offerGroup.get("globalAddPercent").value));
+      this.offerGroup.controls.content.insert(index + 1, newEmptyOfferEntryGroup(getNumericVal(this.offerGroup.get("globalAddPercent")), 0));
     }
   }
 
   onCopyContent(index: number) {
-    this.offerGroup.controls.content.insert(index + 1, mapEntryOfferEntryGroup(mapOfferEntryToInput(this.offerGroup.controls.content.at(index)), this.offerGroup.get("globalAddPercent").value, true));
+    this.offerGroup.controls.content.insert(index + 1, mapEntryOfferEntryGroup(mapOfferEntryToInput(this.offerGroup.controls.content.at(index), 0), 0, getNumericVal(this.offerGroup.get("globalAddPercent")), true));
   }
 
   onDeleteContent(index: number) {
@@ -624,18 +627,18 @@ export class OfferV2EditComponent implements OnInit {
       this.savingSubject.next(true);
       this.offerService.patchOfferV2OfferV2OfferOfferIdPost(this.offerV2Id, false, {
         name: this.offerGroup.get("name").value,
-        globalAddPercent: this.offerGroup.get("globalAddPercent").value ?? 0,
-        globalPriceDiff: this.offerGroup.get("globalPriceDiff").value ?? 0,
-        globalSubPercent: this.offerGroup.get("globalSubPercent").value ?? 0,
-        hoursSconto: this.offerGroup.get("hoursSconto").value ?? 0,
-        hourlyRate: this.offerGroup.get("hourlyRate").value ?? 0,
-        content: this.offerGroup.controls.content.controls.map(mapOfferEntryToInput).filter(inp => !!inp),
+        globalAddPercent: getNumericVal(this.offerGroup.get("globalAddPercent")),
+        globalPriceDiff: getNumericVal(this.offerGroup.get("globalPriceDiff")),
+        globalSubPercent: getNumericVal(this.offerGroup.get("globalSubPercent")),
+        hoursSconto: getNumericVal(this.offerGroup.get("hoursSconto")),
+        hourlyRate: getNumericVal(this.offerGroup.get("hourlyRate")),
+        content: this.offerGroup.controls.content.controls.map(e => mapOfferEntryToInput(e, 0)).filter(inp => !!inp),
         versionName: this.lastVersion?.name ?? `Speicherung - ${dayjs().format("DD.MM.YYYY HH:mm")}`,
         delivery: this.offerGroup.get("delivery").value,
         inPriceIncluded: this.offerGroup.get("inPriceIncluded").value,
         materialDescription: this.offerGroup.get("materialDescription").value,
         materialDescriptionTitle: this.offerGroup.get("materialDescriptionTitle").value,
-        number: this.offerGroup.get("number").value,
+        number: getNumericVal(this.offerGroup.get("number")),
         payment: this.offerGroup.get("payment").value,
         validity: this.offerGroup.get("validity").value,
         vatId,
@@ -682,7 +685,7 @@ export class OfferV2EditComponent implements OnInit {
     this.isCustomVersion = true;
     this.historyDialogOpen = false;
     this.subTitle = version.name;
-    this.offerGroup.controls.content = new FormArray(version.content.map((c) => mapEntryOfferEntryGroup(c, this.offerGroup.get("globalAddPercent").value)));
+    this.offerGroup.controls.content = new FormArray(version.content.map((c) => mapEntryOfferEntryGroup(c, 0, getNumericVal(this.offerGroup.get("globalAddPercent")))));
   }
 
   protected onBackToOriginal() {
@@ -690,7 +693,7 @@ export class OfferV2EditComponent implements OnInit {
       return (new Date(b.timestamp)).getTime() - (new Date(a.timestamp)).getTime();
     })[0] : undefined;
     this.timeout = setTimeout(this.autosave.bind(this), 10000);
-    this.offerGroup.controls.content = new FormArray(this.lastVersion.content.map(c => mapEntryOfferEntryGroup(c, this.offerGroup.get("globalAddPercent").value)));
+    this.offerGroup.controls.content = new FormArray(this.lastVersion.content.map(c => mapEntryOfferEntryGroup(c, 0, getNumericVal(this.offerGroup.get("globalAddPercent")))));
     this.isCustomVersion = false;
     this.subTitle = "Angebot bearbeiten";
     if (this.timeout) {
@@ -813,9 +816,9 @@ export class OfferV2EditComponent implements OnInit {
           validity: this.offerGroup.get("validity").value,
           payment: this.offerGroup.get("payment").value,
           lastChanged: new Date().toISOString(),
-          globalAddPercent: this.offerGroup.get("globalAddPercent").value,
-          globalPriceDiff: this.offerGroup.get("globalPriceDiff").value,
-          globalSubPercent: this.offerGroup.get("globalSubPercent").value,
+          globalAddPercent: getNumericVal(this.offerGroup.get("globalAddPercent")),
+          globalPriceDiff: getNumericVal(this.offerGroup.get("globalPriceDiff")),
+          globalSubPercent: getNumericVal(this.offerGroup.get("globalSubPercent")),
           hourlyRate: 1,
           hoursSconto: 1,
           id: 1,
@@ -823,7 +826,7 @@ export class OfferV2EditComponent implements OnInit {
           pdf: "",
           price: -1,
           vat,
-          content: this.offerGroup.controls.content.controls.map(grp => mapOfferEntryToInput(grp)).filter(inp => !!inp)
+          content: this.offerGroup.controls.content.controls.map(grp => mapOfferEntryToInput(grp, 0)).filter(inp => !!inp)
         };
         const dialogRef = this.dialog.open(OfferV2PreviewDialogComponent, {
           width: "1100px",

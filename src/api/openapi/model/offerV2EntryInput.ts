@@ -21,9 +21,11 @@ export interface OfferV2EntryInput {
     id: string;
     name: string;
     offertext: string;
+    offertextEvaluated?: Array<string>;
     price: string;
     priceAddPercent?: number | null;
     priceSubPercent?: number | null;
+    singlePriceEvaluated: number;
     visibleOffer?: boolean;
 }
 

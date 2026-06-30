@@ -68,7 +68,7 @@ function createNumericFormulaCont(formula: string, parsedFields: ParsedField[]):
   return expression;
 }
 
-function createNumericFormula(formula: string, grp: FormGroup<OfferEntryGroup>): string {
+function createNumericFormula(formula: string, grp: FormGroup<OfferEntryGroup>, depth: number): string {
   const parsedFields = grp.controls.fields.controls.map<ParsedField>(group => {
     return {
       label: group.get("label").value.replace(/\(.+\)/g, "").trim(),
@@ -79,7 +79,7 @@ function createNumericFormula(formula: string, grp: FormGroup<OfferEntryGroup>):
       field: group
     };
   });
-  const { price } = priceEvaluationChildren(grp);
+  const { price } = priceEvaluationChildren(grp, depth);
   parsedFields.push({
     label: "children",
     value: price,
@@ -114,13 +114,13 @@ function runNumericFormula(formula: string): CalculationResult {
   }
 }
 
-function evaluateCalculation(formula: string, grp: FormGroup<OfferEntryGroup>): CalculationResult {
-  const evaluatedFormula = createNumericFormula(formula, grp);
+function evaluateCalculation(formula: string, grp: FormGroup<OfferEntryGroup>, depth: number): CalculationResult {
+  const evaluatedFormula = createNumericFormula(formula, grp, depth);
   return runNumericFormula(evaluatedFormula);
 }
 
 
-function applyScontoAndAmount(price: number, formula: string, grp: FormGroup<OfferEntryGroup>): {
+function applyScontoAndAmount(price: number, formula: string, grp: FormGroup<OfferEntryGroup>, depth: number): {
   price: number,
   formula: string
 } {
@@ -136,14 +136,15 @@ function applyScontoAndAmount(price: number, formula: string, grp: FormGroup<Off
       formulaCalculated = `(${formulaCalculated}) -${Math.abs(sconto)}%`;
     }
   }
+  if (depth === 1) {
+    const add = grp.get("priceAddPercent").value;
 
-  const add = grp.get("priceAddPercent").value;
-
-  if (add !== 0) {
-    const priceAddition = priceCalculated * (add / 100);
-    if (priceAddition !== 0) {
-      priceCalculated += priceAddition;
-      formulaCalculated = `(${formulaCalculated}) +${Math.abs(add)}%`;
+    if (add !== 0) {
+      const priceAddition = priceCalculated * (add / 100);
+      if (priceAddition !== 0) {
+        priceCalculated += priceAddition;
+        formulaCalculated = `(${formulaCalculated}) +${Math.abs(add)}%`;
+      }
     }
   }
   priceCalculated = priceCalculated * amount;
@@ -154,7 +155,7 @@ function applyScontoAndAmount(price: number, formula: string, grp: FormGroup<Off
   return { price: priceCalculated, formula: formulaCalculated };
 }
 
-function priceEvaluationChildren(grp: FormGroup<OfferEntryGroup>): { formula: string; price: number } {
+function priceEvaluationChildren(grp: FormGroup<OfferEntryGroup>, depth: number): { formula: string; price: number } {
   let priceCalculated = 0;
   let sums: string[] = [];
   grp.controls.children.controls.forEach(grp => {
@@ -165,26 +166,26 @@ function priceEvaluationChildren(grp: FormGroup<OfferEntryGroup>): { formula: st
       sums.push(`${grpPrice.toFixed(2)}(${grp.get("name").value})`);
     }
   });
-  return applyScontoAndAmount(priceCalculated, sums.join(" + "), grp);
+  return applyScontoAndAmount(priceCalculated, sums.join(" + "), grp, depth);
 
 }
 
-export function priceEvaluationElementGroup(grp: FormGroup<OfferEntryGroup>) {
+export function priceEvaluationElementGroup(grp: FormGroup<OfferEntryGroup>, depth: number): CalculationResult {
   const formula = grp.get("price").value;
   if (formula === "" || formula === "@children") {
-    const { price, formula: formulaCalc } = priceEvaluationChildren(grp);
+    const { price, formula: formulaCalc } = priceEvaluationChildren(grp, depth);
     grp.patchValue({ priceCalculated: price, priceFormula: formulaCalc }, { emitEvent: false });
     return;
   }
-  const result = evaluateCalculation(formula, grp);
+  const result = evaluateCalculation(formula, grp, depth);
   if (result.success) {
-    const { price, formula } = applyScontoAndAmount(result.result, result.formula, grp);
+    const { price, formula } = applyScontoAndAmount(result.result, result.formula, grp, depth);
 
     grp.patchValue({ priceCalculated: price, priceFormula: formula }, {
       emitEvent: false
     });
   } else {
-    const { price, formula: formulaCalc } = priceEvaluationChildren(grp);
+    const { price, formula: formulaCalc } = priceEvaluationChildren(grp, depth);
     grp.patchValue({ priceCalculated: price, priceFormula: formulaCalc }, { emitEvent: false });
   }
 }

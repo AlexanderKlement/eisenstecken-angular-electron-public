@@ -24,12 +24,13 @@ function createOffertextCont(formula: string, parsedFields: ParsedFieldOffertext
     return field;
   });
   expression.split("\n").forEach(line => {
-    result.push(line);
+    if (line.length !== 0 && line !== "\r")
+      result.push(line);
   });
   return result;
 }
 
-function createOffertext(group: FormGroup<OfferEntryGroup>): string[] {
+export function createOffertext(group: FormGroup<OfferEntryGroup>): string[] {
   const visible = group.get("visibleOffer").value;
   if (!visible) {
     return [];

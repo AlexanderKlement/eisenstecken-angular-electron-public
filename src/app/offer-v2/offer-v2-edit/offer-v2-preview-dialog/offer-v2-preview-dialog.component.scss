@@ -10,6 +10,7 @@ $pt: $scale * 0.352778; // px per pt (1pt = 0.352778mm)
 }
 
 $grey: rgb(52, 51, 51); // color_grey
+$neutral: rgb(121, 121, 113); // color_grey
 $yellow: rgb(253, 196, 0); // color_yellow
 $light-grey-box: rgb(243, 243, 244); // color_light_grey_box
 $dark-grey-box: rgb(225, 226, 227); // color_dark_grey_box
@@ -22,7 +23,8 @@ $fs-small: pt(8); // FONT_SIZE_SMALL
 $fs-header: pt(6.5); // FONT_SIZE_HEADER
 $fs-footer: pt(9);
 
-$offer-cols: mm(12) mm(87) mm(19) mm(25) mm(26);
+$offer-cols: mm(12) mm(97) mm(19) mm(25) mm(26);
+$bottom-cols: mm(35) mm(62) mm(36) mm(46);
 
 
 @font-face {
@@ -60,9 +62,6 @@ $offer-cols: mm(12) mm(87) mm(19) mm(25) mm(26);
   font-style: italic;
 }
 
-// =============================================================================
-//  Viewer chrome
-// =============================================================================
 * {
   box-sizing: border-box;
 }
@@ -82,9 +81,6 @@ $offer-cols: mm(12) mm(87) mm(19) mm(25) mm(26);
   padding: mm(8) 0 mm(16);
 }
 
-// =============================================================================
-//  The page (A4)
-// =============================================================================
 .page {
   position: relative;
   width: mm(210);
@@ -175,32 +171,76 @@ $offer-cols: mm(12) mm(87) mm(19) mm(25) mm(26);
       max-width: mm(180);
     }
 
-    .salutation {
+    .salutation-signature {
       margin-top: mm(8);
       position: relative;
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      justify-content: space-between;
 
-      .sal-greeting {
-        font-family: "RobotoLight", serif;
-        font-size: $fs-regular;
+      .salutation {
+        flex: 1;
+
+        .sal-greeting {
+          font-family: "RobotoLight", serif;
+          font-size: $fs-regular;
+        }
+
+        .sal-name {
+          font-family: "Roboto", serif;
+          font-weight: 700;
+          font-size: $fs-regular;
+        }
+
+        .sal-role {
+          font-family: "Roboto", serif;
+          font-weight: 400;
+          color: $yellow;
+          font-size: $fs-regular;
+        }
+
+        .sal-contact {
+          font-family: "RobotoLight", serif;
+          font-size: $fs-regular;
+          margin-top: mm(6);
+        }
+
       }
 
-      .sal-name {
-        font-family: "Roboto", serif;
-        font-weight: 700;
-        font-size: $fs-regular;
-      }
+      .signature {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        padding-bottom: mm(10);
+        padding-right: mm(6);
+        min-width: mm(70);
 
-      .sal-role {
-        font-family: "Roboto", serif;
-        font-weight: 400;
-        color: $yellow;
-        font-size: $fs-regular;
-      }
+        .cs-line {
+          display: flex;
+          gap: mm(6);
 
-      .sal-contact {
-        font-family: "RobotoLight", serif;
-        font-size: $fs-regular;
-        margin-top: mm(6);
+          .field {
+            .rule {
+              border-bottom: .15mm solid $grey-line;
+              height: mm(10);
+            }
+
+            .lbl {
+              font-size: pt(7);
+              margin-top: mm(1);
+            }
+          }
+
+          .field--date {
+            width: mm(15);
+          }
+
+          .field--place {
+            flex: 1;
+          }
+        }
       }
     }
 
@@ -277,6 +317,157 @@ $offer-cols: mm(12) mm(87) mm(19) mm(25) mm(26);
         white-space: pre-line;
       }
     }
+
+    .offer-table {
+      margin-top: mm(16);
+      width: 100%;
+
+      .row {
+        display: grid;
+        grid-template-columns: $offer-cols;
+        column-gap: 0;
+        align-items: start;
+        padding: pt(1.5) 0;
+      }
+
+      // header row of the table (column captions), yellow underline below
+      .row--head {
+        border-bottom: .7pt solid $yellow;
+        padding-bottom: pt(4);
+
+        .cell {
+          font-family: "RobotoLight", serif;
+          font-size: $fs-header;
+          line-height: 1.05;
+        }
+      }
+
+      .row--spacer {
+        height: pt(8);
+        padding: 0;
+      }
+
+      .row--section .cell {
+        font-family: "Roboto", serif;
+        font-weight: 700;
+      }
+
+      .cell {
+        font-family: "RobotoLight", serif;
+        font-size: $fs-regular;
+        color: $grey;
+        padding-right: mm(2);
+        white-space: pre-line;
+      }
+
+      .cell--num,
+      .cell--qty,
+      .cell--single,
+      .cell--total {
+        text-align: right;
+      }
+
+      .cell--num {
+        text-align: left;
+      }
+
+      .cell--desc {
+        text-align: left;
+      }
+
+      .cell--total {
+        padding-right: 0;
+      }
+
+      .row--section {
+        margin-top: mm(3);
+      }
+
+      .row--alternative {
+        .cell--single, .cell--qty, .cell--total {
+          padding-top: 20px;
+        }
+      }
+
+      .row--sconto {
+        .cell {
+          color: $neutral;
+        }
+      }
+    }
+
+
+    .price-box {
+      margin-top: mm(10);
+
+      .pb-head,
+      .pb-values {
+        display: grid;
+        grid-template-columns: $bottom-cols;
+      }
+
+      .pb-head {
+        border-bottom: .8pt solid $yellow;
+        padding-bottom: mm(2);
+
+        .cell {
+          font-family: "RobotoLight", serif;
+          font-size: $fs-header;
+          line-height: 1.1;
+
+          &.cell--last {
+            font-family: "Roboto", serif;
+            font-weight: 700;
+            text-align: right;
+          }
+
+          &.right {
+            text-align: right;
+          }
+        }
+      }
+
+      .pb-values {
+        .cell {
+          padding: mm(3) mm(2);
+          font-family: "RobotoLight", serif;
+          font-size: $fs-regular;
+          background: $light-grey-box;
+
+          &.cell--bold {
+            font-family: "Roboto", serif;
+            font-weight: 700;
+          }
+
+          &.right {
+            text-align: right;
+          }
+
+          &.cell--last {
+            background: $dark-grey-box;
+            font-family: "Roboto", serif;
+            font-weight: 700;
+            text-align: right;
+          }
+        }
+      }
+    }
+
+    .includes {
+      margin-top: mm(20);
+
+      p {
+        margin: 0 0 mm(1.5);
+        font-family: "RobotoLight", serif;
+        font-size: $fs-regular;
+      }
+
+      .gap {
+        height: mm(2);
+      }
+    }
+
+
   }
 
   &.page--cover .content {
@@ -332,191 +523,6 @@ $offer-cols: mm(12) mm(87) mm(19) mm(25) mm(26);
     top: mm(297 - 197);
     width: mm(3);
     border-top: 1px solid $grey-line;
-  }
-}
-
-
-// Customer signature area (right column, last page)
-.customer-signature {
-  position: absolute;
-  top: mm(2);
-  left: mm(96);
-  width: mm(70);
-  font-family: "RobotoLight", serif;
-  font-size: $fs-regular;
-
-  .cs-title {
-    margin-bottom: mm(10);
-  }
-
-  .cs-line {
-    display: flex;
-    gap: mm(8);
-    margin-bottom: mm(12);
-
-    .field {
-      .rule {
-        border-bottom: .15mm solid $grey-line;
-        height: mm(8);
-      }
-
-      .lbl {
-        font-size: pt(7);
-        margin-top: mm(1);
-      }
-    }
-
-    .field--date {
-      width: mm(15);
-    }
-
-    .field--place {
-      flex: 1;
-    }
-  }
-}
-
-.offer-table {
-  margin-top: mm(10);
-  width: 100%;
-
-  .row {
-    display: grid;
-    grid-template-columns: $offer-cols;
-    column-gap: 0;
-    align-items: start;
-    padding: pt(1.5) 0;
-  }
-
-  // header row of the table (column captions), yellow underline below
-  .row--head {
-    border-bottom: .7pt solid $yellow;
-    padding-bottom: pt(4);
-
-    .cell {
-      font-family: "RobotoLight", serif;
-      font-size: $fs-header;
-      line-height: 1.05;
-    }
-  }
-
-  // spacer row that follows the header (repeated row 1 in ReportLab)
-  .row--spacer {
-    height: pt(8);
-    padding: 0;
-  }
-
-  // bold section header rows (position x.0)
-  .row--section .cell {
-    font-family: "Roboto", serif;
-    font-weight: 700;
-  }
-
-  // regular item rows
-  .cell {
-    font-family: "RobotoLight", serif;
-    font-size: $fs-regular;
-    color: $grey;
-    padding-right: mm(2);
-    white-space: pre-line;
-  }
-
-  .cell--num,
-  .cell--qty,
-  .cell--single,
-  .cell--total {
-    text-align: right;
-  }
-
-  .cell--num {
-    text-align: left;
-  }
-
-  .cell--desc {
-    text-align: left;
-  }
-
-  .row--section {
-    margin-top: mm(3);
-  }
-}
-
-// =============================================================================
-//  Bottom price box  (TABLE_STYLE_BOTTOM)
-// =============================================================================
-// alternative column widths: 35, 62, 36, 36 mm
-$bottom-cols: mm(35) mm(62) mm(36) mm(36);
-
-.price-box {
-  margin-top: mm(10);
-
-  .pb-head,
-  .pb-values {
-    display: grid;
-    grid-template-columns: $bottom-cols;
-  }
-
-  .pb-head {
-    border-bottom: .8pt solid $yellow;
-    padding-bottom: mm(2);
-
-    .cell {
-      font-family: "RobotoLight", serif;
-      font-size: $fs-header;
-      line-height: 1.1;
-
-      &.cell--last {
-        font-family: "Roboto", serif;
-        font-weight: 700;
-        text-align: right;
-      }
-
-      &.right {
-        text-align: right;
-      }
-    }
-  }
-
-  .pb-values {
-    .cell {
-      padding: mm(3) mm(2);
-      font-family: "RobotoLight", serif;
-      font-size: $fs-regular;
-      background: $light-grey-box;
-
-      &.cell--bold {
-        font-family: "Roboto", serif;
-        font-weight: 700;
-      }
-
-      &.right {
-        text-align: right;
-      }
-
-      &.cell--last {
-        background: $dark-grey-box;
-        font-family: "Roboto", serif;
-        font-weight: 700;
-        text-align: right;
-      }
-    }
-  }
-}
-
-// =============================================================================
-//  Includes / excludes list
-// =============================================================================
-.includes {
-  margin-top: mm(20);
-
-  p {
-    margin: 0 0 mm(1.5);
-    font-family: "RobotoLight", serif;
-    font-size: $fs-regular;
-  }
-
-  .gap {
-    height: mm(2);
   }
 }
 

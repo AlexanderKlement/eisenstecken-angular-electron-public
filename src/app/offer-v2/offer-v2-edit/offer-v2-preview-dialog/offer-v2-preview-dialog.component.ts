@@ -1,7 +1,7 @@
-import { Component, inject, OnInit } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { DefaultLayoutAlignDirective, DefaultLayoutDirective, FlexModule } from "ng-flex-layout";
-import { DefaultService, GenderEnum, OfferV2EntryOutput, OfferV2WithVersion, Parameter } from "../../../../api/openapi";
+import { DefaultService, OfferV2EntryOutput, OfferV2WithVersion, Parameter } from "../../../../api/openapi";
 import { BehaviorSubject } from "rxjs";
 import { AsyncPipe, formatCurrency, NgOptimizedImage } from "@angular/common";
 import { MatButton } from "@angular/material/button";
@@ -14,7 +14,6 @@ import {
   MatDialogTitle
 } from "@angular/material/dialog";
 import dayjs from "dayjs/esm";
-import { SplitTextNewlinePipe } from "../../../shared/pipes/common";
 
 export interface OfferPreviewData {
   offer: OfferV2WithVersion;
@@ -23,12 +22,13 @@ export interface OfferPreviewData {
 
 type PdfRow = {
   text: string;
-  subText: string;
+  subText: string[];
   prefix: string;
   amount: number;
   price: number;
-  isBold: boolean;
+  type: "title" | "normal" | "alternative" | "sconto" | "alternative-title";
 }
+type RowHeight = { isTitle: boolean, height: number };
 
 @Component({
   selector: "offer-v2-preview-dialog",
@@ -46,24 +46,34 @@ type PdfRow = {
     MatDialogTitle,
     MatDialogContent,
     MatDialogActions,
-    NgOptimizedImage,
-    SplitTextNewlinePipe
+    NgOptimizedImage
   ]
 })
-export default class OfferV2PreviewDialogComponent implements OnInit {
+export default class OfferV2PreviewDialogComponent implements OnInit, AfterViewInit {
   dialogRef = inject<MatDialogRef<OfferV2PreviewDialogComponent>>(MatDialogRef);
   data = inject<OfferPreviewData>(MAT_DIALOG_DATA);
   api = inject(DefaultService);
   private loadingSubject = new BehaviorSubject<boolean>(false);
   public loading$ = this.loadingSubject.asObservable();
   pages = 2;
+  total: number = 0;
+  sconto: number = 0;
+  totalSconted: number = 0;
+  vatPercent: number = 0;
+  vat: number = 0;
+  totalBrutto: number = 0;
   first_page_text = "";
   footer_text = "";
   position = "";
   name = "";
   material_desc_title = "";
   material_desc_body = "";
+  offerTableMeasurements: RowHeight[][] = [];
   rows: PdfRow[] = [];
+  @ViewChild("secondOfferTable") secondOfferTable: ElementRef<HTMLDivElement>;
+  @ViewChild("firstOfferTable") firstOfferTable: ElementRef<HTMLDivElement>;
+  @ViewChild("firstContent") firstContent: ElementRef<HTMLDivElement>;
+  @ViewChild("secondContent") secondContent: ElementRef<HTMLDivElement>;
   now = dayjs().format("DD.MM.YYYY");
   private scale = 4.7619;
 
@@ -71,40 +81,104 @@ export default class OfferV2PreviewDialogComponent implements OnInit {
     return val * this.scale;
   }
 
-  parseRow(row: OfferV2EntryOutput, depth: number, prefix: string): string {
+  ngAfterViewInit() {
+    const rowHeights: RowHeight[] = [];
+    let headerHeight: number = 0;
+    let spacerHeight: number = 0;
+    const firstContentOffset = this.firstContent.nativeElement.offsetTop;
+    const firstOffset = this.firstOfferTable.nativeElement.offsetTop;
+    const secondOffset = this.secondOfferTable.nativeElement.offsetTop;
+    const secondContentOffset = this.secondContent.nativeElement.offsetTop;
+    this.firstOfferTable.nativeElement.childNodes.forEach(child => {
+      if (child.nodeName === "DIV") {
+        const row: HTMLDivElement = child as HTMLDivElement;
+        if (row.classList.contains("row--head")) {
+          headerHeight = row.offsetHeight;
+        } else if (row.classList.contains("row--spacer")) {
+          spacerHeight = row.offsetHeight;
+        } else {
+          rowHeights.push({ height: row.offsetHeight, isTitle: row.classList.contains("row--section") });
+        }
+      }
+    });
+    const pageHeight = this.mm(272); // 297 - footer(25mm)
+    const firstSpace = pageHeight - firstContentOffset - firstOffset - headerHeight - spacerHeight;
+    const secondSpace = pageHeight - secondContentOffset - secondOffset - headerHeight - spacerHeight;
+    const rowDistribution: RowHeight[][] = [[]];
+    let availableSpace = firstSpace;
+    rowHeights.forEach((rowHeight, index) => {
+      let height = rowHeight.height;
+      let totalHeight = height;
+      if (rowHeight.isTitle) {
+        height += this.mm(3);
+        totalHeight = height;
+        if (rowHeights.length > index + 1) {
+          height += rowHeights[index + 1].height;
+        }
+      }
+      if (availableSpace - height < 0) {
+        rowDistribution.push([]);
+        availableSpace = secondSpace;
+      }
+      rowDistribution[rowDistribution.length - 1].push(rowHeight);
+      availableSpace -= totalHeight;
+    });
+    this.offerTableMeasurements = rowDistribution;
+    this.pages = rowDistribution.length + 1;
+  }
+
+  parseRow(row: OfferV2EntryOutput, depth: number, prefix: string) {
     if (depth === 0) {
+      if (!row.alternative) {
+        this.total += (row.singlePriceEvaluated * row.amount);
+      }
+      const sconto = -1 * (row.singlePriceEvaluated * row.amount) * (row.priceSubPercent / 100);
       this.rows.push({
         amount: row.amount,
-        price: 1,
-        prefix,
-        text: row.offertext,
-        subText: "",
-        isBold: true
+        price: row.singlePriceEvaluated - sconto,
+        prefix: `${prefix}.0`,
+        text: row.offertextEvaluated[0],
+        subText: [],
+        type: row.alternative ? "alternative-title" : "title"
       });
+      let alternatives = 0;
       row.children.forEach((item, index) => {
-        this.parseRow(item, 1, `${prefix}.${index + 1}`);
+        if (item.alternative) {
+          alternatives++;
+        }
+        this.parseRow(item, 1, `${prefix}.${index - alternatives + 1}`);
       });
-      return "";
+      if (sconto !== 0) {
+        this.rows.push({
+          amount: 1,
+          subText: [],
+          type: "sconto",
+          text: `Sconto ${row.priceSubPercent.toFixed(2)} %`,
+          prefix,
+          price: sconto
+        });
+        this.total += sconto;
+      }
     } else if (depth === 1) {
-      let subTxt = "";
-      row.children.forEach((item) => {
-        subTxt += this.parseRow(item, 2, "");
-      });
+      const sconto = -1 * (row.singlePriceEvaluated * row.amount) * (row.priceSubPercent / 100);
       this.rows.push({
         amount: row.amount,
-        price: 1,
+        price: row.singlePriceEvaluated - sconto,
         prefix,
-        text: row.offertext,
-        subText: subTxt,
-        isBold: false
+        text: "",
+        subText: row.offertextEvaluated,
+        type: row.alternative ? "alternative" : "normal"
       });
-      return "";
-    } else {
-      let subTxt = row.offertext;
-      row.children.forEach((item) => {
-        subTxt += this.parseRow(item, 2, "");
-      });
-      return subTxt;
+      if (sconto !== 0) {
+        this.rows.push({
+          amount: 1,
+          subText: [],
+          type: "sconto",
+          text: `Sconto ${row.priceSubPercent.toFixed(2)} %`,
+          prefix,
+          price: sconto
+        });
+      }
     }
   }
 
@@ -112,9 +186,20 @@ export default class OfferV2PreviewDialogComponent implements OnInit {
     const client = this.data.offer.job.client;
     const content = this.data.offer.content;
     if (content) {
-      content.forEach((item, index) => {
-        this.parseRow(item, 0, `${index + 1}`);
+      let alternatives = 0;
+      content.filter(c => c.visibleOffer).forEach((item, index) => {
+        if (item.alternative) {
+          alternatives++;
+        }
+        this.parseRow(item, 0, `${index - alternatives + 1}`);
       });
+      this.sconto = this.data.offer.globalSubPercent;
+      this.totalSconted = this.total - (this.total * (this.sconto / 100));
+      if (this.data.offer.vat) {
+        this.vatPercent = this.data.offer.vat.amount;
+        this.vat = (this.vatPercent / 100) * this.totalSconted;
+        this.totalBrutto = this.totalSconted + this.vat;
+      }
     }
     this.material_desc_title = this.data.offer.materialDescriptionTitle;
     this.material_desc_body = this.data.offer.materialDescription;
@@ -154,6 +239,5 @@ export default class OfferV2PreviewDialogComponent implements OnInit {
   }
 
   protected readonly dayjs = dayjs;
-  protected readonly GenderEnum = GenderEnum;
   protected readonly formatCurrency = formatCurrency;
 }

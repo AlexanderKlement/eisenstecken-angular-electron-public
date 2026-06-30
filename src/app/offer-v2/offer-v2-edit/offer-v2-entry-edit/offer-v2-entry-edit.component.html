@@ -73,11 +73,13 @@
 
           <mat-icon class="icon-btn" (click)="onCopyElem(index)" title="Dublizieren">content_copy
           </mat-icon>
-          <mat-icon class="icon-btn"
-                    [class.active]="entryGroup.get('alternative').value"
-                    (click)="toggleAlternative()" title="Als Alternative markieren">
-            compare_arrows
-          </mat-icon>
+          @if (depth !== 0) {
+            <mat-icon class="icon-btn"
+                      [class.active]="entryGroup.get('alternative').value"
+                      (click)="toggleAlternative()" title="Als Alternative markieren">
+              compare_arrows
+            </mat-icon>
+          }
           <mat-icon class="icon-btn" (click)="togglePercent()"
                     [class.active]="percent"
                     title="Sconto/Aufschlag für diese Posizionsetzen">

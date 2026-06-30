@@ -171,23 +171,25 @@
               </div>
               <div class="preview">
                 <div class="preview-header">
-                  <strong>Stundenkalkulation</strong>
-                  <div fxLayout="row" class="calculation-line" fxLayoutAlign="space-between center">
+                  <div fxLayout="column" fxLayoutAlign="stretch" fxFlexFill>
+                    <strong>Stundenkalkulation</strong>
+                    <div fxLayout="row" class="calculation-line" fxLayoutAlign="space-between center">
                     <span class="neutral">
                       Gesamtpreis
                     </span>
-                    <span>
+                      <span>
                     {{ priceAsCurrency }}
                     </span>
-                  </div>
-                  <div fxLayout="row" class="calculation-line" fxLayoutAlign="space-between center">
+                    </div>
+                    <div fxLayout="row" class="calculation-line" fxLayoutAlign="space-between center">
                     <span class="neutral">
                       Abzug
                     </span>
-                    <mat-form-field appearance="outline" class="new-form-element small">
-                      <input matInput formControlName="hoursSconto">
-                      <mat-icon class="neutral" matSuffix>percent</mat-icon>
-                    </mat-form-field>
+                      <mat-form-field appearance="outline" class="new-form-element small">
+                        <input matInput formControlName="hoursSconto">
+                        <mat-icon class="neutral" matSuffix>percent</mat-icon>
+                      </mat-form-field>
+                    </div>
                   </div>
                 </div>
                 <div class="calculation-content">
