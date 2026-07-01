@@ -4,6 +4,7 @@ import { DefaultLayoutAlignDirective, DefaultLayoutDirective, FlexModule } from 
 import {
   DefaultService,
   OfferV2EntryOutput,
+  OfferV2PdfBody,
   OfferV2Service,
   OfferV2WithVersion,
   Parameter
@@ -178,7 +179,7 @@ export default class OfferV2PreviewDialogComponent implements OnInit, AfterViewI
     return {
       html: (clone as HTMLDivElement).outerHTML,
       css: relevantCSS.join(" ")
-    };
+    } as OfferV2PdfBody;
   }
 
   onGeneratePdf() {
