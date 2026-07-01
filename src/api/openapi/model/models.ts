@@ -118,6 +118,7 @@ export * from './offerV2EntryField';
 export * from './offerV2EntryInput';
 export * from './offerV2EntryOutput';
 export * from './offerV2Patch';
+export * from './offerV2PdfBody';
 export * from './offerV2Version';
 export * from './offerV2WithVersion';
 export * from './order';

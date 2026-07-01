@@ -71,6 +71,8 @@ import { OfferV2Create } from '../model/offerV2Create';
 // @ts-ignore
 import { OfferV2Patch } from '../model/offerV2Patch';
 // @ts-ignore
+import { OfferV2PdfBody } from '../model/offerV2PdfBody';
+// @ts-ignore
 import { OfferV2Version } from '../model/offerV2Version';
 // @ts-ignore
 import { OfferV2WithVersion } from '../model/offerV2WithVersion';
@@ -1538,6 +1540,77 @@ export class OfferV2Service extends BaseService {
     }
 
     /**
+     * Generate Pdf
+     * @param offerId 
+     * @param offerV2PdfBody 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public generatePdfOfferV2OfferPdfOfferIdPost(offerId: number, offerV2PdfBody: OfferV2PdfBody, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OfferV2>;
+    public generatePdfOfferV2OfferPdfOfferIdPost(offerId: number, offerV2PdfBody: OfferV2PdfBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OfferV2>>;
+    public generatePdfOfferV2OfferPdfOfferIdPost(offerId: number, offerV2PdfBody: OfferV2PdfBody, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OfferV2>>;
+    public generatePdfOfferV2OfferPdfOfferIdPost(offerId: number, offerV2PdfBody: OfferV2PdfBody, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (offerId === null || offerId === undefined) {
+            throw new Error('Required parameter offerId was null or undefined when calling generatePdfOfferV2OfferPdfOfferIdPost.');
+        }
+        if (offerV2PdfBody === null || offerV2PdfBody === undefined) {
+            throw new Error('Required parameter offerV2PdfBody was null or undefined when calling generatePdfOfferV2OfferPdfOfferIdPost.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (OAuth2PasswordBearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/offer/v2/offer/pdf/${this.configuration.encodeParam({name: "offerId", value: offerId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<OfferV2>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: offerV2PdfBody,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Get All Offer Libraries With Entries
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -2525,9 +2598,9 @@ export class OfferV2Service extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public mergeOfferOfferV2MergeOfferOfferIdPost(offerId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OfferV2WithVersion>>;
-    public mergeOfferOfferV2MergeOfferOfferIdPost(offerId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OfferV2WithVersion>>>;
-    public mergeOfferOfferV2MergeOfferOfferIdPost(offerId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OfferV2WithVersion>>>;
+    public mergeOfferOfferV2MergeOfferOfferIdPost(offerId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OfferV2WithVersion>;
+    public mergeOfferOfferV2MergeOfferOfferIdPost(offerId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OfferV2WithVersion>>;
+    public mergeOfferOfferV2MergeOfferOfferIdPost(offerId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OfferV2WithVersion>>;
     public mergeOfferOfferV2MergeOfferOfferIdPost(offerId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (offerId === null || offerId === undefined) {
             throw new Error('Required parameter offerId was null or undefined when calling mergeOfferOfferV2MergeOfferOfferIdPost.');
@@ -2563,7 +2636,7 @@ export class OfferV2Service extends BaseService {
 
         let localVarPath = `/offer/v2/merge_offer/${this.configuration.encodeParam({name: "offerId", value: offerId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<OfferV2WithVersion>>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<OfferV2WithVersion>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

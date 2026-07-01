@@ -143,6 +143,7 @@ model/offerV2EntryField.ts
 model/offerV2EntryInput.ts
 model/offerV2EntryOutput.ts
 model/offerV2Patch.ts
+model/offerV2PdfBody.ts
 model/offerV2Version.ts
 model/offerV2WithVersion.ts
 model/order.ts

@@ -1,7 +1,13 @@
 import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { DefaultLayoutAlignDirective, DefaultLayoutDirective, FlexModule } from "ng-flex-layout";
-import { DefaultService, OfferV2EntryOutput, OfferV2WithVersion, Parameter } from "../../../../api/openapi";
+import {
+  DefaultService,
+  OfferV2EntryOutput,
+  OfferV2Service,
+  OfferV2WithVersion,
+  Parameter
+} from "../../../../api/openapi";
 import { BehaviorSubject } from "rxjs";
 import { AsyncPipe, formatCurrency, NgOptimizedImage } from "@angular/common";
 import { MatButton } from "@angular/material/button";
@@ -14,6 +20,7 @@ import {
   MatDialogTitle
 } from "@angular/material/dialog";
 import dayjs from "dayjs/esm";
+import { take } from "rxjs/operators";
 
 export interface OfferPreviewData {
   offer: OfferV2WithVersion;
@@ -21,8 +28,7 @@ export interface OfferPreviewData {
 }
 
 type PdfRow = {
-  text: string;
-  subText: string[];
+  text: string[];
   prefix: string;
   amount: number;
   price: number;
@@ -53,8 +59,10 @@ export default class OfferV2PreviewDialogComponent implements OnInit, AfterViewI
   dialogRef = inject<MatDialogRef<OfferV2PreviewDialogComponent>>(MatDialogRef);
   data = inject<OfferPreviewData>(MAT_DIALOG_DATA);
   api = inject(DefaultService);
+  offerService = inject(OfferV2Service);
   private loadingSubject = new BehaviorSubject<boolean>(false);
   public loading$ = this.loadingSubject.asObservable();
+  isPrinting = false;
   pages = 2;
   total: number = 0;
   sconto: number = 0;
@@ -74,6 +82,7 @@ export default class OfferV2PreviewDialogComponent implements OnInit, AfterViewI
   @ViewChild("firstOfferTable") firstOfferTable: ElementRef<HTMLDivElement>;
   @ViewChild("firstContent") firstContent: ElementRef<HTMLDivElement>;
   @ViewChild("secondContent") secondContent: ElementRef<HTMLDivElement>;
+  @ViewChild("container") container: ElementRef<HTMLDivElement>;
   now = dayjs().format("DD.MM.YYYY");
   private scale = 4.7619;
 
@@ -127,6 +136,67 @@ export default class OfferV2PreviewDialogComponent implements OnInit, AfterViewI
     this.pages = rowDistribution.length + 1;
   }
 
+  async extractNodeWithStyles() {
+    const clone = this.container.nativeElement.cloneNode(true);
+    const images = (clone as HTMLDivElement).querySelectorAll("img");
+    await Promise.all(Array.from(images).map(async (img: HTMLImageElement) => {
+      const response = await fetch(img.src, { credentials: "include" }); // sends cookies/session
+      const blob = await response.blob();
+      img.src = await new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result.toString());
+        reader.readAsDataURL(blob);
+      });
+    }));
+    // Collect every CSS rule that could apply to this node or its descendants
+    const relevantCSS = [];
+    for (const sheet of document.styleSheets) {
+      let rules;
+      try {
+        rules = sheet.cssRules; // throws for cross-origin stylesheets
+      } catch (e) {
+        console.warn("Skipping inaccessible stylesheet:", sheet.href);
+        continue;
+      }
+      for (const rule of rules) {
+        if (rule.selectorText) {
+          try {
+            if (this.container.nativeElement.matches(rule.selectorText) || this.container.nativeElement.querySelector(rule.selectorText)) {
+              relevantCSS.push(rule.cssText);
+            }
+          } catch (e) {
+            // invalid selector for matches(), skip
+          }
+        } else {
+          // @font-face, @media, @keyframes etc — safest to include as-is
+          relevantCSS.push(rule.cssText);
+        }
+      }
+    }
+    relevantCSS.push(`body{ margin: 0!important; padding: 0!important; width: ${this.mm(210)}px!important;}`);
+    relevantCSS.push(`.viewer.print{ max-height: ${this.mm((297 * (this.pages + 1))) - 2}px!important; overflow: hidden!important;}`);
+    return {
+      html: (clone as HTMLDivElement).outerHTML,
+      css: relevantCSS.join(" ")
+    };
+  }
+
+  onGeneratePdf() {
+    this.isPrinting = true;
+    this.loadingSubject.next(true);
+    setTimeout(() => {
+
+      this.extractNodeWithStyles().then((payload) => {
+        this.offerService.generatePdfOfferV2OfferPdfOfferIdPost(this.data.offer.id, payload).pipe(take(1)).subscribe((offer) => {
+          console.log(offer);
+          this.loadingSubject.next(false);
+          this.isPrinting = false;
+        });
+      });
+
+    }, 1000);
+  }
+
   parseRow(row: OfferV2EntryOutput, depth: number, prefix: string) {
     if (depth === 0) {
       if (!row.alternative) {
@@ -137,8 +207,7 @@ export default class OfferV2PreviewDialogComponent implements OnInit, AfterViewI
         amount: row.amount,
         price: row.singlePriceEvaluated - sconto,
         prefix: `${prefix}.0`,
-        text: row.offertextEvaluated[0],
-        subText: [],
+        text: row.offertextEvaluated,
         type: row.alternative ? "alternative-title" : "title"
       });
       let alternatives = 0;
@@ -151,9 +220,8 @@ export default class OfferV2PreviewDialogComponent implements OnInit, AfterViewI
       if (sconto !== 0) {
         this.rows.push({
           amount: 1,
-          subText: [],
           type: "sconto",
-          text: `Sconto ${row.priceSubPercent.toFixed(2)} %`,
+          text: [`Sconto ${row.priceSubPercent.toFixed(2)} %`],
           prefix,
           price: sconto
         });
@@ -165,16 +233,14 @@ export default class OfferV2PreviewDialogComponent implements OnInit, AfterViewI
         amount: row.amount,
         price: row.singlePriceEvaluated - sconto,
         prefix,
-        text: "",
-        subText: row.offertextEvaluated,
+        text: row.offertextEvaluated,
         type: row.alternative ? "alternative" : "normal"
       });
       if (sconto !== 0) {
         this.rows.push({
           amount: 1,
-          subText: [],
           type: "sconto",
-          text: `Sconto ${row.priceSubPercent.toFixed(2)} %`,
+          text: [`Sconto ${row.priceSubPercent.toFixed(2)} %`],
           prefix,
           price: sconto
         });

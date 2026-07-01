@@ -44,7 +44,7 @@ import {
 } from "./offer-v2-entry-edit/offer-v2-entry-edit.component";
 import { ListElementComponent } from "../../shared/components/list-element/list-element.component";
 import { MatIcon } from "@angular/material/icon";
-import { Offertext, offertextEvaluationElementGroup } from "../offer-offertext-utils";
+import { createOffertext } from "../offer-offertext-utils";
 import { MatTab, MatTabGroup } from "@angular/material/tabs";
 import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular/material/datepicker";
 import { MatOption, MatSelect } from "@angular/material/select";
@@ -57,8 +57,10 @@ import {
 } from "../templates/template-create-dialog/template-create-dialog/template-create-dialog.component";
 import { newOfferEntryFieldGroupFormField } from "./offer-v2-entry-edit/entry-field-edit/entry-field-edit.component";
 import OfferV2PreviewDialogComponent from "./offer-v2-preview-dialog/offer-v2-preview-dialog.component";
+import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 
 type OfferV2Group = {
+  id: FormControl<number>;
   name: FormControl<string>;
   globalAddPercent: FormControl<number>;
   globalPriceDiff: FormControl<number>;
@@ -98,12 +100,14 @@ function newEmptyOfferGroup() {
     validity: new FormControl(""),
     delivery: new FormControl(""),
     vatId: new FormControl(-1),
-    vatName: new FormControl("Bitte wählen")
+    vatName: new FormControl("Bitte wählen"),
+    id: new FormControl(-1)
   });
 }
 
 function newOfferGroup(data: OfferV2, version?: OfferV2Version) {
   return new FormGroup<OfferV2Group>({
+    id: new FormControl(data.id),
     name: new FormControl(data.name, [Validators.minLength(3), Validators.required]),
     globalPriceDiff: new FormControl(data.globalPriceDiff),
     globalSubPercent: new FormControl(data.globalSubPercent),
@@ -208,7 +212,8 @@ function moveObjectInGroup(group: FormGroup<OfferV2Group>, entry: FormGroup<Offe
     MatSelect,
     MatOption,
     MatIconButton,
-    FlexLayoutModule
+    FlexLayoutModule,
+    CdkTextareaAutosize
   ],
   templateUrl: "./offer-v2-edit.component.html",
   styleUrl: "./offer-v2-edit.component.scss"
@@ -232,7 +237,6 @@ export class OfferV2EditComponent implements OnInit {
   allElements: OfferElementListElement[] = [];
   allTemplates: OfferTemplate[] = [];
   lastVersion: OfferV2Version;
-  offertext: Offertext[] = [];
   parameters: Parameter[] = [];
   selectedElements: string[] = [];
   priceAsCurrency: string = "0,00 €";
@@ -450,7 +454,6 @@ export class OfferV2EditComponent implements OnInit {
       }
       let priceCalculated = 0;
       let sums: string[] = [];
-      let offertext: Offertext[] = [];
       for (let i = 0; i < this.offerGroup.controls.content.length; i++) {
         let entry = this.offerGroup.controls.content.at(i);
         const grpPrice = entry.get("priceCalculated").value;
@@ -458,11 +461,17 @@ export class OfferV2EditComponent implements OnInit {
         if (!grpAlternative) {
           priceCalculated += grpPrice;
         }
-        let txt = offertextEvaluationElementGroup(entry, 0, offertext.length + 1, 0);
-        if (txt) {
-          offertext.push(txt);
-        }
         sums.push(`${grpPrice.toFixed(2)}(${entry.get("name").value})`);
+        if (!entry.controls.offertextChanged.value) {
+          entry.controls.children.controls.forEach(child => {
+            if (!child.controls.offertextChanged.value) {
+              const txt = createOffertext(child);
+              child.patchValue({ offertextEvaluated: txt.join("\n") }, { emitEvent: false });
+            }
+          });
+          const txt = createOffertext(entry);
+          entry.patchValue({ offertextEvaluated: txt.join("\n") }, { emitEvent: false });
+        }
       }
       this.priceAsCurrency = formatCurrency(priceCalculated, "de-DE", "EUR");
       const hoursSconto = priceCalculated * (getNumericVal(this.offerGroup.get("hoursSconto")) / 100);
@@ -478,7 +487,6 @@ export class OfferV2EditComponent implements OnInit {
       this.priceAsFloat = price;
       this.priceAsCurrencySconted = formatCurrency(price, "de-DE", "EUR");
       this.formula = formula;
-      this.offertext = offertext;
     }
   }
 
@@ -487,7 +495,7 @@ export class OfferV2EditComponent implements OnInit {
       confirmDeleteDialog(this.offerV2Id,
         this.dialog,
         "Angebot",
-        (id) => this.offerService.deleteOfferTemplateOfferV2TemplateTemplateIdDelete(id),
+        (id) => this.offerService.deleteOfferV2OfferV2OfferOfferIdDelete(id),
         () => {
           this.subscription.next();
         },
@@ -821,7 +829,7 @@ export class OfferV2EditComponent implements OnInit {
           globalSubPercent: getNumericVal(this.offerGroup.get("globalSubPercent")),
           hourlyRate: 1,
           hoursSconto: 1,
-          id: 1,
+          id: this.offerGroup.get("id").value,
           job: this.job,
           pdf: "",
           price: -1,
@@ -842,4 +850,25 @@ export class OfferV2EditComponent implements OnInit {
   }
 
   protected readonly dayjs = dayjs;
+  protected readonly getNumericVal = getNumericVal;
+  protected readonly formatCurrency = formatCurrency;
+
+  protected onChangeOffertext(idx: number, idx2?: number) {
+    if (this.offerGroup) {
+      const grp = typeof idx2 === "undefined" ? this.offerGroup.controls.content.at(idx) : this.offerGroup.controls.content.at(idx).controls.children.at(idx2);
+      if (grp) {
+        grp.patchValue({ offertextChanged: true }, { emitEvent: false });
+      }
+    }
+  }
+
+  protected resetOffertext(idx: number, idx2?: number) {
+    if (this.offerGroup) {
+      const grp = typeof idx2 === "undefined" ? this.offerGroup.controls.content.at(idx) : this.offerGroup.controls.content.at(idx).controls.children.at(idx2);
+      if (grp) {
+        const txt = createOffertext(grp);
+        grp.patchValue({ offertextChanged: false, offertextEvaluated: txt.join("\n") }, { emitEvent: false });
+      }
+    }
+  }
 }

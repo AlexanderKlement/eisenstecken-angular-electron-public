@@ -39,13 +39,20 @@
         flex: 1;
 
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         align-items: flex-start;
-        justify-content: flex-start;
 
-        > .offertext-line {
-          word-break: break-word;
+        > textarea {
+          flex: 1;
+          border: 1px solid #fff;
+          outline: none;
+
+          &:hover, &:focus {
+            resize: vertical;
+            border: 1px solid #f5f5f5;
+          }
         }
+
       }
 
       > .price {

@@ -12,20 +12,31 @@ type ParsedFieldOffertext = {
 function createOffertextCont(formula: string, parsedFields: ParsedFieldOffertext[], isAlternative: boolean): string[] {
 
   const result: string[] = isAlternative ? ["Alternative:"] : [];
-  const expression = formula.replace(KeywordRegExp, (field) => {
+  let expression = formula.replace(/\r/g, "").replace(KeywordRegExp, (field) => {
     const variable = parsedFields.find(v => `@${v.label}`.startsWith(field));
     if (variable) {
       if (typeof variable.value === "string") {
+        if (variable.value.trim().length === 0) {
+          return "#empty_field#";
+        }
         return variable.value;
-      } else {
-        return variable.value.join("\n");
+
       }
+      if (variable.value.length === 0) {
+        return "#empty_field#";
+      }
+      if (variable.value.reduce((prev, cur) => prev && cur === "#empty_field#", true)) {
+        return "#empty_field#";
+      }
+      return variable.value.join("\n");
     }
-    return field;
+    return "#empty_field#";
   });
+  expression = expression.replace(/#empty_field#\n/g, "");
+  expression = expression.replace(/\n#empty_field#/g, "");
+  expression = expression.replace(/#empty_field#/g, "");
   expression.split("\n").forEach(line => {
-    if (line.length !== 0 && line !== "\r")
-      result.push(line);
+    result.push(line);
   });
   return result;
 }
@@ -49,7 +60,8 @@ export function createOffertext(group: FormGroup<OfferEntryGroup>): string[] {
     group.controls.children.controls.forEach(control => {
       const res = createOffertext(control);
       res.forEach(child => {
-        offertextChildren.push(child);
+        if (child.replace(/\n/g, "").replace(/\r/g, "").trim().length !== 0)
+          offertextChildren.push(child);
       });
     });
     parsedFields.push({
@@ -61,12 +73,9 @@ export function createOffertext(group: FormGroup<OfferEntryGroup>): string[] {
     label: "Beschreibung",
     value: group.controls.description.value
   });
-  parsedFields.push({
-    label: "Ausführung",
-    value: group.controls.description.value
-  });
-
-  return createOffertextCont(formula, parsedFields, group.get("alternative").value);
+  const res = createOffertextCont(formula, parsedFields, group.get("alternative").value);
+  console.log(`offertext for ${group.get("name").value}`, { res, formula, parsedFields });
+  return res;
 }
 
 export declare type Offertext = {

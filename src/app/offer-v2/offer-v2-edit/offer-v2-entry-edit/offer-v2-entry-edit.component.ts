@@ -62,6 +62,8 @@ export declare type OfferEntryGroup = {
   descriptionChanged: FormControl<boolean>;
   price: FormControl<string>;
   offertext: FormControl<string>;
+  offertextEvaluated: FormControl<string>;
+  offertextChanged: FormControl<boolean>;
   priceCalculated: FormControl<number>;
   priceFormula: FormControl<string>;
 }
@@ -87,7 +89,7 @@ export function mapOfferEntryToInput(grp: FormGroup<OfferEntryGroup>, depth: num
     priceAddPercent: grp.get("priceAddPercent").value,
     visibleOffer: grp.get("visibleOffer").value,
     singlePriceEvaluated: grp.get("priceCalculated").value / grp.get("amount").value,
-    offertextEvaluated: depth === 0 || depth === 1 ? createOffertext(grp) : []
+    offertextEvaluated: grp.controls.offertextEvaluated.value.replace(/\r/g, "").split("\n")
   };
 }
 
@@ -110,8 +112,10 @@ export function newEmptyOfferEntryGroup(globalAddPercent = 0, depth: number) {
     descriptionChanged: new FormControl(false),
     price: new FormControl(""),
     offertext: new FormControl(""),
+    offertextEvaluated: new FormControl<string>(""),
     priceCalculated: new FormControl(0),
-    priceFormula: new FormControl("")
+    priceFormula: new FormControl(""),
+    offertextChanged: new FormControl(false)
   });
   grp.valueChanges.subscribe(() => {
     priceEvaluationElementGroup(grp, depth);
@@ -137,9 +141,15 @@ export function mapEntryOfferEntryGroup(entry: OfferV2EntryOutput, depth: number
     descriptionChanged: new FormControl(entry.description !== entry.name),
     price: new FormControl(entry.price),
     offertext: new FormControl(entry.offertext),
+    offertextEvaluated: new FormControl(entry.offertextEvaluated.join("\n")),
     priceCalculated: new FormControl(0),
-    priceFormula: new FormControl("")
+    priceFormula: new FormControl(""),
+    offertextChanged: new FormControl(false)
   });
+  const txt = createOffertext(grp);
+  if (txt.join("\n") !== grp.get("offertextEvaluated").value) {
+    grp.patchValue({ offertextChanged: true }, { emitEvent: false });
+  }
   grp.valueChanges.subscribe(() => {
     priceEvaluationElementGroup(grp, depth);
   });

@@ -117,49 +117,53 @@
                 <div class="preview-header">
                   <strong>Vorschau</strong>
                   <button matIconButton (click)="openPreview()" [disabled]="!job">
-                    <mat-icon>preview</mat-icon>
+                    <mat-icon>picture_as_pdf</mat-icon>
                   </button>
                 </div>
-                <div class="preview-content" [class.no-preview]="offertext.length === 0">
-                  @if (offertext.length === 0) {
+                <div
+                  class="preview-content"
+                  [class.no-preview]="offerGroup.controls.content.controls.length === 0"
+                  [formArray]="offerGroup.controls.content">
+                  @if (offerGroup.controls.content.controls.length === 0) {
                     <span class="neutral">Keine Sichtbaren Positionen</span>
                   } @else {
-                    @for (txt of offertext; track txt.prefix) {
-                      <div class="preview-line">
-                        <span class="prefix">{{ txt.prefix }}</span>
-
+                    @for (control of offerGroup.controls.content.controls; track control.controls.id.value; let idx = $index) {
+                      <div class="preview-line" [formGroup]="control">
+                        <span class="prefix">{{ idx + 1 }}.0</span>
                         <div class="offertext">
-                          @for (line of txt.lines; track line) {
-                            <span class="offertext-line" [class.neutral]="line.trim() === 'Alternative:'">
-                        {{ line }}
-                      </span>
+                          <textarea [formControl]="control.controls.offertextEvaluated" [name]="`${ idx + 1 }.0`"
+                                    [title]="`Angebotstext ${idx + 1.0}.0`" (keyup)="onChangeOffertext(idx)"
+                                    cdkTextareaAutosize></textarea>
+                          @if (control.controls.offertextChanged.value) {
+                            <mat-icon (click)="resetOffertext(idx)">rotate_left</mat-icon>
                           }
                         </div>
-                        <span class="amount">{{ txt.amount }}</span>
+                        <span class="amount">{{ control.get("amount").value }}</span>
                         <div class="price">
-                          @for (p of txt.price; track p) {
-                            <span class="price-line">{{ p }}</span>
-                          }
+                          {{ formatCurrency(getNumericVal(control.get("priceCalculated")), "de-DE", "€") }}
                         </div>
                       </div>
-                      @for (subTxt of txt.children; track subTxt.prefix) {
-                        <div class="preview-line inner">
-                          <span class="prefix">{{ subTxt.prefix }}</span>
-
-                          <div class="offertext">
-                            @for (line of subTxt.lines; track line) {
-                              <span class="offertext-line" [class.neutral]="line.trim() === 'Alternative:'">
-                        {{ line }}
-                      </span>
-                            }
-                          </div>
-                          <span class="amount">{{ subTxt.amount }}</span>
-                          <div class="price">
-                            @for (p of subTxt.price; track p) {
-                              <span class="price-line">{{ p }}</span>
-                            }
-                          </div>
-                        </div>
+                      @if (control.controls.children.controls.length !== 0) {
+                        <ng-container [formArray]="control.controls.children">
+                          @for (child of control.controls.children.controls; track child.controls.id.value; let idx2 = $index) {
+                            <div class="preview-line inner" [formGroup]="child">
+                              <span class="prefix">{{ idx + 1 }}.{{ idx2 + 1 }}</span>
+                              <div class="offertext">
+                                <textarea [formControl]="child.controls.offertextEvaluated"
+                                          (keyup)="onChangeOffertext(idx,idx2)" [name]="`${ idx + 1 }.${idx2 + 1}`"
+                                          [title]="`Angebotstext ${idx + 1.0}.${idx2 + 1}`"
+                                          cdkTextareaAutosize></textarea>
+                                @if (child.controls.offertextChanged.value) {
+                                  <mat-icon (click)="resetOffertext(idx,idx2)">rotate_left</mat-icon>
+                                }
+                              </div>
+                              <span class="amount">{{ child.get("amount").value }}</span>
+                              <div class="price">
+                                {{ formatCurrency(getNumericVal(child.get("priceCalculated")), "de-DE", "€") }}
+                              </div>
+                            </div>
+                          }
+                        </ng-container>
                       }
                     }
                   }
