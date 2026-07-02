@@ -1,0 +1,17 @@
+<div fxLayout="row" fxLayoutAlign="start center" [formGroup]="entryFormGroup" class="field" fxLayoutGap="8">
+  <mat-icon (click)="toggleAdditionSubstraction()">add</mat-icon>
+  <mat-form-field appearance="outline" class="new-form-element fill-width">
+    <mat-label>Beschreibung</mat-label>
+    <input matInput formControlName="description">
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="new-form-element">
+    <mat-label>Anzahl</mat-label>
+    <input matInput formControlName="amount">
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="new-form-element">
+    <mat-label>Preis</mat-label>
+    <input matInput formControlName="price">
+  </mat-form-field>
+  <mat-icon (click)="this.deleted.emit(index)">add</mat-icon>
+
+</div>

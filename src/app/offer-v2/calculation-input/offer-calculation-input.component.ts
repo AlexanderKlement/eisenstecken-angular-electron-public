@@ -118,7 +118,7 @@ export default class OfferCalculationInputComponent implements OnInit {
     const searchTerm = this.getSearchTerm(val, cursorPos, this.maxLength);
     const firstPart = val.substring(0, searchTerm.pos);
     const secondPart = val.substring(searchTerm.pos + searchTerm.original.length);
-    const suffix = nestingKeywords.includes(field) ? "." : "";
+    const suffix = "";
     const firstPartEndsWithNesting = nestingKeywords.reduce((prev, cur) => prev || firstPart.endsWith(`${cur}.`), false);
     const prefix = firstPartEndsWithNesting ? "" : "@";
     const newVal = firstPart + prefix + field + suffix + secondPart;

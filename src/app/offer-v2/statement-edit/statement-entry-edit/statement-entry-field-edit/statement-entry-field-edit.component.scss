@@ -1,0 +1,10 @@
+.field {
+
+  > .new-form-element {
+    margin-top: 0 !important;
+
+    &.fill-width {
+      flex-grow: 1;
+    }
+  }
+}

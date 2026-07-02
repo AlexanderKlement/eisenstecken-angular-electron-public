@@ -7,6 +7,9 @@
       </mat-tab>
       <mat-tab label="Aufstellungen">
 
+        <app-table-builder title="Alle Aufstellungen" [dataSource]="statementDataSource"
+                           [headerButtons]="statementHeaderButtons"
+                           [buttons]="statementButtons" />
       </mat-tab>
     </mat-tab-group>
   </div>

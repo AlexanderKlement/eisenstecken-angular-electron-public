@@ -195,11 +195,13 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
   @Input() onCopyElem: (index: number) => void;
   @Input() onAddNeighbour: (index: number, template?: OfferTemplateEntryInput) => void;
   open = false;
+  open2 = true;
   @Output() priceEvaluated = new EventEmitter<void>();
   @Output() dragStart = new EventEmitter<FormGroup<OfferEntryGroup> | null>();
   @Output() elementInserted = new EventEmitter<string>();
   @Output() elementUnInserted = new EventEmitter<void>();
   @Output() selectElem = new EventEmitter<string>();
+  @Output() elementAdded = new EventEmitter<OfferElementListElement>();
   private waitForChildren: number = 0;
   percent = false;
 
@@ -230,7 +232,7 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
         this.percent = true;
       }
     }
-    if (this.entryGroup.controls.elementType.value === "") {
+    if (this.entryGroup.get("elementId").value === -1) {
       this.open = true;
       const input = this.headerRow.nativeElement.getElementsByTagName("input");
       if (input.length !== 0) {
@@ -277,6 +279,10 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
     this.open = !this.open;
   }
 
+  toggleOpen2() {
+    this.open2 = !this.open2;
+  }
+
 
   togglePercent() {
     this.percent = !this.percent;
@@ -302,6 +308,10 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
       });
       this.onDeleteElem(this.index);
     } else {
+      const e = this.allElements.find(ele => ele.id === val.id);
+      if (!e) {
+        this.elementAdded.emit(val);
+      }
       this.entryGroup.patchValue({
         elementId: val.id,
         elementType: val.elementType.name,

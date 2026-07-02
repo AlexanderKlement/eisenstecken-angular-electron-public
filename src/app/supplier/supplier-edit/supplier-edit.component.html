@@ -10,7 +10,7 @@
         <h3>Kontakte</h3>
         @for (contact of getContacts().controls; track contact; let i = $index) {
           <div [formGroupName]="i" fxLayout="row"
-            fxLayoutAlign="space-around center">
+               fxLayoutAlign="space-around center" fxLayoutGap="6">
             <mat-form-field appearance="fill">
               <mat-label>Name</mat-label>
               <input class="form-control" formControlName="name" matInput>
@@ -23,7 +23,7 @@
               <mat-label>Telefon</mat-label>
               <input (keypress)="numberOnly($event)" class="form-control" formControlName="tel" matInput>
             </mat-form-field>
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="fill" class="larger">
               <mat-label>Mail</mat-label>
               <input class="form-control" formControlName="mail" matInput>
             </mat-form-field>
@@ -31,11 +31,12 @@
               <mat-label>Notiz</mat-label>
               <input class="form-control" formControlName="note" matInput>
             </mat-form-field>
-              <app-circle-icon-button class="position-delete" (click)="removeContactAt(i)" icon="delete" />
+            <app-circle-icon-button class="position-delete" (click)="removeContactAt(i)" icon="delete" />
+
           </div>
         }
         <button type="button" mat-button
-          (click)="addContact()">
+                (click)="addContact()">
           <mat-icon>add</mat-icon>
         </button>
       </div>
@@ -49,7 +50,7 @@
           <mat-select formControlName="language">
             @for (language of languageOptions; track language) {
               <mat-option [value]="language.code">
-                {{language.name.translation_de}}
+                {{ language.name.translation_de }}
               </mat-option>
             }
           </mat-select>

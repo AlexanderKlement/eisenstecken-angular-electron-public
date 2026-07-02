@@ -94,7 +94,6 @@ export default class OfferElementSelectorComponent implements OnInit {
 
   searchFun(term: string, item: OfferElementListElement | OfferTemplate): boolean {
     this.searchString = term;
-    console.log({ term });
     const clearTerm = term.trim().toLowerCase();
     if ("structure" in item) {
       return item.name.toLowerCase().indexOf(clearTerm) !== -1 || item.description.toLowerCase().indexOf(clearTerm) !== -1;

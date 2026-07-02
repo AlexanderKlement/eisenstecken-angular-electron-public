@@ -411,7 +411,7 @@ export class OfferV2EditComponent implements OnInit {
     const addAmount = parseFloat(this.offerGroup.get("globalPriceDiff").value.toString(10));
     if (addAmount !== 0 && !Number.isNaN(addAmount)) {
       priceCalculated += addAmount;
-      formulaCalculated = `(${formulaCalculated}) ${addAmount > 0 ? "+" : "-"} ${formatCurrency(addAmount, "de-DE", "EUR")}`;
+      formulaCalculated = `(${formulaCalculated}) ${addAmount > 0 ? "+" : "-"} ${formatCurrency(addAmount, "de-DE", "€")}`;
     }
 
     return { price: priceCalculated, formula: formulaCalculated };
@@ -473,10 +473,10 @@ export class OfferV2EditComponent implements OnInit {
           entry.patchValue({ offertextEvaluated: txt.join("\n") }, { emitEvent: false });
         }
       }
-      this.priceAsCurrency = formatCurrency(priceCalculated, "de-DE", "EUR");
+      this.priceAsCurrency = formatCurrency(priceCalculated, "de-DE", "€");
       const hoursSconto = priceCalculated * (getNumericVal(this.offerGroup.get("hoursSconto")) / 100);
       const hourlySconted = priceCalculated - hoursSconto;
-      this.priceAsCurrencyHourSconted = formatCurrency(hourlySconted, "de-DE", "EUR");
+      this.priceAsCurrencyHourSconted = formatCurrency(hourlySconted, "de-DE", "€");
       const hourlyRate = getNumericVal(this.offerGroup.get("hourlyRate"));
       if (hourlyRate !== 0 && !Number.isNaN(hourlyRate)) {
         this.hours = hourlySconted / hourlyRate;
@@ -485,7 +485,7 @@ export class OfferV2EditComponent implements OnInit {
       }
       const { price, formula } = this.applySconto(priceCalculated, sums.join(" + "));
       this.priceAsFloat = price;
-      this.priceAsCurrencySconted = formatCurrency(price, "de-DE", "EUR");
+      this.priceAsCurrencySconted = formatCurrency(price, "de-DE", "€");
       this.formula = formula;
     }
   }
@@ -497,7 +497,8 @@ export class OfferV2EditComponent implements OnInit {
         "Angebot",
         (id) => this.offerService.deleteOfferV2OfferV2OfferOfferIdDelete(id),
         () => {
-          this.subscription.next();
+          this.loadingSubject.next(false);
+          this.router.navigateByUrl("/offer_v2").then();
         },
         this.snackBar);
     }
@@ -536,7 +537,31 @@ export class OfferV2EditComponent implements OnInit {
         vatId,
         date: this.offerGroup.get("date").value,
         price: this.priceAsFloat
-      }).pipe(take(1)).subscribe(this.subscription);
+      }).pipe(take(1)).subscribe({
+        next: (data) => {
+
+          this.offerService.getOfferVersionsOfferV2OfferV2IdVersionsGet(data.id).pipe(take(1)).subscribe({
+            next: versions => {
+              this.versions = versions;
+              this.lastVersion = versions.length !== 0 ? [...versions].sort((a, b) => {
+                return (new Date(b.timestamp)).getTime() - (new Date(a.timestamp)).getTime();
+              })[0] : undefined;
+            },
+            error: () => {
+            }
+          });
+          this.subTitle = "Angebot bearbeiten";
+          this.isCustomVersion = false;
+          this.unsavedChanges = false;
+          this.lastSave = new Date();
+          this.loadingSubject.next(false);
+          this.timeout = setTimeout(this.autosave.bind(this), 10000);
+        },
+        error: (error) => {
+          this.loadingSubject.next(false);
+          this.snackBar.open("Etwas ist schief gelaufen: " + error, "Ok", { duration: 8000 });
+        }
+      });
     } else {
       const jobId = this.offerGroup.get("jobId").value;
       if (jobId === -1) {
@@ -548,7 +573,23 @@ export class OfferV2EditComponent implements OnInit {
         name: this.offerGroup.get("name").value,
         number: this.offerGroup.get("number").value,
         jobId
-      }).pipe(take(1)).subscribe(this.subscription);
+      }).pipe(take(1)).subscribe({
+        next: (offer) => {
+          this.loadingSubject.next(false);
+          this.offerV2Id = offer.id;
+          this.jobId = offer.job.id;
+          this.job = offer.job;
+          this.versions = [];
+          this.lastVersion = undefined;
+          this.offerGroup = newOfferGroup(offer);
+          this.timeout = setTimeout(this.autosave.bind(this), 10000);
+          this.unsavedChanges = false;
+        },
+        error: error => {
+          this.loadingSubject.next(false);
+          this.snackBar.open("Etwas ist schief gelaufen: " + error, "Ok", { duration: 8000 });
+        }
+      });
     }
   }
 
@@ -604,18 +645,6 @@ export class OfferV2EditComponent implements OnInit {
       this.offerGroup.controls.content.removeAt(index);
     }
   }
-
-
-  subscription = {
-    next: () => {
-      this.loadingSubject.next(false);
-      this.router.navigateByUrl("/offer_v2").then();
-    },
-    error: (error: any) => {
-      this.loadingSubject.next(false);
-      this.snackBar.open("Etwas ist schief gelaufen: " + error, "Ok", { duration: 8000 });
-    }
-  };
 
   timeout: NodeJS.Timeout | null = null;
 
@@ -870,5 +899,9 @@ export class OfferV2EditComponent implements OnInit {
         grp.patchValue({ offertextChanged: false, offertextEvaluated: txt.join("\n") }, { emitEvent: false });
       }
     }
+  }
+
+  protected onElementAdded(element: OfferElementListElement) {
+    this.allElements.push(element);
   }
 }

@@ -153,11 +153,22 @@
                     }
                   }
                 </div>
-                <div class="cell cell--qty">{{ row.type !== 'normal' ? '' : row.amount.toString(10) }}</div>
-                <div
-                  class="cell cell--single">{{ row.type !== 'normal' ? '' : formatCurrency(row.price, "de-DE", "€") }}
+                <div class="cell cell--qty">
+                  @if (row.price != 0) {
+                    {{ row.type !== 'normal' ? '' : row.amount.toString(10) }}
+                  }
                 </div>
-                <div class="cell cell--total">{{ formatCurrency(row.amount * row.price, "de-DE", "€") }}</div>
+                <div
+                  class="cell cell--single">
+                  @if (row.price != 0) {
+                    {{ row.type !== 'normal' ? '' : formatCurrency(row.price, "de-DE", "€") }}
+                  }
+                </div>
+                <div class="cell cell--total">
+                  @if (row.price != 0) {
+                    {{ formatCurrency(row.amount * row.price, "de-DE", "€") }}
+                  }
+                </div>
               </div>
             }
 

@@ -5,7 +5,7 @@
       <mat-tab label="Berechnung">
         <form [formGroup]="offerGroup">
           <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16">
-            <h3>{{ subTitle }}</h3>
+            <h3 class="sub-title">{{ subTitle }}</h3>
             <div fxFlex></div>
             @if (loading$ | async) {
               <div class="spinner-container">
@@ -55,7 +55,7 @@
           }
           <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="16">
             <div fxLayout="column" fxLayoutAlign="space-around stretch" fxFlex fxLayoutGap="8" class="main-content">
-              <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start center">
+              <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start center" class="offer-header">
                 <mat-form-field appearance="outline" class="new-form-element">
                   <mat-label>Name</mat-label>
                   <input class="form-control" formControlName="name" matInput>
@@ -102,14 +102,17 @@
                       (elementInserted)="this.elementInserted($event)"
                       (elementUnInserted)="this.elementUninserted()"
                       (selectElem)="onSelectElem($event)"
+                      (elementAdded)="onElementAdded($event)"
                     ></app-offer-v2-entry-edit>
                   }
 
                 </div>
               } @else {
-                <app-list-element leftIcon="add" mainText="Erstes Element hinzufügen" (clicked)="onAddContent(0)"
-                                  dottedAccent centered pointer>
-                </app-list-element>
+                <div class="draggable-list">
+                  <app-list-element leftIcon="add" mainText="Erstes Element hinzufügen" (clicked)="onAddContent(0)"
+                                    dottedAccent centered pointer>
+                  </app-list-element>
+                </div>
               }
             </div>
             <div>
@@ -132,15 +135,21 @@
                         <span class="prefix">{{ idx + 1 }}.0</span>
                         <div class="offertext">
                           <textarea [formControl]="control.controls.offertextEvaluated" [name]="`${ idx + 1 }.0`"
-                                    [title]="`Angebotstext ${idx + 1.0}.0`" (keyup)="onChangeOffertext(idx)"
+                                    [title]="`Angebotstext ${idx + 1.0}.0`" (keydown)="onChangeOffertext(idx)"
                                     cdkTextareaAutosize></textarea>
                           @if (control.controls.offertextChanged.value) {
                             <mat-icon (click)="resetOffertext(idx)">rotate_left</mat-icon>
                           }
                         </div>
-                        <span class="amount">{{ control.get("amount").value }}</span>
+                        <span class="amount">
+                          @if (getNumericVal(control.get("priceCalculated")) !== 0) {
+                            {{ control.get("amount").value }}
+                          }
+                        </span>
                         <div class="price">
-                          {{ formatCurrency(getNumericVal(control.get("priceCalculated")), "de-DE", "€") }}
+                          @if (getNumericVal(control.get("priceCalculated")) !== 0) {
+                            {{ formatCurrency(getNumericVal(control.get("priceCalculated")), "de-DE", "€") }}
+                          }
                         </div>
                       </div>
                       @if (control.controls.children.controls.length !== 0) {
@@ -150,16 +159,22 @@
                               <span class="prefix">{{ idx + 1 }}.{{ idx2 + 1 }}</span>
                               <div class="offertext">
                                 <textarea [formControl]="child.controls.offertextEvaluated"
-                                          (keyup)="onChangeOffertext(idx,idx2)" [name]="`${ idx + 1 }.${idx2 + 1}`"
+                                          (keydown)="onChangeOffertext(idx,idx2)" [name]="`${ idx + 1 }.${idx2 + 1}`"
                                           [title]="`Angebotstext ${idx + 1.0}.${idx2 + 1}`"
                                           cdkTextareaAutosize></textarea>
                                 @if (child.controls.offertextChanged.value) {
                                   <mat-icon (click)="resetOffertext(idx,idx2)">rotate_left</mat-icon>
                                 }
                               </div>
-                              <span class="amount">{{ child.get("amount").value }}</span>
+                              <span class="amount">
+                                @if (getNumericVal(child.get("priceCalculated")) !== 0) {
+                                  {{ child.get("amount").value }}
+                                }
+                              </span>
                               <div class="price">
-                                {{ formatCurrency(getNumericVal(child.get("priceCalculated")), "de-DE", "€") }}
+                                @if (getNumericVal(child.get("priceCalculated")) !== 0) {
+                                  {{ formatCurrency(getNumericVal(child.get("priceCalculated")), "de-DE", "€") }}
+                                }
                               </div>
                             </div>
                           }

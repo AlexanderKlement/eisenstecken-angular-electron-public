@@ -74,7 +74,6 @@ export function createOffertext(group: FormGroup<OfferEntryGroup>): string[] {
     value: group.controls.description.value
   });
   const res = createOffertextCont(formula, parsedFields, group.get("alternative").value);
-  console.log(`offertext for ${group.get("name").value}`, { res, formula, parsedFields });
   return res;
 }
 

@@ -1,0 +1,125 @@
+<app-offer-container title="Aufstellungen">
+  @if (!!statementId) {
+    <form [formGroup]="statementGroup">
+      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16">
+        <h3 class="sub-title">{{ subTitle }}</h3>
+        <div fxFlex></div>
+        @if (loading$ | async) {
+          <div class="spinner-container">
+            <mat-spinner></mat-spinner>
+          </div>
+        } @else {
+          <button mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
+
+          <button mat-raised-button color="primary" (click)="onSave()">Speichern</button>
+        }
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="16">
+        <div fxLayout="column" fxLayoutAlign="space-around stretch" fxFlex fxLayoutGap="8">
+          <mat-form-field appearance="outline" class="new-form-element">
+            <mat-label>Name</mat-label>
+            <input class="form-control" formControlName="name" matInput>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="new-form-element">
+            <mat-label>Kunde</mat-label>
+            <input class="form-control" formControlName="clientName" readonly matInput>
+            <mat-hint>Aus Angebot: {{ statementGroup.get("offerName").value }}</mat-hint>
+          </mat-form-field>
+          @if (statementGroup.controls.content.length !== 0) {
+            <div formArrayName="content"
+            >
+              @for (group of statementGroup.controls.content.controls; track group.controls.id; let idx = $index) {
+                <app-offer-statement-entry-edit
+                  [depth]="0"
+                  prefix=""
+                  [index]="idx"
+                  [entryGroup]="group"
+                ></app-offer-statement-entry-edit>
+              }
+            </div>
+          }
+        </div>
+        <div class="summary">
+          <div class="summary-content">
+            <div class="summary-line">
+            <span class="neutral">
+              Zwischensumme
+            </span>
+              <span>
+              {{ formatCurrency((getNumericVal(statementGroup.get("price")) - getNumericVal(statementGroup.get("priceSubtraction"))) / (1 + (getNumericVal(statementGroup.get("subPercent")) / 100)), "de-DE", "€") }}
+            </span>
+            </div>
+            <div class="summary-line">
+            <span class="neutral">
+              Rabatt (%)
+            </span>
+
+              <mat-form-field class="new-form-element small" appearance="outline">
+                <input formControlName="subPercent" matInput (change)="onChangePrice()">
+                <mat-icon class="neutral" matSuffix>percent</mat-icon>
+              </mat-form-field>
+            </div>
+            <div class="summary-line">
+            <span class="neutral">
+              Rabatt (€)
+            </span>
+              <mat-form-field class="new-form-element small" appearance="outline">
+                <input formControlName="priceSubtraction" matInput (change)="onChangePrice()">
+                <mat-icon class="neutral" matSuffix>euro</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="summary-footer">
+            <span class="neutral">
+              Endsumme
+            </span>
+            <strong>
+              {{ formatCurrency(getNumericVal(statementGroup.get("price")), "de-DE", "€") }}
+            </strong>
+          </div>
+        </div>
+      </div>
+    </form>
+  } @else {
+    <form [formGroup]="statementGroup">
+      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16">
+        <h3>{{ subTitle }}</h3>
+        <div fxFlex></div>
+        @if (loading$ | async) {
+          <div class="spinner-container">
+            <mat-spinner></mat-spinner>
+          </div>
+        } @else {
+          <button mat-raised-button color="primary" (click)="onSave()">Speichern</button>
+        }
+      </div>
+      <div fxLayout="column" fxLayoutAlign="space-around stretch">
+        <div fxLayout="row" fxLayoutGap="16">
+          <mat-form-field fxFlex appearance="fill">
+            <mat-label>Name</mat-label>
+            <input class="form-control" formControlName="name" matInput>
+          </mat-form-field>
+          <mat-form-field appearance="fill" fxFlex>
+            <mat-label>Auftrag</mat-label>
+            <mtx-select
+              bindValue="id"
+              bindLabel="name"
+              panelClass="mtx-select-panel-container"
+              notFoundText="Kein element gefunden"
+              typeToSearchText="Tippen um Element zu suchen"
+              [minTermLength]="2"
+              [typeahead]="offersInput$"
+              formControlName="offerId"
+              [clearable]="false"
+              [addTag]="false"
+              [editableSearchTerm]="true"
+              [trackByFn]="trackByFn"
+              [loading]="offersLoading"
+              [items]="offers$|async"
+            ></mtx-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  }
+</app-offer-container>

@@ -4,7 +4,15 @@
   </div>
 </div>
 <div [formGroup]="entryGroup" class="entry">
-
+  @if (entryGroup.controls.children.length !== 0) {
+    <mat-icon (click)="toggleOpen2()" class="open2">
+      @if (open2) {
+        keyboard_arrow_down
+      } @else {
+        keyboard_arrow_up
+      }
+    </mat-icon>
+  }
   <div class="entry-header-container" (mouseenter)="mouseEnter($event)" (mousemove)="mouseMoveEntered($event)"
        (mouseleave)="mouseLeave()">
     @if (draggedObject != null && !this.dragEnabled && !parentDragging) {
@@ -24,7 +32,7 @@
           @if (open) {
             keyboard_arrow_down
           } @else {
-            keyboard_arrow_up
+            keyboard_arrow_right
           }
         </mat-icon>
         <div
@@ -73,13 +81,11 @@
 
           <mat-icon class="icon-btn" (click)="onCopyElem(index)" title="Dublizieren">content_copy
           </mat-icon>
-          @if (depth !== 0) {
-            <mat-icon class="icon-btn"
-                      [class.active]="entryGroup.get('alternative').value"
-                      (click)="toggleAlternative()" title="Als Alternative markieren">
-              compare_arrows
-            </mat-icon>
-          }
+          <mat-icon class="icon-btn"
+                    [class.active]="entryGroup.get('alternative').value"
+                    (click)="toggleAlternative()" title="Als Alternative markieren">
+            compare_arrows
+          </mat-icon>
           <mat-icon class="icon-btn" (click)="togglePercent()"
                     [class.active]="percent"
                     title="Sconto/Aufschlag für diese Posizionsetzen">
@@ -95,7 +101,8 @@
             }
           </mat-icon>
           <strong
-            [title]="entryGroup.get('priceFormula').value">{{ formatCurrency(this.entryGroup.get("priceCalculated").value, "de-DE", "EUR") }}</strong>
+            [title]="entryGroup.get('priceFormula').value"
+            class="header-price">{{ formatCurrency(this.entryGroup.get("priceCalculated").value, "de-DE", "€") }}</strong>
         } @else {
           <span class="icon-btn smaller" (click)="onDeleteElem(this.index)">Esc</span>
         }
@@ -180,7 +187,7 @@
     }
   </div>
   @if (entryGroup.controls.children.length !== 0) {
-    <div class="entry-content" formArrayName="children">
+    <div class="entry-content" formArrayName="children" [class.close]="!open2">
       @for (control of entryGroup.controls.children.controls; track control.controls.id; let idx = $index) {
         <app-offer-v2-entry-edit
           (priceEvaluated)="childrenEvaluated()"
@@ -202,6 +209,7 @@
           (elementInserted)="elementInserted.emit($event)"
           (elementUnInserted)="elementUnInserted.emit($event)"
           (selectElem)="this.selectElem.emit($event)"
+          (elementAdded)="this.elementAdded.emit($event)"
         ></app-offer-v2-entry-edit>
       }
     </div>

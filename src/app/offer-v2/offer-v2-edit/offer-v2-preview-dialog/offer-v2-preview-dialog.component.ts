@@ -186,16 +186,13 @@ export default class OfferV2PreviewDialogComponent implements OnInit, AfterViewI
     this.isPrinting = true;
     this.loadingSubject.next(true);
     setTimeout(() => {
-
       this.extractNodeWithStyles().then((payload) => {
         this.offerService.generatePdfOfferV2OfferPdfOfferIdPost(this.data.offer.id, payload).pipe(take(1)).subscribe((offer) => {
-          console.log(offer);
           this.loadingSubject.next(false);
           this.isPrinting = false;
         });
       });
-
-    }, 1000);
+    }, 200);
   }
 
   parseRow(row: OfferV2EntryOutput, depth: number, prefix: string) {

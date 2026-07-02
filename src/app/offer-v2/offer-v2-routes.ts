@@ -12,6 +12,7 @@ import OfferElementsComponent from "./elements/offer-elements.component";
 import OfferElementsEditComponent from "./elements/elements-edit/offer-elements-edit.component";
 import OfferTemplatesEditComponent from "./templates/templates-edit/offer-templates-edit.component";
 import { OfferV2EditComponent } from "./offer-v2-edit/offer-v2-edit.component";
+import { OfferStatementEditComponent } from "./statement-edit/offer-statement-edit.component";
 
 const offerV2Routes: Routes = [
   {
@@ -144,6 +145,22 @@ const offerV2Routes: Routes = [
   {
     path: "offer_v2/templates/:id/:method",
     component: OfferTemplatesEditComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/statement/:id",
+    component: OfferStatementEditComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/statement/:id/:method",
+    component: OfferStatementEditComponent,
     data: {
       requiresLogin: true
     },

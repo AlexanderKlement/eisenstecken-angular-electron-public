@@ -1,0 +1,39 @@
+<div [formGroup]="entryGroup" class="entry">
+  <div [className]="`entry-header level-${depth+1}`" #header>
+    <span class="neutral prefix">{{ prefix }}{{ index + 1 }}</span>
+    <mat-checkbox formControlName="notMade">nicht gemacht</mat-checkbox>
+    <mat-form-field appearance="outline" class="new-form-element fill-width">
+      <input formControlName="name" matInput [disabled]="true" [readonly]="true">
+    </mat-form-field>
+    <span>
+          {{ formatCurrency(getNumericVal(entryGroup.get("originalPrice")), "de-DE", "€") }}
+        </span>
+    <strong
+      class="header-price">{{ formatCurrency(getNumericVal(this.entryGroup.get("price")), "de-DE", "€") }}</strong>
+  </div>
+  <div class="entry-entries" formArrayName="entries">
+    @for (entry of entryGroup.controls.entries.controls; track entry.controls.id.value; let idx = $index) {
+      <app-statement-entry-field-edit
+        [entryFormGroup]="entry"
+        (deleted)="onDelete($event)"
+        [index]="idx"
+      ></app-statement-entry-field-edit>
+    }
+    <div fxLayout="row" fxLayoutAlign="start center" class="new" (click)="onAdd()">
+      <mat-icon>add</mat-icon>
+      <span>Eintrag hinzufügen</span>
+    </div>
+  </div>
+  @if (entryGroup.controls.children.length !== 0) {
+    <div class="entry-content" formArrayName="children">
+      @for (child of entryGroup.controls.children.controls; track child.controls.id.value; let idx = $index) {
+        <app-offer-statement-entry-edit
+          [index]="idx"
+          [entryGroup]="child"
+          [prefix]="`${prefix}${index+1}.`"
+          [depth]="depth+1"
+        ></app-offer-statement-entry-edit>
+      }
+    </div>
+  }
+</div>
