@@ -9,10 +9,12 @@
             <mat-spinner></mat-spinner>
           </div>
         } @else {
-          <button mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
+          <button type="button" mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
 
-          <button mat-raised-button color="primary" (click)="onSave()" [disabled]="!hasChanged">Speichern</button>
-          <button matIconButton (click)="openPreview()" [disabled]="!offer">
+          <button type="button" mat-raised-button color="primary" (click)="onSave()" [disabled]="!hasChanged">
+            Speichern
+          </button>
+          <button type="button" matIconButton (click)="openPreview()" [disabled]="!offer">
             <mat-icon>picture_as_pdf</mat-icon>
           </button>
         }
@@ -96,7 +98,7 @@
             <mat-spinner></mat-spinner>
           </div>
         } @else {
-          <button mat-raised-button color="primary" (click)="onSave()"
+          <button type="button" mat-raised-button color="primary" (click)="onSave()"
                   [disabled]="statementGroup.controls.offerId.value === -1">Speichern
           </button>
         }

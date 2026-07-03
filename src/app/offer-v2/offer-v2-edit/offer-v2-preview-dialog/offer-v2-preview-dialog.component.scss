@@ -348,6 +348,7 @@ $bottom-cols: mm(35) mm(62) mm(36) mm(46);
 
         .cell--desc {
           text-align: left;
+          white-space: pre-wrap;
         }
 
         .cell--total {

@@ -7,14 +7,15 @@ import { take } from "rxjs/operators";
 import { MatFormField, MatHint, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { MatIcon } from "@angular/material/icon";
-import { globalKeywords, KeywordRegExp, nestingKeywords } from "../offer-calculation-utils";
+import { globalKeywords, KeywordRegExp } from "../offer-calculation-utils";
 
 type HighlightedText = {
   key: string;
   value: string;
   highlighted: boolean;
   warn: boolean;
-  hasNewline: boolean;
+  hasNewlineBefore: boolean;
+  hasNewlineAfter: boolean;
 }
 type Suffix = {
   icon: string;
@@ -119,8 +120,7 @@ export default class OfferCalculationInputComponent implements OnInit {
     const firstPart = val.substring(0, searchTerm.pos);
     const secondPart = val.substring(searchTerm.pos + searchTerm.original.length);
     const suffix = "";
-    const firstPartEndsWithNesting = nestingKeywords.reduce((prev, cur) => prev || firstPart.endsWith(`${cur}.`), false);
-    const prefix = firstPartEndsWithNesting ? "" : "@";
+    const prefix = "@";
     const newVal = firstPart + prefix + field + suffix + secondPart;
     this.setValue(newVal);
     this.calculationInput.nativeElement.value = newVal;
@@ -140,7 +140,7 @@ export default class OfferCalculationInputComponent implements OnInit {
     let lastIdx = 0;
     while (!match.done) {
       const txt = match.value[0];
-      const field = this.fields.find(field => `@${field}` === txt || nestingKeywords.reduce((prev, cur) => prev || `@${cur}.${field}` === txt, false));
+      const field = this.fields.find(field => `@${field}` === txt);
       if (field) {
         if (match.value.index !== 0) {
           const value = text.substring(lastIdx, match.value.index);
@@ -149,15 +149,17 @@ export default class OfferCalculationInputComponent implements OnInit {
             value,
             highlighted: false,
             warn: false,
-            hasNewline: value.includes("\n")
+            hasNewlineBefore: value.replace("\r", "").startsWith("\n"),
+            hasNewlineAfter: value.replace("\r", "").endsWith("\n")
           });
         }
         this.parts.push({
           key: `${txt}-${match.value.index}`,
           value: txt,
           highlighted: true,
-          warn: globalKeywords.find(f => `@${f}` === txt || nestingKeywords.reduce((prev, cur) => prev || `@${cur}.${f}` === txt, false)) ? false : this.filterFields ? !this.filterFields.find(f => `@${f.label}` === txt) : false,
-          hasNewline: false
+          warn: globalKeywords.find(f => `@${f}` === txt) ? false : this.filterFields ? !this.filterFields.find(f => `@${f.label}` === txt) : false,
+          hasNewlineBefore: false,
+          hasNewlineAfter: false
         });
         lastIdx = match.value.index + txt.length;
       }

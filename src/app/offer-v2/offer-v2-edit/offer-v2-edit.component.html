@@ -12,15 +12,18 @@
                 <mat-spinner></mat-spinner>
               </div>
             } @else if (isCustomVersion) {
-              <button mat-raised-button color="accent" (click)="onRestoreVersion()">Version wiederherstellen</button>
-              <button mat-raised-button color="primary" (click)="onBackToOriginal()">Zurück zur aktuellen Version
+              <button type="button" mat-raised-button color="accent" (click)="onRestoreVersion()">Version
+                wiederherstellen
+              </button>
+              <button type="button" mat-raised-button color="primary" (click)="onBackToOriginal()">Zurück zur aktuellen
+                Version
               </button>
 
             } @else {
               @if (!!offerV2Id) {
-                <button mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
+                <button type="button" mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
               }
-              <button mat-raised-button color="primary" (click)="onSave()">Speichern</button>
+              <button type="button" mat-raised-button color="primary" (click)="onSave()">Speichern</button>
               @if (unsavedChanges) {
                 <mat-icon class="unsaved-changes"
                           [title]="`Änderungen nicht gespeichert ${lastSave ? `(Letzter Auto-save: ${lastSave.toLocaleTimeString('de-DE')})` : ''}`">
@@ -48,8 +51,10 @@
               <strong>{{ selectedElements.length }} {{ selectedElements.length === 1 ? 'Element' : 'Elemente' }}
                 ausgewählt</strong>
               <div fxFlex></div>
-              <button mat-raised-button color="primary" (click)="onCreateTemplate()">Als Teamplate Speichern</button>
-              <button mat-raised-button color="accent" (click)="onUnselectAll()">Auswahl aufheben</button>
+              <button type="button" mat-raised-button color="primary" (click)="onCreateTemplate()">Als Teamplate
+                Speichern
+              </button>
+              <button type="button" mat-raised-button color="accent" (click)="onUnselectAll()">Auswahl aufheben</button>
 
             </div>
           }
@@ -119,7 +124,7 @@
               <div class="preview">
                 <div class="preview-header">
                   <strong>Vorschau</strong>
-                  <button matIconButton (click)="openPreview()" [disabled]="!job">
+                  <button type="button" matIconButton (click)="openPreview()" [disabled]="!job">
                     <mat-icon>picture_as_pdf</mat-icon>
                   </button>
                 </div>
@@ -251,7 +256,7 @@
                 <mat-spinner></mat-spinner>
               </div>
             } @else {
-              <button mat-raised-button color="primary" (click)="onSave()">Speichern</button>
+              <button type="button" mat-raised-button color="primary" (click)="onSave()">Speichern</button>
             }
           </div>
           <mat-form-field appearance="fill">
@@ -333,9 +338,9 @@
           </div>
         } @else {
           @if (!!offerV2Id) {
-            <button mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
+            <button type="button" mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
           }
-          <button mat-raised-button color="primary" (click)="onSave()">Speichern</button>
+          <button type="button" mat-raised-button color="primary" (click)="onSave()">Speichern</button>
         }
       </div>
       <div fxLayout="column" fxLayoutAlign="space-around stretch">

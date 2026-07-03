@@ -23,8 +23,9 @@
     </div>
   } @else {
     <div fxLayout="row" fxFlexFill fxLayoutAlign="space-between center">
-      <button mat-raised-button color="accent" (click)="onCancelClick()">Abbrechen</button>
-      <button mat-raised-button color="primary" [disabled]="!templateGroup.valid" (click)="onSubmitClick()">Speichern
+      <button type="button" mat-raised-button color="accent" (click)="onCancelClick()">Abbrechen</button>
+      <button type="button" mat-raised-button color="primary" [disabled]="!templateGroup.valid"
+              (click)="onSubmitClick()">Speichern
       </button>
     </div>
   }

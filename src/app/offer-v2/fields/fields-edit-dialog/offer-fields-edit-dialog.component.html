@@ -64,11 +64,12 @@
     </div>
   } @else {
     <div fxLayout="row" fxFlexFill fxLayoutAlign="space-between center">
-      <button mat-raised-button color="accent" (click)="onCancelClick()">Abbrechen</button>
+      <button type="button" mat-raised-button color="accent" (click)="onCancelClick()">Abbrechen</button>
       @if (fieldId) {
-        <button (click)="onDelete()" mat-raised-button color="warn">Löschen</button>
+        <button type="button" (click)="onDelete()" mat-raised-button color="warn">Löschen</button>
       }
-      <button mat-raised-button color="primary" [disabled]="!fieldsGroup.valid" (click)="onSubmitClick()">Speichern
+      <button type="button" mat-raised-button color="primary" [disabled]="!fieldsGroup.valid" (click)="onSubmitClick()">
+        Speichern
       </button>
     </div>
   }

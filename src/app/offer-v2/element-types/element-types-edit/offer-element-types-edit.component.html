@@ -8,9 +8,10 @@
       </div>
     } @else {
       @if (!!elementTypeId) {
-        <button mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
+        <button type="button" mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
       }
-      <button mat-raised-button [disabled]="!elementTypeGroup.valid" color="primary" (click)="onSave()">Speichern
+      <button type="button" mat-raised-button [disabled]="!elementTypeGroup.valid" color="primary" (click)="onSave()">
+        Speichern
       </button>
     }
   </div>
@@ -70,7 +71,9 @@
           <app-offer-field-element-type-pill [fieldType]="field.fieldType"></app-offer-field-element-type-pill>
         </app-list-element>
       }
-      <button mat-stroked-button color="primary" class="my-2" (click)="onNavCreateField()">Neues Feld erstellen</button>
+      <button type="button" mat-stroked-button color="primary" class="my-2" (click)="onNavCreateField()">Neues Feld
+        erstellen
+      </button>
     </div>
   </div>
 </app-offer-container>

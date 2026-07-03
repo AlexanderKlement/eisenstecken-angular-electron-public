@@ -3,9 +3,8 @@ import { FormGroup } from "@angular/forms";
 import { OfferFieldEnum } from "../../api/openapi";
 import { OfferEntryGroup } from "./offer-v2-edit/offer-v2-entry-edit/offer-v2-entry-edit.component";
 
-export const nestingKeywords = ["children", "parent"];
-export const KeywordRegExp = new RegExp(`@(?:(?:${nestingKeywords.join("|")})\\.)?[a-zA-ZäöüÄÖÜß]+`, "g");
-export const globalKeywords = ["Beschreibung", "Angebotstext", ...nestingKeywords];
+export const KeywordRegExp = new RegExp(`@[a-zA-ZäöüÄÖÜß]+`, "g");
+export const globalKeywords = ["Beschreibung", "Angebotstext", "children"];
 
 
 type ParsedField = {

@@ -8,9 +8,9 @@
       </div>
     } @else {
       @if (!!templateId) {
-        <button mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
+        <button type="button" mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
       }
-      <button mat-raised-button color="primary" (click)="onSave()">Speichern</button>
+      <button type="button" mat-raised-button color="primary" (click)="onSave()">Speichern</button>
     }
   </div>
 
@@ -48,7 +48,7 @@
 
       @if (templateGroup.controls.structure.length === 0) {
         <div fxLayout="row" fxLayoutAlign="center center">
-          <button mat-raised-button (click)="onAddStructure()">
+          <button type="button" mat-raised-button (click)="onAddStructure()">
             Neue Struktur
           </button>
         </div>

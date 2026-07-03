@@ -8,9 +8,10 @@
       </div>
     } @else {
       @if (libraryId) {
-        <button (click)="onDelete()" mat-raised-button color="warn">Löschen</button>
+        <button type="button" (click)="onDelete()" mat-raised-button color="warn">Löschen</button>
       }
-      <button mat-raised-button color="primary" [disabled]="!libraryGroup.valid" (click)="onSubmitClick()">Speichern
+      <button type="button" mat-raised-button color="primary" [disabled]="!libraryGroup.valid"
+              (click)="onSubmitClick()">Speichern
       </button>
     }
   </div>
@@ -66,7 +67,7 @@
           }
         </div>
         <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="center" class="my-1">
-          <button mat-raised-button type="button" (click)="onAddEntry()"
+          <button type="button" mat-raised-button type="button" (click)="onAddEntry()"
                   class="save-btn">
             Neuer Eintrag
           </button>

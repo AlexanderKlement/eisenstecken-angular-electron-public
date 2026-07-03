@@ -4,8 +4,11 @@
     <div class="highlight-backdrop" #highlightsContainer>
       <div class="highlights">
         @for (part of parts; track part.key) {
+          @if (part.hasNewlineBefore) {
+            <br />
+          }
           <span [class.mark]="part.highlighted" [class.warn]="part.warn">{{ part.value }}</span>
-          @if (part.hasNewline) {
+          @if (part.hasNewlineAfter) {
             <br />
           }
         }
@@ -62,7 +65,7 @@
   @if (!readonly) {
     <div fxLayout="row" fxLayoutGap="8" class="my-1 autocomlete-buttons">
       @for (field of displayFields; track field) {
-        <button (click)="onFieldClick(displayFields[$index])" mat-stroked-button
+        <button type="button" (click)="onFieldClick(displayFields[$index])" mat-stroked-button
                 class="autocomplete-button">{{ field }}
         </button>
       }

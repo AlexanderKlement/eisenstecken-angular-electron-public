@@ -8,9 +8,9 @@
       </div>
     } @else {
       @if (!!elementId) {
-        <button mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
+        <button type="button" mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
       }
-      <button mat-raised-button color="primary" (click)="onSave()">Speichern</button>
+      <button type="button" mat-raised-button color="primary" (click)="onSave()">Speichern</button>
     }
   </div>
 
@@ -38,7 +38,7 @@
 
         <div fxLayout="row" fxFill fxLayoutAlign="space-between center" class="my-1">
           <strong class="neutral">Felder (definiert im Elementtyp)</strong>
-          <button mat-stroked-button color="primary" (click)="onNavElementType()">
+          <button type="button" mat-stroked-button color="primary" (click)="onNavElementType()">
             Elementtyp bearbeiten
           </button>
         </div>

@@ -147,7 +147,7 @@
                 </div>
                 <div class="cell cell--desc">
                   @for (line of row.text; track line; let idx = $index) {
-                    {{ line }}
+                    <span>{{ line }}</span>
                     @if (idx < row.text.length - 1) {
                       <br />
                     }
@@ -303,7 +303,7 @@
                       </div>
                       <div class="cell cell--desc">
                         @for (line of row.text; track line; let idx = $index) {
-                          {{ line }}
+                          <span>{{ line }}</span>
                           @if (idx < row.text.length - 1) {
                             <br />
                           }
@@ -456,13 +456,14 @@
 </div>
 <mat-dialog-actions>
   <div fxLayout="row" fxFlexFill fxLayoutAlign="space-between center">
-    <button mat-raised-button color="accent" (click)="onCloseClick()">Schließen</button>
+    <button type="button" mat-raised-button color="accent" (click)="onCloseClick()">Schließen</button>
     @if (loading$ | async) {
       <div class="spinner-container">
         <mat-spinner></mat-spinner>
       </div>
     } @else {
-      <button mat-raised-button color="primary" (click)="onGeneratePdf()" [disabled]="data.offer.id === -1">PDF
+      <button type="button" mat-raised-button color="primary" (click)="onGeneratePdf()"
+              [disabled]="data.offer.id === -1">PDF
         Speichern
       </button>
     }

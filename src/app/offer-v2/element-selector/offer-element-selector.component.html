@@ -69,7 +69,8 @@
           </mat-icon>
           <span is="save-in-library" (click)="onCheckSavInLibrary()">In Bibliothek speichern</span>
           <div fxFlex></div>
-          <button mat-raised-button color="primary" (click)="onCreateType()" [disabled]="!selectedElementType">
+          <button type="button" mat-raised-button color="primary" (click)="onCreateType()"
+                  [disabled]="!selectedElementType">
             Erstellen
           </button>
         </div>
