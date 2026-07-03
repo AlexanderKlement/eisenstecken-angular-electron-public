@@ -250,28 +250,30 @@ export class OfferStatementEditComponent implements OnInit {
         });
       } else {
         const offerId = getNumericVal(this.statementGroup.get("offerId"));
-        this.offerService.createOfferStatementOfferV2StatementPut({
-          offerId,
-          name: this.statementGroup.get("name").value ?? ""
-        }).pipe(take(1)).subscribe({
-          next: (data) => {
-            this.offer = {
-              ...data.offer,
-              content: data.offerContent
-            };
-            this.loadingSubject.next(false);
-            this.statementGroup = mapStatementGroup(data);
-            this.statementId = data.id;
-            this.hasChanged = false;
-            this.statementGroup.valueChanges.subscribe(() => {
-              this.statementGroupValidator();
-            });
-          },
-          error: error => {
-            this.loadingSubject.next(false);
-            this.snackBar.open("Etwas ist schief gelaufen: " + error, "Ok", { duration: 8000 });
-          }
-        });
+        if (offerId !== -1) {
+          this.offerService.createOfferStatementOfferV2StatementPut({
+            offerId,
+            name: this.statementGroup.get("name").value ?? ""
+          }).pipe(take(1)).subscribe({
+            next: (data) => {
+              this.offer = {
+                ...data.offer,
+                content: data.offerContent
+              };
+              this.loadingSubject.next(false);
+              this.statementGroup = mapStatementGroup(data);
+              this.statementId = data.id;
+              this.hasChanged = false;
+              this.statementGroup.valueChanges.subscribe(() => {
+                this.statementGroupValidator();
+              });
+            },
+            error: error => {
+              this.loadingSubject.next(false);
+              this.snackBar.open("Etwas ist schief gelaufen: " + error, "Ok", { duration: 8000 });
+            }
+          });
+        }
       }
     }
   }

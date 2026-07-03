@@ -11,7 +11,8 @@ $pt: $scale * 0.352778; // px per pt (1pt = 0.352778mm)
 
 $grey: rgb(52, 51, 51); // color_grey
 $neutral: rgb(121, 121, 113); // color_grey
-$yellow: rgb(253, 196, 0); // color_yellow
+$yellow: #fdc400; // color_yellow
+$error: #ff0000; // color_yellow
 $light-grey-box: rgb(243, 243, 244); // color_light_grey_box
 $dark-grey-box: rgb(225, 226, 227); // color_dark_grey_box
 $grey-line: rgb(25, 25, 25); // color_grey_line
@@ -377,13 +378,13 @@ $bottom-cols: mm(35) mm(62) mm(36) mm(46);
 
         .row--addition {
           > .cell {
-            color: var(--primary-color);
+            color: $yellow;
           }
         }
 
         .row--substraction {
           > .cell {
-            color: var(--warn-color);
+            color: $error;
           }
         }
       }

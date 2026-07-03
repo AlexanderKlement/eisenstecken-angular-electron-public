@@ -19,6 +19,7 @@ export interface UserListElement {
     birthplace?: string | null;
     city?: string | null;
     coffee_key?: boolean | null;
+    contact: string;
     country?: string | null;
     dial: string;
     disabled: boolean;

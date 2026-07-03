@@ -96,7 +96,9 @@
             <mat-spinner></mat-spinner>
           </div>
         } @else {
-          <button mat-raised-button color="primary" (click)="onSave()">Speichern</button>
+          <button mat-raised-button color="primary" (click)="onSave()"
+                  [disabled]="statementGroup.controls.offerId.value === -1">Speichern
+          </button>
         }
       </div>
       <div fxLayout="column" fxLayoutAlign="space-around stretch">
@@ -106,7 +108,7 @@
             <input class="form-control" formControlName="name" matInput>
           </mat-form-field>
           <mat-form-field appearance="fill" fxFlex>
-            <mat-label>Auftrag</mat-label>
+            <mat-label>Angebot</mat-label>
             <mtx-select
               bindValue="id"
               bindLabel="name"

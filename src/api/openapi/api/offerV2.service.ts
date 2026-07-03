@@ -1806,9 +1806,9 @@ export class OfferV2Service extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public generateStatementPdfOfferV2StatementPdfStatementIdPost(statementId: number, offerV2PdfBody: OfferV2PdfBody, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OfferV2>;
-    public generateStatementPdfOfferV2StatementPdfStatementIdPost(statementId: number, offerV2PdfBody: OfferV2PdfBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OfferV2>>;
-    public generateStatementPdfOfferV2StatementPdfStatementIdPost(statementId: number, offerV2PdfBody: OfferV2PdfBody, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OfferV2>>;
+    public generateStatementPdfOfferV2StatementPdfStatementIdPost(statementId: number, offerV2PdfBody: OfferV2PdfBody, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OfferStatement>;
+    public generateStatementPdfOfferV2StatementPdfStatementIdPost(statementId: number, offerV2PdfBody: OfferV2PdfBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OfferStatement>>;
+    public generateStatementPdfOfferV2StatementPdfStatementIdPost(statementId: number, offerV2PdfBody: OfferV2PdfBody, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OfferStatement>>;
     public generateStatementPdfOfferV2StatementPdfStatementIdPost(statementId: number, offerV2PdfBody: OfferV2PdfBody, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (statementId === null || statementId === undefined) {
             throw new Error('Required parameter statementId was null or undefined when calling generateStatementPdfOfferV2StatementPdfStatementIdPost.');
@@ -1856,7 +1856,7 @@ export class OfferV2Service extends BaseService {
 
         let localVarPath = `/offer/v2/statement/pdf/${this.configuration.encodeParam({name: "statementId", value: statementId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<OfferV2>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<OfferStatement>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: offerV2PdfBody,
