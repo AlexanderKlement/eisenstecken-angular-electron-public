@@ -62,6 +62,7 @@
 * remove yarn from package.json ([d1a5ba7](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/d1a5ba7))
 * Small Bugfix ([a598bc2](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/a598bc2))
 * small fixes ([c32815a](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c32815a))
+* Small fixes ([0fe9fde](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/0fe9fde))
 * Small fixes ([9cc8af8](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/9cc8af8))
 * Some bugfixes ([9dd6991](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/9dd6991))
 * some modifications to existing ([e168745](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/e168745))
