@@ -1,4 +1,4 @@
-<app-offer-container title="Aufstellungen">
+<app-offer-container subTitle="Aufstellungen">
   @if (!!statementId) {
     <form [formGroup]="statementGroup">
       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16">
@@ -11,7 +11,10 @@
         } @else {
           <button mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
 
-          <button mat-raised-button color="primary" (click)="onSave()">Speichern</button>
+          <button mat-raised-button color="primary" (click)="onSave()" [disabled]="!hasChanged">Speichern</button>
+          <button matIconButton (click)="openPreview()" [disabled]="!offer">
+            <mat-icon>picture_as_pdf</mat-icon>
+          </button>
         }
       </div>
       <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="16">
@@ -34,6 +37,7 @@
                   prefix=""
                   [index]="idx"
                   [entryGroup]="group"
+                  [parentNotMade]="false"
                 ></app-offer-statement-entry-edit>
               }
             </div>
@@ -46,7 +50,9 @@
               Zwischensumme
             </span>
               <span>
-              {{ formatCurrency((getNumericVal(statementGroup.get("price")) - getNumericVal(statementGroup.get("priceSubtraction"))) / (1 + (getNumericVal(statementGroup.get("subPercent")) / 100)), "de-DE", "€") }}
+              {{
+                  formatCurrency(betweenPrice, "de-DE", "€")
+                }}
             </span>
             </div>
             <div class="summary-line">

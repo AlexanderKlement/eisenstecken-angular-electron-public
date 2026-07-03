@@ -13,7 +13,6 @@ import { OfferStatementEntryInput } from './offerStatementEntryInput';
 export interface OfferStatementPatch { 
     content: Array<OfferStatementEntryInput>;
     name: string;
-    originalPrice: number;
     price: number;
     priceSubtraction: number;
     subPercent: number;

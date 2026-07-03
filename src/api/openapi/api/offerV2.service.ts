@@ -1800,6 +1800,77 @@ export class OfferV2Service extends BaseService {
     }
 
     /**
+     * Generate Statement Pdf
+     * @param statementId 
+     * @param offerV2PdfBody 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public generateStatementPdfOfferV2StatementPdfStatementIdPost(statementId: number, offerV2PdfBody: OfferV2PdfBody, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OfferV2>;
+    public generateStatementPdfOfferV2StatementPdfStatementIdPost(statementId: number, offerV2PdfBody: OfferV2PdfBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OfferV2>>;
+    public generateStatementPdfOfferV2StatementPdfStatementIdPost(statementId: number, offerV2PdfBody: OfferV2PdfBody, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OfferV2>>;
+    public generateStatementPdfOfferV2StatementPdfStatementIdPost(statementId: number, offerV2PdfBody: OfferV2PdfBody, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (statementId === null || statementId === undefined) {
+            throw new Error('Required parameter statementId was null or undefined when calling generateStatementPdfOfferV2StatementPdfStatementIdPost.');
+        }
+        if (offerV2PdfBody === null || offerV2PdfBody === undefined) {
+            throw new Error('Required parameter offerV2PdfBody was null or undefined when calling generateStatementPdfOfferV2StatementPdfStatementIdPost.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (OAuth2PasswordBearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/offer/v2/statement/pdf/${this.configuration.encodeParam({name: "statementId", value: statementId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<OfferV2>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: offerV2PdfBody,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Get All Offer Libraries With Entries
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

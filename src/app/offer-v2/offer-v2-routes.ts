@@ -159,6 +159,14 @@ const offerV2Routes: Routes = [
     canActivate: [AccessGuard]
   },
   {
+    path: "offer_v2/statement/new/:job_id",
+    component: OfferStatementEditComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
     path: "offer_v2/statement/:id/:method",
     component: OfferStatementEditComponent,
     data: {

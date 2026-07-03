@@ -23,6 +23,10 @@
       <app-table-builder [$refresh]="$refresh" [dataSource]="offerV2DataSource" noSearch noPagination
                          title="Angebote"></app-table-builder>
     </div>
+    <div class="table-section">
+      <app-table-builder [$refresh]="$refresh" [dataSource]="statementsDataSource" noSearch noPagination
+                         title="Aufstellungen"></app-table-builder>
+    </div>
   }
 
   @if (isMainJob && outgoingInvoicesAllowed) {

@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from "@angular/core";
 import OfferContainerComponent from "../offer-container/offer-container.component";
-import { AsyncPipe, formatCurrency } from "@angular/common";
+import { AsyncPipe, formatCurrency, Location } from "@angular/common";
 import {
   DefaultFlexDirective,
   DefaultLayoutAlignDirective,
@@ -220,6 +220,8 @@ function moveObjectInGroup(group: FormGroup<OfferV2Group>, entry: FormGroup<Offe
 })
 export class OfferV2EditComponent implements OnInit {
   private router = inject(Router);
+  private location = inject(Location);
+
   private route = inject(ActivatedRoute);
   private api = inject(DefaultService);
   private offerService = inject(OfferV2Service);
@@ -498,7 +500,7 @@ export class OfferV2EditComponent implements OnInit {
         (id) => this.offerService.deleteOfferV2OfferV2OfferOfferIdDelete(id),
         () => {
           this.loadingSubject.next(false);
-          this.router.navigateByUrl("/offer_v2").then();
+          this.location.back();
         },
         this.snackBar);
     }

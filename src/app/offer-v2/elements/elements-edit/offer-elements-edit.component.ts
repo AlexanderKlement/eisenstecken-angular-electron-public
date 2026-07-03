@@ -21,20 +21,18 @@ import {
   DefaultLayoutGapDirective,
   FlexLayoutModule
 } from "ng-flex-layout";
-import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
+import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
 import OfferFieldsComponent from "../../fields/offer-fields.component";
 import { MatDialog } from "@angular/material/dialog";
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe, Location } from "@angular/common";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { BehaviorSubject, Observable } from "rxjs";
 import { confirmDeleteDialog, fieldTypeToString } from "../../offer.util";
 import { MatOption, MatSelect } from "@angular/material/select";
 import { MatCheckbox } from "@angular/material/checkbox";
 import OfferCalculationInputComponent from "../../calculation-input/offer-calculation-input.component";
-import { MatRadioButton, MatRadioGroup } from "@angular/material/radio";
 import { selectRequires } from "../../../shared/custom-validators";
-import { MatIcon } from "@angular/material/icon";
 
 type ElementFieldGroup = {
   value: FormControl<string>,
@@ -75,21 +73,18 @@ type ElementGroup = {
     MatLabel,
     MatButton,
     AsyncPipe,
-    MatSuffix,
     MatProgressSpinner,
     MatSelect,
     MatOption,
     FlexLayoutModule,
     MatCheckbox,
-    OfferCalculationInputComponent,
-    MatRadioGroup,
-    MatRadioButton,
-    MatIcon
+    OfferCalculationInputComponent
   ]
 })
 export default class OfferElementsEditComponent implements OnInit {
 
   private router = inject(Router);
+  private location = inject(Location);
   private route = inject(ActivatedRoute);
   private offerService = inject(OfferV2Service);
   subTitle = "Element erstellen";
@@ -275,7 +270,7 @@ export default class OfferElementsEditComponent implements OnInit {
   subscription = {
     next: () => {
       this.loadingSubject.next(false);
-      this.router.navigateByUrl("/offer_v2/elements").then();
+      this.location.back();
     },
     error: (error: any) => {
       this.loadingSubject.next(false);

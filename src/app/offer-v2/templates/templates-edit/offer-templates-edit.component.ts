@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import OfferContainerComponent from "../../offer-container/offer-container.component";
 import {
@@ -20,7 +20,7 @@ import {
 import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
 import { MatDialog } from "@angular/material/dialog";
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe, Location } from "@angular/common";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { BehaviorSubject } from "rxjs";
 import { confirmDeleteDialog } from "../../offer.util";
@@ -127,9 +127,8 @@ function moveObjectInGroup(group: FormGroup<TemplateGroup>, entry: FormGroup<Tem
   ]
 })
 export default class OfferTemplatesEditComponent implements OnInit {
-
-  private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private location = inject(Location);
   private offerService = inject(OfferV2Service);
   subTitle = "Template erstellen";
   templateId: number;
@@ -258,7 +257,7 @@ export default class OfferTemplatesEditComponent implements OnInit {
   subscription = {
     next: () => {
       this.loadingSubject.next(false);
-      this.router.navigateByUrl("/offer_v2/templates").then();
+      this.location.back();
     },
     error: (error: any) => {
       this.loadingSubject.next(false);

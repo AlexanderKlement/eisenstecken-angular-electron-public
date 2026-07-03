@@ -318,9 +318,11 @@ $bottom-cols: mm(35) mm(62) mm(36) mm(46);
           padding: 0;
         }
 
-        .row--section .cell {
-          font-family: "Roboto", serif;
-          font-weight: 700;
+        .row--section {
+          > .cell {
+            font-family: "Roboto", serif;
+            font-weight: 700;
+          }
         }
 
         .cell {
@@ -356,14 +358,32 @@ $bottom-cols: mm(35) mm(62) mm(36) mm(46);
         }
 
         .row--alternative {
-          .cell--single, .cell--qty, .cell--total {
+          > .cell--single, > .cell--qty, > .cell--total {
             padding-top: 20px;
           }
         }
 
         .row--sconto {
-          .cell {
+          > .cell {
             color: $neutral;
+          }
+        }
+
+        .row--not-made {
+          > .cell {
+            color: $neutral;
+          }
+        }
+
+        .row--addition {
+          > .cell {
+            color: var(--primary-color);
+          }
+        }
+
+        .row--substraction {
+          > .cell {
+            color: var(--warn-color);
           }
         }
       }

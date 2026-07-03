@@ -76,6 +76,13 @@
       color: #797971;
       cursor: pointer;
 
+      > .add {
+        font-size: 16px;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+      }
+
       &:hover {
         color: #000;
       }

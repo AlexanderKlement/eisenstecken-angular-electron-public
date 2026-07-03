@@ -3,6 +3,9 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { DefaultLayoutAlignDirective, DefaultLayoutDirective, FlexModule } from "ng-flex-layout";
 import {
   DefaultService,
+  OfferStatementEntryEntry,
+  OfferStatementEntryInput,
+  OfferStatementEntryOutput,
   OfferV2EntryOutput,
   OfferV2PdfBody,
   OfferV2Service,
@@ -25,7 +28,31 @@ import { take } from "rxjs/operators";
 
 export interface OfferPreviewData {
   offer: OfferV2WithVersion;
+  statement?: {
+    id: number;
+    content: OfferStatementEntryInput[]
+  };
   parameters: Parameter[];
+}
+
+type PdfStatement = {
+  additionSubstraction: boolean
+  text: string;
+  price: number;
+  amount: number;
+}
+
+function mapStatementEntry(entry: OfferStatementEntryEntry): PdfStatement {
+  return {
+    additionSubstraction: entry.additionSubstraction,
+    text: entry.description,
+    price: entry.price,
+    amount: entry.amount
+  };
+}
+
+function reduceStatementEntry(previous: PdfStatement[], entry: OfferStatementEntryOutput): PdfStatement[] {
+  return previous.concat(entry.entries.map(mapStatementEntry));
 }
 
 type PdfRow = {
@@ -34,6 +61,8 @@ type PdfRow = {
   amount: number;
   price: number;
   type: "title" | "normal" | "alternative" | "sconto" | "alternative-title";
+  notMade: boolean;
+  statements: PdfStatement[];
 }
 type RowHeight = { isTitle: boolean, height: number };
 
@@ -77,6 +106,12 @@ export default class OfferV2PreviewDialogComponent implements OnInit, AfterViewI
   name = "";
   material_desc_title = "";
   material_desc_body = "";
+  inPriceIncluded = "";
+  validity = "";
+  delivery = "";
+  payment = "";
+  mfg = "";
+  offer = "Angebot";
   offerTableMeasurements: RowHeight[][] = [];
   rows: PdfRow[] = [];
   @ViewChild("secondOfferTable") secondOfferTable: ElementRef<HTMLDivElement>;
@@ -187,33 +222,43 @@ export default class OfferV2PreviewDialogComponent implements OnInit, AfterViewI
     this.loadingSubject.next(true);
     setTimeout(() => {
       this.extractNodeWithStyles().then((payload) => {
-        this.offerService.generatePdfOfferV2OfferPdfOfferIdPost(this.data.offer.id, payload).pipe(take(1)).subscribe((offer) => {
-          this.loadingSubject.next(false);
-          this.isPrinting = false;
-        });
+        if (this.data.statement) {
+          this.offerService.generateStatementPdfOfferV2StatementPdfStatementIdPost(this.data.statement.id, payload).pipe(take(1)).subscribe(() => {
+            this.loadingSubject.next(false);
+            this.isPrinting = false;
+          });
+        } else {
+          this.offerService.generatePdfOfferV2OfferPdfOfferIdPost(this.data.offer.id, payload).pipe(take(1)).subscribe(() => {
+            this.loadingSubject.next(false);
+            this.isPrinting = false;
+          });
+        }
       });
     }, 200);
   }
 
-  parseRow(row: OfferV2EntryOutput, depth: number, prefix: string) {
+  parseRow(row: OfferV2EntryOutput, depth: number, prefix: string, statementEntry?: OfferStatementEntryInput) {
     if (depth === 0) {
       if (!row.alternative) {
         this.total += (row.singlePriceEvaluated * row.amount);
       }
       const sconto = -1 * (row.singlePriceEvaluated * row.amount) * (row.priceSubPercent / 100);
+      const statements = statementEntry ? statementEntry.entries.map(mapStatementEntry) : [];
       this.rows.push({
         amount: row.amount,
         price: row.singlePriceEvaluated - sconto,
         prefix: `${prefix}.0`,
         text: row.offertextEvaluated,
-        type: row.alternative ? "alternative-title" : "title"
+        type: row.alternative ? "alternative-title" : "title",
+        notMade: statementEntry ? statementEntry.notMade : false,
+        statements
       });
       let alternatives = 0;
       row.children.forEach((item, index) => {
         if (item.alternative) {
           alternatives++;
         }
-        this.parseRow(item, 1, `${prefix}.${index - alternatives + 1}`);
+        this.parseRow(item, 1, `${prefix}.${index - alternatives + 1}`, statementEntry ? statementEntry.children.at(index) : undefined);
       });
       if (sconto !== 0) {
         this.rows.push({
@@ -221,18 +266,23 @@ export default class OfferV2PreviewDialogComponent implements OnInit, AfterViewI
           type: "sconto",
           text: [`Sconto ${row.priceSubPercent.toFixed(2)} %`],
           prefix,
-          price: sconto
+          price: sconto,
+          notMade: false,
+          statements: []
         });
         this.total += sconto;
       }
     } else if (depth === 1) {
       const sconto = -1 * (row.singlePriceEvaluated * row.amount) * (row.priceSubPercent / 100);
+      const statements = statementEntry ? [statementEntry].reduce(reduceStatementEntry, [] as PdfStatement[]) : [];
       this.rows.push({
         amount: row.amount,
         price: row.singlePriceEvaluated - sconto,
         prefix,
         text: row.offertextEvaluated,
-        type: row.alternative ? "alternative" : "normal"
+        type: row.alternative ? "alternative" : "normal",
+        notMade: statementEntry ? statementEntry.notMade : false,
+        statements
       });
       if (sconto !== 0) {
         this.rows.push({
@@ -240,7 +290,9 @@ export default class OfferV2PreviewDialogComponent implements OnInit, AfterViewI
           type: "sconto",
           text: [`Sconto ${row.priceSubPercent.toFixed(2)} %`],
           prefix,
-          price: sconto
+          price: sconto,
+          notMade: false,
+          statements: []
         });
       }
     }
@@ -255,7 +307,7 @@ export default class OfferV2PreviewDialogComponent implements OnInit, AfterViewI
         if (item.alternative) {
           alternatives++;
         }
-        this.parseRow(item, 0, `${index - alternatives + 1}`);
+        this.parseRow(item, 0, `${index - alternatives + 1}`, this.data.statement ? this.data.statement.content.at(index) : undefined);
       });
       this.sconto = this.data.offer.globalSubPercent;
       this.totalSconted = this.total - (this.total * (this.sconto / 100));
@@ -280,8 +332,24 @@ export default class OfferV2PreviewDialogComponent implements OnInit, AfterViewI
       salutation = "Caro signor " + client.lastname;
     else if (client.gender.code == "F" && client.language.code == "IT")
       salutation = "Gentile signora " + client.lastname;
+    const lang = this.data.offer.job.client.language.code.toLowerCase();
+    if (lang === "de") {
+      this.inPriceIncluded = "Im Gesamtbetrag enthalten: ";
+      this.validity = "Gültigkeit des Angebotes: ";
+      this.delivery = "Lieferung: ";
+      this.payment = "Zahlung: ";
+      this.mfg = "Mit freundlichen Grüßen";
+      this.offer = "Angebot";
+    } else {
+      this.inPriceIncluded = "Incluso nell'importo totale: ";
+      this.validity = "Validità dell'offerta: ";
+      this.delivery = "Consegna: ";
+      this.payment = "Pagamento: ";
+      this.mfg = "Cordiali saluti";
+      this.offer = "Offerta";
+    }
     this.data.parameters.forEach(parameter => {
-      const lang = this.data.offer.job.client.language.code.toLowerCase();
+
       if (parameter.key === `offer_title_introduction_${lang}`) {
         this.first_page_text = parameter.value.replace("[ANREDE]", salutation);
       }

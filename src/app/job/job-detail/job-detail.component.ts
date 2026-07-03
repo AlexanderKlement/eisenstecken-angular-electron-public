@@ -21,6 +21,7 @@ import {
   DeliveryNote,
   Job,
   Offer,
+  OfferStatement,
   OfferV2,
   OfferV2Service,
   OrderSmall,
@@ -79,6 +80,7 @@ export default class JobDetailComponent implements OnInit {
 
   offerDataSource: TableDataSource<Offer, DefaultService>;
   offerV2DataSource: TableDataSource<OfferV2, OfferV2Service>;
+  statementsDataSource: TableDataSource<OfferStatement, OfferV2Service>;
   outgoingInvoiceDataSource: TableDataSource<OutgoingInvoice, DefaultService>;
   subJobDataSource: TableDataSource<Job, DefaultService>;
   orderDataSource: TableDataSource<OrderSmall, DefaultService>;
@@ -235,7 +237,6 @@ export default class JobDetailComponent implements OnInit {
         return rows;
       },
       [
-        { name: "id", headerName: "ID" },
         { name: "name", headerName: "Name" },
         { name: "date", headerName: "Datum" },
         { name: "price", headerName: "Preis" }
@@ -243,6 +244,48 @@ export default class JobDetailComponent implements OnInit {
       (api) => api.countOffersOfferV2CountOffersGet(this.jobId)
     );
     this.offerV2DataSource.loadData();
+    this.statementsDataSource = new TableDataSource(
+      this.offerService,
+      (api, filter, sortDirection, skip, limit) =>
+        api.getStatementsOfferV2StatementsGet(this.jobId, skip, filter, limit),
+      (dataSourceClasses) => {
+        const rows = [];
+        dataSourceClasses.forEach((dataSource) => {
+          rows.push({
+            values: {
+              id: dataSource.id,
+              name: dataSource.name,
+              offer: dataSource.offer.name,
+              originalPrice: formatCurrency(dataSource.originalPrice, "de-DE", "€"),
+              price: formatCurrency(
+                dataSource.price,
+                "de-DE",
+                "EUR"
+              )
+            },
+            route: () => {
+              this.authService
+                .currentUserHasScope(ScopeEnum.Office)
+                .pipe(first())
+                .subscribe((allowed) => {
+                  if (allowed) {
+                    this.router.navigateByUrl(`/offer_v2/statement/${dataSource.id}`).then();
+                  }
+                });
+            }
+          });
+        });
+        return rows;
+      },
+      [
+        { name: "name", headerName: "Name" },
+        { name: "offer", headerName: "Angebot" },
+        { name: "originalPrice", headerName: "Originalpreis" },
+        { name: "price", headerName: "Preis" }
+      ],
+      (api) => api.countStatementsOfferV2CountStatementsGet(this.jobId)
+    );
+    this.statementsDataSource.loadData();
   }
 
   initOutgoingInvoiceTable() {
@@ -662,6 +705,14 @@ export default class JobDetailComponent implements OnInit {
             navigate: (): void => {
               this.router.navigateByUrl(
                 "/offer_v2/offer/new/" + this.jobId.toString()
+              ).then();
+            }
+          });
+          this.buttonsMain[0].dropdown.push({
+            name: "Neue Aufstellung",
+            navigate: (): void => {
+              this.router.navigateByUrl(
+                "/offer_v2/statement/new/" + this.jobId.toString()
               ).then();
             }
           });

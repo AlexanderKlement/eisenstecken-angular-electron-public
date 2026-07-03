@@ -7,4 +7,28 @@
       flex-grow: 1;
     }
   }
+
+  > .plus {
+    border: solid 1px var(--primary-color);
+    background-color: var(--primary-lighter-color);
+    border-radius: 4px;
+    font-size: 16px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+
+    &.minus {
+      border-color: var(--warn-color);
+      background-color: var(--warn-lighter-color);
+    }
+  }
+
+  > .delete {
+    color: #797971;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--warn-color);
+    }
+  }
 }

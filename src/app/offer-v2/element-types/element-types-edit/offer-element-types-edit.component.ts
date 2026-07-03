@@ -22,7 +22,7 @@ import {
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from "@angular/cdk/drag-drop";
 import OfferCalculationInputComponent from "../../calculation-input/offer-calculation-input.component";
 import { MatDialog } from "@angular/material/dialog";
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe, Location } from "@angular/common";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { BehaviorSubject } from "rxjs";
 import { confirmDeleteDialog } from "../../offer.util";
@@ -64,6 +64,7 @@ export default class OfferElementTypesEditComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private offerService = inject(OfferV2Service);
+  private location = inject(Location);
   subTitle = "Elementtyp erstellen";
   elementTypeId: number;
   private snackBar = inject(MatSnackBar);
@@ -191,7 +192,7 @@ export default class OfferElementTypesEditComponent implements OnInit {
   subscription = {
     next: () => {
       this.loadingSubject.next(false);
-      this.router.navigateByUrl("/offer_v2/element_types").then();
+      this.location.back();
     },
     error: (error: any) => {
       this.loadingSubject.next(false);

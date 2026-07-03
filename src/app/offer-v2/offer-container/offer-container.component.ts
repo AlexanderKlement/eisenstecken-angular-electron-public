@@ -17,49 +17,49 @@ export default class OfferContainerComponent implements OnInit {
 
   private router = inject(Router);
 
-  @Input() title: string;
+  @Input() subTitle: string;
   buttons = [];
 
   ngOnInit(): void {
     this.buttons.push({
       name: "Angebote",
-      active: this.title === "Angebote",
+      active: this.subTitle === "Angebote",
       navigate: () => {
         this.router.navigateByUrl("/offer_v2").then();
       }
     }, {
       name: "Elemente",
-      active: this.title === "Elemente",
+      active: this.subTitle === "Elemente",
       navigate: () => {
         this.router.navigateByUrl("/offer_v2/elements").then();
       }
     }, {
       name: "Elementtypen",
-      active: this.title === "Elementtypen",
+      active: this.subTitle === "Elementtypen",
       navigate: () => {
         this.router.navigateByUrl("/offer_v2/element_types").then();
       }
     }, {
       name: "Felder",
-      active: this.title === "Felder",
+      active: this.subTitle === "Felder",
       navigate: () => {
         this.router.navigateByUrl("/offer_v2/fields").then();
       }
     }, {
       name: "Bibliotheken",
-      active: this.title === "Bibliotheken",
+      active: this.subTitle === "Bibliotheken",
       navigate: () => {
         this.router.navigateByUrl("/offer_v2/libraries").then();
       }
     }, {
       name: "Einheiten",
-      active: this.title === "Einheiten",
+      active: this.subTitle === "Einheiten",
       navigate: () => {
         this.router.navigateByUrl("/offer_v2/units").then();
       }
     }, {
       name: "Templates",
-      active: this.title === "Templates",
+      active: this.subTitle === "Templates",
       navigate: () => {
         this.router.navigateByUrl("/offer_v2/templates").then();
       }

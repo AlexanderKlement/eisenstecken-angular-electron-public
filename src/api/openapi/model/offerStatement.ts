@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OfferV2EntryOutput } from './offerV2EntryOutput';
 import { OfferStatementEntryOutput } from './offerStatementEntryOutput';
 import { OfferV2 } from './offerV2';
 
@@ -16,6 +17,7 @@ export interface OfferStatement {
     id: number;
     name: string;
     offer: OfferV2;
+    offerContent: Array<OfferV2EntryOutput>;
     originalPrice: number;
     pdf: string;
     pdfServer: string;

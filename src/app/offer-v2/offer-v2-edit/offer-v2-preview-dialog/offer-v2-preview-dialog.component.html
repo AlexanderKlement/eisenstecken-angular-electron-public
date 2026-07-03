@@ -21,7 +21,7 @@
         <!-- Content frame -->
         <div class="content">
           <div class="title-row">
-            <div class="title">Angebot</div>
+            <div class="title">{{ offer }}</div>
             <div class="destination">
               <div>{{ data.offer.job.client.address.name }}</div>
               <div>{{ data.offer.job.client.address.address_1 }}</div>
@@ -88,7 +88,7 @@
         <!-- Content frame -->
         <div class="content" #firstContent>
           <div class="title-row">
-            <div class="title">Angebot</div>
+            <div class="title">{{ offer }}</div>
             <div class="destination">
               <div>{{ data.offer.job.client.address.name }}</div>
               <div>{{ data.offer.job.client.address.address_1 }}</div>
@@ -139,9 +139,9 @@
               <div class="cell cell--total">Gesamtpreis/<br>Prezzo tot.</div>
             </div>
             <div class="row row--spacer"></div>
-            @for (row of (offerTableMeasurements.length === 0 ? rows : rows.slice(0, offerTableMeasurements[0].length)); track row.prefix; ) {
+            @for (row of (offerTableMeasurements.length === 0 ? rows : rows.slice(0, offerTableMeasurements[0].length)); track row.prefix; let idx = $index) {
               <div
-                [className]="`row${row.type === 'title' || row.type === 'alternative-title' ? ' row--section' : ''}${row.type === 'sconto' ? ' row--sconto' : ''}${row.type === 'alternative' || row.type === 'alternative-title' ? ' row--alternative' : ''}`">
+                [className]="`row${row.type === 'title' || row.type === 'alternative-title' ? ' row--section' : ''}${row.type === 'sconto' ? ' row--sconto' : ''}${row.type === 'alternative' || row.type === 'alternative-title' ? ' row--alternative' : ''}${row.notMade ? ' row--not-made' : ''}`">
                 <div
                   class="cell cell--num">{{ row.type === 'title' || row.type === "normal" ? row.prefix : "" }}
                 </div>
@@ -170,6 +170,19 @@
                   }
                 </div>
               </div>
+              @for (statement of row.statements; track statement.text) {
+                <div
+                  [className]="`row ${statement.additionSubstraction ? 'row--addition' : 'row--substraction'}`">
+                  <div
+                    class="cell cell--num"></div>
+                  <div class="cell cell--desc">{{ statement.text.slice(0, 20) }}</div>
+                  <div class="cell cell--qty">{{ statement.amount }}</div>
+                  <div class="cell cell--single">{{ formatCurrency(statement.price, "de-DE", "€") }}</div>
+                  <div
+                    class="cell cell--total">{{ statement.additionSubstraction ? '+' : '-' }}{{ formatCurrency(statement.price * statement.amount, "de-DE", "€") }}
+                  </div>
+                </div>
+              }
             }
 
           </div>
@@ -284,7 +297,7 @@
                     [className]="`row row--spacer ${rows.length} ${offerTableMeasurements[idx].length} ${measurement.length}`"></div>
                   @for (row of rows.slice(offerTableMeasurements[idx].length, offerTableMeasurements[idx].length + measurement.length); track row.prefix) {
                     <div
-                      [className]="`row${row.type === 'title' || row.type === 'alternative-title' ? ' row--section' : ''}${row.type === 'sconto' ? ' row--sconto' : ''}${row.type === 'alternative' || row.type === 'alternative-title' ? ' row--alternative' : ''}`">
+                      [className]="`row${row.type === 'title' || row.type === 'alternative-title' ? ' row--section' : ''}${row.type === 'sconto' ? ' row--sconto' : ''}${row.type === 'alternative' || row.type === 'alternative-title' ? ' row--alternative' : ''}${row.notMade ? ' row--not-made' : ''}`">
                       <div
                         class="cell cell--num">{{ row.type === 'title' || row.type === "normal" ? row.prefix : "" }}
                       </div>
@@ -302,6 +315,19 @@
                       </div>
                       <div class="cell cell--total">{{ formatCurrency(row.amount * row.price, "de-DE", "€") }}</div>
                     </div>
+                    @for (statement of row.statements; track statement.text) {
+                      <div
+                        [className]="`row ${statement.additionSubstraction ? 'row--addition' : 'row--substraction'}`">
+                        <div
+                          class="cell cell--num"></div>
+                        <div class="cell cell--desc">{{ statement.text.slice(0, 20) }}</div>
+                        <div class="cell cell--qty">{{ statement.amount }}</div>
+                        <div class="cell cell--single">{{ formatCurrency(statement.price, "de-DE", "€") }}</div>
+                        <div
+                          class="cell cell--total">{{ statement.additionSubstraction ? '+' : '-' }}{{ formatCurrency(statement.price * statement.amount, "de-DE", "€") }}
+                        </div>
+                      </div>
+                    }
                   }
 
                 </div>
@@ -360,17 +386,16 @@
             </div>
           </div>
           <div class="includes">
-            <p>Im Gesamtbetrag enthalten: Montage, Lieferung und Befestigungsmaterial</p>
-            <p>Gültigkeit des Angebotes: 30 Tage</p>
-            <p>Lieferung: ca. 8–10 Wochen nach Auftragsbestätigung</p>
-            <p>Zahlung: 30% bei Auftrag, 60% bei Lieferung, 10% nach Montage</p>
+            <p>{{ inPriceIncluded }}{{ data.offer.inPriceIncluded }}</p>
+            <p>{{ validity }}{{ data.offer.validity }}</p>
+            <p>{{ delivery }}{{ data.offer.delivery }}</p>
+            <p>{{ payment }}{{ data.offer.payment }}</p>
             <div class="gap"></div>
-            <p>Wir garantieren für eine sorgfältige, präzise Ausführung</p>
-            <p>Bei Fragen und näheren Erklärungen stehen wir gerne zur Verfügung</p>
+            <p>{{ footer_text }}</p>
           </div>
           <div class="salutation-signature">
             <div class="salutation">
-              <div class="sal-greeting">Mit freundlichen Grüßen</div>
+              <div class="sal-greeting">{{ mfg }}</div>
               <img ngSrc="/assets/images/signature_eisenstecken_hannes.svg" [width]="mm(45)"
                    [height]="mm(45*(104/294))"
                    alt="Unterschrift">

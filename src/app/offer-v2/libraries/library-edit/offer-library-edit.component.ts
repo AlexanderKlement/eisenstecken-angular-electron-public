@@ -9,7 +9,7 @@ import {
 import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
 import { OfferLibrary, OfferUnit, OfferV2Service } from "../../../../api/openapi";
 import { BehaviorSubject, forkJoin, Observable } from "rxjs";
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe, Location } from "@angular/common";
 import { MatButton } from "@angular/material/button";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { MatDialog } from "@angular/material/dialog";
@@ -69,6 +69,7 @@ type OfferLibraryGroup = {
 })
 export default class OfferLibraryEditComponent implements OnInit {
   private dialog = inject(MatDialog);
+  private location = inject(Location);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private offerService = inject(OfferV2Service);
@@ -135,7 +136,7 @@ export default class OfferLibraryEditComponent implements OnInit {
       if (!this.libraryId) {
         this.router.navigateByUrl(`/offer_v2/libraries/${(l as OfferLibrary).id}`).then();
       } else {
-        this.router.navigateByUrl("/offer_v2/libraries").then();
+        this.location.back();
       }
     },
     error: (error: any) => {
@@ -187,7 +188,7 @@ export default class OfferLibraryEditComponent implements OnInit {
               this.offerService.reorderOfferLibraryEntriesOfferV2LibraryLibraryIdEntriesReorderPost(this.libraryId, { libraryEntryIds: ids }).pipe(take(1)).subscribe(this.subscription);
             } else {
               this.loadingSubject.next(false);
-              this.router.navigateByUrl("/offer_v2/libraries").then();
+              this.location.back();
               return;
             }
           } else {
@@ -212,19 +213,19 @@ export default class OfferLibraryEditComponent implements OnInit {
                       if (realIds.includes(-1)) {
                         console.warn("This should not happen");
                         this.loadingSubject.next(false);
-                        this.router.navigateByUrl("/offer_v2/libraries").then();
+                        this.location.back();
                         return;
                       } else {
                         this.offerService.reorderOfferLibraryEntriesOfferV2LibraryLibraryIdEntriesReorderPost(library.id, { libraryEntryIds: realIds }).pipe(take(1)).subscribe(() => {
                           this.loadingSubject.next(false);
-                          this.router.navigateByUrl("/offer_v2/libraries").then();
+                          this.location.back();
                           return;
                         });
                       }
                     });
                   } else {
                     this.loadingSubject.next(false);
-                    this.router.navigateByUrl("/offer_v2/libraries").then();
+                    this.location.back();
                     return;
                   }
                 },
@@ -275,7 +276,7 @@ export default class OfferLibraryEditComponent implements OnInit {
         "Bibliothek",
         (id) => this.offerService.deleteOfferLibraryOfferV2LibraryLibraryIdDelete(id), () => {
           this.loadingSubject.next(false);
-          this.router.navigateByUrl("/offer_v2/libraries").then();
+          this.location.back();
         },
         this.snackBar);
     }

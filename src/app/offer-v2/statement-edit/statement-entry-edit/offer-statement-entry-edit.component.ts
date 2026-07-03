@@ -1,24 +1,25 @@
-import { Component, inject, Input } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { FlexModule } from "ng-flex-layout";
-import { OfferStatementEntryInput, OfferStatementEntryOutput, OfferV2Service } from "../../../../api/openapi";
+import { OfferStatementEntryInput, OfferStatementEntryOutput } from "../../../../api/openapi";
 import { MatFormField, MatInput } from "@angular/material/input";
 import { formatCurrency } from "@angular/common";
-import { MatDialog } from "@angular/material/dialog";
 import { getNumericVal } from "../../../shared/custom-validators";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { MatIcon } from "@angular/material/icon";
 import {
+  mapStatementEntryFieldToInput,
   newStatementEntryFieldGroup,
   newStatementEntryFieldGroupFormField,
-  StatementEntryFieldEditComponent
+  StatementEntryFieldEditComponent,
+  StatementEntryFieldGroup
 } from "./statement-entry-field-edit/statement-entry-field-edit.component";
 
 export declare type StatementEntryGroup = {
   id: FormControl<string>;
   name: FormControl<string>;
   children: FormArray<FormGroup<StatementEntryGroup>>;
-  entries: FormArray<FormGroup>;
+  entries: FormArray<FormGroup<StatementEntryFieldGroup>>;
   price: FormControl<number>;
   originalPrice: FormControl<number>;
   notMade: FormControl<boolean>;
@@ -32,7 +33,7 @@ export function mapStatementEntryToInput(grp: FormGroup<StatementEntryGroup>): O
     name: grp.get("name").value,
     notMade: grp.get("notMade").value,
     children: grp.controls.children.controls.map(mapStatementEntryToInput),
-    entries: []
+    entries: grp.controls.entries.controls.map(mapStatementEntryFieldToInput)
   };
 }
 
@@ -64,12 +65,11 @@ export function mapStatementEntryToGroup(entry: OfferStatementEntryOutput): Form
   styleUrl: "./offer-statement-entry-edit.component.scss"
 })
 export class OfferStatementEntryEditComponent {
-  private offerService = inject(OfferV2Service);
-  private dialog = inject(MatDialog);
   @Input() entryGroup: FormGroup<StatementEntryGroup>;
   @Input() prefix: string;
   @Input() index: number;
   @Input() depth: number;
+  @Input() parentNotMade: boolean;
 
 
   protected onDelete(idx: number) {
