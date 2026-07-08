@@ -64,11 +64,11 @@
       }
 
       > .prefix {
-        color: #797971;
+        color: var(--neutral-color);
       }
 
       > .amount {
-        color: #797971;
+        color: var(--neutral-color);
       }
 
       &.inner {
@@ -155,7 +155,7 @@
 
 .show-history {
   cursor: pointer;
-  color: #797971;
+  color: var(--neutral-color);
 }
 
 .overlay {

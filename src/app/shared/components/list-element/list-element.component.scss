@@ -39,12 +39,12 @@
 
     .sub {
       line-height: 20px;
-      color: #797971;
+      color: var(--neutral-color);
     }
   }
 
   .left-icon, .right-icon {
-    color: #797971;
+    color: var(--neutral-color);
   }
 
   .drag-placeholder {

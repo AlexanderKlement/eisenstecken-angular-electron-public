@@ -24,7 +24,7 @@
   }
 
   > .delete {
-    color: #797971;
+    color: var(--neutral-color);
     cursor: pointer;
 
     &:hover {

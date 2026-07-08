@@ -36,7 +36,7 @@
 
           <div class="salutation-signature">
             <div class="salutation">
-              <div class="sal-greeting">Mit freundlichen Grüßen</div>
+              <div class="sal-greeting">{{ mfg }}</div>
               <img ngSrc="/assets/images/signature_eisenstecken_hannes.svg" [width]="mm(45)"
                    [height]="mm(45*(104/294))"
                    alt="Unterschrift">
@@ -98,27 +98,27 @@
           </div>
           <div class="header-args">
             <div class="harg">
-              <div class="label">Nummer/Numero</div>
+              <div class="label">{{ labels.number }}</div>
               <div class="value">{{ data.offer.number.toString(10).padStart(3, "0") }}</div>
             </div>
             <div class="harg">
-              <div class="label">Datum/Data</div>
+              <div class="label">{{ labels.date }}</div>
               <div class="value">{{ dayjs(data.offer.date).format("DD.MM.YYYY") }}</div>
             </div>
             <div class="harg">
-              <div class="label">Seite/Pagina</div>
+              <div class="label">{{ labels.page }}</div>
               <div class="value">02 / {{ pages.toString(10).padStart(2, '0') }}</div>
             </div>
             <div class="harg">
-              <div class="label">Kunde/Cliente</div>
+              <div class="label">{{ labels.client }}</div>
               <div class="value">{{ data.offer.job.client.id.toString(10).padStart(4, "0") }}</div>
             </div>
             <div class="harg">
-              <div class="label">MwStr-Nr/Part. IVA</div>
+              <div class="label">{{ labels.vatNumber }}</div>
               <div class="value">{{ data.offer.job.client.fiscal_code }}</div>
             </div>
             <div class="harg">
-              <div class="label">St.-Nr./Cod.fisc</div>
+              <div class="label">{{ labels.fiscalCode }}</div>
               <div class="value">{{ data.offer.job.client.esigibilita_iva }}</div>
             </div>
           </div>
@@ -132,11 +132,11 @@
           <div class="offer-table" #firstOfferTable>
             <!-- column captions -->
             <div class="row row--head">
-              <div class="cell cell--num">Position/<br>Posizione</div>
-              <div class="cell cell--desc">Beschreibung/<br>Descrizione</div>
-              <div class="cell cell--qty">Menge/<br>Quantità</div>
-              <div class="cell cell--single">Einzelpreis/<br>Prezzo cad.</div>
-              <div class="cell cell--total">Gesamtpreis/<br>Prezzo tot.</div>
+              <div class="cell cell--num">{{ labels.position }}</div>
+              <div class="cell cell--desc">{{ labels.description }}</div>
+              <div class="cell cell--qty">{{ labels.quantity }}</div>
+              <div class="cell cell--single">{{ labels.singlePrice }}</div>
+              <div class="cell cell--total">{{ labels.totalPrice }}</div>
             </div>
             <div class="row row--spacer"></div>
             @for (row of (offerTableMeasurements.length === 0 ? rows : rows.slice(0, offerTableMeasurements[0].length)); track row.prefix; let idx = $index) {
@@ -222,37 +222,37 @@
               <div class="content" #secondContent>
                 <div class="header-args">
                   <div class="harg">
-                    <div class="label">Nummer/Numero</div>
+                    <div class="label">{{ labels.number }}</div>
                     <div class="value">{{ data.offer.number.toString(10).padStart(3, "0") }}</div>
                   </div>
                   <div class="harg">
-                    <div class="label">Datum/Data</div>
+                    <div class="label">{{ labels.date }}</div>
                     <div class="value">{{ dayjs(data.offer.date).format("DD.MM.YYYY") }}</div>
                   </div>
                   <div class="harg">
-                    <div class="label">Seite/Pagina</div>
+                    <div class="label">{{ labels.page }}</div>
                     <div class="value">01 / {{ pages.toString(10).padStart(2, '0') }}</div>
                   </div>
                   <div class="harg">
-                    <div class="label">Kunde/Cliente</div>
+                    <div class="label">{{ labels.client }}</div>
                     <div class="value">{{ data.offer.job.client.id.toString(10).padStart(4, "0") }}</div>
                   </div>
                   <div class="harg">
-                    <div class="label">MwStr-Nr/Part. IVA</div>
+                    <div class="label">{{ labels.vatNumber }}</div>
                     <div class="value">{{ data.offer.job.client.fiscal_code }}</div>
                   </div>
                   <div class="harg">
-                    <div class="label">St.-Nr./Cod.fisc</div>
+                    <div class="label">{{ labels.fiscalCode }}</div>
                     <div class="value">{{ data.offer.job.client.esigibilita_iva }}</div>
                   </div>
                 </div>
                 <div class="offer-table" #secondOfferTable>
                   <div class="row row--head">
-                    <div class="cell cell--num">Position/<br>Posizione</div>
-                    <div class="cell cell--desc">Beschreibung/<br>Descrizione</div>
-                    <div class="cell cell--qty">Menge/<br>Quantità</div>
-                    <div class="cell cell--single">Einzelpreis/<br>Prezzo cad.</div>
-                    <div class="cell cell--total">Gesamtpreis/<br>Prezzo tot.</div>
+                    <div class="cell cell--num">{{ labels.position }}</div>
+                    <div class="cell cell--desc">{{ labels.description }}</div>
+                    <div class="cell cell--qty">{{ labels.quantity }}</div>
+                    <div class="cell cell--single">{{ labels.singlePrice }}</div>
+                    <div class="cell cell--total">{{ labels.totalPrice }}</div>
                   </div>
                   <div class="row row--spacer"></div>
                 </div>
@@ -261,37 +261,37 @@
               <div class="content">
                 <div class="header-args">
                   <div class="harg">
-                    <div class="label">Nummer/Numero</div>
+                    <div class="label">{{ labels.number }}</div>
                     <div class="value">{{ data.offer.number.toString(10).padStart(3, "0") }}</div>
                   </div>
                   <div class="harg">
-                    <div class="label">Datum/Data</div>
+                    <div class="label">{{ labels.date }}</div>
                     <div class="value">{{ dayjs(data.offer.date).format("DD.MM.YYYY") }}</div>
                   </div>
                   <div class="harg">
-                    <div class="label">Seite/Pagina</div>
+                    <div class="label">{{ labels.page }}</div>
                     <div class="value">01 / {{ pages.toString(10).padStart(2, '0') }}</div>
                   </div>
                   <div class="harg">
-                    <div class="label">Kunde/Cliente</div>
+                    <div class="label">{{ labels.client }}</div>
                     <div class="value">{{ data.offer.job.client.id.toString(10).padStart(4, "0") }}</div>
                   </div>
                   <div class="harg">
-                    <div class="label">MwStr-Nr/Part. IVA</div>
+                    <div class="label">{{ labels.vatNumber }}</div>
                     <div class="value">{{ data.offer.job.client.fiscal_code }}</div>
                   </div>
                   <div class="harg">
-                    <div class="label">St.-Nr./Cod.fisc</div>
+                    <div class="label">{{ labels.fiscalCode }}</div>
                     <div class="value">{{ data.offer.job.client.esigibilita_iva }}</div>
                   </div>
                 </div>
                 <div class="offer-table">
                   <div class="row row--head">
-                    <div class="cell cell--num">Position/<br>Posizione</div>
-                    <div class="cell cell--desc">Beschreibung/<br>Descrizione</div>
-                    <div class="cell cell--qty">Menge/<br>Quantità</div>
-                    <div class="cell cell--single">Einzelpreis/<br>Prezzo cad.</div>
-                    <div class="cell cell--total">Gesamtpreis/<br>Prezzo tot.</div>
+                    <div class="cell cell--num">{{ labels.position }}</div>
+                    <div class="cell cell--desc">{{ labels.description }}</div>
+                    <div class="cell cell--qty">{{ labels.quantity }}</div>
+                    <div class="cell cell--single">{{ labels.singlePrice }}</div>
+                    <div class="cell cell--total">{{ labels.totalPrice }}</div>
                   </div>
                   <div
                     [className]="`row row--spacer ${rows.length} ${offerTableMeasurements[idx].length} ${measurement.length}`"></div>
@@ -364,15 +364,14 @@
         <div class="content">
           <div class="price-box">
             <div class="pb-head">
-              <div class="cell">Gesamtsumme ohne MwSt./<br>Totale escluso IVA</div>
+              <div class="cell">{{ labels.sumNet }}</div>
               <div class="cell">
                 @if (sconto !== 0) {
-                  Gesamtsumme abzgl. Skonto: {{ sconto.toFixed(2) }} %/<br>Totale
-                    escluso sconto: {{ sconto.toFixed(2) }} %
+                  {{ labels.sumSconto }} {{ sconto.toFixed(2) }} %
                 }
               </div>
-              <div class="cell right">MwSt.-Betrag/Importo IVA<br>({{ vatPercent }}%)</div>
-              <div class="cell cell--last">Gesamtbetrag/Importo totale</div>
+              <div class="cell right">{{ labels.vatAmount }} ({{ vatPercent }}%)</div>
+              <div class="cell cell--last">{{ labels.totalGross }}</div>
             </div>
             <div class="pb-values">
               <div class="cell">{{ formatCurrency(total, "de-DE", "€") }}</div>
@@ -405,21 +404,21 @@
               <div class="sal-contact">M&nbsp;&nbsp;+39 328 35 27 802&nbsp;&nbsp;|&nbsp;&nbsp;hannes&commat;eisenstecken.it</div>
             </div>
             <div class="signature">
-              <div class="dig-title">Bei Annahme / All'accettazione</div>
+              <div class="dig-title">{{ labels.onAcceptance }}</div>
               <div class="cs-line">
                 <div class="field field--date">
                   <div class="rule"></div>
-                  <div class="lbl">Datum/Data</div>
+                  <div class="lbl">{{ labels.date }}</div>
                 </div>
                 <div class="field field--place">
                   <div class="rule"></div>
-                  <div class="lbl">Ort/Luogo</div>
+                  <div class="lbl">{{ labels.place }}</div>
                 </div>
               </div>
               <div class="cs-line">
                 <div class="field field--place">
                   <div class="rule"></div>
-                  <div class="lbl">Unterschrift/Firma</div>
+                  <div class="lbl">{{ labels.signature }}</div>
                 </div>
               </div>
             </div>

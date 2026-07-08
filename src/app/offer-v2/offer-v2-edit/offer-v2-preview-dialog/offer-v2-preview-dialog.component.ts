@@ -112,6 +112,26 @@ export default class OfferV2PreviewDialogComponent implements OnInit, AfterViewI
   payment = "";
   mfg = "";
   offer = "Angebot";
+  labels = {
+    number: "Nummer",
+    date: "Datum",
+    page: "Seite",
+    client: "Kunde",
+    vatNumber: "MwSt.-Nr.",
+    fiscalCode: "St.-Nr.",
+    position: "Position",
+    description: "Beschreibung",
+    quantity: "Menge",
+    singlePrice: "Einzelpreis",
+    totalPrice: "Gesamtpreis",
+    sumNet: "Gesamtsumme ohne MwSt.",
+    sumSconto: "Gesamtsumme abzgl. Skonto:",
+    vatAmount: "MwSt.-Betrag",
+    totalGross: "Gesamtbetrag",
+    onAcceptance: "Bei Annahme",
+    place: "Ort",
+    signature: "Unterschrift"
+  };
   offerTableMeasurements: RowHeight[][] = [];
   rows: PdfRow[] = [];
   @ViewChild("secondOfferTable") secondOfferTable: ElementRef<HTMLDivElement>;
@@ -340,6 +360,26 @@ export default class OfferV2PreviewDialogComponent implements OnInit, AfterViewI
       this.payment = "Zahlung: ";
       this.mfg = "Mit freundlichen Grüßen";
       this.offer = "Angebot";
+      this.labels = {
+        number: "Nummer",
+        date: "Datum",
+        page: "Seite",
+        client: "Kunde",
+        vatNumber: "MwSt.-Nr.",
+        fiscalCode: "St.-Nr.",
+        position: "Position",
+        description: "Beschreibung",
+        quantity: "Menge",
+        singlePrice: "Einzelpreis",
+        totalPrice: "Gesamtpreis",
+        sumNet: "Gesamtsumme ohne MwSt.",
+        sumSconto: "Gesamtsumme abzgl. Skonto:",
+        vatAmount: "MwSt.-Betrag",
+        totalGross: "Gesamtbetrag",
+        onAcceptance: "Bei Annahme",
+        place: "Ort",
+        signature: "Unterschrift"
+      };
     } else {
       this.inPriceIncluded = "Incluso nell'importo totale: ";
       this.validity = "Validità dell'offerta: ";
@@ -347,6 +387,26 @@ export default class OfferV2PreviewDialogComponent implements OnInit, AfterViewI
       this.payment = "Pagamento: ";
       this.mfg = "Cordiali saluti";
       this.offer = "Offerta";
+      this.labels = {
+        number: "Numero",
+        date: "Data",
+        page: "Pagina",
+        client: "Cliente",
+        vatNumber: "Part. IVA",
+        fiscalCode: "Cod. fisc.",
+        position: "Posizione",
+        description: "Descrizione",
+        quantity: "Quantità",
+        singlePrice: "Prezzo cad.",
+        totalPrice: "Prezzo tot.",
+        sumNet: "Totale escluso IVA",
+        sumSconto: "Totale escluso sconto:",
+        vatAmount: "Importo IVA",
+        totalGross: "Importo totale",
+        onAcceptance: "All'accettazione",
+        place: "Luogo",
+        signature: "Firma"
+      };
     }
     this.data.parameters.forEach(parameter => {
 
