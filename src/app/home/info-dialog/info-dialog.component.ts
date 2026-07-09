@@ -46,17 +46,12 @@ export class InfoDialogComponent implements OnInit {
 
   updateList: Update[] = [
     {
-      versionName: "2.2.6",
+      versionName: "2.2.7",
       changes: [
         "Neues Angebots-Tool",
         "Erstelldatum in Aufträge",
         "Email Felder Breiter Bei Lieferanten/Kunden",
-        "Neues Feld Kontaktperson bei Benutzer"
-      ]
-    },
-    {
-      versionName: "2.2.5",
-      changes: [
+        "Neues Feld Kontaktperson bei Benutzer",
         "Sohle im Kleidergrößen export"
       ]
     },

@@ -1,4 +1,4 @@
-## <small>2.2.6 (2026-07-03)</small>
+## <small>2.2.7 (2026-07-09)</small>
 
 * A lot refactored with templates ([44fa7e7](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/44fa7e7))
 * Add Husky and version check ([d92151e](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/d92151e))
@@ -11,11 +11,14 @@
 * Bugfix notiz ([5ee5812](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/5ee5812))
 * Bugfixes ([f60d276](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f60d276))
 * Bugfixes ([c5c2b7e](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c5c2b7e))
+* bugfixes and pdf-preview translation ([36222d0](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/36222d0))
+* bugfixes for Preview ([f559700](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f559700))
 * Bugfixes to build ([aee7fb5](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/aee7fb5))
 * Build for ios fix ([253732d](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/253732d))
 * Build for iso ([f91a264](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f91a264))
 * Build for iso fix ([b142b4b](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/b142b4b))
 * Build for iso fix ([05cfda3](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/05cfda3))
+* Changelog ([ac8f9bc](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/ac8f9bc))
 * Container/Calculation-Input/Fields/Units/Library/Element-Types ([99e8ca3](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/99e8ca3))
 * display job note ([eda832e](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/eda832e))
 * do not lazy load components since states are not preserved ([1a55e38](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/1a55e38))
