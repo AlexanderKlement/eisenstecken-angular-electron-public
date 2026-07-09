@@ -8,7 +8,7 @@ import {
   OfferV2Service,
   SchemasOfferV2OfferElementFieldSchemaOfferElementCreatePatch
 } from "../../../api/openapi";
-import { MatFormField, MatLabel } from "@angular/material/input";
+import { MatFormField } from "@angular/material/input";
 import { MtxSelect, MtxSelectOptionTemplate, MtxSelectTagTemplate } from "@ng-matero/extensions/select";
 import { take } from "rxjs/operators";
 import { DefaultFlexDirective, DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
@@ -31,7 +31,6 @@ type CustomElement = (OfferElementListElement | OfferTemplate) & {
   imports: [
     ReactiveFormsModule,
     MatFormField,
-    MatLabel,
     MtxSelect,
     DefaultFlexDirective,
     OfferFieldElementTypePillComponent,
@@ -51,7 +50,6 @@ export default class OfferElementSelectorComponent implements OnInit {
   @Input() allElements: OfferElementListElement[];
   @Input() allTemplates: OfferTemplate[];
   @Input() value?: number;
-  @Input() label?: string;
   @Input({ transform: booleanAttribute }) outline: boolean;
   @Input({ transform: booleanAttribute }) readonly: boolean;
   @Input({ transform: booleanAttribute }) fillWidth: boolean;

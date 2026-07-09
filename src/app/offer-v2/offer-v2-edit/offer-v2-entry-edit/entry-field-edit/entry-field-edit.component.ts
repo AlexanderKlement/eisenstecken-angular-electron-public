@@ -7,6 +7,7 @@ import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import OfferLibraryEntrySelectorComponent, {
   LibraryEntryDropDownItem
 } from "../../../library-entry-selector/offer-library-entry-selector.component";
+import { getNumericVal } from "../../../../shared/custom-validators";
 
 export declare type OfferEntryFieldGroup = {
   calculation: FormControl<string>,
@@ -49,7 +50,7 @@ export function mapOfferEntryFieldToInput(grp: FormGroup<OfferEntryFieldGroup>):
         name: grp.get("valueString").value,
         price: grp.get("valuePrice").value
       }
-    ) : grp.get("value").value,
+    ) : type === OfferFieldEnum.Numeric ? getNumericVal(grp.get("value")) : grp.get("value").value,
     default_value: grp.get("defaultValue").value,
     mandatory: grp.get("mandatory").value,
     inherits: grp.get("inherits").value,

@@ -109,6 +109,15 @@
           &.active {
             background-color: var(--primary-lighter-color);
           }
+
+          &.disabled {
+            color: var(--disabled-color);
+            cursor: default;
+
+            &:hover {
+              background-color: #fff;
+            }
+          }
         }
 
         > .header-price {

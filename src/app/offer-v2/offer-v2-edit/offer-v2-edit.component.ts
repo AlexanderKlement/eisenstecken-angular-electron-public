@@ -287,10 +287,16 @@ export class OfferV2EditComponent implements OnInit {
                 } catch {
                   // is createMode
                 }
+                if (Number.isNaN(this.offerV2Id)) {
+                  this.offerV2Id = undefined;
+                }
                 try {
                   this.jobId = parseInt(params.job_id, 10);
                 } catch {
                   // no JobID emitted
+                }
+                if (Number.isNaN(this.jobId)) {
+                  this.jobId = undefined;
                 }
                 this.initData(params.method);
               });
@@ -383,20 +389,26 @@ export class OfferV2EditComponent implements OnInit {
     }
   }
 
-  patchGroupGlobalAdd(globalAdd: number, group: FormGroup<OfferEntryGroup>) {
-    const grpGlobal = getNumericVal(group.get("globalAddPercent"));
-    const grpAdd = getNumericVal(group.get("priceAddPercent"));
-    if (grpAdd === grpGlobal) {
-      group.patchValue({ priceAddPercent: globalAdd, globalAddPercent: globalAdd });
+  patchGroupGlobalAdd(globalAdd: number, group: FormGroup<OfferEntryGroup>, depth: number) {
+    if (depth === 1) {
+      const grpGlobal = getNumericVal(group.get("globalAddPercent"));
+      const grpAdd = getNumericVal(group.get("priceAddPercent"));
+      if (grpAdd === grpGlobal) {
+        group.patchValue({ priceAddPercent: globalAdd, globalAddPercent: globalAdd });
+      } else {
+        group.patchValue({ globalAddPercent: globalAdd });
+      }
+    } else if (depth === 0) {
+      group.patchValue({ globalAddPercent: globalAdd, priceAddPercent: 0 });
     } else {
       group.patchValue({ globalAddPercent: globalAdd });
     }
-    group.controls.children.controls.forEach(grp => this.patchGroupGlobalAdd(globalAdd, grp));
+    group.controls.children.controls.forEach(grp => this.patchGroupGlobalAdd(globalAdd, grp, depth + 1));
   }
 
   changeGlobalAdd() {
     const globalAdd = getNumericVal(this.offerGroup.get("globalAddPercent"));
-    this.offerGroup.controls.content.controls.forEach(grp => this.patchGroupGlobalAdd(globalAdd, grp));
+    this.offerGroup.controls.content.controls.forEach(grp => this.patchGroupGlobalAdd(globalAdd, grp, 0));
   }
 
   applySconto(price: number, formula: string): { price: number, formula: string } {
@@ -410,10 +422,10 @@ export class OfferV2EditComponent implements OnInit {
         formulaCalculated = `(${formulaCalculated}) - ${sub}%`;
       }
     }
-    const addAmount = parseFloat(this.offerGroup.get("globalPriceDiff").value.toString(10));
-    if (addAmount !== 0 && !Number.isNaN(addAmount)) {
-      priceCalculated += addAmount;
-      formulaCalculated = `(${formulaCalculated}) ${addAmount > 0 ? "+" : "-"} ${formatCurrency(addAmount, "de-DE", "€")}`;
+    const subAmount = getNumericVal(this.offerGroup.get("globalPriceDiff"));
+    if (subAmount !== 0 && !Number.isNaN(subAmount)) {
+      priceCalculated -= subAmount;
+      formulaCalculated = `(${formulaCalculated}) -${formatCurrency(subAmount, "de-DE", "€")}`;
     }
 
     return { price: priceCalculated, formula: formulaCalculated };
@@ -429,31 +441,6 @@ export class OfferV2EditComponent implements OnInit {
   offerGroupValidator() {
     if (this.offerGroup) {
       evaluateOfferInheritance(this.offerGroup.controls.content, []);
-      if (this.job) {
-        const lang = this.job.client.language.code.toLowerCase();
-        let validity = this.offerGroup.get("validity").value;
-        if (validity === "") {
-          validity = this.parameters.find(par => par.key === `offer_validity_${lang}`)?.value ?? validity;
-        }
-        let inPriceIncluded = this.offerGroup.get("inPriceIncluded").value;
-        if (inPriceIncluded === "") {
-          inPriceIncluded = this.parameters.find(par => par.key === `offer_in_price_included_${lang}`)?.value ?? inPriceIncluded;
-        }
-        let delivery = this.offerGroup.get("delivery").value;
-        if (delivery === "") {
-          delivery = this.parameters.find(par => par.key === `offer_delivery_${lang}`)?.value ?? delivery;
-        }
-        let payment = this.offerGroup.get("payment").value;
-        if (payment === "") {
-          payment = this.parameters.find(par => par.key === `offer_payment_${lang}`)?.value ?? payment;
-        }
-        this.offerGroup.patchValue({
-          payment,
-          delivery,
-          inPriceIncluded,
-          validity
-        }, { emitEvent: false });
-      }
       let priceCalculated = 0;
       let sums: string[] = [];
       for (let i = 0; i < this.offerGroup.controls.content.length; i++) {
@@ -571,9 +558,31 @@ export class OfferV2EditComponent implements OnInit {
         this.loadingSubject.next(false);
         return;
       }
+      let validity = "30 Tage";
+      let delivery = "zu vereinbaren 2026";
+      let payment = "40% bei Auftrag, 30% bei Fertigstellung, Rest innerhalb 30 Tage ab Fertigstellung";
+      let inPriceIncluded = "Planung, Fertigung, Lieferung, Montage, MwSt.";
+      if (this.parameters && this.job) {
+        const vPar = this.parameters.find(p => p.key === `offer_validity_${this.job.client.language.code.toLowerCase()}`);
+        if (vPar)
+          validity = vPar.value;
+        const dPar = this.parameters.find(p => p.key === `offer_delivery_${this.job.client.language.code.toLowerCase()}`);
+        if (dPar)
+          delivery = dPar.value;
+        const pPar = this.parameters.find(p => p.key === `offer_payment_${this.job.client.language.code.toLowerCase()}`);
+        if (pPar)
+          payment = pPar.value;
+        const iPar = this.parameters.find(p => p.key === `offer_in_price_included_${this.job.client.language.code.toLowerCase()}`);
+        if (iPar)
+          inPriceIncluded = iPar.value;
+      }
       this.offerService.createOfferV2OfferV2OfferPut({
         name: this.offerGroup.get("name").value,
         number: this.offerGroup.get("number").value,
+        validity,
+        payment,
+        delivery,
+        inPriceIncluded,
         jobId
       }).pipe(take(1)).subscribe({
         next: (offer) => {

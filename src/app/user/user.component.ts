@@ -85,7 +85,7 @@ export default class UserComponent implements OnInit {
     this.buttons.push({
       name: "Bekleidungsgrößen exportieren",
       navigate: (): void => {
-        const rows = [["Mitarbeiter", "Pullower", "T-Shirt", "Hose", "Schugröße", "Modell Schuhe", "Werkzeuggurt", "Gehörschutz"]];
+        const rows = [["Mitarbeiter", "Pullower", "T-Shirt", "Hose", "Schugröße", "Modell Schuhe", "Sohle", "Werkzeuggurt", "Gehörschutz"]];
         const now = new Date();
         const date = now.getFullYear() +
           "-" +
@@ -112,6 +112,7 @@ export default class UserComponent implements OnInit {
                 user.pants,
                 user.shoes,
                 user.shoe_model,
+                user.sole,
                 user.belt ? "Ja" : "Nein",
                 user.ear_protection
               ]);

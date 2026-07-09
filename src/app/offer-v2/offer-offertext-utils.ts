@@ -5,7 +5,7 @@ import { KeywordRegExp } from "./offer-calculation-utils";
 
 type ParsedFieldOffertext = {
   label: string;
-  value: string | string[];
+  value: string | number | string[];
 }
 
 function createOffertextCont(formula: string, parsedFields: ParsedFieldOffertext[], isAlternative: boolean): string[] {
@@ -20,6 +20,12 @@ function createOffertextCont(formula: string, parsedFields: ParsedFieldOffertext
         }
         return variable.value;
 
+      }
+      if (typeof variable.value === "number") {
+        if (variable.value.toString(10).trim().length === 0) {
+          return "#empty_field#";
+        }
+        return variable.value.toString(10);
       }
       if (variable.value.length === 0) {
         return "#empty_field#";

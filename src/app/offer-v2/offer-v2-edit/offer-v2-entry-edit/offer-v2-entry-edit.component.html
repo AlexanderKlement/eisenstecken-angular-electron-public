@@ -87,8 +87,8 @@
             compare_arrows
           </mat-icon>
           <mat-icon class="icon-btn" (click)="togglePercent()"
-                    [class.active]="percent"
-                    title="Sconto/Aufschlag für diese Posizionsetzen">
+                    [class.active]="percent || scontoResettable" [class.disabled]="depth===0"
+                    [title]="depth === 0 ? 'Sconto/Aufschlag auf dieser Ebene nicht möglich' : 'Sconto/Aufschlag für diese Posizionsetzen'">
             percent
           </mat-icon>
           <mat-icon class="icon-btn"

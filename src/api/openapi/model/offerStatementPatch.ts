@@ -12,6 +12,7 @@ import { OfferStatementEntryInput } from './offerStatementEntryInput';
 
 export interface OfferStatementPatch { 
     content: Array<OfferStatementEntryInput>;
+    date: string;
     name: string;
     price: number;
     priceSubtraction: number;

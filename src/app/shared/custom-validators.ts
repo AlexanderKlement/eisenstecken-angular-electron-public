@@ -17,7 +17,7 @@ export function getNumericVal(control: AbstractControl): number {
     return 0;
 
   }
-  const numeric = parseFloat(val);
+  const numeric = parseFloat(val.replace(",", "."));
   if (!Number.isNaN(numeric)) {
     return numeric;
   }

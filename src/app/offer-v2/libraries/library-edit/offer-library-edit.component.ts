@@ -23,7 +23,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { confirmDeleteDialog } from "../../offer.util";
 import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray } from "@angular/cdk/drag-drop";
 import { MatIcon } from "@angular/material/icon";
-import { selectRequires } from "../../../shared/custom-validators";
+import { getNumericVal, selectRequires } from "../../../shared/custom-validators";
 
 
 type OfferLibraryEntryGroup = {
@@ -160,7 +160,7 @@ export default class OfferLibraryEditComponent implements OnInit {
             const grp = this.libraryGroup.controls.entries.at(i);
             const id = grp.get("id").value;
             const unitId = parseInt(grp.get("unit").value, 10);
-            const price = grp.get("price").value;
+            const price = getNumericVal(grp.get("price"));
             const name = grp.get("name").value;
             if (id === -1) {
               ids.push(-i);

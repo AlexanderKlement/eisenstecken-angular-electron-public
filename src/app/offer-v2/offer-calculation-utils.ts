@@ -2,6 +2,7 @@ import { OfferEntryFieldGroup } from "./offer-v2-edit/offer-v2-entry-edit/entry-
 import { FormGroup } from "@angular/forms";
 import { OfferFieldEnum } from "../../api/openapi";
 import { OfferEntryGroup } from "./offer-v2-edit/offer-v2-entry-edit/offer-v2-entry-edit.component";
+import { getNumericVal } from "../shared/custom-validators";
 
 export const KeywordRegExp = new RegExp(`@[a-zA-ZäöüÄÖÜß]+`, "g");
 export const globalKeywords = ["Beschreibung", "Angebotstext", "children"];
@@ -44,7 +45,6 @@ function createNumericFormulaCont(formula: string, parsedFields: ParsedField[]):
         label: field.label,
         price: field.value as number
       };
-
     }
   });
   let isValid = true;
@@ -71,8 +71,8 @@ function createNumericFormula(formula: string, grp: FormGroup<OfferEntryGroup>, 
   const parsedFields = grp.controls.fields.controls.map<ParsedField>(group => {
     return {
       label: group.get("label").value.replace(/\(.+\)/g, "").trim(),
-      value: group.get("type").value === OfferFieldEnum.Calculation ? group.get("calculation").value : group.get("value").value,
-      price: group.get("valuePrice").value,
+      value: group.get("type").value === OfferFieldEnum.Calculation ? group.get("calculation").value : group.get("type").value === OfferFieldEnum.Numeric ? getNumericVal(group.get("value")) : group.get("value").value,
+      price: getNumericVal(group.get("valuePrice")),
       name: group.get("valueString").value,
       type: group.get("type").value as OfferFieldEnum,
       field: group
@@ -125,8 +125,8 @@ function applyScontoAndAmount(price: number, formula: string, grp: FormGroup<Off
 } {
   let priceCalculated = price;
   let formulaCalculated = formula;
-  const amount = Math.floor(grp.get("amount").value);
-  const sconto = grp.get("priceSubPercent").value;
+  const amount = Math.floor(getNumericVal(grp.get("amount")));
+  const sconto = getNumericVal(grp.get("priceSubPercent"));
 
   if (sconto !== 0) {
     const priceSubstraction = priceCalculated * (sconto / 100);
@@ -135,8 +135,8 @@ function applyScontoAndAmount(price: number, formula: string, grp: FormGroup<Off
       formulaCalculated = `(${formulaCalculated}) -${Math.abs(sconto)}%`;
     }
   }
-  if (depth === 1) {
-    const add = grp.get("priceAddPercent").value;
+  if (depth > 0) {
+    const add = getNumericVal(grp.get("priceAddPercent"));
 
     if (add !== 0) {
       const priceAddition = priceCalculated * (add / 100);
@@ -179,12 +179,13 @@ export function priceEvaluationElementGroup(grp: FormGroup<OfferEntryGroup>, dep
   const result = evaluateCalculation(formula, grp, depth);
   if (result.success) {
     const { price, formula } = applyScontoAndAmount(result.result, result.formula, grp, depth);
-
     grp.patchValue({ priceCalculated: price, priceFormula: formula }, {
       emitEvent: false
     });
   } else {
-    const { price, formula: formulaCalc } = priceEvaluationChildren(grp, depth);
-    grp.patchValue({ priceCalculated: price, priceFormula: formulaCalc }, { emitEvent: false });
+    if (formula.includes("@children")) {
+      const { price, formula: formulaCalc } = priceEvaluationChildren(grp, depth);
+      grp.patchValue({ priceCalculated: price, priceFormula: formulaCalc }, { emitEvent: false });
+    }
   }
 }

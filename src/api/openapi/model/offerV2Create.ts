@@ -10,8 +10,12 @@
 
 
 export interface OfferV2Create { 
+    delivery: string;
+    inPriceIncluded: string;
     jobId: number;
     name: string;
     number: number;
+    payment: string;
+    validity: string;
 }
 

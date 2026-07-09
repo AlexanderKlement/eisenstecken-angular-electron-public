@@ -14,6 +14,7 @@ import { OfferV2 } from './offerV2';
 
 export interface OfferStatement { 
     content?: Array<OfferStatementEntryOutput>;
+    date: string;
     id: number;
     name: string;
     offer: OfferV2;

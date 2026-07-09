@@ -1,21 +1,17 @@
-import { Component, OnInit, inject } from "@angular/core";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {BaseSettingsComponent} from "../base-settings.component";
-import {DefaultService} from "../../../api/openapi";
+import { Component } from "@angular/core";
+import { BaseSettingsComponent } from "../base-settings.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
-import { MatFormField, MatLabel, MatInput } from "@angular/material/input";
+import { DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
+import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
 
 @Component({
-    selector: 'app-general-settings',
-    templateUrl: './general-settings.component.html',
-    styleUrls: ['./general-settings.component.scss'],
-    imports: [FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatButton]
+  selector: "app-general-settings",
+  templateUrl: "./general-settings.component.html",
+  styleUrls: ["./general-settings.component.scss"],
+  imports: [FormsModule, ReactiveFormsModule, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatInput, MatButton]
 })
-export class GeneralSettingsComponent extends BaseSettingsComponent  implements OnInit{
-  protected api: DefaultService;
-  protected snackBar: MatSnackBar;
+export class GeneralSettingsComponent extends BaseSettingsComponent {
 
 
   keyList = [
@@ -34,22 +30,8 @@ export class GeneralSettingsComponent extends BaseSettingsComponent  implements 
     "general_code",
     "general_capital",
     "general_job_path",
-    "general_order_path",
+    "general_order_path"
   ];
-
-  constructor() {
-    const api = inject(DefaultService);
-    const snackBar = inject(MatSnackBar);
-
-    super(api, snackBar);
-  
-    this.api = api;
-    this.snackBar = snackBar;
-  }
-
-  ngOnInit(): void {
-    super.ngOnInit();
-  }
 
 
 }

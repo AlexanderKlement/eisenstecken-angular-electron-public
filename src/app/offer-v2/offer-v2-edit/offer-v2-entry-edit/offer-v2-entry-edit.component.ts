@@ -44,6 +44,7 @@ import { ConfirmDialogComponent } from "../../../shared/components/confirm-dialo
 import { MatDialog } from "@angular/material/dialog";
 import { adjustInheritance, autofillInheritance } from "../../offer-inheritance-util";
 import { createOffertext } from "../../offer-offertext-utils";
+import { getNumericVal } from "../../../shared/custom-validators";
 
 export declare type OfferEntryGroup = {
   alternative: FormControl<boolean>;
@@ -85,8 +86,8 @@ export function mapOfferEntryToInput(grp: FormGroup<OfferEntryGroup>, depth: num
     price: grp.get("price").value,
     amount: grp.get("amount").value,
     fields: grp.controls.fields.controls.map(mapOfferEntryFieldToInput),
-    priceSubPercent: grp.get("priceSubPercent").value,
-    priceAddPercent: grp.get("priceAddPercent").value,
+    priceSubPercent: getNumericVal(grp.get("priceSubPercent")),
+    priceAddPercent: getNumericVal(grp.get("priceAddPercent")),
     visibleOffer: grp.get("visibleOffer").value,
     singlePriceEvaluated: grp.get("priceCalculated").value / grp.get("amount").value,
     offertextEvaluated: grp.controls.offertextEvaluated.value.replace(/\r/g, "").split("\n")
@@ -105,7 +106,7 @@ export function newEmptyOfferEntryGroup(globalAddPercent = 0, depth: number) {
     visibleOffer: new FormControl(true),
     alternative: new FormControl(false),
     priceSubPercent: new FormControl(0),
-    priceAddPercent: new FormControl(globalAddPercent),
+    priceAddPercent: new FormControl(depth === 1 ? globalAddPercent : 0),
     globalAddPercent: new FormControl(globalAddPercent),
     fields: new FormArray([]),
     description: new FormControl(""),
@@ -134,7 +135,7 @@ export function mapEntryOfferEntryGroup(entry: OfferV2EntryOutput, depth: number
     visibleOffer: new FormControl(entry.visibleOffer),
     alternative: new FormControl(entry.alternative),
     priceSubPercent: new FormControl(entry.priceSubPercent),
-    priceAddPercent: new FormControl(entry.priceAddPercent),
+    priceAddPercent: new FormControl(depth === 0 ? 0 : entry.priceAddPercent),
     globalAddPercent: new FormControl(globalAddPercent),
     fields: new FormArray(entry.fields.map(mapEntryToEntryFieldGroup)),
     description: new FormControl(entry.description),
@@ -228,7 +229,7 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
       } else {
         this.waitForChildren = this.entryGroup.controls.children.length;
       }
-      if (this.scontoResettable || this.entryGroup.get("priceSubPercent").value !== 0) {
+      if ((this.scontoResettable || this.entryGroup.get("priceSubPercent").value !== 0) && this.depth !== 0) {
         this.percent = true;
       }
     }
@@ -248,7 +249,10 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
   }
 
   protected get scontoResettable(): boolean {
-    return this.entryGroup.get("priceAddPercent").value !== this.entryGroup.get("globalAddPercent").value;
+    if (this.depth === 1) {
+      return this.entryGroup.get("priceAddPercent").value !== this.entryGroup.get("globalAddPercent").value;
+    }
+    return this.entryGroup.get("priceAddPercent").value !== 0;
   }
 
   descriptionChanged() {
@@ -264,7 +268,8 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
   }
 
   onResetSconto() {
-    this.entryGroup.patchValue({ priceAddPercent: this.entryGroup.get("globalAddPercent").value });
+
+    this.entryGroup.patchValue({ priceAddPercent: this.depth === 1 ? this.entryGroup.get("globalAddPercent").value : 0 });
   }
 
   childrenEvaluated() {
@@ -285,12 +290,10 @@ export class OfferV2EntryEditComponent implements AfterViewInit {
 
 
   togglePercent() {
-    this.percent = !this.percent;
-    this.open = true;
-    this.entryGroup.patchValue({
-      priceSubPercent: 0,
-      priceAddPercent: this.entryGroup.get("globalAddPercent").value
-    });
+    if (this.depth !== 0) {
+      this.percent = !this.percent;
+      this.open = true;
+    }
   }
 
   toggleAlternative() {

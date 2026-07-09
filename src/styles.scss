@@ -93,6 +93,14 @@ html {
       background-color: #f5f5f5;
       border-radius: var(--mat-form-field-outlined-container-shape) !important;
     }
+
+    .mat-mdc-icon-button.mat-mdc-button-base {
+      --mdc-icon-button-state-layer-size: 37px;
+      --mat-icon-button-state-layer-size: 37px;
+      width: var(--mat-icon-button-state-layer-size);
+      height: var(--mat-icon-button-state-layer-size);
+      padding: 7px;
+    }
   }
 }
 

@@ -30,10 +30,12 @@ import {
 import { MatIcon } from "@angular/material/icon";
 import { evaluateStatementPrice } from "./statement-utils";
 import OfferV2PreviewDialogComponent from "../offer-v2-edit/offer-v2-preview-dialog/offer-v2-preview-dialog.component";
+import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular/material/datepicker";
 
 type StatementGroup = {
   id: FormControl<number>;
   name: FormControl<string>;
+  date: FormControl<string>;
   price: FormControl<number>;
   subPercent: FormControl<number>;
   priceSubtraction: FormControl<number>;
@@ -49,6 +51,7 @@ function newStatementGroup() {
     id: new FormControl(-1),
     name: new FormControl(""),
     price: new FormControl(0),
+    date: new FormControl(new Date().toLocaleDateString()),
     subPercent: new FormControl(0),
     priceSubtraction: new FormControl(0),
     originalPrice: new FormControl(0),
@@ -65,6 +68,7 @@ function mapStatementGroup(data: OfferStatement) {
     id: new FormControl(data.id),
     name: new FormControl(data.name),
     price: new FormControl(data.price),
+    date: new FormControl(data.date),
     subPercent: new FormControl(data.subPercent),
     priceSubtraction: new FormControl(data.priceSubtraction),
     originalPrice: new FormControl(data.originalPrice),
@@ -96,7 +100,10 @@ function mapStatementGroup(data: OfferStatement) {
     OfferStatementEntryEditComponent,
     MatIcon,
     MatSuffix,
-    MatIconButton
+    MatIconButton,
+    MatDatepicker,
+    MatDatepickerInput,
+    MatDatepickerToggle
   ],
   templateUrl: "./offer-statement-edit.component.html",
   styleUrl: "./offer-statement-edit.component.scss"
@@ -191,28 +198,36 @@ export class OfferStatementEditComponent implements OnInit {
       this.statementGroup.valueChanges.subscribe(() => {
         this.statementGroupValidator();
       });
+      if (this.jobId) {
+        this.offers$ = this.offerService.getOffersOfferV2OffersGet(this.jobId, 0, "", 100).pipe(
+          tap((offers) => {
+            if (offers.length === 1) {
+              this.statementGroup.patchValue({ offerId: offers[0].id });
+              this.onSetOffer(offers[0]);
+            }
+          })
+        );
+      }
     }
   }
 
-  get betweenPrice() {
+  get finalPrice() {
     const price = getNumericVal(this.statementGroup.get("price"));
     const priceSubtraction = getNumericVal(this.statementGroup.get("priceSubtraction"));
     const subPercent = getNumericVal(this.statementGroup.get("subPercent"));
-    return (price + priceSubtraction) / (1 - (subPercent / 100));
+    const percentSubstraction = price * (subPercent / 100);
+    return price - priceSubtraction - percentSubstraction;
   }
 
   statementGroupValidator() {
     if (this.statementGroup) {
       this.hasChanged = true;
       evaluateStatementPrice(this.statementGroup.controls.content);
-      const priceSubtraction = getNumericVal(this.statementGroup.get("priceSubtraction"));
-      const subPercent = getNumericVal(this.statementGroup.get("subPercent"));
       const newBetweenPrice = this.statementGroup.controls.content.controls.reduce((prev, cur) => {
         return prev + getNumericVal(cur.get("price"));
       }, 0);
-      const newPercentedPrice = newBetweenPrice - (newBetweenPrice * (subPercent / 100));
       this.statementGroup.patchValue({
-        price: newPercentedPrice - priceSubtraction
+        price: newBetweenPrice
       }, { emitEvent: false });
     }
   }
@@ -226,6 +241,7 @@ export class OfferStatementEditComponent implements OnInit {
           price: getNumericVal(this.statementGroup.get("price")),
           subPercent: getNumericVal(this.statementGroup.get("subPercent")),
           priceSubtraction: getNumericVal(this.statementGroup.get("priceSubtraction")),
+          date: this.statementGroup.get("date").value,
           content: this.statementGroup.controls.content.controls.map(mapStatementEntryToInput)
         }).pipe(take(1)).subscribe({
           next: (data) => {
@@ -278,10 +294,6 @@ export class OfferStatementEditComponent implements OnInit {
     }
   }
 
-  onChangePrice() {
-    console.log(this.statementGroup.controls.priceSubtraction.value);
-  }
-
   onDelete() {
     if (this.statementId) {
       confirmDeleteDialog(this.statementId,
@@ -307,6 +319,7 @@ export class OfferStatementEditComponent implements OnInit {
                 offer: this.offer,
                 statement: {
                   id: this.statementId,
+                  date: this.statementGroup.get("date").value,
                   content: this.statementGroup.controls.content.controls.map(mapStatementEntryToInput)
                 },
                 parameters
@@ -324,6 +337,10 @@ export class OfferStatementEditComponent implements OnInit {
         generate(true);
       }
     }
+  }
+
+  protected onSetOffer(event: OfferV2) {
+    this.statementGroup.patchValue({ name: `${event.job.code}_${event.number.toString(10).padStart(2, "0")}_` });
   }
 
   protected readonly getNumericVal = getNumericVal;

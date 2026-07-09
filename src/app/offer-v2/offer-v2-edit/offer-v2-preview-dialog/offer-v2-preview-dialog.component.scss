@@ -24,8 +24,8 @@ $fs-small: pt(8); // FONT_SIZE_SMALL
 $fs-header: pt(6.5); // FONT_SIZE_HEADER
 $fs-footer: pt(9);
 
-$offer-cols: mm(12) mm(97) mm(19) mm(25) mm(26);
-$bottom-cols: mm(35) mm(62) mm(36) mm(46);
+$offer-cols: mm(12) mm(98) mm(19) mm(25) mm(26);
+$bottom-cols: mm(36) mm(62) mm(36) mm(46);
 * {
   box-sizing: border-box;
 }
@@ -54,40 +54,6 @@ $bottom-cols: mm(35) mm(62) mm(36) mm(46);
     overflow: hidden;
     font-size: $fs-regular;
     line-height: 1.32;
-
-
-    .banner {
-      position: absolute;
-      top: mm(15);
-      left: mm(24);
-      width: mm(171);
-      aspect-ratio: 8079/1002;
-
-      img {
-        display: block;
-        object-fit: contain;
-        object-position: left bottom;
-      }
-    }
-
-    .side-text {
-      position: absolute;
-      left: mm(8);
-      bottom: mm(17);
-      transform-origin: left bottom;
-      transform: rotate(-90deg);
-      white-space: nowrap;
-      font-family: "Roboto", serif;
-      font-weight: 300;
-      font-size: $fs-header;
-      color: $grey;
-      letter-spacing: .1px;
-
-      .sep {
-        padding: 0 mm(2.2);
-      }
-    }
-
 
     .content {
       position: absolute;
@@ -121,7 +87,7 @@ $bottom-cols: mm(35) mm(62) mm(36) mm(46);
           }
 
           .place-date {
-            margin-top: mm(1)
+            margin-top: mm(3)
           }
         }
       }
@@ -221,6 +187,8 @@ $bottom-cols: mm(35) mm(62) mm(36) mm(46);
 
         img {
           display: block;
+          height: mm(17) !important;
+          width: auto;
         }
       }
 
@@ -332,7 +300,7 @@ $bottom-cols: mm(35) mm(62) mm(36) mm(46);
           font-size: $fs-regular;
           color: $grey;
           padding-right: mm(2);
-          white-space: pre-line;
+          white-space: collapse;
         }
 
         .cell--num,
@@ -348,7 +316,6 @@ $bottom-cols: mm(35) mm(62) mm(36) mm(46);
 
         .cell--desc {
           text-align: left;
-          white-space: pre-wrap;
         }
 
         .cell--total {
@@ -373,7 +340,7 @@ $bottom-cols: mm(35) mm(62) mm(36) mm(46);
 
         .row--not-made {
           > .cell {
-            color: $neutral;
+            text-decoration: line-through;
           }
         }
 
@@ -474,53 +441,6 @@ $bottom-cols: mm(35) mm(62) mm(36) mm(46);
     // first-page frame
     &.page--body .content {
       top: mm(38);
-    }
-
-    .footer {
-      position: absolute;
-      left: mm(15);
-      right: 0;
-      bottom: mm(15);
-      font-family: "Roboto", serif;
-      font-weight: 300;
-      font-size: $fs-footer;
-      color: $grey;
-
-      .frow {
-        position: relative;
-        height: mm(4.23);
-      }
-
-      .fcell {
-        position: absolute;
-        white-space: nowrap;
-        left: 0;
-
-        &:nth-child(2) {
-          left: mm(44);
-        }
-
-        &:nth-child(3) {
-          left: mm(102);
-        }
-
-        &:nth-child(4) {
-          left: mm(148);
-        }
-      }
-
-      .frow--second .fcell:nth-child(4) {
-        font-family: "Roboto", serif;
-        font-weight: 700;
-      }
-    }
-
-    .fold-mark {
-      position: absolute;
-      left: 0;
-      top: mm(297 - 197);
-      width: mm(3);
-      border-top: 1px solid $grey-line;
     }
   }
 

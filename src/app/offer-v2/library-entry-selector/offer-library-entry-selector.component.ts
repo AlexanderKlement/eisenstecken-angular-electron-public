@@ -47,7 +47,7 @@ export default class OfferLibraryEntrySelectorComponent implements OnInit {
   @Input() allLibraries: OfferLibrary[];
   @Input() firstLibraryId?: number;
   @Input() value?: number;
-  @Input() label?: string;
+  @Input() label: string;
   @Input({ transform: booleanAttribute }) outline: boolean;
   @Input({ transform: booleanAttribute }) readonly: boolean;
   @Input({ transform: booleanAttribute }) fillWidth: boolean;

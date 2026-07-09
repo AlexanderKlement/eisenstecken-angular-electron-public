@@ -15,7 +15,7 @@ export interface UserUpdateBase {
     birthday?: string | null;
     birthplace?: string | null;
     city?: string | null;
-    contact: string;
+    contact?: string | null;
     country?: string | null;
     dial: string;
     email: string;

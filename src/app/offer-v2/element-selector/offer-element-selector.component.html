@@ -3,9 +3,6 @@
   [class.new-form-element]="outline"
   class="select-container"
   [fxFlex]="fillWidth">
-  @if (label) {
-    <mat-label>{{ label }}</mat-label>
-  }
   <mtx-select
     class="select-container"
     [items]="elements$ | async"
