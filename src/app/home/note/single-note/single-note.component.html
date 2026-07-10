@@ -1,6 +1,6 @@
 @if (noteVisible) {
-  <div class="single-note">
-    <span (click)="deleteNoteClicked()" class="material-icons close">delete</span>
+  <div class="single-note" #container>
+    <mat-icon (click)="deleteNoteClicked()" class="close">delete</mat-icon>
     <mat-icon class="save"
               [class.hidden]="saved === 0"
               [class.waiting]="saved === 1">{{ saved === 0 ? "" : saved === 2 ? "cloud_done" : "cloud_upload" }}
@@ -9,5 +9,6 @@
       <textarea [formControl]="singleNoteTextArea"
                 class="note-text">{{ note.text }}</textarea>
     </div>
+    <div class="resize-handle" (mousedown)="mouseDown($event)"></div>
   </div>
 }

@@ -1,37 +1,25 @@
-import { Component, inject, Input, OnDestroy, OnInit } from "@angular/core";
+import { Component, inject, Input, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 import { first, tap } from "rxjs/operators";
-import { Router } from "@angular/router";
 import dayjs from "dayjs/esm";
 import { CalendarService } from "../calendar.service";
 import { CalendarData, CalendarEditComponent } from "../calendar-edit/calendar-edit.component";
 import { MatDialog } from "@angular/material/dialog";
-import { CalendarEntry, DefaultService } from "../../../../../api/openapi";
-import { LoadingComponent } from "../../loading/loading.component";
-import { MatCard, MatCardContent } from "@angular/material/card";
+import { CalendarEntry } from "../../../../../api/openapi";
 import { AsyncPipe, NgClass } from "@angular/common";
 import { DefaultClassDirective } from "ng-flex-layout/extended";
-import { DefaultFlexDirective, DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
 
 @Component({
   selector: "app-calendar-day",
   templateUrl: "./calendar-day.component.html",
   styleUrls: ["./calendar-day.component.scss"],
   imports: [
-    LoadingComponent,
-    MatCard,
     NgClass,
     DefaultClassDirective,
-    MatCardContent,
-    DefaultLayoutDirective,
-    DefaultLayoutAlignDirective,
-    DefaultFlexDirective,
     AsyncPipe
   ]
 })
-export class CalendarDayComponent implements OnInit, OnDestroy {
-  private api = inject(DefaultService);
-  private router = inject(Router);
+export class CalendarDayComponent implements OnInit {
   private calendar = inject(CalendarService);
   private dialog = inject(MatDialog);
 
@@ -59,10 +47,6 @@ export class CalendarDayComponent implements OnInit, OnDestroy {
       .getCalendarEntries(this.calendarId, this.day)
       .pipe(tap(() => (this.loading = false)));
     this.setTitle();
-  }
-
-  ngOnDestroy(): void {
-
   }
 
   onCalendarEntryClicked(id: number): void {

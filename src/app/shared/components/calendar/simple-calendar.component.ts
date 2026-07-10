@@ -1,23 +1,12 @@
-import { Component, Input, OnInit, inject } from "@angular/core";
+import { Component, inject, Input, OnInit } from "@angular/core";
 import { DayManager } from "./day.manager";
 import { MatDialog } from "@angular/material/dialog";
-import {
-  CalendarData,
-  CalendarEditComponent,
-} from "./calendar-edit/calendar-edit.component";
+import { CalendarData, CalendarEditComponent } from "./calendar-edit/calendar-edit.component";
 import { first } from "rxjs/operators";
 import { CalendarService } from "./calendar.service";
 import dayjs from "dayjs/esm";
 import { AuthStateService } from "../../services/auth-state.service";
-import {
-  DefaultLayoutDirective,
-  DefaultLayoutAlignDirective,
-  FlexModule,
-  DefaultFlexDirective,
-  DefaultLayoutGapDirective,
-} from "ng-flex-layout";
-import { MatToolbar } from "@angular/material/toolbar";
-import { DefaultShowHideDirective } from "ng-flex-layout/extended";
+import { FlexModule } from "ng-flex-layout";
 import { CalendarDayComponent } from "./calendar-day/calendar-day.component";
 import { CircleIconButtonComponent } from "../circle-icon-button/circle-icon-button.component";
 import { ScopeEnum } from "../../../../api/openapi";
@@ -27,16 +16,10 @@ import { ScopeEnum } from "../../../../api/openapi";
   templateUrl: "./simple-calendar.component.html",
   styleUrls: ["./simple-calendar.component.scss"],
   imports: [
-    DefaultLayoutDirective,
-    DefaultLayoutAlignDirective,
     FlexModule,
-    MatToolbar,
-    DefaultFlexDirective,
-    DefaultShowHideDirective,
-    DefaultLayoutGapDirective,
     CalendarDayComponent,
-    CircleIconButtonComponent,
-  ],
+    CircleIconButtonComponent
+  ]
 })
 export class SimpleCalendarComponent implements OnInit {
   dialog = inject(MatDialog);
@@ -84,11 +67,11 @@ export class SimpleCalendarComponent implements OnInit {
 
   newMeetingClicked(): void {
     const data: CalendarData = {
-      calendarId: this.calendarId,
+      calendarId: this.calendarId
     };
     const dialogRef = this.dialog.open(CalendarEditComponent, {
       width: "700px",
-      data,
+      data
     });
 
     dialogRef
@@ -100,7 +83,7 @@ export class SimpleCalendarComponent implements OnInit {
           const now = dayjs();
           this.calendar.refreshCalendar(
             parseInt(result.calendar.id, 10),
-            date.diff(now, "days"),
+            date.diff(now, "days")
           );
         }
       });

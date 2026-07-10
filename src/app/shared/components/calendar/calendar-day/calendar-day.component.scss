@@ -2,76 +2,99 @@
 @use "../../../../../theme" as theme;
 @use "sass:color";
 
-.day-title {
-
-}
-
-.entries {
-  table-layout: fixed;
-  border-left: solid thin rgb(0 0 0 / 20%);
-
-  tr {
-    cursor: pointer;
-    box-shadow: 0 1px 0 0 rgb(0 0 0 / 20%);
-
-    td:first-child {
-      min-width: 80px;
-      max-width: 80px;
-      width: 80px;
-    }
-  }
-
-  tr.no-entry {
-    cursor: default;
-  }
-
-  tr:last-child {
-    visibility: hidden;
-    display: none;
-    box-shadow: none;
-  }
-
-  tr:first-child {
-    visibility: visible;
-    display: table-row;
-  }
-
-  tr:nth-last-child(2) {
-    box-shadow: none;
-  }
-
-  .no-entry {
-    text-align: center;
-  }
-
-  tr:hover {
-    box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
-  }
-
-  tr.no-entry:hover {
-    box-shadow: none;
-  }
-}
 
 .small-card {
-  padding: 10px;
-  height: 10vh;
-  overflow-y: auto;
+  padding: 2px 0;
+  border-radius: 2px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-}
+  align-items: stretch;
+  justify-content: flex-start;
+  // box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 3px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
 
-.weekend {
-  opacity: 0.6;
-}
+  &.weekend {
+    opacity: 0.4;
+  }
 
-.today {
-  background-color: color.scale(map.get(theme.$mat-primary, main), $alpha: -90%);
+  &.today {
+    background-color: color.scale(map.get(theme.$mat-primary, main), $alpha: -90%);
+  }
 
-  ::ng-deep {
-    table {
-      background-color: transparent;
+  .day-title {
+    font-size: 75%;
+    padding: 2px 8px;
+    border-bottom: 1px solid map.get(theme.$mat-accent, lighter);
+  }
+
+  .entries {
+    flex: 1;
+    padding: 2px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-evenly;
+    min-height: 42px;
+
+    .entry {
+      cursor: pointer;
+      padding: 2px 8px;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 8px;
+      border-bottom: 1px solid map.get(theme.$mat-accent, lighter);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .when-author {
+        padding-right: 8px;
+        border-right: 1px solid map.get(theme.$mat-accent, lighter);
+
+        .when, .author {
+          display: block;
+        }
+
+        .when {
+          white-space: nowrap;
+        }
+
+        .author {
+          color: var(--neutral-color);
+          font-size: 75%;
+          word-break: break-all;
+        }
+      }
+
+      .description-title {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+
+        .description {
+          color: var(--neutral-color);
+          font-size: 85%;
+        }
+      }
+
+      &:hover {
+        box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+      }
+    }
+
+    .no-entry {
+      flex: 1;
+      cursor: default;
+      color: var(--neutral-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 }
+
+

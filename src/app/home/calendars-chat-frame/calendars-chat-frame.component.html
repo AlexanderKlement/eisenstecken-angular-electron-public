@@ -1,16 +1,14 @@
 <app-loading [loading]="loading">
   <div class="outer-container">
-      <div class="app-calendar-tab" fxFlexFill>
-        <div fxLayout="row" fxLayoutAlign="center start" fxFlexFill class="container">
-          @for (calendar of calendars$ | async; track calendar) {
-            <div fxLayout="column" fxLayoutAlign=" stretch" class="calenderside">
-              <p fxFlexFill>{{calendar.name}}</p>
-              <app-calendar [public]="calendar.open" [calendarId]="calendar.id" fxFlexFill>
-              </app-calendar>
-            </div>
-          }
+    @if (calendars$|async; as calendars) {
+      @for (calendar of calendars; track calendar) {
+        <div class="inner-container">
+          <strong>{{ calendar.name }}</strong>
+          <app-calendar [public]="calendar.open" [calendarId]="calendar.id">
+          </app-calendar>
         </div>
-      </div>
+      }
+    }
   </div>
 </app-loading>
 

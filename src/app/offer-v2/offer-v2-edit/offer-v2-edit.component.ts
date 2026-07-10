@@ -23,7 +23,8 @@ import {
   OfferV2Service,
   OfferV2Version,
   OfferV2WithVersion,
-  Parameter
+  Parameter,
+  Vat
 } from "../../../api/openapi";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatDialog } from "@angular/material/dialog";
@@ -48,7 +49,6 @@ import { createOffertext } from "../offer-offertext-utils";
 import { MatTab, MatTabGroup } from "@angular/material/tabs";
 import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular/material/datepicker";
 import { MatOption, MatSelect } from "@angular/material/select";
-import { Vat } from "../../model/vat";
 import { getNumericVal, selectRequires } from "../../shared/custom-validators";
 import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
 import { autofillInheritance, evaluateOfferInheritance } from "../offer-inheritance-util";
@@ -587,14 +587,7 @@ export class OfferV2EditComponent implements OnInit {
       }).pipe(take(1)).subscribe({
         next: (offer) => {
           this.loadingSubject.next(false);
-          this.offerV2Id = offer.id;
-          this.jobId = offer.job.id;
-          this.job = offer.job;
-          this.versions = [];
-          this.lastVersion = undefined;
-          this.offerGroup = newOfferGroup(offer);
-          this.timeout = setTimeout(this.autosave.bind(this), 10000);
-          this.unsavedChanges = false;
+          this.router.navigateByUrl(`/offer_v2/offer/${offer.id}`).then();
         },
         error: error => {
           this.loadingSubject.next(false);

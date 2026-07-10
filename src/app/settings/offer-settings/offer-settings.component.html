@@ -44,7 +44,8 @@
   </div>
   <div class="logo-upload" fxLayout="column" fxLayoutAlign="space-around center">
     <h3>Angebots-Footer-Logo</h3>
-
+    <span class="neutral">Das Bild wird mit 17mm Höhe im Angebot Angezeigt und belibig Breit, wobei die maximale Breite auf A4 abzüglich Ränder 170mm ist</span>
+    <br />
     @if (selectedLogoUrl) {
       <img class="logo-preview" [src]="selectedLogoUrl" [alt]="logoFilename" />
       <span class="logo-filename">{{ logoFilename }}</span>

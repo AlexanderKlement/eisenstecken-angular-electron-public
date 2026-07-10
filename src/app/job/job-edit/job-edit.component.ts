@@ -114,7 +114,8 @@ export default class JobEditComponent extends BaseEditComponent<Job> implements 
           cap: new UntypedFormControl(""),
           country: new UntypedFormControl("IT")
         }),
-        completion: new UntypedFormControl(""),
+        assembly: new UntypedFormControl(""),
+        production: new UntypedFormControl(""),
         note: new UntypedFormControl("")
       });
     } else {
@@ -128,7 +129,9 @@ export default class JobEditComponent extends BaseEditComponent<Job> implements 
           cap: new UntypedFormControl(""),
           country: new UntypedFormControl("IT")
         }),
-        completion: new UntypedFormControl("")
+        assembly: new UntypedFormControl(""),
+        production: new UntypedFormControl(""),
+        note: new UntypedFormControl("")
       });
     }
   }
@@ -171,7 +174,8 @@ export default class JobEditComponent extends BaseEditComponent<Job> implements 
           address: {
             country: job.address.country.code
           },
-          completion: job.completion
+          assembly: job.assembly,
+          production: job.production
         });
       });
     }
@@ -196,7 +200,8 @@ export default class JobEditComponent extends BaseEditComponent<Job> implements 
         country_code: this.jobGroup.get("address.country").value
       },
       type: this.jobGroup.get("minijob").value ? "JOBYTPE_MINI" : "JOBTYPE_MAIN",
-      completion: this.jobGroup.get("completion").value,
+      assembly: this.jobGroup.get("assembly").value,
+      production: this.jobGroup.get("production").value,
       note: this.jobGroup.get("note").value
     };
     this.api.createJobJobPost(jobCreate).subscribe((job) => {
@@ -235,7 +240,8 @@ export default class JobEditComponent extends BaseEditComponent<Job> implements 
         cap: this.jobGroup.get("address.cap").value,
         country_code: this.jobGroup.get("address.country").value
       },
-      completion: this.jobGroup.get("completion").value,
+      assembly: this.jobGroup.get("assembly").value,
+      production: this.jobGroup.get("production").value,
       note: this.jobGroup.get("note").value
     };
     this.api.updateJobJobJobIdPut(this.id, jobUpdate).subscribe((job) => {

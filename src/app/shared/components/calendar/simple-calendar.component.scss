@@ -1,9 +1,35 @@
-.add-button {
-  float: right;
-}
+.outer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
 
-.calendar-days {
-  overflow-y: scroll;
-  padding-bottom: 10px;
-  padding-right: 3px;
+  .header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 24px 12px;
+    background-color: var(--accent-color);
+    color: var(--text-accent-color);
+
+    app-circle-icon-button {
+      color: var(--text-primary-color);
+    }
+
+    .hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+  .calendar-days {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 12px;
+    padding-top: 4px;
+  }
 }

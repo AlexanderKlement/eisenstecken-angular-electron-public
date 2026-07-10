@@ -12,10 +12,11 @@ import { AddressCreate } from './addressCreate';
 
 export interface JobUpdate { 
     address: AddressCreate;
-    completion: string;
+    assembly: string;
     description: string;
     name: string;
     note?: string | null;
+    production: string;
     responsible_id: number;
 }
 

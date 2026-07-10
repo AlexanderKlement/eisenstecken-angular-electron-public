@@ -24,6 +24,7 @@ export interface OfferStatement {
     pdfServer: string;
     price: number;
     priceSubtraction: number;
+    sconted_price: number;
     subPercent: number;
 }
 

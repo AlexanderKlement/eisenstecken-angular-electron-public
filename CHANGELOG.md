@@ -1,4 +1,4 @@
-## <small>2.2.7 (2026-07-09)</small>
+## <small>2.2.8 (2026-07-10)</small>
 
 * A lot refactored with templates ([44fa7e7](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/44fa7e7))
 * Add Husky and version check ([d92151e](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/d92151e))
@@ -79,6 +79,7 @@
 * Update README.md ([e24ca68](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/e24ca68))
 * Version 2.2.3 ([3db1467](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/3db1467))
 * Version bumb for release ([465f77c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/465f77c))
+* version bump ([9175bb5](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/9175bb5))
 * wtf is this error ([cb85cef](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/cb85cef))
 
 

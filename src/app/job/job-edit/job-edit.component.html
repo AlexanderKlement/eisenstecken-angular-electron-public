@@ -33,11 +33,13 @@
       }
       @if (!subMode) {
         <mat-form-field appearance="fill">
-          <mat-label>Fertigstellung</mat-label>
-          <input class="form-control" formControlName="completion" matInput>
+          <mat-label>Produktion</mat-label>
+          <input class="form-control" formControlName="production" matInput>
         </mat-form-field>
-      }
-      @if (!subMode) {
+        <mat-form-field appearance="fill">
+          <mat-label>Montage</mat-label>
+          <input class="form-control" formControlName="assembly" matInput>
+        </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Notiz</mat-label>
           <textarea class="form-control" formControlName="note" matInput rows="7"></textarea>

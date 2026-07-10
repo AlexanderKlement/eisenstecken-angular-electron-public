@@ -11,6 +11,7 @@ import { User } from './user';
 
 
 export interface Note { 
+    height: number | null;
     id: number;
     text: string;
     user: User;
