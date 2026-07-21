@@ -59,7 +59,7 @@ function checkContentForVersion(file) {
     ${file}
 
   Please add release notes for v${newVersion} before committing in info-dialog.component.ts,
-  and use "npm run version:[patch|minor|mayor]" to bump correctly via the version hooks.
+  and use "npm run version:[patch|minor|major]" to bump correctly via the version hooks.
 `);
     process.exit(1);
   }

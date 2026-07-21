@@ -1,5 +1,8 @@
-## <small>2.2.7 (2026-07-21)</small>
+## <small>2.2.8 (2026-07-21)</small>
 
+* adding missing generated files ([4cef3c8](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/4cef3c8))
+* Delete Tiktak Timeentries button ([ada8b91](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/ada8b91))
+* Delete Tiktak Timeentries text fix ([9815f61](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/9815f61))
 
 
 

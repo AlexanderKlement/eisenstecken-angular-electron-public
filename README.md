@@ -46,7 +46,7 @@ windows:
 IMPORTANT: Restart Terminal/IDE to reload environment variables.
 
 The build and deploy with:
-`npm run postversion` or `npm run version:[patch|minor|mayor]`
+`npm run postversion` or `npm run version:[patch|minor|major]`
 `npm run electron:deploy`
 
 Go to GitHub open the release and release it
@@ -113,12 +113,20 @@ the time not accessible by others, which makes regular uploads a real struggle.
 
 ## Updating
 
-To increase the Version please use the `version:[patch|minor|mayor]` scripts, this runs the preversion & version & postversion hooks:
+To increase the Version please use the `version:[patch|minor|major]` scripts, this runs the preversion & version & postversion hooks:
 
 These do:
 
 - `preversion`: replace the version in `app/main.ts`, `src/main.ts` and `app/package.json` and checks if there are patch-notes in the `src/app/home/info-dialog/info-dialog.component.ts`
 - `postversion`: builds the project with the new version, inject sentry DEBUG ID's and uploads the sourcemaps to sentry
+
+INFO: login to sentry-cli via sentry-cli --url https://sentry.kivi.bz.it login (i did not open the browser but entered the token manually)
+
+Token needs the scopes org:read, project:read, project:releases
+
+Add the server to ~/.sentryclirc:
+
+url = https://sentry.kivi.bz.it
 
 If you make code changes after you increase the version, you can still run the `npm run postversion` script to regenerate the sentry sourcemaps.
 

@@ -52,6 +52,12 @@ export class InfoDialogComponent implements OnInit {
       ]
     },
     {
+      versionName: "2.2.8",
+      changes: [
+        "Zwischen beta und prod kann nun viel komfortabler gewechselt werden"
+      ]
+    },
+    {
       versionName: "2.2.7",
       changes: [
         "Arbeitszeiten aus TikTak können nun auch gelöscht werden"
