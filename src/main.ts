@@ -75,7 +75,7 @@ Sentry.init({
   integrations: [],
   tracesSampleRate: 0.3,
   environment: APP_CONFIG.environment,
-  release: "2.2.8"
+  release: "2.2.9"
 });
 
 if (APP_CONFIG.production) {

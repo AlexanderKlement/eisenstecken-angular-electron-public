@@ -33,13 +33,13 @@ export class LocalConfigRenderer {
 
     switch (env) {
       case "prod":
-        url = "https://api.app.eisenstecken.it/"; // adjust if your prod URL differs
+        url = "https://api.app.eisenstecken.it"; // adjust if your prod URL differs
         break;
       case "beta":
-        url = "https://api.app.eisenstecken.it/beta/";
+        url = "https://api.app.eisenstecken.it/beta";
         break;
       case "dev":
-        url = "https://api.app.eisenstecken.it/dev/"; // adjust to your real dev URL
+        url = "https://api.app.eisenstecken.it/dev"; // adjust to your real dev URL
         break;
       default:
         console.warn("Unknown environment:", env);
