@@ -95,27 +95,6 @@ export class ChatComponent implements OnInit, OnDestroy {
     );
   }
 
-  private addSystemMessage(text: string) {
-    this.messages.push({
-      id: -1,
-      own: false,
-      recipient: null,
-      sender: {
-        email: "system@eisenstecken.it",
-        firstname: "System",
-        fullname: "System",
-        id: -1,
-        //innovaphone_pass: "",
-        // innovaphone_user: "",
-        notifications: false,
-        secondname: "System",
-        tel: ""
-      },
-      text: text,
-      timestamp: Date.now().toString()
-    });
-  }
-
   private resetChatControl() {
     this.chatGroup.reset({
       messageInput: "",
@@ -166,18 +145,15 @@ export class ChatComponent implements OnInit, OnDestroy {
       this.authService.doLogout();
     }
     if (chatInput.startsWith("!prod")) {
-      LocalConfigRenderer.getInstance().setEnvironment("prod");
-      this.addSystemMessage("Environment set to PROD. Please restart the app to apply the change.");
+      this.applyEnvironment("prod");
       return;
     }
     if (chatInput.startsWith("!beta")) {
-      LocalConfigRenderer.getInstance().setEnvironment("beta");
-      this.addSystemMessage("Environment set to BETA. Please restart the app to apply the change.");
+      this.applyEnvironment("beta");
       return;
     }
     if (chatInput.startsWith("!dev")) {
-      LocalConfigRenderer.getInstance().setEnvironment("dev");
-      this.addSystemMessage("Environment set to DEV. Please restart the app to apply the change.");
+      this.applyEnvironment("dev");
       return;
     }
     if (chatInput.startsWith("!logout")) {
@@ -185,6 +161,17 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
     if (chatInput.startsWith("!")) {
       this.resetChatControl();
+    }
+  }
+
+  private applyEnvironment(env: "prod" | "beta" | "dev"): void {
+    LocalConfigRenderer.getInstance().setEnvironment(env);
+    if (this.electron.isElectron) {
+      // location.reload() breaks on file:// builds because the router has
+      // rewritten the URL, so the main process reloads index.html instead
+      this.electron.ipcRenderer.send("reload_window");
+    } else {
+      window.location.reload();
     }
   }
 }

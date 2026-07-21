@@ -1,7 +1,9 @@
 import { app, dialog, ipcMain } from "electron";
 import { getAppState } from "../singleton";
+import { getRendererDistFolder } from "../paths";
 import { autoUpdater } from "electron-updater";
 import * as fs from "node:fs";
+import * as path from "path";
 
 
 export function registerAppIpc(): void {
@@ -21,6 +23,21 @@ export function registerAppIpc(): void {
       dialog.showErrorBox("Error", "Failed to install updates");
     }
 
+  });
+
+  ipcMain.on("reload_window", () => {
+    const state = getAppState();
+    if (!state.win) {
+      return;
+    }
+    if (state.win.webContents.getURL().startsWith("http")) {
+      state.win.webContents.reload();
+      return;
+    }
+    // file:// build: the Angular router rewrites the URL via pushState, so
+    // reloading the current URL would request a path that is not a real file.
+    // Load the actual entry file instead.
+    void state.win.loadFile(path.join(getRendererDistFolder(), "index.html"));
   });
 
   ipcMain.on("app_path", (event) => {
