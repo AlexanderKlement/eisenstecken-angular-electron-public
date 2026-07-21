@@ -1,6 +1,6 @@
 {
   "name": "eisenstecken-eibel",
-  "version": "2.2.5",
+  "version": "2.2.7",
   "description": "Eisenstecken internal administration software",
   "homepage": "https://kivi.bz.it",
   "author": {
@@ -35,6 +35,7 @@
     "lint": "ng lint",
     "package:msi": "node build_installer_msi.js",
     "generate": "openapi-generator-cli generate -g typescript-angular -i https://api.app.eisenstecken.it/beta/openapi.yaml -o src/api/openapi --additional-properties=supportsES6=true,withSeparateModelsAndApi=true,ngVersion=20.2.0",
+    "generate-prod": "openapi-generator-cli generate -g typescript-angular -i https://api.app.eisenstecken.it/openapi.yaml -o src/api/openapi --additional-properties=supportsES6=true,withSeparateModelsAndApi=true,ngVersion=20.2.0",
     "version:patch": "npm version patch --git-tag-version false -f",
     "version:minor": "npm version minor --git-tag-version false -f",
     "version:mayor": "npm version mayor --git-tag-version false -f",

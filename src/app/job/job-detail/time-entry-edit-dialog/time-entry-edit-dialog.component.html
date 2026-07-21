@@ -47,7 +47,12 @@
 </div>
 <mat-dialog-actions>
   <div fxLayout="row" fxFlexFill fxLayoutAlign="space-between center">
-    <button mat-button (click)="onCancelClick()">Abbrechen</button>
-    <button mat-button type="submit" (click)="onSubmitClick()">Speichern</button>
+    <button type="button" mat-raised-button color="accent" (click)="onCancelClick()">Abbrechen</button>
+    @if (!createMode) {
+      <button type="button" (click)="onDeleteClick()" mat-raised-button color="warn">Löschen</button>
+    }
+    <button type="button" mat-raised-button color="primary" (click)="onSubmitClick()">
+      Speichern
+    </button>
   </div>
 </mat-dialog-actions>

@@ -1,46 +1,67 @@
+## <small>2.2.7 (2026-07-21)</small>
+
+
+
+
 ## <small>2.2.5 (2026-06-29)</small>
 
+* Export Bekleidungsgrößen fix ([c6f7dff](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c6f7dff))
+
+
+
+## <small>2.2.4 (2026-06-10)</small>
+
 * Add Husky and version check ([d92151e](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/d92151e))
+* Fix supplier detail dialog return data and fix sourcemaps ([ddcd7f1](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/ddcd7f1))
+* Husky pre-commit check ([8e966ef](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/8e966ef))
+* Logging ([c78d269](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c78d269))
+* New version with email fix ([939278c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/939278c))
+* Test manual version incr ([c5f402d](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c5f402d))
+* these just use up a log of github actions but don't work atm ([f9c9574](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f9c9574))
+* Update README.md ([e24ca68](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/e24ca68))
+
+
+
+## <small>2.2.3 (2026-06-03)</small>
+
 * Add Note To Job ([f01b519](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f01b519))
-* afterpack for macbuild ([c63c71c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c63c71c))
-* author and description here for electron builder warning ([9c749b2](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/9c749b2))
 * Bugfix notiz ([5ee5812](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/5ee5812))
 * Bugfixes ([f60d276](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f60d276))
 * Bugfixes ([c5c2b7e](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c5c2b7e))
+* display job note ([eda832e](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/eda832e))
+* Fix article by stock, we may move everything to article_router_v2 in the future ([c852b01](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c852b01))
+* fix Table builder AnyApi ([036801d](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/036801d))
+* Remove pagination & search in recalculation tables ([2dfa437](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/2dfa437))
+* Remove the users/me filter on the refresh logic, idk why i put that there ([fbab85f](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/fbab85f))
+* Version 2.2.3 ([3db1467](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/3db1467))
+
+
+
+## <small>2.2.3-beta (2026-05-28)</small>
+
+* afterpack for macbuild ([c63c71c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c63c71c))
+* author and description here for electron builder warning ([9c749b2](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/9c749b2))
 * Build for ios fix ([253732d](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/253732d))
 * Build for iso ([f91a264](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f91a264))
 * Build for iso fix ([b142b4b](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/b142b4b))
 * Build for iso fix ([05cfda3](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/05cfda3))
-* display job note ([eda832e](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/eda832e))
 * do not lazy load components since states are not preserved ([1a55e38](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/1a55e38))
-* Fix article by stock, we may move everything to article_router_v2 in the future ([c852b01](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c852b01))
 * Fix eisen issue 21.05.2026 Whatsapp ([9b022c9](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/9b022c9))
 * Fix naming convention eslint command ([d77afe3](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/d77afe3))
-* Fix supplier detail dialog return data and fix sourcemaps ([ddcd7f1](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/ddcd7f1))
-* fix Table builder AnyApi ([036801d](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/036801d))
 * Fix this shiet ([8e2099c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/8e2099c))
 * Fixed a bug if a resource not accessible wouldn't kill routing ([3a18552](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/3a18552))
 * Fixed some bugs and added a Create Time Entry Button ([9d47bfd](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/9d47bfd))
-* Husky pre-commit check ([8e966ef](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/8e966ef))
 * Is this all i need for mac? ([7f663be](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/7f663be))
 * it builds on ios now but doesn't show tables ([3db5d9f](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/3db5d9f))
 * Lets see if this action works ([b57ff67](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/b57ff67))
-* Logging ([c78d269](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c78d269))
 * mac build ([d50dfd1](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/d50dfd1))
 * Mac package.json build script ([c984b91](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c984b91))
 * new input fields ([6f339e4](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/6f339e4))
 * new TimeEntries Endpoint ([83b9db5](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/83b9db5))
-* New version with email fix ([939278c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/939278c))
-* Remove pagination & search in recalculation tables ([2dfa437](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/2dfa437))
-* Remove the users/me filter on the refresh logic, idk why i put that there ([fbab85f](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/fbab85f))
 * remove yarn from package.json ([d1a5ba7](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/d1a5ba7))
 * Small Bugfix ([a598bc2](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/a598bc2))
 * Small fixes ([9cc8af8](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/9cc8af8))
-* Test manual version incr ([c5f402d](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c5f402d))
-* these just use up a log of github actions but don't work atm ([f9c9574](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f9c9574))
 * TikTak Time Entries ([1b86867](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/1b86867))
-* Update README.md ([e24ca68](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/e24ca68))
-* Version 2.2.3 ([3db1467](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/3db1467))
 * Version bumb for release ([465f77c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/465f77c))
 
 

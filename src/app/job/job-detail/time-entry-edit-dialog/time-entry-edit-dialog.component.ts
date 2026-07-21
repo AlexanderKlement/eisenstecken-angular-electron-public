@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from "@angular/core";
 import {
   MAT_DIALOG_DATA,
+  MatDialog,
   MatDialogActions,
   MatDialogContent,
   MatDialogRef,
@@ -15,6 +16,7 @@ import { first } from "rxjs/operators";
 import { MatOption, MatSelect } from "@angular/material/select";
 import { AsyncPipe } from "@angular/common";
 import { Observable } from "rxjs";
+import { ConfirmDialogComponent } from "../../../shared/components/confirm-dialog/confirm-dialog.component";
 
 export interface TimeEntryEditData {
   timeEntry?: TikTakTimeEntryByJob;
@@ -54,6 +56,7 @@ type TimeEntryControl = {
 })
 export class TimeEntryEditDialogComponent implements OnInit {
   dialogRef = inject<MatDialogRef<TimeEntryEditDialogComponent>>(MatDialogRef);
+  private dialog = inject(MatDialog);
   data = inject<TimeEntryEditData>(MAT_DIALOG_DATA);
   timeEntryService = inject(TimeEntryService);
   api = inject(DefaultService);
@@ -157,6 +160,25 @@ export class TimeEntryEditDialogComponent implements OnInit {
       } else {
         this.dialogRef.close();
       }
+    }
+  }
+
+  onDeleteClick() {
+    if (!this.createMode) {
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        width: "400px",
+        data: {
+          title: "Auftrag löschen?",
+          text: "Auftrag wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden!"
+        }
+      });
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.timeEntryService.deleteTimeEntryTimeEntryTimeEntryIdDelete(this.data.timeEntry.id).pipe(first()).subscribe((_) => {
+            this.dialogRef.close();
+          });
+        }
+      });
     }
   }
 }

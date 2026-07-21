@@ -52,6 +52,12 @@ export class InfoDialogComponent implements OnInit {
       ]
     },
     {
+      versionName: "2.2.7",
+      changes: [
+        "Arbeitszeiten aus TikTak können nun auch gelöscht werden"
+      ]
+    },
+    {
       versionName: "2.2.5",
       changes: [
         "Sohle im Kleidergrößen export"

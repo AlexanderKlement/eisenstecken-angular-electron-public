@@ -12,7 +12,7 @@ export class LocalConfigRenderer {
   private defaultEncoding: BufferEncoding = "utf8";
 
   private defaultConfig = {
-    api: APP_CONFIG.apiBasePath,
+    api: APP_CONFIG.apiBasePath
   };
 
   private loadedConfig = this.defaultConfig;
@@ -33,13 +33,13 @@ export class LocalConfigRenderer {
 
     switch (env) {
       case "prod":
-        url = "https://api.app.eisenstecken.it/"; // adjust if your prod URL differs
+        url = "https://api.app.eisenstecken.it"; // adjust if your prod URL differs
         break;
       case "beta":
-        url = "https://api.app.eisenstecken.it/beta/";
+        url = "https://api.app.eisenstecken.it/beta";
         break;
       case "dev":
-        url = "https://api.app.eisenstecken.it/dev/"; // adjust to your real dev URL
+        url = "https://api.app.eisenstecken.it/dev"; // adjust to your real dev URL
         break;
       default:
         console.warn("Unknown environment:", env);
@@ -114,13 +114,13 @@ export class LocalConfigRenderer {
   private writeConfig(electronService: ElectronService): void {
     const yamlString = yaml.stringify(this.loadedConfig);
     electronService.fs.writeFileSync(this.configFilePath, yamlString, {
-      encoding: this.defaultEncoding,
+      encoding: this.defaultEncoding
     });
   }
 
   private readConfig(electronService: ElectronService): void {
     const configData = electronService.fs.readFileSync(this.configFilePath, {
-      encoding: this.defaultEncoding,
+      encoding: this.defaultEncoding
     });
     this.loadedConfig = yaml.parse(configData);
   }
