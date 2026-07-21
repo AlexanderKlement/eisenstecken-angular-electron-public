@@ -168,8 +168,8 @@ export class TimeEntryEditDialogComponent implements OnInit {
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         width: "400px",
         data: {
-          title: "Auftrag löschen?",
-          text: "Auftrag wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden!"
+          title: "Arbeitszeit löschen?",
+          text: "Arbeitszeit wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden!"
         }
       });
       dialogRef.afterClosed().subscribe((result) => {
