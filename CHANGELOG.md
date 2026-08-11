@@ -1,4 +1,4 @@
-## <small>2.2.10 (2026-08-11)</small>
+## <small>2.2.11 (2026-08-11)</small>
 
 * A lot refactored with templates ([44fa7e7](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/44fa7e7))
 * Added the navigate to home when click on title ([1fa749c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/1fa749c))
@@ -19,6 +19,7 @@
 * Introduces Templates ([5bf5451](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/5bf5451))
 * Just a small fix ([54599a1](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/54599a1))
 * Kontaktperson feld bei user ([1a51ff4](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/1a51ff4))
+* Lastes bugfixes for release ([9720118](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/9720118))
 * Many fixes ([4ee5fb1](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/4ee5fb1))
 * many progress ([058efcd](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/058efcd))
 * missing models ([928f8b5](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/928f8b5))
