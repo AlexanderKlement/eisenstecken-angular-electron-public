@@ -4,6 +4,11 @@
       <h3>{{ title }}</h3>
     }
     <div fxFlex></div>
+    @if (dragNDrop && dragNDropChanged) {
+      <button mat-raised-button color="primary" (click)="saveDragNDrop()" class="mt-6">
+        Reihenfolge speichern
+      </button>
+    }
     @if (headerButtons) {
       @for (button of headerButtons; track button) {
         @if (typeof button.name(true) === "string") {
@@ -27,12 +32,10 @@
       }
     }
     @if (!noSearch) {
-      <div class="new-form-element">
-        <mat-form-field appearance="outline">
-          <mat-label>Suchen</mat-label>
-          <input matInput #input>
-        </mat-form-field>
-      </div>
+      <mat-form-field appearance="outline" class="new-form-element">
+        <mat-label>Suchen</mat-label>
+        <input matInput #input>
+      </mat-form-field>
     }
   </div>
 
@@ -41,10 +44,19 @@
       <mat-spinner></mat-spinner>
     </div>
   }
-  <mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+  <mat-table
+    [dataSource]="dataSource"
+    [class]="`mat-elevation-z8 ${dragNDrop ? 'draggable-list' : ''}`"
+    matSort
+    [matSortDisabled]="dragNDrop"
+    cdkDropList
+    [cdkDropListDisabled]="!dragNDrop"
+    (cdkDropListDropped)="drop($event)"
+
+  >
     @for (column of dataSource.columns; track column) {
       <ng-container [matColumnDef]="column.name">
-        @if (column.sortable) {
+        @if (column.sortable && !dragNDrop) {
           <mat-header-cell *matHeaderCellDef mat-sort-header>
             {{ column.headerName }}
           </mat-header-cell>
@@ -60,8 +72,8 @@
     }
     @if (buttons.length > 0) {
       <ng-container matColumnDef="actions">
-        <mat-header-cell *matHeaderCellDef>Aktionen</mat-header-cell>
-        <mat-cell *matCellDef="let element">
+        <mat-header-cell *matHeaderCellDef class="actions">Aktionen</mat-header-cell>
+        <mat-cell *matCellDef="let element" class="actions">
           @for (button of buttons; track button; ) {
             @if (typeof button.name(element.values['condition']) === "string") {
               <button [color]="button.color(element.values['condition'])"
@@ -82,12 +94,22 @@
         </mat-cell>
       </ng-container>
     }
+    @if (dragNDrop) {
+      <ng-container matColumnDef="drag_handler">
+        <mat-header-cell *matHeaderCellDef class="drag-handler"></mat-header-cell>
+        <mat-cell cdkDragHandle *matCellDef class="drag-handler">
+          <mat-icon>drag_indicator</mat-icon>
+        </mat-cell>
+      </ng-container>
+    }
     <mat-header-row *matHeaderRowDef="dataSource.columnIdentifiers; sticky: true"></mat-header-row>
     <mat-row
+      cdkDrag
+      cdkDragBoundary=".draggable-list"
       *matRowDef="let row; columns: dataSource.columnIdentifiers"
       (click)="rowClicked(row.route)"
       matTooltip="{{row.toolTip}}"
-      [ngClass]="row.rowClass ? ['table-row', row.rowClass] : 'table-row'">
+      [class]="`table-row ${row.rowClass} ${dragNDrop ? 'draggable-element' : ''}`">
     </mat-row>
   </mat-table>
   @if (!noPagination) {

@@ -21,6 +21,7 @@ export type GeneralControl = {
   handy: FormControl<string>,
   position: FormControl<string>,
   dial: FormControl<string>,
+  contact: FormControl<string>,
   innovaphone_user: FormControl<string>,
   innovaphone_pass: FormControl<string>,
   notifications: FormControl<boolean>

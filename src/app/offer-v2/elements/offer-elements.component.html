@@ -1,0 +1,10 @@
+<app-offer-container subTitle="Elemente">
+  <app-table-builder title="Alle Elemente"
+                     [headerButtons]="headerButtons"
+                     [dataSource]="elementsDataSource"
+                     [buttons]="tableButtons"
+                     dragNDrop
+                     (dragNDropDropped)="drop($event)"
+                     (dragNDropSaved)="saveOrder()"
+  ></app-table-builder>
+</app-offer-container>

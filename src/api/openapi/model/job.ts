@@ -18,9 +18,9 @@ import { Lock } from './lock';
 export interface Job { 
     address: Address;
     archive: boolean;
+    assembly: string;
     client: Client;
     code: string;
-    completion: string;
     description: string;
     displayable_name: string;
     id: number;
@@ -32,6 +32,7 @@ export interface Job {
     name: string;
     note?: string | null;
     path: string;
+    production: string;
     responsible: UserEssential;
     status: JobStatus;
     sub_jobs: Array<Job>;

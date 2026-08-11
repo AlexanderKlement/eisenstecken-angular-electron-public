@@ -1,18 +1,13 @@
-<div class="outer-container" fxLayout="column" fxLayoutAlign="start stretch" fxFlexFill>
-  <mat-toolbar color="accent" fxFlex="10">
-    <div fxShow="true" fxLayout="row" fxLayoutAlign="space-between center">
-      <app-circle-icon-button backgroundColor="transparent" (click)="todayClicked()" icon="today" />
-      <div>
-        <app-circle-icon-button backgroundColor="transparent" (click)="previousWeekClicked()" icon="navigate_before" />
-        <span>{{ dayManager.getStartDate() + " - " + dayManager.getEndDate()}}</span>
-        <app-circle-icon-button backgroundColor="transparent" (click)="nextWeekClicked()" icon="navigate_next" />
-      </div>
-      @if (createAllowed) {
-        <app-circle-icon-button backgroundColor="transparent" (click)="newMeetingClicked()" icon="add" />
-      }
-    </div>
-  </mat-toolbar>
-  <div fxFlex="90" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="5px" class="calendar-days">
+<div class="outer-container">
+  <div class="header">
+    <app-circle-icon-button backgroundColor="white" (click)="todayClicked()" icon="today" />
+    <app-circle-icon-button backgroundColor="white" (click)="previousWeekClicked()" icon="navigate_before" />
+    <span>{{ dayManager.getStartDate() + " - " + dayManager.getEndDate() }}</span>
+    <app-circle-icon-button backgroundColor="white" (click)="nextWeekClicked()" icon="navigate_next" />
+    <app-circle-icon-button backgroundColor="white" (click)="newMeetingClicked()" icon="add"
+                            [class.hidden]="!createAllowed" />
+  </div>
+  <div class="calendar-days">
     @for (day of dayManager.getShownDayArray(); track day) {
       <app-calendar-day [day]="day" [calendarId]="calendarId" [public]="public" />
     }

@@ -7,7 +7,7 @@ export class LocalConfigRenderer {
 
   private configFileFolder = "Kivi/Eisenstecken-Eibel";
   private configFileName = "config_renderer.yml";
-
+  private isElectron: boolean = true;
   private configFilePath: string;
   private defaultEncoding: BufferEncoding = "utf8";
 
@@ -59,6 +59,7 @@ export class LocalConfigRenderer {
       const electronService = new ElectronService();
 
       if (!electronService.isElectron) {
+        this.isElectron = false;
         // Browser build → just use defaults
         return;
       }
@@ -109,6 +110,10 @@ export class LocalConfigRenderer {
 
   public getApi(): string {
     return this.loadedConfig.api;
+  }
+
+  public getIsElectron(): boolean {
+    return this.isElectron;
   }
 
   private writeConfig(electronService: ElectronService): void {

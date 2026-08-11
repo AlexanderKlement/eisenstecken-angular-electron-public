@@ -5,6 +5,7 @@ import { LockService } from "../../services/lock.service";
 import { DefaultFlexDirective, DefaultLayoutDirective } from "ng-flex-layout";
 import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
 import { AsyncPipe } from "@angular/common";
+import dayjs from "dayjs/esm";
 
 @Component({
   selector: "app-info-builder",
@@ -23,6 +24,9 @@ export class InfoBuilderComponent<T extends DataSourceClass> implements OnInit {
   }
 
   getPropertyOfObject(data: T, property: string): string {
+    if (property === "timestamp") {
+      return dayjs(data[property]).format("LLL");
+    }
     const propertyArray = property.split(".");
     for (const singleProperty of propertyArray) {
       if (singleProperty.includes("[")) {
@@ -37,6 +41,7 @@ export class InfoBuilderComponent<T extends DataSourceClass> implements OnInit {
         data = data[singleProperty];
       }
     }
+
     return data?.toString() ?? "";
   }
 

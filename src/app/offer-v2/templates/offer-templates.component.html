@@ -1,0 +1,11 @@
+<app-offer-container subTitle="Templates">
+  <app-table-builder
+    title="Deine Templates"
+    [headerButtons]="headerButtons"
+    [dataSource]="templateDataSource"
+    [buttons]="tableButtons"
+    dragNDrop
+    (dragNDropDropped)="drop($event)"
+    (dragNDropSaved)="saveOrder()"
+  ></app-table-builder>
+</app-offer-container>

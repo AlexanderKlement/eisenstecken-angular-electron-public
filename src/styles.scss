@@ -10,6 +10,7 @@ html {
 
 :root {
   font-family: Roboto, serif;
+  --mat-sys-on-surface: #000;
 }
 
 ::-webkit-scrollbar {
@@ -69,7 +70,10 @@ html {
     container-height: 37px,
     container-vertical-padding: 6.5px,
     outlined-focus-label-text-color: --mat-sys-on-surface,
-    outlined-focus-outline-color: --mat-sys-on-surface,
+    outlined-outline-color: #f5f5f5,
+    outlined-hover-outline-color: #cccccc,
+    outlined-focus-outline-color: var(--primary-color),
+    outlined-disabled-outline-color: #f5f5f5,
   ));
 }
 
@@ -78,13 +82,33 @@ html {
 }
 
 .new-form-element {
-  .mat-form-field-appearance-fill {
+  &.mat-form-field-appearance-fill {
     margin-bottom: unset;
   }
 
-  .mat-form-field-appearance-outline {
+  &.mat-form-field-appearance-outline {
     margin-top: 6px;
+
+    .mdc-text-field {
+      background-color: #f5f5f5;
+      border-radius: var(--mat-form-field-outlined-container-shape) !important;
+    }
+
+    .mat-mdc-icon-button.mat-mdc-button-base {
+      --mdc-icon-button-state-layer-size: 37px;
+      --mat-icon-button-state-layer-size: 37px;
+      width: var(--mat-icon-button-state-layer-size);
+      height: var(--mat-icon-button-state-layer-size);
+      padding: 7px;
+    }
   }
+}
+
+
+.mtx-select-panel-container {
+  background-color: #fff !important;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 10%) !important;
+  border-radius: 4px !important;
 }
 
 .my-shadow {
@@ -95,4 +119,21 @@ html {
   margin: 0 auto;
   padding: 0 1rem;
   max-width: 1920px;
+}
+
+
+.cursor-drag {
+  cursor: grab;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.font-math {
+  font-family: math !important;
+}
+
+.neutral {
+  color: var(--neutral-color);
 }

@@ -1,0 +1,179 @@
+import { Routes } from "@angular/router";
+import { AccessGuard } from "../shared/services/access-guard.service";
+import OfferTemplatesComponent from "./templates/offer-templates.component";
+import OfferLibrariesComponent from "./libraries/offer-libraries.component";
+import OfferElementTypesComponent from "./element-types/offer-element-types.component";
+import OfferFieldsComponent from "./fields/offer-fields.component";
+import OfferV2Component from "./offer-v2.component";
+import OfferUnitsComponent from "./units/offer-units.component";
+import OfferElementTypesEditComponent from "./element-types/element-types-edit/offer-element-types-edit.component";
+import OfferLibraryEditComponent from "./libraries/library-edit/offer-library-edit.component";
+import OfferElementsComponent from "./elements/offer-elements.component";
+import OfferElementsEditComponent from "./elements/elements-edit/offer-elements-edit.component";
+import OfferTemplatesEditComponent from "./templates/templates-edit/offer-templates-edit.component";
+import { OfferV2EditComponent } from "./offer-v2-edit/offer-v2-edit.component";
+import { OfferStatementEditComponent } from "./statement-edit/offer-statement-edit.component";
+
+const offerV2Routes: Routes = [
+  {
+    path: "offer_v2",
+    component: OfferV2Component,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/job/:job_id",
+    component: OfferV2Component,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/offer/:id",
+    component: OfferV2EditComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/offer/:id/:job_id",
+    component: OfferV2EditComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  }, {
+    path: "offer_v2/fields",
+    component: OfferFieldsComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/elements",
+    component: OfferElementsComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/elements/:id",
+    component: OfferElementsEditComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/elements/:id/:method",
+    component: OfferElementsEditComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/element_types",
+    component: OfferElementTypesComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/element_types/:id",
+    component: OfferElementTypesEditComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/element_types/:id/:method",
+    component: OfferElementTypesEditComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/libraries",
+    component: OfferLibrariesComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/libraries/:id",
+    component: OfferLibraryEditComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/units",
+    component: OfferUnitsComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/templates",
+    component: OfferTemplatesComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/templates/:id",
+    component: OfferTemplatesEditComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/templates/:id/:method",
+    component: OfferTemplatesEditComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/statement/:id",
+    component: OfferStatementEditComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/statement/new/:job_id",
+    component: OfferStatementEditComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  },
+  {
+    path: "offer_v2/statement/:id/:method",
+    component: OfferStatementEditComponent,
+    data: {
+      requiresLogin: true
+    },
+    canActivate: [AccessGuard]
+  }
+];
+
+export default offerV2Routes;

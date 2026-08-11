@@ -10,6 +10,7 @@
 
 
 export interface NoteUpdate { 
+    height: number | null;
     text: string;
 }
 

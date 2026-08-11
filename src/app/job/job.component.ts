@@ -1,18 +1,18 @@
-import { Component, OnInit, inject } from "@angular/core";
-import { Row, TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
+import { Component, inject, OnInit } from "@angular/core";
+import { TableDataSource } from "../shared/components/table-builder/table-builder.datasource";
 import { Router } from "@angular/router";
 import { Observable, Subscriber } from "rxjs";
 import dayjs from "dayjs/esm";
 import { FileService } from "../shared/services/file.service";
 import { DefaultService, Job, Stock } from "../../api/openapi";
 import { ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from "ng-flex-layout";
+import { DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
 import { MatFormField, MatLabel } from "@angular/material/input";
-import { MatSelect, MatOption } from "@angular/material/select";
-import { MatTabGroup, MatTab } from "@angular/material/tabs";
+import { MatOption, MatSelect } from "@angular/material/select";
+import { MatTab, MatTabGroup } from "@angular/material/tabs";
 import { TableBuilderComponent } from "../shared/components/table-builder/table-builder.component";
 import { AsyncPipe } from "@angular/common";
- 
+
 @Component({
   selector: "app-job",
   templateUrl: "./job.component.html",
@@ -51,7 +51,7 @@ export default class JobComponent implements OnInit {
       name: "Angenommen Aufträge - PDF generieren",
       navigate: (): void => {
         this.api.generateJobPdfJobPdfPost().subscribe((pdf) => {
-          this.file.open(pdf);
+          this.file.open(pdf).then();
         });
       }
     }
@@ -115,7 +115,7 @@ export default class JobComponent implements OnInit {
               code: dataSource.code,
               "client.name": dataSource.client.fullname,
               "responsible.fullname": dataSource.responsible.fullname,
-              completion: dataSource.completion
+              assembly: dataSource.assembly
             },
             route: () => {
               this.router.navigateByUrl("/job/" + dataSource.id.toString());
@@ -132,7 +132,7 @@ export default class JobComponent implements OnInit {
         { name: "name", headerName: "Kommission" },
         { name: "client.name", headerName: "Kunde" },
         { name: "responsible.fullname", headerName: "Zuständig" },
-        { name: "completion", headerName: "Fertigstellung" }
+        { name: "assembly", headerName: "Montage" }
       ],
       (api) =>
         api.readJobCountJobCountGet(
@@ -173,7 +173,7 @@ export default class JobComponent implements OnInit {
               code: dataSource.code,
               "client.name": dataSource.client.fullname,
               "responsible.fullname": dataSource.responsible.fullname,
-              completion: dataSource.completion
+              assembly: dataSource.assembly
             },
             route: () => {
               this.router.navigateByUrl("/job/" + dataSource.id.toString());
@@ -190,7 +190,7 @@ export default class JobComponent implements OnInit {
         { name: "name", headerName: "Kommission" },
         { name: "client.name", headerName: "Kunde" },
         { name: "responsible.fullname", headerName: "Zuständig" },
-        { name: "completion", headerName: "Fertigstellung" }
+        { name: "assembly", headerName: "Montage" }
       ],
       (api) =>
         api.readJobCountJobCountGet(
@@ -231,7 +231,7 @@ export default class JobComponent implements OnInit {
               code: dataSource.code,
               "client.name": dataSource.client.fullname,
               "responsible.fullname": dataSource.responsible.fullname,
-              completion: dataSource.completion
+              assembly: dataSource.assembly
             },
             route: () => {
               this.router.navigateByUrl("/job/" + dataSource.id.toString());
@@ -248,7 +248,7 @@ export default class JobComponent implements OnInit {
         { name: "name", headerName: "Kommission" },
         { name: "client.name", headerName: "Kunde" },
         { name: "responsible.fullname", headerName: "Zuständig" },
-        { name: "completion", headerName: "Fertigstellung" }
+        { name: "assembly", headerName: "Montage" }
       ],
       (api) =>
         api.readJobCountJobCountGet(
@@ -289,7 +289,7 @@ export default class JobComponent implements OnInit {
               code: dataSource.code,
               "client.name": dataSource.client.fullname,
               "responsible.fullname": dataSource.responsible.fullname,
-              completion: dataSource.completion
+              assembly: dataSource.assembly
             },
             route: () => {
               this.router.navigateByUrl("/job/" + dataSource.id.toString());
@@ -306,7 +306,7 @@ export default class JobComponent implements OnInit {
         { name: "name", headerName: "Kommission" },
         { name: "client.name", headerName: "Kunde" },
         { name: "responsible.fullname", headerName: "Zuständig" },
-        { name: "completion", headerName: "Fertigstellung" }
+        { name: "assembly", headerName: "Montage" }
       ],
       (api) =>
         api.readJobCountJobCountGet(

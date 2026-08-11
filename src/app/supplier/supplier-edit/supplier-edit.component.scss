@@ -1,1 +1,5 @@
 @use "../../shared/components/base-edit/base-edit.component";
+
+.larger {
+  min-width: 300px !important;
+}

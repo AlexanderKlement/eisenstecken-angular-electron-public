@@ -31,7 +31,7 @@ export class NoteComponent implements OnInit {
   }
 
   public newNoteClicked(): void {
-    const noteCreate: NoteCreate = { text: "" };
+    const noteCreate: NoteCreate = { text: "", height: null };
     const newNoteObservable = this.api.createNoteEntryNotePost(noteCreate);
     newNoteObservable.pipe(first()).subscribe((note) => {
       this.notes.push(note);

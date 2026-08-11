@@ -1,0 +1,217 @@
+<div class="entry placeholder" #placeholderContainer>
+  <div class="entry-header-container">
+    <div [className]="`entry-header level-${depth+1} smaller`" #placeholder></div>
+  </div>
+</div>
+<div [formGroup]="entryGroup" class="entry">
+  @if (entryGroup.controls.children.length !== 0) {
+    <mat-icon (click)="toggleOpen2()" class="open2">
+      @if (open2) {
+        keyboard_arrow_down
+      } @else {
+        keyboard_arrow_up
+      }
+    </mat-icon>
+  }
+  <div class="entry-header-container" (mouseenter)="mouseEnter($event)" (mousemove)="mouseMoveEntered($event)"
+       (mouseleave)="mouseLeave()">
+    @if (draggedObject != null && !this.dragEnabled && !parentDragging) {
+      <div [className]="`droppable-area before ${addedPosition === 'before' ? 'visible' : ''}`">
+
+      </div>
+    }
+    @if (draggedObject != null && !this.dragEnabled && !parentDragging) {
+      <div [className]="`droppable-area child ${addedPosition === 'child' ? 'visible' : ''}`">
+
+      </div>
+    }
+    <div [className]="`entry-header level-${depth+1}`" #header>
+      <div class="entry-header-row" #headerRow>
+        <mat-icon class="drag-handle" (mousedown)="mouseDown($event)">drag_indicator</mat-icon>
+        <mat-icon (click)="toggleOpen()" class="icon-btn">
+          @if (open) {
+            keyboard_arrow_down
+          } @else {
+            keyboard_arrow_right
+          }
+        </mat-icon>
+        <div
+          [className]="`select-box-prefix ${entryGroup.get('id').value !== '' ? 'filled' : ''} ${elementSelected ? 'selected' : ''}`">
+
+          <span class="neutral prefix">{{ prefix }}{{ index + 1 }}</span>
+          <mat-icon class="select-box" [color]="elementSelected ? 'primary' : 'accent'" (click)="onSelectElem()">
+            @if (!elementSelected) {
+              check_box_outline_blank
+            } @else {
+              check_box
+            }
+          </mat-icon>
+        </div>
+        @if (entryGroup.get('elementId').value !== -1) {
+          <app-offer-field-element-type-pill
+            [fieldType]="entryGroup.get('elementType').value"></app-offer-field-element-type-pill>
+          <mat-form-field appearance="outline" fxFlex class="new-form-element">
+            <input matInput formControlName="name" (keyup)="nameChanged()">
+          </mat-form-field>
+        } @else {
+
+          <app-offer-element-selector
+            outline
+            (setValue)="onSetElement($event)"
+            [value]="-1"
+            [fillWidth]="true"
+            fxFlex
+            (keyClicked)="onSearchKeyClicked($event)"
+            [allElementTypes]="allElementTypes"
+            [allElements]="allElements"
+            [allTemplates]="allTemplates"
+            addingEnabled
+            includeTemplates
+          >
+          </app-offer-element-selector>
+        }
+        @if (entryGroup.get('elementType').value !== "") {
+          <mat-icon class="icon-btn" (click)="onAddChild()" title="Kind hinzufügen (Tab)">
+            subdirectory_arrow_right
+          </mat-icon>
+          <mat-icon class="icon-btn" (click)="onAddNeighbour(index)" title="Nachbar hinzufügen (Enter)">add
+          </mat-icon>
+          <mat-icon class="icon-btn" (click)="onDeleteElem(index)" title="Löschen (Entf)">delete
+          </mat-icon>
+
+          <mat-icon class="icon-btn" (click)="onCopyElem(index)" title="Dublizieren">content_copy
+          </mat-icon>
+          <mat-icon class="icon-btn"
+                    [class.active]="entryGroup.get('alternative').value"
+                    (click)="toggleAlternative()" title="Als Alternative markieren">
+            compare_arrows
+          </mat-icon>
+          <mat-icon class="icon-btn" (click)="togglePercent()"
+                    [class.active]="percent || scontoResettable" [class.disabled]="depth===0"
+                    [title]="depth === 0 ? 'Sconto/Aufschlag auf dieser Ebene nicht möglich' : 'Sconto/Aufschlag für diese Posizionsetzen'">
+            percent
+          </mat-icon>
+          <mat-icon class="icon-btn"
+                    [class.active]="!entryGroup.get('visibleOffer').value || parentInvisible"
+                    (click)="toggleVisibility()" title="Sichtbar im Angebot">
+            @if (!entryGroup.get('visibleOffer').value || parentInvisible) {
+              visibility_off
+            } @else {
+              visibility
+            }
+          </mat-icon>
+          <strong
+            [title]="entryGroup.get('priceFormula').value"
+            class="header-price">{{ formatCurrency(this.entryGroup.get("priceCalculated").value, "de-DE", "€") }}</strong>
+        } @else {
+          <span class="icon-btn smaller" (click)="onDeleteElem(this.index)">Esc</span>
+        }
+      </div>
+      <div class="entry-header-content" [class.close]="!open">
+
+        @if (entryGroup.get('elementType').value !== "") {
+          @if (depth === 1) {
+            <div class="entry-fields">
+              @if (percent) {
+                <mat-form-field appearance="outline" class="new-form-element">
+                  <mat-label>Aufschlag</mat-label>
+                  <input matInput formControlName="priceAddPercent">
+
+                  <mat-icon matSuffix (click)="onResetSconto()" class="neutral" title="Zurücksetzen">
+                    @if (scontoResettable) {
+                      rotate_left
+                    }
+                  </mat-icon>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="new-form-element">
+                  <mat-label>Skonto</mat-label>
+                  <input matInput formControlName="priceSubPercent">
+                </mat-form-field>
+              }
+              <mat-form-field appearance="outline" class="new-form-element">
+                <mat-label>Menge Spalte 2</mat-label>
+                <input matInput formControlName="amount">
+              </mat-form-field>
+
+            </div>
+          } @else if (percent) {
+            <div class="entry-fields">
+              <mat-form-field appearance="outline" class="new-form-element">
+                <mat-label>Aufschlag</mat-label>
+                <input matInput formControlName="priceAddPercent">
+
+                <mat-icon matSuffix (click)="onResetSconto()" class="neutral" title="Zurücksetzen">
+                  @if (scontoResettable) {
+                    rotate_left
+                  }
+                </mat-icon>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="new-form-element">
+                <mat-label>Skonto</mat-label>
+                <input matInput formControlName="priceSubPercent">
+              </mat-form-field>
+            </div>
+
+          }
+          <mat-form-field appearance="outline" class="new-form-element">
+            <mat-label>Beschreibung</mat-label>
+            <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="3" formControlName="description"
+                      (keyup)="descriptionChanged()"></textarea>
+          </mat-form-field>
+          <ng-container formArrayName="fields">
+            @for (field of entryGroup.controls.fields.controls; track field.controls) {
+              @if (field.controls.type.value === OfferFieldEnum.Text) {
+                <app-entry-field-edit [entryFormGroup]="field"
+                                      (fieldChanged)="fieldChanged()"></app-entry-field-edit>
+              }
+            }
+          </ng-container>
+        }
+        <div class="entry-fields" formArrayName="fields">
+          @for (field of entryGroup.controls.fields.controls; track field.controls) {
+            @if (field.controls.type.value !== OfferFieldEnum.Text) {
+              <app-entry-field-edit
+                [entryFormGroup]="field"
+                [allLibraries]="allLibraries"
+                (fieldChanged)="fieldChanged()"
+              ></app-entry-field-edit>
+            }
+          }
+        </div>
+      </div>
+    </div>
+    @if (draggedObject != null && !this.dragEnabled && !parentDragging) {
+      <div [className]="`droppable-area after ${addedPosition === 'after' ? 'visible' : ''}`">
+
+      </div>
+    }
+  </div>
+  @if (entryGroup.controls.children.length !== 0) {
+    <div class="entry-content" formArrayName="children" [class.close]="!open2">
+      @for (control of entryGroup.controls.children.controls; track control.controls.id; let idx = $index) {
+        <app-offer-v2-entry-edit
+          (priceEvaluated)="childrenEvaluated()"
+          [entryGroup]="control"
+          [depth]="depth+1"
+          [prefix]="prefix+(index + 1)+'.'" [index]="idx"
+          [onAddNeighbour]="onAddNeighbourHere.bind(this)"
+          [onCopyElem]="onCopyElemHere.bind(this)"
+          [onDeleteElem]="onDeleteElemHere.bind(this)"
+          [allLibraries]="allLibraries"
+          [allElements]="allElements"
+          [allTemplates]="allTemplates"
+          [allElementTypes]="allElementTypes"
+          [draggedObject]="draggedObject"
+          [selectedElements]="selectedElements.concat(elementSelected ? [control.controls.id.value] : [])"
+          (dragStart)="dragStart.emit($event)"
+          [parentDragging]="dragEnabled || parentDragging"
+          [parentInvisible]="parentInvisible || !entryGroup.get('visibleOffer').value"
+          (elementInserted)="elementInserted.emit($event)"
+          (elementUnInserted)="elementUnInserted.emit($event)"
+          (selectElem)="this.selectElem.emit($event)"
+          (elementAdded)="this.elementAdded.emit($event)"
+        ></app-offer-v2-entry-edit>
+      }
+    </div>
+  }
+</div>

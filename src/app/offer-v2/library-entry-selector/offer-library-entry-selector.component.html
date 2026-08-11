@@ -1,0 +1,25 @@
+<mat-form-field
+  [appearance]="outline ? 'outline' : 'fill'"
+  [class.new-form-element]="outline"
+  class="select-container"
+  [fxFlex]="fillWidth">
+  <mat-label>{{ label }}</mat-label>
+  <mtx-select
+    class="select-container"
+    [items]="items"
+    bindValue="id"
+    bindLabel="label"
+    groupBy="library"
+    [minTermLength]="1"
+    [value]="value"
+    [clearable]="false"
+    [addTag]="false"
+    [editableSearchTerm]="true"
+    panelClass="mtx-select-panel-container"
+    notFoundText="Kein material gefunden"
+    typeToSearchText="Tippen um Material zu suchen"
+    (change)="onChange($event)"
+    (keyup)="onKeyUp($event)"
+  >
+  </mtx-select>
+</mat-form-field>

@@ -15,6 +15,7 @@ export interface UserCreate {
     birthday?: string | null;
     birthplace?: string | null;
     city?: string | null;
+    contact?: string | null;
     country?: string | null;
     dial?: string | null;
     email: string;

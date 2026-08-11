@@ -1,0 +1,94 @@
+$scale: 4.7619; // px per mm
+$pt: $scale * 0.352778; // px per pt (1pt = 0.352778mm)
+
+@function mm($v) {
+  @return $v * $scale * 1px;
+}
+
+@function pt($v) {
+  @return $v * $pt * 1px;
+}
+
+$grey-line: rgb(25, 25, 25); // color_grey_line
+$grey: rgb(52, 51, 51); // color_grey
+$fs-footer: pt(9);
+$fs-header: pt(6.5); // FONT_SIZE_HEADER
+
+.banner {
+  position: absolute;
+  top: mm(15);
+  left: mm(24);
+  width: mm(171);
+  aspect-ratio: 8079/1002;
+
+  img {
+    display: block;
+    object-fit: contain;
+    object-position: left bottom;
+  }
+}
+
+.footer {
+  position: absolute;
+  left: mm(15);
+  right: 0;
+  bottom: mm(15);
+  font-family: "Roboto", serif;
+  font-weight: 300;
+  font-size: $fs-footer;
+  color: $grey;
+
+  .frow {
+    position: relative;
+    height: mm(4.23);
+  }
+
+  .fcell {
+    position: absolute;
+    white-space: nowrap;
+    left: 0;
+
+    &:nth-child(2) {
+      left: mm(44);
+    }
+
+    &:nth-child(3) {
+      left: mm(102);
+    }
+
+    &:nth-child(4) {
+      left: mm(148);
+    }
+  }
+
+  .frow--second .fcell:nth-child(4) {
+    font-family: "Roboto", serif;
+    font-weight: 700;
+  }
+}
+
+.fold-mark {
+  position: absolute;
+  left: 0;
+  top: mm(297 - 197);
+  width: mm(3);
+  border-top: 1px solid $grey-line;
+}
+
+.side-text {
+  position: absolute;
+  left: mm(8);
+  bottom: mm(17);
+  transform-origin: left bottom;
+  transform: rotate(-90deg);
+  white-space: nowrap;
+  font-family: "Roboto", serif;
+  font-weight: 300;
+  font-size: $fs-header;
+  color: $grey;
+  letter-spacing: .1px;
+
+  .sep {
+    padding: 0 mm(2.2);
+  }
+}

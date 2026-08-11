@@ -1,18 +1,21 @@
-app-loading {
+.outer-container {
   max-height: 100%;
   min-height: 100%;
-}
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 12px;
 
-.app-calendar {
-  width: 50%;
-}
+  .inner-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: start;
 
-.calenderside {
-  min-width: 48%;
-  max-width: 50%;
-  margin-right: 10px;
-}
-
-.outer-container {
-  height: 69vh; // nice
+    app-calendar {
+      flex: 1;
+    }
+  }
 }

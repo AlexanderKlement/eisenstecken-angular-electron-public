@@ -1,16 +1,18 @@
 <h1 mat-dialog-title>Bestellte Artikel verschieben</h1>
 <div mat-dialog-content>
   <div fxLayout="column" fxLayoutAlign="space-around center">
-    <mat-stepper [linear]="true" >
+    <mat-stepper [linear]="true">
       <mat-step>
         <ng-template matStepLabel>Artikel auswählen</ng-template>
         <div fxLayout="column" fxLayoutAlign="space-around center">
           <p>Welche Artikel sollen verschoben werden?</p>
-          <mat-selection-list #orderable [multiple]="false" (selectionChange)="orderableClicked()">
-            @for (orderedArticle of orderedArticles$ | async; track orderedArticle.id) {
-              <mat-list-option [value]="orderedArticle">
-                {{ orderedArticle.name.translation }}
-              </mat-list-option>
+          <mat-selection-list #articles [multiple]="false" (selectionChange)="orderedArticleClicked()">
+            @if (orderedArticles$|async; as orderedArticles) {
+              @for (orderedArticle of orderedArticles; track orderedArticle.id) {
+                <mat-list-option [value]="orderedArticle">
+                  {{ orderedArticle.name.translation }}
+                </mat-list-option>
+              }
             }
           </mat-selection-list>
           @if (atLeastOneArticleSelected) {
@@ -26,10 +28,12 @@
         </div>
         <p>Wohin sollen die Artikel verschoben werden?</p>
         <mat-selection-list #orderable [multiple]="false" (selectionChange)="orderableClicked()">
-          @for (o of orderableTargets$ | async; track o.id) {
-            <mat-list-option [value]="o">
-              {{ o.name }}
-            </mat-list-option>
+          @if (orderableTargets$|async; as orderableTargets) {
+            @for (o of orderableTargets; track o.id) {
+              <mat-list-option [value]="o">
+                {{ o.name }}
+              </mat-list-option>
+            }
           }
         </mat-selection-list>
         <div fxLayout="row" fxLayoutAlign="space-around center">
@@ -44,15 +48,17 @@
         <div fxLayout="column" fxLayoutAlign="space-around center">
           <p>Ausgewählte Artikel: </p>
           <mat-list>
-            @for (selectedArticle of articlesSelected.selectedOptions.selected; track selectedArticle) {
-              <mat-list-item>
-                {{ $any(selectedArticle.value).article?.name?.translation }}
-              </mat-list-item>
+            @if (articlesSelected) {
+              @for (selectedArticle of articlesSelected.selectedOptions.selected; track selectedArticle) {
+                <mat-list-item>
+                  {{ $any(selectedArticle.value).article?.name?.translation }}
+                </mat-list-item>
+              }
             }
           </mat-list>
-          @if (orderable.selectedOptions.selected?.length) {
+          @if (orderableSelected?.selectedOptions?.selected?.length) {
             <p>
-              Ziel: {{ $any(orderable.selectedOptions.selected[0].value).name }}
+              Ziel: {{ $any(orderableSelected.selectedOptions.selected[0].value).name }}
             </p>
           }
         </div>

@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>Template erstellen</h1>
+<div mat-dialog-content>
+  <form [formGroup]="templateGroup">
+    <div fxLayout="column" fxLayoutAlign="space-around stretch">
+      <div fxLayout="row" fxLayoutGap="16">
+        <mat-form-field fxFlex>
+          <mat-label>Name</mat-label>
+          <input class="form-control" formControlName="name" matInput>
+        </mat-form-field>
+        <mat-form-field fxFlex>
+          <mat-label>Beschreibung</mat-label>
+          <input class="form-control" formControlName="description" matInput>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+<mat-dialog-actions>
+
+  @if (loading$ | async) {
+    <div class="spinner-container">
+      <mat-spinner></mat-spinner>
+    </div>
+  } @else {
+    <div fxLayout="row" fxFlexFill fxLayoutAlign="space-between center">
+      <button type="button" mat-raised-button color="accent" (click)="onCancelClick()">Abbrechen</button>
+      <button type="button" mat-raised-button color="primary" [disabled]="!templateGroup.valid"
+              (click)="onSubmitClick()">Speichern
+      </button>
+    </div>
+  }
+</mat-dialog-actions>

@@ -1,0 +1,78 @@
+<div class="entry placeholder" #placeholderContainer>
+  <div class="entry-header-container">
+    <div [className]="`entry-header level-${depth+1} smaller`" #placeholder></div>
+  </div>
+</div>
+
+<div class="entry" [formGroup]="entryFormGroup">
+  @if (draggedObject != null && !this.dragEnabled && !parentDragging) {
+    <div [className]="`droppable-area child ${addedPosition === 'child' ? 'visible' : ''}`" #droppableAreaChild>
+
+    </div>
+  }
+  <div class="entry-header-container" (mouseenter)="mouseEnter($event)" (mousemove)="mouseMoveEntered($event)"
+       (mouseleave)="mouseLeave()">
+    @if (draggedObject != null && !this.dragEnabled && !parentDragging) {
+      <div [className]="`droppable-area before ${addedPosition === 'before' ? 'visible' : ''}`" #droppableAreaBefore>
+
+      </div>
+    }
+    <div [className]="`entry-header level-${depth+1}`" #header>
+      <div class="entry-header-row" #headerRow>
+        <mat-icon class="drag-handle" (mousedown)="mouseDown($event)">drag_indicator</mat-icon>
+        <span class="neutral">{{ prefix }}{{ index + 1 }}</span>
+        @if (entryFormGroup.get('elementId').value === -1) {
+
+          <app-offer-element-selector
+            outline
+            (setValue)="onSetElement($event)"
+            [allElements]="allElements"
+            [allTemplates]="[]"
+            [addingEnabled]="false"
+            fillWidth
+            fxFlex
+            [value]="-1"
+          ></app-offer-element-selector>
+        } @else {
+          <app-offer-field-element-type-pill
+            [fieldType]="entryFormGroup.get('elementType').value"></app-offer-field-element-type-pill>
+
+          <mat-form-field appearance="outline" fxFlex class="new-form-element">
+            <input matInput formControlName="name">
+          </mat-form-field>
+        }
+        <mat-icon class="icon-btn" (click)="onAddChild()" title="Kind hinzufügen (Tab)">
+          subdirectory_arrow_right
+        </mat-icon>
+        <mat-icon class="icon-btn" (click)="onAddNeighbour(index)" title="Nachbar hinzufügen (Enter)">add
+        </mat-icon>
+        <mat-icon class="icon-btn" (click)="onDeleteElem(index)" title="Löschen (Entf)">delete</mat-icon>
+      </div>
+    </div>
+    @if (draggedObject != null && !this.dragEnabled && !parentDragging) {
+      <div [className]="`droppable-area after ${addedPosition === 'after' ? 'visible' : ''}`" #droppableAreaAfter>
+
+      </div>
+    }
+  </div>
+  @if (entryFormGroup.controls.children.controls.length !== 0) {
+    <div class="entry-content" formArrayName="children">
+
+      @for (control of entryFormGroup.controls.children.controls; track control.controls.id; let idx = $index) {
+        <app-template-entry-edit [entryFormGroup]="control"
+                                 [depth]="depth+1"
+                                 [prefix]="prefix+(index + 1)+'.'"
+                                 [index]="idx"
+                                 [allElements]="allElements"
+                                 [onAddNeighbour]="onAddNeighbourHere.bind(this)"
+                                 [onDeleteElem]="onDeleteElemHere.bind(this)"
+                                 [draggedObject]="draggedObject"
+                                 (dragStart)="dragStart.emit($event)"
+                                 [parentDragging]="dragEnabled || parentDragging"
+                                 (elementInserted)="this.elementInserted.emit($event)"
+                                 (elementUnInserted)="this.elementUnInserted.emit($event)"
+        ></app-template-entry-edit>
+      }
+    </div>
+  }
+</div>

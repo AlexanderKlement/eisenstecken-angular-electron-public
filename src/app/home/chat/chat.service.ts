@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy, inject } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import {Observable, Subscriber} from "rxjs";
 import {first, tap} from "rxjs/operators";
 import {ElectronService} from "../../core/services";
@@ -8,7 +8,7 @@ import { ChatMessage, ChatMessageCreate, ChatRecipient, DefaultService } from '.
 @Injectable({
     providedIn: 'root'
 })
-export class ChatService implements OnDestroy {
+export class ChatService {
     private api = inject(DefaultService);
     private electron = inject(ElectronService);
     private tray = inject(TrayService);
@@ -25,7 +25,6 @@ export class ChatService implements OnDestroy {
     private lastReadId = 0;
     private messageSubscriber: Subscriber<ChatMessage>;
 
-    private intervals: NodeJS.Timeout[] = [];
     private chatComponentRegistered = true; //This is true, to let the first register happen without consequences
 
     //TODO: i left a lot of stuff here, because we are not finished yet, but i am leaving it until we are finished
@@ -35,10 +34,10 @@ export class ChatService implements OnDestroy {
         this.messages$ = new Observable((messageSubscriber) => {
             this.messageSubscriber = messageSubscriber;
             this.check4Messages();
-            this.intervals.push(setInterval(() => { //this can go endlessly, because this service is a singleton ->
-                // maybe stop it if there are no active subscribers
+            const interval = setInterval(() => {
                 this.check4Messages();
-            }, 1000 * this.secondsBetweenNewMessageCheck));
+            }, 1000 * this.secondsBetweenNewMessageCheck);
+            return () => clearInterval(interval);
         });
         this.amountOfUnreadMessages$ = new Observable((amountOfUnreadMessagesSubscriber) => {
             this.amountOfUnreadMessagesSubscriber = amountOfUnreadMessagesSubscriber;
@@ -47,12 +46,6 @@ export class ChatService implements OnDestroy {
             this.electron.ipcRenderer.on("app-hidden", () => {
                 this.unsubscribe();
             });
-        }
-    }
-
-    ngOnDestroy(): void {
-        for (const interval of this.intervals) {
-            clearInterval(interval);
         }
     }
 

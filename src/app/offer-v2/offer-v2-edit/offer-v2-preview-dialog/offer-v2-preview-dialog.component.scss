@@ -1,0 +1,456 @@
+$scale: 4.7619; // px per mm
+$pt: $scale * 0.352778; // px per pt (1pt = 0.352778mm)
+
+@function mm($v) {
+  @return $v * $scale * 1px;
+}
+
+@function pt($v) {
+  @return $v * $pt * 1px;
+}
+
+$grey: rgb(52, 51, 51); // color_grey
+$neutral: rgb(121, 121, 113); // color_grey
+$yellow: #fdc400; // color_yellow
+$error: #ff0000; // color_yellow
+$light-grey-box: rgb(243, 243, 244); // color_light_grey_box
+$dark-grey-box: rgb(225, 226, 227); // color_dark_grey_box
+$grey-line: rgb(25, 25, 25); // color_grey_line
+$page-bg: #d8d8da;
+
+$fs-regular: pt(10); // FONT_SIZE
+$fs-title: pt(12.2); // title drawString uses 12.2
+$fs-small: pt(8); // FONT_SIZE_SMALL
+$fs-header: pt(6.5); // FONT_SIZE_HEADER
+$fs-footer: pt(9);
+
+$offer-cols: mm(12) mm(98) mm(19) mm(25) mm(26);
+$bottom-cols: mm(36) mm(62) mm(36) mm(46);
+* {
+  box-sizing: border-box;
+}
+
+.viewer-container {
+  margin: 0;
+  background: $page-bg;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  color: $grey;
+}
+
+.viewer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: mm(8);
+  padding: mm(8) 0 mm(16);
+
+  .page {
+    position: relative;
+    width: mm(210);
+    height: mm(297);
+    background: #fff;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, .28);
+    overflow: hidden;
+    font-size: $fs-regular;
+    line-height: 1.32;
+
+    .content {
+      position: absolute;
+      left: mm(15);
+      width: mm(180);
+
+      .title-row {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding-right: mm(20);
+
+        .title {
+          font-family: "Roboto", serif;
+          font-weight: 700;
+          font-size: $fs-title;
+          color: $grey;
+        }
+
+        .destination {
+          font-family: "Roboto", serif;
+          font-weight: 300;
+          font-size: $fs-regular;
+          line-height: 1.5;
+          color: $grey;
+
+          div {
+            white-space: nowrap;
+          }
+
+          .place-date {
+            margin-top: mm(3)
+          }
+        }
+      }
+
+      .offer-intro {
+        font-family: "Roboto", serif;
+        font-weight: 300;
+        position: relative;
+        font-size: $fs-regular;
+        color: $grey;
+        white-space: pre-line;
+        margin-top: mm(8.5);
+        line-height: 1.2;
+        max-width: mm(180);
+      }
+
+      .salutation-signature {
+        margin-top: mm(8);
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        justify-content: space-between;
+
+        .salutation {
+          flex: 1;
+
+          .sal-greeting {
+            font-family: "Roboto", serif;
+            font-weight: 300;
+            font-size: $fs-regular;
+          }
+
+          .sal-name {
+            font-family: "Roboto", serif;
+            font-weight: 700;
+            font-size: $fs-regular;
+          }
+
+          .sal-role {
+            font-family: "Roboto", serif;
+            font-weight: 400;
+            color: $yellow;
+            font-size: $fs-regular;
+          }
+
+          .sal-contact {
+            font-family: "Roboto", serif;
+            font-weight: 300;
+            font-size: $fs-regular;
+            margin-top: mm(6);
+          }
+
+        }
+
+        .signature {
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+          justify-content: flex-start;
+          padding-bottom: mm(10);
+          padding-right: mm(6);
+          min-width: mm(70);
+
+          .cs-line {
+            display: flex;
+            gap: mm(6);
+
+            .field {
+              .rule {
+                border-bottom: .15mm solid $grey-line;
+                height: mm(10);
+              }
+
+              .lbl {
+                font-size: pt(7);
+                margin-top: mm(1);
+              }
+            }
+
+            .field--date {
+              width: mm(15);
+            }
+
+            .field--place {
+              flex: 1;
+            }
+          }
+        }
+      }
+
+      .closing-logos {
+        margin-top: mm(8);
+        display: flex;
+        align-items: flex-end;
+        gap: mm(6);
+
+        img {
+          display: block;
+          height: mm(17) !important;
+          width: auto;
+        }
+      }
+
+      .header-args {
+        margin-top: mm(5);
+        position: relative;
+
+        .harg {
+          position: absolute;
+          left: 0;
+
+          .label {
+            font-family: "Roboto", serif;
+            font-weight: 300;
+            font-size: $fs-header;
+            color: $grey;
+          }
+
+          .value {
+            font-family: "Roboto", serif;
+            font-size: $fs-footer;
+            color: $grey;
+            margin-top: mm(1);
+            white-space: nowrap;
+          }
+        }
+
+        .harg:nth-child(2) {
+          left: mm(25);
+        }
+
+        .harg:nth-child(3) {
+          left: mm(50);
+        }
+
+        .harg:nth-child(4) {
+          left: mm(80);
+        }
+
+        .harg:nth-child(5) {
+          left: mm(100);
+        }
+
+        .harg:nth-child(6) {
+          left: mm(150);
+        }
+      }
+
+      .material-description {
+        margin-top: mm(30);
+
+        .md-title {
+          font-family: "Roboto", serif;
+          font-weight: 700;
+          font-size: $fs-regular;
+          padding-bottom: mm(1);
+          margin-bottom: mm(2);
+          border-bottom: solid 2px var(--primary-color);
+        }
+
+        .md-text {
+          font-family: "Roboto", serif;
+          font-weight: 300;
+          font-size: $fs-regular;
+          white-space: pre-line;
+        }
+      }
+
+      .offer-table {
+        margin-top: mm(16);
+        width: 100%;
+
+        .row {
+          display: grid;
+          grid-template-columns: $offer-cols;
+          column-gap: 0;
+          align-items: start;
+          padding: pt(1.5) 0;
+        }
+
+        // header row of the table (column captions), yellow underline below
+        .row--head {
+          border-bottom: .7pt solid $yellow;
+          padding-bottom: pt(4);
+
+          .cell {
+            font-family: "Roboto", serif;
+            font-weight: 300;
+            font-size: $fs-header;
+            line-height: 1.05;
+          }
+        }
+
+        .row--spacer {
+          height: pt(8);
+          padding: 0;
+        }
+
+        .row--section {
+          > .cell {
+            font-family: "Roboto", serif;
+            font-weight: 700;
+          }
+        }
+
+        .cell {
+          font-family: "Roboto", serif;
+          font-weight: 300;
+          font-size: $fs-regular;
+          color: $grey;
+          padding-right: mm(2);
+          white-space: collapse;
+        }
+
+        .cell--num,
+        .cell--qty,
+        .cell--single,
+        .cell--total {
+          text-align: right;
+        }
+
+        .cell--num {
+          text-align: left;
+        }
+
+        .cell--desc {
+          text-align: left;
+        }
+
+        .cell--total {
+          padding-right: 0;
+        }
+
+        .row--section {
+          margin-top: mm(3);
+        }
+
+        .row--alternative {
+          > .cell--single, > .cell--qty, > .cell--total {
+            padding-top: 20px;
+          }
+        }
+
+        .row--sconto {
+          > .cell {
+            color: $neutral;
+          }
+        }
+
+        .row--not-made {
+          > .cell {
+            text-decoration: line-through;
+          }
+        }
+
+        .row--addition {
+          > .cell {
+            color: $yellow;
+          }
+        }
+
+        .row--substraction {
+          > .cell {
+            color: $error;
+          }
+        }
+      }
+
+
+      .price-box {
+        margin-top: mm(10);
+
+        .pb-head,
+        .pb-values {
+          display: grid;
+          grid-template-columns: $bottom-cols;
+        }
+
+        .pb-head {
+          border-bottom: .8pt solid $yellow;
+          padding-bottom: mm(2);
+
+          .cell {
+            font-family: "Roboto", serif;
+            font-weight: 300;
+            font-size: $fs-header;
+            line-height: 1.1;
+
+            &.cell--last {
+              font-family: "Roboto", serif;
+              font-weight: 700;
+              text-align: right;
+            }
+
+            &.right {
+              text-align: right;
+            }
+          }
+        }
+
+        .pb-values {
+          .cell {
+            padding: mm(3) mm(2);
+            font-family: "Roboto", serif;
+            font-weight: 300;
+            font-size: $fs-regular;
+            background: $light-grey-box;
+
+            &.cell--bold {
+              font-family: "Roboto", serif;
+              font-weight: 700;
+            }
+
+            &.right {
+              text-align: right;
+            }
+
+            &.cell--last {
+              background: $dark-grey-box;
+              font-family: "Roboto", serif;
+              font-weight: 700;
+              text-align: right;
+            }
+          }
+        }
+      }
+
+      .includes {
+        margin-top: mm(20);
+
+        p {
+          margin: 0 0 mm(1.5);
+          font-family: "Roboto", serif;
+          font-weight: 300;
+          font-size: $fs-regular;
+        }
+
+        .gap {
+          height: mm(2);
+        }
+      }
+
+
+    }
+
+    &.page--cover .content {
+      top: mm(58);
+    }
+
+    // first-page frame
+    &.page--body .content {
+      top: mm(38);
+    }
+  }
+
+
+  &.print {
+    gap: 0;
+    padding: 0;
+
+    .page {
+      box-shadow: none;
+    }
+  }
+}

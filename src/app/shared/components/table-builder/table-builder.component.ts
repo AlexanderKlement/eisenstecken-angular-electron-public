@@ -3,10 +3,12 @@ import {
   booleanAttribute,
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnChanges,
   OnDestroy,
   OnInit,
+  Output,
   SimpleChanges,
   ViewChild
 } from "@angular/core";
@@ -33,10 +35,11 @@ import {
 } from "@angular/material/table";
 import { MatButton, MatIconButton } from "@angular/material/button";
 import { MatTooltip } from "@angular/material/tooltip";
-import { AsyncPipe, NgClass } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import {
   ArticleService,
   DefaultService,
+  OfferV2Service,
   OrderService,
   RecalculationService,
   TimeEntryService
@@ -44,6 +47,7 @@ import {
 import { MatSort, MatSortHeader } from "@angular/material/sort";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatIcon } from "@angular/material/icon";
+import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList } from "@angular/cdk/drag-drop";
 
 export interface TableButtonIcon {
   icon: string;
@@ -57,7 +61,7 @@ export interface TableButton {
   selectedField: string;
 }
 
-type AnyApi = DefaultService | RecalculationService | ArticleService | OrderService | TimeEntryService;
+type AnyApi = DefaultService | RecalculationService | ArticleService | OrderService | TimeEntryService | OfferV2Service;
 
 @Component({
   selector: "app-table-builder",
@@ -82,7 +86,6 @@ type AnyApi = DefaultService | RecalculationService | ArticleService | OrderServ
     MatTooltip,
     MatPaginator,
     AsyncPipe,
-    NgClass,
     MatSortHeader,
     MatSort,
     DefaultFlexDirective,
@@ -91,7 +94,10 @@ type AnyApi = DefaultService | RecalculationService | ArticleService | OrderServ
     MatHeaderRowDef,
     MatRowDef,
     ReactiveFormsModule,
-    MatIconButton
+    MatIconButton,
+    CdkDropList,
+    CdkDrag,
+    CdkDragHandle
   ]
 })
 
@@ -101,12 +107,16 @@ export class TableBuilderComponent<T extends DataSourceClass, A extends AnyApi =
   @Input() title?: string;
   @Input({ transform: booleanAttribute }) noSearch?: boolean = false;
   @Input({ transform: booleanAttribute }) noPagination?: boolean = false;
+  @Input({ transform: booleanAttribute }) dragNDrop?: boolean = false;
   @Input() buttons?: TableButton[] = [];
   @Input() headerButtons?: TableButton[] = [];
   @Input() $refresh?: Observable<void>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild("input") input: ElementRef;
   @ViewChild(MatSort) sort!: MatSort;
+  @Output() dragNDropDropped = new EventEmitter<CdkDragDrop<any>>();
+  @Output() dragNDropSaved = new EventEmitter();
+  dragNDropChanged = false;
   subscription: Subscription;
   refreshInterval: NodeJS.Timeout;
   refreshRateSeconds = 60;
@@ -127,6 +137,13 @@ export class TableBuilderComponent<T extends DataSourceClass, A extends AnyApi =
           this.loadDataPage(false);
         })
       );
+    }
+    if (this.dragNDrop) {
+      this.dataSource.columnIdentifiers.unshift("drag_handler");
+      this.dataSource.columns.unshift({
+        name: "drag_handler",
+        headerName: ""
+      });
     }
   }
 
@@ -183,6 +200,7 @@ export class TableBuilderComponent<T extends DataSourceClass, A extends AnyApi =
   }
 
   private loadDataPage(enableLoading: boolean = true) {
+    this.dragNDropChanged = false;
     this.dataSource.loadData(
       !this.noSearch ? this.input.nativeElement.value : undefined,
       "",
@@ -190,5 +208,16 @@ export class TableBuilderComponent<T extends DataSourceClass, A extends AnyApi =
       !this.noPagination ? this.paginator.pageSize : 1000,
       enableLoading
     );
+  }
+
+  protected saveDragNDrop() {
+    this.dragNDropChanged = false;
+    this.dragNDropSaved.emit();
+  }
+
+  protected drop(event: CdkDragDrop<any, any, any>) {
+    this.dataSource.moveItemInArray(event.previousIndex, event.currentIndex);
+    this.dragNDropChanged = true;
+    this.dragNDropDropped.emit(event);
   }
 }

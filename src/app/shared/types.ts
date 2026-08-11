@@ -15,6 +15,19 @@ import {
   Meal,
   MealSum,
   Offer,
+  OfferElement,
+  OfferElementField,
+  OfferElementListElement,
+  OfferElementType,
+  OfferField,
+  OfferLibrary,
+  OfferLibraryEntry,
+  OfferLibraryListElement,
+  OfferStatement,
+  OfferTemplate,
+  OfferUnit,
+  OfferV2,
+  OfferV2Version,
   Order,
   OrderBundle,
   OrderedArticle,
@@ -55,6 +68,19 @@ export type DataSourceClass =
   | Supplier
   | Contact
   | Price
+  | OfferV2
+  | OfferV2Version
+  | OfferField
+  | OfferUnit
+  | OfferElementType
+  | OfferElement
+  | OfferElementListElement
+  | OfferElementField
+  | OfferLibraryListElement
+  | OfferLibrary
+  | OfferLibraryEntry
+  | OfferTemplate
+  | OfferStatement
   | OrderSmall
   | TechnicalData
   | Credential

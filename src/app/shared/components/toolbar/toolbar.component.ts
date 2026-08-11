@@ -46,7 +46,7 @@ export class ToolbarComponent {
   }
 
   homeClicked(): void {
-    this.router.navigateByUrl("/");
+    this.router.navigateByUrl("/").then();
   }
 
   buttonClicked(button: CustomButton): void {

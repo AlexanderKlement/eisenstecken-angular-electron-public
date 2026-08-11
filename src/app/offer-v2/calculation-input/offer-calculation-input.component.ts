@@ -1,0 +1,169 @@
+import { booleanAttribute, Component, ElementRef, inject, Input, OnInit, ViewChild } from "@angular/core";
+import { ReactiveFormsModule } from "@angular/forms";
+import { DefaultFlexDirective, DefaultLayoutDirective, DefaultLayoutGapDirective } from "ng-flex-layout";
+import { MatButton } from "@angular/material/button";
+import { OfferField, OfferV2Service } from "../../../api/openapi";
+import { take } from "rxjs/operators";
+import { MatFormField, MatHint, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
+import { CdkTextareaAutosize } from "@angular/cdk/text-field";
+import { MatIcon } from "@angular/material/icon";
+import { globalKeywords, KeywordRegExp } from "../offer-calculation-utils";
+
+type HighlightedText = {
+  key: string;
+  value: string;
+  highlighted: boolean;
+  warn: boolean;
+  hasNewlineBefore: boolean;
+  hasNewlineAfter: boolean;
+}
+type Suffix = {
+  icon: string;
+  onClick?: () => void;
+}
+type SearchTerm = {
+  pos: number;
+  hasAt: boolean;
+  key: string;
+  valid: boolean;
+  original: string;
+}
+@Component({
+  selector: "app-offer-calculation-input",
+  templateUrl: "./offer-calculation-input.component.html",
+  styleUrls: ["./offer-calculation-input.component.scss"],
+  imports: [
+    ReactiveFormsModule,
+    DefaultFlexDirective,
+    DefaultLayoutDirective,
+    DefaultLayoutGapDirective,
+    MatButton,
+    MatFormField,
+    MatLabel,
+    MatHint,
+    MatInput,
+    CdkTextareaAutosize,
+    MatIcon,
+    MatSuffix
+  ]
+})
+export default class OfferCalculationInputComponent implements OnInit {
+
+  private offerService = inject(OfferV2Service);
+  @ViewChild("calculationInput") calculationInput: ElementRef<HTMLTextAreaElement>;
+  @ViewChild("highlightsContainer") highlightsContainer: ElementRef<HTMLDivElement>;
+  @Input() value: string;
+  @Input() label: string;
+  @Input() setValue: (val: string) => void;
+  @Input() hintStyle: "big" | "small" | "offertext" | "none";
+  @Input({ transform: booleanAttribute }) outline: boolean;
+  @Input({ transform: booleanAttribute }) readonly: boolean;
+  @Input() filterFields: OfferField[];
+  @Input() fieldSuffix?: Suffix;
+  parts: HighlightedText[] = [];
+  private fields: string[] = globalKeywords;
+  private maxLength = Math.max(...globalKeywords.map(f => f.length));
+  displayFields: string[] | null;
+
+  ngOnInit(): void {
+    this.offerService.getOfferFieldsOfferV2FieldsGet().pipe(take(1)).subscribe((data) => {
+      this.fields = globalKeywords.concat(data.map(d => d.label)).filter((k, idx, arr) => arr.indexOf(k) === idx);
+      this.maxLength = Math.max(...this.fields.map(f => f.length));
+      this.sync();
+    });
+
+  }
+
+  getSearchTerm(value: string, cursorPos: number, count: number): SearchTerm {
+    if (count > cursorPos) {
+      return this.getSearchTerm(value, cursorPos, count - 1);
+    }
+    const substr = value.substring(cursorPos - count, cursorPos);
+    if (/[^a-zA-ZäöüÄÖÜß@]/.test(substr)) {
+      return this.getSearchTerm(value, cursorPos, count - 1);
+    }
+    const key = substr.replace("@", "");
+    return {
+      pos: cursorPos - count,
+      hasAt: substr.includes("@"),
+      key,
+      valid: key.length !== 0,
+      original: substr
+    };
+  }
+
+  onCalculationKeyUp(): void {
+    const val = this.calculationInput.nativeElement.value;
+    this.setValue(val);
+    const cursorPos = this.calculationInput.nativeElement.selectionStart;
+    this.sync();
+    if (!val) {
+      this.displayFields = null;
+      return;
+    }
+    const searchTerm = this.getSearchTerm(val, cursorPos, this.maxLength);
+    const key = searchTerm.key.toLowerCase();
+    if (searchTerm.valid) {
+      this.displayFields = this.fields.filter(field => field.toLowerCase().startsWith(key));
+    } else {
+      this.displayFields = null;
+    }
+
+  }
+
+  onFieldClick(field: string) {
+    const val = this.calculationInput.nativeElement.value;
+    const cursorPos = this.calculationInput.nativeElement.selectionStart;
+    if (!val)
+      return;
+    const searchTerm = this.getSearchTerm(val, cursorPos, this.maxLength);
+    const firstPart = val.substring(0, searchTerm.pos);
+    const secondPart = val.substring(searchTerm.pos + searchTerm.original.length);
+    const suffix = "";
+    const prefix = "@";
+    const newVal = firstPart + prefix + field + suffix + secondPart;
+    this.setValue(newVal);
+    this.calculationInput.nativeElement.value = newVal;
+    this.calculationInput.nativeElement.focus();
+    this.sync();
+  }
+
+  sync() {
+    const text = this.calculationInput.nativeElement.value;
+    this.highlightsContainer.nativeElement.style.top = this.calculationInput.nativeElement.offsetTop + "px";
+    this.highlightsContainer.nativeElement.style.left = this.calculationInput.nativeElement.offsetLeft + "px";
+    this.highlightsContainer.nativeElement.style.height = this.calculationInput.nativeElement.clientHeight + "px";
+    this.highlightsContainer.nativeElement.style.width = this.calculationInput.nativeElement.clientWidth + "px";
+    const matches = text.matchAll(KeywordRegExp);
+    this.parts = [];
+    let match = matches.next();
+    let lastIdx = 0;
+    while (!match.done) {
+      const txt = match.value[0];
+      const field = this.fields.find(field => `@${field}` === txt);
+      if (field) {
+        if (match.value.index !== 0) {
+          const value = text.substring(lastIdx, match.value.index);
+          this.parts.push({
+            key: `${txt}-${lastIdx}-${match.value.index}`,
+            value,
+            highlighted: false,
+            warn: false,
+            hasNewlineBefore: value.replace("\r", "").startsWith("\n"),
+            hasNewlineAfter: value.replace("\r", "").endsWith("\n")
+          });
+        }
+        this.parts.push({
+          key: `${txt}-${match.value.index}`,
+          value: txt,
+          highlighted: true,
+          warn: globalKeywords.find(f => `@${f}` === txt) ? false : this.filterFields ? !this.filterFields.find(f => `@${f.label}` === txt) : false,
+          hasNewlineBefore: false,
+          hasNewlineAfter: false
+        });
+        lastIdx = match.value.index + txt.length;
+      }
+      match = matches.next();
+    }
+  }
+}

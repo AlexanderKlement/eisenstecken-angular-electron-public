@@ -10,6 +10,7 @@
 
 
 export interface NoteCreate { 
+    height: number | null;
     text: string;
 }
 

@@ -1,0 +1,154 @@
+<app-offer-container subTitle="Elemente">
+  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16">
+    <h3>{{ subTitle }}</h3>
+    <div fxFlex></div>
+    @if (loading$ | async) {
+      <div class="spinner-container">
+        <mat-spinner></mat-spinner>
+      </div>
+    } @else {
+      @if (!!elementId) {
+        <button type="button" mat-raised-button color="warn" (click)="onDelete()">Löschen</button>
+      }
+      <button type="button" mat-raised-button color="primary" (click)="onSave()">Speichern</button>
+    }
+  </div>
+
+  <form [formGroup]="elementGroup" class="pb-3">
+    <div fxLayout="column" fxLayoutAlign="space-around stretch">
+      <div fxLayout="row" fxLayoutGap="16">
+        <mat-form-field fxFlex>
+          <mat-label>Name</mat-label>
+          <input class="form-control" formControlName="name" matInput>
+        </mat-form-field>
+        <mat-form-field fxFlex>
+          <mat-label>Elementtyp</mat-label>
+          <mat-select class="form-control" formControlName="elementType" (selectionChange)="onChangeType()">
+            <mat-option value="-1">Auswählen</mat-option>
+            @if (elementTypes$ | async; as elementTypes) {
+              @for (elementType of elementTypes; track elementType.id) {
+                <mat-option value="{{elementType.id}}">{{ elementType.name }}</mat-option>
+              }
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      @if (elementGroup.get('elementType').value !== "-1") {
+
+        <div fxLayout="row" fxFill fxLayoutAlign="space-between center" class="my-1">
+          <strong class="neutral">Felder (definiert im Elementtyp)</strong>
+          <button type="button" mat-stroked-button color="primary" (click)="onNavElementType()">
+            Elementtyp bearbeiten
+          </button>
+        </div>
+
+        <!--<div class="element-field">
+          <div class="element-field-header">
+            <strong>Beschreibung</strong>
+            <span class="sub-header"></span>
+          </div>
+        </div> -->
+        @if (elementGroup.get("price").value !== "") {
+          <div class="element-field">
+            <div class="element-field-header">
+              <strong>Preisberechnung</strong>
+              <span class="sub-header font-math">{{ elementGroup.get("price").value }}</span>
+            </div>
+          </div>
+        }
+        @if (elementGroup.get("offertext").value !== "") {
+          <div class="element-field">
+            <div class="element-field-header">
+              <strong>Angebotstext</strong>
+              <span class="sub-header font-math">{{ elementGroup.get("offertext").value }}</span>
+            </div>
+          </div>
+        }
+        <div formArrayName="fields">
+          @for (control of elementGroup.controls.fields.controls; track control.controls.id; let idx = $index) {
+            <div class="element-field" [formGroupName]="idx">
+              <div class="element-field-header">
+                <strong>{{ control.controls.label.value }}</strong>
+                <span class="sub-header">{{ fieldTypeToString(control.controls.fieldType.value) }}
+                  @if (control.controls.fieldType.value === OfferFieldEnum.Calculation || control.controls.fieldType.value === OfferFieldEnum.Numeric) {
+                    &bullet;
+                    {{ control.controls.unit.value }}
+                  }
+              </span>
+              </div>
+              <div class="element-field-content">
+
+                @if (control.controls.fieldType.value === OfferFieldEnum.Calculation || control.controls.fieldType.value === OfferFieldEnum.Offertext) {
+                  <div class="padd-8">
+                    <app-offer-calculation-input [value]="control.controls.value.value" readonly
+                                                 [setValue]="setDefaultVal.bind(this,idx)" label="Berechnung"
+                                                 hintStyle="none" outline></app-offer-calculation-input>
+                  </div>
+                } @else {
+                  <!-- <mat-checkbox formControlName="mandatory" class="form-control">Pflichtfeld</mat-checkbox> -->
+                  <mat-checkbox formControlName="inherits" class="form-control">Vom übergeordneten Element erben
+                  </mat-checkbox>
+                  @if (control.controls.fieldType.value === OfferFieldEnum.Select) {
+                    <mat-form-field appearance="outline" class="new-form-element my-1">
+                      <mat-label>Biblithek wählen</mat-label>
+                      <mat-select formControlName="library">
+                        @if (libraries$|async; as libraries) {
+                          @for (library of libraries; track library.id) {
+                            <mat-option [value]="library.id.toString(10)">{{ library.name }}</mat-option>
+                          }
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                    <!--
+                     <mat-radio-group formControlName="useManualList">
+                       <mat-radio-button [value]="false" (click)="onChangeSelectType(control)">Aus Bibliothek
+                       </mat-radio-button>
+                       <mat-radio-button [value]="true" (click)="onChangeSelectType(control)">Manuelle Liste
+                       </mat-radio-button>
+                     </mat-radio-group>
+                    @if (control.controls.useManualList.value) {
+                      <label id="radio-group-label">Liste erstellen</label>
+                      <ng-container formArrayName="manualList">
+                        @for (mLControl of control.controls.manualList.controls; track mLControl.value; let mLIdx = $index) {
+                          <mat-form-field appearance="outline" class="new-form-element">
+                            <input matInput [formControlName]="mLIdx" (keyup)="onChangeSelectType(control)">
+                            <mat-icon matSuffix class="neutral"
+                                      (click)="onDeleteListElement(control,mLIdx)">delete
+                            </mat-icon>
+                          </mat-form-field>
+                        }
+                        <div fxLayout="row" fxLayoutAlign="center center" class="my-1">
+                          <button mat-raised-button color="primary"
+                                  (click)="onAddListElement(control)">Eintrag hizufügen
+                          </button>
+                        </div>
+                      </ng-container>
+                    } @else {
+                      <label id="radio-group-label">Bibliothek wählen</label>
+                      <mat-radio-group aria-labelledby="radio-group-label" formControlName="library"
+                                       class="vertical-radio">
+                        @if (libraries$|async; as libraries) {
+                          @for (library of libraries; track library.id) {
+                            <mat-radio-button [value]="library.id">{{ library.name }}</mat-radio-button>
+                          }
+                        }
+                      </mat-radio-group>
+                    }
+                    -->
+                  } @else {
+                    <!-- <mat-form-field fxFill appearance="outline">
+                       <mat-label>Standartwert</mat-label>
+                       <input class="form-control" matInput formControlName="value">
+                     </mat-form-field> -->
+                  }
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </form>
+
+</app-offer-container>

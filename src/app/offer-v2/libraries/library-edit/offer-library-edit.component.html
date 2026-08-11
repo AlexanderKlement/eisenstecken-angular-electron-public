@@ -1,0 +1,78 @@
+<app-offer-container subTitle="Bibliotheken">
+  <div fxLayout="row" fxFlexFill fxLayoutAlign="start center">
+    <h3>{{ subTitle }}</h3>
+    <div fxFlex></div>
+    @if (loading$ | async) {
+      <div class="spinner-container">
+        <mat-spinner></mat-spinner>
+      </div>
+    } @else {
+      @if (libraryId) {
+        <button type="button" (click)="onDelete()" mat-raised-button color="warn">Löschen</button>
+      }
+      <button type="button" mat-raised-button color="primary" [disabled]="!libraryGroup.valid"
+              (click)="onSubmitClick()">Speichern
+      </button>
+    }
+  </div>
+  <form [formGroup]="libraryGroup">
+    <div fxLayout="column" fxLayoutAlign="space-around stretch">
+      <div fxLayout="row" fxLayoutGap="16">
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Name</mat-label>
+          <input class="form-control" formControlName="name" matInput>
+        </mat-form-field>
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Beschreibung</mat-label>
+          <input class="form-control" formControlName="description" matInput>
+        </mat-form-field>
+      </div>
+      @if (libraryId) {
+        <div formArrayName="entries"
+             cdkDropList
+             class="draggable-list"
+             (cdkDropListDropped)="drop($event)">
+          <h3>Einträge</h3>
+          @for (control of libraryGroup.controls.entries.controls; track control.controls.id; let idx = $index; ) {
+            <div
+              fxLayout="row"
+              fxLayoutGap="16"
+              fxLayoutAlign="start center"
+              [formGroupName]="idx"
+              class="draggable-element"
+              cdkDrag
+              cdkDragBoundary=".draggable-list"
+            >
+              <mat-icon class="neutral cursor-drag" cdkDragHandle>drag_indicator</mat-icon>
+              <mat-form-field fxFlex appearance="outline">
+                <mat-label>Name</mat-label>
+                <input class="form-control" matInput formControlName="name">
+              </mat-form-field>
+              <mat-form-field fxFlex appearance="outline">
+                <mat-label>Einheit</mat-label>
+                <mat-select class="form-control"
+                            formControlName="unit">
+                  @for (unit of units; track unit.id) {
+                    <mat-option value="{{unit.id}}">{{ unit.name }} [{{ unit.short }}]</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field fxFlex appearance="outline">
+                <mat-label>Preis</mat-label>
+                <input class="form-control" matInput formControlName="price">
+              </mat-form-field>
+              <app-circle-icon-button class="del-button" icon="delete"
+                                      (click)="onDeleteEntry(control.get('id').value,idx)"></app-circle-icon-button>
+            </div>
+          }
+        </div>
+        <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="center" class="my-1">
+          <button type="button" mat-raised-button type="button" (click)="onAddEntry()"
+                  class="save-btn">
+            Neuer Eintrag
+          </button>
+        </div>
+      }
+    </div>
+  </form>
+</app-offer-container>
