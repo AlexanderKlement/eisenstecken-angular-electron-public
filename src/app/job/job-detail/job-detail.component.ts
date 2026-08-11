@@ -108,7 +108,7 @@ export default class JobDetailComponent implements OnInit {
         return;
       }
       this.jobId = id;
-      this.hasLegacyOffer = id < 3800;
+      this.hasLegacyOffer = id < 38000;
       this.initData();
     });
     this.initAccessRights();
@@ -705,6 +705,14 @@ export default class JobDetailComponent implements OnInit {
             navigate: (): void => {
               this.router.navigateByUrl(
                 "/offer_v2/offer/new/" + this.jobId.toString()
+              ).then();
+            }
+          });
+          this.buttonsMain[0].dropdown.push({
+            name: "Neues Angebot (Altsystem)",
+            navigate: (): void => {
+              this.router.navigateByUrl(
+                "/offer/edit/new/" + this.jobId.toString()
               ).then();
             }
           });

@@ -14,7 +14,6 @@ api/order.service.ts
 api/orderBundle.service.ts
 api/orderedArticle.service.ts
 api/recalculation.service.ts
-api/scheduler.service.ts
 api/tikTak.service.ts
 api/timeEntry.service.ts
 api/viet.service.ts
