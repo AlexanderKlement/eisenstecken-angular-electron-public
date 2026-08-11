@@ -1,4 +1,4 @@
-## <small>2.2.9 (2026-07-21)</small>
+## <small>2.2.10 (2026-08-11)</small>
 
 * A lot refactored with templates ([44fa7e7](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/44fa7e7))
 * Added the navigate to home when click on title ([1fa749c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/1fa749c))
@@ -9,6 +9,7 @@
 * Bugfixes to build ([aee7fb5](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/aee7fb5))
 * Changelog ([ac8f9bc](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/ac8f9bc))
 * Container/Calculation-Input/Fields/Units/Library/Element-Types ([99e8ca3](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/99e8ca3))
+* Delete Tiktak Timeentries & environment fix ([430ddd4](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/430ddd4))
 * element-fields ([2f495c4](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/2f495c4))
 * elements ([17ecba5](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/17ecba5))
 * Fields Finish ([f58bf9d](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f58bf9d))

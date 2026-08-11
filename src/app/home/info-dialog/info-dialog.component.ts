@@ -46,7 +46,7 @@ export class InfoDialogComponent implements OnInit {
 
   updateList: Update[] = [
     {
-      versionName: "2.2.9",
+      versionName: "2.2.10",
       changes: [
         "Neues Angebots-Tool",
         "Erstelldatum in Aufträge",
