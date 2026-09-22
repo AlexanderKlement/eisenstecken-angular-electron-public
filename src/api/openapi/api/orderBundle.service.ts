@@ -106,4 +106,84 @@ export class OrderBundleService extends BaseService {
         );
     }
 
+    /**
+     * Find Shop Order Bundle
+     * @param year 
+     * @param ordererId 
+     * @param supplierId 
+     * @param commissionId 
+     * @param skip 
+     * @param limit 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public findShopOrderBundleOrderBundleV2ShopSearchGet(year: number, ordererId: number, supplierId?: number, commissionId?: number, skip?: number, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OrderBundle>>;
+    public findShopOrderBundleOrderBundleV2ShopSearchGet(year: number, ordererId: number, supplierId?: number, commissionId?: number, skip?: number, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OrderBundle>>>;
+    public findShopOrderBundleOrderBundleV2ShopSearchGet(year: number, ordererId: number, supplierId?: number, commissionId?: number, skip?: number, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OrderBundle>>>;
+    public findShopOrderBundleOrderBundleV2ShopSearchGet(year: number, ordererId: number, supplierId?: number, commissionId?: number, skip?: number, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (year === null || year === undefined) {
+            throw new Error('Required parameter year was null or undefined when calling findShopOrderBundleOrderBundleV2ShopSearchGet.');
+        }
+        if (ordererId === null || ordererId === undefined) {
+            throw new Error('Required parameter ordererId was null or undefined when calling findShopOrderBundleOrderBundleV2ShopSearchGet.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>year, 'year');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>ordererId, 'orderer_id');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>supplierId, 'supplier_id');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>commissionId, 'commission_id');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>skip, 'skip');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>limit, 'limit');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (OAuth2PasswordBearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/order_bundle/v2/shop/search`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<OrderBundle>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
 }

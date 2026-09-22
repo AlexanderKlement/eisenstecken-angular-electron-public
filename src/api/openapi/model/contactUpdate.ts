@@ -14,7 +14,7 @@ export interface ContactUpdate {
     lastname: string;
     mail: string;
     name: string;
-    name1?: string | null;
+    name1?: string;
     note: string;
     tel: string;
 }

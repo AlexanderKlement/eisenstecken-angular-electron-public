@@ -1,33 +1,29 @@
-import { Component, OnInit, inject } from "@angular/core";
-import { Observable, Subscriber, combineLatest } from "rxjs";
+import { Component, inject, OnInit } from "@angular/core";
+import { combineLatest, Observable, Subscriber } from "rxjs";
 import {
   isJob,
   ListItem,
   SupportedListElements
 } from "../shared/components/filterable-clickable-list/filterable-clickable-list.types";
 import { first } from "rxjs/operators";
-import {
-  CustomButton,
-  ToolbarComponent
-} from "../shared/components/toolbar/toolbar.component";
+import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
 import { Router } from "@angular/router";
 import {
+  Article,
+  ArticleService,
+  DefaultService,
   OrderableType,
   OrderedArticle,
-  Article,
-  DefaultService, OrderedArticleSmall, ArticleService
+  OrderedArticleSmall
 } from "../../api/openapi";
-import {
-  DefaultLayoutDirective,
-  DefaultLayoutAlignDirective,
-  FlexModule,
-  DefaultFlexDirective
-} from "ng-flex-layout";
+import { DefaultFlexDirective, DefaultLayoutAlignDirective, DefaultLayoutDirective, FlexModule } from "ng-flex-layout";
 import {
   FilterableClickableListComponent
 } from "../shared/components/filterable-clickable-list/filterable-clickable-list.component";
 import { ProductsListComponent } from "./available-products-list/products-list.component";
- 
+import { MatTab, MatTabGroup } from "@angular/material/tabs";
+import { ShopOrdersComponent } from "./shop-order/shop-orders/shop-orders.component";
+
 @Component({
   selector: "app-order",
   templateUrl: "./order.component.html",
@@ -39,7 +35,10 @@ import { ProductsListComponent } from "./available-products-list/products-list.c
     FlexModule,
     DefaultFlexDirective,
     FilterableClickableListComponent,
-    ProductsListComponent
+    ProductsListComponent,
+    MatTab,
+    MatTabGroup,
+    ShopOrdersComponent
   ]
 })
 export default class OrderComponent implements OnInit {

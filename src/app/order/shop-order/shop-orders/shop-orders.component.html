@@ -1,0 +1,88 @@
+<div fxLayout="row" fxLayoutGap="16">
+  <div fxLayout="column" fxLayoutGap="16">
+    <form [formGroup]="filterForm" class="filters">
+      <strong>Filter</strong>
+      <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start center" class="offer-header">
+        <mat-form-field appearance="outline" class="new-form-element">
+          <mat-label>Jahr</mat-label>
+          <input class="form-control" formControlName="year" matInput>
+        </mat-form-field>
+        @if (users$|async; as users) {
+          <mat-form-field appearance="outline" class="new-form-element">
+            <mat-label>Besteller</mat-label>
+
+            <mat-select formControlName="orderer">
+              @for (u of users; track u.id) {
+                <mat-option [value]="u.id">{{ u.fullname }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+      </div>
+      <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start center" class="offer-header">
+        <mat-form-field appearance="outline" class="new-form-element">
+          <mat-label>Lieferant</mat-label>
+          <mtx-select
+            bindValue="id"
+            bindLabel="displayable_name"
+            panelClass="mtx-select-panel-container"
+            notFoundText="Kein Lieferant gefunden"
+            typeToSearchText="Tippen um Lieferant zu suchen"
+            [minTermLength]="0"
+            [typeahead]="suppliersInput$"
+            formControlName="supplier"
+            [clearable]="false"
+            [addTag]="false"
+            [editableSearchTerm]="true"
+            [trackByFn]="trackByFnSupplier"
+            [loading]="suppliersLoading"
+            [items]="suppliers$|async"
+          ></mtx-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="new-form-element">
+          <mat-label>Komission</mat-label>
+          <mtx-select
+            bindValue="id"
+            bindLabel="displayable_name"
+            panelClass="mtx-select-panel-container"
+            notFoundText="Keine Kommision gefunden"
+            typeToSearchText="Tippen um Kommision zu suchen"
+            [minTermLength]="3"
+            [typeahead]="commissionInput$"
+            formControlName="commission"
+            [clearable]="false"
+            [addTag]="false"
+            [editableSearchTerm]="true"
+            [trackByFn]="trackByFnCommission"
+            [loading]="jobsLoading || stocksLoading"
+            [items]="commissions$|async"
+          ></mtx-select>
+        </mat-form-field>
+      </div>
+    </form>
+    <div class="bundle-list">
+      @if (orders$|async; as orders) {
+        @for (order of orders; track order.id) {
+          <div class="order-bundle">
+            <div class="supplier-orderer-date">
+              <span class="supplier">{{ order.order_from.displayable_name }}</span>
+              <div class="orderer-date">
+                <span>{{ order.user.fullname }}
+                  &bullet; {{ dayjs(order.create_date).format("DD.MM.YYYY, HH:mm") }}</span>
+              </div>
+            </div>
+            <div class="price-open">
+              <span class="price">1.230 €</span>
+              @if (order.id % 10 === 0) {
+                <span class="open">1 offen</span>
+              }
+            </div>
+          </div>
+        }
+      }
+    </div>
+  </div>
+  <div>
+    <span>hi</span>
+  </div>
+</div>
