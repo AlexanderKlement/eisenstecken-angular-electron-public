@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>Verlauf</h1>
+<div mat-dialog-content>
+  @if (loading$ | async) {
+    <div class="spinner-container">
+      <mat-spinner></mat-spinner>
+    </div>
+  } @else {
+    <span>hier kommt verlauf</span>
+  }
+</div>
+<mat-dialog-actions>
+  <div fxLayout="row" fxFlexFill fxLayoutAlign="space-between center">
+    <div></div>
+    <button type="button" mat-raised-button color="accent" (click)="onCancelClick()">Schließen</button>
+  </div>
+</mat-dialog-actions>

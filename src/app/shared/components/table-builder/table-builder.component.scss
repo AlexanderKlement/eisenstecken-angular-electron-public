@@ -9,6 +9,96 @@
   }
 }
 
+.table-row, .mat-mdc-header-row {
+  &.cell-f-2 {
+    --cell-flex: 2;
+  }
+
+  &.cell-f-3 {
+    --cell-flex: 3;
+  }
+
+  &.cell-f-2-alt {
+    --cell-flex-alt: 2;
+  }
+
+  &.cell-f-3-alt {
+    --cell-flex-alt: 3;
+  }
+
+  &.cell-1-f {
+    > .mat-mdc-cell:nth-child(1), > .mat-mdc-header-cell:nth-child(1) {
+      flex: var(--cell-flex);
+    }
+  }
+
+  &.cell-2-f {
+    > .mat-mdc-cell:nth-child(2), > .mat-mdc-header-cell:nth-child(2) {
+      flex: var(--cell-flex);
+    }
+  }
+
+  &.cell-3-f {
+    > .mat-mdc-cell:nth-child(3), > .mat-mdc-header-cell:nth-child(3) {
+      flex: var(--cell-flex);
+    }
+  }
+
+  &.cell-4-f {
+    > .mat-mdc-cell:nth-child(4), > .mat-mdc-header-cell:nth-child(4) {
+      flex: var(--cell-flex);
+    }
+  }
+
+  &.cell-5-f {
+    > .mat-mdc-cell:nth-child(5), > .mat-mdc-header-cell:nth-child(5) {
+      flex: var(--cell-flex);
+    }
+  }
+
+  &.cell-6-f {
+    > .mat-mdc-cell:nth-child(6), > .mat-mdc-header-cell:nth-child(6) {
+      flex: var(--cell-flex);
+    }
+  }
+
+  &.cell-1-f-alt {
+    > .mat-mdc-cell:nth-child(1), > .mat-mdc-header-cell:nth-child(1) {
+      flex: var(--cell-flex-alt);
+    }
+  }
+
+  &.cell-2-f-alt {
+    > .mat-mdc-cell:nth-child(2), > .mat-mdc-header-cell:nth-child(2) {
+      flex: var(--cell-flex-alt);
+    }
+  }
+
+  &.cell-3-f-alt {
+    > .mat-mdc-cell:nth-child(3), > .mat-mdc-header-cell:nth-child(3) {
+      flex: var(--cell-flex-alt);
+    }
+  }
+
+  &.cell-4-f-alt {
+    > .mat-mdc-cell:nth-child(4), > .mat-mdc-header-cell:nth-child(4) {
+      flex: var(--cell-flex-alt);
+    }
+  }
+
+  &.cell-5-f-alt {
+    > .mat-mdc-cell:nth-child(5), > .mat-mdc-header-cell:nth-child(5) {
+      flex: var(--cell-flex-alt);
+    }
+  }
+
+  &.cell-6-f-alt {
+    > .mat-mdc-cell:nth-child(6), > .mat-mdc-header-cell:nth-child(6) {
+      flex: var(--cell-flex-alt);
+    }
+  }
+}
+
 .mat-mdc-table {
   border-collapse: separate !important;
   border-spacing: 0 4px !important;
@@ -25,6 +115,10 @@
 
 .mt-6 {
   margin-top: 6px;
+}
+
+.actions {
+  justify-content: flex-end;
 }
 
 .actions {

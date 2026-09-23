@@ -66,13 +66,39 @@
           </mat-header-cell>
         }
         <mat-cell *matCellDef="let element">
-          {{ element.values[column.name] }}
+          @if (column.asInput) {
+            @if (column.asInput.type === "select-autocomplete") {
+              <mat-form-field appearance="outline" class="new-form-element">
+                <mat-label>{{ column.asInput.label }}</mat-label>
+                <mtx-select
+                  bindValue="id"
+                  bindLabel="displayable_name"
+                  panelClass="mtx-select-panel-container"
+                  notFoundText="Nichts gefunden"
+                  typeToSearchText="Tippen um zu suchen"
+                  [minTermLength]="3"
+                  [typeahead]="column.asInput.typeahead"
+                  (change)="column.asInput.onChange($event, element.values['id'])"
+                  [clearable]="false"
+                  [addTag]="false"
+                  [editableSearchTerm]="true"
+                  [trackByFn]="column.asInput.trackByFunc"
+                  [loading]="column.asInput.loading()"
+                  [items]="(column.asInput.items|async).concat(element.values[column.name] ? [element.values[column.name]] : [])"
+                  [value]="element.values[column.name]?.id"
+                >
+                </mtx-select>
+              </mat-form-field>
+            }
+          } @else {
+            {{ element.values[column.name] }}
+          }
         </mat-cell>
       </ng-container>
     }
     @if (buttons.length > 0) {
       <ng-container matColumnDef="actions">
-        <mat-header-cell *matHeaderCellDef class="actions">Aktionen</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef [class.actions]="!buttonsLeft">{{ buttonsTitle }}</mat-header-cell>
         <mat-cell *matCellDef="let element" class="actions">
           @for (button of buttons; track button; ) {
             @if (typeof button.name(element.values['condition']) === "string") {
@@ -102,7 +128,8 @@
         </mat-cell>
       </ng-container>
     }
-    <mat-header-row *matHeaderRowDef="dataSource.columnIdentifiers; sticky: true"></mat-header-row>
+    <mat-header-row [class]="headerRowClass"
+                    *matHeaderRowDef="dataSource.columnIdentifiers; sticky: true"></mat-header-row>
     <mat-row
       cdkDrag
       cdkDragBoundary=".draggable-list"

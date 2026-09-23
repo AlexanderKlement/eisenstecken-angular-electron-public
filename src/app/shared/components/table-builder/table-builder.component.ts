@@ -48,6 +48,7 @@ import { MatSort, MatSortHeader } from "@angular/material/sort";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatIcon } from "@angular/material/icon";
 import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList } from "@angular/cdk/drag-drop";
+import { MtxSelect } from "@ng-matero/extensions/select";
 
 export interface TableButtonIcon {
   icon: string;
@@ -97,7 +98,8 @@ type AnyApi = DefaultService | RecalculationService | ArticleService | OrderServ
     MatIconButton,
     CdkDropList,
     CdkDrag,
-    CdkDragHandle
+    CdkDragHandle,
+    MtxSelect
   ]
 })
 
@@ -108,7 +110,10 @@ export class TableBuilderComponent<T extends DataSourceClass, A extends AnyApi =
   @Input({ transform: booleanAttribute }) noSearch?: boolean = false;
   @Input({ transform: booleanAttribute }) noPagination?: boolean = false;
   @Input({ transform: booleanAttribute }) dragNDrop?: boolean = false;
+  @Input({ transform: booleanAttribute }) buttonsLeft?: boolean = false;
   @Input() buttons?: TableButton[] = [];
+  @Input() buttonsTitle?: string = "Aktionen";
+  @Input() headerRowClass?: string;
   @Input() headerButtons?: TableButton[] = [];
   @Input() $refresh?: Observable<void>;
   @ViewChild(MatPaginator) paginator: MatPaginator;

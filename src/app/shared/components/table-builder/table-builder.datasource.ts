@@ -1,5 +1,5 @@
 import { CollectionViewer, DataSource } from "@angular/cdk/collections";
-import { BehaviorSubject, Observable, of } from "rxjs";
+import { BehaviorSubject, Observable, of, Subject } from "rxjs";
 import { catchError, finalize, map } from "rxjs/operators";
 import { DataSourceClass } from "../../types";
 import { MatPaginatorIntl } from "@angular/material/paginator";
@@ -13,10 +13,31 @@ import {
 } from "../../../../api/openapi";
 import { Sort } from "@angular/material/sort";
 import { moveItemInArray } from "@angular/cdk/drag-drop";
+import { MatSelectChange } from "@angular/material/select";
+
+export type InputSettings = { placeholder?: string, label?: string } & ({
+  type: "text",
+  onChange: (value: string, id: number | string) => void,
+} | {
+  type: "number",
+  onChange: (value: number, id: number | string) => void,
+} | {
+  type: "select",
+  items: { id: number, displayable_name: string }[],
+  onChange: ($event: MatSelectChange<number>) => void,
+} | {
+  type: "select-autocomplete",
+  typeahead: Subject<string>,
+  onChange: ($event: any, id: number | string) => void,
+  items: Observable<{ id: number, displayable_name: string }[]>,
+  loading: () => boolean,
+  trackByFunc: (val: any) => string,
+})
 
 export interface Column<T> {
   name: string; // RecursiveKeyOf<T>; Maybe this is better this way
   sortable?: boolean;
+  asInput?: InputSettings;
   headerName: string;
 }
 

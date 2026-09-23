@@ -10,7 +10,6 @@
         @if (users$|async; as users) {
           <mat-form-field appearance="outline" class="new-form-element">
             <mat-label>Besteller</mat-label>
-
             <mat-select formControlName="orderer">
               @for (u of users; track u.id) {
                 <mat-option [value]="u.id">{{ u.fullname }}</mat-option>
@@ -50,7 +49,7 @@
             [minTermLength]="3"
             [typeahead]="commissionInput$"
             formControlName="commission"
-            [clearable]="false"
+            [clearable]="true"
             [addTag]="false"
             [editableSearchTerm]="true"
             [trackByFn]="trackByFnCommission"
@@ -63,7 +62,7 @@
     <div class="bundle-list">
       @if (orders$|async; as orders) {
         @for (order of orders; track order.id) {
-          <div class="order-bundle">
+          <div class="order-bundle" (click)="setSelectedOrder(order)">
             <div class="supplier-orderer-date">
               <span class="supplier">{{ order.order_from.displayable_name }}</span>
               <div class="orderer-date">
@@ -72,7 +71,7 @@
               </div>
             </div>
             <div class="price-open">
-              <span class="price">1.230 €</span>
+              <span class="price">1.230,00 €</span>
               @if (order.id % 10 === 0) {
                 <span class="open">1 offen</span>
               }
@@ -82,7 +81,33 @@
       }
     </div>
   </div>
-  <div>
-    <span>hi</span>
+  <div class="selected-order">
+    @if (selectedOrder) {
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <h3>{{ selectedOrder.order_from.displayable_name }}</h3>
+        <h3>1815,00 €</h3>
+      </div>
+      <div fxLayout="column">
+      <span class="neutral">
+        {{ selectedOrder.user.fullname }}
+        &bullet; {{ dayjs(selectedOrder.create_date).format("DD.MM.YYYY, HH:mm") }}
+      </span>
+        <span class="neutral">
+        Lieferdatum: {{ dayjs(selectedOrder.delivery_date).format("DD.MM.YYYY, HH:mm") }}
+      </span>
+      </div>
+      @if (articlesDataSource) {
+        @if (loading$|async) {
+          <div class="spinner-container">
+            <mat-spinner></mat-spinner>
+          </div>
+        } @else {
+          <app-table-builder [dataSource]="articlesDataSource" [buttons]="articleButtons"
+                             buttonsTitle="Verlauf"
+                             headerRowClass="cell-f-2 cell-f-3-alt cell-1-f-alt cell-5-f"></app-table-builder>
+        }
+
+      }
+    }
   </div>
 </div>
