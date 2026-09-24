@@ -5,6 +5,7 @@ import {
   Order,
   OrderBundle,
   OrderBundleService,
+  OrderedArticleService,
   Stock,
   Supplier,
   User
@@ -20,10 +21,13 @@ import { AsyncPipe, formatCurrency } from "@angular/common";
 import { MtxSelect } from "@ng-matero/extensions/select";
 import dayjs from "dayjs/esm";
 import { TableDataSource } from "../../../shared/components/table-builder/table-builder.datasource";
-import { TableBuilderComponent, TableButton } from "../../../shared/components/table-builder/table-builder.component";
+import { TableBuilderComponent } from "../../../shared/components/table-builder/table-builder.component";
 import { MatDialog } from "@angular/material/dialog";
 import { ShopOrderHistoryComponent } from "../shop-order-history/shop-order-history/shop-order-history.component";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { MatIconButton } from "@angular/material/button";
+import { MatIcon } from "@angular/material/icon";
+import { Router } from "@angular/router";
 
 type OrderBundleFilter = {
   commission: FormControl<number>;
@@ -47,7 +51,9 @@ type OrderBundleFilter = {
     MatOption,
     MtxSelect,
     TableBuilderComponent,
-    MatProgressSpinner
+    MatProgressSpinner,
+    MatIconButton,
+    MatIcon
   ],
   templateUrl: "./shop-orders.component.html",
   styleUrl: "./shop-orders.component.scss"
@@ -55,11 +61,12 @@ type OrderBundleFilter = {
 export class ShopOrdersComponent implements OnInit {
   private api = inject(DefaultService);
   private orderBundleService = inject(OrderBundleService);
+  private orderedArticleService = inject(OrderedArticleService);
   private dialog = inject(MatDialog);
+  private router = inject(Router);
   private authService = inject(AuthStateService);
   selectedOrder: OrderBundle | undefined;
   articlesDataSource: TableDataSource<Order, DefaultService> | undefined;
-  articleButtons: TableButton[] | undefined;
 
   private loadingSubject = new BehaviorSubject<boolean>(false);
   public loading$ = this.loadingSubject.asObservable();
@@ -117,8 +124,7 @@ export class ShopOrdersComponent implements OnInit {
   ngOnInit() {
     this.users$ = this.api.readUsersUsersGet(0, undefined, 100);
     this.filterForm.valueChanges.subscribe(() => {
-      console.log("value-changed");
-      this.orders$ = this.orderBundleService.findShopOrderBundleOrderBundleV2ShopSearchGet(this.filterForm.get("year").value, this.filterForm.get("orderer").value);
+      this.orders$ = this.orderBundleService.searchShop(this.filterForm.get("year").value, this.filterForm.get("orderer").value);
     });
     this.authService.getCurrentUser().pipe(first()).subscribe((user) => {
       this.filterForm.patchValue({ orderer: user.id }, { emitEvent: true });
@@ -129,27 +135,6 @@ export class ShopOrdersComponent implements OnInit {
 
   protected setSelectedOrder(order: OrderBundle) {
     this.selectedOrder = order;
-    this.articleButtons = [{
-      name: (val) => {
-        return { icon: "info" };
-      },
-      class: () => {
-        return "";
-      },
-      color: () => {
-        return undefined;
-      },
-      navigate: ($event: PointerEvent, id) => {
-        console.log({ event: $event, id });
-        this.dialog.open(ShopOrderHistoryComponent, {
-          width: "400px",
-          data: {
-            data: id
-          }
-        });
-      },
-      selectedField: "id"
-    }];
     this.articlesDataSource = new TableDataSource(
       this.api,
       (api, filter, sortDirection, skip, limit) =>
@@ -161,7 +146,7 @@ export class ShopOrdersComponent implements OnInit {
             rows.push(
               {
                 values: {
-                  id: `${article.id}#${order.id}`,
+                  id: article.id,
                   article: `${article.name.translation_de} ${article.modNumber}`,
                   amount: article.amount,
                   price: formatCurrency(article.price, "de-DE", "€"),
@@ -171,7 +156,8 @@ export class ShopOrdersComponent implements OnInit {
                 },
                 rowClass: "cell-f-2 cell-f-3-alt cell-1-f-alt cell-5-f",
                 route: () => {
-                  // TODO
+                  //this.router.navigateByUrl("order/" + order.id);
+
                 }
               }
             );
@@ -197,14 +183,12 @@ export class ShopOrdersComponent implements OnInit {
             label: "Neue Komission",
             onChange: ($event, id) => {
               const jobSupplier: Job | Supplier = $event;
-              const articleId = id.toString().split("#")[0];
-              const orderId = id.toString().split("#")[1];
+              const articleId = typeof id === "string" ? parseInt(id, 10) : id;
               this.loadingSubject.next(true);
-              this.api.moveOrderedArticlesOrderMoveOldOrderIdNewOrderableToIdPost(parseInt(orderId, 10), jobSupplier.id, [parseInt(articleId, 10)]).pipe(first()).subscribe((res) => {
+              this.orderedArticleService.moveOrderedArticle(articleId, jobSupplier.id).pipe(first()).subscribe((res) => {
                 this.loadingSubject.next(false);
                 this.articlesDataSource.loadData();
               });
-              console.log({ event: $event, id });
             }
           }, headerName: "Komission"
         }
@@ -212,5 +196,16 @@ export class ShopOrdersComponent implements OnInit {
       (api) => api.readOrdersByOrderBundleOrderBundleOrdersOrderBundleIdCountGet(order.id)
     );
     this.articlesDataSource.loadData();
+  }
+
+  onOpenHistory() {
+    if (this.selectedOrder) {
+      this.dialog.open(ShopOrderHistoryComponent, {
+        width: "800px",
+        data: {
+          orderBundleId: this.selectedOrder.id
+        }
+      });
+    }
   }
 }

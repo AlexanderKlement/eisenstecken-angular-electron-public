@@ -14,15 +14,18 @@ import {
   DefaultService,
   OrderableType,
   OrderedArticle,
-  OrderedArticleSmall
+  OrderedArticleSmall,
+  OrderService
 } from "../../api/openapi";
 import { DefaultFlexDirective, DefaultLayoutAlignDirective, DefaultLayoutDirective, FlexModule } from "ng-flex-layout";
 import {
   FilterableClickableListComponent
 } from "../shared/components/filterable-clickable-list/filterable-clickable-list.component";
 import { ProductsListComponent } from "./available-products-list/products-list.component";
-import { MatTab, MatTabGroup } from "@angular/material/tabs";
+import { MatTab, MatTabGroup, MatTabLabel } from "@angular/material/tabs";
 import { ShopOrdersComponent } from "./shop-order/shop-orders/shop-orders.component";
+import { MatBadge } from "@angular/material/badge";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
   selector: "app-order",
@@ -38,12 +41,16 @@ import { ShopOrdersComponent } from "./shop-order/shop-orders/shop-orders.compon
     ProductsListComponent,
     MatTab,
     MatTabGroup,
-    ShopOrdersComponent
+    ShopOrdersComponent,
+    MatBadge,
+    MatTabLabel,
+    AsyncPipe
   ]
 })
 export default class OrderComponent implements OnInit {
   private api = inject(DefaultService);
   private articleService = inject(ArticleService);
+  private orderBundleService = inject(OrderService);
   private router = inject(Router);
 
   toListName = "Bestelle für Aufträge oder Lager";
@@ -57,7 +64,7 @@ export default class OrderComponent implements OnInit {
   fromList$: Observable<ListItem[]>;
   fromListSubscriber: Subscriber<ListItem[]>;
   fromListSelected?: ListItem;
-
+  unmatchedOrderCount$: Observable<number>;
   availableProductListName = "Verfügbare Artikel";
   availableProducts$: Observable<Article[]>;
   availableProductsSubscriber: Subscriber<Article[]>;
@@ -133,6 +140,7 @@ export default class OrderComponent implements OnInit {
         this.orderedProductsSubscriber = orderedProductsSubscriber;
       }
     );
+    this.unmatchedOrderCount$ = this.orderBundleService.unmatchedOrdersPerOrderer();
   }
 
   toggleChildren(listItem: ListItem): void {

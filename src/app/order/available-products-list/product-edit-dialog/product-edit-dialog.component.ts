@@ -11,7 +11,7 @@ import { MatButton } from "@angular/material/button";
 
 export type OrderDialogMode = "delete" | "save" | "add";
 
-export interface OrderDialogBaseData {
+interface OrderDialogBaseData {
   name: string;
   amount: number;
   unitId: number;

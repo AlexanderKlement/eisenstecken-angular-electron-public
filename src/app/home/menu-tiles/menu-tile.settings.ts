@@ -9,7 +9,7 @@ export interface MenuTileDetail {
   isDuplicate?: boolean;
 }
 
-export const availableMenuTiles: MenuTileDetail[] = [
+const availableMenuTiles: MenuTileDetail[] = [
   { title: "Kunden", icon: "group", link: "/client", requiredScope: ScopeEnum.Office },
   { title: "Aufträge", icon: "domain", link: "/job", requiredScope: ScopeEnum.Office },
   { title: "Nachkalkulation", icon: "calculate", link: "/recalculation", requiredScope: ScopeEnum.Office },

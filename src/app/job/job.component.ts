@@ -50,7 +50,7 @@ export default class JobComponent implements OnInit {
     {
       name: "Angenommen Aufträge - PDF generieren",
       navigate: (): void => {
-        this.api.generateJobPdfJobPdfPost().subscribe((pdf) => {
+        this.api.generateJobsPdfJobPdfPost().subscribe((pdf) => {
           this.file.open(pdf).then();
         });
       }

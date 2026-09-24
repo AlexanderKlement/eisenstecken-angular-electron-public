@@ -33,6 +33,17 @@
       </div>
     </mat-tab>
     <mat-tab label="Shop-Bestellung">
+      @if (unmatchedOrderCount$|async; as unmatched) {
+        @if (unmatched !== 0) {
+          <ng-template mat-tab-label>
+        <span matBadgeOverlap="false"
+              matBadgeDescription="Bestellungen ohne Komission"
+              matBadgeColor="warn"
+              [matBadge]="unmatched"
+              matBadgePosition="above after">Shop-Bestellung</span>
+          </ng-template>
+        }
+      }
       <app-shop-orders />
     </mat-tab>
   </mat-tab-group>

@@ -8,26 +8,19 @@
  * Do not edit the class manually.
  */
 import { Payment } from './payment';
-import { Lock } from './lock';
+import { UserEssential } from './userEssential';
 
 
-export interface IngoingInvoice { 
-    cf: string;
-    date: string;
-    date_formatted: string;
+export interface Liability { 
+    amount: number;
+    created_at: string;
+    due_date: string;
     id: number;
-    iva: string;
-    lock: Lock;
     name: string;
-    number: string;
     open_amount: number;
     paid: boolean;
     paid_sum: number;
-    payment_date: string;
     payments: Array<Payment>;
-    timestamp: string;
-    total: number;
-    xml?: string | null;
-    xml_server?: string | null;
+    user: UserEssential;
 }
 

@@ -19,6 +19,7 @@ import {
   OrderBundle,
   OrderBundleCreate,
   OrderBundleService,
+  OrderBundleSource,
   OrderSmall,
   ScopeEnum,
   Supplier
@@ -234,6 +235,7 @@ export default class SupplierDetailComponent implements OnInit {
               values: {
                 create_date: dayjs(dataSource.create_date).format("L"),
                 delivery_date: dayjs(dataSource.delivery_date).format("L"),
+                type: dataSource.source === OrderBundleSource.Manually ? "Manuell" : "Online",
                 "user.fullname": dataSource.user.fullname
               },
               route: () => {
@@ -246,6 +248,7 @@ export default class SupplierDetailComponent implements OnInit {
       [
         { name: "create_date", headerName: "Bestelldatum" },
         { name: "delivery_date", headerName: "Lieferdatum" },
+        { name: "type", headerName: "Typ" },
         { name: "user.fullname", headerName: "Bestellt von" }
       ],
       (api) => api.readCountOfOrderBundleBySupplierAndStatusOrderBundleSupplierSupplierIdCountGet(supplierId, "ORDERED")
@@ -263,6 +266,7 @@ export default class SupplierDetailComponent implements OnInit {
                 create_date: dayjs(dataSource.create_date).format("L"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 delivery_date: dayjs(dataSource.delivery_date).format("L"),
+                type: dataSource.source === OrderBundleSource.Manually ? "Manuell" : "Online",
                 "user.fullname": dataSource.user.fullname
               },
               route: () => {
@@ -275,6 +279,7 @@ export default class SupplierDetailComponent implements OnInit {
       [
         { name: "create_date", headerName: "Bestelldatum" },
         { name: "delivery_date", headerName: "Lieferdatum" },
+        { name: "type", headerName: "Typ" },
         { name: "user.fullname", headerName: "Bestellt von" }
       ],
       (api) => api.readCountOfOrderBundleBySupplierAndStatusOrderBundleSupplierSupplierIdCountGet(supplierId, "DELIVERED")
@@ -293,6 +298,7 @@ export default class SupplierDetailComponent implements OnInit {
                 create_date: dayjs(dataSource.create_date).format("L"),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 delivery_date: dayjs(dataSource.delivery_date).format("L"),
+                type: dataSource.source === OrderBundleSource.Manually ? "Manuell" : "Online",
                 "user.fullname": dataSource.user.fullname
               },
               route: () => {
@@ -305,6 +311,7 @@ export default class SupplierDetailComponent implements OnInit {
       [
         { name: "create_date", headerName: "Bestelldatum" },
         { name: "delivery_date", headerName: "Lieferdatum" },
+        { name: "type", headerName: "Typ" },
         { name: "user.fullname", headerName: "Bestellt von" }
       ],
       (api) => api.readCountOfOrderBundleBySupplierAndStatusOrderBundleSupplierSupplierIdCountGet(supplierId, undefined, true)

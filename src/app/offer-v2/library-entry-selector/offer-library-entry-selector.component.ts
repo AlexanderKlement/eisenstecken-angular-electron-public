@@ -14,7 +14,7 @@ export declare type LibraryEntryDropDownItem = {
   price: number;
 }
 
-export function libraryEntryToString(entry: OfferLibraryEntry): string {
+function libraryEntryToString(entry: OfferLibraryEntry): string {
   return `${entry.name} ${formatCurrency(entry.price, "de-DE", "€").replace(" ", "")}${entry.unit ? "/" : ""}${entry.unit?.short}`;
 }
 

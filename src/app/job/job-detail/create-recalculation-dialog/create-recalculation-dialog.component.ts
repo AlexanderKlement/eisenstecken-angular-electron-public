@@ -1,6 +1,12 @@
 import { Component, inject } from "@angular/core";
 import { DefaultService, Job } from "../../../../api/openapi";
-import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from "@angular/material/dialog";
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle
+} from "@angular/material/dialog";
 import { shareReplay, tap } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { MatCheckbox } from "@angular/material/checkbox";
@@ -14,14 +20,14 @@ export interface CreateRecalculationDialogData {
   jobId: number;
 }
 
-export interface CreateRecalculationDialogResult {
+interface CreateRecalculationDialogResult {
   jobIds: number[];
   materialChargePercent: number;
   name: string;
 }
 
 @Component({
-  selector: 'app-create-recalculation-dialog',
+  selector: "app-create-recalculation-dialog",
   imports: [
     MatCheckbox,
     MatTree,
@@ -39,31 +45,31 @@ export interface CreateRecalculationDialogResult {
     MatInput,
     MatDialogActions
   ],
-  templateUrl: './create-recalculation-dialog.component.html',
-  styleUrl: './create-recalculation-dialog.component.scss'
+  templateUrl: "./create-recalculation-dialog.component.html",
+  styleUrl: "./create-recalculation-dialog.component.scss"
 })
 export class CreateRecalculationDialogComponent {
   private api = inject(DefaultService);
   dialogRef = inject<MatDialogRef<CreateRecalculationDialogComponent>>(MatDialogRef);
   data = inject<CreateRecalculationDialogData>(MAT_DIALOG_DATA);
 
-  title = "Nachkalkulation erstellen"
+  title = "Nachkalkulation erstellen";
   mainSelected = true;
   subSelected = new Set<number>();
 
   materialChargePercentCtrl = new FormControl<number>(10, {
     nonNullable: true,
-    validators: [Validators.required, Validators.min(0)],
+    validators: [Validators.required, Validators.min(0)]
   });
 
   nameCtrl = new FormControl<string>("Alle", {
     nonNullable: true,
-    validators: [Validators.required],
+    validators: [Validators.required]
   });
 
   form = new FormGroup({
     materialChargePercent: this.materialChargePercentCtrl,
-    name: this.nameCtrl,
+    name: this.nameCtrl
   });
 
   readonly job$: Observable<Job> = this.api
@@ -89,6 +95,7 @@ export class CreateRecalculationDialogComponent {
     if (this.subSelected.has(id)) this.subSelected.delete(id);
     else this.subSelected.add(id);
   }
+
   childrenAccessor = (node: Job): Job[] => node.sub_jobs ?? [];
 
   isMain = (_: number, node: Job) => node.is_main === true; // oder: !node.is_sub
@@ -109,12 +116,11 @@ export class CreateRecalculationDialogComponent {
     const result: CreateRecalculationDialogResult = {
       jobIds: Array.from(this.subSelected).concat(this.mainSelected ? [this.data.jobId] : []),
       materialChargePercent: this.materialChargePercentCtrl.value,
-      name: this.nameCtrl.value,
+      name: this.nameCtrl.value
     };
 
     this.dialogRef.close(result);
   }
-
 
 
 }

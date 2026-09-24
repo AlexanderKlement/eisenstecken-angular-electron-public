@@ -32,7 +32,9 @@ export interface OutgoingInvoice {
     lock: Lock;
     name: string;
     number: string;
+    open_amount: number;
     paid: boolean;
+    paid_sum: number;
     paymentTerms: PaymentTermEnum;
     payment_condition: string;
     payment_date: string;

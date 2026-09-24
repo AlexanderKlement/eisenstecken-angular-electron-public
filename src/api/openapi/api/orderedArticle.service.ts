@@ -109,6 +109,74 @@ export class OrderedArticleService extends BaseService {
     }
 
     /**
+     * Move Ordered Article
+     * @param orderedArticleId 
+     * @param targetOrderableId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public moveOrderedArticle(orderedArticleId: number, targetOrderableId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OrderedArticle>;
+    public moveOrderedArticle(orderedArticleId: number, targetOrderableId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OrderedArticle>>;
+    public moveOrderedArticle(orderedArticleId: number, targetOrderableId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OrderedArticle>>;
+    public moveOrderedArticle(orderedArticleId: number, targetOrderableId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (orderedArticleId === null || orderedArticleId === undefined) {
+            throw new Error('Required parameter orderedArticleId was null or undefined when calling moveOrderedArticle.');
+        }
+        if (targetOrderableId === null || targetOrderableId === undefined) {
+            throw new Error('Required parameter targetOrderableId was null or undefined when calling moveOrderedArticle.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>orderedArticleId, 'ordered_article_id');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>targetOrderableId, 'target_orderable_id');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (OAuth2PasswordBearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/ordered_article/v2/move`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<OrderedArticle>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Order Article
      * @param orderArticleCreateV2 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

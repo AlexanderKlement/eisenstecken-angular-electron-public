@@ -50,7 +50,7 @@ import { MatIcon } from "@angular/material/icon";
 import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList } from "@angular/cdk/drag-drop";
 import { MtxSelect } from "@ng-matero/extensions/select";
 
-export interface TableButtonIcon {
+interface TableButtonIcon {
   icon: string;
 }
 

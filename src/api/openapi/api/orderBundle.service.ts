@@ -22,6 +22,8 @@ import { HTTPValidationError } from '../model/hTTPValidationError';
 import { OrderBundle } from '../model/orderBundle';
 // @ts-ignore
 import { OrderBundleCreate } from '../model/orderBundleCreate';
+// @ts-ignore
+import { OrderBundleEvent } from '../model/orderBundleEvent';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -107,6 +109,63 @@ export class OrderBundleService extends BaseService {
     }
 
     /**
+     * Get Order Bundle History
+     * @param orderBundleId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getOrderBundleHistory(orderBundleId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OrderBundleEvent>>;
+    public getOrderBundleHistory(orderBundleId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OrderBundleEvent>>>;
+    public getOrderBundleHistory(orderBundleId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OrderBundleEvent>>>;
+    public getOrderBundleHistory(orderBundleId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (orderBundleId === null || orderBundleId === undefined) {
+            throw new Error('Required parameter orderBundleId was null or undefined when calling getOrderBundleHistory.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (OAuth2PasswordBearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/order_bundle/v2/${this.configuration.encodeParam({name: "orderBundleId", value: orderBundleId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}/history`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<OrderBundleEvent>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Find Shop Order Bundle
      * @param year 
      * @param ordererId 
@@ -117,15 +176,15 @@ export class OrderBundleService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findShopOrderBundleOrderBundleV2ShopSearchGet(year: number, ordererId: number, supplierId?: number, commissionId?: number, skip?: number, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OrderBundle>>;
-    public findShopOrderBundleOrderBundleV2ShopSearchGet(year: number, ordererId: number, supplierId?: number, commissionId?: number, skip?: number, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OrderBundle>>>;
-    public findShopOrderBundleOrderBundleV2ShopSearchGet(year: number, ordererId: number, supplierId?: number, commissionId?: number, skip?: number, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OrderBundle>>>;
-    public findShopOrderBundleOrderBundleV2ShopSearchGet(year: number, ordererId: number, supplierId?: number, commissionId?: number, skip?: number, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public searchShop(year: number, ordererId: number, supplierId?: number, commissionId?: number, skip?: number, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<OrderBundle>>;
+    public searchShop(year: number, ordererId: number, supplierId?: number, commissionId?: number, skip?: number, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<OrderBundle>>>;
+    public searchShop(year: number, ordererId: number, supplierId?: number, commissionId?: number, skip?: number, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<OrderBundle>>>;
+    public searchShop(year: number, ordererId: number, supplierId?: number, commissionId?: number, skip?: number, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (year === null || year === undefined) {
-            throw new Error('Required parameter year was null or undefined when calling findShopOrderBundleOrderBundleV2ShopSearchGet.');
+            throw new Error('Required parameter year was null or undefined when calling searchShop.');
         }
         if (ordererId === null || ordererId === undefined) {
-            throw new Error('Required parameter ordererId was null or undefined when calling findShopOrderBundleOrderBundleV2ShopSearchGet.');
+            throw new Error('Required parameter ordererId was null or undefined when calling searchShop.');
         }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});

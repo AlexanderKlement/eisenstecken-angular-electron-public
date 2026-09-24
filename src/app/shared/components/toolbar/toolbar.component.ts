@@ -10,7 +10,7 @@ import { CircleIconButtonComponent } from "../circle-icon-button/circle-icon-but
 import { MatMenu, MatMenuItem, MatMenuTrigger } from "@angular/material/menu";
 import { MatIcon } from "@angular/material/icon";
 
-export interface CustomButtonWithoutDropdown {
+interface CustomButtonWithoutDropdown {
   name: string;
   navigate: VoidFunction;
   error?: boolean;

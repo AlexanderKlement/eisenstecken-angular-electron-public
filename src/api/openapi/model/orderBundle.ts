@@ -9,6 +9,7 @@
  */
 import { UserEssential } from './userEssential';
 import { Orderable } from './orderable';
+import { OrderBundleSource } from './orderBundleSource';
 import { Lock } from './lock';
 
 
@@ -24,6 +25,10 @@ export interface OrderBundle {
     pdf_external?: string | null;
     pdf_internal?: string | null;
     request: boolean;
+    source: OrderBundleSource;
     user: UserEssential;
 }
+export namespace OrderBundle {
+}
+
 

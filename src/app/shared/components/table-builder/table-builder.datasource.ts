@@ -15,7 +15,7 @@ import { Sort } from "@angular/material/sort";
 import { moveItemInArray } from "@angular/cdk/drag-drop";
 import { MatSelectChange } from "@angular/material/select";
 
-export type InputSettings = { placeholder?: string, label?: string } & ({
+type InputSettings = { placeholder?: string, label?: string } & ({
   type: "text",
   onChange: (value: string, id: number | string) => void,
 } | {
@@ -48,7 +48,7 @@ export interface Row<T> {
   rowClass?: string;
 }
 
-export const defaultValues = {
+const defaultValues = {
   filter: "",
   sortDirection: "asc",
   pageIndex: 0,
@@ -99,7 +99,6 @@ export type LoadFunction<T, A> = (
 ) => Observable<T[]>;
 
 export type AmountFunction<A> = (api: A) => Observable<number>;
-export type SortFunction<A> = (a: A, b: A) => number;
 
 export type ParseFunction<T extends DataSourceClass> = (
   dataSourceClasses: T[]

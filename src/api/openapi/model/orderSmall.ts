@@ -23,7 +23,7 @@ export interface OrderSmall {
     id: number;
     lock: Lock;
     order_from: Orderable;
-    order_to: Orderable;
+    order_to: Orderable | null;
     pdf?: string | null;
     status: OrderStatusType;
     status_translation: string;

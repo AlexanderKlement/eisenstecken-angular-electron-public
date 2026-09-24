@@ -1,26 +1,26 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from "@angular/core";
 import {
   MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialogTitle,
-  MatDialogContent,
   MatDialogActions,
-} from '@angular/material/dialog';
-import { MatSelectionList, MatListOption, MatList, MatListItem } from '@angular/material/list';
-import { combineLatest, Observable } from 'rxjs';
-import { first, map } from 'rxjs/operators';
-import { DefaultService, Job, Stock, OrderedArticle, OrderableType } from '../../../../api/openapi';
-import { DefaultLayoutDirective, DefaultLayoutAlignDirective } from 'ng-flex-layout';
-import { MatStepper, MatStep, MatStepLabel, MatStepperNext, MatStepperPrevious } from '@angular/material/stepper';
-import { MatButton } from '@angular/material/button';
-import { AsyncPipe } from '@angular/common';
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle
+} from "@angular/material/dialog";
+import { MatList, MatListItem, MatListOption, MatSelectionList } from "@angular/material/list";
+import { combineLatest, Observable } from "rxjs";
+import { first, map } from "rxjs/operators";
+import { DefaultService, Job, OrderableType, OrderedArticle, Stock } from "../../../../api/openapi";
+import { DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
+import { MatStep, MatStepLabel, MatStepper, MatStepperNext, MatStepperPrevious } from "@angular/material/stepper";
+import { MatButton } from "@angular/material/button";
+import { AsyncPipe } from "@angular/common";
 
 export interface OrderedArticleMoveDialogData {
   orderId: number;
 }
 
 
-export interface OrderedArticleReturnDialogData {
+interface OrderedArticleReturnDialogData {
   success: boolean;
 }
 
@@ -30,10 +30,10 @@ interface SimpleOrderable {
 }
 
 @Component({
-  selector: 'app-ordered-article-move-dialog',
-  templateUrl: './ordered-article-move-dialog.component.html',
-  styleUrls: ['./ordered-article-move-dialog.component.scss'],
-  imports: [MatDialogTitle, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatStepper, MatStep, MatStepLabel, MatSelectionList, MatListOption, MatButton, MatStepperNext, MatStepperPrevious, MatList, MatListItem, MatDialogActions, AsyncPipe],
+  selector: "app-ordered-article-move-dialog",
+  templateUrl: "./ordered-article-move-dialog.component.html",
+  styleUrls: ["./ordered-article-move-dialog.component.scss"],
+  imports: [MatDialogTitle, MatDialogContent, DefaultLayoutDirective, DefaultLayoutAlignDirective, MatStepper, MatStep, MatStepLabel, MatSelectionList, MatListOption, MatButton, MatStepperNext, MatStepperPrevious, MatList, MatListItem, MatDialogActions, AsyncPipe]
 })
 export class OrderedArticleMoveDialogComponent implements OnInit {
   dialogRef = inject<MatDialogRef<OrderedArticleMoveDialogComponent>>(MatDialogRef);
@@ -41,8 +41,8 @@ export class OrderedArticleMoveDialogComponent implements OnInit {
   private api = inject(DefaultService);
 
 
-  @ViewChild('articles') articlesSelected: MatSelectionList;
-  @ViewChild('orderable') orderableSelected: MatSelectionList;
+  @ViewChild("articles") articlesSelected: MatSelectionList;
+  @ViewChild("orderable") orderableSelected: MatSelectionList;
   orderedArticles$: Observable<OrderedArticle[]>;
   orderableTargets$: Observable<SimpleOrderable[]>;
 
@@ -54,7 +54,7 @@ export class OrderedArticleMoveDialogComponent implements OnInit {
 
   jobStock2SimpleOrderable = (element: Job | Stock): SimpleOrderable => ({
     id: element.id,
-    name: element.displayable_name,
+    name: element.displayable_name
   });
 
   checkSelections(): void {
@@ -64,7 +64,7 @@ export class OrderedArticleMoveDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.orderedArticles$ = this.api.readOrderOrderOrderIdGet(this.data.orderId).pipe(map(order => order.articles));
-    const jobs$ = this.api.readJobsJobGet(0, 1000, '', undefined, 'JOBSTATUS_ACCEPTED');
+    const jobs$ = this.api.readJobsJobGet(0, 1000, "", undefined, "JOBSTATUS_ACCEPTED");
     const stocks$ = this.api.readStocksStockGet();
     const order$ = this.api.readOrderOrderOrderIdGet(this.data.orderId);
     combineLatest([stocks$, jobs$, order$]).pipe(first()).subscribe(([stocks, jobs, order]) => {
@@ -85,7 +85,7 @@ export class OrderedArticleMoveDialogComponent implements OnInit {
       this.getSelectedOrderable(), this.getSelectedArticleIds())
       .pipe(first()).subscribe((result) => {
       const response: OrderedArticleReturnDialogData = {
-        success: result !== undefined,
+        success: result !== undefined
       };
       this.dialogRef.close(response);
     });

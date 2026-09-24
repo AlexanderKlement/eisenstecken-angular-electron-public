@@ -21,7 +21,7 @@ import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
 import { MatButton } from "@angular/material/button";
 
-export const timeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+const timeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const exampleDate = "07.07.1993";
   const startTime = control.get("start_time").value;
   const endTime = control.get("end_time").value;

@@ -1,12 +1,168 @@
 <h1 mat-dialog-title>Verlauf</h1>
 <div mat-dialog-content>
-  @if (loading$ | async) {
-    <div class="spinner-container">
-      <mat-spinner></mat-spinner>
-    </div>
-  } @else {
-    <span>hier kommt verlauf</span>
-  }
+  <section class="changelog" aria-label="Changelog">
+    <header class="changelog__header">
+      <div class="changelog__heading">
+        <h2 class="changelog__title">Verlauf</h2>
+        @if (!initialLoading() && !error()) {
+          <span class="changelog__count">{{ counts().all }} events</span>
+        }
+        <button
+          mat-icon-button
+          class="changelog__reload"
+          aria-label="Reload changelog"
+          matTooltip="Reload"
+          [disabled]="loading()"
+          (click)="reload()"
+        >
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+
+      <mat-chip-listbox
+        class="changelog__filters"
+        aria-label="Filter events"
+        [hideSingleSelectionIndicator]="true"
+        [value]="filter()"
+        (change)="setFilter($event.value)"
+      >
+        @for (f of filters; track f.value) {
+          <mat-chip-option [value]="f.value" [disabled]="f.value !== 'all' && counts()[f.value] === 0">
+            {{ f.label }}
+            <span class="changelog__chip-count">{{ counts()[f.value] }}</span>
+          </mat-chip-option>
+        }
+      </mat-chip-listbox>
+    </header>
+
+    <!-- Thin bar while reloading a list that is already shown -->
+    <mat-progress-bar
+      class="changelog__progress"
+      mode="indeterminate"
+      [class.changelog__progress--hidden]="!loading() || initialLoading()"
+    />
+
+    @if (error() && events().length === 0) {
+      <div class="changelog__state changelog__state--error" role="alert">
+        <mat-icon>cloud_off</mat-icon>
+        <p>The changelog couldn't be loaded. Check your connection and try again.</p>
+        <button mat-stroked-button (click)="reload()">
+          <mat-icon>refresh</mat-icon>
+          Try again
+        </button>
+      </div>
+    } @else if (initialLoading()) {
+      <div class="skeleton" aria-busy="true" aria-label="Loading changelog">
+        @for (i of [1, 2, 3]; track i) {
+          <div class="skeleton__row">
+            <span class="skeleton__dot"></span>
+            <span class="skeleton__card">
+            <span class="skeleton__line skeleton__line--title"></span>
+            <span class="skeleton__line"></span>
+          </span>
+          </div>
+        }
+      </div>
+    } @else {
+      @if (error()) {
+        <div class="changelog__inline-error" role="alert">
+          <mat-icon>error</mat-icon>
+          <span>Reload failed. Showing the last loaded changes.</span>
+          <button mat-button (click)="reload()">Try again</button>
+        </div>
+      }
+
+      @for (day of days(); track day.key) {
+        <div class="day">
+          <h3 class="day__label">{{ day.date | date: 'EEEE, d MMMM y' }}</h3>
+
+          <ol class="timeline">
+            @for (e of day.entries; track e.id; let last = $last) {
+              <li class="entry" [attr.data-tone]="e.tone" [class.entry--last]="last">
+                <div class="entry__rail" aria-hidden="true">
+                  <span class="entry__dot"><mat-icon>{{ e.icon }}</mat-icon></span>
+                </div>
+
+                <article class="entry__card">
+                  <div class="entry__head">
+                    <div class="entry__text">
+                      <span class="entry__title">{{ e.title }}</span>
+                      @if (e.subtitle) {
+                        <span class="entry__subtitle"><ng-container
+                          *ngTemplateOutlet="text; context: { $implicit: e.subtitle }" /></span>
+                      }
+                    </div>
+
+                    <div class="entry__meta">
+                      @if (e.user; as u) {
+                        <span class="entry__avatar" [matTooltip]="u.email">{{ e.initials }}</span>
+                        <span class="entry__user">{{ u.fullname }}</span>
+                      } @else {
+                        <span class="entry__avatar entry__avatar--system"><mat-icon>smart_toy</mat-icon></span>
+                        <span class="entry__user">System</span>
+                      }
+                      <time class="entry__time" [attr.datetime]="e.date.toISOString()"
+                            [matTooltip]="(e.date | date: 'medium') ?? ''">
+                        {{ e.date | date: 'HH:mm' }}
+                      </time>
+                    </div>
+                  </div>
+
+                  @if (e.diffs.length) {
+                    <dl class="diff">
+                      @for (d of e.diffs; track d.label) {
+                        <div class="diff__row">
+                          <dt class="diff__label">{{ d.label }}</dt>
+                          <dd class="diff__values">
+                        <span class="diff__old" [class.diff__empty]="d.old === null">
+                          @if (d.old) {
+                            <ng-container *ngTemplateOutlet="text; context: { $implicit: d.old }" />
+                          } @else {
+                            empty
+                          }
+                        </span>
+                            <mat-icon class="diff__arrow" aria-label="changed to">arrow_forward</mat-icon>
+                            <span class="diff__new" [class.diff__empty]="d.new === null">
+                          @if (d.new) {
+                            <ng-container *ngTemplateOutlet="text; context: { $implicit: d.new }" />
+                          } @else {
+                            empty
+                          }
+                        </span>
+                          </dd>
+                        </div>
+                      }
+                    </dl>
+                  }
+
+                  @if (e.fields.length) {
+                    <dl class="fields">
+                      @for (f of e.fields; track f.label) {
+                        <div class="fields__item">
+                          <dt>{{ f.label }}</dt>
+                          <dd>
+                            <ng-container *ngTemplateOutlet="text; context: { $implicit: f.value }" />
+                          </dd>
+                        </div>
+                      }
+                    </dl>
+                  }
+                </article>
+              </li>
+            }
+          </ol>
+        </div>
+      } @empty {
+        <div class="changelog__state">
+          <mat-icon>history_toggle_off</mat-icon>
+          <p>No changes recorded{{ filter() !== 'all' ? ' for this filter' : '' }}.</p>
+          @if (filter() !== 'all') {
+            <button mat-button (click)="setFilter('all')">Show all events</button>
+          }
+        </div>
+      }
+    }
+  </section>
 </div>
 <mat-dialog-actions>
   <div fxLayout="row" fxFlexFill fxLayoutAlign="space-between center">
@@ -14,3 +170,11 @@
     <button type="button" mat-raised-button color="accent" (click)="onCancelClick()">Schließen</button>
   </div>
 </mat-dialog-actions>
+
+<ng-template #text let-parts>@for (part of parts; track $index) {
+  @if (part.orderId != null) {
+    <app-commission-ref [orderId]="part.orderId" />
+  } @else {
+    <ng-container>{{ part.text }}</ng-container>
+  }
+}</ng-template>

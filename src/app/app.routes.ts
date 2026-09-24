@@ -9,13 +9,9 @@ import clientRoutes from "./client/client-routes";
 import recalculationRoutes from "./recalculation/recalculation-routes";
 import orderRoutes from "./order/order-routes";
 import settingsRoutes from "./settings/settings-routes";
-import mobileAppRoutes from "./mobile-app/mobile-app-routes";
 import invoiceRoutes from "./invoice/invoice-routes";
-import eventCalendarRoutes from "./calendar/event-calendar-routes";
 import debugRoutes from "./debug/debug-routes";
-import employeeRoutes from "./employee/employee-routes";
 import deliveryNotesRoutes from "./delivery-note/delivery-note-routes";
-import serviceRoutes from "./service/service-routes";
 import phoneBookRoutes from "./phone-book/phone-book-routes";
 import LoginComponent from "./login/login.component";
 import { PageNotFoundComponent } from "./shared/components";
@@ -54,13 +50,9 @@ export const routes: Routes = [
   ...recalculationRoutes,
   ...orderRoutes,
   ...settingsRoutes,
-  ...mobileAppRoutes,
   ...invoiceRoutes,
-  ...eventCalendarRoutes,
   ...debugRoutes,
-  ...employeeRoutes,
   ...deliveryNotesRoutes,
-  ...serviceRoutes,
   ...phoneBookRoutes,
   {
     path: "**",
