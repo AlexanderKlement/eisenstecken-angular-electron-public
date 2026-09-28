@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from "@angular/core";
 import { MatTooltipModule } from "@angular/material/tooltip";
-import { CommissionLookupService } from "./commission-lookup.service";
+import { OrderBundleLookupService } from "./order-bundle-lookup.service";
 
 /**
  * Shows "#1042" right away and swaps in the order's displayable name as soon as it
  * has been loaded. Falls back to "#1042" if the order can't be loaded.
  */
 @Component({
-  selector: "app-commission-ref",
+  selector: "app-order-bundle-ref",
   standalone: true,
   imports: [MatTooltipModule],
   template: `<span
@@ -34,12 +34,12 @@ import { CommissionLookupService } from "./commission-lookup.service";
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CommissionRefComponent {
-  private readonly commissions = inject(CommissionLookupService);
+export class OrderBundleRefComponent {
+  private readonly orderBundle = inject(OrderBundleLookupService);
 
   readonly orderId = input.required<number>();
 
-  readonly state = computed(() => this.commissions.get(this.orderId())());
+  readonly state = computed(() => this.orderBundle.get(this.orderId())());
 
   readonly label = computed(() => {
     const s = this.state();

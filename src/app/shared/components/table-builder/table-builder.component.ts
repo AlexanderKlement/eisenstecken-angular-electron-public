@@ -19,7 +19,7 @@ import { fromEvent, Observable, Subscription } from "rxjs";
 import { DataSourceClass } from "../../types";
 import { ThemePalette } from "@angular/material/core";
 import { DefaultFlexDirective, DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
-import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
+import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import {
   MatCell,
@@ -49,6 +49,14 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatIcon } from "@angular/material/icon";
 import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList } from "@angular/cdk/drag-drop";
 import { MtxSelect } from "@ng-matero/extensions/select";
+import { Dayjs } from "dayjs";
+import {
+  MatDatepicker,
+  MatDatepickerInput,
+  MatDatepickerInputEvent,
+  MatDatepickerToggle
+} from "@angular/material/datepicker";
+import dayjs from "dayjs/esm";
 
 interface TableButtonIcon {
   icon: string;
@@ -99,7 +107,11 @@ type AnyApi = DefaultService | RecalculationService | ArticleService | OrderServ
     CdkDropList,
     CdkDrag,
     CdkDragHandle,
-    MtxSelect
+    MtxSelect,
+    MatSuffix,
+    MatDatepickerInput,
+    MatDatepicker,
+    MatDatepickerToggle
   ]
 })
 
@@ -224,5 +236,20 @@ export class TableBuilderComponent<T extends DataSourceClass, A extends AnyApi =
     this.dataSource.moveItemInArray(event.previousIndex, event.currentIndex);
     this.dragNDropChanged = true;
     this.dragNDropDropped.emit(event);
+  }
+
+
+  protected onChangeText($event: Event, onChange: (value: string, id: (number | string)) => void, id: number | string) {
+    const input = $event.target as HTMLInputElement;
+    onChange(input.value, id);
+  }
+
+  protected onChangeNumber($event: Event, onChange: (value: number, id: (number | string)) => void, id: number | string) {
+    const input = $event.target as HTMLInputElement;
+    onChange(parseFloat(input.value), id);
+  }
+
+  protected onChangeDate($event: MatDatepickerInputEvent<any, any>, onChange: (value: Dayjs, id: (number | string)) => void, id: number | string) {
+    onChange(dayjs($event.value), id);
   }
 }

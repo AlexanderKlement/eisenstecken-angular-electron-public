@@ -47,13 +47,14 @@ export class LiabilityService extends BaseService {
      * @param paid 
      * @param dateFrom 
      * @param dateTo 
+     * @param ingoingInvoiceId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public countLiabilities(filterString?: string, paid?: boolean, dateFrom?: string, dateTo?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<number>;
-    public countLiabilities(filterString?: string, paid?: boolean, dateFrom?: string, dateTo?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<number>>;
-    public countLiabilities(filterString?: string, paid?: boolean, dateFrom?: string, dateTo?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<number>>;
-    public countLiabilities(filterString?: string, paid?: boolean, dateFrom?: string, dateTo?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public countLiabilities(filterString?: string, paid?: boolean, dateFrom?: string, dateTo?: string, ingoingInvoiceId?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<number>;
+    public countLiabilities(filterString?: string, paid?: boolean, dateFrom?: string, dateTo?: string, ingoingInvoiceId?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<number>>;
+    public countLiabilities(filterString?: string, paid?: boolean, dateFrom?: string, dateTo?: string, ingoingInvoiceId?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<number>>;
+    public countLiabilities(filterString?: string, paid?: boolean, dateFrom?: string, dateTo?: string, ingoingInvoiceId?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
@@ -64,6 +65,8 @@ export class LiabilityService extends BaseService {
           <any>dateFrom, 'date_from');
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
           <any>dateTo, 'date_to');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>ingoingInvoiceId, 'ingoing_invoice_id');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -234,6 +237,59 @@ export class LiabilityService extends BaseService {
     }
 
     /**
+     * Generate Open Liabilities Pdf
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public generateOpenLiabilitiesPdf(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<string>;
+    public generateOpenLiabilitiesPdf(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
+    public generateOpenLiabilitiesPdf(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
+    public generateOpenLiabilitiesPdf(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (OAuth2PasswordBearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/liability/pdf/open`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<string>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Read Liabilities
      * @param skip 
      * @param limit 
@@ -241,13 +297,14 @@ export class LiabilityService extends BaseService {
      * @param paid 
      * @param dateFrom 
      * @param dateTo 
+     * @param ingoingInvoiceId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getLiabilities(skip?: number, limit?: number, filterString?: string, paid?: boolean, dateFrom?: string, dateTo?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<Liability>>;
-    public getLiabilities(skip?: number, limit?: number, filterString?: string, paid?: boolean, dateFrom?: string, dateTo?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<Liability>>>;
-    public getLiabilities(skip?: number, limit?: number, filterString?: string, paid?: boolean, dateFrom?: string, dateTo?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<Liability>>>;
-    public getLiabilities(skip?: number, limit?: number, filterString?: string, paid?: boolean, dateFrom?: string, dateTo?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getLiabilities(skip?: number, limit?: number, filterString?: string, paid?: boolean, dateFrom?: string, dateTo?: string, ingoingInvoiceId?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<Liability>>;
+    public getLiabilities(skip?: number, limit?: number, filterString?: string, paid?: boolean, dateFrom?: string, dateTo?: string, ingoingInvoiceId?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<Liability>>>;
+    public getLiabilities(skip?: number, limit?: number, filterString?: string, paid?: boolean, dateFrom?: string, dateTo?: string, ingoingInvoiceId?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<Liability>>>;
+    public getLiabilities(skip?: number, limit?: number, filterString?: string, paid?: boolean, dateFrom?: string, dateTo?: string, ingoingInvoiceId?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
@@ -262,6 +319,8 @@ export class LiabilityService extends BaseService {
           <any>dateFrom, 'date_from');
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
           <any>dateTo, 'date_to');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>ingoingInvoiceId, 'ingoing_invoice_id');
 
         let localVarHeaders = this.defaultHeaders;
 

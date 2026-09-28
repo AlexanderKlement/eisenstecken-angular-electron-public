@@ -10,15 +10,15 @@
 
 
 export const OrderBundleEventType = {
-    Created: 'created',
-    DescriptionChanged: 'description_changed',
-    DeliveryDateChanged: 'delivery_date_changed',
-    OrderAdded: 'order_added',
-    OrderRemoved: 'order_removed',
-    OrderTargetChanged: 'order_target_changed',
-    ArticleAdded: 'article_added',
-    ArticleChanged: 'article_changed',
-    ArticleRemoved: 'article_removed'
+    OrderBundleCreated: 'order_bundle_created',
+    OrderDeleted: 'order_deleted',
+    ArticlesMoved: 'articles_moved',
+    ArticleOrdered: 'article_ordered',
+    ArticleUpdated: 'article_updated',
+    ArticleMoved: 'article_moved',
+    RequestsConverted: 'requests_converted',
+    PricesUpdated: 'prices_updated',
+    ArticleDeleted: 'article_deleted'
 } as const;
 export type OrderBundleEventType = typeof OrderBundleEventType[keyof typeof OrderBundleEventType];
 

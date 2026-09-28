@@ -8,25 +8,21 @@
  * Do not edit the class manually.
  */
 import { OrderedArticleSnapshot } from './orderedArticleSnapshot';
-import { OrderBundleSource } from './orderBundleSource';
 
 
-export interface OrderBundleCreatedEvent { 
-    deliveryDate: string;
-    description: string;
-    orderBundleId: number;
+export interface RequestsConvertedEvent { 
     orderFromId: number;
     orderFromName: string;
-    orderIds: Array<number>;
-    orderedArticles: Array<OrderedArticleSnapshot> | null;
-    request: boolean;
-    source: OrderBundleSource;
+    orderToId: number | null;
+    orderToName: string | null;
+    orderedArticles: Array<OrderedArticleSnapshot>;
     sourceOrderIds: Array<number>;
-    type: OrderBundleCreatedEvent.TypeEnum;
+    targetOrderId: number;
+    type: RequestsConvertedEvent.TypeEnum;
 }
-export namespace OrderBundleCreatedEvent {
+export namespace RequestsConvertedEvent {
     export const TypeEnum = {
-        OrderBundleCreated: 'order_bundle_created'
+        RequestsConverted: 'requests_converted'
     } as const;
     export type TypeEnum = typeof TypeEnum[keyof typeof TypeEnum];
 }

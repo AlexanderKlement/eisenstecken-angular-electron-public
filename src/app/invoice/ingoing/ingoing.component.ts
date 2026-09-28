@@ -10,16 +10,23 @@ import { Observable, Subscription } from "rxjs";
 import { Router } from "@angular/router";
 import { AsyncPipe, formatCurrency } from "@angular/common";
 import { DefaultService, IngoingInvoice } from "../../../api/openapi";
-import { DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
+import {
+  DefaultFlexDirective,
+  DefaultLayoutAlignDirective,
+  DefaultLayoutDirective,
+  DefaultLayoutGapDirective
+} from "ng-flex-layout";
 import { MatFormField, MatLabel } from "@angular/material/input";
 import { MatOption, MatSelect } from "@angular/material/select";
-import { MatTab, MatTabGroup } from "@angular/material/tabs";
+import { MatTabLink, MatTabNav, MatTabNavPanel } from "@angular/material/tabs";
+import { INVOICE_TYPES } from "../../shared/types";
+import { IngoingPaymentDialogComponent } from "./ingoing-payment-dialog/ingoing-payment-dialog.component";
 
 @Component({
   selector: "app-ingoing",
   templateUrl: "./ingoing.component.html",
   styleUrls: ["./ingoing.component.scss"],
-  imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatSelect, MatOption, MatTabGroup, MatTab, TableBuilderComponent, AsyncPipe]
+  imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatSelect, MatOption, TableBuilderComponent, AsyncPipe, DefaultFlexDirective, DefaultLayoutGapDirective, MatTabLink, MatTabNav, MatTabNavPanel]
 })
 export class IngoingComponent implements OnInit {
   private api = inject(DefaultService);
@@ -30,19 +37,18 @@ export class IngoingComponent implements OnInit {
 
   @Input() updateTables$: Observable<void>;
   @Input() $refresh: Observable<void>;
-  allIngoingInvoiceDataSource: TableDataSource<IngoingInvoice, DefaultService>;
-  paidIngoingInvoiceDataSource: TableDataSource<IngoingInvoice, DefaultService>;
-  unPaidIngoingInvoiceDataSource: TableDataSource<IngoingInvoice, DefaultService>;
+  ingoingDataSource: TableDataSource<IngoingInvoice, DefaultService>;
 
   public selectedYear = dayjs().year();
   public $year: Observable<number[]>;
 
+  activeType = "Unbezahlt";
   buttons: TableButton[] = [
     {
-      name: (condition: any) => (condition) ? "Zahlung entfernen" : " Zahlung hinzufügen",
-      class: (condition: any) => (condition) ? "paid" : " unpaid",
+      name: _ => "Zahlungen",
+      class: _ => "",
       navigate: ($event: any, id: number) => {
-        this.paidClicked($event, id);
+        this.openPaymentDetails($event, id);
       },
       color: (_) => "primary",
       selectedField: "id"
@@ -53,7 +59,7 @@ export class IngoingComponent implements OnInit {
       navigate: ($event: any, id: number) => {
         this.deleteClicked($event, id);
       },
-      color: (_) => "primary",
+      color: (_) => "warn",
       selectedField: "id"
     }
   ];
@@ -67,189 +73,68 @@ export class IngoingComponent implements OnInit {
     }
     this.subscription = new Subscription();
     this.subscription.add(this.updateTables$.subscribe(() => {
-      this.loadTables();
+      this.ingoingDataSource.loadData();
     }));
     this.$year = this.api.getAvailableYearsIngoingInvoiceAvailableYearsGet();
   }
 
   initDataSources() {
-    this.initAllIngoingInvoiceDataSource();
-    this.initPaidIngoingInvoiceDataSource();
-    this.initUnPaidIngoingInvoiceDataSource();
+    this.ingoingDataSource = new TableDataSource(
+      this.api,
+      (api, filter, sortDirection, skip, limit) =>
+        api.readIngoingInvoicesIngoingInvoiceGet(skip, limit, filter, this.selectedYear), //TODO type this.activeType === ALL_INVOICES ? undefined : this.activeType === PAID_INVOICES
+      (dataSourceClasses) => {
+        const rows = [];
+        dataSourceClasses.forEach((dataSource) => {
+          const paid = dataSource.liabilities.filter(l => !l.paid).length === 0;
+
+          rows.push(
+            {
+              values: {
+                rgNum: dataSource.number,
+                name: dataSource.name,
+                date: dayjs(dataSource.date).format("L"),
+                payment_date: dayjs(dataSource.payment_date).format("L"),
+                id: dataSource.id,
+                paid: paid ? "Ja" : "Nein",
+                condition: paid,
+
+                total: formatCurrency(dataSource.total, "de-DE", "EUR")
+              },
+              route: () => {
+                this.router.navigateByUrl("/invoice/ingoing/" + dataSource.id.toString());
+              }
+            });
+        });
+        return rows;
+      },
+      [
+        { name: "name", headerName: "Firma" },
+        { name: "rgNum", headerName: "Nummer" },
+        { name: "date", headerName: "Rechnungsdatum" },
+        { name: "payment_date", headerName: "Fälligkeitsdatum" },
+        { name: "total", headerName: "Gesamtpreis [mit MwSt.]" }
+      ],
+      (api) => api.countIngoingInvoicesIngoingInvoiceCountGet(this.selectedYear)
+    );
+    this.ingoingDataSource.loadData();
   }
 
-  loadTables() {
-    this.allIngoingInvoiceDataSource.loadData();
-    this.paidIngoingInvoiceDataSource.loadData();
-    this.unPaidIngoingInvoiceDataSource.loadData();
-  }
-
-  paidClicked(event: any, id: number) {
+  openPaymentDetails(event: any, id: number) {
     event.stopPropagation();
-    this.api.readIngoingInvoiceIngoingInvoiceIngoingInvoiceIdGet(id).pipe(first()).subscribe(ingoingInvoice => {
-      let text = `Die Rechnung ${ingoingInvoice.number} vom ${dayjs(ingoingInvoice.date, "YYYY-MM-DD")
-        .format("L")} an ${ingoingInvoice.name} `;
-      let title = "Zahlung ";
-      let returnFunction = (result) => {
-        console.info(result);
-      };
-      if (!ingoingInvoice.paid) {
-        text += "als bezahlt markieren?";
-        title += " hinzufügen";
-        returnFunction = (result) => {
-          if (result) {
-            this.api.payIngoingInvoicePaymentIngoingInvoiceIdPayPost(id).pipe(first()).subscribe(() => {
-              this.loadTables();
-            });
-          }
-        };
-
-      } else {
-        text += "als NICHT bezahlt markieren?";
-        title += " entfernen";
-        returnFunction = (result) => {
-          if (result) {
-            this.api.unpayIngoingInvoicePaymentIngoingInvoiceIdUnpayPost(id).pipe(first()).subscribe(() => {
-              this.loadTables();
-            });
-          }
-        };
+    const dialogRef = this.dialog.open(IngoingPaymentDialogComponent, {
+      width: "1200px",
+      data: {
+        ingoingId: id
       }
-
-      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-        width: "400px",
-        data: {
-          title,
-          text
-        }
-      });
-
-      dialogRef.afterClosed().subscribe(result => {
-        returnFunction(result);
-      });
-
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.ingoingDataSource.loadData();
     });
   }
 
   yearChanged() {
-    this.initDataSources();
-  }
-
-  private initAllIngoingInvoiceDataSource(): void {
-    this.allIngoingInvoiceDataSource = new TableDataSource(
-      this.api,
-      (api, filter, sortDirection, skip, limit) =>
-        api.readIngoingInvoicesIngoingInvoiceGet(skip, limit, filter, undefined, this.selectedYear),
-      (dataSourceClasses) => {
-        const rows = [];
-        dataSourceClasses.forEach((dataSource) => {
-          rows.push(
-            {
-              values: {
-                rgNum: dataSource.number,
-                name: dataSource.name,
-                date: dayjs(dataSource.date).format("L"),
-                payment_date: dayjs(dataSource.payment_date).format("L"),
-                id: dataSource.id,
-                total: formatCurrency(dataSource.total, "de-DE", "EUR"),
-                paid: dataSource.paid ? "Ja" : "Nein",
-                condition: dataSource.paid
-              },
-              route: () => {
-                this.router.navigateByUrl("/invoice/ingoing/" + dataSource.id.toString());
-              }
-            });
-        });
-        return rows;
-      },
-      [
-        { name: "name", headerName: "Firma" },
-        { name: "rgNum", headerName: "Nummer" },
-        { name: "date", headerName: "Rechnungsdatum" },
-        { name: "payment_date", headerName: "Fälligkeitsdatum" },
-        { name: "total", headerName: "Gesamtpreis [mit MwSt.]" }
-      ],
-      (api) => api.countIngoingInvoicesIngoingInvoiceCountGet(undefined, this.selectedYear)
-    );
-    this.allIngoingInvoiceDataSource.loadData();
-  }
-
-  private initPaidIngoingInvoiceDataSource(): void {
-    this.paidIngoingInvoiceDataSource = new TableDataSource(
-      this.api,
-      (api, filter, sortDirection, skip, limit) =>
-        api.readIngoingInvoicesIngoingInvoiceGet(skip, limit, filter, true, this.selectedYear),
-      (dataSourceClasses) => {
-        const rows = [];
-        dataSourceClasses.forEach((dataSource) => {
-          rows.push(
-            {
-              values: {
-                rgNum: dataSource.number,
-                name: dataSource.name,
-                date: dayjs(dataSource.date).format("L"),
-                id: dataSource.id,
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                payment_date: dayjs(dataSource.payment_date).format("L"),
-                total: formatCurrency(dataSource.total, "de-DE", "EUR"),
-                condition: dataSource.paid
-              },
-              route: () => {
-                this.router.navigateByUrl("/invoice/ingoing/" + dataSource.id.toString());
-              }
-            });
-        });
-        return rows;
-      },
-      [
-        { name: "name", headerName: "Firma" },
-        { name: "rgNum", headerName: "Nummer" },
-        { name: "date", headerName: "Rechnungsdatum" },
-        { name: "payment_date", headerName: "Fälligkeitsdatum" },
-        { name: "total", headerName: "Gesamtpreis [mit MwSt.]" }
-      ],
-      (api) => api.countIngoingInvoicesIngoingInvoiceCountGet(true, this.selectedYear)
-    );
-    this.paidIngoingInvoiceDataSource.loadData();
-  }
-
-  private initUnPaidIngoingInvoiceDataSource(): void {
-    this.unPaidIngoingInvoiceDataSource = new TableDataSource(
-      this.api,
-      (api, filter, sortDirection, skip, limit) =>
-        api.readIngoingInvoicesIngoingInvoiceGet(skip, limit, filter, false, this.selectedYear),
-      (dataSourceClasses) => {
-        const rows = [];
-        dataSourceClasses.forEach((dataSource) => {
-          rows.push(
-            {
-              values: {
-                rgNum: dataSource.number,
-                name: dataSource.name,
-                date: dayjs(dataSource.date).format("L"),
-                total: formatCurrency(dataSource.total, "de-DE", "EUR"),
-                id: dataSource.id,
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                payment_date: dayjs(dataSource.payment_date).format("L"),
-                condition: dataSource.paid
-              },
-              route: () => {
-                this.router.navigateByUrl("/invoice/ingoing/" + dataSource.id.toString());
-              }
-            });
-        });
-        return rows;
-      },
-      [
-        { name: "name", headerName: "Firma" },
-        { name: "rgNum", headerName: "Nummer" },
-        { name: "date", headerName: "Rechnungsdatum" },
-        { name: "payment_date", headerName: "Fälligkeitsdatum" },
-        { name: "total", headerName: "Gesamtpreis [mit MwSt.]" }
-      ],
-      (api) => api.countIngoingInvoicesIngoingInvoiceCountGet(false, this.selectedYear)
-    );
-    this.unPaidIngoingInvoiceDataSource.loadData();
+    this.ingoingDataSource.loadData();
   }
 
 
@@ -263,7 +148,7 @@ export class IngoingComponent implements OnInit {
       const returnFunction = (result) => {
         if (result) {
           this.api.deleteIngoingInvoiceIngoingInvoiceIngoingInvoiceIdDelete(id).pipe(first()).subscribe(() => {
-            this.loadTables();
+            this.ingoingDataSource.loadData();
           });
         }
       };
@@ -284,4 +169,10 @@ export class IngoingComponent implements OnInit {
   }
 
 
+  protected setActiveType(link: string) {
+    this.activeType = link;
+    this.ingoingDataSource.loadData();
+  }
+
+  protected readonly INVOICE_TYPES = INVOICE_TYPES;
 }

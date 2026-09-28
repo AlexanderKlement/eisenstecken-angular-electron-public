@@ -6,6 +6,7 @@ import { MatPaginatorIntl } from "@angular/material/paginator";
 import {
   ArticleService,
   DefaultService,
+  LiabilityService,
   OfferV2Service,
   OrderService,
   RecalculationService,
@@ -14,13 +15,18 @@ import {
 import { Sort } from "@angular/material/sort";
 import { moveItemInArray } from "@angular/cdk/drag-drop";
 import { MatSelectChange } from "@angular/material/select";
+import { Dayjs } from "dayjs";
+import { TableButton } from "./table-builder.component";
 
-type InputSettings = { placeholder?: string, label?: string } & ({
+type InputSettings = { placeholder?: string, label?: string, suffix?: string } & ({
   type: "text",
   onChange: (value: string, id: number | string) => void,
 } | {
   type: "number",
   onChange: (value: number, id: number | string) => void,
+} | {
+  type: "date",
+  onChange: (value: Dayjs, id: number | string) => void,
 } | {
   type: "select",
   items: { id: number, displayable_name: string }[],
@@ -38,6 +44,7 @@ export interface Column<T> {
   name: string; // RecursiveKeyOf<T>; Maybe this is better this way
   sortable?: boolean;
   asInput?: InputSettings;
+  asButton?: TableButton;
   headerName: string;
 }
 
@@ -56,10 +63,6 @@ const defaultValues = {
   pageSizeOptions: [100, 200, 500]
 };
 
-export interface TableButton<T> {
-  name: string;
-  onClick: (arg0: T) => void;
-}
 
 const germanRangeLabel = (page: number, pageSize: number, length: number) => {
   if (length === 0 || pageSize === 0) {
@@ -116,14 +119,13 @@ function sortFunction<T>(sort: Sort, a: Row<T>, b: Row<T>) {
   return 0;
 }
 
-export class TableDataSource<T extends DataSourceClass, A extends DefaultService | ArticleService | RecalculationService | OrderService | TimeEntryService | OfferV2Service> extends DataSource<Row<T>> {
+export class TableDataSource<T extends DataSourceClass, A extends LiabilityService | DefaultService | ArticleService | RecalculationService | OrderService | TimeEntryService | OfferV2Service> extends DataSource<Row<T>> {
   public columns: Column<T>[];
   public readonly columnIdentifiers: string[];
   public amount$: Observable<number>;
   public pageSize = defaultValues.pageSize;
   public pageSizeOptions = defaultValues.pageSizeOptions;
   public pageIndex = defaultValues.pageIndex;
-  public buttonList: TableButton<T>[];
   private loadingSubject = new BehaviorSubject<boolean>(false);
   // eslint-disable-next-line @typescript-eslint/member-ordering
   public loading$ = this.loadingSubject.asObservable();
@@ -141,7 +143,6 @@ export class TableDataSource<T extends DataSourceClass, A extends DefaultService
     parseFunction: ParseFunction<T>,
     columns: Column<T>[],
     amountFunction: AmountFunction<A>,
-    buttonList: TableButton<T>[] = [],
     defaultSort?: string,
     defaultSortDirection: "asc" | "desc" | "" = "asc"
   ) {
@@ -153,7 +154,6 @@ export class TableDataSource<T extends DataSourceClass, A extends DefaultService
       column.name.toString()
     );
     this.amount$ = amountFunction(api);
-    this.buttonList = buttonList;
     this.sortActive = defaultSort;
     this.sortDirection = defaultSortDirection;
   }

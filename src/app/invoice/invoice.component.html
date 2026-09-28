@@ -3,12 +3,17 @@
   <mat-tab-group (selectedIndexChange)="selectedTabChanged($event)">
     @if (outgoingInvoicesAvailable) {
       <mat-tab label="Ausgangsrechnungen">
-        <app-outgoing [$refresh]="$refresh"></app-outgoing>
+        <app-outgoing></app-outgoing>
       </mat-tab>
     }
     @if (ingoingInvoicesAvailable) {
       <mat-tab label="Eingangsrechnungen">
-        <app-ingoing [$refresh]="$refresh" [updateTables$]="updateChildTables$"></app-ingoing>
+        <app-ingoing [updateTables$]="updateChildTables$"></app-ingoing>
+      </mat-tab>
+    }
+    @if (expensesAvailable) {
+      <mat-tab label="Spesen">
+        <app-expenses></app-expenses>
       </mat-tab>
     }
   </mat-tab-group>

@@ -201,7 +201,7 @@ export class ShopOrdersComponent implements OnInit {
   onOpenHistory() {
     if (this.selectedOrder) {
       this.dialog.open(ShopOrderHistoryComponent, {
-        width: "800px",
+        width: "1200px",
         data: {
           orderBundleId: this.selectedOrder.id
         }

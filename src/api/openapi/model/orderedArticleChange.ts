@@ -15,7 +15,6 @@ export interface OrderedArticleChange {
     comment?: string | null;
     modNumber?: string | null;
     name?: string | null;
-    orderId?: number | null;
     orderedUnitId?: number | null;
     position?: string | null;
     price?: number | null;

@@ -77,7 +77,6 @@ export default class UserComponent implements OnInit {
         headerName: "Gesamte Arbeitszeit bisher"
       }],
       (api) => api.readUserCountUsersCountGet(),
-      [],
       "fullname",
       "desc"
     );

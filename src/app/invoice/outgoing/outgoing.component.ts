@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
 import { LockService } from "../../shared/services/lock.service";
 import { first } from "rxjs/operators";
@@ -10,16 +10,22 @@ import { MatDialog } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { AsyncPipe, formatCurrency } from "@angular/common";
 import { DefaultService, OutgoingInvoice, ScopeEnum } from "../../../api/openapi";
-import { DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
+import {
+  DefaultFlexDirective,
+  DefaultLayoutAlignDirective,
+  DefaultLayoutDirective,
+  DefaultLayoutGapDirective
+} from "ng-flex-layout";
 import { MatFormField, MatLabel } from "@angular/material/input";
 import { MatOption, MatSelect } from "@angular/material/select";
-import { MatTab, MatTabGroup } from "@angular/material/tabs";
+import { MatTabLink, MatTabNav, MatTabNavPanel } from "@angular/material/tabs";
+import { ALL_INVOICES, INVOICE_TYPES, PAID_INVOICES } from "../../shared/types";
 
 @Component({
   selector: "app-outgoing",
   templateUrl: "./outgoing.component.html",
   styleUrls: ["./outgoing.component.scss"],
-  imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatSelect, MatOption, MatTabGroup, MatTab, TableBuilderComponent, AsyncPipe]
+  imports: [DefaultLayoutDirective, DefaultLayoutAlignDirective, MatFormField, MatLabel, MatSelect, MatOption, TableBuilderComponent, AsyncPipe, DefaultFlexDirective, DefaultLayoutGapDirective, MatTabLink, MatTabNav, MatTabNavPanel]
 })
 export class OutgoingComponent implements OnInit {
   private api = inject(DefaultService);
@@ -28,11 +34,9 @@ export class OutgoingComponent implements OnInit {
   private dialog = inject(MatDialog);
 
 
-  @Input() $refresh: Observable<void>;
-  allOutgoingInvoiceDataSource: TableDataSource<OutgoingInvoice, DefaultService>;
-  unPaidOutgoingInvoiceDataSource: TableDataSource<OutgoingInvoice, DefaultService>;
-  paidOutgoingInvoiceDataSource: TableDataSource<OutgoingInvoice, DefaultService>;
+  outgoingDataSource: TableDataSource<OutgoingInvoice, DefaultService>;
 
+  activeType = "Unbezahlt";
   public selectedYear = dayjs().year();
   public $year: Observable<number[]>;
 
@@ -54,15 +58,54 @@ export class OutgoingComponent implements OnInit {
   }
 
   initDataSources() {
-    this.initAllOutgoingInvoiceDataSource();
-    this.initPaidOutgoingInvoiceDataSource();
-    this.initUnPaidOutgoingInvoiceDataSource();
+    this.outgoingDataSource = new TableDataSource(
+      this.api,
+      (api, filter, sortDirection, skip, limit) =>
+        api.readOutgoingInvoicesOutgoingInvoiceGet(skip, filter, limit, this.activeType === ALL_INVOICES ? undefined : this.activeType === PAID_INVOICES, this.selectedYear),
+      (dataSourceClasses) => {
+        const rows = [];
+        dataSourceClasses.forEach((dataSource) => {
+          rows.push(
+            {
+              values: {
+                client_name: dataSource.client_name,
+                date: dayjs(dataSource.date, "YYYY-MM-DD").format("L"),
+                rgNum: dataSource.number,
+                id: dataSource.id,
+                total: formatCurrency(dataSource.full_price_with_vat, "de-DE", "EUR"),
+                payment_date: dayjs(dataSource.payment_date, "YYYY-MM-DD").format("L"),
+                condition: dataSource.paid
+              },
+              route: () => {
+                this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
+                  if (allowed) {
+                    this.locker.getLockAndTryNavigate(
+                      this.api.islockedOutgoingInvoiceOutgoingInvoiceIslockedOutgoingInvoiceIdGet(dataSource.id),
+                      this.api.lockOutgoingInvoiceOutgoingInvoiceLockOutgoingInvoiceIdPost(dataSource.id),
+                      this.api.unlockOutgoingInvoiceOutgoingInvoiceUnlockOutgoingInvoiceIdPost(dataSource.id),
+                      "outgoing_invoice/edit/" + dataSource.id.toString()
+                    );
+                  }
+                });
+              }
+            });
+        });
+        return rows;
+      },
+      [
+        { name: "client_name", headerName: "Kunde" },
+        { name: "rgNum", headerName: "Nummer" },
+        { name: "date", headerName: "Ausstellungsdatum" },
+        { name: "payment_date", headerName: "Fälligkeitsdatum" },
+        { name: "total", headerName: "Preis [mit MwSt.]" }
+      ],
+      (api) => api.countOutgoingInvoicesOutgoingInvoiceCountGet(undefined, this.selectedYear)
+    );
+    this.outgoingDataSource.loadData();
   }
 
   loadTables(): void {
-    this.allOutgoingInvoiceDataSource.loadData();
-    this.unPaidOutgoingInvoiceDataSource.loadData();
-    this.paidOutgoingInvoiceDataSource.loadData();
+    this.outgoingDataSource.loadData();
   }
 
   paidClicked(event: any, id: number) {
@@ -113,149 +156,14 @@ export class OutgoingComponent implements OnInit {
   }
 
   yearChanged() {
-    this.initDataSources();
-  }
-
-  private initAllOutgoingInvoiceDataSource(): void {
-    this.allOutgoingInvoiceDataSource = new TableDataSource(
-      this.api,
-      (api, filter, sortDirection, skip, limit) =>
-        api.readOutgoingInvoicesOutgoingInvoiceGet(skip, filter, limit, undefined, this.selectedYear),
-      (dataSourceClasses) => {
-        const rows = [];
-        dataSourceClasses.forEach((dataSource) => {
-          rows.push(
-            {
-              values: {
-                client_name: dataSource.client_name,
-                date: dayjs(dataSource.date, "YYYY-MM-DD").format("L"),
-                rgNum: dataSource.number,
-                id: dataSource.id,
-                total: formatCurrency(dataSource.full_price_with_vat, "de-DE", "EUR"),
-                payment_date: dayjs(dataSource.payment_date, "YYYY-MM-DD").format("L"),
-                condition: dataSource.paid
-              },
-              route: () => {
-                this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
-                  if (allowed) {
-                    this.locker.getLockAndTryNavigate(
-                      this.api.islockedOutgoingInvoiceOutgoingInvoiceIslockedOutgoingInvoiceIdGet(dataSource.id),
-                      this.api.lockOutgoingInvoiceOutgoingInvoiceLockOutgoingInvoiceIdPost(dataSource.id),
-                      this.api.unlockOutgoingInvoiceOutgoingInvoiceUnlockOutgoingInvoiceIdPost(dataSource.id),
-                      "outgoing_invoice/edit/" + dataSource.id.toString()
-                    );
-                  }
-                });
-              }
-            });
-        });
-        return rows;
-      },
-      [
-        { name: "client_name", headerName: "Kunde" },
-        { name: "rgNum", headerName: "Nummer" },
-        { name: "date", headerName: "Ausstellungsdatum" },
-        { name: "payment_date", headerName: "Fälligkeitsdatum" },
-        { name: "total", headerName: "Preis [mit MwSt.]" }
-      ],
-      (api) => api.countOutgoingInvoicesOutgoingInvoiceCountGet(undefined, this.selectedYear)
-    );
-    this.allOutgoingInvoiceDataSource.loadData();
-  }
-
-  private initPaidOutgoingInvoiceDataSource(): void {
-    this.paidOutgoingInvoiceDataSource = new TableDataSource(
-      this.api,
-      (api, filter, sortDirection, skip, limit) =>
-        api.readOutgoingInvoicesOutgoingInvoiceGet(skip, filter, limit, true, this.selectedYear),
-      (dataSourceClasses) => {
-        const rows = [];
-        dataSourceClasses.forEach((dataSource) => {
-          rows.push(
-            {
-              values: {
-                client_name: dataSource.client_name,
-                date: dayjs(dataSource.date, "YYYY-MM-DD").format("L"),
-                rgNum: dataSource.number,
-                id: dataSource.id,
-                total: formatCurrency(dataSource.full_price_with_vat, "de-DE", "EUR"),
-                payment_date: dayjs(dataSource.payment_date, "YYYY-MM-DD").format("L"),
-                condition: dataSource.paid
-              },
-              route: () => {
-                this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
-                  if (allowed) {
-                    this.locker.getLockAndTryNavigate(
-                      this.api.islockedOutgoingInvoiceOutgoingInvoiceIslockedOutgoingInvoiceIdGet(dataSource.id),
-                      this.api.lockOutgoingInvoiceOutgoingInvoiceLockOutgoingInvoiceIdPost(dataSource.id),
-                      this.api.unlockOutgoingInvoiceOutgoingInvoiceUnlockOutgoingInvoiceIdPost(dataSource.id),
-                      "outgoing_invoice/edit/" + dataSource.id.toString()
-                    );
-                  }
-                });
-              }
-            });
-        });
-        return rows;
-      },
-      [
-        { name: "client_name", headerName: "Kunde" },
-        { name: "rgNum", headerName: "Nummer" },
-        { name: "date", headerName: "Ausstellungsdatum" },
-        { name: "payment_date", headerName: "Fälligkeitsdatum" },
-        { name: "total", headerName: "Preis [mit MwSt.]" }
-      ],
-      (api) => api.countOutgoingInvoicesOutgoingInvoiceCountGet(true, this.selectedYear)
-    );
-    this.paidOutgoingInvoiceDataSource.loadData();
-  }
-
-  private initUnPaidOutgoingInvoiceDataSource(): void {
-    this.unPaidOutgoingInvoiceDataSource = new TableDataSource(
-      this.api,
-      (api, filter, sortDirection, skip, limit) =>
-        api.readOutgoingInvoicesOutgoingInvoiceGet(skip, filter, limit, false, this.selectedYear),
-      (dataSourceClasses) => {
-        const rows = [];
-        dataSourceClasses.forEach((dataSource) => {
-          rows.push(
-            {
-              values: {
-                client_name: dataSource.client_name,
-                date: dayjs(dataSource.date, "YYYY-MM-DD").format("L"),
-                rgNum: dataSource.number,
-                id: dataSource.id,
-                total: formatCurrency(dataSource.full_price_with_vat, "de-DE", "EUR"),
-                payment_date: dayjs(dataSource.payment_date, "YYYY-MM-DD").format("L"),
-                condition: dataSource.paid
-              },
-              route: () => {
-                this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
-                  if (allowed) {
-                    this.locker.getLockAndTryNavigate(
-                      this.api.islockedOutgoingInvoiceOutgoingInvoiceIslockedOutgoingInvoiceIdGet(dataSource.id),
-                      this.api.lockOutgoingInvoiceOutgoingInvoiceLockOutgoingInvoiceIdPost(dataSource.id),
-                      this.api.unlockOutgoingInvoiceOutgoingInvoiceUnlockOutgoingInvoiceIdPost(dataSource.id),
-                      "outgoing_invoice/edit/" + dataSource.id.toString()
-                    );
-                  }
-                });
-              }
-            });
-        });
-        return rows;
-      },
-      [
-        { name: "client_name", headerName: "Kunde" },
-        { name: "rgNum", headerName: "Nummer" },
-        { name: "date", headerName: "Ausstellungsdatum" },
-        { name: "payment_date", headerName: "Fälligkeitsdatum" },
-        { name: "total", headerName: "Preis [mit MwSt.]" }
-      ],
-      (api) => api.countOutgoingInvoicesOutgoingInvoiceCountGet(false, this.selectedYear)
-    );
-    this.unPaidOutgoingInvoiceDataSource.loadData();
+    this.outgoingDataSource.loadData();
   }
 
 
+  protected setActiveType(link: string) {
+    this.activeType = link;
+    this.outgoingDataSource.loadData();
+  }
+
+  protected readonly INVOICE_TYPES = INVOICE_TYPES;
 }

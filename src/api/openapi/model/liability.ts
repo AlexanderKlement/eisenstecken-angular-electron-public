@@ -16,6 +16,7 @@ export interface Liability {
     created_at: string;
     due_date: string;
     id: number;
+    ingoing_invoice_id?: number | null;
     name: string;
     open_amount: number;
     paid: boolean;

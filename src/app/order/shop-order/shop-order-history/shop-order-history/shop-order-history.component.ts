@@ -7,20 +7,20 @@ import {
   MatDialogTitle
 } from "@angular/material/dialog";
 import {
-  OrderBundleArticleAddedEvent,
-  OrderBundleArticleChangedEvent,
-  OrderBundleArticleRemovedEvent,
+  ArticleDeletedEvent,
+  ArticleMovedEvent,
+  ArticleOrderedEvent,
+  ArticlesMovedEvent,
+  ArticleUpdatedEvent,
   OrderBundleCreatedEvent,
-  OrderBundleDeliveryDateChangedEvent,
-  OrderBundleDescriptionChangedEvent,
   OrderBundleEvent,
   OrderBundleEventType,
-  OrderBundleOrderAddedEvent,
-  OrderBundleOrderRemovedEvent,
-  OrderBundleOrderTargetChangedEvent,
   OrderBundleService,
+  OrderDeletedEvent,
   OrderedArticleChange,
   OrderedArticleSnapshot,
+  PricesUpdatedEvent,
+  RequestsConvertedEvent,
   UserEssential
 } from "../../../../../api/openapi";
 import { DatePipe, formatDate, formatNumber, NgTemplateOutlet } from "@angular/common";
@@ -33,61 +33,91 @@ import { catchError, map, scan, startWith, switchMap } from "rxjs/operators";
 import { toObservable, toSignal } from "@angular/core/rxjs-interop";
 import { combineLatest, of } from "rxjs";
 import { MatProgressBar } from "@angular/material/progress-bar";
-import { CommissionRefComponent } from "./commission-ref-component";
-
-type ChangelogCategory = "bundle" | "order";
-type ChangelogTone = "create" | "add" | "remove" | "change";
-type ChangelogFilter = "all" | ChangelogCategory;
+import { OrderBundleRefComponent } from "./order-bundle-ref-component";
 
 
-type ChangelogPart = { text: string; orderId?: never } | { orderId: number; text?: never };
+// ------------------------------------------------------------------ view model
+
+export type ChangelogCategory = "order" | "article";
+export type ChangelogTone = "create" | "add" | "remove" | "change" | "move";
+export type ChangelogFilter = "all" | ChangelogCategory;
+
+/**
+ * A piece of displayed text. Either plain text, or an order reference that
+ * <app-order-ref> renders as "#id" and later as the order's displayable name.
+ */
+export type ChangelogPart = { text: string; orderId?: never } | { orderId: number; text?: never };
 export type ChangelogText = ChangelogPart[];
 
-
-interface ChangelogField {
+export interface ChangelogField {
   label: string;
   value: ChangelogText;
 }
 
-interface ChangelogDiff {
+export interface ChangelogDiff {
   label: string;
   old: ChangelogText | null;
   new: ChangelogText | null;
 }
 
-interface ChangelogEntry {
+/** One row in an entry's article list. */
+export interface ChangelogArticle {
+  id: number;
+  /** "28 × Home jersey" */
+  title: string;
+  /** "JSY-HOME-26 · 34,90 € · <order ref>" */
+  meta: ChangelogText;
+  request: boolean;
+}
+
+export interface ChangelogEntry {
   id: number;
   date: Date;
   category: ChangelogCategory;
   tone: ChangelogTone;
   icon: string;
   title: string;
-  /** Short one-line context, e.g. "Order #1042 · moved from bundle #87" */
+  /** Short one-line context, e.g. "28 × Home jersey · Order <ref>" */
   subtitle?: ChangelogText;
+  /** Side effects worth calling out, e.g. "New order created" */
+  badges: string[];
   user: UserEssential | null;
   initials: string;
-  fields: ChangelogField[];
   diffs: ChangelogDiff[];
+  fields: ChangelogField[];
+  articles: ChangelogArticle[];
 }
 
-interface ChangelogDay {
+export interface ChangelogDay {
   key: string;
   date: Date;
   entries: ChangelogEntry[];
 }
 
-type EventType = (typeof OrderBundleEventType)[keyof typeof OrderBundleEventType];
+interface LoadState {
+  id: number | null;
+  status: "loading" | "loaded" | "error";
+  events: OrderBundleEvent[];
+  error?: unknown;
+}
 
-const META: Record<EventType, { category: ChangelogCategory; tone: ChangelogTone; icon: string; title: string }> = {
-  created: { category: "bundle", tone: "create", icon: "inventory_2", title: "bestellung erstellt" },
-  description_changed: { category: "bundle", tone: "change", icon: "edit_note", title: "Beschreibung geändert" },
-  delivery_date_changed: { category: "bundle", tone: "change", icon: "event", title: "Lieferdatum geändert" },
-  order_added: { category: "order", tone: "add", icon: "playlist_add", title: "Bestellung hinzugefügt" },
-  order_removed: { category: "order", tone: "remove", icon: "playlist_remove", title: "bestellung entfernt" },
-  order_target_changed: { category: "order", tone: "change", icon: "swap_horiz", title: "Komission geändert" },
-  article_added: { category: "order", tone: "add", icon: "add_shopping_cart", title: "Artikel entfernt" },
-  article_changed: { category: "order", tone: "change", icon: "edit", title: "Artikel bearbeitet" },
-  article_removed: { category: "order", tone: "remove", icon: "remove_shopping_cart", title: "Artikel entfernt" }
+type Meta = { category: ChangelogCategory; tone: ChangelogTone; icon: string; title: string };
+
+const META: Record<OrderBundleEventType, Meta> = {
+  order_bundle_created: { category: "order", tone: "create", icon: "inventory_2", title: "Bestellung erstellt" },
+  order_deleted: { category: "order", tone: "remove", icon: "delete", title: "Bestellung gelöscht" },
+  requests_converted: {
+    category: "order",
+    tone: "create",
+    icon: "published_with_changes",
+    title: "Anfrage bestellt"
+  },
+  article_ordered: { category: "article", tone: "add", icon: "add_shopping_cart", title: "Artikel bestellt" },
+  article_updated: { category: "article", tone: "change", icon: "edit", title: "Artikel geändert" },
+  article_deleted: { category: "article", tone: "remove", icon: "remove_shopping_cart", title: "Artikel gelöscht" },
+  article_moved: { category: "article", tone: "move", icon: "move_up", title: "Komission geändert" },
+  articles_moved: { category: "article", tone: "move", icon: "move_up", title: "Komission geändert" },
+  prices_updated: { category: "article", tone: "change", icon: "euro", title: "Preis verändert" }
 };
 
 /** Labels for OrderedArticleChange keys, in display order. */
@@ -99,17 +129,9 @@ const ARTICLE_FIELDS: { key: keyof OrderedArticleChange; label: string }[] = [
   { key: "position", label: "Position" },
   { key: "comment", label: "Kommentar" },
   { key: "request", label: "Anfrage" },
-  { key: "orderId", label: "Komission" },
   { key: "articleId", label: "Artikel" },
   { key: "orderedUnitId", label: "Einheit" }
 ];
-
-interface LoadState {
-  id: number | null;
-  status: "loading" | "loaded" | "error";
-  events: OrderBundleEvent[];
-  error?: unknown;
-}
 
 export interface ShopOrderHistoryData {
   orderBundleId: number;
@@ -132,7 +154,7 @@ export interface ShopOrderHistoryData {
     MatTooltip,
     MatProgressBar,
     MatIconButton,
-    CommissionRefComponent,
+    OrderBundleRefComponent,
     NgTemplateOutlet
   ],
   templateUrl: "./shop-order-history.component.html",
@@ -143,6 +165,10 @@ export class ShopOrderHistoryComponent {
   dialogRef = inject<MatDialogRef<ShopOrderHistoryComponent>>(MatDialogRef);
   private orderBundleService = inject(OrderBundleService);
   data = inject<ShopOrderHistoryData>(MAT_DIALOG_DATA);
+
+  protected onCancelClick() {
+    this.dialogRef.close();
+  }
 
   /** Currency symbol appended to prices. */
   readonly currency = input("€");
@@ -191,9 +217,8 @@ export class ShopOrderHistoryComponent {
       .sort((a, b) => b.createdAt.localeCompare(a.createdAt) || b.id - a.id)
       .map((e) => this.toEntry(e))
   );
-
   readonly counts = computed(() => {
-    const c: Record<ChangelogFilter, number> = { all: 0, bundle: 0, order: 0 };
+    const c: Record<ChangelogFilter, number> = { all: 0, order: 0, article: 0 };
     for (const e of this.entries()) {
       c.all++;
       c[e.category]++;
@@ -218,97 +243,149 @@ export class ShopOrderHistoryComponent {
   });
 
   readonly filters: { value: ChangelogFilter; label: string; icon: string }[] = [
-    { value: "all", label: "Alle", icon: "history" },
-    { value: "bundle", label: "Bestellung", icon: "inventory_2" },
-    { value: "order", label: "Artikel", icon: "receipt_long" }
+    { value: "all", label: "All", icon: "history" },
+    { value: "order", label: "Bestellung", icon: "receipt_long" },
+    { value: "article", label: "Artikel", icon: "category" }
   ];
 
   setFilter(value: ChangelogFilter | null | undefined): void {
     this.filter.set(value ?? "all");
   }
 
-  // ---------------------------------------------------------------- mapping
+
+  // ------------------------------------------------------------------ mapping
 
   private toEntry(event: OrderBundleEvent): ChangelogEntry {
-    const type = event.eventType as unknown as EventType;
-    const meta = META[type] ?? { category: "bundle", tone: "change", icon: "info", title: type };
+    const type = event.eventType;
+    const meta: Meta = META[type] ?? { category: "order", tone: "change", icon: "info", title: String(type) };
     const entry: ChangelogEntry = {
       id: event.id,
       date: new Date(event.createdAt),
       ...meta,
       user: event.user ?? null,
       initials: this.initials(event.user),
+      badges: [],
+      diffs: [],
       fields: [],
-      diffs: []
+      articles: []
     };
 
     const p = event.payload;
     switch (type) {
-      case "created": {
+      case "order_bundle_created": {
         const x = p as OrderBundleCreatedEvent;
         entry.subtitle = txt(x.description);
         entry.fields = [
-          { label: "Delivery date", value: txt(this.date(x.deliveryDate)) },
-          { label: "Source", value: txt(String(x.source)) },
-          { label: "Supplier", value: txt(`#${x.orderFromId}`) },
-          { label: "Orders", value: orders(x.orderIds) },
-          ...(x.sourceOrderIds?.length ? [{ label: "Source orders", value: orders(x.sourceOrderIds) }] : []),
-          { label: "Request", value: txt(this.bool(x.request)) }
+          { label: "Lieferdatum", value: txt(this.date(x.deliveryDate)) },
+          { label: "Von", value: txt(x.orderFromName) },
+          { label: "Typ", value: txt(x.source === "manually" ? "Manuell" : "Online Shop") },
+          { label: "Anfrage", value: txt(this.bool(x.request)) }
         ];
+        entry.articles = this.articles(x.orderedArticles);
         break;
       }
-      case "description_changed": {
-        const x = p as OrderBundleDescriptionChangedEvent;
-        entry.diffs = [{ label: "Description", old: txtOrNull(x.old), new: txtOrNull(x.new) }];
-        break;
-      }
-      case "delivery_date_changed": {
-        const x = p as OrderBundleDeliveryDateChangedEvent;
-        entry.diffs = [{ label: "Delivery date", old: txt(this.date(x.old)), new: txt(this.date(x.new)) }];
-        break;
-      }
-      case "order_added": {
-        const x = p as OrderBundleOrderAddedEvent;
+
+      case "order_deleted": {
+        const x = p as OrderDeletedEvent;
         entry.subtitle = order(x.orderId);
-        if (x.oldOrderBundleId != null) entry.subtitle.push({ text: ` · moved from bundle #${x.oldOrderBundleId}` });
+        entry.fields = [
+          { label: "From", value: txt(x.orderFromName) },
+          ...(x.orderToName ? [{ label: "Komission", value: txt(x.orderToName) }] : []),
+          ...(x.description ? [{ label: "beschreibung", value: txt(x.description) }] : [])
+        ];
+        entry.articles = this.articles(x.orderedArticles, false);
         break;
       }
-      case "order_removed": {
-        const x = p as OrderBundleOrderRemovedEvent;
-        entry.subtitle = order(x.orderId);
-        if (x.newOrderBundleId != null) entry.subtitle.push({ text: ` · moved to bundle #${x.newOrderBundleId}` });
+
+      case "requests_converted": {
+        const x = p as RequestsConvertedEvent;
+        entry.subtitle = [{ text: "Into " }, ...order(x.targetOrderId)];
+        entry.fields = [
+          { label: "Von", value: txt(x.orderFromName) },
+          ...(x.orderToName ? [{ label: "To", value: txt(x.orderToName) }] : []),
+          { label: "Bestellungen", value: orders(x.sourceOrderIds) }
+        ];
+        entry.articles = this.articles(x.orderedArticles, false);
         break;
       }
-      case "order_target_changed": {
-        const x = p as OrderBundleOrderTargetChangedEvent;
-        entry.subtitle = order(x.orderId);
-        entry.diffs = [{ label: "Target", old: txtOrNull(this.ref(x.old)), new: txtOrNull(this.ref(x.new)) }];
-        break;
-      }
-      case "article_added": {
-        const x = p as OrderBundleArticleAddedEvent;
-        entry.subtitle = txt(this.articleLine(x.orderedArticle));
-        if (x.oldOrderId != null) entry.subtitle.push({ text: " · moved from " }, ...order(x.oldOrderId));
+
+      case "article_ordered": {
+        const x = p as ArticleOrderedEvent;
+        entry.subtitle = [{ text: `${this.articleLine(x.orderedArticle)} · ` }, ...order(x.orderedArticle.orderId)];
+        if (x.articleCreated) entry.badges.push("Neuer Artikel");
         entry.fields = this.articleFields(x.orderedArticle);
         break;
       }
-      case "article_removed": {
-        const x = p as OrderBundleArticleRemovedEvent;
-        entry.subtitle = txt(this.articleLine(x.orderedArticle));
-        if (x.newOrderId != null) entry.subtitle.push({ text: " · moved to " }, ...order(x.newOrderId));
+
+      case "article_deleted": {
+        const x = p as ArticleDeletedEvent;
+        entry.subtitle = [{ text: `${this.articleLine(x.orderedArticle)} · ` }, ...order(x.orderedArticle.orderId)];
+        if (x.orderDeleted) entry.badges.push("Bestellung gelöscht");
         entry.fields = this.articleFields(x.orderedArticle);
         break;
       }
-      case "article_changed": {
-        const x = p as OrderBundleArticleChangedEvent;
-        entry.subtitle = txt(x.name ?? x.new.name ?? x.old.name ?? `Article #${x.orderedArticleId}`);
-        entry.diffs = ARTICLE_FIELDS.filter(({ key }) => (x.old[key] ?? null) !== (x.new[key] ?? null)).map(({
-                                                                                                               key,
-                                                                                                               label
-                                                                                                             }) => ({
-          label,
-          old: this.articleValue(key, x.old[key]),
-          new: this.articleValue(key, x.new[key])
+
+      case "article_updated": {
+        const x = p as ArticleUpdatedEvent;
+        const name = x.name ?? x.new.name ?? x.old.name ?? `Artikel #${x.orderedArticleId}`;
+        entry.subtitle = [{ text: `${name} · ` }, ...order(x.orderId)];
+        entry.diffs = ARTICLE_FIELDS.filter(({ key }) => (x.old[key] ?? null) !== (x.new[key] ?? null)).map(
+          ({ key, label }) => ({
+            label,
+            old: this.articleValue(key, x.old[key]),
+            new: this.articleValue(key, x.new[key])
+          })
+        );
+        break;
+      }
+
+      case "article_moved": {
+        const x = p as ArticleMovedEvent;
+        entry.subtitle = txt(this.articleLine(x.orderedArticle));
+        entry.diffs = [
+          {
+            label: "Komission",
+            old: txt(x.sourceOrderableName),
+            new: txt(x.targetOrderableName)
+          }
+        ];
+        if (x.targetOrderCreated) entry.badges.push("Neue Bestellung");
+        if (x.sourceOrderDeleted) entry.badges.push("Bestellung gelöscht");
+        entry.fields = this.articleFields(x.orderedArticle);
+        break;
+      }
+
+      case "articles_moved": {
+        const x = p as ArticlesMovedEvent;
+        const n = x.orderedArticles.length;
+        entry.subtitle = txt(`${n} Artikel`);
+        entry.diffs = [
+          {
+            label: "Komission",
+            old: txt(x.sourceOrderableName),
+            new: txt(x.targetOrderableName)
+          }
+        ];
+        if (x.sourceOrderBundleId !== x.targetOrderBundleId) {
+          entry.diffs.push({
+            label: "Bestellung",
+            old: orderAt(x.sourceOrderBundleId, undefined),
+            new: orderAt(x.targetOrderBundleId, undefined)
+          });
+        }
+        if (x.createdOrderBundleId != null) entry.badges.push(`Neue Bestellung #${x.createdOrderBundleId} erstellt`);
+        entry.articles = this.articles(x.orderedArticles, false);
+        break;
+      }
+
+      case "prices_updated": {
+        const x = p as PricesUpdatedEvent;
+        const n = x.prices.length;
+        entry.subtitle = txt(`${n} ${n === 1 ? "Preis" : "Preise"} geändert`);
+        entry.diffs = x.prices.map((c) => ({
+          label: c.name ?? `Artikel #${c.orderedArticleId}`,
+          old: txt(this.price(c.oldPrice)),
+          new: txt(this.price(c.newPrice))
         }));
         break;
       }
@@ -316,28 +393,35 @@ export class ShopOrderHistoryComponent {
     return entry;
   }
 
-  // ------------------------------------------------------------- formatting
+  // --------------------------------------------------------------- formatting
 
   private articleLine(a: OrderedArticleSnapshot): string {
     return `${this.num(a.amount)} × ${a.name ?? a.modNumber}`;
   }
 
+  /** Detail grid for a single article (the order is already in the subtitle or diff). */
   private articleFields(a: OrderedArticleSnapshot): ChangelogField[] {
     return [
       { label: "Mod. number", value: txt(a.modNumber) },
-      { label: "Price", value: txt(this.price(a.price)) },
-      { label: "Order", value: [{ orderId: a.orderId }] },
-      ...(a.position ? [{ label: "Position", value: txt(a.position) }] : []),
-      ...(a.comment ? [{ label: "Comment", value: txt(a.comment) }] : []),
-      ...(a.request ? [{ label: "Request", value: txt("Yes") }] : [])
+      { label: "Preis", value: txt(this.price(a.price * a.amount)) },
+      ...(a.comment ? [{ label: "Kommentar", value: txt(a.comment) }] : []),
+      ...(a.request ? [{ label: "Anfrage", value: txt("Yes") }] : [])
     ];
+  }
+
+  /** Compact rows for events that touch several articles. */
+  private articles(list: OrderedArticleSnapshot[] | null | undefined, withOrder = true): ChangelogArticle[] {
+    return (list ?? []).map((a) => {
+      const meta: ChangelogText = [{ text: `${a.modNumber} · ${this.price(a.price)}` }];
+      if (a.position) meta.push({ text: ` · Pos. ${a.position}` });
+      if (withOrder) meta.push({ text: " · " }, { orderId: a.orderId });
+      return { id: a.orderedArticleId, title: this.articleLine(a), meta, request: a.request };
+    });
   }
 
   private articleValue(key: keyof OrderedArticleChange, v: unknown): ChangelogText | null {
     if (v === null || v === undefined || v === "") return null;
     switch (key) {
-      case "orderId":
-        return [{ orderId: v as number }];
       case "price":
         return txt(this.price(v as number));
       case "amount":
@@ -365,11 +449,7 @@ export class ShopOrderHistoryComponent {
   }
 
   private bool(v: boolean): string {
-    return v ? "Yes" : "No";
-  }
-
-  private ref(v: number | null | undefined): string | null {
-    return v == null ? null : `#${v}`;
+    return v ? "Ja" : "Nein";
   }
 
   private initials(u: UserEssential | null | undefined): string {
@@ -378,27 +458,22 @@ export class ShopOrderHistoryComponent {
     const b = u.secondname?.[0] ?? "";
     return (a + b || u.fullname?.[0] || u.email[0]).toUpperCase();
   }
-
-  /*####################### */
-
-  protected onCancelClick() {
-    this.dialogRef.close();
-  }
-
-  protected readonly JSON = JSON;
 }
+
+// ---------------------------------------------------------------- text helpers
 
 function txt(text: string): ChangelogText {
   return [{ text }];
 }
 
-function txtOrNull(text: string | null | undefined): ChangelogText | null {
-  return text ? [{ text }] : null;
-}
-
 /** "Order <ref>" */
 function order(id: number): ChangelogText {
-  return [{ text: "Order " }, { orderId: id }];
+  return [{ text: "Bestellung " }, { orderId: id }];
+}
+
+/** "<ref> · Orderable name" */
+function orderAt(id: number, orderableName: string | null | undefined): ChangelogText {
+  return orderableName ? [{ orderId: id }, { text: ` · ${orderableName}` }] : [{ orderId: id }];
 }
 
 /** "<ref>, <ref>, <ref>" or "—" */

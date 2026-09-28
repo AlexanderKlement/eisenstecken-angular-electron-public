@@ -7,7 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Payment } from './payment';
+import { Liability } from './liability';
 import { Lock } from './lock';
 
 
@@ -17,14 +17,11 @@ export interface IngoingInvoice {
     date_formatted: string;
     id: number;
     iva: string;
+    liabilities: Array<Liability>;
     lock: Lock;
     name: string;
     number: string;
-    open_amount: number;
-    paid: boolean;
-    paid_sum: number;
     payment_date: string;
-    payments: Array<Payment>;
     timestamp: string;
     total: number;
     xml?: string | null;

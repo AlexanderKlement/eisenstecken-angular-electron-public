@@ -209,6 +209,8 @@ $theme-accent: mat.m2-define-palette($mat-accent, main, lighter, darker);
 
 
 body {
+  --paid-color: #99ff99;
+  --not-paid-color: #ee9090;
   --warn-color: #ff0000;
   --warn-lighter-color: #ffb3b3;
   --warn-darker-color: #ff0000;

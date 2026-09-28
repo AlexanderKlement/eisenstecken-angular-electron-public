@@ -426,8 +426,7 @@ export default class JobDetailComponent implements OnInit {
         { name: "status", headerName: "Status" },
         { name: "request", headerName: "Anfrage" }
       ],
-      (api) => api.readOrdersToCountOrderToOrderableToIdCountGet(this.jobId),
-      []
+      (api) => api.readOrdersToCountOrderToOrderableToIdCountGet(this.jobId)
     );
     this.orderDataSource.loadData();
   }
@@ -461,8 +460,7 @@ export default class JobDetailComponent implements OnInit {
         { name: "amount_articles", headerName: "Anzahl Teile" },
         { name: "create_date", headerName: "Datum" }
       ],
-      (api) => api.readOrdersToCountOrderToOrderableToIdCountGet(this.jobId),
-      []
+      (api) => api.readOrdersToCountOrderToOrderableToIdCountGet(this.jobId)
     );
     this.deliveryNoteDataSource.loadData();
   }

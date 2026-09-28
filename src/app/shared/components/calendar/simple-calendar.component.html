@@ -5,7 +5,7 @@
     <span>{{ dayManager.getStartDate() + " - " + dayManager.getEndDate() }}</span>
     <app-circle-icon-button backgroundColor="white" (click)="nextWeekClicked()" icon="navigate_next" />
     <app-circle-icon-button backgroundColor="white" (click)="newMeetingClicked()" icon="add"
-                            [class.hidden]="!createAllowed" />
+                            [class.hidden-create]="!createAllowed" />
   </div>
   <div class="calendar-days">
     @for (day of dayManager.getShownDayArray(); track day) {

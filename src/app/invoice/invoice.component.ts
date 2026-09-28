@@ -1,4 +1,4 @@
-import { Component, ComponentRef, OnInit, inject } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { AuthStateService } from "../shared/services/auth-state.service";
 import { first } from "rxjs/operators";
 import { CustomButton, ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
@@ -8,41 +8,36 @@ import {
 } from "./outgoing/outgoing-invoice-number-dialog/outgoing-invoice-number-dialog.component";
 import { ImportXmlDialogComponent } from "./ingoing/import-xml-dialog/import-xml-dialog.component";
 import { Observable, Subscriber } from "rxjs";
-import { ConfirmDialogComponent } from "../shared/components/confirm-dialog/confirm-dialog.component";
 import { FileService } from "../shared/services/file.service";
-import { ActivatedRoute } from "@angular/router";
-import { DefaultService, ScopeEnum } from "../../api/openapi";
-import { MatTabGroup, MatTab } from "@angular/material/tabs";
+import { DefaultService, LiabilityService, ScopeEnum } from "../../api/openapi";
+import { MatTab, MatTabGroup } from "@angular/material/tabs";
 import { OutgoingComponent } from "./outgoing/outgoing.component";
 import { IngoingComponent } from "./ingoing/ingoing.component";
+import { ExpensesComponent } from "./expenses/expenses.component";
 
 @Component({
   selector: "app-invoice",
   templateUrl: "./invoice.component.html",
   styleUrls: ["./invoice.component.scss"],
-  imports: [ToolbarComponent, MatTabGroup, MatTab, OutgoingComponent, IngoingComponent]
+  imports: [ToolbarComponent, MatTabGroup, MatTab, OutgoingComponent, IngoingComponent, ExpensesComponent]
 })
 export default class InvoiceComponent implements OnInit {
   private authService = inject(AuthStateService);
   private dialog = inject(MatDialog);
   private api = inject(DefaultService);
+  private liabilityService = inject(LiabilityService);
   private file = inject(FileService);
 
   outgoingInvoicesAvailable = false;
+  expensesAvailable = false;
   ingoingInvoicesAvailable = false;
   updateChildTablesSubscriber: Subscriber<void>;
   updateChildTables$: Observable<void>;
 
   outgoingInvoicesTabIndex = 0;
   ingoingInvoicesTabIndex = 1;
+  expensesInvoicesTabIndex = 2;
 
-  public $refresh: Observable<void>;
-  nextRgNumButton = {
-    name: "Nächste Rechnungsnummer setzen",
-    navigate: (): void => {
-      this.outgoingInvoiceNumberClicked();
-    }
-  };
   importIngoingInvoicesButton = {
     name: "Eingangsrechnungen importieren",
     navigate: (): void => {
@@ -62,31 +57,19 @@ export default class InvoiceComponent implements OnInit {
     }
   };
   buttons: CustomButton[] = [];
-  private $refreshSubscriber: Subscriber<void>;
 
   ngOnInit(): void {
     this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
       this.outgoingInvoicesAvailable = allowed;
-    });
-    this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
       this.ingoingInvoicesAvailable = allowed;
+      this.expensesAvailable = allowed;
     });
     this.updateChildTables$ = new Observable<void>((subscriber => {
       this.updateChildTablesSubscriber = subscriber;
     }));
     this.pushOutgoingInvoiceButtons();
-    this.initRefreshObservables();
   }
 
-  initRefreshObservables(): void {
-    this.$refresh = new Observable<void>((subscriber => {
-      this.$refreshSubscriber = subscriber;
-    }));
-  }
-
-  onAttach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute): void {
-    this.$refreshSubscriber.next();
-  }
 
   selectedTabChanged($event: number) {
     if ($event === this.outgoingInvoicesTabIndex) {
@@ -95,6 +78,9 @@ export default class InvoiceComponent implements OnInit {
     } else if ($event === this.ingoingInvoicesTabIndex) {
       this.buttons = [];
       this.pushIngoingInvoiceButtons();
+    } else if ($event === this.expensesInvoicesTabIndex) {
+      this.buttons = [];
+      this.pushExpensesButtons();
     }
   }
 
@@ -121,19 +107,23 @@ export default class InvoiceComponent implements OnInit {
   }
 
   private printUnpaidIngoingInvoicesClicked() {
-    this.api.generateUnpaidIngoingInvoicesPdfIngoingInvoicePdfUnpaidGet().pipe(first()).subscribe((pdf) => {
-      this.file.open(pdf);
+    this.liabilityService.generateOpenLiabilitiesPdf().pipe(first()).subscribe((pdf) => {
+      this.file.open(pdf).then();
     });
   }
 
   private printUnpaidOutgoingInvoicesClicked() {
     this.api.generateUnpaidOutgoingInvoicesPdfOutgoingInvoicePdfUnpaidGet().pipe(first()).subscribe((pdf) => {
-      this.file.open(pdf);
+      this.file.open(pdf).then();
     });
   }
 
   private pushIngoingInvoiceButtons() {
     this.buttons.push(this.printUnpaidIngoingInvoices);
     this.buttons.push(this.importIngoingInvoicesButton);
+  }
+
+  private pushExpensesButtons() {
+    this.buttons.push(this.printUnpaidIngoingInvoices);
   }
 }

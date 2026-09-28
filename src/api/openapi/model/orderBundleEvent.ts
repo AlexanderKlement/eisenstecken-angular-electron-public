@@ -18,7 +18,7 @@ export interface OrderBundleEvent {
     id: number;
     orderBundleId: number;
     payload: Payload;
-    user?: UserEssential | null;
+    user: UserEssential;
 }
 export namespace OrderBundleEvent {
 }

@@ -5,15 +5,12 @@ import {
   Client,
   Contact,
   Credential,
+  DeliveryNote,
   Expense,
-  Fee,
   InfoPage,
   IngoingInvoice,
   Job,
-  Journey,
-  Maintenance,
-  Meal,
-  MealSum,
+  Liability,
   Offer,
   OfferElement,
   OfferElementField,
@@ -36,8 +33,6 @@ import {
   OutgoingInvoice,
   Price,
   RecalculationSmall,
-  Service,
-  ServiceSum,
   Stock,
   Supplier,
   TechnicalData,
@@ -75,32 +70,31 @@ export type DataSourceClass =
   | OfferElementType
   | OfferElement
   | OfferElementListElement
+  | Liability
   | OfferElementField
   | OfferLibraryListElement
   | OfferLibrary
+  | DeliveryNote
   | OfferLibraryEntry
   | OfferTemplate
   | OfferStatement
   | OrderSmall
   | TechnicalData
   | Credential
-  | Fee
-  | Meal
-  | MealSum
   | Stock
   | Expense
   | Workload
-  | Service
-  | ServiceSum
-  | Maintenance
   | InfoPage
   | WoodList
   | TikTakEmployee
   | TemplatePaint
   | OrderedArticleSmall
   | RecalculationSmall
-  | TikTakTimeEntryByJob
-  | Journey;
+  | TikTakTimeEntryByJob;
 
+export const ALL_INVOICES = "Alle";
+export const PAID_INVOICES = "Unbezahlt";
+export const UNPAID_INVOICES = "Bezahlt";
+export const INVOICE_TYPES = [ALL_INVOICES, PAID_INVOICES, UNPAID_INVOICES];
 
 //I did not come up with this myself: https://stackoverflow.com/questions/65332597/typescript-is-there-a-recursive-keyof

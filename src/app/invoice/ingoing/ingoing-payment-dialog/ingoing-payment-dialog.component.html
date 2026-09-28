@@ -1,0 +1,94 @@
+<div mat-dialog-content class="content">
+  <h2>Zahlungen</h2>
+  @if (invoice$|async; as invoice) {
+    <span class="neutral">{{ invoice.name }} &bullet; Nr. {{ invoice.number }}
+      &bullet; vom {{ invoice.date_formatted }}</span>
+  }
+  @if (invoice$|async; as invoice) {
+    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="12" class="mt-24">
+      <div class="box">
+        <strong class="neutral">Rechnungsbetrag</strong>
+        <h3>{{ formatCurrency(invoice.total, "de-DE", "EUR") }}</h3>
+      </div>
+      <div class="box">
+        <strong class="neutral">Bereits bezahlt</strong>
+        <h3>{{ formatCurrency(paid(), "de-DE", "EUR") }}</h3>
+      </div>
+      <div class="box primary">
+        <strong class="neutral">Offener Betrag</strong>
+        <h3>{{ formatCurrency(open(), "de-DE", "EUR") }}</h3>
+      </div>
+    </div>
+  }
+  <form class="mt-12" [formGroup]="liabilityGroup">
+    <strong>Zahlungsplan</strong>
+    <ng-container formArrayName="entries">
+      @for (group of liabilityGroup.controls.entries.controls; track group.controls.id; let index = $index; let last = $last) {
+        <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16" [formGroup]="group"
+             class="mt-6 liability"
+             [class.highlight]="last">
+          @if (group.get('paid').value) {
+            <mat-form-field appearance="outline" class="new-form-element">
+              <mat-label>
+                Fälligkeit
+              </mat-label>
+              <input matInput [disabled]="true" [readonly]="true"
+                     [value]="dayjs(group.get('dueDate').value).format('DD.MM.YYYY')">
+            </mat-form-field>
+          } @else {
+            <mat-form-field appearance="outline" class="new-form-element">
+              <mat-label>
+                Fälligkeit
+                @if (hasChangesControl(group, "dueDate")) {
+                  *
+                }
+              </mat-label>
+              <input matInput [matDatepicker]="date_picker"
+                     formControlName="dueDate">
+              <mat-datepicker-toggle [for]="date_picker" matSuffix></mat-datepicker-toggle>
+              <mat-datepicker #date_picker></mat-datepicker>
+            </mat-form-field>
+          }
+          <mat-form-field appearance="outline" class="new-form-element">
+            <mat-label>
+              Betrag
+              @if (hasChangesControl(group, "amount")) {
+                *
+              }
+            </mat-label>
+            <input matInput [disabled]="last || group.get('paid').value" [readonly]="last || group.get('paid').value"
+                   formControlName="amount"
+                   type="number" />
+            <mat-icon matSuffix>euro</mat-icon>
+          </mat-form-field>
+          <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8">
+
+            <button matIconButton [class.hidden]="last || group.get('paid').value" (click)="toggleDelete(index)">
+              <mat-icon>delete</mat-icon>
+            </button>
+
+            <div class="pill" [class.paid]="group.get('paid').value">
+              @if (group.get('paid').value) {
+                Bezahlt
+              } @else {
+                Offen
+              }
+            </div>
+          </div>
+        </div>
+      }
+    </ng-container>
+    <div fxLayout="row" fxLayoutAlign="end center" class="mt-6">
+      <button mat-stroked-button (click)="onAddLine()" [disabled]="open() === 0">Hinzufügen</button>
+    </div>
+  </form>
+</div>
+<mat-dialog-actions>
+  <div fxLayout="row" fxFlexFill fxLayoutAlign="space-between center">
+    <button type="button" mat-raised-button color="accent" (click)="onCancelClick()">Schließen</button>
+
+    <button type="button" mat-raised-button color="primary" (click)="onSave()" [disabled]="!hasChanges()">
+      Speichern
+    </button>
+  </div>
+</mat-dialog-actions>
