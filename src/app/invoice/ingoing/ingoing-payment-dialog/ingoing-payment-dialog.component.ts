@@ -1,20 +1,38 @@
 import { Component, inject, OnInit } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogRef } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogContent, MatDialogRef } from "@angular/material/dialog";
 import { DefaultLayoutAlignDirective, DefaultLayoutDirective, FlexModule } from "ng-flex-layout";
 import { MatButton, MatIconButton } from "@angular/material/button";
-import { Observable } from "rxjs";
-import { DefaultService, IngoingInvoice, Liability, LiabilityService } from "../../../../api/openapi";
+import {
+  DefaultService,
+  IngoingInvoice,
+  LiabilityCreate,
+  LiabilityPatch,
+  LiabilityService
+} from "../../../../api/openapi";
 import { AsyncPipe, formatCurrency } from "@angular/common";
 import dayjs from "dayjs/esm";
 import { first } from "rxjs/operators";
 import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
 import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular/material/datepicker";
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from "@angular/forms";
 import { MatIcon } from "@angular/material/icon";
+import { BehaviorSubject, forkJoin } from "rxjs";
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { ConfirmDialogComponent } from "../../../shared/components/confirm-dialog/confirm-dialog.component";
 
 export interface IngoingPaymentData {
   ingoingId: number;
 }
+
+const dateValidator: ValidatorFn = (control: FormControl<Date>) => {
+  const d = control.value;
+  if (d.getFullYear() < 2000) {
+    return {
+      dateValidator: true
+    };
+  }
+  return undefined;
+};
 
 type LiabilityGroup = {
   id: FormControl<number>;
@@ -26,12 +44,6 @@ type LiabilityGroup = {
   deleted: FormControl<boolean>;
 }
 
-interface LoadState {
-  id: number | null;
-  status: "loading" | "loaded" | "error";
-  liabilities: Liability[];
-  error?: unknown;
-}
 
 @Component({
   selector: "app-ingoing-payment-dialog",
@@ -42,7 +54,6 @@ interface LoadState {
     FlexModule,
     MatButton,
     MatDialogActions,
-    AsyncPipe,
     MatFormField,
     MatLabel,
     MatDatepicker,
@@ -52,23 +63,28 @@ interface LoadState {
     ReactiveFormsModule,
     MatInput,
     MatIconButton,
-    MatIcon
+    MatIcon,
+    AsyncPipe,
+    MatProgressSpinner
   ],
   templateUrl: "./ingoing-payment-dialog.component.html",
   styleUrl: "./ingoing-payment-dialog.component.scss"
 })
 export class IngoingPaymentDialogComponent implements OnInit {
-  data = inject<IngoingPaymentData>(MAT_DIALOG_DATA);
-  api = inject(DefaultService);
-  liabilityService = inject(LiabilityService);
+  private data = inject<IngoingPaymentData>(MAT_DIALOG_DATA);
+  private api = inject(DefaultService);
+  private dialog = inject(MatDialog);
+  private liabilityService = inject(LiabilityService);
   dialogRef = inject<MatDialogRef<IngoingPaymentDialogComponent>>(MatDialogRef);
-  invoice$: Observable<IngoingInvoice>;
+  invoice: IngoingInvoice | null = null;
   liabilityGroup: FormGroup<{
     entries: FormArray<FormGroup<LiabilityGroup>>
   }> = new FormGroup({
     entries: new FormArray([])
   });
-
+  liabilitiesName = "";
+  private loadingSubject = new BehaviorSubject<boolean>(true);
+  public loading$ = this.loadingSubject.asObservable();
 
   paid() {
     return this.liabilityGroup.controls.entries.controls.reduce<number>((prev, l) => l.get("paid").value ? l.get("amount").value + prev : prev, 0);
@@ -80,15 +96,16 @@ export class IngoingPaymentDialogComponent implements OnInit {
 
   reloadLiabilities() {
     this.liabilityService.getLiabilities(0, 100, undefined, undefined, undefined, undefined, this.data.ingoingId).pipe(first()).subscribe(res => {
+      this.loadingSubject.next(false);
       this.liabilityGroup.controls.entries.clear({ emitEvent: false });
       res.sort((a, b) => {
         return new Date(a.due_date).getTime() - new Date(b.due_date).getTime();
       }).forEach(item => {
         this.liabilityGroup.controls.entries.push(new FormGroup<LiabilityGroup>({
           id: new FormControl(item.id),
-          dueDate: new FormControl(new Date(item.due_date)),
+          dueDate: new FormControl(new Date(item.due_date), [dateValidator]),
           dueDateOrig: new FormControl(new Date(item.due_date)),
-          amount: new FormControl(item.amount),
+          amount: new FormControl(item.amount, [Validators.min(1)]),
           amountOrig: new FormControl(item.amount),
           paid: new FormControl(item.paid),
           deleted: new FormControl(false)
@@ -98,30 +115,43 @@ export class IngoingPaymentDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.invoice$ = this.api.readIngoingInvoiceIngoingInvoiceIngoingInvoiceIdGet(this.data.ingoingId);
-    this.reloadLiabilities();
+    this.api.readIngoingInvoiceIngoingInvoiceIngoingInvoiceIdGet(this.data.ingoingId).pipe(first()).subscribe((res) => {
+      this.invoice = res;
+      this.liabilitiesName = `${res.name} - ${res.number}`;
+      this.reloadLiabilities();
+    });
+
     this.liabilityGroup.valueChanges.subscribe(() => {
       if (this.liabilityGroup.controls.entries.length !== 0) {
         const last = this.liabilityGroup.controls.entries.at(-1);
         const latestDate = last.get("dueDate").value.getTime();
         const openAmountOrig = last.get("amountOrig").value;
-        const openAmount = last.get("amount").value;
         let diffAmount = 0;
         this.liabilityGroup.controls.entries.controls.forEach((group, idx) => {
-          const thisDiff = (group.get("amount").value - group.get("amountOrig").value);
-          if (thisDiff !== 0) { // TODO this does not work atm
-            if (thisDiff > openAmount) {
-              group.patchValue({ amount: openAmountOrig }, { emitEvent: false });
-              diffAmount += (openAmount - group.get("amountOrig").value);
-            } else if (idx !== this.liabilityGroup.controls.entries.length - 1) {
-              diffAmount += thisDiff;
+          if (idx < this.liabilityGroup.controls.entries.length - 1) {
+            if (group.get("deleted").value) {
+              diffAmount -= group.get("amountOrig").value;
+            } else {
+              const thisDiff = (group.get("amount").value - group.get("amountOrig").value);
+              if (thisDiff !== 0) {
+                if (thisDiff > openAmountOrig) {
+                  group.patchValue({ amount: openAmountOrig - diffAmount }, { emitEvent: false });
+                  diffAmount = openAmountOrig;
+                } else if (diffAmount + thisDiff > openAmountOrig) {
+                  const remainder = openAmountOrig - diffAmount;
+                  group.patchValue({ amount: remainder }, { emitEvent: false });
+                  diffAmount += remainder;
+                } else {
+                  diffAmount += thisDiff;
+                }
+              }
+              if (group.get("dueDate").value.getTime() > latestDate) {
+                group.patchValue({ dueDate: new Date(latestDate) }, { emitEvent: false });
+              }
             }
           }
-          if (group.get("dueDate").value.getTime() > latestDate) {
-            group.patchValue({ dueDate: new Date(latestDate) }, { emitEvent: false });
-          }
         });
-        last.patchValue({ amount: openAmount - diffAmount }, { emitEvent: false });
+        last.patchValue({ amount: openAmountOrig - diffAmount }, { emitEvent: false });
       }
     });
   }
@@ -137,10 +167,10 @@ export class IngoingPaymentDialogComponent implements OnInit {
     if (this.open() !== 0) {
       this.liabilityGroup.controls.entries.insert(0, new FormGroup({
         id: new FormControl(-1),
-        amount: new FormControl(0),
+        amount: new FormControl(0, [Validators.min(1)]),
         amountOrig: new FormControl(0),
-        dueDate: new FormControl(new Date()),
-        dueDateOrig: new FormControl(new Date()),
+        dueDate: new FormControl(new Date(), [dateValidator]),
+        dueDateOrig: new FormControl(new Date(0)),
         paid: new FormControl(false),
         deleted: new FormControl(false)
       }));
@@ -163,6 +193,28 @@ export class IngoingPaymentDialogComponent implements OnInit {
     return !!this.liabilityGroup.controls.entries.controls.find(grp => this.hasChangesGroup(grp));
   }
 
+  private maxDate() {
+    const last = this.liabilityGroup.controls.entries.at(-1);
+    return last.get("dueDate").value;
+  }
+
+  protected controlInvalid(group: FormGroup<LiabilityGroup>, key: "amount" | "dueDate") {
+    if (key === "amount") {
+      return group.get("amount").value === 0;
+    } else {
+      const date = group.get("dueDate").value;
+      return date.getFullYear() < 2000 || date.getTime() > this.maxDate().getTime();
+    }
+  }
+
+  protected groupInvalid(group: FormGroup<LiabilityGroup>) {
+    return this.controlInvalid(group, "amount") || this.controlInvalid(group, "dueDate");
+  }
+
+  protected formInvalid() {
+    return !!this.liabilityGroup.controls.entries.controls.find(grp => this.groupInvalid(grp));
+  }
+
   protected toggleDelete(index: number) {
     const grp = this.liabilityGroup.controls.entries.at(index);
     if (grp.get("id").value === -1) {
@@ -172,7 +224,98 @@ export class IngoingPaymentDialogComponent implements OnInit {
     }
   }
 
-  protected onSave() {
+  protected onRecalculateRest() {
+    if (this.invoice) {
+      const amount = this.invoice.total;
+      let calculated = 0;
+      const last = this.liabilityGroup.controls.entries.at(-1);
+      this.liabilityGroup.controls.entries.controls.forEach((grp) => {
+        if (last.get("id").value !== grp.get("id").value) {
+          calculated += grp.get("amount").value;
+        }
+      });
+      if (calculated + last.get("amount").value !== amount) {
+        last.patchValue({ amount: amount - calculated }, { emitEvent: false });
+      }
+    }
+  }
 
+  protected onPayLiability(id: number, paid: boolean) {
+    if (paid) {
+      this.liabilityService.unpayLiability(id).pipe(first()).subscribe(() => {
+        this.reloadLiabilities();
+      });
+    } else {
+      this.liabilityService.payLiability(id).pipe(first()).subscribe(() => {
+        this.reloadLiabilities();
+      });
+    }
+  }
+
+  protected onPayAllRemaining() {
+    const unpaid = this.liabilityGroup.controls.entries.controls.filter(grp => !grp.get("paid").value);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "400px",
+      data: {
+        title: "Alles zahlen?",
+        text: `Möchtest du die ${unpaid.length} offenen Verpflichtungen als bezahlt markieren?`
+      }
+    });
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        forkJoin(
+          unpaid.map(grp => {
+            return this.liabilityService.payLiability(grp.get("id").value);
+          })
+        ).pipe(first()).subscribe(() => {
+          this.reloadLiabilities();
+        });
+      }
+    });
+  }
+
+  protected onSave() {
+    const creates: LiabilityCreate[] = [];
+    const patches: Record<number, LiabilityPatch> = {};
+    const deletes: number[] = [];
+    this.liabilityGroup.controls.entries.controls.forEach((group) => {
+      const id = group.get("id").value;
+      const amount = group.get("amount").value;
+      const dueDate = group.get("dueDate").value;
+      const due_date = new Date(dueDate.getTime() + 7300_000).toISOString().split("T")[0];
+      if (id === -1) {
+        creates.push({
+          name: this.liabilitiesName,
+          due_date,
+          amount,
+          ingoing_invoice_id: this.invoice.id
+        });
+      } else {
+        if (group.get("deleted").value) {
+          deletes.push(id);
+        } else if (this.hasChangesGroup(group)) {
+          patches[id] = {
+            amount,
+            due_date
+          };
+        }
+      }
+    });
+    const patchKeys: (keyof typeof patches)[] = Object.keys(patches).map(key => parseInt(key, 10));
+    this.loadingSubject.next(true);
+    forkJoin(
+      Array(creates.length + deletes.length + patchKeys.length).fill(0).map((_, i) => {
+        if (i < creates.length) {
+          return this.liabilityService.createLiability(creates[i]);
+        }
+        if (i < creates.length + deletes.length) {
+          return this.liabilityService.deleteLiability(deletes[i - creates.length]);
+        }
+        const id = patchKeys[i - creates.length - deletes.length];
+        return this.liabilityService.patchLiability(id, patches[id]);
+      })
+    ).pipe(first()).subscribe(() => {
+      this.reloadLiabilities();
+    });
   }
 }

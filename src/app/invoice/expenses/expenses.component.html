@@ -9,6 +9,9 @@
     <mat-form-field appearance="outline" class="new-form-element">
       <mat-label>Monat</mat-label>
       <mat-select [(value)]="selectedMonth" (valueChange)="this.dateChanged()">
+        <mat-option [value]="-1">
+          Alle
+        </mat-option>
         @for (month of MONTHS; track month) {
           <mat-option [value]="month.key">
             {{ month.label }}

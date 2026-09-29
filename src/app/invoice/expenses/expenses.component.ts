@@ -15,8 +15,10 @@ import { MatTabLink, MatTabNav, MatTabNavPanel } from "@angular/material/tabs";
 import { TableBuilderComponent, TableButton } from "../../shared/components/table-builder/table-builder.component";
 import dayjs from "dayjs/esm";
 import { TableDataSource } from "../../shared/components/table-builder/table-builder.datasource";
-import { INVOICE_TYPES } from "../../shared/types";
-import { Dayjs } from "dayjs";
+import { ALL_INVOICES, INVOICE_TYPES, PAID_INVOICES, UNPAID_INVOICES } from "../../shared/types";
+import { first } from "rxjs/operators";
+import { ConfirmDialogComponent } from "../../shared/components/confirm-dialog/confirm-dialog.component";
+import { MatDialog } from "@angular/material/dialog";
 
 const MONTHS = [
   { key: 0, label: "Januar" },
@@ -59,26 +61,32 @@ const ADD_PAYMENT_STR = "Zahlung hinzufügen";
 export class ExpensesComponent implements OnInit {
   private expensesService = inject(LiabilityService);
   private api = inject(DefaultService);
+  private dialog = inject(MatDialog);
   public $year: Observable<number[]>;
 
   public selectedYear = dayjs().year();
   public selectedMonth = dayjs().month();
 
   expensesDataSource: TableDataSource<Liability, LiabilityService>;
-  activeType = "Unbezahlt";
+  activeType = UNPAID_INVOICES;
+  createActive = false;
   headerButtons: TableButton[] = [
     {
       name: () => "Neue Spese hinzufügen",
       color: () => "primary",
       selectedField: "",
       navigate: () => {
-        // TODO
+        this.createActive = true;
+        this.expensesDataSource.loadData();
       },
       class: () => ""
     }
   ];
 
   dateFromRaw() {
+    if (this.selectedMonth === -1) {
+      return dayjs().set("minute", 1).set("hour", 2).set("date", 1).set("month", 0).set("year", this.selectedYear);
+    }
     return dayjs().set("minute", 1).set("hour", 2).set("date", 1).set("month", this.selectedMonth).set("year", this.selectedYear);
   }
 
@@ -87,10 +95,13 @@ export class ExpensesComponent implements OnInit {
   }
 
   dateTo() {
+    if (this.selectedMonth === -1) {
+      return this.dateFromRaw().clone().set("year", this.selectedYear + 1).toISOString().split("T")[0];
+    }
     return this.dateFromRaw().clone().set("month", this.selectedMonth + 1).set("date", 0).toISOString().split("T")[0];
   }
 
-  editedData: { name?: string, dueDate?: Dayjs, amount?: number, id: number }[] = [];
+  editedData: { name?: string, dueDate?: Date, amount?: number, id: number }[] = [];
 
   buttons: TableButton[] = [
     {
@@ -103,11 +114,8 @@ export class ExpensesComponent implements OnInit {
           return "hidden";
         }
       },
-      navigate: ($event, id) => {
-        const edited = this.editedData.find(data => data.id === id);
-        if (edited) {
-          // TODO save edited
-        }
+      navigate: (_, id) => {
+        this.saveClicked(id);
       },
       color: _ => "primary",
       selectedField: "id"
@@ -115,8 +123,8 @@ export class ExpensesComponent implements OnInit {
     {
       name: (_) => "Löschen",
       class: (_) => "",
-      navigate: ($event: any, id: number) => {
-        this.deleteClicked($event, id);
+      navigate: (_, id) => {
+        this.deleteClicked(id);
       },
       color: (_) => "warn",
       selectedField: "id"
@@ -132,22 +140,38 @@ export class ExpensesComponent implements OnInit {
     this.expensesDataSource = new TableDataSource(
       this.expensesService,
       (api, filter, sortDirection, skip, limit) => {
-        return api.getLiabilities(skip, limit, filter, this.activeType === "Unbezahlt" ? false : this.activeType === "Bezahlt" ? true : undefined, this.dateFrom(), this.dateTo());
+        return api.getLiabilities(skip, limit, filter, this.activeType === ALL_INVOICES ? undefined : this.activeType === PAID_INVOICES, this.dateFrom(), this.dateTo(), undefined, true);
       },
       (dataSourceClasses) => {
         const rows = [];
+        if (this.createActive) {
+          rows.push({
+            values: {
+              id: -1,
+              name: "",
+              payment_date: new Date(),
+              total: 0,
+              status: "Neu",
+              condition: -1
+            },
+            route: () => {
+              // nothing
+            }
+          });
+        }
         dataSourceClasses.forEach((dataSource) => {
+          const edited = this.editedData.find(data => data.id === dataSource.id);
           rows.push({
             values: {
               id: dataSource.id,
-              name: dataSource.name,
-              payment_date: dayjs(dataSource.due_date).format("YYYY-MM-DD"),
-              total: dataSource.amount,
+              name: edited?.name ?? dataSource.name,
+              payment_date: (edited?.dueDate ?? new Date(dataSource.due_date)),
+              total: edited?.amount ?? dataSource.amount,
               status: dataSource.paid ? "Zahlung löschen" : ADD_PAYMENT_STR,
               condition: dataSource.id
             },
             route: () => {
-              //  this.router.navigateByUrl("/invoice/ingoing/" + dataSource.id.toString());
+              // nothing
             }
           });
         });
@@ -221,15 +245,27 @@ export class ExpensesComponent implements OnInit {
           asButton: {
             name: (val: any) => val,
             class: (val: any) => (val === ADD_PAYMENT_STR) ? "paid" : " unpaid",
-            navigate: ($event, id) => {
-              this.paidClicked($event, id);
+            navigate: ($event: PointerEvent, id) => {
+
+              if (id !== -1) {
+                if ($event.target) {
+                  const val = ($event.target as HTMLButtonElement).innerText;
+                  if (val === ADD_PAYMENT_STR) {
+                    this.paidClicked(id);
+                  } else {
+                    this.paidClicked(id, true);
+                  }
+                }
+              } else {
+                alert("Spese zuerst speichern");
+              }
             },
             color: (_) => "primary",
             selectedField: "id"
           }
         }
       ],
-      (api) => api.countLiabilities(undefined, undefined, this.dateFrom(), this.dateTo())
+      (api) => api.countLiabilities(undefined, this.activeType === ALL_INVOICES ? undefined : this.activeType === PAID_INVOICES, this.dateFrom(), this.dateTo(), undefined, true)
     );
     this.expensesDataSource.loadData();
   }
@@ -238,12 +274,91 @@ export class ExpensesComponent implements OnInit {
     this.expensesDataSource.loadData();
   }
 
-  private paidClicked($event: any, id: number) {
-
+  private paidClicked(id: number, removePayment = false) {
+    this.expensesService.getLiability(id).pipe(first()).subscribe(res => {
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        width: "400px",
+        data: {
+          title: removePayment ? "Zahlung löschen?" : "Spesen bezahlt?",
+          text: removePayment ?
+            `Möchtest du die Zahlung für "${res.name}" vom ${dayjs(res.due_date).format("DD.MM.YYYY")} löschen?` :
+            `Möchtest du die Spesen "${res.name}" vom ${dayjs(res.due_date).format("DD.MM.YYYY")} als bezahlt markieren?`
+        }
+      });
+      dialogRef.afterClosed().subscribe((result: boolean) => {
+        if (result) {
+          if (removePayment) {
+            this.expensesService.unpayLiability(id).pipe(first()).subscribe(() => {
+              this.expensesDataSource.loadData();
+            });
+          } else {
+            this.expensesService.payLiability(id).pipe(first()).subscribe(() => {
+              this.expensesDataSource.loadData();
+            });
+          }
+        }
+      });
+    });
   }
 
-  private deleteClicked($event: any, id: number) {
+  private deleteClicked(id: number) {
+    if (id === -1) {
+      this.createActive = false;
+      this.expensesDataSource.loadData();
+      this.editedData = this.editedData.filter(data => data.id !== id);
+    } else {
+      this.expensesService.getLiability(id).pipe(first()).subscribe(res => {
+        const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+          width: "400px",
+          data: {
+            title: "Spesen Löschen?",
+            text: `Möchtest du die Spesen "${res.name}" vom ${dayjs(res.due_date).format("DD.MM.YYYY")} löschen? Diese Operation kann rückgängig gemacht werden.`
+          }
+        });
+        dialogRef.afterClosed().subscribe((result: boolean) => {
+          if (result) {
+            this.expensesService.deleteLiability(id).pipe(first()).subscribe(() => {
+              this.expensesDataSource.loadData();
+            });
+          }
+        });
+      });
+    }
+  }
 
+  private saveClicked(id: number) {
+    const edited = this.editedData.find(data => data.id === id);
+    console.log(edited);
+    if (edited) {
+      const due_date = edited.dueDate ? new Date(edited.dueDate.getTime() + 7300_000).toISOString().split("T")[0] : undefined;
+      if (id === -1) {
+        if (edited.name && edited.dueDate && edited.amount) {
+          this.expensesService.createLiability({
+            name: edited.name,
+            due_date,
+            amount: edited.amount
+          }).pipe(first()).subscribe(() => {
+            this.selectedYear = edited.dueDate.getFullYear();
+            if (this.selectedMonth !== -1) {
+              this.selectedMonth = edited.dueDate.getMonth();
+            }
+            this.activeType = UNPAID_INVOICES;
+            this.createActive = false;
+            this.editedData = this.editedData.filter(data => data.id !== id);
+            this.expensesDataSource.loadData();
+          });
+        }
+      } else {
+        this.expensesService.patchLiability(id, {
+          name: edited.name,
+          due_date,
+          amount: edited.amount
+        }).pipe(first()).subscribe(() => {
+          this.editedData = this.editedData.filter(data => data.id !== id);
+          this.expensesDataSource.loadData();
+        });
+      }
+    }
   }
 
   protected setActiveType(link: string) {

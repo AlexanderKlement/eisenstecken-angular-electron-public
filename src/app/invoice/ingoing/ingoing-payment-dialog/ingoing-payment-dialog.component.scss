@@ -13,6 +13,7 @@
 
     h3 {
       margin-block-start: 0;
+      margin-block-end: 0;
     }
 
     &.primary {
@@ -21,21 +22,25 @@
     }
   }
 
-  .pill {
-    padding: 4px 8px;
-    border-radius: 4px;
+  .unpaid {
     background-color: var(--not-paid-color);
+  }
 
-    &.paid {
-      background-color: var(--paid-color);
-    }
+  .paid {
+    background-color: var(--paid-color);
   }
 
   .liability {
     padding: 4px;
+    border: solid 2px transparent;
+    border-radius: 4px;
 
     &.highlight {
-      background-color: var(--primary-lighter-color);
+      border: solid 2px var(--primary-lighter-color);
+    }
+
+    &.deleted {
+      border: solid 2px var(--warn-lighter-color);
     }
   }
 }

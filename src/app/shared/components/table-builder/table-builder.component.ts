@@ -49,14 +49,12 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatIcon } from "@angular/material/icon";
 import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList } from "@angular/cdk/drag-drop";
 import { MtxSelect } from "@ng-matero/extensions/select";
-import { Dayjs } from "dayjs";
 import {
   MatDatepicker,
   MatDatepickerInput,
   MatDatepickerInputEvent,
   MatDatepickerToggle
 } from "@angular/material/datepicker";
-import dayjs from "dayjs/esm";
 
 interface TableButtonIcon {
   icon: string;
@@ -136,7 +134,7 @@ export class TableBuilderComponent<T extends DataSourceClass, A extends AnyApi =
   dragNDropChanged = false;
   subscription: Subscription;
   refreshInterval: NodeJS.Timeout;
-  refreshRateSeconds = 60;
+  refreshRateSeconds = 300;
   noInspectUnusedImports = false;
 
   constructor() {
@@ -249,7 +247,7 @@ export class TableBuilderComponent<T extends DataSourceClass, A extends AnyApi =
     onChange(parseFloat(input.value), id);
   }
 
-  protected onChangeDate($event: MatDatepickerInputEvent<any, any>, onChange: (value: Dayjs, id: (number | string)) => void, id: number | string) {
-    onChange(dayjs($event.value), id);
+  protected onChangeDate($event: MatDatepickerInputEvent<any, any>, onChange: (value: Date, id: (number | string)) => void, id: number | string) {
+    onChange($event.value, id);
   }
 }

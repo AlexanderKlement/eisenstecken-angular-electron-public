@@ -5,6 +5,7 @@ import {
   Order,
   OrderBundle,
   OrderBundleService,
+  OrderBundleSource,
   OrderedArticleService,
   Stock,
   Supplier,
@@ -121,10 +122,25 @@ export class ShopOrdersComponent implements OnInit {
   );
   trackByFnCommission = (item: Job | Stock) => `commission-${item.id}`;
 
+
+  refreshOrders() {
+    const orderer = this.filterForm.get("orderer").value;
+    const commission = this.filterForm.get("commission").value;
+    const supplier = this.filterForm.get("supplier").value;
+    this.orders$ = this.orderBundleService.getOrderBundle(
+      this.filterForm.get("year").value,
+      orderer === -1 ? undefined : orderer,
+      commission === -1 ? undefined : commission,
+      supplier === -1 ? undefined : supplier,
+      0,
+      100,
+      OrderBundleSource.Online);
+  }
+
   ngOnInit() {
     this.users$ = this.api.readUsersUsersGet(0, undefined, 100);
     this.filterForm.valueChanges.subscribe(() => {
-      this.orders$ = this.orderBundleService.searchShop(this.filterForm.get("year").value, this.filterForm.get("orderer").value);
+      this.refreshOrders();
     });
     this.authService.getCurrentUser().pipe(first()).subscribe((user) => {
       this.filterForm.patchValue({ orderer: user.id }, { emitEvent: true });
@@ -151,13 +167,14 @@ export class ShopOrdersComponent implements OnInit {
                   amount: article.amount,
                   price: formatCurrency(article.price, "de-DE", "€"),
                   sum: formatCurrency(article.price * article.amount, "de-DE", "€"),
-                  condition: order.order_to.displayable_name,
-                  commission: { id: order.order_to.id, displayable_name: order.order_to.displayable_name }
+                  commission: order.order_to ? {
+                    id: order.order_to.id,
+                    displayable_name: order.order_to.displayable_name
+                  } : undefined
                 },
                 rowClass: "cell-f-2 cell-f-3-alt cell-1-f-alt cell-5-f",
                 route: () => {
-                  //this.router.navigateByUrl("order/" + order.id);
-
+                  this.router.navigateByUrl("order/" + order.id).then();
                 }
               }
             );
@@ -179,15 +196,20 @@ export class ShopOrdersComponent implements OnInit {
               return this.jobsLoading || this.stocksLoading;
             },
             items: this.commissions$,
+            invalid: (value) => {
+              console.log("checkValidity", { value, invalid: !value });
+              return !value;
+            },
             trackByFunc: this.trackByFnCommission,
             label: "Neue Komission",
             onChange: ($event, id) => {
               const jobSupplier: Job | Supplier = $event;
               const articleId = typeof id === "string" ? parseInt(id, 10) : id;
               this.loadingSubject.next(true);
-              this.orderedArticleService.moveOrderedArticle(articleId, jobSupplier.id).pipe(first()).subscribe((res) => {
+              this.orderedArticleService.moveOrderedArticle(articleId, jobSupplier.id).pipe(first()).subscribe(() => {
                 this.loadingSubject.next(false);
                 this.articlesDataSource.loadData();
+                this.refreshOrders();
               });
             }
           }, headerName: "Komission"
@@ -208,4 +230,6 @@ export class ShopOrdersComponent implements OnInit {
       });
     }
   }
+
+  protected readonly formatCurrency = formatCurrency;
 }

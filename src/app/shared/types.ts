@@ -93,8 +93,8 @@ export type DataSourceClass =
   | TikTakTimeEntryByJob;
 
 export const ALL_INVOICES = "Alle";
-export const PAID_INVOICES = "Unbezahlt";
-export const UNPAID_INVOICES = "Bezahlt";
+export const PAID_INVOICES = "Bezahlt";
+export const UNPAID_INVOICES = "Unbezahlt";
 export const INVOICE_TYPES = [ALL_INVOICES, PAID_INVOICES, UNPAID_INVOICES];
 
 //I did not come up with this myself: https://stackoverflow.com/questions/65332597/typescript-is-there-a-recursive-keyof

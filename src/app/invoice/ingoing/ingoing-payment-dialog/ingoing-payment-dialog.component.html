@@ -1,10 +1,10 @@
 <div mat-dialog-content class="content">
   <h2>Zahlungen</h2>
-  @if (invoice$|async; as invoice) {
+  @if (invoice) {
     <span class="neutral">{{ invoice.name }} &bullet; Nr. {{ invoice.number }}
       &bullet; vom {{ invoice.date_formatted }}</span>
   }
-  @if (invoice$|async; as invoice) {
+  @if (invoice) {
     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="12" class="mt-24">
       <div class="box">
         <strong class="neutral">Rechnungsbetrag</strong>
@@ -23,9 +23,10 @@
   <form class="mt-12" [formGroup]="liabilityGroup">
     <strong>Zahlungsplan</strong>
     <ng-container formArrayName="entries">
-      @for (group of liabilityGroup.controls.entries.controls; track group.controls.id; let index = $index; let last = $last) {
+      @for (group of liabilityGroup.controls.entries.controls; track group.controls.id; let index = $index; let last = $last; let first = $first) {
         <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16" [formGroup]="group"
-             class="mt-6 liability"
+             class="mt-6 liability" [class.hidden]="group.get('deleted').value"
+             [class.deleted]="group.get('deleted').value"
              [class.highlight]="last">
           @if (group.get('paid').value) {
             <mat-form-field appearance="outline" class="new-form-element">
@@ -64,16 +65,24 @@
           <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8">
 
             <button matIconButton [class.hidden]="last || group.get('paid').value" (click)="toggleDelete(index)">
-              <mat-icon>delete</mat-icon>
+              <mat-icon>
+                @if (group.get('deleted').value) {
+                  add
+                } @else {
+                  delete
+                }</mat-icon>
             </button>
 
-            <div class="pill" [class.paid]="group.get('paid').value">
+            <button type="button" (click)="onPayLiability(group.get('id').value, group.get('paid').value)"
+                    mat-raised-button
+                    [class.paid]="group.get('paid').value"
+                    [class.unpaid]="!group.get('paid').value">
               @if (group.get('paid').value) {
-                Bezahlt
+                Zahlung löschen
               } @else {
-                Offen
+                Zahlung hinzufügen
               }
-            </div>
+            </button>
           </div>
         </div>
       }
@@ -84,11 +93,24 @@
   </form>
 </div>
 <mat-dialog-actions>
-  <div fxLayout="row" fxFlexFill fxLayoutAlign="space-between center">
-    <button type="button" mat-raised-button color="accent" (click)="onCancelClick()">Schließen</button>
-
-    <button type="button" mat-raised-button color="primary" (click)="onSave()" [disabled]="!hasChanges()">
-      Speichern
-    </button>
-  </div>
+  @if (loading$ | async) {
+    <div class="spinner-container">
+      <mat-spinner></mat-spinner>
+    </div>
+  } @else {
+    <div fxLayout="row" fxFlexFill fxLayoutAlign="space-between center">
+      <button type="button" mat-raised-button color="accent" (click)="onCancelClick()">Schließen</button>
+      <button type="button" mat-stroked-button (click)="onRecalculateRest()"
+              [disabled]="liabilityGroup.controls.entries.at(-1).get('paid').value">Beträge neu berechnen
+      </button>
+      <div fxFlex></div>
+      <button type="button" mat-stroked-button (click)="onPayAllRemaining()"
+              [disabled]="liabilityGroup.controls.entries.at(-1).get('paid').value">Alle als bezahlt markieren
+      </button>
+      <button type="button" mat-raised-button color="primary" (click)="onSave()"
+              [disabled]="!hasChanges() || formInvalid()">
+        Speichern
+      </button>
+    </div>
+  }
 </mat-dialog-actions>

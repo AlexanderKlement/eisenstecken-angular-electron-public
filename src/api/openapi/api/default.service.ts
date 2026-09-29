@@ -491,16 +491,19 @@ export class DefaultService extends BaseService {
 
     /**
      * Count Ingoing Invoices
+     * @param paid 
      * @param year 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public countIngoingInvoicesIngoingInvoiceCountGet(year?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<number>;
-    public countIngoingInvoicesIngoingInvoiceCountGet(year?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<number>>;
-    public countIngoingInvoicesIngoingInvoiceCountGet(year?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<number>>;
-    public countIngoingInvoicesIngoingInvoiceCountGet(year?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public countIngoingInvoicesIngoingInvoiceCountGet(paid?: boolean, year?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<number>;
+    public countIngoingInvoicesIngoingInvoiceCountGet(paid?: boolean, year?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<number>>;
+    public countIngoingInvoicesIngoingInvoiceCountGet(paid?: boolean, year?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<number>>;
+    public countIngoingInvoicesIngoingInvoiceCountGet(paid?: boolean, year?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>paid, 'paid');
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
           <any>year, 'year');
 
@@ -7156,14 +7159,15 @@ export class DefaultService extends BaseService {
      * @param skip 
      * @param limit 
      * @param filter 
+     * @param paid 
      * @param year 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readIngoingInvoicesIngoingInvoiceGet(skip?: number, limit?: number, filter?: string, year?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<IngoingInvoice>>;
-    public readIngoingInvoicesIngoingInvoiceGet(skip?: number, limit?: number, filter?: string, year?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<IngoingInvoice>>>;
-    public readIngoingInvoicesIngoingInvoiceGet(skip?: number, limit?: number, filter?: string, year?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<IngoingInvoice>>>;
-    public readIngoingInvoicesIngoingInvoiceGet(skip?: number, limit?: number, filter?: string, year?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public readIngoingInvoicesIngoingInvoiceGet(skip?: number, limit?: number, filter?: string, paid?: boolean, year?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<IngoingInvoice>>;
+    public readIngoingInvoicesIngoingInvoiceGet(skip?: number, limit?: number, filter?: string, paid?: boolean, year?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<IngoingInvoice>>>;
+    public readIngoingInvoicesIngoingInvoiceGet(skip?: number, limit?: number, filter?: string, paid?: boolean, year?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<IngoingInvoice>>>;
+    public readIngoingInvoicesIngoingInvoiceGet(skip?: number, limit?: number, filter?: string, paid?: boolean, year?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
@@ -7172,6 +7176,8 @@ export class DefaultService extends BaseService {
           <any>limit, 'limit');
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
           <any>filter, 'filter');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>paid, 'paid');
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
           <any>year, 'year');
 

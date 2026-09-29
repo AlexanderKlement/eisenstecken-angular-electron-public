@@ -19,7 +19,7 @@ import {
 import { MatFormField, MatLabel } from "@angular/material/input";
 import { MatOption, MatSelect } from "@angular/material/select";
 import { MatTabLink, MatTabNav, MatTabNavPanel } from "@angular/material/tabs";
-import { ALL_INVOICES, INVOICE_TYPES, PAID_INVOICES } from "../../shared/types";
+import { ALL_INVOICES, INVOICE_TYPES, PAID_INVOICES, UNPAID_INVOICES } from "../../shared/types";
 
 @Component({
   selector: "app-outgoing",
@@ -36,7 +36,7 @@ export class OutgoingComponent implements OnInit {
 
   outgoingDataSource: TableDataSource<OutgoingInvoice, DefaultService>;
 
-  activeType = "Unbezahlt";
+  activeType = UNPAID_INVOICES;
   public selectedYear = dayjs().year();
   public $year: Observable<number[]>;
 

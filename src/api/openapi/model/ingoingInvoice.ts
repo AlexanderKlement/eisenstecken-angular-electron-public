@@ -21,6 +21,7 @@ export interface IngoingInvoice {
     lock: Lock;
     name: string;
     number: string;
+    paid: boolean;
     payment_date: string;
     timestamp: string;
     total: number;

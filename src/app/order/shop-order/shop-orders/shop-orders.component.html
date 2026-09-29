@@ -64,18 +64,28 @@
         @for (order of orders; track order.id) {
           <div class="order-bundle" (click)="setSelectedOrder(order)">
             <div class="supplier-orderer-date">
-              <span class="supplier">{{ order.order_from.displayable_name }}</span>
+                <span class="supplier">
+                  @if (order.articlesWithoutComissions !== 0) {
+                    <mat-icon color="warn" inline>error</mat-icon>
+                  }
+                  {{ order.order_from.displayable_name }}
+                </span>
               <div class="orderer-date">
                 <span>{{ order.user.fullname }}
                   &bullet; {{ dayjs(order.create_date).format("DD.MM.YYYY, HH:mm") }}</span>
               </div>
             </div>
             <div class="price-open">
-              <span class="price">1.230,00 €</span>
-              @if (order.id % 10 === 0) {
-                <span class="open">1 offen</span>
+              <span class="price">{{ formatCurrency(order.priceWithRequests, "de-DE", "€") }}</span>
+              @if (order.articlesWithoutComissions !== 0) {
+                <span class="open">{{ order.articlesWithoutComissions }} offen</span>
               }
             </div>
+          </div>
+        }
+        @if (orders.length === 0) {
+          <div class="order-bundle">
+            <span class="neutral">Keine Bestellungen gefunden</span>
           </div>
         }
       }
@@ -84,22 +94,22 @@
   <div class="selected-order">
     @if (selectedOrder) {
       <div fxLayout="row" fxLayoutAlign="space-between stretch">
-        <h3>{{ selectedOrder.order_from.displayable_name }}</h3>
-        <div fxLayout="column" fxLayoutAlign="space-between end">
-          <h4>1815,00 €</h4>
-          <button matIconButton (click)="onOpenHistory()">
-            <mat-icon>history</mat-icon>
-          </button>
-        </div>
+        <strong class="text-lg font-medium">{{ selectedOrder.order_from.displayable_name }}</strong>
+        <span class="text-xl">{{ formatCurrency(selectedOrder.priceWithRequests, "de-DE", "€") }}</span>
       </div>
-      <div fxLayout="column">
-      <span class="neutral">
-        {{ selectedOrder.user.fullname }}
-        &bullet; {{ dayjs(selectedOrder.create_date).format("DD.MM.YYYY, HH:mm") }}
-      </span>
-        <span class="neutral">
-        Lieferdatum: {{ dayjs(selectedOrder.delivery_date).format("DD.MM.YYYY, HH:mm") }}
-      </span>
+      <div fxLayout="row" fxLayoutAlign="space-between start">
+        <div fxLayout="column">
+          <span class="neutral">
+            {{ selectedOrder.user.fullname }}
+            &bullet; {{ dayjs(selectedOrder.create_date).format("DD.MM.YYYY, HH:mm") }}
+          </span>
+          <span class="neutral">
+            Lieferdatum: {{ dayjs(selectedOrder.delivery_date).format("DD.MM.YYYY, HH:mm") }}
+          </span>
+        </div>
+        <button matIconButton (click)="onOpenHistory()">
+          <mat-icon>history</mat-icon>
+        </button>
       </div>
       @if (loading$|async) {
         <div class="spinner-container">

@@ -14,6 +14,7 @@ import { Lock } from './lock';
 
 
 export interface OrderBundle { 
+    articlesWithoutComissions: number;
     create_date: string;
     create_date_formatted: string;
     delivery_date: string;
@@ -24,6 +25,8 @@ export interface OrderBundle {
     order_from: Orderable;
     pdf_external?: string | null;
     pdf_internal?: string | null;
+    priceWithRequests: number;
+    priceWithoutRequests: number;
     request: boolean;
     source: OrderBundleSource;
     user: UserEssential;

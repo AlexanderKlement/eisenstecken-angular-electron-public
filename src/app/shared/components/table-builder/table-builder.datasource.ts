@@ -15,26 +15,30 @@ import {
 import { Sort } from "@angular/material/sort";
 import { moveItemInArray } from "@angular/cdk/drag-drop";
 import { MatSelectChange } from "@angular/material/select";
-import { Dayjs } from "dayjs";
 import { TableButton } from "./table-builder.component";
 
 type InputSettings = { placeholder?: string, label?: string, suffix?: string } & ({
   type: "text",
   onChange: (value: string, id: number | string) => void,
+  invalid?: (value: string, id: number | string) => boolean
 } | {
   type: "number",
   onChange: (value: number, id: number | string) => void,
+  invalid?: (value: number, id: number | string) => boolean
 } | {
   type: "date",
-  onChange: (value: Dayjs, id: number | string) => void,
+  onChange: (value: Date, id: number | string) => void,
+  invalid?: (value: Date, id: number | string) => boolean
 } | {
   type: "select",
   items: { id: number, displayable_name: string }[],
   onChange: ($event: MatSelectChange<number>) => void,
+  invalid?: (value: { id: number, displayable_name: string } | undefined) => boolean
 } | {
   type: "select-autocomplete",
   typeahead: Subject<string>,
   onChange: ($event: any, id: number | string) => void,
+  invalid?: (value: { id: number, displayable_name: string } | undefined) => boolean,
   items: Observable<{ id: number, displayable_name: string }[]>,
   loading: () => boolean,
   trackByFunc: (val: any) => string,

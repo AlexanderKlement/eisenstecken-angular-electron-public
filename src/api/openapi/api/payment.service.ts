@@ -42,19 +42,15 @@ export class PaymentService extends BaseService {
     /**
      * Create Liability Payment
      * @param liabilityId 
-     * @param paymentCreate 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createLiabilityPayment(liabilityId: number, paymentCreate: PaymentCreate, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Payment>;
-    public createLiabilityPayment(liabilityId: number, paymentCreate: PaymentCreate, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Payment>>;
-    public createLiabilityPayment(liabilityId: number, paymentCreate: PaymentCreate, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Payment>>;
-    public createLiabilityPayment(liabilityId: number, paymentCreate: PaymentCreate, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createLiabilityPayment(liabilityId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Payment>;
+    public createLiabilityPayment(liabilityId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Payment>>;
+    public createLiabilityPayment(liabilityId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Payment>>;
+    public createLiabilityPayment(liabilityId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (liabilityId === null || liabilityId === undefined) {
             throw new Error('Required parameter liabilityId was null or undefined when calling createLiabilityPayment.');
-        }
-        if (paymentCreate === null || paymentCreate === undefined) {
-            throw new Error('Required parameter paymentCreate was null or undefined when calling createLiabilityPayment.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -74,15 +70,6 @@ export class PaymentService extends BaseService {
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -99,7 +86,6 @@ export class PaymentService extends BaseService {
         return this.httpClient.request<Payment>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: paymentCreate,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

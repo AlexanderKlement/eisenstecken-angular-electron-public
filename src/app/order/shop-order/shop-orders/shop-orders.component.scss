@@ -16,7 +16,7 @@
   align-items: stretch;
   justify-content: flex-start;
   overflow-y: auto;
-  max-height: 70vh;
+  max-height: 60vh;
 
   .order-bundle {
     display: flex;
@@ -48,6 +48,10 @@
 
       .supplier {
         font-weight: 500;
+
+        mat-icon {
+          margin-right: 4px;
+        }
       }
 
       .orderer-date {

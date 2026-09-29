@@ -12,6 +12,7 @@
 export interface LiabilityCreate { 
     amount: number;
     due_date: string;
+    ingoing_invoice_id?: number | null;
     name: string;
 }
 

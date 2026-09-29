@@ -19,7 +19,7 @@ import {
 import { MatFormField, MatLabel } from "@angular/material/input";
 import { MatOption, MatSelect } from "@angular/material/select";
 import { MatTabLink, MatTabNav, MatTabNavPanel } from "@angular/material/tabs";
-import { INVOICE_TYPES } from "../../shared/types";
+import { ALL_INVOICES, INVOICE_TYPES, PAID_INVOICES, UNPAID_INVOICES } from "../../shared/types";
 import { IngoingPaymentDialogComponent } from "./ingoing-payment-dialog/ingoing-payment-dialog.component";
 
 @Component({
@@ -42,7 +42,7 @@ export class IngoingComponent implements OnInit {
   public selectedYear = dayjs().year();
   public $year: Observable<number[]>;
 
-  activeType = "Unbezahlt";
+  activeType = UNPAID_INVOICES;
   buttons: TableButton[] = [
     {
       name: _ => "Zahlungen",
@@ -82,7 +82,7 @@ export class IngoingComponent implements OnInit {
     this.ingoingDataSource = new TableDataSource(
       this.api,
       (api, filter, sortDirection, skip, limit) =>
-        api.readIngoingInvoicesIngoingInvoiceGet(skip, limit, filter, this.selectedYear), //TODO type this.activeType === ALL_INVOICES ? undefined : this.activeType === PAID_INVOICES
+        api.readIngoingInvoicesIngoingInvoiceGet(skip, limit, filter, this.activeType === ALL_INVOICES ? undefined : this.activeType === PAID_INVOICES, this.selectedYear),
       (dataSourceClasses) => {
         const rows = [];
         dataSourceClasses.forEach((dataSource) => {
@@ -102,7 +102,7 @@ export class IngoingComponent implements OnInit {
                 total: formatCurrency(dataSource.total, "de-DE", "EUR")
               },
               route: () => {
-                this.router.navigateByUrl("/invoice/ingoing/" + dataSource.id.toString());
+                this.router.navigateByUrl("/invoice/ingoing/" + dataSource.id.toString()).then();
               }
             });
         });
@@ -115,7 +115,7 @@ export class IngoingComponent implements OnInit {
         { name: "payment_date", headerName: "Fälligkeitsdatum" },
         { name: "total", headerName: "Gesamtpreis [mit MwSt.]" }
       ],
-      (api) => api.countIngoingInvoicesIngoingInvoiceCountGet(this.selectedYear)
+      (api) => api.countIngoingInvoicesIngoingInvoiceCountGet(this.activeType === ALL_INVOICES ? undefined : this.activeType === PAID_INVOICES, this.selectedYear)
     );
     this.ingoingDataSource.loadData();
   }
