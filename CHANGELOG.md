@@ -1,18 +1,4 @@
-## <small>2.2.8 (2026-07-21)</small>
-
-* adding missing generated files ([4cef3c8](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/4cef3c8))
-* Delete Tiktak Timeentries button ([ada8b91](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/ada8b91))
-* Delete Tiktak Timeentries text fix ([9815f61](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/9815f61))
-
-
-
-## <small>2.2.5 (2026-06-29)</small>
-
-* Export Bekleidungsgrößen fix ([c6f7dff](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c6f7dff))
-
-
-
-## <small>2.2.11 (2026-08-11)</small>
+## 2.3.0 (2026-09-29)
 
 * A lot refactored with templates ([44fa7e7](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/44fa7e7))
 * Added the navigate to home when click on title ([1fa749c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/1fa749c))
@@ -28,11 +14,14 @@
 * elements ([17ecba5](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/17ecba5))
 * Fields Finish ([f58bf9d](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f58bf9d))
 * first beta ([de37bf9](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/de37bf9))
+* First shop-order screen ([92995cf](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/92995cf))
 * Fix to build ([5dcaa1c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/5dcaa1c))
 * Fixes From E-Mail ([7de4573](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/7de4573))
 * Introduces Templates ([5bf5451](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/5bf5451))
+* Invoices ([c007b4d](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c007b4d))
 * Just a small fix ([54599a1](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/54599a1))
 * Kontaktperson feld bei user ([1a51ff4](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/1a51ff4))
+* Lastes bugfixes for release ([fa4873c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/fa4873c))
 * Lastes bugfixes for release ([9720118](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/9720118))
 * Many fixes ([4ee5fb1](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/4ee5fb1))
 * many progress ([058efcd](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/058efcd))
@@ -47,6 +36,9 @@
 * Progress ([7f3e912](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/7f3e912))
 * Progress ([650eb26](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/650eb26))
 * progress in dragNDrop ([db602d5](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/db602d5))
+* Refactor & shop-order-history ([96c2b86](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/96c2b86))
+* shop order screen cont ([759a16a](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/759a16a))
+* Shop orders & Ingoing invoice ([2e76565](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/2e76565))
 * small fixes ([c32815a](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c32815a))
 * Small fixes ([0fe9fde](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/0fe9fde))
 * Some bugfixes ([9dd6991](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/9dd6991))
@@ -54,9 +46,30 @@
 * Some more things ([140d15d](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/140d15d))
 * Template finish und Angebot Anfang ([779ab47](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/779ab47))
 * This is not necessary ([d418446](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/d418446))
+* this should make the chatservice stop leaking memory and making the application slow ([4e1f2f8](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/4e1f2f8))
 * This was missing ([2ed7367](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/2ed7367))
 * version bump ([9175bb5](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/9175bb5))
 * wtf is this error ([cb85cef](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/cb85cef))
+
+
+
+## <small>2.2.11 (2026-07-21)</small>
+
+* bumping minor version ([0b83fa0](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/0b83fa0))
+
+
+
+## <small>2.2.7 (2026-07-21)</small>
+
+* adding missing generated files ([4cef3c8](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/4cef3c8))
+* Delete Tiktak Timeentries button ([ada8b91](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/ada8b91))
+* Delete Tiktak Timeentries text fix ([9815f61](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/9815f61))
+
+
+
+## <small>2.2.5 (2026-06-29)</small>
+
+* Export Bekleidungsgrößen fix ([c6f7dff](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c6f7dff))
 
 
 

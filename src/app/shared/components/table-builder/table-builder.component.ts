@@ -39,6 +39,7 @@ import { AsyncPipe } from "@angular/common";
 import {
   ArticleService,
   DefaultService,
+  LiabilityService,
   OfferV2Service,
   OrderService,
   RecalculationService,
@@ -68,7 +69,14 @@ export interface TableButton {
   selectedField: string;
 }
 
-type AnyApi = DefaultService | RecalculationService | ArticleService | OrderService | TimeEntryService | OfferV2Service;
+type AnyApi =
+  LiabilityService
+  | DefaultService
+  | RecalculationService
+  | ArticleService
+  | OrderService
+  | TimeEntryService
+  | OfferV2Service;
 
 @Component({
   selector: "app-table-builder",

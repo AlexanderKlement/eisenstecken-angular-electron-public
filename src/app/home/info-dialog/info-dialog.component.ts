@@ -46,6 +46,16 @@ export class InfoDialogComponent implements OnInit {
 
   updateList: Update[] = [
     {
+      versionName: "2.3.0",
+      changes: [
+        "Online-Shop Bestellungen",
+        "Rechnungswesen verfeinert",
+        "Spesen-Tab bei Rechnungen",
+        "Auf Home Screen anzeige ob Beta oder Productive",
+        "Besteller sieht bei manueller Bestellung nur mehr die eigenen Artikel"
+      ]
+    },
+    {
       versionName: "2.2.11",
       changes: [
         "Neues Angebots-Tool",

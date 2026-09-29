@@ -35,5 +35,7 @@
   </div>
 </nav>
 <mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
-<app-table-builder [buttons]="buttons" [headerButtons]="this.headerButtons"
-                   [dataSource]="expensesDataSource"></app-table-builder>
+@if (expensesDataSource) {
+  <app-table-builder [buttons]="buttons" [headerButtons]="this.headerButtons"
+                     [dataSource]="expensesDataSource"></app-table-builder>
+}
