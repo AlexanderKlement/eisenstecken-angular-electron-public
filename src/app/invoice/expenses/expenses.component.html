@@ -6,20 +6,20 @@
          (click)="setActiveType(link)"
          [active]="activeType == link"> {{ link }} </a>
     }
-    <mat-form-field appearance="outline" class="new-form-element">
-      <mat-label>Monat</mat-label>
-      <mat-select [(value)]="selectedMonth" (valueChange)="this.dateChanged()">
-        <mat-option [value]="-1">
-          Alle
-        </mat-option>
-        @for (month of MONTHS; track month) {
-          <mat-option [value]="month.key">
-            {{ month.label }}
-          </mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-
+    <!-- <mat-form-field appearance="outline" class="new-form-element">
+       <mat-label>Monat</mat-label>
+       <mat-select [(value)]="selectedMonth" (valueChange)="this.dateChanged()">
+         <mat-option [value]="-1">
+           Alle
+         </mat-option>
+         @for (month of MONTHS; track month) {
+           <mat-option [value]="month.key">
+             {{ month.label }}
+           </mat-option>
+         }
+       </mat-select>
+     </mat-form-field>
+  -->
     @if ($year | async; as years) {
       <mat-form-field appearance="outline" class="new-form-element">
         <mat-label>Jahr</mat-label>
@@ -36,6 +36,6 @@
 </nav>
 <mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
 @if (expensesDataSource) {
-  <app-table-builder [buttons]="buttons" [headerButtons]="this.headerButtons"
+  <app-table-builder noLoading [buttons]="buttons" [headerButtons]="this.headerButtons"
                      [dataSource]="expensesDataSource"></app-table-builder>
 }

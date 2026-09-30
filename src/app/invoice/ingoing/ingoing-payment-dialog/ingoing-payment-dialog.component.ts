@@ -11,7 +11,7 @@ import {
 } from "../../../../api/openapi";
 import { AsyncPipe, formatCurrency } from "@angular/common";
 import dayjs from "dayjs/esm";
-import { first } from "rxjs/operators";
+import { finalize, first } from "rxjs/operators";
 import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
 import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular/material/datepicker";
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from "@angular/forms";
@@ -164,7 +164,7 @@ export class IngoingPaymentDialogComponent implements OnInit {
   protected readonly formatCurrency = formatCurrency;
 
   protected onAddLine() {
-    if (this.open() !== 0) {
+    if (this.open() !== 0 || this.liabilityGroup.controls.entries.length === 0) {
       this.liabilityGroup.controls.entries.insert(0, new FormGroup({
         id: new FormControl(-1),
         amount: new FormControl(0, [Validators.min(1)]),
@@ -190,15 +190,23 @@ export class IngoingPaymentDialogComponent implements OnInit {
   }
 
   protected hasChanges() {
-    return !!this.liabilityGroup.controls.entries.controls.find(grp => this.hasChangesGroup(grp));
+    if (this.liabilityGroup.controls.entries.length !== 0) {
+      return !!this.liabilityGroup.controls.entries.controls.find(grp => this.hasChangesGroup(grp));
+    }
+    return false;
   }
 
   private maxDate() {
     const last = this.liabilityGroup.controls.entries.at(-1);
-    return last.get("dueDate").value;
+    if (last) {
+      return last.get("dueDate").value;
+    }
+    return undefined;
   }
 
   protected controlInvalid(group: FormGroup<LiabilityGroup>, key: "amount" | "dueDate") {
+    if (!group)
+      return false;
     if (key === "amount") {
       return group.get("amount").value === 0;
     } else {
@@ -208,19 +216,33 @@ export class IngoingPaymentDialogComponent implements OnInit {
   }
 
   protected groupInvalid(group: FormGroup<LiabilityGroup>) {
+    if (!group)
+      return false;
     return this.controlInvalid(group, "amount") || this.controlInvalid(group, "dueDate");
   }
 
   protected formInvalid() {
-    return !!this.liabilityGroup.controls.entries.controls.find(grp => this.groupInvalid(grp));
+    if (this.liabilityGroup.controls.entries.length !== 0) {
+      return !!this.liabilityGroup.controls.entries.controls.find(grp => this.groupInvalid(grp));
+    }
+    return false;
+  }
+
+  protected lastPaid() {
+    if (this.liabilityGroup.controls.entries.length !== 0) {
+      return this.liabilityGroup.controls.entries.at(-1).get("paid").value;
+    }
+    return true;
   }
 
   protected toggleDelete(index: number) {
     const grp = this.liabilityGroup.controls.entries.at(index);
-    if (grp.get("id").value === -1) {
-      this.liabilityGroup.controls.entries.removeAt(index);
-    } else {
-      grp.patchValue({ deleted: !grp.get("deleted").value });
+    if (grp) {
+      if (grp.get("id").value === -1) {
+        this.liabilityGroup.controls.entries.removeAt(index);
+      } else {
+        grp.patchValue({ deleted: !grp.get("deleted").value });
+      }
     }
   }
 
@@ -229,26 +251,28 @@ export class IngoingPaymentDialogComponent implements OnInit {
       const amount = this.invoice.total;
       let calculated = 0;
       const last = this.liabilityGroup.controls.entries.at(-1);
-      this.liabilityGroup.controls.entries.controls.forEach((grp) => {
-        if (last.get("id").value !== grp.get("id").value) {
-          calculated += grp.get("amount").value;
+      if (last) {
+        this.liabilityGroup.controls.entries.controls.forEach((grp) => {
+          if (last.get("id").value !== grp.get("id").value) {
+            calculated += grp.get("amount").value;
+          }
+        });
+        if (calculated + last.get("amount").value !== amount) {
+          last.patchValue({ amount: amount - calculated }, { emitEvent: false });
         }
-      });
-      if (calculated + last.get("amount").value !== amount) {
-        last.patchValue({ amount: amount - calculated }, { emitEvent: false });
       }
     }
   }
 
   protected onPayLiability(id: number, paid: boolean) {
     if (paid) {
-      this.liabilityService.unpayLiability(id).pipe(first()).subscribe(() => {
+      this.liabilityService.unpayLiability(id).pipe(finalize(() => {
         this.reloadLiabilities();
-      });
+      })).subscribe();
     } else {
-      this.liabilityService.payLiability(id).pipe(first()).subscribe(() => {
+      this.liabilityService.payLiability(id).pipe(finalize(() => {
         this.reloadLiabilities();
-      });
+      })).subscribe();
     }
   }
 
@@ -267,9 +291,9 @@ export class IngoingPaymentDialogComponent implements OnInit {
           unpaid.map(grp => {
             return this.liabilityService.payLiability(grp.get("id").value);
           })
-        ).pipe(first()).subscribe(() => {
+        ).pipe(finalize(() => {
           this.reloadLiabilities();
-        });
+        })).subscribe();
       }
     });
   }
@@ -314,8 +338,8 @@ export class IngoingPaymentDialogComponent implements OnInit {
         const id = patchKeys[i - creates.length - deletes.length];
         return this.liabilityService.patchLiability(id, patches[id]);
       })
-    ).pipe(first()).subscribe(() => {
+    ).pipe(finalize(() => {
       this.reloadLiabilities();
-    });
+    })).subscribe();
   }
 }

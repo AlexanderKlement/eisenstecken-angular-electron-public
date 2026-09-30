@@ -65,7 +65,7 @@ export class ExpensesComponent implements OnInit {
   public $year: Observable<number[]>;
 
   public selectedYear = dayjs().year();
-  public selectedMonth = dayjs().month();
+  public selectedMonth = -1; //dayjs().month();
 
   expensesDataSource: TableDataSource<Liability, LiabilityService>;
   activeType = UNPAID_INVOICES;

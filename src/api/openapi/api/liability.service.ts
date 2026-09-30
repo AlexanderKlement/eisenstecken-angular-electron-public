@@ -251,9 +251,6 @@ export class LiabilityService extends BaseService {
 
         let localVarHeaders = this.defaultHeaders;
 
-        // authentication (OAuth2PasswordBearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('OAuth2PasswordBearer', 'Authorization', localVarHeaders, 'Bearer ');
-
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'application/json'
         ]);

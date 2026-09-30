@@ -129,6 +129,7 @@ export class TableBuilderComponent<T extends DataSourceClass, A extends AnyApi =
   @Input({ transform: booleanAttribute }) noPagination?: boolean = false;
   @Input({ transform: booleanAttribute }) dragNDrop?: boolean = false;
   @Input({ transform: booleanAttribute }) buttonsLeft?: boolean = false;
+  @Input({ transform: booleanAttribute }) noLoading?: boolean = false;
   @Input() buttons?: TableButton[] = [];
   @Input() buttonsTitle?: string = "Aktionen";
   @Input() headerRowClass?: string;
