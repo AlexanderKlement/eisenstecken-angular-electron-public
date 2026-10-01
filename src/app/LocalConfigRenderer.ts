@@ -115,11 +115,26 @@ export class LocalConfigRenderer {
 
 
   public replaceServerPath(path: string): string {
-    return path.startsWith("CAD/") ? `${this.loadedConfig.cadPath}${path.slice(4)}` : path.startsWith("VW/") ? `${this.loadedConfig.vwPath}${path.slice(3)}` : path;
+    let localPath = path.startsWith("CAD/") ? this.loadedConfig.cadPath : path.startsWith("VW/") ? this.loadedConfig.vwPath : undefined;
+    if (!localPath) {
+      return path;
+    }
+    const sliced = path.startsWith("CAD/") ? path.slice(4) : path.slice(3);
+    if (sliced.startsWith("/")) {
+      if (localPath.endsWith("/")) {
+        localPath = path.slice(0, -1);
+      }
+    } else {
+      if (!localPath.endsWith("/")) {
+        localPath = `${localPath}/`;
+      }
+    }
+    return `${localPath}${sliced}`;
   }
 
   public replaceLocalPath(path: string): string {
-    return path.startsWith(this.loadedConfig.cadPath) ? path.replace(this.loadedConfig.cadPath, "CAD/") : path.startsWith(this.loadedConfig.vwPath) ? path.replace(this.loadedConfig.vwPath, "VW/") : path;
+    const replaceSlash = this.loadedConfig.cadPath.endsWith("/") && path.startsWith(this.loadedConfig.cadPath) ? "/" : this.loadedConfig.vwPath.endsWith("/") && path.startsWith(this.loadedConfig.vwPath) ? "/" : "";
+    return path.startsWith(this.loadedConfig.cadPath) ? path.replace(this.loadedConfig.cadPath, `CAD${replaceSlash}`) : path.startsWith(this.loadedConfig.vwPath) ? path.replace(this.loadedConfig.vwPath, `VW${replaceSlash}`) : path;
   }
 
   public getIsElectron(): boolean {
