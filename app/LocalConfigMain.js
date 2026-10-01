@@ -6,12 +6,12 @@ var fs = require("fs");
 var electron_1 = require("electron");
 var LocalConfigMain = /** @class */ (function () {
     function LocalConfigMain() {
-        this.configFileFolder = 'Kivi/Eisenstecken-Eibel';
-        this.configFileName = 'config_main.yml';
-        this.defaultEncoding = 'utf8';
+        this.configFileFolder = "Kivi/Eisenstecken-Eibel";
+        this.configFileName = "config_main.yml";
+        this.defaultEncoding = "utf8";
         this.defaultConfig = {
-            channel: 'latest',
-            mail_processor: 'x86'
+            channel: "latest",
+            mail_processor: "x86"
         };
         this.init();
     }
@@ -23,12 +23,12 @@ var LocalConfigMain = /** @class */ (function () {
     };
     LocalConfigMain.prototype.init = function () {
         this.loadedConfig = this.defaultConfig;
-        var appdataPath = electron_1.app.getPath('userData');
-        var path = require('path');
+        var appdataPath = electron_1.app.getPath("userData");
+        var path = require("path");
         var configFileFolderPath = path.join(appdataPath, this.configFileFolder);
         this.configFilePath = path.join(configFileFolderPath, this.configFileName);
         fs.mkdirSync(configFileFolderPath, { recursive: true });
-        console.log('Main Config: ' + this.configFilePath);
+        console.log("Main Config: " + this.configFilePath);
         if (fs.existsSync(this.configFilePath)) {
             this.readConfig();
         }

@@ -12,7 +12,9 @@ export class LocalConfigRenderer {
   private defaultEncoding: BufferEncoding = "utf8";
 
   private defaultConfig = {
-    api: APP_CONFIG.apiBasePath
+    api: APP_CONFIG.apiBasePath,
+    cadPath: APP_CONFIG.cadPath,
+    vwPath: APP_CONFIG.vwPath
   };
 
   private loadedConfig = this.defaultConfig;
@@ -60,7 +62,7 @@ export class LocalConfigRenderer {
 
       if (!electronService.isElectron) {
         this.isElectron = false;
-        // Browser build → just use defaults
+        this.readConfigBrowser();
         return;
       }
 
@@ -86,14 +88,50 @@ export class LocalConfigRenderer {
     }
   }
 
+  public setMultiple(keyValues: Record<keyof typeof this.defaultConfig, string>): void {
+    Object.keys(keyValues).forEach((key: keyof typeof this.defaultConfig) => {
+      this.loadedConfig[key] = keyValues[key];
+    });
+    this.writeConfigUniversal();
+  }
+
   public setApi(newApiUrl: string): void {
     this.loadedConfig.api = newApiUrl;
+    this.writeConfigUniversal();
+  }
 
+  public getApi(): string {
+    return this.loadedConfig.api;
+  }
+
+  public getCADPath(): string {
+    return this.loadedConfig.cadPath;
+  }
+
+
+  public getVWPath(): string {
+    return this.loadedConfig.vwPath;
+  }
+
+
+  public replaceServerPath(path: string): string {
+    return path.startsWith("CAD/") ? `${this.loadedConfig.cadPath}${path.slice(4)}` : path.startsWith("VW/") ? `${this.loadedConfig.vwPath}${path.slice(3)}` : path;
+  }
+
+  public replaceLocalPath(path: string): string {
+    return path.startsWith(this.loadedConfig.cadPath) ? path.replace(this.loadedConfig.cadPath, "CAD/") : path.startsWith(this.loadedConfig.vwPath) ? path.replace(this.loadedConfig.vwPath, "VW/") : path;
+  }
+
+  public getIsElectron(): boolean {
+    return this.isElectron;
+  }
+
+  private writeConfigUniversal() {
     try {
       const electronService = new ElectronService();
 
       if (!electronService.isElectron) {
-        // In browser builds we don't persist anything, just keep it in memory
+        this.writeConfigBrowser();
         return;
       }
 
@@ -104,16 +142,13 @@ export class LocalConfigRenderer {
 
       this.writeConfig(electronService);
     } catch (err) {
-      console.error("LocalConfigRenderer.setApi failed, config not persisted:", err);
+      console.error("LocalConfigRenderer.writeConfig failed, config not persisted:", err);
     }
   }
 
-  public getApi(): string {
-    return this.loadedConfig.api;
-  }
-
-  public getIsElectron(): boolean {
-    return this.isElectron;
+  private writeConfigBrowser(): void {
+    const yamlString = yaml.stringify(this.loadedConfig);
+    localStorage.setItem("config_renderer", yamlString);
   }
 
   private writeConfig(electronService: ElectronService): void {
@@ -123,10 +158,23 @@ export class LocalConfigRenderer {
     });
   }
 
+  private readConfigBrowser(): void {
+    const configData = localStorage.getItem("config_renderer");
+    if (configData) {
+      this.loadedConfig = yaml.parse(configData);
+    }
+  }
+
   private readConfig(electronService: ElectronService): void {
     const configData = electronService.fs.readFileSync(this.configFilePath, {
       encoding: this.defaultEncoding
     });
-    this.loadedConfig = yaml.parse(configData);
+    const parsed = yaml.parse(configData);
+    if (!("cadPath" in parsed) || !("vwPath" in parsed)) {
+      parsed["vwPath"] = this.defaultConfig.vwPath;
+      parsed["catPath"] = this.defaultConfig.cadPath;
+      this.writeConfig(electronService);
+    }
+    this.loadedConfig = parsed;
   }
 }

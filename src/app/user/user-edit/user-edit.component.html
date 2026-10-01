@@ -126,7 +126,9 @@
             </div>
           }
           <div fxLayout="row" fxLayoutGap="16" fxLayoutAlign="center">
-            <button [disabled]="submitted" mat-raised-button type="submit" class="save-btn">Speichern</button>
+            <button [disabled]="submitted" mat-raised-button type="submit" class="save-btn" (click)="onSubmitGeneral()">
+              Speichern
+            </button>
           </div>
         </div>
       </form>

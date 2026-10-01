@@ -1,0 +1,65 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="programSettingsGroup">
+  <div fxLayout="column" fxLayoutAlign="space-around center">
+    <mat-form-field appearance="fill">
+      <mat-label>Umgebung:</mat-label>
+      <mat-select formControlName="environment">
+        <mat-option value="https://api.app.eisenstecken.it">Produktion</mat-option>
+        <mat-option value="https://api.app.eisenstecken.it/beta">Beta-Test</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>CAD Pfad:</mat-label>
+      <input class="form-control" matInput formControlName="cadPath">
+      <mat-icon (click)="selectCADPathClicked()" class="cursor-pointer" matSuffix>folder</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>VW Pfad:</mat-label>
+      <input class="form-control" matInput formControlName="vwPath">
+      <mat-icon (click)="selectVWPathClicked()" class="cursor-pointer" matSuffix>folder</mat-icon>
+    </mat-form-field>
+    <button mat-raised-button type="submit">Speichern</button>
+  </div>
+  <div fxLayout="column" fxLayoutAlign="space-around center" class="mt-24">
+    <h3 class="mt-24">Datei öffnen testen</h3>
+    <mat-form-field appearance="outline" class="new-form-element">
+      <mat-label>Angebots PDF öffnen (CAD Pfad)</mat-label>
+      <mtx-select
+        bindValue="id"
+        bindLabel="displayable_name"
+        panelClass="mtx-select-panel-container"
+        notFoundText="Keine Kommision gefunden"
+        typeToSearchText="Tippen um Kommision zu suchen"
+        [minTermLength]="3"
+        [typeahead]="jobsInput$"
+        [clearable]="true"
+        [addTag]="false"
+        [editableSearchTerm]="true"
+        [trackByFn]="trackByFnJob"
+        [loading]="jobsLoading"
+        [items]="jobs$|async"
+        (change)="onSelectJob($event)"
+      ></mtx-select>
+    </mat-form-field>
+    <div class="mt-12">
+      <mat-form-field appearance="outline" class="new-form-element">
+        <mat-label>Rechnungs PDF öffnen (VW Pfad)</mat-label>
+        <mtx-select
+          bindValue="id"
+          bindLabel="client_name"
+          panelClass="mtx-select-panel-container"
+          notFoundText="Keine Kommision gefunden"
+          typeToSearchText="Tippen um Kommision zu suchen"
+          [minTermLength]="3"
+          [typeahead]="invoiceInput$"
+          [clearable]="true"
+          [addTag]="false"
+          [editableSearchTerm]="true"
+          [trackByFn]="trackByFnInvoice"
+          [loading]="invoiceLoading"
+          [items]="invoices$|async"
+          (change)="onSelectInvoice($event)"
+        ></mtx-select>
+      </mat-form-field>
+    </div>
+  </div>
+</form>

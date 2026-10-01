@@ -1,21 +1,25 @@
-import { Injectable, inject } from "@angular/core";
-import {ElectronService} from "../../core/services";
+import { inject, Injectable } from "@angular/core";
+import { ElectronService } from "../../core/services";
+import { LocalConfigRenderer } from "../../LocalConfigRenderer";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class FileService {
   private electronService = inject(ElectronService);
 
 
   open(path: string): Promise<string> {
+    const realPath = LocalConfigRenderer.getInstance().replaceServerPath(path);
     if (!this.electronService.isElectron) {
       console.warn("Opening Files is only possible in electron!");
-      console.warn(path);
+      console.warn(realPath);
       return new Promise((resolve, reject) => {
         reject();
       });
     }
+
+    console.log(`Try to open ${realPath}`);
     return new Promise<string>((resolve, reject) => {
       try {
         this.electronService.ipcRenderer.on("shell-item-reply", (_, data) => {
@@ -25,7 +29,7 @@ export class FileService {
             reject();
           }
         });
-        this.electronService.ipcRenderer.send("shell-item-request", path);
+        this.electronService.ipcRenderer.send("shell-item-request", realPath);
       } catch (e) {
         console.error(e);
         console.error("Cannot send request to api");
@@ -35,13 +39,15 @@ export class FileService {
   }
 
   show(path: string): Promise<void> {
+    const realPath = LocalConfigRenderer.getInstance().replaceServerPath(path);
     if (!this.electronService.isElectron) {
       console.error("Showing files is only possible in electron!");
-      console.error(path);
+      console.error(realPath);
       return new Promise((resolve, reject) => {
         reject();
       });
     }
+    console.log(`Try to show ${realPath}`);
     return new Promise<void>((resolve, reject) => {
       try {
         this.electronService.ipcRenderer.on("shell-file-reply", (_, data) => {
@@ -51,7 +57,7 @@ export class FileService {
             reject();
           }
         });
-        this.electronService.ipcRenderer.send("shell-file-request", path);
+        this.electronService.ipcRenderer.send("shell-file-request", realPath);
       } catch (e) {
         console.error(e);
         console.error("Cannot send request to api");
