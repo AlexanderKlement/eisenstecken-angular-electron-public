@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 import { Observable, Subscriber } from "rxjs";
 import dayjs from "dayjs/esm";
 import { FileService } from "../shared/services/file.service";
-import { DefaultService, Job, Stock } from "../../api/openapi";
+import { DefaultService, Job, JobService, Stock } from "../../api/openapi";
 import { ToolbarComponent } from "../shared/components/toolbar/toolbar.component";
 import { DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
 import { MatFormField, MatLabel } from "@angular/material/input";
@@ -33,6 +33,7 @@ import { AsyncPipe } from "@angular/common";
 })
 export default class JobComponent implements OnInit {
   private api = inject(DefaultService);
+  private jobService = inject(JobService);
   private router = inject(Router);
   private file = inject(FileService);
 
@@ -48,10 +49,10 @@ export default class JobComponent implements OnInit {
 
   buttons = [
     {
-      name: "Angenommen Aufträge - PDF generieren",
+      name: "Angenommen Aufträge - Excel generieren",
       navigate: (): void => {
-        this.api.generateJobsPdfJobPdfPost().subscribe((pdf) => {
-          this.file.open(pdf).then();
+        this.jobService.generateJobXlsx([-1]).subscribe((excel) => {
+          this.file.open(excel).then();
         });
       }
     }

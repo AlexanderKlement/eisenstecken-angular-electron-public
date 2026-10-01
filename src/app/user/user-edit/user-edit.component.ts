@@ -194,6 +194,13 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
   }
 
 
+  showError(error: any): void {
+    const errorMsg = typeof error === "string" ? error : typeof error === "object" && "message" in error ? error.message : "Unbekannter fehler";
+    this.snackBar.open(`Beim speichern ist ein Fehler aufgetreten: ${errorMsg}`, "Ok", {
+      duration: 10000
+    });
+  }
+
   onAddHourly() {
     let hourly = new FormGroup<HourlyControl>({
       id: new FormControl(-1),
@@ -399,11 +406,14 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
         email_private: this.userGroup.get("email_private").value,
         birthplace: this.userGroup.get("birthplace").value
       };
-      this.api.createUserUsersPost(userCreate).pipe(first()).subscribe({
+      this.api.createUserUsersPost(userCreate).pipe(
+        first()
+      ).subscribe({
         next: (user) => {
           this.createUpdateSuccess(user);
         },
         error: error => {
+          this.showError(error);
           this.createUpdateError(error);
         },
         complete: () => {
@@ -418,6 +428,14 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
       let birthday = this.userGroup.get("birthday").value;
       if (birthday === "") {
         birthday = null;
+      } else {
+        let date = new Date(birthday);
+        if (Number.isNaN(date.getTime())) {
+          birthday = null;
+        } else {
+          date.setHours(10);
+          birthday = date.toISOString().split("T")[0];
+        }
       }
       const userUpdate: UserUpdateBase = {
         email: this.userGroup.get("email").value,
@@ -444,6 +462,7 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
           this.createUpdateSuccess(user);
         },
         error: error => {
+          this.showError(error);
           this.createUpdateError(error);
         },
         complete: () => {
@@ -471,6 +490,7 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
         this.createUpdateSuccess(user);
       },
       error: error => {
+        this.showError(error);
         this.createUpdateError(error);
       },
       complete: () => {
@@ -520,6 +540,7 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
         this.createUpdateSuccess(user);
       },
       error: error => {
+        this.showError(error);
         this.createUpdateError(error);
       },
       complete: () => {
@@ -544,6 +565,7 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
         this.createUpdateSuccess(user);
       },
       error: error => {
+        this.showError(error);
         this.createUpdateError(error);
       },
       complete: () => {
@@ -571,6 +593,7 @@ export default class UserEditComponent extends BaseEditComponent<User> implement
         this.createUpdateSuccess(user);
       },
       error: error => {
+        this.showError(error);
         this.createUpdateError(error);
       },
       complete: () => {
