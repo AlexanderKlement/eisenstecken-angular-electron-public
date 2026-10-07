@@ -7,7 +7,7 @@
       <mat-checkbox formControlName="notMade">nicht gemacht</mat-checkbox>
     }
     <mat-form-field appearance="outline" class="new-form-element fill-width">
-      <input formControlName="name" matInput [disabled]="true" [readonly]="true">
+      <input formControlName="name" matInput>
     </mat-form-field>
     <span>
           {{ formatCurrency(getNumericVal(entryGroup.get("originalPrice")), "de-DE", "€") }}

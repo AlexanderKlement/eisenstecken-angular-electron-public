@@ -1,5 +1,5 @@
 import { booleanAttribute, Component, ElementRef, inject, Input, OnInit, ViewChild } from "@angular/core";
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { DefaultFlexDirective, DefaultLayoutDirective, DefaultLayoutGapDirective } from "ng-flex-layout";
 import { MatButton } from "@angular/material/button";
 import { OfferField, OfferV2Service } from "../../../api/openapi";
@@ -64,6 +64,7 @@ export default class OfferCalculationInputComponent implements OnInit {
   private fields: string[] = globalKeywords;
   private maxLength = Math.max(...globalKeywords.map(f => f.length));
   displayFields: string[] | null;
+  control: FormControl<string> = new FormControl("");
 
   ngOnInit(): void {
     this.offerService.getOfferFieldsOfferV2FieldsGet().pipe(take(1)).subscribe((data) => {
@@ -71,7 +72,10 @@ export default class OfferCalculationInputComponent implements OnInit {
       this.maxLength = Math.max(...this.fields.map(f => f.length));
       this.sync();
     });
-
+    if (this.readonly) {
+      this.control.disable();
+    }
+    this.control.setValue(this.value);
   }
 
   getSearchTerm(value: string, cursorPos: number, count: number): SearchTerm {

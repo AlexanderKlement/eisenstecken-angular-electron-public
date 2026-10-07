@@ -14,7 +14,7 @@
         }
       </div>
     </div>
-    <textarea type="text" [readonly]="readonly" class="calculation-textarea" cdkTextareaAutosize
+    <textarea type="text" [formControl]="control" class="calculation-textarea" cdkTextareaAutosize
               cdkAutosizeMinRows="3" #calculationInput matInput
               (input)="onCalculationKeyUp()" (mouseup)="onCalculationKeyUp()">{{ value }}</textarea>
     <mat-icon matSuffix class="neutral" (click)="fieldSuffix?.onClick()">{{ fieldSuffix?.icon }}</mat-icon>

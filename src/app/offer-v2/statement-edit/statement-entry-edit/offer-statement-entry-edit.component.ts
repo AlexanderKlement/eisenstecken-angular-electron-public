@@ -38,8 +38,10 @@ export function mapStatementEntryToInput(grp: FormGroup<StatementEntryGroup>): O
 }
 
 export function mapStatementEntryToGroup(entry: OfferStatementEntryOutput): FormGroup<StatementEntryGroup> {
+  const name = new FormControl(entry.name);
+  name.disable();
   return new FormGroup<StatementEntryGroup>({
-    name: new FormControl(entry.name),
+    name,
     id: new FormControl(entry.id),
     price: new FormControl(entry.price),
     originalPrice: new FormControl(entry.originalPrice),

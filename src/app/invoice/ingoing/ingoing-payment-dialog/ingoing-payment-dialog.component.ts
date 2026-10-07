@@ -77,6 +77,7 @@ export class IngoingPaymentDialogComponent implements OnInit {
   private liabilityService = inject(LiabilityService);
   dialogRef = inject<MatDialogRef<IngoingPaymentDialogComponent>>(MatDialogRef);
   invoice: IngoingInvoice | null = null;
+
   liabilityGroup: FormGroup<{
     entries: FormArray<FormGroup<LiabilityGroup>>
   }> = new FormGroup({
@@ -100,8 +101,9 @@ export class IngoingPaymentDialogComponent implements OnInit {
       this.liabilityGroup.controls.entries.clear({ emitEvent: false });
       res.sort((a, b) => {
         return new Date(a.due_date).getTime() - new Date(b.due_date).getTime();
-      }).forEach(item => {
-        this.liabilityGroup.controls.entries.push(new FormGroup<LiabilityGroup>({
+      }).forEach((item, index) => {
+
+        const grp = new FormGroup<LiabilityGroup>({
           id: new FormControl(item.id),
           dueDate: new FormControl(new Date(item.due_date), [dateValidator]),
           dueDateOrig: new FormControl(new Date(item.due_date)),
@@ -109,8 +111,16 @@ export class IngoingPaymentDialogComponent implements OnInit {
           amountOrig: new FormControl(item.amount),
           paid: new FormControl(item.paid),
           deleted: new FormControl(false)
-        }), { emitEvent: false });
+        });
+        if (item.paid) {
+          grp.controls.amount.disable();
+          grp.controls.dueDate.disable();
+        } else if (index === res.length - 1) {
+          grp.controls.amount.disable();
+        }
+        this.liabilityGroup.controls.entries.push(grp, { emitEvent: false });
       });
+
     });
   }
 

@@ -18,7 +18,14 @@ import { ApiModule, Configuration } from "./api/openapi";
 import { AccessGuard } from "./app/shared/services/access-guard.service";
 import { ChatService } from "./app/home/chat/chat.service";
 import { CommonModule, CurrencyPipe, DatePipe } from "@angular/common";
-import { MAT_DATE_LOCALE, MatNativeDateModule } from "@angular/material/core";
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+  MAT_NATIVE_DATE_FORMATS,
+  MatNativeDateModule,
+  NativeDateAdapter
+} from "@angular/material/core";
 import { MatPaginatorIntl, MatPaginatorModule } from "@angular/material/paginator";
 import { getGermanPaginatorIntl } from "./app/shared/components/table-builder/table-builder.datasource";
 import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
@@ -28,7 +35,7 @@ import {
   CalendarDateFormatter,
   CalendarModule,
   CalendarNativeDateFormatter,
-  DateAdapter,
+  DateAdapter as DateAdapterCalendar,
   DateFormatterParams
 } from "angular-calendar";
 import { bootstrapApplication, BrowserModule } from "@angular/platform-browser";
@@ -102,11 +109,42 @@ if (typeof window !== "undefined" &&
   });
 }
 
+@Injectable()
+export class DayFirstDateAdapter extends NativeDateAdapter {
+  override parse(value: any, parseFormat?: any): Date | null {
+    if (typeof value === "string") {
+      const str = value.trim();
+      if (!str) return null;
+
+      const m = str.match(/^(\d{1,2})[.\/\-](\d{1,2})[.\/\-](\d{2}|\d{4})$/);
+      if (!m) return this.invalid();
+
+      const day = +m[1];
+      const month = +m[2];
+      let year = +m[3];
+
+      // 2-stellige Jahre (Geburtstage): 26 -> 2026, 90 -> 1990
+      if (m[3].length === 2) {
+        const cur = new Date().getFullYear() % 100;
+        year += year > cur ? 1900 : 2000;
+      }
+
+      const d = new Date(year, month - 1, day);
+      // ungültige Daten wie 31.02. abfangen
+      if (d.getFullYear() !== year || d.getMonth() !== month - 1 || d.getDate() !== day) {
+        return this.invalid();
+      }
+      return d;
+    }
+    return super.parse(value, parseFormat);
+  }
+}
+
 bootstrapApplication(AppComponent, {
   providers: [
     provideZoneChangeDetection(),
     importProvidersFrom(CommonModule, BrowserModule, CalendarModule.forRoot({
-        provide: DateAdapter,
+        provide: DateAdapterCalendar,
         useFactory: adapterFactory
       }), FormsModule, SharedModule, MatBottomSheetModule,
       ApiModule.forRoot(apiConfigFactory), FlexLayoutModule,
@@ -146,6 +184,8 @@ bootstrapApplication(AppComponent, {
       provide: MAT_DATE_LOCALE,
       useValue: "de-DE"
     },
+    { provide: DateAdapter, useClass: DayFirstDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_NATIVE_DATE_FORMATS },
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { subscriptSizing: "dynamic" }

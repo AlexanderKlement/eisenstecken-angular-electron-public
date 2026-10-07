@@ -74,6 +74,7 @@ html {
     outlined-hover-outline-color: #cccccc,
     outlined-focus-outline-color: var(--primary-color),
     outlined-disabled-outline-color: #f5f5f5,
+    filled-disabled-active-indicator-color: #f00
   ));
 
   &.mat-warn {
@@ -168,6 +169,11 @@ html {
 .hidden {
   display: none !important;
   visibility: hidden !important;
+}
+
+
+.opacity-0 {
+  opacity: 0;
 }
 
 

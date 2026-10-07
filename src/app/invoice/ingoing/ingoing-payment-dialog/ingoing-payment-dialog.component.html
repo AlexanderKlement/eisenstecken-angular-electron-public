@@ -28,15 +28,7 @@
              class="mt-6 liability" [class.hidden]="group.get('deleted').value"
              [class.deleted]="group.get('deleted').value"
              [class.highlight]="last">
-          @if (group.get('paid').value) {
-            <mat-form-field appearance="outline" class="new-form-element">
-              <mat-label>
-                Fälligkeit
-              </mat-label>
-              <input matInput [disabled]="true" [readonly]="true"
-                     [value]="dayjs(group.get('dueDate').value).format('DD.MM.YYYY')">
-            </mat-form-field>
-          } @else {
+          <div fxFlex>
             <mat-form-field appearance="outline" class="new-form-element">
               <mat-label>
                 Fälligkeit
@@ -49,22 +41,24 @@
               <mat-datepicker-toggle [for]="date_picker" matSuffix></mat-datepicker-toggle>
               <mat-datepicker #date_picker></mat-datepicker>
             </mat-form-field>
-          }
-          <mat-form-field appearance="outline" class="new-form-element">
-            <mat-label>
-              Betrag
-              @if (hasChangesControl(group, "amount")) {
-                *
-              }
-            </mat-label>
-            <input matInput [disabled]="last || group.get('paid').value" [readonly]="last || group.get('paid').value"
-                   formControlName="amount"
-                   type="number" />
-            <mat-icon matSuffix>euro</mat-icon>
-          </mat-form-field>
-          <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8">
+          </div>
+          <div fxFlex>
+            <mat-form-field appearance="outline" class="new-form-element">
+              <mat-label>
+                Betrag
+                @if (hasChangesControl(group, "amount")) {
+                  *
+                }
+              </mat-label>
+              <input matInput
+                     formControlName="amount"
+                     type="number" />
+              <mat-icon matSuffix>euro</mat-icon>
+            </mat-form-field>
+          </div>
+          <div fxFlex fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8">
 
-            <button matIconButton [class.hidden]="last || group.get('paid').value" (click)="toggleDelete(index)">
+            <button matIconButton [class.opacity-0]="last || group.get('paid').value" (click)="toggleDelete(index)">
               <mat-icon>
                 @if (group.get('deleted').value) {
                   add
