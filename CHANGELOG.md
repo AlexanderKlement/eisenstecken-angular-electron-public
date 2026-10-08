@@ -1,4 +1,4 @@
-## 2.3.0 (2026-09-29)
+## <small>2.3.1 (2026-10-08)</small>
 
 * A lot refactored with templates ([44fa7e7](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/44fa7e7))
 * Added the navigate to home when click on title ([1fa749c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/1fa749c))
@@ -15,7 +15,11 @@
 * Fields Finish ([f58bf9d](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f58bf9d))
 * first beta ([de37bf9](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/de37bf9))
 * First shop-order screen ([92995cf](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/92995cf))
+* fix math path slash error ([64b5a7f](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/64b5a7f))
+* Fix some UI/UX ([646afb9](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/646afb9))
+* Fix Stammdaten können nicht bearbeitet werden ([af8a69c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/af8a69c))
 * Fix to build ([5dcaa1c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/5dcaa1c))
+* Fixes & version bumb ([3888a16](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/3888a16))
 * Fixes From E-Mail ([7de4573](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/7de4573))
 * Introduces Templates ([5bf5451](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/5bf5451))
 * Invoices ([c007b4d](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c007b4d))
@@ -29,6 +33,7 @@
 * More changes/imporvements ([c82e64a](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c82e64a))
 * new models ([540ddde](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/540ddde))
 * Offer PDF Schema not exported for mac ([b311aa7](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/b311aa7))
+* path fixes ([854b5be](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/854b5be))
 * Pdf ([c7f014c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c7f014c))
 * Pdf Finish ([0f80b0c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/0f80b0c))
 * Pdf Finish ([f1f64a4](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f1f64a4))
@@ -40,6 +45,7 @@
 * shop order screen cont ([759a16a](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/759a16a))
 * Shop orders & Ingoing invoice ([2e76565](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/2e76565))
 * small fixes ([c32815a](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c32815a))
+* Small fixes ([139f0d5](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/139f0d5))
 * Small fixes ([0fe9fde](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/0fe9fde))
 * Some bugfixes ([9dd6991](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/9dd6991))
 * some modifications to existing ([e168745](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/e168745))

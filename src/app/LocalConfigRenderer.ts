@@ -121,10 +121,13 @@ export class LocalConfigRenderer {
     }
     const sliced = path.startsWith("CAD/") ? path.slice(4) : path.slice(3);
     if (sliced.startsWith("/")) {
-      if (localPath.endsWith("/")) {
+      if (localPath.endsWith("/") || localPath.endsWith("\\")) {
         localPath = path.slice(0, -1);
       }
     } else {
+      if (localPath.endsWith("\\")) {
+        localPath = path.slice(0, -1);
+      }
       if (!localPath.endsWith("/")) {
         localPath = `${localPath}/`;
       }
@@ -134,6 +137,7 @@ export class LocalConfigRenderer {
 
   public replaceLocalPath(path: string): string {
     const replaceSlash = this.loadedConfig.cadPath.endsWith("/") && path.startsWith(this.loadedConfig.cadPath) ? "/" : this.loadedConfig.vwPath.endsWith("/") && path.startsWith(this.loadedConfig.vwPath) ? "/" : "";
+
     return path.startsWith(this.loadedConfig.cadPath) ? path.replace(this.loadedConfig.cadPath, `CAD${replaceSlash}`) : path.startsWith(this.loadedConfig.vwPath) ? path.replace(this.loadedConfig.vwPath, `VW${replaceSlash}`) : path;
   }
 
