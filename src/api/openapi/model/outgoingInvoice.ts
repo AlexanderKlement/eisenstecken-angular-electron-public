@@ -39,7 +39,7 @@ export interface OutgoingInvoice {
     payment_condition: string;
     payment_date: string;
     payments: Array<Payment>;
-    pdf?: string | null;
+    pdf: string | null;
     pec: string;
     reminders: Array<Reminder>;
     timestamp: string;

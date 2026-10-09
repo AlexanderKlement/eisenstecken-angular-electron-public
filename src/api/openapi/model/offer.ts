@@ -30,7 +30,7 @@ export interface Offer {
     material_description: string;
     material_description_title: string;
     payment: string;
-    pdf?: string | null;
+    pdf: string | null;
     timestamp: string;
     validity: string;
     vat: Vat;

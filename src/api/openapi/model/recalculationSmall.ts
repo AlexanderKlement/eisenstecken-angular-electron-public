@@ -17,6 +17,6 @@ export interface RecalculationSmall {
     km: number;
     materialChargePercent: number;
     name: string;
-    pdf?: string | null;
+    pdf: string | null;
 }
 

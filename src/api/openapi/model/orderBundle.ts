@@ -23,8 +23,8 @@ export interface OrderBundle {
     id: number;
     lock: Lock;
     order_from: Orderable;
-    pdf_external?: string | null;
-    pdf_internal?: string | null;
+    pdf_external: string | null;
+    pdf_internal: string | null;
     priceWithRequests: number;
     priceWithoutRequests: number;
     request: boolean;

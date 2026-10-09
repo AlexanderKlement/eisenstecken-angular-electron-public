@@ -109,11 +109,11 @@
         <mat-form-field appearance="fill">
           <mat-label>Zahlungsbedingung:</mat-label>
           <mat-select formControlName="paymentTerms">
-              @for (payment_term of paymentTerms; track payment_term.label) {
-                <mat-option [value]="payment_term.value">
-                  {{ payment_term.label }}
-                </mat-option>
-              }
+            @for (payment_term of paymentTerms; track payment_term.label) {
+              <mat-option [value]="payment_term.value">
+                {{ payment_term.label }}
+              </mat-option>
+            }
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="fill">

@@ -304,37 +304,33 @@ export default class OutgoingInvoiceEditComponent
     const fullName = this.invoiceGroup.get("name").value.toString();
 
     if (this.createMode) {
+
+      let number = this.invoiceGroup.get("number").value;
+      if (typeof number === "number") {
+        number = number.toString(10);
+      }
       const invoiceCreate: OutgoingInvoiceCreate = {
-        // eslint-disable-next-line id-blacklist
-        number: this.invoiceGroup.get("number").value,
+        number,
         date: formatDateTransport(this.invoiceGroup.get("date").value),
         payment_condition: this.invoiceGroup.get("payment_condition").value,
         payment_date: formatDateTransport(
           this.invoiceGroup.get("payment_date").value
         ),
         paymentTerms: this.invoiceGroup.get("paymentTerms").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         vat_id: this.invoiceGroup.get("vat_id").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         job_id: this.jobId,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         descriptive_articles: descriptiveArticles,
         name: this.invoiceGroup.get("name").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         vat_number: this.invoiceGroup.get("vat_number").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         fiscal_code: this.invoiceGroup.get("fiscal_code").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         codice_destinatario: this.invoiceGroup.get("codice_destinatario").value,
         pec: this.invoiceGroup.get("pec").value,
         isCompany: this.company,
         address: {
           name: fullName,
-          // eslint-disable-next-line @typescript-eslint/naming-convention
           street_number: this.invoiceGroup.get("address.street_number").value,
           city: this.invoiceGroup.get("address.city").value,
           cap: this.invoiceGroup.get("address.cap").value,
-          // eslint-disable-next-line @typescript-eslint/naming-convention
           country_code: this.invoiceGroup.get("address.country").value
         }
       };
@@ -353,37 +349,31 @@ export default class OutgoingInvoiceEditComponent
           }
         );
     } else {
+      let number = this.invoiceGroup.get("number").value;
+      if (typeof number === "number") {
+        number = number.toString(10);
+      }
       const invoiceUpdate: OutgoingInvoiceUpdate = {
-        // eslint-disable-next-line id-blacklist
-        number: this.invoiceGroup.get("number").value,
+        number,
         date: formatDateTransport(this.invoiceGroup.get("date").value),
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         payment_condition: this.invoiceGroup.get("payment_condition").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         payment_date: formatDateTransport(
           this.invoiceGroup.get("payment_date").value
         ),
         paymentTerms: this.invoiceGroup.get("paymentTerms").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         vat_id: this.invoiceGroup.get("vat_id").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         descriptive_articles: descriptiveArticles,
         name: this.invoiceGroup.get("name").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         vat_number: this.invoiceGroup.get("vat_number").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         fiscal_code: this.invoiceGroup.get("fiscal_code").value,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         codice_destinatario: this.invoiceGroup.get("codice_destinatario").value,
         pec: this.invoiceGroup.get("pec").value,
         isCompany: this.company,
         address: {
           name: fullName,
-          // eslint-disable-next-line @typescript-eslint/naming-convention
           street_number: this.invoiceGroup.get("address.street_number").value,
           city: this.invoiceGroup.get("address.city").value,
           cap: this.invoiceGroup.get("address.cap").value,
-          // eslint-disable-next-line @typescript-eslint/naming-convention
           country_code: this.invoiceGroup.get("address.country").value
         }
       };

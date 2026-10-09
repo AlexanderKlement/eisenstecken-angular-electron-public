@@ -31,7 +31,7 @@ export interface Job {
     main_job_id?: number | null;
     name: string;
     note?: string | null;
-    path: string;
+    readonly path: string;
     production: string;
     responsible: UserEssential;
     status: JobStatus;

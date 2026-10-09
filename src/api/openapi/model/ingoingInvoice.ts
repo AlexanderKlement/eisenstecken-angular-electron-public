@@ -25,7 +25,7 @@ export interface IngoingInvoice {
     payment_date: string;
     timestamp: string;
     total: number;
-    xml?: string | null;
+    xml: string | null;
     xml_server?: string | null;
 }
 

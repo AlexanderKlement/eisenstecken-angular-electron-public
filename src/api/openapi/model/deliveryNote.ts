@@ -28,7 +28,7 @@ export interface DeliveryNote {
     lock: Lock;
     name: string;
     number: number;
-    pdf?: string | null;
+    pdf: string | null;
     timestamp: string;
     user: UserEssential;
     variations: string;

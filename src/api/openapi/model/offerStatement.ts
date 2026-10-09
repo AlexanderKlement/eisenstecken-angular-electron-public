@@ -20,7 +20,7 @@ export interface OfferStatement {
     offer: OfferV2;
     offerContent: Array<OfferV2EntryOutput>;
     originalPrice: number;
-    pdf: string;
+    readonly pdf: string;
     pdfServer: string;
     price: number;
     priceSubtraction: number;

@@ -28,7 +28,7 @@ export interface OfferV2 {
     name: string;
     number: number;
     payment: string;
-    pdf: string;
+    pdf: string | null;
     price: number;
     validity: string;
     vat?: Vat | null;
