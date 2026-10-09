@@ -1,6 +1,6 @@
 import { BrowserWindow } from 'electron';
 import * as path from 'path';
-import { getDistFolder, getPreloadPath, getRendererDistFolder } from './paths';
+import { getRendererDistFolder } from './paths';
 import * as fs from 'node:fs';
 import { getAppState } from './singleton';
 
@@ -12,6 +12,22 @@ export function appHidden(win: BrowserWindow): void {
   win.webContents.send('app-hidden');
 }
 
+// Brings the window back from the tray / minimized state and focuses it
+export function showMainWindow(): void {
+  const win = getAppState().win;
+  if (!win) return;
+
+  if (win.isMinimized()) {
+    win.restore();
+  }
+  win.show();
+  win.focus();
+
+  // Windows sometimes refuses focus; this small trick helps in practice
+  win.setAlwaysOnTop(true);
+  win.setAlwaysOnTop(false);
+}
+
 export async function createWindow(serve: boolean) {
   // Create the browser window.
   const state = getAppState();
@@ -20,10 +36,14 @@ export async function createWindow(serve: boolean) {
     width: 1280,
     height: 900,
     show: false,
+    backgroundColor: '#ffffff',
     webPreferences: {
       contextIsolation: false,
       nodeIntegration: true,
-      preload: getPreloadPath()
+      // The app lives in the tray and polls the chat; without this Chromium throttles
+      // timers and lowers the renderer priority while hidden, which makes reopening sluggish
+      backgroundThrottling: false,
+      spellcheck: false,
     },
   });
 
@@ -31,8 +51,6 @@ export async function createWindow(serve: boolean) {
   state.win.setAutoHideMenuBar(true);
 
   console.log('Creating window');
-  console.log('Dist Folder: ' + getDistFolder());
-  console.log('Preload Path: ' + path.join(getDistFolder(), 'preload.js'));
 
   state.win.on('closed', () => {
     const state = getAppState();
@@ -87,9 +105,9 @@ export async function createWindow(serve: boolean) {
       showFallbackTimer = null;
     }
 
-    // Show first, then maximize, then focus (more reliable on Windows)
-    state.win.show();
+    // Maximize before showing so the window doesn't visibly resize after appearing
     state.win.maximize();
+    state.win.show();
     state.win.focus();
   };
 

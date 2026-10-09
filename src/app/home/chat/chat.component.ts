@@ -44,6 +44,8 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   subscription: Subscription;
 
+  private readonly onAppShown = () => this.chatService.subscribe();
+
   ngOnInit(): void {
     this.chatService.subscribe();
     this.initIvanStuff();
@@ -54,15 +56,16 @@ export class ChatComponent implements OnInit, OnDestroy {
       }));
     this.recipients$ = this.chatService.getRecipients(); //unsubscribes automatically
     if (this.electron.isElectron) {
-      this.electron.ipcRenderer.on("app-shown", () => {
-        this.chatService.subscribe();
-      });
+      this.electron.ipcRenderer.on("app-shown", this.onAppShown);
     }
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
     this.chatService.unsubscribe();
+    if (this.electron.isElectron) {
+      this.electron.ipcRenderer.removeListener("app-shown", this.onAppShown);
+    }
   }
 
   public scrollToBottom(): void {

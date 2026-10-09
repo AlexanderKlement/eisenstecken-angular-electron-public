@@ -1,6 +1,7 @@
 import { getAppState } from './singleton';
 import { Menu, Tray, nativeImage } from 'electron';
 import { resolveIconIco } from './paths';
+import { showMainWindow } from './window';
 import * as fs from 'fs';
 
 export async function initTray() {
@@ -27,11 +28,7 @@ export async function initTray() {
     tray.setContextMenu(Menu.buildFromTemplate([
       {
         label: 'Öffnen',
-        click: () => {
-          if (state.win) {
-            state.win.show();
-          }
-        },
+        click: () => showMainWindow(),
       },
       {
         label: 'Schließen',
@@ -41,6 +38,8 @@ export async function initTray() {
         },
       },
     ]));
+
+    tray.on('double-click', () => showMainWindow());
 
     state.tray = tray;
   } catch (err) {

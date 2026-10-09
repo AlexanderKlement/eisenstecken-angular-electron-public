@@ -1,11 +1,6 @@
 import * as path from 'path';
 import { getAppState } from './singleton';
 
-export function getPreloadPath(): string {
-  // preload.js liegt neben main.js (dev & prod)
-  return path.join(__dirname, 'preload.js');
-}
-
 export function getRendererDistFolder(): string {
   const state = getAppState();
 
@@ -19,11 +14,6 @@ export function getRendererDistFolder(): string {
   // Dev: `ng build` im Projektordner
   // Wenn angular.json -> "outputPath": "dist"
   return path.join(__dirname, 'dist');
-}
-
-export function getDistFolder() {
-  // With angular.json -> "outputPath": "dist"
-  return path.join(__dirname);
 }
 
 function isPackaged() {

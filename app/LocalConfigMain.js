@@ -1,31 +1,34 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LocalConfigMain = void 0;
-var yaml = require("yaml");
-var fs = require("fs");
-var electron_1 = require("electron");
-var LocalConfigMain = /** @class */ (function () {
-    function LocalConfigMain() {
-        this.configFileFolder = "Kivi/Eisenstecken-Eibel";
-        this.configFileName = "config_main.yml";
-        this.defaultEncoding = "utf8";
-        this.defaultConfig = {
-            channel: "latest",
-            mail_processor: "x86"
-        };
+const yaml = require("yaml");
+const fs = require("fs");
+const electron_1 = require("electron");
+class LocalConfigMain {
+    static instance;
+    configFileFolder = "Kivi/Eisenstecken-Eibel";
+    configFileName = "config_main.yml";
+    configFilePath;
+    defaultEncoding = "utf8";
+    defaultConfig = {
+        channel: "latest",
+        mail_processor: "x86"
+    };
+    loadedConfig;
+    constructor() {
         this.init();
     }
-    LocalConfigMain.getInstance = function () {
+    static getInstance() {
         if (!LocalConfigMain.instance) {
             LocalConfigMain.instance = new LocalConfigMain();
         }
         return LocalConfigMain.instance;
-    };
-    LocalConfigMain.prototype.init = function () {
+    }
+    init() {
         this.loadedConfig = this.defaultConfig;
-        var appdataPath = electron_1.app.getPath("userData");
-        var path = require("path");
-        var configFileFolderPath = path.join(appdataPath, this.configFileFolder);
+        const appdataPath = electron_1.app.getPath("userData");
+        const path = require("path");
+        const configFileFolderPath = path.join(appdataPath, this.configFileFolder);
         this.configFilePath = path.join(configFileFolderPath, this.configFileName);
         fs.mkdirSync(configFileFolderPath, { recursive: true });
         console.log("Main Config: " + this.configFilePath);
@@ -35,30 +38,29 @@ var LocalConfigMain = /** @class */ (function () {
         else {
             this.writeConfig();
         }
-    };
-    LocalConfigMain.prototype.getChannel = function () {
+    }
+    getChannel() {
         return this.loadedConfig.channel;
-    };
-    LocalConfigMain.prototype.setChannel = function (channel) {
+    }
+    setChannel(channel) {
         this.loadedConfig.channel = channel;
         this.writeConfig();
-    };
-    LocalConfigMain.prototype.writeConfig = function () {
-        var yamlString = yaml.stringify(this.loadedConfig);
+    }
+    writeConfig() {
+        const yamlString = yaml.stringify(this.loadedConfig);
         fs.writeFileSync(this.configFilePath, yamlString, { encoding: this.defaultEncoding });
-    };
-    LocalConfigMain.prototype.readConfig = function () {
-        var configData = fs.readFileSync(this.configFilePath, { encoding: this.defaultEncoding });
+    }
+    readConfig() {
+        const configData = fs.readFileSync(this.configFilePath, { encoding: this.defaultEncoding });
         this.loadedConfig = yaml.parse(configData);
-    };
-    LocalConfigMain.prototype.setMailProcessor = function (processor) {
+    }
+    setMailProcessor(processor) {
         this.loadedConfig.mail_processor = processor;
         this.writeConfig();
-    };
-    LocalConfigMain.prototype.getMailProcessor = function () {
+    }
+    getMailProcessor() {
         return this.loadedConfig.mail_processor;
-    };
-    return LocalConfigMain;
-}());
+    }
+}
 exports.LocalConfigMain = LocalConfigMain;
 //# sourceMappingURL=LocalConfigMain.js.map

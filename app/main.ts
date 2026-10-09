@@ -1,6 +1,7 @@
 import { app } from "electron";
+import * as path from "path";
 import * as Sentry from "@sentry/electron/main";
-import { createWindow } from "./window";
+import { createWindow, showMainWindow } from "./window";
 import { getAppState } from "./singleton";
 import { initTray } from "./tray";
 import { registerAllIpc } from "./ipc";
@@ -8,14 +9,23 @@ import { checkForUpdatesWhenReady, configureUpdateChannel, wireUpdateEvents } fr
 
 const state = getAppState();
 state.app = app;
+const isBeta = app.getName().toLowerCase().includes("beta");
 Sentry.init({
   dsn: "https://60ac4754e4be476a82b10b0e597dfaa6@sentry.kivi.bz.it/25",
-  environment: app.getName().toLowerCase().includes("beta") ? "beta" : "production",
+  environment: isBeta ? "beta" : "production",
   release: "2.3.1"
 
 });
 const args = process.argv.slice(1);
 const serve = args.some(val => val === "--serve");
+
+// userData has to be set before requesting the single instance lock, the lock lives in that folder
+if (isBeta) {
+  const betaUserData = path.join(app.getPath("appData"), "Eisenstecken-Eibel-Beta");
+  app.setPath("userData", betaUserData);
+  console.info("Using beta userData folder:", betaUserData);
+}
+
 const gotTheLock: boolean = app.requestSingleInstanceLock();
 
 
@@ -25,39 +35,11 @@ try {
   } else {
     app.on("second-instance", async () => {
       console.warn("Second instance detected");
-      const state = getAppState();
-
-      if (!state.win) {
+      if (!getAppState().win) {
         await createWindow(serve);
       }
-
-      if (!state.win) return;
-
-      if (state.win.isMinimized()) {
-        state.win.restore();
-      }
-
-      state.win.show();
-      state.win.focus();
-
-      // Windows sometimes refuses focus; this small trick helps in practice
-      state.win.setAlwaysOnTop(true);
-      state.win.setAlwaysOnTop(false);
+      showMainWindow();
     });
-    if (app.getName().toLowerCase().includes("beta")) {
-      const path = require("path");
-      const os = require("os");
-      const betaUserData = path.join(os.homedir(), ".eisenstecken-beta");
-      app.setPath("userData", betaUserData);
-    }
-
-    if (app.getName().toLowerCase().includes("beta")) {
-      const path = require("path");
-      const appDataBase = app.getPath("appData"); // e.g. %APPDATA% or ~/Library/Application Support
-      const betaUserData = path.join(appDataBase, "Eisenstecken-Eibel-Beta");
-      app.setPath("userData", betaUserData);
-      console.info("Using beta userData folder:", betaUserData);
-    }
 
     const checkForUpdateLoop = () => {
       console.info("[main] triggering update check");
@@ -67,11 +49,12 @@ try {
 
     app.whenReady().then(async () => {
       registerAllIpc();
-      await createWindow(serve);
       configureUpdateChannel();
       wireUpdateEvents();
 
+      // Don't wait for the renderer to finish loading before setting up the tray
       void initTray();
+      await createWindow(serve);
 
       if (!serve) {
         setTimeout(checkForUpdateLoop, 15000); // 15 seconds after start
@@ -85,11 +68,10 @@ try {
     });
 
     app.on("activate", async () => {
-      const state = getAppState();
-      if (!state.win) {
+      if (!getAppState().win) {
         await createWindow(serve);
       } else {
-        state.win.show();
+        showMainWindow();
       }
     });
 
