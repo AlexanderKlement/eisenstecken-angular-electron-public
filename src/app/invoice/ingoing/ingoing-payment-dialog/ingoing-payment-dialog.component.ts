@@ -12,9 +12,9 @@ import {
 import { AsyncPipe, formatCurrency } from "@angular/common";
 import dayjs from "dayjs/esm";
 import { finalize, first } from "rxjs/operators";
-import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
+import { MatError, MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
 import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular/material/datepicker";
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from "@angular/forms";
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { MatIcon } from "@angular/material/icon";
 import { BehaviorSubject, forkJoin } from "rxjs";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
@@ -24,15 +24,6 @@ export interface IngoingPaymentData {
   ingoingId: number;
 }
 
-const dateValidator: ValidatorFn = (control: FormControl<Date>) => {
-  const d = control.value;
-  if (d.getFullYear() < 2000) {
-    return {
-      dateValidator: true
-    };
-  }
-  return undefined;
-};
 
 type LiabilityGroup = {
   id: FormControl<number>;
@@ -41,7 +32,6 @@ type LiabilityGroup = {
   amount: FormControl<number>;
   amountOrig: FormControl<number>;
   paid: FormControl<boolean>;
-  deleted: FormControl<boolean>;
 }
 
 
@@ -65,7 +55,8 @@ type LiabilityGroup = {
     MatIconButton,
     MatIcon,
     AsyncPipe,
-    MatProgressSpinner
+    MatProgressSpinner,
+    MatError
   ],
   templateUrl: "./ingoing-payment-dialog.component.html",
   styleUrl: "./ingoing-payment-dialog.component.scss"
@@ -91,6 +82,14 @@ export class IngoingPaymentDialogComponent implements OnInit {
     return this.liabilityGroup.controls.entries.controls.reduce<number>((prev, l) => l.get("paid").value ? l.get("amount").value + prev : prev, 0);
   }
 
+  hasNew() {
+    return this.liabilityGroup.controls.entries.controls.reduce<boolean>((prev, l) => prev || this.isNew(l), false);
+  }
+
+  isNew(l: FormGroup<LiabilityGroup>) {
+    return l.get("id").value === -1;
+  }
+
   open() {
     return this.liabilityGroup.controls.entries.controls.reduce<number>((prev, l) => !l.get("paid").value ? l.get("amount").value + prev : prev, 0);
   }
@@ -105,12 +104,11 @@ export class IngoingPaymentDialogComponent implements OnInit {
 
         const grp = new FormGroup<LiabilityGroup>({
           id: new FormControl(item.id),
-          dueDate: new FormControl(new Date(item.due_date), [dateValidator]),
+          dueDate: new FormControl(new Date(item.due_date)),
           dueDateOrig: new FormControl(new Date(item.due_date)),
-          amount: new FormControl(item.amount, [Validators.min(1)]),
+          amount: new FormControl(item.amount),
           amountOrig: new FormControl(item.amount),
-          paid: new FormControl(item.paid),
-          deleted: new FormControl(false)
+          paid: new FormControl(item.paid)
         });
         if (item.paid) {
           grp.controls.amount.disable();
@@ -134,29 +132,21 @@ export class IngoingPaymentDialogComponent implements OnInit {
     this.liabilityGroup.valueChanges.subscribe(() => {
       if (this.liabilityGroup.controls.entries.length !== 0) {
         const last = this.liabilityGroup.controls.entries.at(-1);
-        const latestDate = last.get("dueDate").value.getTime();
         const openAmountOrig = last.get("amountOrig").value;
         let diffAmount = 0;
         this.liabilityGroup.controls.entries.controls.forEach((group, idx) => {
           if (idx < this.liabilityGroup.controls.entries.length - 1) {
-            if (group.get("deleted").value) {
-              diffAmount -= group.get("amountOrig").value;
-            } else {
-              const thisDiff = (group.get("amount").value - group.get("amountOrig").value);
-              if (thisDiff !== 0) {
-                if (thisDiff > openAmountOrig) {
-                  group.patchValue({ amount: openAmountOrig - diffAmount }, { emitEvent: false });
-                  diffAmount = openAmountOrig;
-                } else if (diffAmount + thisDiff > openAmountOrig) {
-                  const remainder = openAmountOrig - diffAmount;
-                  group.patchValue({ amount: remainder }, { emitEvent: false });
-                  diffAmount += remainder;
-                } else {
-                  diffAmount += thisDiff;
-                }
-              }
-              if (group.get("dueDate").value.getTime() > latestDate) {
-                group.patchValue({ dueDate: new Date(latestDate) }, { emitEvent: false });
+            const thisDiff = (group.get("amount").value - group.get("amountOrig").value);
+            if (thisDiff !== 0) {
+              if (thisDiff > openAmountOrig) {
+                group.patchValue({ amount: openAmountOrig - diffAmount }, { emitEvent: false });
+                diffAmount = openAmountOrig;
+              } else if (diffAmount + thisDiff > openAmountOrig) {
+                const remainder = openAmountOrig - diffAmount;
+                group.patchValue({ amount: remainder }, { emitEvent: false });
+                diffAmount += remainder;
+              } else {
+                diffAmount += thisDiff;
               }
             }
           }
@@ -177,12 +167,11 @@ export class IngoingPaymentDialogComponent implements OnInit {
     if (this.open() !== 0 || this.liabilityGroup.controls.entries.length === 0) {
       this.liabilityGroup.controls.entries.insert(0, new FormGroup({
         id: new FormControl(-1),
-        amount: new FormControl(0, [Validators.min(1)]),
+        amount: new FormControl(0),
         amountOrig: new FormControl(0),
-        dueDate: new FormControl(new Date(), [dateValidator]),
+        dueDate: new FormControl(new Date()),
         dueDateOrig: new FormControl(new Date(0)),
-        paid: new FormControl(false),
-        deleted: new FormControl(false)
+        paid: new FormControl(false)
       }));
     }
   }
@@ -191,12 +180,17 @@ export class IngoingPaymentDialogComponent implements OnInit {
     if (key === "amount") {
       return group.get("amount").value !== group.get(`amountOrig`).value;
     } else {
-      return group.get("dueDate").value.getTime() !== group.get(`dueDateOrig`).value.getTime();
+      const date = group.get("dueDate").value;
+      const dateOrig = group.get("dueDateOrig").value;
+      if (!date || !dateOrig) {
+        return false;
+      }
+      return date.getTime() !== dateOrig.getTime();
     }
   }
 
   protected hasChangesGroup(group: FormGroup<LiabilityGroup>) {
-    return this.hasChangesControl(group, "amount") || this.hasChangesControl(group, "dueDate") || group.get("deleted").value || group.get("id").value === -1;
+    return this.hasChangesControl(group, "amount") || this.hasChangesControl(group, "dueDate") || group.get("id").value === -1;
   }
 
   protected hasChanges() {
@@ -217,18 +211,52 @@ export class IngoingPaymentDialogComponent implements OnInit {
   protected controlInvalid(group: FormGroup<LiabilityGroup>, key: "amount" | "dueDate") {
     if (!group)
       return false;
+    if (group.get("paid").value) {
+      return false;
+    }
     if (key === "amount") {
-      return group.get("amount").value === 0;
+      /*   const valid = group.get("amount").value >= 0;
+         if (!valid) {
+           group.get("amount").setErrors({ invalid: true });
+           group.get("amount").markAsTouched();
+         } else {
+           group.get("amount").setErrors(null);
+           group.get("amount").markAsTouched();
+         } */
+      return false;
     } else {
+      const last = this.liabilityGroup.controls.entries.at(-1);
+      if (last.get("id").value === group.get("id").value) {
+        const date = group.get("dueDate").value;
+        if (!date) {
+          group.get("dueDate").setErrors({ invalid: true });
+          group.get("dueDate").markAsTouched();
+        } else {
+          group.get("dueDate").setErrors(null);
+          group.get("dueDate").markAsTouched();
+        }
+        return !date;
+      }
       const date = group.get("dueDate").value;
-      return date.getFullYear() < 2000 || date.getTime() > this.maxDate().getTime();
+      const m = this.maxDate();
+      const valid = !!date && !!m && (date.getTime() < m.getTime());
+      if (!valid) {
+        group.get("dueDate").setErrors({ invalid: true });
+        group.get("dueDate").markAsTouched();
+      } else {
+        group.get("dueDate").setErrors(null);
+        group.get("dueDate").markAsTouched();
+      }
+      return !valid;
     }
   }
 
   protected groupInvalid(group: FormGroup<LiabilityGroup>) {
     if (!group)
       return false;
-    return this.controlInvalid(group, "amount") || this.controlInvalid(group, "dueDate");
+    const amountInvalid = this.controlInvalid(group, "amount");
+    const dateInvalid = this.controlInvalid(group, "dueDate");
+    return amountInvalid || dateInvalid;
   }
 
   protected formInvalid() {
@@ -245,13 +273,18 @@ export class IngoingPaymentDialogComponent implements OnInit {
     return true;
   }
 
-  protected toggleDelete(index: number) {
+  protected onDelete(index: number) {
     const grp = this.liabilityGroup.controls.entries.at(index);
     if (grp) {
-      if (grp.get("id").value === -1) {
+      const id = grp.get("id").value;
+      if (id === -1) {
         this.liabilityGroup.controls.entries.removeAt(index);
       } else {
-        grp.patchValue({ deleted: !grp.get("deleted").value });
+        this.liabilityService.deleteLiability(id).pipe(first()).subscribe(() => {
+          this.liabilityGroup.controls.entries.removeAt(index);
+          this.onRecalculateRest();
+          this.onSave();
+        });
       }
     }
   }
@@ -311,7 +344,6 @@ export class IngoingPaymentDialogComponent implements OnInit {
   protected onSave() {
     const creates: LiabilityCreate[] = [];
     const patches: Record<number, LiabilityPatch> = {};
-    const deletes: number[] = [];
     this.liabilityGroup.controls.entries.controls.forEach((group) => {
       const id = group.get("id").value;
       const amount = group.get("amount").value;
@@ -325,9 +357,7 @@ export class IngoingPaymentDialogComponent implements OnInit {
           ingoing_invoice_id: this.invoice.id
         });
       } else {
-        if (group.get("deleted").value) {
-          deletes.push(id);
-        } else if (this.hasChangesGroup(group)) {
+        if (this.hasChangesGroup(group)) {
           patches[id] = {
             amount,
             due_date
@@ -338,18 +368,19 @@ export class IngoingPaymentDialogComponent implements OnInit {
     const patchKeys: (keyof typeof patches)[] = Object.keys(patches).map(key => parseInt(key, 10));
     this.loadingSubject.next(true);
     forkJoin(
-      Array(creates.length + deletes.length + patchKeys.length).fill(0).map((_, i) => {
+      Array(creates.length + patchKeys.length).fill(0).map((_, i) => {
         if (i < creates.length) {
           return this.liabilityService.createLiability(creates[i]);
         }
-        if (i < creates.length + deletes.length) {
-          return this.liabilityService.deleteLiability(deletes[i - creates.length]);
-        }
-        const id = patchKeys[i - creates.length - deletes.length];
+        const id = patchKeys[i - creates.length];
         return this.liabilityService.patchLiability(id, patches[id]);
       })
     ).pipe(finalize(() => {
       this.reloadLiabilities();
     })).subscribe();
+  }
+
+  protected noop(): void {
+    //
   }
 }

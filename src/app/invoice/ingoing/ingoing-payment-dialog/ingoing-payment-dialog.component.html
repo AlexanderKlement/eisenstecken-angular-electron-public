@@ -25,9 +25,10 @@
     <ng-container formArrayName="entries">
       @for (group of liabilityGroup.controls.entries.controls; track group.controls.id; let index = $index; let last = $last; let first = $first) {
         <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16" [formGroup]="group"
-             class="mt-6 liability" [class.hidden]="group.get('deleted').value"
-             [class.deleted]="group.get('deleted').value"
-             [class.highlight]="last">
+             class="mt-6 liability" [class.last]="last">
+          @if (last) {
+            <span class="rest-label">Restbetrag:</span>
+          }
           <div fxFlex>
             <mat-form-field appearance="outline" class="new-form-element">
               <mat-label>
@@ -40,50 +41,74 @@
                      formControlName="dueDate">
               <mat-datepicker-toggle [for]="date_picker" matSuffix></mat-datepicker-toggle>
               <mat-datepicker #date_picker></mat-datepicker>
+              @if (group.get('dueDate').invalid) {
+                @if (last) {
+                  <mat-error>Kein gültiges Datum</mat-error>
+                } @else {
+                  <mat-error>Fälligkeit muss vor dem Fälligkeitsdatum des Restbetrags</mat-error>
+                }
+              }
             </mat-form-field>
           </div>
           <div fxFlex>
-            <mat-form-field appearance="outline" class="new-form-element">
-              <mat-label>
-                Betrag
-                @if (hasChangesControl(group, "amount")) {
-                  *
-                }
-              </mat-label>
-              <input matInput
-                     formControlName="amount"
-                     type="number" />
-              <mat-icon matSuffix>euro</mat-icon>
-            </mat-form-field>
+            @if (last) {
+              <div fxLayout="column" fxLayoutAlign="start start">
+                <span class="neutral">Restbetrag:</span>
+                <span>{{ formatCurrency(group.get('amount').value, 'de-DE', '€') }}</span>
+              </div>
+            } @else {
+              <mat-form-field appearance="outline" class="new-form-element">
+                <mat-label>
+                  Betrag
+                  @if (hasChangesControl(group, "amount")) {
+                    *
+                  }
+                </mat-label>
+                <input matInput
+                       formControlName="amount"
+                       type="number" />
+                <mat-icon matSuffix>euro</mat-icon>
+              </mat-form-field>
+            }
           </div>
           <div fxFlex fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8">
-
-            <button matIconButton [class.opacity-0]="last || group.get('paid').value" (click)="toggleDelete(index)">
-              <mat-icon>
-                @if (group.get('deleted').value) {
-                  add
+            @if (!last) {
+              <button
+                matIconButton
+                [class.opacity-0]="group.get('paid').value"
+                (click)="onDelete(index)"
+                [disabled]="hasNew() && !isNew(group)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            }
+            @if (isNew(group)) {
+              <button type="button" mat-raised-button color="primary" (click)="onSave()"
+                      [disabled]="!hasChanges() || formInvalid()">
+                Speichern
+              </button>
+            } @else {
+              <button type="button"
+                      [disabled]="hasNew()"
+                      (click)="onPayLiability(group.get('id').value, group.get('paid').value)"
+                      mat-raised-button
+                      [class.paid]="group.get('paid').value"
+                      [class.unpaid]="!group.get('paid').value">
+                @if (group.get('paid').value) {
+                  Zahlung löschen
+                } @else if (last) {
+                  Restbetrag bezahlen
                 } @else {
-                  delete
-                }</mat-icon>
-            </button>
-
-            <button type="button" (click)="onPayLiability(group.get('id').value, group.get('paid').value)"
-                    mat-raised-button
-                    [class.paid]="group.get('paid').value"
-                    [class.unpaid]="!group.get('paid').value">
-              @if (group.get('paid').value) {
-                Zahlung löschen
-              } @else {
-                Zahlung hinzufügen
-              }
-            </button>
+                  Zahlung hinzufügen
+                }
+              </button>
+            }
           </div>
         </div>
       }
     </ng-container>
     <div fxLayout="row" fxLayoutAlign="end center" class="mt-6">
       <button mat-stroked-button (click)="onAddLine()"
-              [disabled]="open() === 0 && this.liabilityGroup.controls.entries.length !== 0">Hinzufügen
+              [disabled]="open() === 0 && this.liabilityGroup.controls.entries.length !== 0">Teilzahlung Hinzufügen
       </button>
     </div>
   </form>
@@ -98,15 +123,15 @@
       <button type="button" mat-raised-button color="accent" (click)="onCancelClick()">Schließen</button>
 
       <div fxFlex></div>
-      <button mat-icon-button (click)="onRecalculateRest()"
-              [disabled]="lastPaid()">
+      <button mat-icon-button (click)="onRecalculateRest() "
+              [disabled]="lastPaid() || hasNew()">
         <mat-icon>refresh</mat-icon>
       </button>
       <button type="button" mat-stroked-button (click)="onPayAllRemaining()"
-              [disabled]="lastPaid()">Alle als bezahlt markieren
+              [disabled]="lastPaid() || hasNew()">Alle als bezahlt markieren
       </button>
       <button type="button" mat-raised-button color="primary" (click)="onSave()"
-              [disabled]="!hasChanges() || formInvalid()">
+              [disabled]="!hasChanges() || formInvalid() || hasNew()">
         Speichern
       </button>
     </div>

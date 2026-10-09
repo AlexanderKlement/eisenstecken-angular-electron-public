@@ -77,6 +77,7 @@ export class ExpensesComponent implements OnInit {
       selectedField: "",
       navigate: () => {
         this.createActive = true;
+        this.editedData.push({ id: -1, name: "", dueDate: new Date(), amount: 0 });
         this.expensesDataSource.loadData();
       },
       class: () => ""
@@ -108,7 +109,7 @@ export class ExpensesComponent implements OnInit {
       name: _ => "Speichern",
       class: (id) => {
         const edited = this.editedData.find(data => data.id === id);
-        if (edited) {
+        if (edited && edited.name !== "" && edited.amount !== 0) {
           return "";
         } else {
           return "hidden";
@@ -328,7 +329,6 @@ export class ExpensesComponent implements OnInit {
 
   private saveClicked(id: number) {
     const edited = this.editedData.find(data => data.id === id);
-    console.log(edited);
     if (edited) {
       const due_date = edited.dueDate ? new Date(edited.dueDate.getTime() + 7300_000).toISOString().split("T")[0] : undefined;
       if (id === -1) {

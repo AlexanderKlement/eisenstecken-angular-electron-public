@@ -13,7 +13,7 @@ const isBeta = app.getName().toLowerCase().includes("beta");
 Sentry.init({
   dsn: "https://60ac4754e4be476a82b10b0e597dfaa6@sentry.kivi.bz.it/25",
   environment: isBeta ? "beta" : "production",
-  release: "2.3.1"
+  release: "2.3.2"
 
 });
 const args = process.argv.slice(1);

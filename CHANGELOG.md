@@ -1,4 +1,4 @@
-## <small>2.3.1 (2026-10-08)</small>
+## <small>2.3.2 (2026-10-09)</small>
 
 * A lot refactored with templates ([44fa7e7](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/44fa7e7))
 * Added the navigate to home when click on title ([1fa749c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/1fa749c))
@@ -16,6 +16,7 @@
 * first beta ([de37bf9](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/de37bf9))
 * First shop-order screen ([92995cf](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/92995cf))
 * fix math path slash error ([64b5a7f](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/64b5a7f))
+* Fix path configs ([5108e70](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/5108e70))
 * Fix some UI/UX ([646afb9](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/646afb9))
 * Fix Stammdaten können nicht bearbeitet werden ([af8a69c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/af8a69c))
 * Fix to build ([5dcaa1c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/5dcaa1c))
@@ -33,6 +34,7 @@
 * More changes/imporvements ([c82e64a](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c82e64a))
 * new models ([540ddde](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/540ddde))
 * Offer PDF Schema not exported for mac ([b311aa7](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/b311aa7))
+* Open from tray on double-click, speed up startup and wake-up ([0021953](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/0021953))
 * path fixes ([854b5be](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/854b5be))
 * Pdf ([c7f014c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c7f014c))
 * Pdf Finish ([0f80b0c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/0f80b0c))

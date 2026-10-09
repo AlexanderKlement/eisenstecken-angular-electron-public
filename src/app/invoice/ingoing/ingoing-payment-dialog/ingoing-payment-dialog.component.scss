@@ -34,13 +34,29 @@
     padding: 4px;
     border: solid 2px transparent;
     border-radius: 4px;
-
-    &.highlight {
-      border: solid 2px var(--primary-lighter-color);
-    }
+    position: relative;
 
     &.deleted {
       border: solid 2px var(--warn-lighter-color);
     }
+
+    &.last {
+      padding-top: 28px;
+    }
+
+    .rest-label {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+    }
+
+    .rest-label-2 {
+      color: var(--mat-sys-on-surface-variant)
+    }
   }
+}
+
+.opacity-0 {
+  opacity: 0;
+  cursor: default;
 }
