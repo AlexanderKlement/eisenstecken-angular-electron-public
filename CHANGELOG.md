@@ -1,4 +1,4 @@
-## <small>2.3.2 (2026-10-09)</small>
+## <small>2.3.3 (2026-10-09)</small>
 
 * A lot refactored with templates ([44fa7e7](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/44fa7e7))
 * Added the navigate to home when click on title ([1fa749c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/1fa749c))
@@ -23,6 +23,7 @@
 * Fixes & version bumb ([3888a16](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/3888a16))
 * Fixes From E-Mail ([7de4573](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/7de4573))
 * Introduces Templates ([5bf5451](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/5bf5451))
+* Invoice fixes ([c690ec0](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c690ec0))
 * Invoices ([c007b4d](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c007b4d))
 * Just a small fix ([54599a1](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/54599a1))
 * Kontaktperson feld bei user ([1a51ff4](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/1a51ff4))
