@@ -248,7 +248,9 @@ export class ExpensesComponent implements OnInit {
             class: (val: any) => (val === ADD_PAYMENT_STR) ? "paid" : " unpaid",
             navigate: ($event: PointerEvent, id) => {
 
-              if (id !== -1) {
+              if (id === -1) {
+                this.saveClicked(id, true);
+              } else {
                 if ($event.target) {
                   const val = ($event.target as HTMLButtonElement).innerText;
                   if (val === ADD_PAYMENT_STR) {
@@ -257,8 +259,6 @@ export class ExpensesComponent implements OnInit {
                     this.paidClicked(id, true);
                   }
                 }
-              } else {
-                alert("Spese zuerst speichern");
               }
             },
             color: (_) => "primary",
@@ -327,7 +327,7 @@ export class ExpensesComponent implements OnInit {
     }
   }
 
-  private saveClicked(id: number) {
+  private saveClicked(id: number, clickedAddPayment = false) {
     const edited = this.editedData.find(data => data.id === id);
     if (edited) {
       const due_date = edited.dueDate ? new Date(edited.dueDate.getTime() + 7300_000).toISOString().split("T")[0] : undefined;
@@ -337,7 +337,10 @@ export class ExpensesComponent implements OnInit {
             name: edited.name,
             due_date,
             amount: edited.amount
-          }).pipe(first()).subscribe(() => {
+          }).pipe(first()).subscribe((res) => {
+            if (clickedAddPayment) {
+              this.paidClicked(res.id);
+            }
             this.selectedYear = edited.dueDate.getFullYear();
             if (this.selectedMonth !== -1) {
               this.selectedMonth = edited.dueDate.getMonth();
