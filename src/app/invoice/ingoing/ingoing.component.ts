@@ -46,7 +46,7 @@ export class IngoingComponent implements OnInit {
   buttons: TableButton[] = [
     {
       name: _ => "Zahlungen",
-      class: _ => "",
+      class: (condition) => condition ? "paid" : "unpaid",
       navigate: ($event: any, id: number) => {
         this.openPaymentDetails($event, id);
       },
@@ -87,14 +87,22 @@ export class IngoingComponent implements OnInit {
         const rows = [];
         dataSourceClasses.forEach((dataSource) => {
           const paid = dataSource.liabilities.filter(l => !l.paid).length === 0;
-
+          const dueDate = dataSource.liabilities.length === 0 ? dataSource.payment_date : dataSource.liabilities.reduce<string>((prev, cur) => {
+            if (prev === "") {
+              return cur.due_date;
+            }
+            if (new Date(prev).getTime() < new Date(cur.due_date).getTime()) {
+              return cur.due_date;
+            }
+            return prev;
+          }, "");
           rows.push(
             {
               values: {
                 rgNum: dataSource.number,
                 name: dataSource.name,
                 date: dayjs(dataSource.date).format("L"),
-                payment_date: dayjs(dataSource.payment_date).format("L"),
+                payment_date: `${dayjs(dueDate).format("L")} (${dataSource.liabilities.length} Rate${dataSource.liabilities.length > 1 ? "n" : ""})`,
                 id: dataSource.id,
                 paid: paid ? "Ja" : "Nein",
                 condition: paid,
@@ -127,7 +135,7 @@ export class IngoingComponent implements OnInit {
         ingoingId: id
       }
     });
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(() => {
       this.ingoingDataSource.loadData();
     });
   }
@@ -170,7 +178,7 @@ export class IngoingComponent implements OnInit {
 
   protected setActiveType(link: string) {
     this.activeType = link;
-    this.ingoingDataSource.loadData();
+    this.initDataSources();
   }
 
   protected readonly INVOICE_TYPES = INVOICE_TYPES;

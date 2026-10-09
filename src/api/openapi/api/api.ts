@@ -1,3 +1,5 @@
+export * from './admin.service';
+import { AdminService } from './admin.service';
 export * from './article.service';
 import { ArticleService } from './article.service';
 export * from './auth.service';
@@ -30,4 +32,4 @@ export * from './timeEntry.service';
 import { TimeEntryService } from './timeEntry.service';
 export * from './viet.service';
 import { VietService } from './viet.service';
-export const APIS = [ArticleService, AuthService, ClientService, DefaultService, HealthService, JobService, LiabilityService, OfferV2Service, OrderService, OrderBundleService, OrderedArticleService, PaymentService, RecalculationService, TikTakService, TimeEntryService, VietService];
+export const APIS = [AdminService, ArticleService, AuthService, ClientService, DefaultService, HealthService, JobService, LiabilityService, OfferV2Service, OrderService, OrderBundleService, OrderedArticleService, PaymentService, RecalculationService, TikTakService, TimeEntryService, VietService];

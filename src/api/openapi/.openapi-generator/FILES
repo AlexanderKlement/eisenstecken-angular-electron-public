@@ -2,6 +2,7 @@
 README.md
 api.base.service.ts
 api.module.ts
+api/admin.service.ts
 api/api.ts
 api/article.service.ts
 api/auth.service.ts
@@ -25,6 +26,9 @@ git_push.sh
 index.ts
 model/address.ts
 model/addressCreate.ts
+model/adminActionEnum.ts
+model/adminActionStatus.ts
+model/adminActionTriggered.ts
 model/article.ts
 model/articleCreate.ts
 model/articleCreateV2.ts

@@ -20,6 +20,7 @@ export interface OrderBundle {
     delivery_date: string;
     delivery_date_formatted: string;
     description: string;
+    externalOrderNumber?: string | null;
     id: number;
     lock: Lock;
     order_from: Orderable;
