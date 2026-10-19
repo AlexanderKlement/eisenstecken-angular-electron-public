@@ -1,9 +1,11 @@
-## <small>2.3.3 (2026-10-09)</small>
+## <small>2.3.4 (2026-10-19)</small>
 
 * A lot refactored with templates ([44fa7e7](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/44fa7e7))
+* Added missing services ([8c95e8b](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/8c95e8b))
 * Added the navigate to home when click on title ([1fa749c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/1fa749c))
 * Afstellung Fertig ([cf813a0](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/cf813a0))
 * Aufstellung initial ([6c14831](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/6c14831))
+* Ausgansrechnung fix ([a45d3c8](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/a45d3c8))
 * bugfixes and pdf-preview translation ([36222d0](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/36222d0))
 * bugfixes for Preview ([f559700](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f559700))
 * Bugfixes to build ([aee7fb5](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/aee7fb5))
@@ -12,6 +14,7 @@
 * Delete Tiktak Timeentries & environment fix ([430ddd4](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/430ddd4))
 * element-fields ([2f495c4](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/2f495c4))
 * elements ([17ecba5](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/17ecba5))
+* Expense new Btn action ([0447e03](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/0447e03))
 * Fields Finish ([f58bf9d](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f58bf9d))
 * first beta ([de37bf9](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/de37bf9))
 * First shop-order screen ([92995cf](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/92995cf))
@@ -22,6 +25,7 @@
 * Fix to build ([5dcaa1c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/5dcaa1c))
 * Fixes & version bumb ([3888a16](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/3888a16))
 * Fixes From E-Mail ([7de4573](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/7de4573))
+* Hannes UI fixes ([a3198a3](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/a3198a3))
 * Introduces Templates ([5bf5451](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/5bf5451))
 * Invoice fixes ([c690ec0](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c690ec0))
 * Invoices ([c007b4d](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c007b4d))
@@ -40,6 +44,7 @@
 * Pdf ([c7f014c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/c7f014c))
 * Pdf Finish ([0f80b0c](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/0f80b0c))
 * Pdf Finish ([f1f64a4](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f1f64a4))
+* pfade in mails ([23ea342](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/23ea342))
 * price calculation works more or less ([54ac468](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/54ac468))
 * Progress ([7f3e912](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/7f3e912))
 * Progress ([650eb26](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/650eb26))

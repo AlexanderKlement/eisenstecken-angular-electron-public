@@ -68,7 +68,7 @@
         <mat-cell *matCellDef="let element">
           @if (column.asInput) {
             @if (column.asInput.type === "select-autocomplete") {
-              <mat-form-field appearance="outline" class="new-form-element"
+              <mat-form-field appearance="outline" class="new-form-element" (click)="$event.stopPropagation()"
                               [color]="column.asInput.invalid && column.asInput.invalid(element.values[column.name]) ? 'warn' : undefined">
                 <mat-label>{{ column.asInput.label }}</mat-label>
                 <mtx-select

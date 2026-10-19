@@ -21,7 +21,7 @@ import { HTTPValidationError } from '../model/hTTPValidationError';
 // @ts-ignore
 import { Payment } from '../model/payment';
 // @ts-ignore
-import { PaymentCreate } from '../model/paymentCreate';
+import { ReceivablePayment } from '../model/receivablePayment';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -97,21 +97,18 @@ export class PaymentService extends BaseService {
     }
 
     /**
-     * Create Outgoing Invoice Payment
-     * @param outgoingInvoiceId 
-     * @param paymentCreate 
+     * Create Receivable Payment
+     * @param receivableId 
+     * @param receivablePayment 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createOutgoingInvoicePayment(outgoingInvoiceId: number, paymentCreate: PaymentCreate, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Payment>;
-    public createOutgoingInvoicePayment(outgoingInvoiceId: number, paymentCreate: PaymentCreate, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Payment>>;
-    public createOutgoingInvoicePayment(outgoingInvoiceId: number, paymentCreate: PaymentCreate, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Payment>>;
-    public createOutgoingInvoicePayment(outgoingInvoiceId: number, paymentCreate: PaymentCreate, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (outgoingInvoiceId === null || outgoingInvoiceId === undefined) {
-            throw new Error('Required parameter outgoingInvoiceId was null or undefined when calling createOutgoingInvoicePayment.');
-        }
-        if (paymentCreate === null || paymentCreate === undefined) {
-            throw new Error('Required parameter paymentCreate was null or undefined when calling createOutgoingInvoicePayment.');
+    public createReceivablePayment(receivableId: number, receivablePayment?: ReceivablePayment, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Payment>;
+    public createReceivablePayment(receivableId: number, receivablePayment?: ReceivablePayment, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Payment>>;
+    public createReceivablePayment(receivableId: number, receivablePayment?: ReceivablePayment, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Payment>>;
+    public createReceivablePayment(receivableId: number, receivablePayment?: ReceivablePayment, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (receivableId === null || receivableId === undefined) {
+            throw new Error('Required parameter receivableId was null or undefined when calling createReceivablePayment.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -151,12 +148,12 @@ export class PaymentService extends BaseService {
             }
         }
 
-        let localVarPath = `/payment/outgoing_invoice/${this.configuration.encodeParam({name: "outgoingInvoiceId", value: outgoingInvoiceId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
+        let localVarPath = `/payment/receivable/${this.configuration.encodeParam({name: "receivableId", value: receivableId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Payment>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: paymentCreate,
+                body: receivablePayment,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

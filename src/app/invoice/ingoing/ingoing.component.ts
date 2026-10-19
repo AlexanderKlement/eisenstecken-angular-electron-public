@@ -91,7 +91,7 @@ export class IngoingComponent implements OnInit {
             if (prev === "") {
               return cur.due_date;
             }
-            if (new Date(prev).getTime() < new Date(cur.due_date).getTime()) {
+            if (new Date(prev).getTime() > new Date(cur.due_date).getTime()) {
               return cur.due_date;
             }
             return prev;
@@ -141,7 +141,7 @@ export class IngoingComponent implements OnInit {
   }
 
   yearChanged() {
-    this.ingoingDataSource.loadData();
+    this.initDataSources();
   }
 
 

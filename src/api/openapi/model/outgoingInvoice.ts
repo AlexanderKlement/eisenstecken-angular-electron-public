@@ -7,9 +7,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Payment } from './payment';
 import { Reminder } from './reminder';
 import { Address } from './address';
+import { Receivable } from './receivable';
 import { DescriptiveArticle } from './descriptiveArticle';
 import { Vat } from './vat';
 import { PaymentTermEnum } from './paymentTermEnum';
@@ -38,9 +38,9 @@ export interface OutgoingInvoice {
     paymentTerms: PaymentTermEnum;
     payment_condition: string;
     payment_date: string;
-    payments: Array<Payment>;
     pdf: string | null;
     pec: string;
+    receivables: Array<Receivable>;
     reminders: Array<Reminder>;
     timestamp: string;
     vat: Vat;

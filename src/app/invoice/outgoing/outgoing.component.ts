@@ -20,6 +20,7 @@ import { MatFormField, MatLabel } from "@angular/material/input";
 import { MatOption, MatSelect } from "@angular/material/select";
 import { MatTabLink, MatTabNav, MatTabNavPanel } from "@angular/material/tabs";
 import { ALL_INVOICES, INVOICE_TYPES, PAID_INVOICES, UNPAID_INVOICES } from "../../shared/types";
+import { OutgoingPaymentDialogComponent } from "./outgoing-payment-dialog/outgoing-payment-dialog.component";
 
 @Component({
   selector: "app-outgoing",
@@ -42,12 +43,21 @@ export class OutgoingComponent implements OnInit {
 
   buttons: TableButton[] = [
     {
-      name: (condition: any) => (condition) ? "Zahlung entfernen" : " Zahlung hinzufügen",
-      class: (condition: any) => (condition) ? "paid" : " unpaid",
+      name: _ => "Zahlungen",
+      class: (condition) => condition ? "paid" : "unpaid",
       navigate: ($event: any, id: number) => {
-        this.paidClicked($event, id);
+        this.openPaymentDetails($event, id);
       },
       color: (_) => "primary",
+      selectedField: "id"
+    },
+    {
+      name: (_) => "Löschen",
+      class: (_) => "",
+      navigate: ($event: any, id: number) => {
+        this.deleteClicked($event, id);
+      },
+      color: (_) => "warn",
       selectedField: "id"
     }
   ];
@@ -65,16 +75,27 @@ export class OutgoingComponent implements OnInit {
       (dataSourceClasses) => {
         const rows = [];
         dataSourceClasses.forEach((dataSource) => {
+          const paid = dataSource.receivables.filter(r => !r.paid).length === 0;
+          const dueDate = dataSource.receivables.length === 0 ? dataSource.payment_date : dataSource.receivables.reduce<string>((prev, cur) => {
+            if (prev === "") {
+              return cur.due_date;
+            }
+            if (new Date(prev).getTime() > new Date(cur.due_date).getTime()) {
+              return cur.due_date;
+            }
+            return prev;
+          }, "");
           rows.push(
             {
               values: {
-                client_name: dataSource.client_name,
-                date: dayjs(dataSource.date, "YYYY-MM-DD").format("L"),
                 rgNum: dataSource.number,
+                client_name: dataSource.client_name,
+                date: dayjs(dataSource.date).format("L"),
+                payment_date: `${dayjs(dueDate).format("L")} (${dataSource.receivables.length} Rate${dataSource.receivables.length > 1 ? "n" : ""})`,
                 id: dataSource.id,
-                total: formatCurrency(dataSource.full_price_with_vat, "de-DE", "EUR"),
-                payment_date: dayjs(dataSource.payment_date, "YYYY-MM-DD").format("L"),
-                condition: dataSource.paid
+                paid: paid ? "Ja" : "Nein",
+                total: `${formatCurrency(dataSource.receivables.reduce<number>((prev, cur) => !cur.paid ? cur.amount + prev : prev, 0), "de-DE", "EUR")} (${formatCurrency(dataSource.full_price_with_vat, "de-DE", "EUR")})`,
+                condition: paid
               },
               route: () => {
                 this.authService.currentUserHasScope(ScopeEnum.Office).pipe(first()).subscribe(allowed => {
@@ -97,7 +118,7 @@ export class OutgoingComponent implements OnInit {
         { name: "rgNum", headerName: "Nummer" },
         { name: "date", headerName: "Ausstellungsdatum" },
         { name: "payment_date", headerName: "Fälligkeitsdatum" },
-        { name: "total", headerName: "Preis [mit MwSt.]" }
+        { name: "total", headerName: "Offen (Gesamtpreis) [mit MwSt.]" }
       ],
       (api) => api.countOutgoingInvoicesOutgoingInvoiceCountGet(undefined, this.selectedYear)
     );
@@ -108,37 +129,22 @@ export class OutgoingComponent implements OnInit {
     this.outgoingDataSource.loadData();
   }
 
-  paidClicked(event: any, id: number) {
-    event.stopPropagation();
-    this.api.readOutgoingInvoiceOutgoingInvoiceOutgoingInvoiceIdGet(id).pipe(first()).subscribe(outgoingInvoice => {
-      let text = `Die Rechnung ${outgoingInvoice.number} vom ${dayjs(outgoingInvoice.date, "YYYY-MM-DD")
-        .format("L")} an ${outgoingInvoice.client_name} `;
-      let title = "Zahlung ";
-      let returnFunction = (result) => {
-        console.info(result);
-      };
-      if (!outgoingInvoice.paid) {
-        text += "als bezahlt markieren?";
-        title += " hinzufügen";
-        returnFunction = (result) => {
-          if (result) {
-            this.api.payOutgoingInvoicePaymentOutgoingInvoiceIdPayPost(id).pipe(first()).subscribe(() => {
-              this.loadTables();
-            });
-          }
-        };
 
-      } else {
-        text += "als NICHT bezahlt markieren?";
-        title += " entfernen";
-        returnFunction = (result) => {
-          if (result) {
-            this.api.unpayOutgoingInvoicePaymentOutgoingInvoiceIdUnpayPost(id).pipe(first()).subscribe(() => {
-              this.loadTables();
-            });
-          }
-        };
-      }
+  private deleteClicked($event: any, id: number) {
+    $event.stopPropagation();
+    this.api.readOutgoingInvoiceOutgoingInvoiceOutgoingInvoiceIdGet(id).pipe(first()).subscribe(outgoingInvoice => {
+      const text = `Die Rechnung ${outgoingInvoice.number} vom ${dayjs(outgoingInvoice.date, "YYYY-MM-DD")
+        .format("L")} von ${outgoingInvoice.client_name} löschen?`;
+      const title = "Rechnung löschen";
+
+      const returnFunction = (result) => {
+        if (result) {
+          this.api.deleteOutgoingInvoiceOutgoingInvoiceOutgoingInvoiceIdDelete(id).pipe(first()).subscribe(() => {
+            this.outgoingDataSource.loadData();
+          });
+        }
+      };
+
 
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         width: "400px",
@@ -151,18 +157,30 @@ export class OutgoingComponent implements OnInit {
       dialogRef.afterClosed().subscribe(result => {
         returnFunction(result);
       });
+    });
+  }
 
+  openPaymentDetails(event: any, id: number) {
+    event.stopPropagation();
+    const dialogRef = this.dialog.open(OutgoingPaymentDialogComponent, {
+      width: "1200px",
+      data: {
+        outgoingId: id
+      }
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      this.outgoingDataSource.loadData();
     });
   }
 
   yearChanged() {
-    this.outgoingDataSource.loadData();
+    this.initDataSources();
   }
 
 
   protected setActiveType(link: string) {
     this.activeType = link;
-    this.outgoingDataSource.loadData();
+    this.initDataSources();
   }
 
   protected readonly INVOICE_TYPES = INVOICE_TYPES;

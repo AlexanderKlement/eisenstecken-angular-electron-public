@@ -17,6 +17,7 @@ api/orderBundle.service.ts
 api/orderedArticle.service.ts
 api/payment.service.ts
 api/recalculation.service.ts
+api/receivable.service.ts
 api/tikTak.service.ts
 api/timeEntry.service.ts
 api/viet.service.ts
@@ -172,7 +173,6 @@ model/parameter.ts
 model/parameterCreate.ts
 model/payload.ts
 model/payment.ts
-model/paymentCreate.ts
 model/paymentTermEnum.ts
 model/price.ts
 model/priceUpdate.ts
@@ -181,6 +181,11 @@ model/recalculationCreateV2.ts
 model/recalculationSmall.ts
 model/recalculationUpdateV2.ts
 model/recalculationV2.ts
+model/receivable.ts
+model/receivableCreate.ts
+model/receivableInstallment.ts
+model/receivablePatch.ts
+model/receivablePayment.ts
 model/reminder.ts
 model/reminderLevel.ts
 model/requestsConvertedEvent.ts

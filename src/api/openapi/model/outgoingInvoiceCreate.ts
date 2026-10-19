@@ -10,6 +10,7 @@
 import { AddressCreate } from './addressCreate';
 import { DescriptiveArticleCreate } from './descriptiveArticleCreate';
 import { PaymentTermEnum } from './paymentTermEnum';
+import { ReceivableInstallment } from './receivableInstallment';
 
 
 export interface OutgoingInvoiceCreate { 
@@ -18,6 +19,7 @@ export interface OutgoingInvoiceCreate {
     date: string;
     descriptive_articles: Array<DescriptiveArticleCreate>;
     fiscal_code: string;
+    installments?: Array<ReceivableInstallment>;
     isCompany: boolean;
     job_id: number;
     name: string;

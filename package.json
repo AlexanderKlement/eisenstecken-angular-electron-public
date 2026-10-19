@@ -1,6 +1,6 @@
 {
   "name": "eisenstecken-eibel",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "description": "Eisenstecken internal administration software",
   "homepage": "https://kivi.bz.it",
   "author": {
@@ -14,6 +14,7 @@
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "ng": "ng",
+    "dev": "npm-run-all -p electron:serve ng:serve",
     "start": "npm-run-all -p electron:serve ng:serve",
     "build": "npm run electron:serve-tsc && ng build --base-href ./",
     "build:dev": "npm run build -- -c dev",
