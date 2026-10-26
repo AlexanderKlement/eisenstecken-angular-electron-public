@@ -23,11 +23,11 @@
   }
 
   .unpaid {
-    background-color: var(--not-paid-color);
+    background-color: var(--paid-color);
   }
 
   .paid {
-    background-color: var(--paid-color);
+    background-color: var(--not-paid-color);
   }
 
   .liability {
