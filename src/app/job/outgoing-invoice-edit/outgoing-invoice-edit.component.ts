@@ -417,9 +417,7 @@ export default class OutgoingInvoiceEditComponent
           });
           this.company = invoice.isCompany;
           this.invoiceGroup.patchValue({
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             vat_id: invoice.vat.id,
-
             address: {
               country: invoice.address.country.code
             }

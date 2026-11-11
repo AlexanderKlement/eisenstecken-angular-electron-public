@@ -18,12 +18,20 @@
     --cell-flex: 3;
   }
 
+  &.cell-f-4 {
+    --cell-flex: 4;
+  }
+
   &.cell-f-2-alt {
     --cell-flex-alt: 2;
   }
 
   &.cell-f-3-alt {
     --cell-flex-alt: 3;
+  }
+
+  &.cell-f-4-alt {
+    --cell-flex-alt: 4;
   }
 
   &.cell-1-f {

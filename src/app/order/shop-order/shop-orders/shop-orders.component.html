@@ -71,7 +71,7 @@
                   {{ order.order_from.displayable_name }}
                 </span>
               <div class="orderer-date">
-                <span>{{ order.user.fullname }}
+                <span><span [class.warn]="order.user.id === SYSTEM_USER_ID">{{ displayUserName(order.user) }}</span>
                   &bullet; {{ dayjs(order.create_date).format("DD.MM.YYYY, HH:mm") }}</span>
               </div>
             </div>
@@ -100,12 +100,24 @@
       <div fxLayout="row" fxLayoutAlign="space-between start">
         <div fxLayout="column">
           <span class="neutral">
-            {{ selectedOrder.user.fullname }}
+            {{ displayUserName(selectedOrder.user) }}
             &bullet; {{ dayjs(selectedOrder.create_date).format("DD.MM.YYYY, HH:mm") }}
           </span>
           <span class="neutral">
             Lieferdatum: {{ dayjs(selectedOrder.delivery_date).format("DD.MM.YYYY, HH:mm") }}
           </span>
+          @if (selectedOrder.user.id === SYSTEM_USER_ID) {
+            @if (users$|async; as users) {
+              <mat-form-field appearance="outline" class="new-form-element">
+                <mat-label>Besteller auswählen</mat-label>
+                <mat-select (selectionChange)="onSetNewOrderer($event)">
+                  @for (u of users; track u.id) {
+                    <mat-option [value]="u.id">{{ u.fullname }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            }
+          }
         </div>
         <button matIconButton (click)="onOpenHistory()">
           <mat-icon>history</mat-icon>
@@ -118,7 +130,7 @@
       }
       @if (articlesDataSource) {
         <app-table-builder [dataSource]="articlesDataSource" noSearch noPagination
-                           headerRowClass="cell-f-2 cell-f-3-alt cell-1-f-alt cell-5-f"></app-table-builder>
+                           headerRowClass="cell-f-2 cell-f-4-alt cell-1-f cell-5-f-alt"></app-table-builder>
       }
     }
   </div>

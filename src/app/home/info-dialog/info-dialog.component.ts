@@ -46,6 +46,12 @@ export class InfoDialogComponent implements OnInit {
 
   updateList: Update[] = [
     {
+      versionName: "2.3.5",
+      changes: [
+        "Kleine Bugs behoben"
+      ]
+    },
+    {
       versionName: "2.3.4",
       changes: [
         "Online-Shop Bestellungen",

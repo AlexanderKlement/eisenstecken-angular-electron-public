@@ -68,7 +68,8 @@
         <mat-cell *matCellDef="let element">
           @if (column.asInput) {
             @if (column.asInput.type === "select-autocomplete") {
-              <mat-form-field appearance="outline" class="new-form-element" (click)="$event.stopPropagation()"
+              <mat-form-field appearance="outline" class="new-form-element" [style]="column.asInput.style"
+                              (click)="$event.stopPropagation()"
                               [color]="column.asInput.invalid && column.asInput.invalid(element.values[column.name]) ? 'warn' : undefined">
                 <mat-label>{{ column.asInput.label }}</mat-label>
                 <mtx-select
@@ -92,7 +93,7 @@
                 </mtx-select>
               </mat-form-field>
             } @else if (column.asInput.type === "text") {
-              <mat-form-field appearance="outline" class="new-form-element">
+              <mat-form-field appearance="outline" class="new-form-element" [style]="column.asInput.style">
                 <mat-label>{{ column.asInput.label }}</mat-label>
                 <input type="text" matInput [value]="element.values[column.name]"
                        (click)="$event.stopPropagation();"
@@ -100,7 +101,7 @@
                 <mat-icon class="neutral" matSuffix>{{ column.asInput.suffix }}</mat-icon>
               </mat-form-field>
             } @else if (column.asInput.type === "number") {
-              <mat-form-field appearance="outline" class="new-form-element">
+              <mat-form-field appearance="outline" class="new-form-element" [style]="column.asInput.style">
                 <mat-label>{{ column.asInput.label }}</mat-label>
                 <input type="number" matInput [value]="element.values[column.name]"
                        (click)="$event.stopPropagation();"
@@ -108,7 +109,7 @@
                 <mat-icon class="neutral" matSuffix>{{ column.asInput.suffix }}</mat-icon>
               </mat-form-field>
             } @else if (column.asInput.type === "date") {
-              <mat-form-field appearance="outline" class="new-form-element">
+              <mat-form-field appearance="outline" class="new-form-element" [style]="column.asInput.style">
                 <mat-label>{{ column.asInput.label }}</mat-label>
                 <input matInput [value]="element.values[column.name]" (click)="$event.stopPropagation();"
                        [matDatepicker]="date_picker"

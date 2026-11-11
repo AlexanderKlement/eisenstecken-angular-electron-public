@@ -38,7 +38,11 @@ export class InfoBuilderComponent<T extends DataSourceClass> implements OnInit {
           return "";
         }
       } else {
-        data = data[singleProperty];
+        if (data) {
+          data = data[singleProperty];
+        } else {
+          return "";
+        }
       }
     }
 

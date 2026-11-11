@@ -29,6 +29,7 @@ import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { MatIconButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
 import { Router } from "@angular/router";
+import { displayUserName, SYSTEM_USER_ID } from "../../../../constants";
 
 type OrderBundleFilter = {
   commission: FormControl<number>;
@@ -172,7 +173,7 @@ export class ShopOrdersComponent implements OnInit {
                     displayable_name: order.order_to.displayable_name
                   } : undefined
                 },
-                rowClass: "cell-f-2 cell-f-3-alt cell-1-f-alt cell-5-f",
+                rowClass: "cell-f-2 cell-f-4-alt cell-1-f cell-5-f-alt",
                 route: () => {
                   this.router.navigateByUrl("order/" + order.id).then();
                 }
@@ -189,6 +190,7 @@ export class ShopOrdersComponent implements OnInit {
         { name: "sum", sortable: false, headerName: "Summe" },
         {
           name: "commission", sortable: false, asInput: {
+            style: "width: 100%",
             type: "select-autocomplete",
             typeahead: this.commissionInput$,
             loading: () => {
@@ -197,7 +199,6 @@ export class ShopOrdersComponent implements OnInit {
             },
             items: this.commissions$,
             invalid: (value) => {
-              console.log("checkValidity", { value, invalid: !value });
               return !value;
             },
             trackByFunc: this.trackByFnCommission,
@@ -231,5 +232,13 @@ export class ShopOrdersComponent implements OnInit {
     }
   }
 
+  protected onSetNewOrderer($event: any) {
+    console.log("onSetNewOrderer", $event); // TODO
+  }
+
   protected readonly formatCurrency = formatCurrency;
+  protected readonly displayUserName = displayUserName;
+  protected readonly SYSTEM_USER_ID = SYSTEM_USER_ID;
+
+
 }

@@ -17,7 +17,7 @@ import { moveItemInArray } from "@angular/cdk/drag-drop";
 import { MatSelectChange } from "@angular/material/select";
 import { TableButton } from "./table-builder.component";
 
-type InputSettings = { placeholder?: string, label?: string, suffix?: string } & ({
+type InputSettings = { placeholder?: string, style?: string, label?: string, suffix?: string } & ({
   type: "text",
   onChange: (value: string, id: number | string) => void,
   invalid?: (value: string, id: number | string) => boolean

@@ -114,7 +114,7 @@ export default class OrderDetailComponent implements OnInit {
           name: "Lieferant"
         },
         {
-          property: "order_to.name",
+          property: "order_to?.name",
           name: "Empfänger"
         }
       ],

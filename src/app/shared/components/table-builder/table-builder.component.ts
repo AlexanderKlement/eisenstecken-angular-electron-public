@@ -18,7 +18,7 @@ import { debounceTime, distinctUntilChanged, tap } from "rxjs/operators";
 import { fromEvent, Observable, Subscription } from "rxjs";
 import { DataSourceClass } from "../../types";
 import { ThemePalette } from "@angular/material/core";
-import { DefaultFlexDirective, DefaultLayoutAlignDirective, DefaultLayoutDirective } from "ng-flex-layout";
+import { DefaultFlexDirective, DefaultLayoutAlignDirective, DefaultLayoutDirective, FlexModule } from "ng-flex-layout";
 import { MatFormField, MatInput, MatLabel, MatSuffix } from "@angular/material/input";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import {
@@ -117,7 +117,8 @@ type AnyApi =
     MatSuffix,
     MatDatepickerInput,
     MatDatepicker,
-    MatDatepickerToggle
+    MatDatepickerToggle,
+    FlexModule
   ]
 })
 
