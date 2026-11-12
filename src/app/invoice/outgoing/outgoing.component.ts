@@ -120,7 +120,7 @@ export class OutgoingComponent implements OnInit {
         { name: "payment_date", headerName: "Fälligkeitsdatum" },
         { name: "total", headerName: "Offen (Gesamtpreis) [mit MwSt.]" }
       ],
-      (api) => api.countOutgoingInvoicesOutgoingInvoiceCountGet(undefined, this.selectedYear)
+      (api) => api.countOutgoingInvoicesOutgoingInvoiceCountGet(this.activeType === ALL_INVOICES ? undefined : this.activeType === PAID_INVOICES, this.selectedYear)
     );
     this.outgoingDataSource.loadData();
   }

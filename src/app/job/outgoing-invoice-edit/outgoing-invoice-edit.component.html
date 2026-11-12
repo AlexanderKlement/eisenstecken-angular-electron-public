@@ -1,137 +1,267 @@
 <app-toolbar [title]="title" [buttonList]="buttons"></app-toolbar>
 <div class="window-container">
-  <form (ngSubmit)="onSubmit()" [formGroup]="invoiceGroup">
-    <div fxLayout="row" fxLayoutAlign="space-around start">
+  <ng-container [formGroup]="invoiceGroup">
+    <div fxLayout="row" fxLayoutAlign="space-around start" fxLayoutGap="16">
       <div fxFlex="70" formArrayName="descriptive_articles" fxLayout="column" fxLayoutAlign="space-around center">
         @for (descriptiveArticle of getDescriptiveArticles().controls; track descriptiveArticle; let i = $index) {
           <div
             class="descriptive-article" fxFlexFill>
-            <div class="position-control new-position-btn">
-              <app-circle-icon-button (click)="addDescriptiveArticleAt(i)" icon="add" />
-            </div>
             <button type="button" mat-icon-button (click)="moveDescriptiveArticleUp(i)"
-                    [disabled]="i === 0"
+                    [disabled]="i === 0 || hasPaidReceivables"
                     class="position-control position-up" title="Nach oben schieben">
               <mat-icon>arrow_upward</mat-icon>
             </button>
             <button type="button" mat-icon-button (click)="moveDescriptiveArticleDown(i)"
-                    [disabled]="i === getDescriptiveArticles().controls.length - 1"
+                    [disabled]="i === getDescriptiveArticles().controls.length - 1 || hasPaidReceivables"
                     class="position-control position-down" title="Nach unten schieben">
               <mat-icon>arrow_downward</mat-icon>
             </button>
-            <div fxLayout="row" fxLayoutAlign="space-between center" [formGroupName]="i">
-              <mat-form-field appearance="fill" fxFlex="80">
+            <div fxLayout="row" fxLayoutGap="2" fxLayoutAlign="start start" [formGroupName]="i">
+              <mat-form-field appearance="fill" fxFlex="60">
                 <mat-label>Position</mat-label>
                 <textarea rows="3" class="form-control" formControlName="description" maxlength="10000"
                           matInput></textarea>
               </mat-form-field>
-              <mat-form-field appearance="fill" fxFlex="4">
+              <mat-form-field appearance="fill" fxFlex="10">
                 <mat-label>Menge</mat-label>
                 <input class="form-control" type=number formControlName="amount" matInput>
               </mat-form-field>
-              <mat-form-field appearance="fill" fxFlex="4">
+              <mat-form-field appearance="fill" fxFlex="15">
                 <mat-label>Einzelpreis</mat-label>
                 <input class="form-control" type=text formControlName="singlePriceFormatted" (blur)="transformAmount(i)"
                        matInput>
               </mat-form-field>
-              <mat-form-field appearance="fill" fxFlex="8">
+              <mat-form-field appearance="fill" fxFlex="15">
                 <mat-label>Gesamtpreis</mat-label>
                 <input readonly class="form-control" formControlName="total_price" matInput>
               </mat-form-field>
-              <div fxFlex="8" fxLayout="row" fxLayoutAlign="space-around center">
-                <div class="position-delete">
-                  <app-circle-icon-button (click)="removeDescriptiveArticle(i)" [disabled]="i === 0" icon="delete" />
-                </div>
+              <div class="delete-add-buttons">
+                <app-circle-icon-button (click)="removeDescriptiveArticle(i)" [disabled]="i === 0 || hasPaidReceivables"
+                                        icon="delete" />
+                <app-circle-icon-button (click)="addDescriptiveArticleAt(i)" [disabled]="hasPaidReceivables"
+                                        icon="add" />
               </div>
             </div>
           </div>
         }
       </div>
-      <div fxFlex="30" fxLayout="column" fxLayoutAlign="space-around center" fxFlexFill>
-        <mat-form-field appearance="fill">
-          <mat-label>Nummer</mat-label>
-          <input class="form-control" formControlName="number" type=number matInput>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Datum</mat-label>
-          <input formControlName="date" matInput [matDatepicker]="date_picker">
-          <mat-datepicker-toggle matSuffix [for]="date_picker"></mat-datepicker-toggle>
-          <mat-datepicker #date_picker></mat-datepicker>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Mehrwertsteuer:</mat-label>
-          <mat-select formControlName="vat_id">
-            @if (vatOptions$ | async; as vatOptions) {
-              @for (vat of vatOptions; track vat.id) {
-                <mat-option [value]="vat.id">
-                  {{ vat.name }}
+      <div fxFlex="30" fxLayout="column" fxLayoutAlign="space-around stretch">
+        <h4>Rechnungsdaten</h4>
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5">
+          <mat-form-field appearance="fill" fxFlex="50">
+            <mat-label>Nummer</mat-label>
+            <input class="form-control" formControlName="number" type=number matInput>
+          </mat-form-field>
+          <mat-form-field appearance="fill" fxFlex="50">
+            <mat-label>Datum</mat-label>
+            <input formControlName="date" matInput [matDatepicker]="date_picker" (dateChange)="onInvoiceDateChanged()">
+            <mat-datepicker-toggle matSuffix [for]="date_picker"></mat-datepicker-toggle>
+            <mat-datepicker #date_picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5">
+          <mat-form-field appearance="fill" fxFlex="50">
+            <mat-label>Mehrwertsteuer:</mat-label>
+            <mat-select formControlName="vat_id">
+              @if (vatOptions$ | async; as vatOptions) {
+                @for (vat of vatOptions; track vat.id) {
+                  <mat-option [value]="vat.id">
+                    {{ vat.name }}
+                  </mat-option>
+                }
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-checkbox fxFlex="50" [checked]="company" [disabled]="hasPaidReceivables"
+                        (change)="companyCheckBoxClicked()">Unternehmen
+          </mat-checkbox>
+        </div>
+
+        @if (!company) {
+          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5">
+            <mat-form-field appearance="fill" fxFlex="100">
+              <mat-label>Name</mat-label>
+              <input class="form-control" formControlName="name" matInput>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5">
+            <mat-form-field appearance="fill" fxFlex="100">
+              <mat-label>Steuernummer</mat-label>
+              <input class="form-control" formControlName="fiscal_code" matInput>
+            </mat-form-field>
+          </div>
+        }
+        @if (company) {
+          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5">
+            <mat-form-field appearance="fill" fxFlex="100">
+              <mat-label>Firmenbezeichnung</mat-label>
+              <input class="form-control" formControlName="name" matInput>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5">
+            <mat-form-field appearance="fill" fxFlex="50">
+              <mat-label>P. IVA</mat-label>
+              <input class="form-control" formControlName="vat_number" matInput>
+            </mat-form-field>
+            <mat-form-field appearance="fill" fxFlex="50">
+              <mat-label>Steuernummer</mat-label>
+              <input class="form-control" formControlName="fiscal_code" matInput>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5">
+            <mat-form-field appearance="fill" fxFlex="50">
+              <mat-label>PEC</mat-label>
+              <input class="form-control" formControlName="pec" matInput>
+            </mat-form-field>
+            <mat-form-field appearance="fill" fxFlex="50">
+              <mat-label>Empfängerkodex</mat-label>
+              <input class="form-control" formControlName="codice_destinatario" matInput>
+            </mat-form-field>
+          </div>
+        }
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5" formGroupName="address">
+          <mat-form-field appearance="fill" fxFlex="50">
+            <mat-label>Adresse</mat-label>
+            <input class="form-control" formControlName="street_number" matInput>
+          </mat-form-field>
+          <mat-form-field appearance="fill" fxFlex="50">
+            <mat-label>Stadt/Gemeinde</mat-label>
+            <input class="form-control" formControlName="city" matInput>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5" formGroupName="address">
+          <mat-form-field appearance="fill" fxFlex="50">
+            <mat-label>PLZ</mat-label>
+            <input class="form-control" formControlName="cap" matInput>
+          </mat-form-field>
+          @if (countryOptions$ | async; as countryOptions) {
+            <mat-form-field appearance="fill" fxFlex="50">
+              <mat-label>Land</mat-label>
+              <mat-select formControlName="country">
+                @for (country of countryOptions; track country) {
+                  <mat-option [value]="country.code">
+                    {{ country.name.translation_de }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5">
+          <mat-form-field appearance="fill" fxFlex="50">
+            <mat-label>Zahlungsbedingung:</mat-label>
+            <mat-select formControlName="paymentTerms" (selectionChange)="onPaymentTermsChanged($event)">
+              @for (payment_term of paymentTerms; track payment_term.label) {
+                <mat-option [value]="payment_term.value">
+                  {{ payment_term.label }}
                 </mat-option>
               }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="fill" fxFlex="50">
+            <mat-label>Zahlungsbeschreibung:</mat-label>
+            <textarea class="form-control" formControlName="payment_condition" matInput></textarea>
+          </mat-form-field>
+        </div>
+        @if (!createMode) {
+          <h4>Zahlungsplan</h4>
+          <ng-container [formGroup]="receivableGroup">
+            @for (group of receivableGroup.controls.entries.controls; track group.controls.id; let index = $index) {
+              <!-- the open remainder is shown below as "Restbetrag" -->
+              @if (!isBalancing(group)) {
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5" [formGroup]="group">
+                  <div fxFlex>
+                    <mat-form-field appearance="outline" class="new-form-element">
+                      <mat-label>
+                        Fälligkeit
+                        @if (hasChangesControl(group, "dueDate")) {
+                          *
+                        }
+                      </mat-label>
+                      <input matInput [matDatepicker]="date_picker"
+                             formControlName="dueDate">
+                      <mat-datepicker-toggle [for]="date_picker" matSuffix></mat-datepicker-toggle>
+                      <mat-datepicker #date_picker></mat-datepicker>
+                      <!-- no @if around mat-error: it would not be projected (NG8011); it only shows when invalid anyway -->
+                      <mat-error>Fälligkeit muss vor dem Fälligkeitsdatum des Restbetrags</mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex>
+                    <mat-form-field appearance="outline" class="new-form-element">
+                      <mat-label>
+                        Betrag
+                        @if (hasChangesControl(group, "amount")) {
+                          *
+                        }
+                      </mat-label>
+                      <input matInput
+                             formControlName="amount"
+                             type="number" />
+                      <mat-icon matSuffix>euro</mat-icon>
+                      <mat-error>Betrag muss das gleiche Vorzeichen wie der Rechnungsbetrag haben</mat-error>
+                    </mat-form-field>
+                  </div>
+                  @if (group.get("paid").value) {
+                    <div fxFlex fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8">
+                      <mat-icon class="paid">paid</mat-icon>
+                    </div>
+                  } @else if (!canEditReceivables()) {
+                    <div fxFlex></div>
+                  } @else {
+                    <div fxFlex fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8">
+                      <button
+                        matIconButton
+                        (click)="onDelete(index)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+                  }
+                </div>
+              }
             }
-          </mat-select>
-        </mat-form-field>
-        <mat-checkbox [checked]="company" (change)="companyCheckBoxClicked()">Unternehmen</mat-checkbox>
-        @if (company) {
-          <mat-form-field appearance="fill">
-            <mat-label>Firmenbezeichnung</mat-label>
-            <input class="form-control" formControlName="name" matInput>
-          </mat-form-field>
+          </ng-container>
+
+          @if (remainderHasWrongSign()) {
+            <mat-error class="mt-6">
+              Die Teilzahlungen übersteigen den Rechnungsbetrag
+              ({{ formatCurrency(invoiceGroup.get('invoice_price').value, 'de-DE', '€') }}) –
+              der Restbetrag muss das gleiche Vorzeichen wie der Rechnungsbetrag haben.
+            </mat-error>
+          }
+          <div fxLayout="row" fxLayoutAlign="end center" class="mt-6">
+            <button mat-stroked-button (click)="onAddLine()"
+                    [disabled]="!canEditReceivables()">Teilzahlung
+              Hinzufügen
+            </button>
+          </div>
         }
-        @if (!company) {
-          <mat-form-field appearance="fill">
-            <mat-label>Name</mat-label>
-            <input class="form-control" formControlName="name" matInput>
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5" class="mt-6">
+          <mat-form-field appearance="fill" fxFlex="50">
+            <mat-label>Fälligkeit</mat-label>
+            <input formControlName="payment_date" matInput [matDatepicker]="payment_date_picker">
+            <mat-datepicker-toggle matSuffix [for]="payment_date_picker"></mat-datepicker-toggle>
+            <mat-datepicker #payment_date_picker></mat-datepicker>
           </mat-form-field>
-        }
-        @if (company) {
-          <mat-form-field appearance="fill">
-            <mat-label>P. IVA</mat-label>
-            <input class="form-control" formControlName="vat_number" matInput>
+          <mat-form-field appearance="fill" fxFlex="50">
+            <mat-label>
+              @if (createMode) {
+                Rechnungsbetrag (incl. MwStr.)
+              } @else {
+                Restbetrag (incl. MwStr.)
+              }
+            </mat-label>
+            <input class="form-control" readonly formControlName="open_amount_formatted" matInput>
           </mat-form-field>
-        }
-        <mat-form-field appearance="fill">
-          <mat-label>Steuernummer</mat-label>
-          <input class="form-control" formControlName="fiscal_code" matInput>
-        </mat-form-field>
-        @if (company) {
-          <mat-form-field appearance="fill">
-            <mat-label>PEC</mat-label>
-            <input class="form-control" formControlName="pec" matInput>
-          </mat-form-field>
-        }
-        @if (company) {
-          <mat-form-field appearance="fill">
-            <mat-label>Empfängerkodex</mat-label>
-            <input class="form-control" formControlName="codice_destinatario" matInput>
-          </mat-form-field>
-        }
-        <app-address-form [address]="getAddressGroup()" fxFlexFill></app-address-form>
-        <mat-form-field appearance="fill">
-          <mat-label>Zahlungsbedingung:</mat-label>
-          <mat-select formControlName="paymentTerms">
-            @for (payment_term of paymentTerms; track payment_term.label) {
-              <mat-option [value]="payment_term.value">
-                {{ payment_term.label }}
-              </mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Zahlungsbeschreibung:</mat-label>
-          <textarea class="form-control" formControlName="payment_condition" matInput></textarea>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Zahlungsdatum</mat-label>
-          <input formControlName="payment_date" matInput [matDatepicker]="payment_date_picker">
-          <mat-datepicker-toggle matSuffix [for]="payment_date_picker"></mat-datepicker-toggle>
-          <mat-datepicker #payment_date_picker></mat-datepicker>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Gesamtsumme</mat-label>
-          <input class="form-control" readonly formControlName="invoice_price" matInput>
-        </mat-form-field>
-        <button [disabled]="submitted" mat-raised-button type="submit">Speichern</button>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="5" class="mt-6">
+          <button [disabled]="submitted || formInvalid()" (click)="onSubmit()" color="primary" mat-raised-button
+                  type="submit">
+            Speichern
+          </button>
+        </div>
+        <div class="mt-6"></div>
+        <div class="mt-6"></div>
       </div>
     </div>
-  </form>
+  </ng-container>
 </div>

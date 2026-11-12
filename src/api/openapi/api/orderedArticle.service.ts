@@ -115,15 +115,12 @@ export class OrderedArticleService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public moveOrderedArticle(orderedArticleId: number, targetOrderableId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OrderedArticle>;
-    public moveOrderedArticle(orderedArticleId: number, targetOrderableId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OrderedArticle>>;
-    public moveOrderedArticle(orderedArticleId: number, targetOrderableId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OrderedArticle>>;
-    public moveOrderedArticle(orderedArticleId: number, targetOrderableId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public moveOrderedArticle(orderedArticleId: number, targetOrderableId?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OrderedArticle>;
+    public moveOrderedArticle(orderedArticleId: number, targetOrderableId?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OrderedArticle>>;
+    public moveOrderedArticle(orderedArticleId: number, targetOrderableId?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OrderedArticle>>;
+    public moveOrderedArticle(orderedArticleId: number, targetOrderableId?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (orderedArticleId === null || orderedArticleId === undefined) {
             throw new Error('Required parameter orderedArticleId was null or undefined when calling moveOrderedArticle.');
-        }
-        if (targetOrderableId === null || targetOrderableId === undefined) {
-            throw new Error('Required parameter targetOrderableId was null or undefined when calling moveOrderedArticle.');
         }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});

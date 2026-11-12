@@ -119,6 +119,7 @@ export * from './offerV2WithVersion';
 export * from './order';
 export * from './orderArticleCreateV2';
 export * from './orderBundle';
+export * from './orderBundleClaimedEvent';
 export * from './orderBundleCreate';
 export * from './orderBundleCreatedEvent';
 export * from './orderBundleEvent';

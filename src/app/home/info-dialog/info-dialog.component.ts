@@ -48,7 +48,8 @@ export class InfoDialogComponent implements OnInit {
     {
       versionName: "2.3.5",
       changes: [
-        "Kleine Bugs behoben"
+        "Fehler behoben bei Shop Bestellung",
+        "Ausgangsrechnung Zahlungsplan"
       ]
     },
     {

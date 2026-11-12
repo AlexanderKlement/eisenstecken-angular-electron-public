@@ -81,7 +81,7 @@
                   [minTermLength]="3"
                   [typeahead]="column.asInput.typeahead"
                   (change)="column.asInput.onChange($event, element.values['id'])"
-                  [clearable]="false"
+                  [clearable]="column.asInput.clearable"
                   [addTag]="false"
                   [editableSearchTerm]="true"
                   [trackByFn]="column.asInput.trackByFunc"

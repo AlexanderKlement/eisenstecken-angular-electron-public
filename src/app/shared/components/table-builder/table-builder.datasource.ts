@@ -36,6 +36,7 @@ type InputSettings = { placeholder?: string, style?: string, label?: string, suf
   invalid?: (value: { id: number, displayable_name: string } | undefined) => boolean
 } | {
   type: "select-autocomplete",
+  clearable?: boolean,
   typeahead: Subject<string>,
   onChange: ($event: any, id: number | string) => void,
   invalid?: (value: { id: number, displayable_name: string } | undefined) => boolean,

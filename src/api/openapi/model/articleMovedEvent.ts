@@ -18,8 +18,8 @@ export interface ArticleMovedEvent {
     sourceOrderableName: string | null;
     targetOrderCreated: boolean;
     targetOrderId: number;
-    targetOrderableId: number;
-    targetOrderableName: string;
+    targetOrderableId: number | null;
+    targetOrderableName: string | null;
     type: ArticleMovedEvent.TypeEnum;
 }
 export namespace ArticleMovedEvent {

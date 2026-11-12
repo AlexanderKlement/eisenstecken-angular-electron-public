@@ -13,6 +13,7 @@ import { ArticlesMovedEvent } from './articlesMovedEvent';
 import { OrderedArticleSnapshot } from './orderedArticleSnapshot';
 import { OrderDeletedEvent } from './orderDeletedEvent';
 import { ArticleDeletedEvent } from './articleDeletedEvent';
+import { OrderBundleClaimedEvent } from './orderBundleClaimedEvent';
 import { OrderedArticleChange } from './orderedArticleChange';
 import { RequestsConvertedEvent } from './requestsConvertedEvent';
 import { ArticleOrderedEvent } from './articleOrderedEvent';
@@ -26,5 +27,5 @@ import { OrderBundleSource } from './orderBundleSource';
  * @type Payload
  * @export
  */
-export type Payload = ArticleDeletedEvent | ArticleMovedEvent | ArticleOrderedEvent | ArticleUpdatedEvent | ArticlesMovedEvent | OrderBundleCreatedEvent | OrderDeletedEvent | PricesUpdatedEvent | RequestsConvertedEvent;
+export type Payload = ArticleDeletedEvent | ArticleMovedEvent | ArticleOrderedEvent | ArticleUpdatedEvent | ArticlesMovedEvent | OrderBundleClaimedEvent | OrderBundleCreatedEvent | OrderDeletedEvent | PricesUpdatedEvent | RequestsConvertedEvent;
 

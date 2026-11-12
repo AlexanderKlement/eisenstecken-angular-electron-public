@@ -19,7 +19,6 @@ export interface OutgoingInvoiceUpdate {
     date: string;
     descriptive_articles: Array<DescriptiveArticleCreate>;
     fiscal_code: string;
-    installments?: Array<ReceivableInstallment>;
     isCompany: boolean;
     name: string;
     number: string;
@@ -27,6 +26,7 @@ export interface OutgoingInvoiceUpdate {
     payment_condition: string;
     payment_date: string;
     pec: string;
+    receivables?: Array<ReceivableInstallment> | null;
     vat_id: number;
     vat_number: string;
 }

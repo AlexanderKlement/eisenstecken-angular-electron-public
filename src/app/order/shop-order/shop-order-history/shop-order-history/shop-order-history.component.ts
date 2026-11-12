@@ -105,6 +105,7 @@ type Meta = { category: ChangelogCategory; tone: ChangelogTone; icon: string; ti
 
 const META: Record<OrderBundleEventType, Meta> = {
   order_bundle_created: { category: "order", tone: "create", icon: "inventory_2", title: "Bestellung erstellt" },
+  order_bundle_claimed: { category: "order", tone: "change", icon: "move_up", title: "Besteller geändert" },
   order_deleted: { category: "order", tone: "remove", icon: "delete", title: "Bestellung gelöscht" },
   requests_converted: {
     category: "order",

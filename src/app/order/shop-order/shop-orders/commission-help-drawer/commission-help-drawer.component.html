@@ -1,0 +1,114 @@
+<div class="scrim" [class.is-open]="open" (click)="close()" aria-hidden="true"></div>
+
+<aside
+  class="drawer"
+  [class.is-open]="open"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="kommission-help-title"
+  [attr.inert]="open ? null : ''"
+>
+  <header class="drawer__header">
+    <div class="drawer__heading">
+      <span class="drawer__eyebrow">So funktioniert’s</span>
+      <h2 id="kommission-help-title" class="drawer__title">
+        Online-Bestellungen: Kommission und Position
+      </h2>
+    </div>
+    <button #closeButton type="button" class="drawer__close" aria-label="Schließen" (click)="close()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M6 6l12 12M18 6L6 18"></path>
+      </svg>
+    </button>
+  </header>
+
+  <div class="drawer__body">
+    <p class="intro">
+      Beim Import der Online-Bestellungen (Würth, Grohe, Häfele, Frischeis) wird die im Shop
+      eingegebene Kommission jetzt in <strong>Auftrag</strong> und <strong>Position</strong>
+      aufgeteilt. Die Position wird automatisch in das Feld „Position“ des bestellten Artikels
+      übernommen.
+    </p>
+
+    <section class="section">
+      <h3 class="section__title">So wird die Kommission eingegeben</h3>
+
+      <div class="formula" aria-label="Auftragsnummer, Leerzeichen, Position">
+        <span class="token token--order">Auftragsnummer</span>
+        <span class="plus" aria-hidden="true">+</span>
+        <span class="token token--space">Leerzeichen</span>
+        <span class="plus" aria-hidden="true">+</span>
+        <span class="token token--position">Position</span>
+      </div>
+
+      <div class="table-wrap">
+        <table class="examples">
+          <thead>
+            <tr>
+              <th scope="col">Eingabe im Shop</th>
+              <th scope="col">Auftrag</th>
+              <th scope="col">Position</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (b of beispiele; track b.eingabe) {
+              <tr>
+                <td class="examples__input">{{ b.eingabe }}</td>
+                <td class="examples__order">{{ b.auftrag }}</td>
+                @if (b.position) {
+                  <td class="examples__position">{{ b.position }}</td>
+                } @else {
+                  <td class="examples__empty">leer</td>
+                }
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3 class="section__title">Regeln</h3>
+      <dl class="rules">
+        <div class="rules__item">
+          <dt>Auftragsnummer</dt>
+          <dd>Jahr und Nummer können zusammen (2026047) oder mit Leerzeichen (2026 047) geschrieben werden.</dd>
+        </div>
+        <div class="rules__item">
+          <dt>Unterauftrag</dt>
+          <dd>Wird mit / direkt an die Nummer angehängt, höchstens zweistellig (/1 bis /99).</dd>
+        </div>
+        <div class="rules__item">
+          <dt>Position</dt>
+          <dd>
+            Zwischen Auftragsnummer und Position muss ein Leerzeichen stehen. Alles, was danach kommt,
+            wird unverändert als Position übernommen (z. B. auch „B12 links“).
+          </dd>
+        </div>
+        <div class="rules__item">
+          <dt>Ohne Position</dt>
+          <dd>Wird nur die Auftragsnummer eingegeben, bleibt das Feld „Position“ leer.</dd>
+        </div>
+        <div class="rules__item">
+          <dt>Andere Kommissionen</dt>
+          <dd>Kommissionen wie „Lager“ funktionieren wie bisher und haben keine Position.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="section">
+      <h3 class="section__title">Mehrere Aufträge und Positionen in einer Bestellung</h3>
+      <ul class="list">
+        <li>
+          Die Kommission kann pro Artikel eingegeben werden. Ist bei einem Artikel nichts eingetragen,
+          gilt die Kommission der gesamten Bestellung.
+        </li>
+        <li>
+          Artikel für denselben Auftrag mit unterschiedlichen Positionen landen in einer Bestellung,
+          jeder Artikel mit seiner eigenen Position.
+        </li>
+        <li>Artikel für unterschiedliche Aufträge werden automatisch auf getrennte Bestellungen aufgeteilt.</li>
+      </ul>
+    </section>
+  </div>
+</aside>

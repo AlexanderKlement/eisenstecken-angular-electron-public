@@ -1,0 +1,259 @@
+:host {
+  // Farben an das bestehende Theme anpassen
+  --khd-text: #212121;
+  --khd-text-muted: #616161;
+  --khd-text-subtle: #757575;
+  --khd-border: #e0e0e0;
+  --khd-border-light: #eeeeee;
+  --khd-surface: #ffffff;
+  --khd-surface-alt: #fafafa;
+  --khd-accent-bg: #fff3c4;
+  --khd-accent-border: #e0b400;
+  --khd-accent-text: #3d3000;
+  --khd-eyebrow: #6b5400;
+  --khd-width: 580px;
+  --khd-duration: 220ms;
+}
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.32);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--khd-duration) ease;
+
+  &.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1001;
+  width: var(--khd-width);
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--khd-surface);
+  color: var(--khd-text);
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.2);
+  transform: translateX(100%);
+  visibility: hidden;
+  transition:
+    transform var(--khd-duration) ease,
+    visibility 0s linear var(--khd-duration);
+
+  &.is-open {
+    transform: translateX(0);
+    visibility: visible;
+    transition: transform var(--khd-duration) ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrim,
+  .drawer,
+  .drawer.is-open {
+    transition: none;
+  }
+}
+
+.drawer__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 16px 16px 28px;
+  border-bottom: 1px solid var(--khd-border);
+}
+
+.drawer__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.drawer__eyebrow {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--khd-eyebrow);
+}
+
+.drawer__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.drawer__close {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #424242;
+  cursor: pointer;
+
+  &:hover {
+    background: #f0f0f0;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #1a73e8;
+    outline-offset: 2px;
+  }
+}
+
+.drawer__body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 24px 28px 40px;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.intro {
+  margin: 0;
+  color: #424242;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.section__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+// Formel: Auftragsnummer + Leerzeichen + Position
+.formula {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  background: var(--khd-surface-alt);
+  border: 1px solid var(--khd-border);
+  border-radius: 4px;
+}
+
+.token {
+  padding: 6px 12px;
+  border-radius: 4px;
+  background: var(--khd-surface);
+  border: 1px solid #9e9e9e;
+  font-weight: 500;
+
+  &--space {
+    border-style: dashed;
+    font-weight: 400;
+    color: var(--khd-text-muted);
+  }
+
+  &--position {
+    background: var(--khd-accent-bg);
+    border-color: var(--khd-accent-border);
+    color: var(--khd-accent-text);
+  }
+}
+
+.plus {
+  font-size: 18px;
+  color: var(--khd-text-subtle);
+}
+
+// Beispieltabelle
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--khd-border);
+  border-radius: 4px;
+}
+
+.examples {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+
+  th {
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 500;
+    color: var(--khd-text-muted);
+    background: var(--khd-surface-alt);
+    border-bottom: 1px solid var(--khd-border);
+  }
+
+  td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--khd-border-light);
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+// Monospace, damit Leerzeichen in der Eingabe sichtbar bleiben
+.examples__input {
+  font-family: 'Roboto Mono', ui-monospace, Menlo, Consolas, monospace;
+  white-space: pre;
+}
+
+.examples__order {
+  font-weight: 500;
+}
+
+.examples__position {
+  font-weight: 500;
+  color: var(--khd-accent-text);
+}
+
+.examples__empty {
+  font-style: italic;
+  color: var(--khd-text-subtle);
+}
+
+// Regeln
+.rules {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+}
+
+.rules__item {
+  dt {
+    font-weight: 700;
+  }
+
+  dd {
+    margin: 0;
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding-left: 20px;
+}

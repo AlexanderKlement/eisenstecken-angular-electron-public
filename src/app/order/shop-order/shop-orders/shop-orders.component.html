@@ -1,4 +1,10 @@
-<div fxLayout="row" fxLayoutGap="16">
+<div fxLayout="row" fxLayoutAlign="end end" class="mt-12">
+  <button mat-flat-button (click)="toggleInfoDrawer()">
+    <mat-icon>help_outline</mat-icon>
+    So funktioniert's
+  </button>
+</div>
+<div fxLayout="row" fxLayoutGap="16" class="mt-6">
   <div fxLayout="column" fxLayoutGap="16">
     <form [formGroup]="filterForm" class="filters">
       <strong>Filter</strong>
@@ -119,6 +125,10 @@
             }
           }
         </div>
+        <div fxFlex></div>
+        <button matIconButton (click)="onGeneratePdf()">
+          <mat-icon>picture_as_pdf</mat-icon>
+        </button>
         <button matIconButton (click)="onOpenHistory()">
           <mat-icon>history</mat-icon>
         </button>
@@ -135,3 +145,4 @@
     }
   </div>
 </div>
+<app-commission-help-drawer [open]="helpOpen" (closed)="toggleInfoDrawer()"></app-commission-help-drawer>

@@ -147,6 +147,7 @@ model/offerV2WithVersion.ts
 model/order.ts
 model/orderArticleCreateV2.ts
 model/orderBundle.ts
+model/orderBundleClaimedEvent.ts
 model/orderBundleCreate.ts
 model/orderBundleCreatedEvent.ts
 model/orderBundleEvent.ts

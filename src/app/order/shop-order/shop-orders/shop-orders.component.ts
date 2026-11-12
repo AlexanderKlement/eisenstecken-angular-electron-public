@@ -14,10 +14,15 @@ import {
 import { BehaviorSubject, concat, Observable, of, Subject } from "rxjs";
 import { AuthStateService } from "../../../shared/services/auth-state.service";
 import { catchError, distinctUntilChanged, first, switchMap, tap } from "rxjs/operators";
-import { DefaultLayoutAlignDirective, DefaultLayoutDirective, DefaultLayoutGapDirective } from "ng-flex-layout";
+import {
+  DefaultFlexDirective,
+  DefaultLayoutAlignDirective,
+  DefaultLayoutDirective,
+  DefaultLayoutGapDirective
+} from "ng-flex-layout";
 import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { MatFormField, MatInput, MatLabel } from "@angular/material/input";
-import { MatOption, MatSelect } from "@angular/material/select";
+import { MatOption, MatSelect, MatSelectChange } from "@angular/material/select";
 import { AsyncPipe, formatCurrency } from "@angular/common";
 import { MtxSelect } from "@ng-matero/extensions/select";
 import dayjs from "dayjs/esm";
@@ -26,10 +31,12 @@ import { TableBuilderComponent } from "../../../shared/components/table-builder/
 import { MatDialog } from "@angular/material/dialog";
 import { ShopOrderHistoryComponent } from "../shop-order-history/shop-order-history/shop-order-history.component";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
-import { MatIconButton } from "@angular/material/button";
+import { MatButton, MatIconButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
 import { Router } from "@angular/router";
 import { displayUserName, SYSTEM_USER_ID } from "../../../../constants";
+import { FileService } from "../../../shared/services/file.service";
+import { CommissionHelpDrawerComponent } from "./commission-help-drawer/commission-help-drawer.component";
 
 type OrderBundleFilter = {
   commission: FormControl<number>;
@@ -55,7 +62,10 @@ type OrderBundleFilter = {
     TableBuilderComponent,
     MatProgressSpinner,
     MatIconButton,
-    MatIcon
+    MatIcon,
+    DefaultFlexDirective,
+    MatButton,
+    CommissionHelpDrawerComponent
   ],
   templateUrl: "./shop-orders.component.html",
   styleUrl: "./shop-orders.component.scss"
@@ -65,6 +75,7 @@ export class ShopOrdersComponent implements OnInit {
   private orderBundleService = inject(OrderBundleService);
   private orderedArticleService = inject(OrderedArticleService);
   private dialog = inject(MatDialog);
+  private file = inject(FileService);
   private router = inject(Router);
   private authService = inject(AuthStateService);
   selectedOrder: OrderBundle | undefined;
@@ -192,9 +203,9 @@ export class ShopOrdersComponent implements OnInit {
           name: "commission", sortable: false, asInput: {
             style: "width: 100%",
             type: "select-autocomplete",
+            clearable: true,
             typeahead: this.commissionInput$,
             loading: () => {
-              console.log("loading check");
               return this.jobsLoading || this.stocksLoading;
             },
             items: this.commissions$,
@@ -204,13 +215,21 @@ export class ShopOrdersComponent implements OnInit {
             trackByFunc: this.trackByFnCommission,
             label: "Neue Komission",
             onChange: ($event, id) => {
-              const jobSupplier: Job | Supplier = $event;
+              const jobSupplier: Job | Supplier | undefined = $event;
               const articleId = typeof id === "string" ? parseInt(id, 10) : id;
               this.loadingSubject.next(true);
-              this.orderedArticleService.moveOrderedArticle(articleId, jobSupplier.id).pipe(first()).subscribe(() => {
-                this.loadingSubject.next(false);
-                this.articlesDataSource.loadData();
-                this.refreshOrders();
+              this.orderedArticleService.moveOrderedArticle(articleId, jobSupplier?.id ?? undefined).pipe(first()).subscribe({
+                next: () => {
+                  this.loadingSubject.next(false);
+                  this.articlesDataSource.loadData();
+                  this.refreshOrders();
+                },
+                error: (err) => {
+                  console.error("moveOrderedArticle failed", err);
+                  this.loadingSubject.next(false);
+                  // reload so the select shows the actual (unchanged) commission again
+                  this.articlesDataSource.loadData();
+                }
               });
             }
           }, headerName: "Komission"
@@ -221,7 +240,13 @@ export class ShopOrdersComponent implements OnInit {
     this.articlesDataSource.loadData();
   }
 
-  onOpenHistory() {
+  protected onGeneratePdf() {
+    if (this.selectedOrder) {
+      this.file.open(this.selectedOrder.pdf_internal).then();
+    }
+  }
+
+  protected onOpenHistory() {
     if (this.selectedOrder) {
       this.dialog.open(ShopOrderHistoryComponent, {
         width: "1200px",
@@ -232,8 +257,31 @@ export class ShopOrdersComponent implements OnInit {
     }
   }
 
-  protected onSetNewOrderer($event: any) {
-    console.log("onSetNewOrderer", $event); // TODO
+  protected helpOpen = false;
+
+  protected toggleInfoDrawer() {
+    this.helpOpen = !this.helpOpen;
+  }
+
+  protected onSetNewOrderer($event: MatSelectChange<number>) {
+    if (this.selectedOrder) {
+      const id = $event.value;
+      if (id) {
+        this.loadingSubject.next(true);
+        this.orderBundleService.assignOrderBundle(this.selectedOrder.id, id).pipe(first()).subscribe({
+          next: (res) => {
+            this.selectedOrder = res;
+            this.loadingSubject.next(false);
+            this.articlesDataSource.loadData();
+            this.refreshOrders();
+          },
+          error: (err) => {
+            console.error("assignOrderBundle failed", err);
+            this.loadingSubject.next(false);
+          }
+        });
+      }
+    }
   }
 
   protected readonly formatCurrency = formatCurrency;

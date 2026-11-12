@@ -13,6 +13,5 @@ export interface ReceivableCreate {
     amount: number;
     due_date: string;
     name: string;
-    outgoing_invoice_id?: number | null;
 }
 

@@ -12,6 +12,8 @@
 export const AdminActionEnum = {
     WuerthImport: 'wuerth_import',
     GroheImport: 'grohe_import',
+    HaefeleImport: 'haefele_import',
+    FrischeisImport: 'frischeis_import',
     ContactExport: 'contact_export'
 } as const;
 export type AdminActionEnum = typeof AdminActionEnum[keyof typeof AdminActionEnum];
