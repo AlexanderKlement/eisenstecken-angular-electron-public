@@ -1,3 +1,8 @@
+## <small>2.3.6 (2026-11-19)</small>
+
+
+
+
 ## <small>2.3.5 (2026-11-12)</small>
 
 * A lot refactored with templates ([44fa7e7](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/44fa7e7))
@@ -9,6 +14,7 @@
 * bugfixes and pdf-preview translation ([36222d0](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/36222d0))
 * bugfixes for Preview ([f559700](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/f559700))
 * Bugfixes to build ([aee7fb5](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/aee7fb5))
+* Build 2.3.5 ([96ca3ae](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/96ca3ae))
 * Changelog ([ac8f9bc](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/ac8f9bc))
 * Container/Calculation-Input/Fields/Units/Library/Element-Types ([99e8ca3](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/99e8ca3))
 * Delete Tiktak Timeentries & environment fix ([430ddd4](https://github.com/AlexanderKlement/eisenstecken-angular-electron-public/commit/430ddd4))

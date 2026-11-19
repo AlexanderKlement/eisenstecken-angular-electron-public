@@ -76,15 +76,15 @@ export class OutgoingComponent implements OnInit {
         const rows = [];
         dataSourceClasses.forEach((dataSource) => {
           const paid = dataSource.receivables.filter(r => !r.paid).length === 0;
-          const dueDate = dataSource.receivables.length === 0 ? dataSource.payment_date : dataSource.receivables.reduce<string>((prev, cur) => {
-            if (prev === "") {
-              return cur.due_date;
-            }
-            if (new Date(prev).getTime() > new Date(cur.due_date).getTime()) {
-              return cur.due_date;
-            }
-            return prev;
-          }, "");
+          const unpaidDueDates = dataSource.receivables.filter((receivable) => !receivable.paid).map((receivable) => receivable.due_date);
+          const allDueDates = dataSource.receivables.map((receivable) => receivable.due_date);
+          const dueDate =
+            dataSource.receivables.length === 0
+              ? dataSource.payment_date
+              : unpaidDueDates.length > 0
+                ? unpaidDueDates.reduce((a, b) => (b < a ? b : a)) // earliest unpaid
+                : allDueDates.reduce((a, b) => (b > a ? b : a)); // all paid -> latest
+
           rows.push(
             {
               values: {

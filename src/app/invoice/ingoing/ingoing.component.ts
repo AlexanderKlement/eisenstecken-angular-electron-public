@@ -87,15 +87,14 @@ export class IngoingComponent implements OnInit {
         const rows = [];
         dataSourceClasses.forEach((dataSource) => {
           const paid = dataSource.liabilities.filter(l => !l.paid).length === 0;
-          const dueDate = dataSource.liabilities.length === 0 ? dataSource.payment_date : dataSource.liabilities.reduce<string>((prev, cur) => {
-            if (prev === "") {
-              return cur.due_date;
-            }
-            if (new Date(prev).getTime() > new Date(cur.due_date).getTime()) {
-              return cur.due_date;
-            }
-            return prev;
-          }, "");
+          const unpaidDueDates = dataSource.liabilities.filter((liability) => !liability.paid).map((liability) => liability.due_date);
+          const allDueDates = dataSource.liabilities.map((liability) => liability.due_date);
+          const dueDate =
+            dataSource.liabilities.length === 0
+              ? dataSource.payment_date
+              : unpaidDueDates.length > 0
+                ? unpaidDueDates.reduce((a, b) => (b < a ? b : a)) // earliest unpaid
+                : allDueDates.reduce((a, b) => (b > a ? b : a)); // all paid -> latest
           rows.push(
             {
               values: {
